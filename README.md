@@ -13,7 +13,6 @@
   * [Demo Video Links](#demo-video-links)
   * [Mentors](#mentors)
   * [Collaborators](#collaborators)
-  * [Testing Instructions](#testing-instructions)
 
 </div>
 
@@ -48,6 +47,7 @@ This will be announced after the first stable release of the GeoCode project.
 
 This will be announced after the first stable release of the GeoCode project.
 
+* <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> GeoCode SRS </a>
 </div> 
  
  
@@ -58,8 +58,8 @@ This will be announced after the first stable release of the GeoCode project.
 The following documentation was done in LaTeX and is to document the methods used to create, how <br/> to install and use the GeoCode project.
 
  * <a href="https://www.overleaf.com/read/byjsbnwxcgnm"> Coding Standards </a>
- * <a href="">User Manual</a>
- * <a href="">Technical Installation Guide</a>
+* <a href="https://michael-stroh.github.io/capstone/">Technical Installation Guide</a>
+* <a href="https://michael-stroh.github.io/capstone/">User Manual</a>
 
 </div>
 
@@ -67,11 +67,13 @@ The following documentation was done in LaTeX and is to document the methods use
 
 <div style="margin-left: 4%">
 
-* <a href="https://github.com/COS301-SE-2021/GeoCode/projects">GitHub project boards:</a> Task allocations and progresstracking
-* <a href="">Google Meets:</a> Formal team meetings and communication between stakeholders.
-* <a href="">Discord:</a> Informal team meetings for quick debriefs, communication
-* <a href="">Github and Discord Webhooks:</a> used for notifications when a commit is made to the GitHub repository.
-* <a href="">Overleaf:</a> LaTeX editor that allows collaboration on creating documentation.
+To aid with the management of the GeoCode project the following tools were used:
+
+* <a href="https://github.com/COS301-SE-2021/GeoCode/projects">GitHub project boards:</a> Task allocations and progress tracking
+* <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
+* <a href="https://discord.com/brand-newover">Discord:</a> Informal team meetings for quick debriefs, communication
+* <a href="https://discord.com/developers/docs/resources/webhooks">Github and Discord Webhooks:</a> Notifications sent to the team's discord server when a commit is made to the GitHub repository.
+* <a href="https://www.overleaf.com">Overleaf:</a> LaTeX editor that allows collaboration on creating documentation.
 
 </div>
 
@@ -81,13 +83,13 @@ The following documentation was done in LaTeX and is to document the methods use
 
 <div style="margin-left: 4%">
 
-The folllowing links are the live demo videos held on blackboard collaborate to present the different <br/>
+The following links are the live demo videos held on blackboard collaborate to present the different <br/>
 phases of the project to the stakeholders of the GeoCode project.
 
-* <a href=""> Demo 1 </a>
-* <a href=""> Demo 2 </a>
-* <a href=""> Demo 3 </a>
-* <a href=""> Demo 4 </a>
+* <a href="https://michael-stroh.github.io/capstone/"> Demo 1 </a>
+* <a href="https://michael-stroh.github.io/capstone/"> Demo 2 </a>
+* <a href="https://michael-stroh.github.io/capstone/"> Demo 3 </a>
+* <a href="https://michael-stroh.github.io/capstone/"> Demo 4 </a>
   
 </div>
     
@@ -105,7 +107,9 @@ The team Peak Performers had the following mentor from <a href="https://5dt.com/
 
 <div style="margin-left: 4%">
 
-<img align="left" width="80" src=".jpg">
+The following software engineers contributed to the GeoCode project:
+
+<img align="left" width="80" src="https://raw.githubusercontent.com/Michael-Stroh/capstone/main/teamPhotos/Michael%20Stroh.jpg?token=APMNYWOVQ6RF4MEV4QULXB3AWZJMS">
 <h1 style="color:green; font-size: 200%;" > Michael Ströh </h1>
 <br/>
 
@@ -123,7 +127,7 @@ The team Peak Performers had the following mentor from <a href="https://5dt.com/
     </details>
 
 
-<img align="left" width="80" src=".jpg">
+<img align="left" width="80" src="https://raw.githubusercontent.com/Michael-Stroh/capstone/main/teamPhotos/Liam.jpg?token=APMNYWJDAGWL4HD2HDNTTUTAWZJOQ">
 <h1 style="color:green; font-size: 200%;" > Liam Moore </h1>
 <br/>
 
@@ -140,7 +144,7 @@ The team Peak Performers had the following mentor from <a href="https://5dt.com/
     </details>
 
 
-<img align="left" width="80" src=".jpg">
+<img align="left" width="80" src="https://raw.githubusercontent.com/Michael-Stroh/capstone/main/teamPhotos/Jenna.jpg?token=APMNYWOKVZDS2SSHGZAMTH3AWZJPQ">
 <h1 style="color:green; font-size: 200%;" > Jenna Gallagher </h1>
 <br/>
 
@@ -158,7 +162,7 @@ The team Peak Performers had the following mentor from <a href="https://5dt.com/
     </details>
 
 
-<img align="left" width="80" src=".jpg">
+<img align="left" width="80" src="https://raw.githubusercontent.com/Michael-Stroh/capstone/main/teamPhotos/Caleb.jpg?token=APMNYWMFRNQBPRTHQWLNMU3AWZJQI">
 <h1 style="color:green; font-size: 200%;" > Caleb Johnstone </h1>
 <br/>
 
@@ -175,12 +179,12 @@ The team Peak Performers had the following mentor from <a href="https://5dt.com/
     </details>
 
 
-<img align="left" width="80" src=".jpg">
+<img align="left" width="80" src="https://raw.githubusercontent.com/Michael-Stroh/capstone/main/teamPhotos/Michael%20Harvey.jpg?token=APMNYWJT5I3XXQ3NC4ZAF2TAWZJRM">
 <h1 style="color:green; font-size: 200%;" > Michael Harvey </h1>
 <br/>
 
- * <a href="https://github.com/CalebJohnstone"> Github Account</a>
- * <a href="https://www.linkedin.com/in/caleb-johnstone-94368a132/"> Linkedin  Account </a>
+ * <a href="https://github.com/robotic-coder"> Github Account</a>
+ * <a href="https://www.linkedin.com/in/michaelharvey-123/"> Linkedin  Account </a>
  * michael.harvey@tuks.co.za
     
     <details>
@@ -193,6 +197,3 @@ The team Peak Performers had the following mentor from <a href="https://5dt.com/
     
     
 </div>
-
-# Testing Instructions
-
