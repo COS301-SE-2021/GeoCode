@@ -1,8 +1,11 @@
 package tech.geocodeapp.geocode.Collectable.Model;
 
 public class Collectable {
+    //A link to the image location of the collectable
     private String image;
+    //The unique name of a collectable
     private String name;
+    //Enum set to the rarity of a collectable
     private Rarity rarity;
 
     public Collectable() {
