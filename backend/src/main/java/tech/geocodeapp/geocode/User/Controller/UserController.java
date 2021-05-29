@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import tech.geocodeapp.geocode.User.Service.UserInterfaceServiceImpl.UserServiceImpl;
+import tech.geocodeapp.geocode.User.Service.UserServiceImpl;
 
 /**
  * This class implements the functionality of the UserAPI interface.

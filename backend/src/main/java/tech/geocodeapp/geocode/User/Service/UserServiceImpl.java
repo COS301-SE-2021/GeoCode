@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.User.Repository.UserRepository;
 import tech.geocodeapp.geocode.User.Request.RegisterUserRequest;
 import tech.geocodeapp.geocode.User.Response.RegisterUserResponse;
-import tech.geocodeapp.geocode.User.Service.UserInterfaceService.UserService;
+import tech.geocodeapp.geocode.User.Service.UserService;
 
 import javax.transaction.Transactional;
 
