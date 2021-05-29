@@ -30,14 +30,15 @@ public class GeoCode {
     @GeneratedValue( strategy = GenerationType.AUTO )
     private Long id;
 
+    @Column( name= "DIFFICULTYLEVEL" )
+    @Enumerated( EnumType.STRING )
+    private DIFFICULTYLEVEL difficulty;
+
     @Column( name = "description" )
     private String description;
 
     @Column( name = "hints" )
     private String hints;
-
-    @Column( name = "difficulty" )
-    private DIFFICULTYLEVEL difficulty;
 
     @Column( name = "collectables" )
     private String collectables;
