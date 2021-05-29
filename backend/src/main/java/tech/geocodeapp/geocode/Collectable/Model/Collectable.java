@@ -5,6 +5,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
+/*
+  The entity class for the Collectable Subsystem
+ */
 @Entity
 public class Collectable {
 
