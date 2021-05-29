@@ -66,7 +66,7 @@ public class GeoCode {
      * @param hints the given list of hints that will assist the user in locating the physical GeoCode/QR Code
      * @param difficulty the given level of difficulty there is in finding the physical GeoCode/QR Code
      * @param collectables the given collectable that is associated at this GeoCode
-     * @param trackables the given tracbable that is associated at this GeoCode
+     * @param trackables the given trackable that is associated at this GeoCode
      * @param qrCode the given QR Code that connects this class to the real world
      * @param location the given physical location, of where the QR Code is stored, in the real world
      */
