@@ -17,10 +17,9 @@ import java.util.Optional;
  */
 @Service
 public class CollectableServiceImpl implements CollectableService {
-    @Autowired
     private CollectableRepository collectableRepository;
 
-    public CollectableServiceImpl() {
+    public CollectableServiceImpl(CollectableRepository collectableRepository) {
 
     }
 
