@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.User.Controller;
+package tech.geocodeapp.geocode.Collectable.Controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,16 +8,10 @@ import tech.geocodeapp.geocode.APIObjectMapper;
 import tech.geocodeapp.geocode.User.Service.UserServiceImpl;
 
 /**
- * This class implements the functionality of the UserAPI interface.
+ * This class implements the functionality of the UserAPI interface. Will be autogenereated
  */
 @CrossOrigin("*")
 @RestController
-public class UserController implements UserApi {//TODO: generate UserApi
-    @Autowired
-    private UserServiceImpl userService;
-
-    @Autowired
-    private APIObjectMapper apiObjectMapper;
-
+public class CollectableController implements CollectableApi {//TODO: generate UserApi
 
 }
