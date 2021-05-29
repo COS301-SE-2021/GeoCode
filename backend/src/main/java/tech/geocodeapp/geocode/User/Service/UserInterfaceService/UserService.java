@@ -1,8 +1,6 @@
 package tech.geocodeapp.geocode.User.Service.UserInterfaceService;
 
 import org.springframework.stereotype.Service;
-import tech.geocodeapp.geocode.User.Request.RegisterUserRequest;
-import tech.geocodeapp.geocode.User.Response.RegisterUserResponse;
 
 /**
  * This interface is for the User subsystem
