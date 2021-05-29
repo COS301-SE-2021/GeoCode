@@ -2,10 +2,12 @@ package tech.geocodeapp.geocode.User.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+
 import tech.geocodeapp.geocode.User.Repository.UserRepository;
 import tech.geocodeapp.geocode.User.Request.RegisterUserRequest;
 import tech.geocodeapp.geocode.User.Response.RegisterUserResponse;
-import tech.geocodeapp.geocode.User.Service.UserService;
+import tech.geocodeapp.geocode.User.Service.UserInterfaceService.UserService;
 
 import javax.transaction.Transactional;
 
@@ -22,7 +24,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public RegisterUserResponse Register(RegisterUserRequest request){
+    public RegisterUserResponse Register( RegisterUserRequest request ){
         if (request == null) {
             return new RegisterUserResponse();//TODO: pass parameters once class done
         }

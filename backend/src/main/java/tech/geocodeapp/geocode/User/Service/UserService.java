@@ -11,5 +11,5 @@ import tech.geocodeapp.geocode.User.Response.RegisterUserResponse;
 public interface UserService {
     //TODO: add once use cases finalised, Register shown as an example
     //U1.1 Register
-    RegisterUserResponse Register(RegisterUserRequest request);
+    RegisterUserResponse Register( RegisterUserRequest request );
 }
