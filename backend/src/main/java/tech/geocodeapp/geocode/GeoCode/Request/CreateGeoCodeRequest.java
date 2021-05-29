@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
 
 
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode.DIFFICULTYLEVEL;
+import tech.geocodeapp.geocode.GeoCode.Model.GeoCode.DifficultyLevel;
 
 @Component
 public class CreateGeoCodeRequest {
 
     private String description, collectables, trackables, location;
-    private DIFFICULTYLEVEL difficulty;
+    private DifficultyLevel difficulty;
     private String[] hints;
 
     /**
@@ -32,7 +32,7 @@ public class CreateGeoCodeRequest {
      */
     public CreateGeoCodeRequest( @JsonProperty("description") String description, @JsonProperty("collectables") String collectables,
                                  @JsonProperty("location") String location, @JsonProperty("hints") String[] hints,
-                                 @JsonProperty("difficulty") DIFFICULTYLEVEL difficulty ) {
+                                 @JsonProperty("difficulty") DifficultyLevel difficulty ) {
 
         this.description = description;
         this.collectables = collectables;
@@ -52,7 +52,7 @@ public class CreateGeoCodeRequest {
      * @param location the given physical location, of where the QR Code is stored, in the real world
      */
     public CreateGeoCodeRequest( @JsonProperty("description") String description, @JsonProperty("location") String location,
-                                 @JsonProperty("hints") String[] hints, @JsonProperty("difficulty") DIFFICULTYLEVEL difficulty ) {
+                                 @JsonProperty("hints") String[] hints, @JsonProperty("difficulty") DifficultyLevel difficulty ) {
 
         this.description = description;
         this.location = location;
@@ -72,7 +72,7 @@ public class CreateGeoCodeRequest {
      */
     public CreateGeoCodeRequest( @JsonProperty("description") String description, @JsonProperty("collectables") String collectables,
                                  @JsonProperty("trackables") String trackables, @JsonProperty("location") String location,
-                                 @JsonProperty("hints") String[] hints, @JsonProperty("difficulty") DIFFICULTYLEVEL difficulty ) {
+                                 @JsonProperty("hints") String[] hints, @JsonProperty("difficulty") DifficultyLevel difficulty ) {
 
         this.description = description;
         this.collectables = collectables;
@@ -127,7 +127,7 @@ public class CreateGeoCodeRequest {
      *
      * @return the specified difficulty attribute
      */
-    public DIFFICULTYLEVEL getDifficulty() {
+    public DifficultyLevel getDifficulty() {
 
         return difficulty;
     }
@@ -137,7 +137,7 @@ public class CreateGeoCodeRequest {
      *
      * @param difficulty the difficulty to set the difficulty attribute to
      */
-    public void setDifficulty( DIFFICULTYLEVEL difficulty ) {
+    public void setDifficulty( DifficultyLevel difficulty ) {
 
         this.difficulty = difficulty;
     }

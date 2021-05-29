@@ -12,16 +12,16 @@ public class GeoCode {
 
     /**
      *
-     *  DIFFICULTYLEVEL enumeration
+     *  DifficultyLevel enumeration
      *                 - this indicates the level of difficulty there is in finding the
      *                   physical GeoCode/QR Code
      */
-    public enum DIFFICULTYLEVEL {
+    public enum DifficultyLevel {
 
-        Easy,
-        Medium,
-        Difficult,
-        Insane
+        EASY,
+        MEDIUM,
+        DIFFICULTY,
+        INSANE
     }
 
 
@@ -30,9 +30,9 @@ public class GeoCode {
     @GeneratedValue( strategy = GenerationType.AUTO )
     private Long id;
 
-    @Column( name= "DIFFICULTYLEVEL" )
+    @Column( name= "DifficultyLevel" )
     @Enumerated( EnumType.STRING )
-    private DIFFICULTYLEVEL difficulty;
+    private DifficultyLevel difficulty;
 
     @Column( name = "description" )
     private String description;
@@ -71,7 +71,7 @@ public class GeoCode {
      * @param qrCode the given QR Code that connects this class to the real world
      * @param location the given physical location, of where the QR Code is stored, in the real world
      */
-    public GeoCode( Long id, String description, String hints, DIFFICULTYLEVEL difficulty, String collectables, String trackables, String qrCode, String location ) {
+    public GeoCode( Long id, String description, String hints, DifficultyLevel difficulty, String collectables, String trackables, String qrCode, String location ) {
 
         this.id = id;
         this.description = description;
@@ -149,7 +149,7 @@ public class GeoCode {
      *
      * @return the specified difficulty attribute
      */
-    public DIFFICULTYLEVEL getDifficulty() {
+    public DifficultyLevel getDifficulty() {
 
         return difficulty;
     }
@@ -159,7 +159,7 @@ public class GeoCode {
      *
      * @param difficulty the difficulty to set the difficulty attribute to
      */
-    public void setDifficulty( DIFFICULTYLEVEL difficulty ) {
+    public void setDifficulty( DifficultyLevel difficulty ) {
 
         this.difficulty = difficulty;
     }
