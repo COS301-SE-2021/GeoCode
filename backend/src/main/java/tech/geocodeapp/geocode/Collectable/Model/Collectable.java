@@ -25,6 +25,7 @@ public class Collectable {
     private Rarity rarity;
 
     public Collectable() {
+
     }
 
     public Collectable(String image, String name, Rarity rarity) {
