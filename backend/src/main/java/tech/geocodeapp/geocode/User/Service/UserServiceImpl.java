@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public RegisterUserResponse Register(RegisterUserRequest request){
         if (request == null) {
-            return new RegisterUserResponse();//TODO: pass parameters once class done
+            return new RegisterUserResponse();
         }
 
         return null;
