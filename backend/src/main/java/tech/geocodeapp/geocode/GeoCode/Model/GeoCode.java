@@ -214,7 +214,7 @@ public class GeoCode {
     }
 
     /**
-     * Set the location in the table to the given
+     * Set the qrCode in the table to the given
      *
      * @param qrCode the hints to set the location attribute to
      */
