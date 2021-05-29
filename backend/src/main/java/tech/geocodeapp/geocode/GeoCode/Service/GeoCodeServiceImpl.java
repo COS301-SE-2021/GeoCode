@@ -1,8 +1,11 @@
 package tech.geocodeapp.geocode.GeoCode.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.GeoCode.Request.CreateGeoCodeRequest;
+import tech.geocodeapp.geocode.GeoCode.Response.CreateGeoCodeResponse;
 
 
 /**
@@ -11,12 +14,17 @@ import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 @Service
 public class GeoCodeServiceImpl implements GeoCodeService {
 
-    @Autowired
-    private GeoCodeRepository geoCodeRepo;
+    private final GeoCodeRepository geoCodeRepo;
 
-    public GeoCodeServiceImpl() {
+    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo ) {
 
+        this.geoCodeRepo = geoCodeRepo;
     }
 
+    @Override
+    public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) {
+
+        return null;
+    }
 
 }
