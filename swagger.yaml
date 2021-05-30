@@ -143,6 +143,45 @@ paths:
           description: "Invalid Exception"
 
 definitions:
+  GeoCode:
+    type: "object"
+    required:
+      - id
+      - difficulty
+      - description
+      - hints
+      - collectables
+      - trackables
+      - qrCode
+      - location
+    properties:
+      id:
+        type: string
+        format: uuid
+      difficulty:
+        type: string
+        description: "GeoCode real world locating difficulty"
+        enum:
+          - "EASY"
+          - "MEDIUM"
+          - "DIFFICULTY"
+          - "INSANE"
+      description:
+        type: string
+      hints:
+        type: array
+        items:
+          type: string
+      collectables:
+        type: string
+      trackables:
+        type: string
+      qrCode:
+        type: string
+      location:
+        type: string
+    xml:
+      name: "GeoCode"
   CreateGeoCodeRequest :
     type: "object"
     required:
@@ -160,7 +199,7 @@ definitions:
         items:
           type: string
       difficulty:
-        type: "string"
+        type: string
         description: "GeoCode real world locating difficulty"
         enum:
           - "EASY"
@@ -179,6 +218,35 @@ definitions:
         type: string
     xml:
       name: "CreateGeoCodeResponse"
+  getGeocodeCollectablesRequest:
+    type: "object"
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        format: uuid
+    xml:
+      name: "getGeocodeCollectablesRequest"
+  GetMyGeocodeRequest:
+    type: "object"
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        format: uuid
+    xml:
+      name: "getMyGeocodeRequest"
+  GetMyGeocodeResponse:
+    type: object
+    properties:
+      geocodes:
+        type: array
+        items:
+          type: Geocode
+    xml:
+      name: "getMyGeocodeResponse"
   Collectable:
     type: "object"
     required:
@@ -195,7 +263,7 @@ definitions:
       image:
         type: string
       rarity:
-        type: "string"
+        type: string
         enum:
           - "COMMON"
           - "UNCOMMON"
@@ -228,37 +296,5 @@ definitions:
         type: array
         items:
           $ref: '#components/schemas/Geocodes'
-
-
-  getGeocodeCollectablesRequest:
-    type: "object"
-    required:
-      - id
-    properties:
-      id:
-        type: string
-        format: uuid
-    xml:
-      name: "getGeocodeCollectablesRequest"
-  GetMyGeocodeRequest:
-    type: "object"
-    required:
-      - id
-    properties:
-      id:
-        type: string
-        format: uuid
-    xml:
-      name: "getMyGeocodeRequest"
-
-  GetMyGeocodeResponse:
-    type: object
-    properties:
-      geocodes:
-        type: array
-        items:
-          type: Geocode
-    xml:
-      name: "getMyGeocodeResponse"
 
 
