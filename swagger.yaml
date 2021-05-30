@@ -113,6 +113,35 @@ paths:
                 name: Collectable
           '401':
             description: "Invalid Exception"
+
+  /User/getMyGeocodes:
+    post:
+      tags:
+        - "User"
+      summary: "Get all geocodes associated with a user"
+      description: "Get My Geocodes"
+      operationId: "getMyGeocodes"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "GetMyGeocodeRequest"
+          description: "Request to get geocodes belonging to user"
+          required: true
+          schema:
+            $ref: '#/definitions/GetMyGeocodeRequest'
+      responses:
+        '200':
+          description: "Successfully gotten geocodes"
+          schema:
+            $ref: '#/definitions/GetMyGeocodeResponse'
+        '401':
+          description: "Invalid Exception"
+
 definitions:
   CreateGeoCodeRequest :
     type: "object"
@@ -175,7 +204,32 @@ definitions:
           - "LEGENDARY"
     xml:
       name: "Collectable"
-  
+  User:
+    type: object
+    required:
+      -username
+    properties:
+      id:
+        type: string
+        format: uuid
+      username:
+        type: string
+      currentCollectable:
+        $ref: '#/components/schemas/Collectable'
+      foundCollectables:
+        type: array
+        items:
+          $ref: '#/components/schemas/Collectable'
+      foundGeocodes:
+        type: array
+        items:
+          $ref: '#components/schemas/Geocodes'
+      myGeocodes:
+        type: array
+        items:
+          $ref: '#components/schemas/Geocodes'
+
+
   getGeocodeCollectablesRequest:
     type: "object"
     required:
@@ -186,3 +240,25 @@ definitions:
         format: uuid
     xml:
       name: "getGeocodeCollectablesRequest"
+  GetMyGeocodeRequest:
+    type: "object"
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        format: uuid
+    xml:
+      name: "getMyGeocodeRequest"
+
+  GetMyGeocodeResponse:
+    type: object
+    properties:
+      geocodes:
+        type: array
+        items:
+          type: Geocode
+    xml:
+      name: "getMyGeocodeResponse"
+
+
