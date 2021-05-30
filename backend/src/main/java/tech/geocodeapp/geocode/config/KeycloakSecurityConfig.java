@@ -26,8 +26,14 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
         super.configure(http);
         http.authorizeRequests()
                 .anyRequest()
-                .permitAll();
+                .hasRole("User")
+        ;
+
+        http.logout().logoutUrl("/logout").addLogoutHandler(keycloakLogoutHandler());
+
         http.csrf().disable();
+
+
     }
 
 
