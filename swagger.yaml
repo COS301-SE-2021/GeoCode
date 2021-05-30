@@ -55,64 +55,64 @@ paths:
             $ref: '#/definitions/CreateGeoCodeResponse'
         '401':
           description: "Invalid Exception"
-    
+
   /Collectable/createCollectable:
-      post:
-        tags:
-          - "Collectable"
-        summary: "Creates a new Collectable"
-        description: "Create Collectable"
-        operationId: "createCollectable"
-        consumes:
-          - "application/json"
-          - "application/xml"
-        produces:
-           - "application/xml"
-           - "application/json"
-        parameters:
-          - in: "body"
-            name: "CreateCollectableRequest"
-            description: "Request to create a new Collectable"
-            required: true
-            schema:
-              $ref: '#/definitions/Collectable'
-        responses:
-          '200':
-            description: "Collectable created successfully"
-          '401':
-            description: "Invalid Exception"
-              
+    post:
+      tags:
+        - "Collectable"
+      summary: "Creates a new Collectable"
+      description: "Create Collectable"
+      operationId: "createCollectable"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "CreateCollectableRequest"
+          description: "Request to create a new Collectable"
+          required: true
+          schema:
+            $ref: '#/definitions/Collectable'
+      responses:
+        '200':
+          description: "Collectable created successfully"
+        '401':
+          description: "Invalid Exception"
+
   /Collectable/getGeocodeCollectables:
     post:
-        tags:
-          - "Collectable"
-        summary: "Get all Collectables for a certain GeoCode"
-        description: "Get a GeoCode's Collectables"
-        operationId: "getGeocodeCollectables"
-        consumes:
-          - "application/json"
-          - "application/xml"
-        produces:
-           - "application/xml"
-           - "application/json"
-        parameters:
-          - in: "body"
-            name: "getGeocodeCollectablesRequest"
-            description: "Request to get a GeoCode's Collectables"
-            required: true
-            schema:
-              $ref: '#/definitions/getGeocodeCollectablesRequest'
-        responses:
-          '200':
-            description: "Returned the GeoCode's Collectables successfully"
-            schema:
-              type: array
-              items:
-                $ref: '#/definitions/Collectable'
-              xml:
-                name: Collectable
-          '401':
-            description: "Invalid Exception"
+      tags:
+        - "Collectable"
+      summary: "Get all Collectables for a certain GeoCode"
+      description: "Get a GeoCode's Collectables"
+      operationId: "getGeocodeCollectables"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "getGeocodeCollectablesRequest"
+          description: "Request to get a GeoCode's Collectables"
+          required: true
+          schema:
+            $ref: '#/definitions/getGeocodeCollectablesRequest'
+      responses:
+        '200':
+          description: "Returned the GeoCode's Collectables successfully"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Collectable'
+            xml:
+              name: Collectable
+        '401':
+          description: "Invalid Exception"
 
   /User/getMyGeocodes:
     post:
@@ -150,6 +150,8 @@ definitions:
       - difficulty
       - description
       - hints
+      - collectables
+      - trackables
       - qrCode
       - location
     properties:
@@ -216,6 +218,35 @@ definitions:
         type: string
     xml:
       name: "CreateGeoCodeResponse"
+  getGeocodeCollectablesRequest:
+    type: "object"
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        format: uuid
+    xml:
+      name: "getGeocodeCollectablesRequest"
+  GetMyGeocodeRequest:
+    type: "object"
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        format: uuid
+    xml:
+      name: "getMyGeocodeRequest"
+  GetMyGeocodeResponse:
+    type: object
+    properties:
+      geocodes:
+        type: array
+        items:
+          $ref: '#/definitions/GeoCode'
+    xml:
+      name: "getMyGeocodeResponse"
   Collectable:
     type: "object"
     required:
@@ -244,7 +275,7 @@ definitions:
   User:
     type: object
     required:
-      -username
+      - username
     properties:
       id:
         type: string
@@ -252,37 +283,18 @@ definitions:
       username:
         type: string
       currentCollectable:
-        $ref: '#/components/schemas/Collectable'
+        $ref: '#/definitions/Collectable'
       foundCollectables:
         type: array
         items:
-          $ref: '#/components/schemas/Collectable'
+          $ref: '#/definitions/Collectable'
       foundGeocodes:
         type: array
         items:
-          $ref: '#components/schemas/Geocodes'
+          $ref: '#/definitions/GeoCode'
       myGeocodes:
         type: array
         items:
-          $ref: '#components/schemas/Geocodes'
-  GetMyGeocodeRequest:
-    type: "object"
-    required:
-      - id
-    properties:
-      id:
-        type: string
-        format: uuid
-    xml:
-      name: "getMyGeocodeRequest"
-  GetMyGeocodeResponse:
-    type: object
-    properties:
-      geocodes:
-        type: array
-        items:
-          type: Geocode
-    xml:
-      name: "getMyGeocodeResponse"
+          $ref: '#/definitions/GeoCode'
 
 
