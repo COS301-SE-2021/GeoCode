@@ -150,8 +150,6 @@ definitions:
       - difficulty
       - description
       - hints
-      - collectables
-      - trackables
       - qrCode
       - location
     properties:
@@ -228,25 +226,6 @@ definitions:
         format: uuid
     xml:
       name: "getGeocodeCollectablesRequest"
-  GetMyGeocodeRequest:
-    type: "object"
-    required:
-      - id
-    properties:
-      id:
-        type: string
-        format: uuid
-    xml:
-      name: "getMyGeocodeRequest"
-  GetMyGeocodeResponse:
-    type: object
-    properties:
-      geocodes:
-        type: array
-        items:
-          $ref: '#/definitions/GeoCode'
-    xml:
-      name: "getMyGeocodeResponse"
   Collectable:
     type: "object"
     required:
@@ -296,5 +275,23 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/GeoCode'
-
+  GetMyGeocodeRequest:
+    type: "object"
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        format: uuid
+    xml:
+      name: "getMyGeocodeRequest"
+  GetMyGeocodeResponse:
+    type: object
+    properties:
+      geocodes:
+        type: array
+        items:
+          $ref: '#/definitions/GeoCode'
+    xml:
+      name: "getMyGeocodeResponse"
 
