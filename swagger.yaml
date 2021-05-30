@@ -92,3 +92,26 @@ definitions:
         type: string
     xml:
       name: "CreateGeoCodeResponse"
+  Collectable :
+    type: "object"
+    required:
+      - id
+      - name
+      - image
+      - rarity
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      image:
+        type: string
+      rarity:
+        type: "string"
+        enum:
+          - "COMMON"
+          - "UNCOMMON"
+          - "RARE"
+          - "EPIC"
+          - "LEGENDARY"
