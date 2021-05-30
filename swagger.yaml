@@ -10,88 +10,70 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "db.geocodeapp.tech"
-basePath: "/v2"
+basePath: "/api"
 tags:
-- name: "User"
-  description: "Everything about the users of the platform"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
-- name: "GeoCode"
-  description: "Everything about QR Codes known as GeoCodes"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
-- name: "Collectable"
-  description: "Everything about the collectables that users can trade"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
-- name: "Trackable"
-  description: "Everything about the trackables users can create and follow"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
-- name: "Leaderboard"
-  description: "Everything about the different scores and rankings of users"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
-- name: "Notifications"
-  description: "Everything about how users are notified"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
+  - name: "User"
+    description: "Everything about the users of the platform"
+    externalDocs:
+      description: "Find out more"
+      url: "http://swagger.io"
+  - name: "GeoCode"
+    description: "Everything about QR Codes known as GeoCodes"
+    externalDocs:
+      description: "Find out more"
+      url: "http://swagger.io"
+  - name: "Collectable"
+    description: "Everything about the collectables that users can trade"
+    externalDocs:
+      description: "Find out more"
+      url: "http://swagger.io"
+  - name: "Trackable"
+    description: "Everything about the trackables users can create and follow"
+    externalDocs:
+      description: "Find out more"
+      url: "http://swagger.io"
+  - name: "Leaderboard"
+    description: "Everything about the different scores and rankings of users"
+    externalDocs:
+      description: "Find out more"
+      url: "http://swagger.io"
+  - name: "Notifications"
+    description: "Everything about how users are notified"
+    externalDocs:
+      description: "Find out more"
+      url: "http://swagger.io"
 schemes:
-- "https"
-- "http"
+  - "https"
+  - "http"
 paths:
   /GeoCode:
     post:
       tags:
-      - "GeoCode"
+        - "GeoCode"
       summary: "Add a new GeoCode to the platform"
       description: ""
       operationId: "addGeoCode"
       consumes:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "GeoCode object that needs to be added to the platform"
-        required: true
-        schema:
-          $ref: "#/definitions/GeoCode"
+        - "application/xml"
+        - "application/json"
       responses:
         "405":
           description: "Invalid input"
-      security:
-        - GeoCodestore_auth:
-            - "write:GeoCode"
-            - "read:GeoCode"
     put:
       tags:
-      - "GeoCode"
+        - "GeoCode"
       summary: "Update an existing GeoCode"
       description: ""
       operationId: "updateGeoCode"
       consumes:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "GeoCode object that needs to be added to the platform"
-        required: true
-        schema:
-          $ref: "#/definitions/GeoCode"
+        - "application/xml"
+        - "application/json"
       responses:
         "400":
           description: "Invalid ID supplied"
@@ -99,269 +81,24 @@ paths:
           description: "GeoCode not found"
         "405":
           description: "Validation exception"
-      security:
-        - GeoCodestore_auth:
-            - "write:GeoCode"
-            - "read:GeoCode"
-  /GeoCode/findByStatus:
-    get:
-      tags:
-      - "GeoCode"
-      summary: "Finds GeoCode by status"
-      description: "Multiple status values can be provided with comma separated strings"
-      operationId: "findGeoCodeByStatus"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "status"
-        in: "query"
-        description: "Status values that need to be considered for filter"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-          enum:
-          - "available"
-          - "pending"
-          - "sold"
-          default: "available"
-        collectionFormat: "multi"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/GeoCode"
-        "400":
-          description: "Invalid status value"
-      security:
-        - GeoCodestore_auth:
-            - "write:GeoCode"
-            - "read:GeoCode"
-  /GeoCode/findByTags:
-    get:
-      tags:
-      - "GeoCode"
-      summary: "Finds GeoCodes by tags"
-      description: "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing."
-      operationId: "findGeoCodeByTags"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "tags"
-        in: "query"
-        description: "Tags to filter by"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/GeoCode"
-        "400":
-          description: "Invalid tag value"
-      security:
-        - GeoCodestore_auth:
-            - "write:GeoCode"
-            - "read:GeoCode"
-      deprecated: true
-  /GeoCode/{GeoCodeId}:
-    get:
-      tags:
-      - "GeoCode"
-      summary: "Find GeoCode by ID"
-      description: "Returns a single GeoCode"
-      operationId: "getGeoCodeById"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "GeoCodeId"
-        in: "path"
-        description: "ID of GeoCode to return"
-        required: true
-        type: "integer"
-        format: "int64"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/GeoCode"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "GeoCode not found"
-      security:
-      - api_key: []
-    post:
-      tags:
-      - "GeoCode"
-      summary: "Updates a GeoCode in the platform with form data"
-      description: ""
-      operationId: "updateGeoCodeWithForm"
-      consumes:
-      - "application/x-www-form-urlencoded"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "GeoCodeId"
-        in: "path"
-        description: "ID of GeoCode that needs to be updated"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "name"
-        in: "formData"
-        description: "Updated name of the GeoCode"
-        required: false
-        type: "string"
-      - name: "status"
-        in: "formData"
-        description: "Updated status of the GeoCode"
-        required: false
-        type: "string"
-      responses:
-        "405":
-          description: "Invalid input"
-      security:
-        - GeoCodestore_auth:
-            - "write:GeoCode"
-            - "read:GeoCode"
-    delete:
-      tags:
-      - "GeoCode"
-      summary: "Deletes a GeoCode"
-      description: ""
-      operationId: "deleteGeoCode"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "GeoCodeId"
-        in: "path"
-        description: "GeoCode id to delete"
-        required: true
-        type: "integer"
-        format: "int64"
-      responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "GeoCode not found"
-      security:
-        - GeoCodestore_auth:
-            - "write:GeoCode"
-            - "read:GeoCode"
-  /GeoCode/{GeoCodeId}/uploadImage:
-    post:
-      tags:
-      - "GeoCode"
-      summary: "uploads an image"
-      description: ""
-      operationId: "uploadFile"
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "GeoCodeId"
-        in: "path"
-        description: "ID of GeoCode to update"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "additionalMetadata"
-        in: "formData"
-        description: "Additional data to pass to server"
-        required: false
-        type: "string"
-      - name: "file"
-        in: "formData"
-        description: "file to upload"
-        required: false
-        type: "file"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-      security:
-        - GeoCodestore_auth:
-            - "write:GeoCode"
-            - "read:GeoCode"
-securityDefinitions:
-  GeoCodestore_auth:
-    type: "oauth2"
-    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
-    flow: "implicit"
-    scopes:
-      write:GeoCode: "modify GeoCodes in your account"
-      read:GeoCode: "read your GeoCodes"
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
 definitions:
-  GeoCode:
+  CreateGeoCodeRequest :
     type: "object"
     required:
-    - "name"
-    - "photoUrls"
+      - username
+      - password
     properties:
-      id:
-        type: "integer"
-        format: "int64"
-      category:
-        $ref: "#/definitions/Category"
-      name:
+      username:
+        type: string
+      password:
+        type: string
+      DifficultyLevel:
         type: "string"
-        example: "doggie"
-      photoUrls:
-        type: "array"
-        xml:
-          name: "photoUrl"
-          wrapped: true
-        items:
-          type: "string"
-      tags:
-        type: "array"
-        xml:
-          name: "tag"
-          wrapped: true
-        items:
-          $ref: "#/definitions/Tag"
-      status:
-        type: "string"
-        description: "GeoCode status on the platform"
+        description: "GeoCode real world locating difficulty"
         enum:
-        - "available"
-        - "pending"
-        - "sold"
+          - "EASY"
+          - "MEDIUM"
+          - "DIFFICULTY"
+          - "INSANE"
     xml:
       name: "GeoCode"
-  ApiResponse:
-    type: "object"
-    properties:
-      code:
-        type: "integer"
-        format: "int32"
-      type:
-        type: "string"
-      message:
-        type: "string"
-externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
