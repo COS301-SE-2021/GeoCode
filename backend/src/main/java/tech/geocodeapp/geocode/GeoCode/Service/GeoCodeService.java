@@ -1,6 +1,8 @@
 package tech.geocodeapp.geocode.GeoCode.Service;
 
 import org.springframework.stereotype.Service;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
 import tech.geocodeapp.geocode.GeoCode.Request.CreateGeoCodeRequest;
 import tech.geocodeapp.geocode.GeoCode.Response.CreateGeoCodeResponse;
 
@@ -11,5 +13,5 @@ import tech.geocodeapp.geocode.GeoCode.Response.CreateGeoCodeResponse;
 @Service
 public interface GeoCodeService {
 
-    CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request );
+    CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException;
 }
