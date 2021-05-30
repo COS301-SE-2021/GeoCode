@@ -3,96 +3,76 @@ info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
   version: "1.0.0"
   title: "Swagger GeoCode"
-  termsOfService: "http://swagger.io/terms/"
+  termsOfService: "https://swagger.io/terms/"
   contact:
     email: "peakperformers@geocodeapp.tech"
   license:
     name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
 host: "db.geocodeapp.tech"
 basePath: "/api"
 tags:
   - name: "User"
     description: "Everything about the users of the platform"
-    externalDocs:
-      description: "Find out more"
-      url: "http://swagger.io"
   - name: "GeoCode"
     description: "Everything about QR Codes known as GeoCodes"
-    externalDocs:
-      description: "Find out more"
-      url: "http://swagger.io"
   - name: "Collectable"
     description: "Everything about the collectables that users can trade"
-    externalDocs:
-      description: "Find out more"
-      url: "http://swagger.io"
   - name: "Trackable"
     description: "Everything about the trackables users can create and follow"
-    externalDocs:
-      description: "Find out more"
-      url: "http://swagger.io"
   - name: "Leaderboard"
     description: "Everything about the different scores and rankings of users"
-    externalDocs:
-      description: "Find out more"
-      url: "http://swagger.io"
   - name: "Notifications"
     description: "Everything about how users are notified"
-    externalDocs:
-      description: "Find out more"
-      url: "http://swagger.io"
 schemes:
   - "https"
   - "http"
 paths:
-  /GeoCode:
+  /GeoCode/createGeoCode:
     post:
       tags:
         - "GeoCode"
-      summary: "Add a new GeoCode to the platform"
-      description: ""
-      operationId: "addGeoCode"
+      summary: "Creates a new GeoCode"
+      description: "Create GeoCode"
+      operationId: "createGeoCode"
       consumes:
         - "application/json"
         - "application/xml"
       produces:
         - "application/xml"
         - "application/json"
+      parameters:
+        - in: "body"
+          name: "CreateGeoCodeRequest"
+          description: "Request to create a new GeoCode"
+          required: true
+          schema:
+            $ref: '#/definitions/CreateGeoCodeRequest'
       responses:
-        "405":
-          description: "Invalid input"
-    put:
-      tags:
-        - "GeoCode"
-      summary: "Update an existing GeoCode"
-      description: ""
-      operationId: "updateGeoCode"
-      consumes:
-        - "application/json"
-        - "application/xml"
-      produces:
-        - "application/xml"
-        - "application/json"
-      responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "GeoCode not found"
-        "405":
-          description: "Validation exception"
+        '200':
+          description: "Create GeoCode Response"
+          schema:
+            $ref: '#/definitions/CreateGeoCodeResponse'
+        '401':
+          description: "Invalid Exception"
 definitions:
   CreateGeoCodeRequest :
     type: "object"
     required:
-      - username
-      - password
+      - description
+      - location
+      - difficulty
+      - hints
     properties:
-      username:
+      description:
         type: string
-      password:
+      location:
         type: string
-      DifficultyLevel:
+      hints:
+        type: array
+        items:
+          type: string
+      difficulty:
         type: "string"
         description: "GeoCode real world locating difficulty"
         enum:
@@ -101,4 +81,14 @@ definitions:
           - "DIFFICULTY"
           - "INSANE"
     xml:
-      name: "GeoCode"
+      name: "CreateGeoCodeRequest"
+  CreateGeoCodeResponse :
+    type: "object"
+    properties:
+      id:
+        type: string
+        format: uuid
+      qrCode:
+        type: string
+    xml:
+      name: "CreateGeoCodeResponse"
