@@ -171,7 +171,7 @@ definitions:
         items:
           type: string
       collectables:
-        type: string
+        $ref: '#/definitions/Collectable'
       trackables:
         type: string
       qrCode:
