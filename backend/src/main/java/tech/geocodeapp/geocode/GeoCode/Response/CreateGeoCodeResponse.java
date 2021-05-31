@@ -2,10 +2,12 @@ package tech.geocodeapp.geocode.GeoCode.Response;
 
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class CreateGeoCodeResponse {
 
-    private long id;
+    private UUID id;
     private String qrCode;
 
     /**
@@ -15,7 +17,7 @@ public class CreateGeoCodeResponse {
 
     }
 
-    public CreateGeoCodeResponse( long id, String qrCode ) {
+    public CreateGeoCodeResponse( UUID id, String qrCode ) {
 
         this.id = id;
         this.qrCode = qrCode;
@@ -26,7 +28,7 @@ public class CreateGeoCodeResponse {
      *
      * @return the specified id attribute
      */
-    public Long getId() {
+    public UUID getId() {
 
         return id;
     }
@@ -36,7 +38,7 @@ public class CreateGeoCodeResponse {
      *
      * @param id the long value to set the id attribute to
      */
-    public void setId( Long id ) {
+    public void setId( UUID id ) {
 
         this.id = id;
     }
