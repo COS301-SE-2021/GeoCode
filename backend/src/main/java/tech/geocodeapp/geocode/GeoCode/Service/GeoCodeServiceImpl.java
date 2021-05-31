@@ -11,7 +11,9 @@ import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCode.Request.CreateGeoCodeRequest;
+import tech.geocodeapp.geocode.GeoCode.Request.GetAllGeoCodesRequest;
 import tech.geocodeapp.geocode.GeoCode.Response.CreateGeoCodeResponse;
+import tech.geocodeapp.geocode.GeoCode.Response.GetAllGeoCodesResponse;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -65,6 +67,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         return new CreateGeoCodeResponse();
+    }
+
+    @Override
+    public GetAllGeoCodesResponse getAllGeoCode( GetAllGeoCodesRequest request ) {
+
+        return null;
     }
 
     /**
