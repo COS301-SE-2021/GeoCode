@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * This class implements the repository for the GeoCode Subsystem
  */
-@Repository
+@Repository( "GeoCodeRepository" )
 public interface GeoCodeRepository extends JpaRepository<GeoCode, UUID> {
 
     //SELECT
