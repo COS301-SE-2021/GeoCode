@@ -7,6 +7,8 @@ import io.swagger.model.CollectableSet;
 import io.swagger.model.Rarity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
+
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
@@ -38,6 +40,7 @@ public class CollectableType   {
   @JsonProperty("set")
   @ManyToOne
   @JoinColumn(name = "COLLECTABLE_SET_ID")
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private CollectableSet set = null;
 
   public CollectableType() {
