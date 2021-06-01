@@ -41,6 +41,18 @@ public class CollectableType   {
   @JsonProperty("set")
   private CollectableSet set = null;
 
+  public CollectableType() {
+  }
+
+  //main constructor for creating new CollectableTypes
+  public CollectableType(String name, String image, Rarity rarity, CollectableSet set) {
+    this.name = name;
+    this.image = image;
+    this.rarity = rarity;
+    this.set = set;
+  }
+
+  //property for id
   public CollectableType id(UUID id) {
     this.id = id;
     return this;
@@ -62,6 +74,7 @@ public class CollectableType   {
     this.id = id;
   }
 
+  //property for name
   public CollectableType name(String name) {
     this.name = name;
     return this;
@@ -82,6 +95,7 @@ public class CollectableType   {
     this.name = name;
   }
 
+  //property for image
   public CollectableType image(String image) {
     this.image = image;
     return this;
@@ -102,6 +116,7 @@ public class CollectableType   {
     this.image = image;
   }
 
+  //property for rarity
   public CollectableType rarity(Rarity rarity) {
     this.rarity = rarity;
     return this;
@@ -123,6 +138,7 @@ public class CollectableType   {
     this.rarity = rarity;
   }
 
+  //property for set
   public CollectableType set(CollectableSet set) {
     this.set = set;
     return this;
