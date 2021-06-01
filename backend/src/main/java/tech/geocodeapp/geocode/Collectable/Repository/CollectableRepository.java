@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 /**
- * This class implements the repository for the Collectable Subsystem
+ * This class implements the repository for the Collectable Class
  */
 @Repository
 public interface CollectableRepository extends JpaRepository<Collectable, UUID> {
