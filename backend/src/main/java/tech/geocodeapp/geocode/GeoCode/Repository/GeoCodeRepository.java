@@ -1,8 +1,8 @@
 package tech.geocodeapp.geocode.GeoCode.Repository;
 
+import io.swagger.model.GeoCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 
 
 import java.util.UUID;
@@ -11,7 +11,7 @@ import java.util.UUID;
  * This class implements the repository for the GeoCode Subsystem
  */
 @Repository
-public interface GeoCodeRepository extends JpaRepository<GeoCode, Long> {
+public interface GeoCodeRepository extends JpaRepository<GeoCode, UUID> {
 
     //SELECT
 
