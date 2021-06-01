@@ -1,4 +1,4 @@
-package io.swagger.api;
+package tech.geocodeapp.geocode.swagger.api;
 
 import java.io.IOException;
 

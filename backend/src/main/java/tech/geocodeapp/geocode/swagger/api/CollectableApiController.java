@@ -1,4 +1,4 @@
-package io.swagger.api;
+package tech.geocodeapp.geocode.swagger.api;
 
 import io.swagger.model.Collectable;
 import io.swagger.model.CreateCollectableRequest;

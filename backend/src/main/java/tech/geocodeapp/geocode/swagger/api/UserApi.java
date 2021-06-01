@@ -3,7 +3,7 @@
  * https://github.com/swagger-api/swagger-codegen
  * Do not edit the class manually.
  */
-package io.swagger.api;
+package tech.geocodeapp.geocode.swagger.api;
 
 import io.swagger.model.GetMyGeocodeRequest;
 import io.swagger.model.GetMyGeocodeResponse;
