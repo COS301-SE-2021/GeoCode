@@ -15,11 +15,15 @@ import java.util.UUID;
 public interface CollectableRepository extends JpaRepository<Collectable, UUID> {
     /**
      * Gets all Collectables of a provided CollectableType
-     * @param type the CollectableType to search by
+     * @param type The CollectableType to search by
      * @return A List of Collectable objects found
      */
     List<Collectable> findCollectablesByType(CollectableType type);
-    //UPDATE
 
-    //DELETE
+    /**
+     * Deletes all Collectables of a provided CollectableType
+     * @param type The CollectableType to delete by
+     * @return A long containing the number of deleted records
+     */
+    long deleteCollectablesByType(CollectableType type);
 }
