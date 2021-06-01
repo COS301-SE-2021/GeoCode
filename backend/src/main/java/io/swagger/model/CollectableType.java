@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -39,6 +36,8 @@ public class CollectableType   {
   private Rarity rarity = null;
 
   @JsonProperty("set")
+  @ManyToOne
+  @JoinColumn(name = "COLLECTABLE_SET_ID")
   private CollectableSet set = null;
 
   public CollectableType() {
