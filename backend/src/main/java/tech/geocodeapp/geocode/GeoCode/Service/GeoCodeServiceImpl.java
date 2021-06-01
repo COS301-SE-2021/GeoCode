@@ -5,15 +5,14 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
-import io.swagger.model.GetGeoCodesRequest;
+import io.swagger.model.CreateGeoCodeRequest;
+import io.swagger.model.CreateGeoCodeResponse;
 import io.swagger.model.GetGeoCodesResponse;
 import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
-import tech.geocodeapp.geocode.GeoCode.Request.CreateGeoCodeRequest;
-import tech.geocodeapp.geocode.GeoCode.Response.CreateGeoCodeResponse;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -48,7 +47,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified CreateGeoCodeRequest
      */
     @Override
-    public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException {
+    public CreateGeoCodeResponse createGeoCode(CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException {
 
         /** Validate the request */
         if ( request == null ) {
@@ -70,7 +69,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     }
 
     @Override
-    public GetGeoCodesResponse getGeoCodes(GetGeoCodesRequest request) {
+    public GetGeoCodesResponse getGeoCodes() {
 
         return new GetGeoCodesResponse();
     }
