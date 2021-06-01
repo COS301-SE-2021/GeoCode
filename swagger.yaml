@@ -40,6 +40,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateGeoCodeRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateGeoCodeRequest'
       responses:
         '200':
           description: "Create GeoCode Response"
@@ -47,8 +50,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateGeoCodeResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGeoCodeResponse'
         '401':
-          description: "Invalid Exception"
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
 
   /Collectable/createCollectable:
     post:
@@ -64,6 +72,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateCollectableRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateCollectableRequest'
       responses:
         '200':
           description: "Collectable created successfully"
@@ -71,8 +82,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Collectable'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Collectable'
         '401':
-          description: "Invalid Exception"
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
 
   /Collectable/getGeoCodeCollectables:
     post:
@@ -88,6 +104,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/getGeoCodeCollectablesRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/getGeoCodeCollectablesRequest'
       responses:
         '200':
           description: "Returned the GeoCode's Collectables successfully"
@@ -95,8 +114,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GeoCodeCollectablesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GeoCodeCollectablesResponse'
         '401':
-          description: "Invalid Exception"
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
 
   /User/getMyGeocodes:
     post:
@@ -112,6 +136,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/GetMyGeocodeRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetMyGeocodeRequest'
       responses:
         '200':
           description: "Successfully gotten geocodes"
@@ -119,10 +146,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetMyGeocodeResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetMyGeocodeResponse'
         '401':
-          description: "Invalid Exception"
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
 
 components:
+  responses:
+    UnauthorizedError:
+      description: Invalid JWT token
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     GeoCode:
       type: "object"
