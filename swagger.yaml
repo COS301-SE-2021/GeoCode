@@ -120,25 +120,15 @@ paths:
       security:
         - bearerAuth: []
   /GeoCode/getGeoCodes:
-    post:
+    get:
       tags:
         - "GeoCode"
-      summary: "Get all the GeoCode's on the platform"
-      description: "Get all the GeoCode's that is stored on the platform"
+      summary: "Get all the GeoCodes on the platform"
+      description: "Get all the GeoCodes that are stored on the platform"
       operationId: "getGeoCodes"
-      requestBody:
-        required: true
-        description: "Request to get all the GeoCode's"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GetGeoCodesRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/GetGeoCodesRequest'
       responses:
         '200':
-          description: "Returned all the GeoCode's successfully"
+          description: "Returned all the GeoCodes successfully"
           content:
             application/json:
               schema:
@@ -741,34 +731,15 @@ components:
           type: string
       xml:
         name: "getGeoCodesByDifficultyResponse"
-    GetGeoCodesRequest:
-      type: "object"
-      required:
-        - description
-        - location
-        - difficulty
-        - hints
-      properties:
-        description:
-          type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
-      xml:
-        name: "getGeoCodesByDifficultyRequest"
     GetGeoCodesResponse:
       type: "object"
+      required:
+        - geocodes
       properties:
-        id:
-          type: string
-          format: uuid
-        qrCode:
-          type: string
+        geocodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoCode'
       xml:
         name: "getGeoCodesByDifficultyResponse"
     GetHintsRequest:
