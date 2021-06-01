@@ -627,6 +627,24 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    Difficulty:
+      type: string
+      description: "GeoCode real world locating difficulty"
+      enum:
+        - "EASY"
+        - "MEDIUM"
+        - "DIFFICULTY"
+        - "INSANE"
+    
+    Rarity:
+      type: string
+      enum:
+        - "COMMON"
+        - "UNCOMMON"
+        - "RARE"
+        - "EPIC"
+        - "LEGENDARY"
+    
     GeoCode:
       type: "object"
       required:
@@ -642,13 +660,7 @@ components:
           type: string
           format: uuid
         difficulty:
-          type: string
-          description: "GeoCode real world locating difficulty"
-          enum:
-            - "EASY"
-            - "MEDIUM"
-            - "DIFFICULTY"
-            - "INSANE"
+          $ref: '#/components/schemas/Difficulty'
         available:
           type: boolean
         description:
@@ -684,13 +696,7 @@ components:
           items:
             type: string
         difficulty:
-          type: string
-          description: "GeoCode real world locating difficulty"
-          enum:
-            - "EASY"
-            - "MEDIUM"
-            - "DIFFICULTY"
-            - "INSANE"
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "CreateGeoCodeRequest"
     CreateGeoCodeResponse:
@@ -722,13 +728,7 @@ components:
           items:
             type: string
         difficulty:
-          type: string
-          description: "GeoCode real world locating difficulty"
-          enum:
-            - "EASY"
-            - "MEDIUM"
-            - "DIFFICULTY"
-            - "INSANE"
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodesByDifficultyRequest"
     GetGeoCodesByDifficultyResponse:
@@ -758,13 +758,7 @@ components:
           items:
             type: string
         difficulty:
-          type: string
-          description: "GeoCode real world locating difficulty"
-          enum:
-            - "EASY"
-            - "MEDIUM"
-            - "DIFFICULTY"
-            - "INSANE"
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodesByDifficultyRequest"
     GetGeoCodesResponse:
@@ -794,13 +788,7 @@ components:
           items:
             type: string
         difficulty:
-          type: string
-          description: "GeoCode real world locating difficulty"
-          enum:
-            - "EASY"
-            - "MEDIUM"
-            - "DIFFICULTY"
-            - "INSANE"
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodesByDifficultyRequest"
     GetHintsResponse:
@@ -830,13 +818,7 @@ components:
           items:
             type: string
         difficulty:
-          type: string
-          description: "GeoCode real world locating difficulty"
-          enum:
-            - "EASY"
-            - "MEDIUM"
-            - "DIFFICULTY"
-            - "INSANE"
+         $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodeByQRCodeRequest"
     GetGeoCodeByQRCodeResponse:
@@ -866,13 +848,7 @@ components:
           items:
             type: string
         difficulty:
-          type: string
-          description: "GeoCode real world locating difficulty"
-          enum:
-            - "EASY"
-            - "MEDIUM"
-            - "DIFFICULTY"
-            - "INSANE"
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodeByLocationRequest"
     GetGeoCodeByLocationResponse:
@@ -902,13 +878,7 @@ components:
           items:
             type: string
         difficulty:
-          type: string
-          description: "GeoCode real world locating difficulty"
-          enum:
-            - "EASY"
-            - "MEDIUM"
-            - "DIFFICULTY"
-            - "INSANE"
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getTrackablesRequest"
     GetTrackablesResponse:
@@ -938,13 +908,7 @@ components:
           items:
             type: string
         difficulty:
-          type: string
-          description: "GeoCode real world locating difficulty"
-          enum:
-            - "EASY"
-            - "MEDIUM"
-            - "DIFFICULTY"
-            - "INSANE"
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "swapCollectablesRequest"
     SwapCollectablesResponse:
@@ -974,13 +938,7 @@ components:
           items:
             type: string
         difficulty:
-          type: string
-          description: "GeoCode real world locating difficulty"
-          enum:
-            - "EASY"
-            - "MEDIUM"
-            - "DIFFICULTY"
-            - "INSANE"
+         $ref: '#/components/schemas/Difficulty'
       xml:
         name: "updateAvailabilityRequest"
     UpdateAvailabilityResponse:
@@ -1022,13 +980,7 @@ components:
         image:
           type: string
         rarity:
-          type: string
-          enum:
-            - "COMMON"
-            - "UNCOMMON"
-            - "RARE"
-            - "EPIC"
-            - "LEGENDARY"
+          $ref: "#/components/schemas/Rarity"
         set:
           $ref: "#/components/schemas/CollectableSet"
       xml:
@@ -1089,13 +1041,7 @@ components:
         image:
           type: string
         rarity:
-          type: string
-          enum:
-            - "COMMON"
-            - "UNCOMMON"
-            - "RARE"
-            - "EPIC"
-            - "LEGENDARY"
+          $ref: "#/components/schemas/Rarity"
         setId:
           type: string
           format: uuid
@@ -1163,13 +1109,7 @@ components:
         - rarity
       properties:
         rarity:
-          type: string
-          enum:
-            - "COMMON"
-            - "UNCOMMON"
-            - "RARE"
-            - "EPIC"
-            - "LEGENDARY"
+          $ref: "#/components/schemas/Rarity"
       xml:
         name: "GetCollectableTypeByRarity"
         

@@ -3,8 +3,8 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.CollectableSet;
+import io.swagger.model.Rarity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
  * CollectableType
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T17:39:45.783Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T18:53:58.734Z[GMT]")
 
 
 public class CollectableType   {
@@ -28,44 +28,8 @@ public class CollectableType   {
   @JsonProperty("image")
   private String image = null;
 
-  /**
-   * Gets or Sets rarity
-   */
-  public enum RarityEnum {
-    COMMON("COMMON"),
-    
-    UNCOMMON("UNCOMMON"),
-    
-    RARE("RARE"),
-    
-    EPIC("EPIC"),
-    
-    LEGENDARY("LEGENDARY");
-
-    private String value;
-
-    RarityEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static RarityEnum fromValue(String text) {
-      for (RarityEnum b : RarityEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
   @JsonProperty("rarity")
-  private RarityEnum rarity = null;
+  private Rarity rarity = null;
 
   @JsonProperty("set")
   private CollectableSet set = null;
@@ -131,7 +95,7 @@ public class CollectableType   {
     this.image = image;
   }
 
-  public CollectableType rarity(RarityEnum rarity) {
+  public CollectableType rarity(Rarity rarity) {
     this.rarity = rarity;
     return this;
   }
@@ -143,11 +107,12 @@ public class CollectableType   {
   @Schema(required = true, description = "")
       @NotNull
 
-    public RarityEnum getRarity() {
+    @Valid
+    public Rarity getRarity() {
     return rarity;
   }
 
-  public void setRarity(RarityEnum rarity) {
+  public void setRarity(Rarity rarity) {
     this.rarity = rarity;
   }
 
