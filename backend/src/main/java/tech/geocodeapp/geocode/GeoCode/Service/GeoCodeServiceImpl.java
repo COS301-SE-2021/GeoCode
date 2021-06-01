@@ -5,6 +5,8 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import io.swagger.model.GetGeoCodesRequest;
+import io.swagger.model.GetGeoCodesResponse;
 import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
@@ -65,6 +67,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         return new CreateGeoCodeResponse();
+    }
+
+    @Override
+    public GetGeoCodesResponse getGeoCodes(GetGeoCodesRequest request) {
+
+        return new GetGeoCodesResponse();
     }
 
     /**
