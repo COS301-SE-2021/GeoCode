@@ -3,8 +3,8 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.Collectable;
+import io.swagger.model.Difficulty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,49 +17,15 @@ import javax.validation.constraints.*;
  * GeoCode
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T17:39:45.783Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T18:53:58.734Z[GMT]")
 
 
 public class GeoCode   {
   @JsonProperty("id")
   private UUID id = null;
 
-  /**
-   * GeoCode real world locating difficulty
-   */
-  public enum DifficultyEnum {
-    EASY("EASY"),
-    
-    MEDIUM("MEDIUM"),
-    
-    DIFFICULTY("DIFFICULTY"),
-    
-    INSANE("INSANE");
-
-    private String value;
-
-    DifficultyEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static DifficultyEnum fromValue(String text) {
-      for (DifficultyEnum b : DifficultyEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
   @JsonProperty("difficulty")
-  private DifficultyEnum difficulty = null;
+  private Difficulty difficulty = null;
 
   @JsonProperty("available")
   private Boolean available = null;
@@ -104,23 +70,24 @@ public class GeoCode   {
     this.id = id;
   }
 
-  public GeoCode difficulty(DifficultyEnum difficulty) {
+  public GeoCode difficulty(Difficulty difficulty) {
     this.difficulty = difficulty;
     return this;
   }
 
   /**
-   * GeoCode real world locating difficulty
+   * Get difficulty
    * @return difficulty
    **/
-  @Schema(required = true, description = "GeoCode real world locating difficulty")
+  @Schema(required = true, description = "")
       @NotNull
 
-    public DifficultyEnum getDifficulty() {
+    @Valid
+    public Difficulty getDifficulty() {
     return difficulty;
   }
 
-  public void setDifficulty(DifficultyEnum difficulty) {
+  public void setDifficulty(Difficulty difficulty) {
     this.difficulty = difficulty;
   }
 
