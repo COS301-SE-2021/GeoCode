@@ -1,9 +1,9 @@
 package tech.geocodeapp.geocode.swagger.api;
 
-import io.swagger.model.Collectable;
-import io.swagger.model.CreateCollectableRequest;
-import io.swagger.model.GeoCodeCollectablesResponse;
-import io.swagger.model.GetGeoCodeCollectablesRequest;
+import tech.geocodeapp.geocode.swagger.model.Collectable;
+import tech.geocodeapp.geocode.swagger.model.CreateCollectableRequest;
+import tech.geocodeapp.geocode.swagger.model.GeoCodeCollectablesResponse;
+import tech.geocodeapp.geocode.swagger.model.GetGeoCodeCollectablesRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

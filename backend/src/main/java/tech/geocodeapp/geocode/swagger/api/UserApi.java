@@ -5,8 +5,8 @@
  */
 package tech.geocodeapp.geocode.swagger.api;
 
-import io.swagger.model.GetMyGeocodeRequest;
-import io.swagger.model.GetMyGeocodeResponse;
+import tech.geocodeapp.geocode.swagger.model.GetMyGeocodeRequest;
+import tech.geocodeapp.geocode.swagger.model.GetMyGeocodeResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
