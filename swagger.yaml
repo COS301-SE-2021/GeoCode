@@ -58,6 +58,38 @@ paths:
       security:
         - bearerAuth: []
 
+  /Collectable/createCollectableType:
+    post:
+      tags:
+        - "Collectable"
+      summary: "Creates a new Collectable Type"
+      description: "Create Collectable Type"
+      operationId: "createCollectableType"
+      requestBody:
+        required: true
+        description: "Request to create a new Collectable Type"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCollectableTypeRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateCollectableTypeRequest'
+      responses:
+        '200':
+          description: "Collectable Type created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectableType'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CollectableType'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+        
   /Collectable/createCollectable:
     post:
       tags:
@@ -90,10 +122,10 @@ paths:
       security:
         - bearerAuth: []
 
-  /Collectable/getGeoCodeCollectables:
+  /GeoCode/getCollectables:
     post:
       tags:
-        - "Collectable"
+        - "GeoCode"
       summary: "Get all Collectables for a certain GeoCode"
       description: "Get a GeoCode's Collectables"
       operationId: "getGeoCodeCollectables"
@@ -103,20 +135,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/getGeoCodeCollectablesRequest'
+              $ref: '#/components/schemas/GetCollectablesRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/getGeoCodeCollectablesRequest'
+              $ref: '#/components/schemas/GetCollectablesRequest'
       responses:
         '200':
           description: "Returned the GeoCode's Collectables successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GeoCodeCollectablesResponse'
+                $ref: '#/components/schemas/GetCollectablesResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/GeoCodeCollectablesResponse'
+                $ref: '#/components/schemas/GetCollectablesResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -153,7 +185,195 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
+  
+  /Collectable/createCollectableSet:
+    post:
+      tags:
+        - "Collectable"
+      summary: "Create a new Collectable Set"
+      description: "Create Collectable Set"
+      operationId: "createCollectableSet"
+      requestBody:
+        required: true
+        description: "Request to create a new Collectable Set"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCollectableSetRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateCollectableSetRequest'
+      responses:
+        '200':
+          description: "Successfully created Collectable Set"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectableSet'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CollectableSet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+        
+  /Collectable/getCollectables:
+    get:
+      tags:
+        - "Collectable"
+      description: "Returns all Collectables"
+      operationId: "getCollectables"
+      responses:
+        '200':
+          description: "Successfully returned Collectables"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectablesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCollectablesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []     
+              
+  /Collectable/getCollectableTypes:
+    get:
+      tags:
+        - "Collectable"
+      description: "Returns all Collectable Types"
+      operationId: "getCollectableTypes"
+      responses:
+        '200':
+          description: "Successfully returned Collectable Types"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectableTypesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCollectableTypesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+                
+  /Collectable/getCollectableSets:
+    get:
+      tags:
+        - "Collectable"
+      description: "Returns all Collectable Sets"
+      operationId: "getCollectableSets"
+      responses:
+        '200':
+          description: "Successfully returned Collectable Sets"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectableSetsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCollectableSetsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+                
+  /Collectable/getCollectableByType:
+    post:
+      tags:
+        - "Collectable"
+      description: "Returns all Collectables of the specified type"
+      operationId: "getCollectableByType"
+      requestBody:
+        required: true
+        description: "Request Collectables by type"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetCollectableByTypeRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetCollectableByTypeRequest'
+      responses:
+        '201':
+          description: "Successfully returned Collectables of given type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectablesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCollectablesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+        
+  /Collectable/getCollectableTypeByRarity:
+    post:
+      tags:
+        - "Collectable"
+      description: "Returns all Collectable Types of the specified rarity"
+      operationId: "getCollectableTypeByRarity"
+      requestBody:
+        required: true
+        description: "Request Collectable Types by rarity"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetCollectableTypeByRarityRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetCollectableTypeByRarityRequest'
+      responses:
+        '201':
+          description: "Successfully returned Collectable Types of given rarity"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectableTypesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCollectableTypesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+        
+  /Collectable/getCollectableTypeBySet:
+    post:
+      tags:
+        - "Collectable"
+      description: "Returns all Collectable Types of the specified set"
+      operationId: "getCollectableTypeBySet"
+      requestBody:
+        required: true
+        description: "Request Collectable Types by set"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetCollectableTypeBySetRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetCollectableTypeBySetRequest'
+      responses:
+        '201':
+          description: "Successfully returned Collectable Types of given set"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectableTypesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCollectableTypesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []      
+  
 components:
   responses:
     UnauthorizedError:
@@ -237,7 +457,8 @@ components:
           type: string
       xml:
         name: "CreateGeoCodeResponse"
-    getGeoCodeCollectablesRequest:
+        
+    GetCollectablesRequest:
       type: "object"
       required:
         - id
@@ -246,38 +467,88 @@ components:
           type: string
           format: uuid
       xml:
-        name: "getGeoCodeCollectablesRequest"
+        name: "getCollectablesRequest"
+        
+    CollectableType:
+      type: "object"
+      required:
+        - id
+        - name
+        - image
+        - rarity
+        - set
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        image:
+          type: string
+        rarity:
+          type: string
+          enum:
+            - "COMMON"
+            - "UNCOMMON"
+            - "RARE"
+            - "EPIC"
+            - "LEGENDARY"
+        set:
+          $ref: "#/components/schemas/CollectableSet"
+      xml:
+        name: "CollectableType"
+        
+    CollectableSet:
+      type: "object"
+      required:
+        - id
+        - name
+        - description
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+      xml:
+        name: "CollectableSet"
+        
     Collectable:
       type: "object"
       required:
         - id
-        - name
-        - image
-        - rarity
+        - type
       properties:
         id:
           type: string
           format: uuid
-        name:
-          type: string
-        image:
-          type: string
-        rarity:
-          type: string
-          enum:
-            - "COMMON"
-            - "UNCOMMON"
-            - "RARE"
-            - "EPIC"
-            - "LEGENDARY"
+        type:
+          $ref: "#/components/schemas/CollectableType"
       xml:
         name: "Collectable"
-    CreateCollectableRequest:
+    
+    CreateCollectableSetRequest:
+      type: "object"
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      xml:
+        name: "CreateCollectableSetRequest"
+    
+    CreateCollectableTypeRequest:
       type: "object"
       required:
         - name
         - image
         - rarity
+        - setId
       properties:
         name:
           type: string
@@ -291,10 +562,25 @@ components:
             - "RARE"
             - "EPIC"
             - "LEGENDARY"
+        setId:
+          type: string
+          format: uuid
       xml:
-        name: "CreateCollectableCollectable"
-    GeoCodeCollectablesResponse:
-      type: object
+        name: "CreateCollectableTypeRequest"
+        
+    CreateCollectableRequest:
+      type: "object"
+      required:
+        - collectableTypeId
+      properties:
+        collectableTypeId:
+          type: string
+          format: uuid
+      xml:
+        name: "CreateCollectableRequest"
+        
+    GetCollectablesResponse:
+      type: "object"
       required:
         - collectables
       properties:
@@ -303,9 +589,70 @@ components:
           items:
             $ref: '#/components/schemas/Collectable'
       xml:
-        name: "GeoCodeCollectableResponse"
+        name: "CollectableResponse"
+        
+    GetCollectableTypesResponse:
+      type: "object"
+      required:
+        - collectableTypes
+      properties:
+        collectableTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectableType'
+      xml:
+        name: "CollectableTypeResponse"
+    
+    GetCollectableSetsResponse:
+      type: "object"
+      required:
+        - collectableSets
+      properties:
+        collectableSets:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectableSet'
+            
+    GetCollectableByTypeRequest:
+      type: "object"
+      required:
+        - collectableTypeId
+      properties:
+        collectableTypeId:
+          type: string
+          format: uuid
+      xml:
+        name: "GetCollectableByTypeRequest"
+        
+    GetCollectableTypeByRarityRequest:
+      type: "object"
+      required:
+        - rarity
+      properties:
+        rarity:
+          type: string
+          enum:
+            - "COMMON"
+            - "UNCOMMON"
+            - "RARE"
+            - "EPIC"
+            - "LEGENDARY"
+      xml:
+        name: "GetCollectableTypeByRarity"
+        
+    GetCollectableTypeBySetRequest:
+      type: "object"
+      required:
+        - setId
+      properties:
+        setId:
+          type: string
+          format: uuid
+      xml:
+        name: "GetCollectableTypeBySet"
+        
     User:
-      type: object
+      type: "object"
       required:
         - username
       properties:
@@ -339,7 +686,7 @@ components:
       xml:
         name: "getMyGeocodeRequest"
     GetMyGeocodeResponse:
-      type: object
+      type: "object"
       properties:
         geocodes:
           type: array
