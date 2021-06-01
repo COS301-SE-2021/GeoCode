@@ -1,0 +1,350 @@
+openapi: 3.0.0
+info:
+  description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
+  version: "1.0.0"
+  title: "Swagger GeoCode"
+  termsOfService: "https://swagger.io/terms/"
+  contact:
+    email: "peakperformers@geocodeapp.tech"
+  license:
+    name: "Apache 2.0"
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: 'http://geocodeapp.tech:8080/api'
+tags:
+  - name: "User"
+    description: "Everything about the users of the platform"
+  - name: "GeoCode"
+    description: "Everything about QR Codes known as GeoCodes"
+  - name: "Collectable"
+    description: "Everything about the collectables that users can trade"
+  - name: "Trackable"
+    description: "Everything about the trackables users can create and follow"
+  - name: "Leaderboard"
+    description: "Everything about the different scores and rankings of users"
+  - name: "Notifications"
+    description: "Everything about how users are notified"
+
+paths:
+  /GeoCode/createGeoCode:
+    post:
+      tags:
+        - "GeoCode"
+      summary: "Creates a new GeoCode"
+      description: "Create GeoCode"
+      operationId: "createGeoCode"
+      requestBody:
+        required: true
+        description: "Request to create a new GeoCode"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGeoCodeRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateGeoCodeRequest'
+      responses:
+        '200':
+          description: "Create GeoCode Response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGeoCodeResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGeoCodeResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Collectable/createCollectable:
+    post:
+      tags:
+        - "Collectable"
+      summary: "Creates a new Collectable"
+      description: "Create Collectable"
+      operationId: "createCollectable"
+      requestBody:
+        required: true
+        description: "Request to create a new Collectable"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCollectableRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateCollectableRequest'
+      responses:
+        '200':
+          description: "Collectable created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collectable'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Collectable'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Collectable/getGeoCodeCollectables:
+    post:
+      tags:
+        - "Collectable"
+      summary: "Get all Collectables for a certain GeoCode"
+      description: "Get a GeoCode's Collectables"
+      operationId: "getGeoCodeCollectables"
+      requestBody:
+        required: true
+        description: "Request to get a GeoCode's Collectables"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/getGeoCodeCollectablesRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/getGeoCodeCollectablesRequest'
+      responses:
+        '200':
+          description: "Returned the GeoCode's Collectables successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeoCodeCollectablesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GeoCodeCollectablesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /User/getMyGeocodes:
+    post:
+      tags:
+        - "User"
+      summary: "Get all geocodes associated with a user"
+      description: "Get My Geocodes"
+      operationId: "getMyGeocodes"
+      requestBody:
+        required: true
+        description: "Request to get geocodes belonging to user"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetMyGeocodeRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetMyGeocodeRequest'
+      responses:
+        '200':
+          description: "Successfully gotten geocodes"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMyGeocodeResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetMyGeocodeResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+components:
+  responses:
+    UnauthorizedError:
+      description: Invalid JWT token
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    GeoCode:
+      type: "object"
+      required:
+       - id
+        - difficulty
+        - description
+       - hints
+        - qrCode
+        - location
+      properties:
+        id:
+          type: string
+          format: uuid
+        difficulty:
+          type: string
+          description: "GeoCode real world locating difficulty"
+          enum:
+            - "EASY"
+            - "MEDIUM"
+            - "DIFFICULTY"
+            - "INSANE"
+        description:
+          type: string
+        hints:
+          type: array
+          items:
+            type: string
+        collectables:
+          $ref: '#/components/schemas/Collectable'
+        trackables:
+          type: string
+        qrCode:
+          type: string
+        location:
+          type: string
+      xml:
+        name: "GeoCode"
+    CreateGeoCodeRequest :
+      type: "object"
+      required:
+        - description
+        - location
+        - difficulty
+        - hints
+      properties:
+        description:
+          type: string
+        location:
+          type: string
+        hints:
+          type: array
+          items:
+            type: string
+        difficulty:
+          type: string
+          description: "GeoCode real world locating difficulty"
+          enum:
+            - "EASY"
+            - "MEDIUM"
+            - "DIFFICULTY"
+            - "INSANE"
+      xml:
+        name: "CreateGeoCodeRequest"
+    CreateGeoCodeResponse :
+      type: "object"
+      properties:
+        id:
+          type: string
+          format: uuid
+        qrCode:
+          type: string
+      xml:
+        name: "CreateGeoCodeResponse"
+    getGeoCodeCollectablesRequest:
+      type: "object"
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+      xml:
+        name: "getGeoCodeCollectablesRequest"
+    Collectable:
+      type: "object"
+      required:
+        - id
+        - name
+        - image
+        - rarity
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        image:
+          type: string
+        rarity:
+          type: string
+          enum:
+            - "COMMON"
+            - "UNCOMMON"
+            - "RARE"
+            - "EPIC"
+            - "LEGENDARY"
+      xml:
+        name: "Collectable"
+    CreateCollectableRequest:
+      type: "object"
+      required:
+        - name
+        - image
+        - rarity
+      properties:
+        name:
+          type: string
+        image:
+          type: string
+        rarity:
+          type: string
+          enum:
+            - "COMMON"
+            - "UNCOMMON"
+            - "RARE"
+            - "EPIC"
+            - "LEGENDARY"
+      xml:
+        name: "CreateCollectableCollectable"
+    GeoCodeCollectablesResponse:
+      type: object
+      required:
+        - collectables
+      properties:
+        collectables:
+          type: array
+          items:
+            $ref: '#/components/schemas/Collectable'
+      xml:
+        name: "GeoCodeCollectableResponse"
+    User:
+      type: object
+      required:
+        - username
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+        currentCollectable:
+          $ref: '#/components/schemas/Collectable'
+        foundCollectables:
+          type: array
+          items:
+            $ref: '#/components/schemas/Collectable'
+        foundGeocodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoCode'
+        myGeocodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoCode'
+    GetMyGeocodeRequest:
+      type: "object"
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+      xml:
+        name: "getMyGeocodeRequest"
+    GetMyGeocodeResponse:
+      type: object
+      properties:
+        geocodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoCode'
+      xml:
+        name: "getMyGeocodeResponse"
+

@@ -1,0 +1,297 @@
+package tech.geocodeapp.geocode.swagger.model;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import tech.geocodeapp.geocode.swagger.model.Collectable;
+import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
+/**
+ * GeoCode
+ */
+@Validated
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T08:10:17.138Z[GMT]")
+
+
+public class GeoCode   {
+  @JsonProperty("id")
+  private UUID id = null;
+
+  /**
+   * GeoCode real world locating difficulty
+   */
+  public enum DifficultyEnum {
+    EASY("EASY"),
+    
+    MEDIUM("MEDIUM"),
+    
+    DIFFICULTY("DIFFICULTY"),
+    
+    INSANE("INSANE");
+
+    private String value;
+
+    DifficultyEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static DifficultyEnum fromValue(String text) {
+      for (DifficultyEnum b : DifficultyEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+  @JsonProperty("difficulty")
+  private DifficultyEnum difficulty = null;
+
+  @JsonProperty("description")
+  private String description = null;
+
+  @JsonProperty("hints")
+  @Valid
+  private List<String> hints = null;
+
+  @JsonProperty("collectables")
+  private Collectable collectables = null;
+
+  @JsonProperty("trackables")
+  private String trackables = null;
+
+  @JsonProperty("qrCode")
+  private String qrCode = null;
+
+  @JsonProperty("location")
+  private String location = null;
+
+  public GeoCode id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public GeoCode difficulty(DifficultyEnum difficulty) {
+    this.difficulty = difficulty;
+    return this;
+  }
+
+  /**
+   * GeoCode real world locating difficulty
+   * @return difficulty
+   **/
+  @Schema(description = "GeoCode real world locating difficulty")
+  
+    public DifficultyEnum getDifficulty() {
+    return difficulty;
+  }
+
+  public void setDifficulty(DifficultyEnum difficulty) {
+    this.difficulty = difficulty;
+  }
+
+  public GeoCode description(String description) {
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * Get description
+   * @return description
+   **/
+  @Schema(description = "")
+  
+    public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public GeoCode hints(List<String> hints) {
+    this.hints = hints;
+    return this;
+  }
+
+  public GeoCode addHintsItem(String hintsItem) {
+    if (this.hints == null) {
+      this.hints = new ArrayList<String>();
+    }
+    this.hints.add(hintsItem);
+    return this;
+  }
+
+  /**
+   * Get hints
+   * @return hints
+   **/
+  @Schema(description = "")
+  
+    public List<String> getHints() {
+    return hints;
+  }
+
+  public void setHints(List<String> hints) {
+    this.hints = hints;
+  }
+
+  public GeoCode collectables(Collectable collectables) {
+    this.collectables = collectables;
+    return this;
+  }
+
+  /**
+   * Get collectables
+   * @return collectables
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public Collectable getCollectables() {
+    return collectables;
+  }
+
+  public void setCollectables(Collectable collectables) {
+    this.collectables = collectables;
+  }
+
+  public GeoCode trackables(String trackables) {
+    this.trackables = trackables;
+    return this;
+  }
+
+  /**
+   * Get trackables
+   * @return trackables
+   **/
+  @Schema(description = "")
+  
+    public String getTrackables() {
+    return trackables;
+  }
+
+  public void setTrackables(String trackables) {
+    this.trackables = trackables;
+  }
+
+  public GeoCode qrCode(String qrCode) {
+    this.qrCode = qrCode;
+    return this;
+  }
+
+  /**
+   * Get qrCode
+   * @return qrCode
+   **/
+  @Schema(description = "")
+  
+    public String getQrCode() {
+    return qrCode;
+  }
+
+  public void setQrCode(String qrCode) {
+    this.qrCode = qrCode;
+  }
+
+  public GeoCode location(String location) {
+    this.location = location;
+    return this;
+  }
+
+  /**
+   * Get location
+   * @return location
+   **/
+  @Schema(description = "")
+  
+    public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+
+  @Override
+  public boolean equals(java.lang.Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    GeoCode geoCode = (GeoCode) o;
+    return Objects.equals(this.id, geoCode.id) &&
+        Objects.equals(this.difficulty, geoCode.difficulty) &&
+        Objects.equals(this.description, geoCode.description) &&
+        Objects.equals(this.hints, geoCode.hints) &&
+        Objects.equals(this.collectables, geoCode.collectables) &&
+        Objects.equals(this.trackables, geoCode.trackables) &&
+        Objects.equals(this.qrCode, geoCode.qrCode) &&
+        Objects.equals(this.location, geoCode.location);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, difficulty, description, hints, collectables, trackables, qrCode, location);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class GeoCode {\n");
+    
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    hints: ").append(toIndentedString(hints)).append("\n");
+    sb.append("    collectables: ").append(toIndentedString(collectables)).append("\n");
+    sb.append("    trackables: ").append(toIndentedString(trackables)).append("\n");
+    sb.append("    qrCode: ").append(toIndentedString(qrCode)).append("\n");
+    sb.append("    location: ").append(toIndentedString(location)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
