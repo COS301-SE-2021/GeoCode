@@ -124,7 +124,7 @@ Industry Mentor:
 * Kyle Pretorius:  kyle.pretorius@5dt.com
 
 University Mentor:
-* TBA
+* Andrew Broekman: andrew.broekman@up.ac.za
 
 </div>
 
