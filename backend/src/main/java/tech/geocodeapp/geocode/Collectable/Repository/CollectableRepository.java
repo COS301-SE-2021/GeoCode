@@ -14,7 +14,7 @@ import java.util.UUID;
 @Repository
 public interface CollectableRepository extends JpaRepository<Collectable, UUID> {
     //SELECT
-    List<Collectable> findCollectableByType(CollectableType type);
+    List<Collectable> findCollectablesByType(CollectableType type);
     //UPDATE
 
     //DELETE
