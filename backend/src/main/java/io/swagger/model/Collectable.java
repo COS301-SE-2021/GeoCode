@@ -7,6 +7,11 @@ import io.swagger.model.CollectableType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -16,14 +21,25 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T17:39:45.783Z[GMT]")
 
-
+@Entity
 public class Collectable   {
   @JsonProperty("id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("type")
   private CollectableType type = null;
 
+  public Collectable() {
+  }
+
+  //main constructor for creating new collectables
+  public Collectable(CollectableType type) {
+    this.type = type;
+  }
+
+  //property for id
   public Collectable id(UUID id) {
     this.id = id;
     return this;
@@ -45,6 +61,7 @@ public class Collectable   {
     this.id = id;
   }
 
+  //property for type
   public Collectable type(CollectableType type) {
     this.type = type;
     return this;
