@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.CollectableType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
+
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
@@ -28,6 +30,7 @@ public class Collectable   {
   @JsonProperty("type")
   @ManyToOne
   @JoinColumn(name = "COLLECTABLE_TYPE_ID")
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private CollectableType type = null;
 
   public Collectable() {
