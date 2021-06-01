@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
+import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCode.Request.CreateGeoCodeRequest;
 import tech.geocodeapp.geocode.GeoCode.Request.GetAllGeoCodesRequest;
@@ -17,6 +19,8 @@ import tech.geocodeapp.geocode.GeoCode.Response.GetAllGeoCodesResponse;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 
 /**
@@ -46,6 +50,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     * @throws QRCodeException an error occurred when attempting to create the QR Image
      */
     @Override
     public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException {
@@ -69,10 +76,34 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         return new CreateGeoCodeResponse();
     }
 
+    /**
+     * Get all the stored GeoCodes in the Repo
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetAllGeoCodesRequest
+     *
+     * @throws RepoException there was an issue accessing the repository
+     */
     @Override
-    public GetAllGeoCodesResponse getAllGeoCode( GetAllGeoCodesRequest request ) {
+    public GetAllGeoCodesResponse getAllGeoCode( GetAllGeoCodesRequest request ) throws RepoException {
 
-        return null;
+        /** Validate the repo */
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+
+        ListIterator< GeoCode > it = geoCodeRepo.findAll().listIterator();
+        ArrayList< GeoCode > allGeoCodes = new ArrayList<>();
+
+        while ( it.hasNext() ) {
+
+            allGeoCodes.add( ( GeoCode ) it );
+            it.next();
+        }
+
+        return new GetAllGeoCodesResponse( allGeoCodes );
     }
 
     /**
