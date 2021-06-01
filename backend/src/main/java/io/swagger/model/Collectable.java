@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -29,6 +26,8 @@ public class Collectable   {
   private UUID id = null;
 
   @JsonProperty("type")
+  @ManyToOne
+  @JoinColumn(name = "COLLECTABLE_TYPE_ID")
   private CollectableType type = null;
 
   public Collectable() {
