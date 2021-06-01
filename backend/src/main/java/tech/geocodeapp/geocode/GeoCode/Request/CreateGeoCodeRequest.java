@@ -3,7 +3,6 @@ package tech.geocodeapp.geocode.GeoCode.Request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
 
-
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode.DifficultyLevel;
 
 @Component
