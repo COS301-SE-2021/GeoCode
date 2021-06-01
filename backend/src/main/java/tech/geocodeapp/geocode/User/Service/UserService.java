@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.User.Service.UserInterfaceService;
+package tech.geocodeapp.geocode.User.Service;
 
 import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.User.Request.RegisterUserRequest;
