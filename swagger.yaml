@@ -92,29 +92,29 @@ paths:
     post:
       tags:
         - "GeoCode"
-      summary: "Get all all the stored GeoCodes in order of difficulty"
+      summary: "Get all all the stored GeoCodes by the specified difficulty"
       description: "Get all GeoCodes by difficulty"
       operationId: "getGeoCodesByDifficulty"
       requestBody:
         required: true
-        description: "Request to get all the GeoCodes by difficulty"
+        description: "Request to get all the GeoCodes by the specified difficulty"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/getGeoCodesByDifficultyRequest'
+              $ref: '#/components/schemas/GetGeoCodesByDifficultyRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/getGeoCodesByDifficultyRequest'
+              $ref: '#/components/schemas/GetGeoCodesByDifficultyRequest'
       responses:
         '200':
-          description: "Returned the GeoCode's Collectables successfully"
+          description: "Returned all the GeoCode's with the specified difficulty"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getGeoCodesByDifficultyResponse'
+                $ref: '#/components/schemas/GetGeoCodesByDifficultyResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/getGeoCodesByDifficultyResponse'
+                $ref: '#/components/schemas/GetGeoCodesByDifficultyResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -123,29 +123,29 @@ paths:
     post:
       tags:
         - "GeoCode"
-      summary: "Get all Collectables for a certain GeoCode"
-      description: "Get a GeoCode's Collectables"
-      operationId: "getGeoCodeCollectables"
+      summary: "Get all the GeoCode's on the platform"
+      description: "Get all the GeoCode's that is stored on the platform"
+      operationId: "getGeoCodes"
       requestBody:
         required: true
-        description: "Request to get a GeoCode's Collectables"
+        description: "Request to get all the GeoCode's"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/GetGeoCodesRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/GetGeoCodesRequest'
       responses:
         '200':
-          description: "Returned the GeoCode's Collectables successfully"
+          description: "Returned all the GeoCode's successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/GetGeoCodesResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/GetGeoCodesResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -154,29 +154,29 @@ paths:
     post:
       tags:
         - "GeoCode"
-      summary: "Get all Collectables for a certain GeoCode"
-      description: "Get a GeoCode's Collectables"
-      operationId: "getGeoCodeCollectables"
+      summary: "Get the hints for the specified GeoCode"
+      description: "Get the hints for the specified GeoCode to help locate it"
+      operationId: "getHints"
       requestBody:
         required: true
-        description: "Request to get a GeoCode's Collectables"
+        description: "Request to get the hints from the specified GeoCode"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/GetHintsRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/GetHintsRequest'
       responses:
         '200':
-          description: "Returned the GeoCode's Collectables successfully"
+          description: "Returned the hints for the GeoCode successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/GetHintsResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/GetHintsResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -185,29 +185,29 @@ paths:
     post:
       tags:
         - "GeoCode"
-      summary: "Get all Collectables for a certain GeoCode"
-      description: "Get a GeoCode's Collectables"
-      operationId: "getGeoCodeCollectables"
+      summary: "Get the GeoCode associated with the given QR Code"
+      description: "Get the GeoCode associated with the given QR Code"
+      operationId: "getGeoCodeByQRCode"
       requestBody:
         required: true
-        description: "Request to get a GeoCode's Collectables"
+        description: "Request to get a GeoCode's associated with the given QR Code"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/GetGeoCodeByQRCodeRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/GetGeoCodeByQRCodeRequest'
       responses:
         '200':
-          description: "Returned the GeoCode's Collectables successfully"
+          description: "Returned the associated GeoCode successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/GetGeoCodeByQRCodeResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/GetGeoCodeByQRCodeResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -216,29 +216,29 @@ paths:
     post:
       tags:
         - "GeoCode"
-      summary: "Get all Collectables for a certain GeoCode"
-      description: "Get a GeoCode's Collectables"
-      operationId: "getGeoCodeCollectables"
+      summary: "Get the GeoCode at or near the given location"
+      description: "Get the GeoCode at or near the given location"
+      operationId: "getGeoCodeByLocation"
       requestBody:
         required: true
-        description: "Request to get a GeoCode's Collectables"
+        description: "Request to get a GeoCode at or near the given location"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/GetGeoCodeByLocationRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/GetGeoCodeByLocationRequest'
       responses:
         '200':
-          description: "Returned the GeoCode's Collectables successfully"
+          description: "Return the GeoCodec at or near the given location"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/GetGeoCodeByLocationResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/GetGeoCodeByLocationResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -247,29 +247,29 @@ paths:
     post:
       tags:
         - "GeoCode"
-      summary: "Get all Collectables for a certain GeoCode"
-      description: "Get a GeoCode's Collectables"
-      operationId: "getGeoCodeCollectables"
+      summary: "Get the Trackable for a certain GeoCode"
+      description: "Get a GeoCode's Trackable"
+      operationId: "getTrackables"
       requestBody:
         required: true
-        description: "Request to get a GeoCode's Collectables"
+        description: "Request to get a GeoCode's Trackable"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/GetTrackablesRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/GetTrackablesRequest'
       responses:
         '200':
-          description: "Returned the GeoCode's Collectables successfully"
+          description: "Returned the GeoCode's Trackable successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/GetTrackablesResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/GetTrackablesResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -278,29 +278,29 @@ paths:
     post:
       tags:
         - "GeoCode"
-      summary: "Get all Collectables for a certain GeoCode"
-      description: "Get a GeoCode's Collectables"
-      operationId: "getGeoCodeCollectables"
+      summary: "Swap a specific GeoCode's Collectable"
+      description: "Swap a specific GeoCode's Collectable"
+      operationId: "swapCollectables"
       requestBody:
         required: true
-        description: "Request to get a GeoCode's Collectables"
+        description: "Request to swap a GeoCode's Collectables"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/SwapCollectablesRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/SwapCollectablesRequest'
       responses:
         '200':
-          description: "Returned the GeoCode's Collectables successfully"
+          description: "Swapped the GeoCode's Collectable successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/SwapCollectablesResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/SwapCollectablesResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -309,29 +309,29 @@ paths:
     post:
       tags:
         - "GeoCode"
-      summary: "Get all Collectables for a certain GeoCode"
-      description: "Get a GeoCode's Collectables"
-      operationId: "getGeoCodeCollectables"
+      summary: "Update the availability for a certain GeoCode"
+      description: "Update the availability for a certain GeoCode"
+      operationId: "updateAvailability"
       requestBody:
         required: true
-        description: "Request to get a GeoCode's Collectables"
+        description: "Request to update a GeoCode's availability"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/UpdateAvailabilityRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: '#/components/schemas/UpdateAvailabilityRequest'
       responses:
         '200':
-          description: "Returned the GeoCode's Collectables successfully"
+          description: "Updated the GeoCode's availability successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/UpdateAvailabilityResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: '#/components/schemas/UpdateAvailabilityResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -705,7 +705,7 @@ components:
         name: "CreateGeoCodeResponse"
 
 
-    getGeoCodesByDifficultyRequest:
+    GetGeoCodesByDifficultyRequest:
       type: "object"
       required:
         - description
@@ -731,7 +731,7 @@ components:
             - "INSANE"
       xml:
         name: "getGeoCodesByDifficultyRequest"
-    getGeoCodesByDifficultyResponse:
+    GetGeoCodesByDifficultyResponse:
       type: "object"
       properties:
         id:
@@ -741,7 +741,7 @@ components:
           type: string
       xml:
         name: "getGeoCodesByDifficultyResponse"
-    getGeoCodesRequest:
+    GetGeoCodesRequest:
       type: "object"
       required:
         - description
@@ -767,7 +767,7 @@ components:
             - "INSANE"
       xml:
         name: "getGeoCodesByDifficultyRequest"
-    getGeoCodesResponse:
+    GetGeoCodesResponse:
       type: "object"
       properties:
         id:
@@ -777,7 +777,7 @@ components:
           type: string
       xml:
         name: "getGeoCodesByDifficultyResponse"
-    getHintsRequest:
+    GetHintsRequest:
       type: "object"
       required:
         - description
@@ -803,7 +803,7 @@ components:
             - "INSANE"
       xml:
         name: "getGeoCodesByDifficultyRequest"
-    getHintsResponse:
+    GetHintsResponse:
       type: "object"
       properties:
         id:
@@ -813,7 +813,7 @@ components:
           type: string
       xml:
         name: "getGeoCodesByDifficultyResponse"
-    getGeoCodeByQRCodeRequest:
+    GetGeoCodeByQRCodeRequest:
       type: "object"
       required:
         - description
@@ -839,7 +839,7 @@ components:
             - "INSANE"
       xml:
         name: "getGeoCodeByQRCodeRequest"
-    getGeoCodeByQRCodeResponse:
+    GetGeoCodeByQRCodeResponse:
       type: "object"
       properties:
         id:
@@ -849,7 +849,7 @@ components:
           type: string
       xml:
         name: "getGeoCodeByQRCodeResponse"
-    getGeoCodeByLocationRequest:
+    GetGeoCodeByLocationRequest:
       type: "object"
       required:
         - description
@@ -875,7 +875,7 @@ components:
             - "INSANE"
       xml:
         name: "getGeoCodeByLocationRequest"
-    getGeoCodeByLocationResponse:
+    GetGeoCodeByLocationResponse:
       type: "object"
       properties:
         id:
@@ -885,7 +885,7 @@ components:
           type: string
       xml:
         name: "getGeoCodeByLocationResponse"
-    getTrackablesRequest:
+    GetTrackablesRequest:
       type: "object"
       required:
         - description
@@ -911,7 +911,7 @@ components:
             - "INSANE"
       xml:
         name: "getTrackablesRequest"
-    getTrackablesResponse:
+    GetTrackablesResponse:
       type: "object"
       properties:
         id:
@@ -921,7 +921,7 @@ components:
           type: string
       xml:
         name: "getTrackablesResponse"
-    swapCollectablesRequest:
+    SwapCollectablesRequest:
       type: "object"
       required:
         - description
@@ -947,7 +947,7 @@ components:
             - "INSANE"
       xml:
         name: "swapCollectablesRequest"
-    swapCollectablesResponse:
+    SwapCollectablesResponse:
       type: "object"
       properties:
         id:
@@ -957,7 +957,7 @@ components:
           type: string
       xml:
         name: "swapCollectablesResponse"
-    updateAvailabilityRequest:
+    UpdateAvailabilityRequest:
       type: "object"
       required:
         - description
@@ -983,7 +983,7 @@ components:
             - "INSANE"
       xml:
         name: "updateAvailabilityRequest"
-    updateAvailabilityResponse:
+    UpdateAvailabilityResponse:
         type: "object"
         properties:
           id:
@@ -993,24 +993,6 @@ components:
             type: string
         xml:
           name: "updateAvailabilityResponse"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     GetCollectablesRequest:
