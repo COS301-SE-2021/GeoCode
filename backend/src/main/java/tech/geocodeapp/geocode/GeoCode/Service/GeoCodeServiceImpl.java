@@ -60,6 +60,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new InvalidRequestException( "An error occurred." );
         }
 
+        GeoCode newGeoCode = new GeoCode();
+        // ToDo: need to get and set the ID
+        newGeoCode.setAvailable( request.isAvailable() );
+        newGeoCode.setDescription( request.getDescription() );
+        newGeoCode.setDifficulty( request.getDifficulty() );
+        newGeoCode.setHints( request.getHints() );
+        newGeoCode.setLocation( request.getLocation() );
+
+        // ToDo: need to get and set the QR Code => how will this be generated
         /** Try and create the relevant image with the newly create GeoCode instance */
         try {
 
@@ -70,7 +79,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new QRCodeException( "The QR Code could not be created." );
         }
 
-        return new CreateGeoCodeResponse();
+        // ToDo: need to save to the repo
+
+        CreateGeoCodeResponse response = new CreateGeoCodeResponse();
+        response.setGeoCode( newGeoCode );
+
+        return response;
     }
 
     /**
@@ -102,6 +116,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         return new GetGeoCodesResponse();
     }
+
+
 
     /**
      * This helper function helps create the QR Code image and stores
