@@ -4,10 +4,7 @@ import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
-import tech.geocodeapp.geocode.GeoCode.Request.CreateGeoCodeRequest;
-import tech.geocodeapp.geocode.GeoCode.Request.GetAllGeoCodesRequest;
-import tech.geocodeapp.geocode.GeoCode.Response.CreateGeoCodeResponse;
-import tech.geocodeapp.geocode.GeoCode.Response.GetAllGeoCodesResponse;
+import io.swagger.model.*;
 
 /**
  * This is the main interface is for the GeoCode subsystem,
@@ -18,5 +15,5 @@ public interface GeoCodeService {
 
     CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException;
 
-    GetAllGeoCodesResponse getAllGeoCode( GetAllGeoCodesRequest request ) throws RepoException;
+    GetGeoCodesResponse getAllGeoCode( GetGeoCodesRequest request ) throws RepoException;
 }

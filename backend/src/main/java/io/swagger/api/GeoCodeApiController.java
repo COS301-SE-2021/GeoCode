@@ -10,7 +10,6 @@ import io.swagger.model.GetGeoCodeByQRCodeRequest;
 import io.swagger.model.GetGeoCodeByQRCodeResponse;
 import io.swagger.model.GetGeoCodesByDifficultyRequest;
 import io.swagger.model.GetGeoCodesByDifficultyResponse;
-import io.swagger.model.GetGeoCodesRequest;
 import io.swagger.model.GetGeoCodesResponse;
 import io.swagger.model.GetHintsRequest;
 import io.swagger.model.GetHintsResponse;
@@ -51,7 +50,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T18:53:58.734Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T21:43:55.444Z[GMT]")
 @RestController
 public class GeoCodeApiController implements GeoCodeApi {
 
@@ -71,7 +70,7 @@ public class GeoCodeApiController implements GeoCodeApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<CreateGeoCodeResponse>(objectMapper.readValue("{\n  \"qrCode\" : \"qrCode\",\n  \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n}", CreateGeoCodeResponse.class), HttpStatus.NOT_IMPLEMENTED);
+                return new ResponseEntity<CreateGeoCodeResponse>(objectMapper.readValue("{\n  \"geoCode\" : {\n    \"difficulty\" : \"EASY\",\n    \"collectables\" : {\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"type\" : {\n        \"image\" : \"image\",\n        \"set\" : {\n          \"name\" : \"name\",\n          \"description\" : \"description\",\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n        },\n        \"name\" : \"name\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n        \"rarity\" : \"COMMON\"\n      }\n    },\n    \"qrCode\" : \"qrCode\",\n    \"hints\" : [ \"hints\", \"hints\" ],\n    \"available\" : true,\n    \"description\" : \"description\",\n    \"trackables\" : \"trackables\",\n    \"location\" : \"location\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }\n}", CreateGeoCodeResponse.class), HttpStatus.NOT_IMPLEMENTED);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<CreateGeoCodeResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -123,11 +122,11 @@ public class GeoCodeApiController implements GeoCodeApi {
         return new ResponseEntity<GetCollectablesResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<GetGeoCodesResponse> getGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all the GeoCode's", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodesRequest body) {
+    public ResponseEntity<GetGeoCodesResponse> getGeoCodes() {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<GetGeoCodesResponse>(objectMapper.readValue("{\n  \"qrCode\" : \"qrCode\",\n  \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n}", GetGeoCodesResponse.class), HttpStatus.NOT_IMPLEMENTED);
+                return new ResponseEntity<GetGeoCodesResponse>(objectMapper.readValue("{\n  \"geocodes\" : [ {\n    \"difficulty\" : \"EASY\",\n    \"collectables\" : {\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"type\" : {\n        \"image\" : \"image\",\n        \"set\" : {\n          \"name\" : \"name\",\n          \"description\" : \"description\",\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n        },\n        \"name\" : \"name\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n        \"rarity\" : \"COMMON\"\n      }\n    },\n    \"qrCode\" : \"qrCode\",\n    \"hints\" : [ \"hints\", \"hints\" ],\n    \"available\" : true,\n    \"description\" : \"description\",\n    \"trackables\" : \"trackables\",\n    \"location\" : \"location\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }, {\n    \"difficulty\" : \"EASY\",\n    \"collectables\" : {\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"type\" : {\n        \"image\" : \"image\",\n        \"set\" : {\n          \"name\" : \"name\",\n          \"description\" : \"description\",\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n        },\n        \"name\" : \"name\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n        \"rarity\" : \"COMMON\"\n      }\n    },\n    \"qrCode\" : \"qrCode\",\n    \"hints\" : [ \"hints\", \"hints\" ],\n    \"available\" : true,\n    \"description\" : \"description\",\n    \"trackables\" : \"trackables\",\n    \"location\" : \"location\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  } ]\n}", GetGeoCodesResponse.class), HttpStatus.NOT_IMPLEMENTED);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<GetGeoCodesResponse>(HttpStatus.INTERNAL_SERVER_ERROR);

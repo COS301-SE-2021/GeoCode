@@ -7,15 +7,12 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import org.springframework.stereotype.Service;
 
+import io.swagger.model.*;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
-import tech.geocodeapp.geocode.GeoCode.Request.CreateGeoCodeRequest;
-import tech.geocodeapp.geocode.GeoCode.Request.GetAllGeoCodesRequest;
-import tech.geocodeapp.geocode.GeoCode.Response.CreateGeoCodeResponse;
-import tech.geocodeapp.geocode.GeoCode.Response.GetAllGeoCodesResponse;
+
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -86,7 +83,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws RepoException there was an issue accessing the repository
      */
     @Override
-    public GetAllGeoCodesResponse getAllGeoCode( GetAllGeoCodesRequest request ) throws RepoException {
+    public GetGeoCodesResponse getAllGeoCode( GetGeoCodesRequest request ) throws RepoException {
 
         /** Validate the repo */
         if ( geoCodeRepo == null ) {
@@ -94,16 +91,16 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new RepoException( "The GeoCode Repository is empty." );
         }
 
-        ListIterator< GeoCode > it = geoCodeRepo.findAll().listIterator();
+        /*ListIterator< GeoCode > it;
         ArrayList< GeoCode > allGeoCodes = new ArrayList<>();
 
         while ( it.hasNext() ) {
 
             allGeoCodes.add( ( GeoCode ) it );
             it.next();
-        }
+        }*/
 
-        return new GetAllGeoCodesResponse( allGeoCodes );
+        return new GetGeoCodesResponse();
     }
 
     /**

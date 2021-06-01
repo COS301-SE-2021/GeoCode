@@ -3,8 +3,10 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -13,53 +15,37 @@ import javax.validation.constraints.*;
  * GetGeoCodesResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T18:53:58.734Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T21:43:55.444Z[GMT]")
 
 
 public class GetGeoCodesResponse   {
-  @JsonProperty("id")
-  private UUID id = null;
+  @JsonProperty("geocodes")
+  @Valid
+  private List<GeoCode> geocodes = new ArrayList<GeoCode>();
 
-  @JsonProperty("qrCode")
-  private String qrCode = null;
+  public GetGeoCodesResponse geocodes(List<GeoCode> geocodes) {
+    this.geocodes = geocodes;
+    return this;
+  }
 
-  public GetGeoCodesResponse id(UUID id) {
-    this.id = id;
+  public GetGeoCodesResponse addGeocodesItem(GeoCode geocodesItem) {
+    this.geocodes.add(geocodesItem);
     return this;
   }
 
   /**
-   * Get id
-   * @return id
+   * Get geocodes
+   * @return geocodes
    **/
-  @Schema(description = "")
-  
+  @Schema(required = true, description = "")
+      @NotNull
     @Valid
-    public UUID getId() {
-    return id;
+    public List<GeoCode> getGeocodes() {
+    return geocodes;
   }
 
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public GetGeoCodesResponse qrCode(String qrCode) {
-    this.qrCode = qrCode;
-    return this;
-  }
-
-  /**
-   * Get qrCode
-   * @return qrCode
-   **/
-  @Schema(description = "")
-  
-    public String getQrCode() {
-    return qrCode;
-  }
-
-  public void setQrCode(String qrCode) {
-    this.qrCode = qrCode;
+  public void setGeocodes(List<GeoCode> geocodes) {
+    this.geocodes = geocodes;
   }
 
 
@@ -72,13 +58,12 @@ public class GetGeoCodesResponse   {
       return false;
     }
     GetGeoCodesResponse getGeoCodesResponse = (GetGeoCodesResponse) o;
-    return Objects.equals(this.id, getGeoCodesResponse.id) &&
-        Objects.equals(this.qrCode, getGeoCodesResponse.qrCode);
+    return Objects.equals(this.geocodes, getGeoCodesResponse.geocodes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, qrCode);
+    return Objects.hash(geocodes);
   }
 
   @Override
@@ -86,8 +71,7 @@ public class GetGeoCodesResponse   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetGeoCodesResponse {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    qrCode: ").append(toIndentedString(qrCode)).append("\n");
+    sb.append("    geocodes: ").append(toIndentedString(geocodes)).append("\n");
     sb.append("}");
     return sb.toString();
   }

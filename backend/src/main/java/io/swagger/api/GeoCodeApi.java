@@ -15,7 +15,6 @@ import io.swagger.model.GetGeoCodeByQRCodeRequest;
 import io.swagger.model.GetGeoCodeByQRCodeResponse;
 import io.swagger.model.GetGeoCodesByDifficultyRequest;
 import io.swagger.model.GetGeoCodesByDifficultyResponse;
-import io.swagger.model.GetGeoCodesRequest;
 import io.swagger.model.GetGeoCodesResponse;
 import io.swagger.model.GetHintsRequest;
 import io.swagger.model.GetHintsResponse;
@@ -51,7 +50,7 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T18:53:58.734Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T21:43:55.444Z[GMT]")
 @Validated
 public interface GeoCodeApi {
 
@@ -107,17 +106,16 @@ public interface GeoCodeApi {
     ResponseEntity<GetCollectablesResponse> getGeoCodeCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody GetCollectablesRequest body);
 
 
-    @Operation(summary = "Get all the GeoCode's on the platform", description = "Get all the GeoCode's that is stored on the platform", security = {
+    @Operation(summary = "Get all the GeoCodes on the platform", description = "Get all the GeoCodes that are stored on the platform", security = {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "GeoCode" })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Returned all the GeoCode's successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetGeoCodesResponse.class))),
+        @ApiResponse(responseCode = "200", description = "Returned all the GeoCodes successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetGeoCodesResponse.class))),
         
         @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/GeoCode/getGeoCodes",
         produces = { "application/json", "application/xml" }, 
-        consumes = { "application/json", "application/xml" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<GetGeoCodesResponse> getGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all the GeoCode's", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodesRequest body);
+        method = RequestMethod.GET)
+    ResponseEntity<GetGeoCodesResponse> getGeoCodes();
 
 
     @Operation(summary = "Get all all the stored GeoCodes by the specified difficulty", description = "Get all GeoCodes by difficulty", security = {

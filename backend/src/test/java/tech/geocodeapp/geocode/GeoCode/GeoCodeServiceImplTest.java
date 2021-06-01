@@ -4,12 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import io.swagger.model.*;
+
 import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
-import tech.geocodeapp.geocode.GeoCode.Request.CreateGeoCodeRequest;
-import tech.geocodeapp.geocode.GeoCode.Request.GetAllGeoCodesRequest;
 import tech.geocodeapp.geocode.GeoCode.Service.*;
 
 
@@ -48,7 +48,7 @@ public class GeoCodeServiceImplTest {
 
         try {
 
-            geoCodeService.getAllGeoCode( new GetAllGeoCodesRequest() );
+            geoCodeService.getAllGeoCode( new GetGeoCodesRequest() );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
