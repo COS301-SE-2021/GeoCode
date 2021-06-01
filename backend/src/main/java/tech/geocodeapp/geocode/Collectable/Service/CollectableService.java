@@ -1,9 +1,6 @@
 package tech.geocodeapp.geocode.Collectable.Service;
 
-import io.swagger.model.CollectableSet;
-import io.swagger.model.CollectableType;
-import io.swagger.model.CreateCollectableSetRequest;
-import io.swagger.model.CreateCollectableTypeRequest;
+import io.swagger.model.*;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,5 +12,5 @@ public interface CollectableService {
 
     CollectableType createCollectableType(CreateCollectableTypeRequest request);
 
-
+    Collectable createCollectable(CreateCollectableRequest request);
 }
