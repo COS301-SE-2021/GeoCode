@@ -1,10 +1,10 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.model.Collectable;
+import tech.geocodeapp.geocode.swagger.model.Collectable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
