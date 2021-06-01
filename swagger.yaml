@@ -541,7 +541,7 @@ paths:
             schema:
               $ref: '#/components/schemas/GetCollectableByTypeRequest'
       responses:
-        '201':
+        '200':
           description: "Successfully returned Collectables of given type"
           content:
             application/json:
@@ -572,7 +572,7 @@ paths:
             schema:
               $ref: '#/components/schemas/GetCollectableTypeByRarityRequest'
       responses:
-        '201':
+        '200':
           description: "Successfully returned Collectable Types of given rarity"
           content:
             application/json:
@@ -603,7 +603,7 @@ paths:
             schema:
               $ref: '#/components/schemas/GetCollectableTypeBySetRequest'
       responses:
-        '201':
+        '200':
           description: "Successfully returned Collectable Types of given set"
           content:
             application/json:
