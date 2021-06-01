@@ -1,5 +1,7 @@
 package tech.geocodeapp.geocode.GeoCode.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 /**
@@ -52,6 +54,9 @@ public class GeoCode {
     @Column( name = "location" )
     private String location;
 
+    @Column( name = "available")
+    private Boolean available = null;
+
     /**
      * Default Constructor.
      */
@@ -70,17 +75,19 @@ public class GeoCode {
      * @param trackables the given trackable that is associated at this GeoCode
      * @param qrCode the given QR Code that connects this class to the real world
      * @param location the given physical location, of where the QR Code is stored, in the real world
+     * @param available the availability of the GeoCode
      */
-    public GeoCode( Long id, String description, String hints, DifficultyLevel difficulty, String collectables, String trackables, String qrCode, String location ) {
+    public GeoCode( Long id, DifficultyLevel difficulty, String description, String hints, String collectables, String trackables, String qrCode, String location, Boolean available ) {
 
         this.id = id;
+        this.difficulty = difficulty;
         this.description = description;
         this.hints = hints;
-        this.difficulty = difficulty;
         this.collectables = collectables;
         this.trackables = trackables;
         this.qrCode = qrCode;
         this.location = location;
+        this.available = available;
     }
 
     /**
