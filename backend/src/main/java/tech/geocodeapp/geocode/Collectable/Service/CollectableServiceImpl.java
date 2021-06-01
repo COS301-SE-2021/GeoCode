@@ -1,52 +1,30 @@
 package tech.geocodeapp.geocode.Collectable.Service;
 
+import io.swagger.model.CollectableSet;
+import io.swagger.model.CreateCollectableSetRequest;
 import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 /**
  * This class implements the UserService interface
  */
 @Service
 public class CollectableServiceImpl implements CollectableService {
-    private CollectableRepository collectableRepository;
+    private CollectableRepository collectableRepo;
 
-    public CollectableServiceImpl(CollectableRepository collectableRepository) {
-
+    public CollectableServiceImpl(CollectableRepository collectableRepo) {
+        this.collectableRepo = collectableRepo;
     }
 
     @Transactional
-    public CreateCollectableResponse createCollectable(CreateCollectableRequest request){
+    public CollectableSet createCollectableSet(CreateCollectableSetRequest request){
         if (request == null) {
-            return new CreateCollectableResponse(false, "The CreateCollectableRequest object was null");
+            return null;
         }
 
-        Optional<Collectable> collectableName = collectableRepository.getCollectableByName(request.getName());
-
-        if(collectableName.isPresent()){
-            return new CreateCollectableResponse(false, "There already exists a Collectable with that name");
-        }
-
-        Collectable newCollectable = new Collectable(request.getImage(), request.getName(), request.getRarity());
-        Collectable checkIfSaved = collectableRepository.save(newCollectable);
-
-        if(checkIfSaved != newCollectable){
-            return new CreateCollectableResponse(false, "The Collectable was not saved.");
-        }else{
-            return new CreateCollectableResponse(true, "The Collectable was successfully created.");
-        }
-    }
-
-    @Transactional
-    public GetCollectablesResponse getCollectables(GetCollectablesRequest request){
-        if (request == null) {
-            return new GetCollectablesResponse(false, "The GetCollectablesRequest object was null");
-        }
-
-
-
-        return null;
+        CollectableSet collectableSet = new CollectableSet(request.getName(), request.getDescription());
+        return collectableSet;
     }
 }

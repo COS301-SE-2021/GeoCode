@@ -1,5 +1,7 @@
 package tech.geocodeapp.geocode.Collectable.Service;
 
+import io.swagger.model.CollectableSet;
+import io.swagger.model.CreateCollectableSetRequest;
 import org.springframework.stereotype.Service;
 
 /**
@@ -7,9 +9,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface CollectableService {
-    //U1.1 createCollectable
-    CreateCollectableResponse createCollectable(CreateCollectableRequest request);
+    CollectableSet createCollectableSet(CreateCollectableSetRequest request);
 
-    //U1.2 getCollectables
-    GetCollectablesResponse getCollectables(GetCollectablesRequest request);
+
 }
