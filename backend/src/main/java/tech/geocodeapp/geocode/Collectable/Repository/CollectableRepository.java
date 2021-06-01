@@ -13,7 +13,11 @@ import java.util.UUID;
  */
 @Repository
 public interface CollectableRepository extends JpaRepository<Collectable, UUID> {
-    //SELECT
+    /**
+     * Gets all Collectables of a provided CollectableType
+     * @param type the CollectableType to search by
+     * @return A List of Collectable objects found
+     */
     List<Collectable> findCollectablesByType(CollectableType type);
     //UPDATE
 
