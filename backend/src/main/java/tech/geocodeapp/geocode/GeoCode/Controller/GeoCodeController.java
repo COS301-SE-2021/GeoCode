@@ -18,7 +18,4 @@ public class GeoCodeController {
     @Autowired
     private GeoCodeServiceImpl geoCodeService;
 
-
-
-
 }

@@ -8,7 +8,7 @@ import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import java.util.UUID;
 
 /**
- * This class implements the repository for the User Subsystem
+ * This class implements the repository for the GeoCode Subsystem
  */
 @Repository
 public interface GeoCodeRepository extends JpaRepository<GeoCode, Long> {
