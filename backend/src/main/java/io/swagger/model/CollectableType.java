@@ -8,6 +8,11 @@ import io.swagger.model.CollectableSet;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -17,9 +22,11 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T17:39:45.783Z[GMT]")
 
-
+@Entity
 public class CollectableType   {
   @JsonProperty("id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("name")
@@ -70,6 +77,18 @@ public class CollectableType   {
   @JsonProperty("set")
   private CollectableSet set = null;
 
+  public CollectableType() {
+  }
+
+  //Main constructor for creating CollectableTypes
+  public CollectableType(String name, String image, RarityEnum rarity, CollectableSet set) {
+    this.name = name;
+    this.image = image;
+    this.rarity = rarity;
+    this.set = set;
+  }
+
+  //property for id
   public CollectableType id(UUID id) {
     this.id = id;
     return this;
@@ -91,6 +110,7 @@ public class CollectableType   {
     this.id = id;
   }
 
+  //property for name
   public CollectableType name(String name) {
     this.name = name;
     return this;
@@ -111,6 +131,7 @@ public class CollectableType   {
     this.name = name;
   }
 
+  //property for image
   public CollectableType image(String image) {
     this.image = image;
     return this;
@@ -131,6 +152,7 @@ public class CollectableType   {
     this.image = image;
   }
 
+  //property for rarity
   public CollectableType rarity(RarityEnum rarity) {
     this.rarity = rarity;
     return this;
@@ -151,6 +173,7 @@ public class CollectableType   {
     this.rarity = rarity;
   }
 
+  //property for set
   public CollectableType set(CollectableSet set) {
     this.set = set;
     return this;
