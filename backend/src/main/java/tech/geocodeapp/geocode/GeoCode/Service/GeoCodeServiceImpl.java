@@ -7,6 +7,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import io.swagger.model.CreateGeoCodeRequest;
 import io.swagger.model.CreateGeoCodeResponse;
+import io.swagger.model.GeoCode;
 import io.swagger.model.GetGeoCodesResponse;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 
 
 /**
@@ -70,8 +72,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
     @Override
     public GetGeoCodesResponse getGeoCodes() {
-
-        return new GetGeoCodesResponse();
+        return new GetGeoCodesResponse().geocodes(geoCodeRepo.findAll());
     }
 
     /**
