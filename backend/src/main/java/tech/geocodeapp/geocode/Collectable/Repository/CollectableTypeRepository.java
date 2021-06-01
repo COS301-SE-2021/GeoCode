@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.Collectable.Repository;
 
+import io.swagger.model.CollectableSet;
 import io.swagger.model.CollectableType;
 import io.swagger.model.Rarity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +14,9 @@ import java.util.UUID;
  */
 @Repository
 public interface CollectableTypeRepository extends JpaRepository<CollectableType, UUID> {
+    //get all CollectableTypes of a given rarity
     List<CollectableType> getCollectableTypesByRarity(Rarity rarity);
+
+    //get all CollectableTypes of a given CollectableSet
+    List<CollectableType> getCollectableTypesBySet(CollectableSet set);
 }
