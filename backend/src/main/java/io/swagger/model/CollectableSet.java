@@ -5,7 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
+
 import org.springframework.validation.annotation.Validated;
+
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -15,9 +22,11 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T17:39:45.783Z[GMT]")
 
-
+@Entity
 public class CollectableSet   {
   @JsonProperty("id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("name")
@@ -26,6 +35,16 @@ public class CollectableSet   {
   @JsonProperty("description")
   private String description = null;
 
+  public CollectableSet() {
+  }
+
+  //main constructor for creating new CollectableSets
+  public CollectableSet(String name, String description) {
+    this.name = name;
+    this.description = description;
+  }
+
+  //id property
   public CollectableSet id(UUID id) {
     this.id = id;
     return this;
@@ -47,6 +66,7 @@ public class CollectableSet   {
     this.id = id;
   }
 
+  //name property
   public CollectableSet name(String name) {
     this.name = name;
     return this;
@@ -67,6 +87,7 @@ public class CollectableSet   {
     this.name = name;
   }
 
+  //description property
   public CollectableSet description(String description) {
     this.description = description;
     return this;
