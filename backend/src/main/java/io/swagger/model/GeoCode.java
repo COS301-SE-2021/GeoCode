@@ -27,6 +27,7 @@ import javax.validation.constraints.*;
 public class GeoCode   {
   @Id
   @JsonProperty("id")
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("difficulty")
