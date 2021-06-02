@@ -112,8 +112,18 @@ public class CollectableServiceImplTest {
          *  Create a request object
          * and assign values to it
          * */
+        //create the set
+        CollectableSet easter = new CollectableSet("Easter", "Themed collectables that can be collected over the Easter weekend");
+        collectableSetRepo.save(easter);
+
+        //create the type
+        CollectableType bunny = new CollectableType("Bunny", "kasnvklnvd", Rarity.RARE, easter);
+        bunny.setId(easter.getId());
+        collectableTypeRepo.save(bunny);
+
+        //create the Collectable
         CreateCollectableRequest request = new CreateCollectableRequest();
-        request.setCollectableTypeId(UUID.fromString(""));//
+        request.setCollectableTypeId(bunny.getId());
         CreateCollectableResponse response = collectableService.createCollectable(request);
 
         Assertions.assertTrue(response.isSuccess());
