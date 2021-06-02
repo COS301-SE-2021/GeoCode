@@ -20,9 +20,6 @@ import javax.validation.constraints.*;
 
 
 public class CreateGeoCodeRequest   {
-  @JsonProperty("id")
-  private UUID id = null;
-
   @JsonProperty("description")
   private String description = null;
 
@@ -38,27 +35,6 @@ public class CreateGeoCodeRequest   {
 
   @JsonProperty("available")
   private Boolean available = null;
-
-  public CreateGeoCodeRequest id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * Get id
-   * @return id
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    @Valid
-    public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
 
   public CreateGeoCodeRequest description(String description) {
     this.description = description;
@@ -176,8 +152,7 @@ public class CreateGeoCodeRequest   {
       return false;
     }
     CreateGeoCodeRequest createGeoCodeRequest = (CreateGeoCodeRequest) o;
-    return Objects.equals(this.id, createGeoCodeRequest.id) &&
-        Objects.equals(this.description, createGeoCodeRequest.description) &&
+    return Objects.equals(this.description, createGeoCodeRequest.description) &&
         Objects.equals(this.location, createGeoCodeRequest.location) &&
         Objects.equals(this.hints, createGeoCodeRequest.hints) &&
         Objects.equals(this.difficulty, createGeoCodeRequest.difficulty) &&
@@ -186,15 +161,14 @@ public class CreateGeoCodeRequest   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, location, hints, difficulty, available);
+    return Objects.hash(description, location, hints, difficulty, available);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CreateGeoCodeRequest {\n");
-    
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    location: ").append(toIndentedString(location)).append("\n");
     sb.append("    hints: ").append(toIndentedString(hints)).append("\n");
