@@ -10,7 +10,7 @@ import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
- * GeoCode real world locating difficulty
+ * The GeoCode's real world locating difficulty
  */
 public enum Difficulty {
   EASY("EASY"),
