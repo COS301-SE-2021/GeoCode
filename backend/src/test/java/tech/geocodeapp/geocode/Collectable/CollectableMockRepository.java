@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.Collectable;
 
 import io.swagger.model.Collectable;
+import io.swagger.model.CollectableType;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -131,5 +132,15 @@ public class CollectableMockRepository implements CollectableRepository {
     @Override
     public <S extends Collectable> boolean exists(Example<S> example) {
         return false;
+    }
+
+    @Override
+    public List<Collectable> findCollectablesByType(CollectableType type) {
+        return null;
+    }
+
+    @Override
+    public long deleteCollectablesByType(CollectableType type) {
+        return 0;
     }
 }
