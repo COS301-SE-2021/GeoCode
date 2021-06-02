@@ -2,16 +2,19 @@ package tech.geocodeapp.geocode.Collectable.Service;
 
 import io.swagger.model.*;
 import org.springframework.stereotype.Service;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
 
 /**
  * This interface is for the User subsystem
  */
 @Service
-public interface CollectableService {
+public interface CollectableService {//success, message, object
     //Creators
-    CollectableSet createCollectableSet(CreateCollectableSetRequest request);
-    CollectableType createCollectableType(CreateCollectableTypeRequest request);
-    Collectable createCollectable(CreateCollectableRequest request);
+    CreateCollectableSetResponse createCollectableSet(CreateCollectableSetRequest request);
+    CreateCollectableTypeResponse createCollectableType(CreateCollectableTypeRequest request);
+    CreateCollectableResponse createCollectable(CreateCollectableRequest request);
 
     //Getters
     GetCollectablesResponse getCollectables();

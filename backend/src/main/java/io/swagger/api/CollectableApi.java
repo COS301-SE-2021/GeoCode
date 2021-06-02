@@ -37,6 +37,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.CookieValue;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -57,7 +60,7 @@ public interface CollectableApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<Collectable> createCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableRequest body);
+    ResponseEntity<CreateCollectableResponse> createCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableRequest body);
 
 
     @Operation(summary = "Create a new Collectable Set", description = "Create Collectable Set", security = {
@@ -70,7 +73,7 @@ public interface CollectableApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<CollectableSet> createCollectableSet(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable Set", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableSetRequest body);
+    ResponseEntity<CreateCollectableSetResponse> createCollectableSet(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable Set", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableSetRequest body);
 
 
     @Operation(summary = "Creates a new Collectable Type", description = "Create Collectable Type", security = {
@@ -83,7 +86,7 @@ public interface CollectableApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<CollectableType> createCollectableType(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable Type", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableTypeRequest body);
+    ResponseEntity<CreateCollectableTypeResponse> createCollectableType(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable Type", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableTypeRequest body);
 
 
     @Operation(summary = "", description = "Returns all Collectables of the specified type", security = {

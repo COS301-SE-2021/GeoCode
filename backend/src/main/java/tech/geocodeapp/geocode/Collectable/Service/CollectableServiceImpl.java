@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableSetRepository;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -29,19 +32,19 @@ public class CollectableServiceImpl implements CollectableService {
 
     }
 
-    public CollectableSet createCollectableSet(CreateCollectableSetRequest request){
+    public CreateCollectableSetResponse createCollectableSet(CreateCollectableSetRequest request){
         if (request == null) {
-            return null;
+            return new CreateCollectableSetResponse(false, "The CreateCollectableSetRequest object passed was NULL", null);
         }
 
         CollectableSet collectableSet = new CollectableSet(request.getName(), request.getDescription());
         CollectableSet savedCollectableSet = collectableSetRepo.save(collectableSet);
-        return collectableSet;
+        return new CreateCollectableSetResponse(true, "The CollectableSet was successfully created", collectableSet);
     }
 
-    public CollectableType createCollectableType(CreateCollectableTypeRequest request){
+    public CreateCollectableTypeResponse createCollectableType(CreateCollectableTypeRequest request){
         if (request == null) {
-            return null;
+            return new CreateCollectableTypeResponse(false, "The CreateCollectableTypeRequest object passed was NULL", null);
         }
 
         UUID setID = request.getSetId();
@@ -50,15 +53,15 @@ public class CollectableServiceImpl implements CollectableService {
         if(collectableSetOptional.isPresent()){
             CollectableType collectableType = new CollectableType(request.getName(), request.getImage(), request.getRarity(), collectableSetOptional.get());
             CollectableType savedCollectableType = collectableTypeRepo.save(collectableType);
-            return collectableType;
+            return new CreateCollectableTypeResponse(true, "The CollectableType was successfully created", collectableType);
         }else{
-            return null;
+            return new CreateCollectableTypeResponse(false, "The given setID was invalid", null);
         }
     }
 
-    public Collectable createCollectable(CreateCollectableRequest request){
+    public CreateCollectableResponse createCollectable(CreateCollectableRequest request){
         if (request == null) {
-            return null;
+            return new CreateCollectableResponse(false, "The CreateCollectableSetRequest object passed was NULL", null);
         }
 
         UUID typeID = request.getCollectableTypeId();
@@ -67,9 +70,9 @@ public class CollectableServiceImpl implements CollectableService {
         if(collectableTypeOptional.isPresent()){
             Collectable collectable = new Collectable(collectableTypeOptional.get());
             Collectable savedCollectable = collectableRepo.save(collectable);
-            return collectable;
+            return new CreateCollectableResponse(true, "The Collectable was successfully created", collectable);
         }else{
-            return null;
+            return new CreateCollectableResponse(false, "The given collectableTypeId was invalid", null);
         }
     }
 
