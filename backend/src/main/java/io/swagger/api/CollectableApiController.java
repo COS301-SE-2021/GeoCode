@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,6 +59,7 @@ public class CollectableApiController implements CollectableApi {
 
     private final HttpServletRequest request;
 
+    @Autowired
     private CollectableServiceImpl collectableService;
 
     @org.springframework.beans.factory.annotation.Autowired
@@ -65,7 +67,6 @@ public class CollectableApiController implements CollectableApi {
         this.objectMapper = objectMapper;
         this.request = request;
 
-        this.collectableService = new CollectableServiceImpl();
     }
 
     public ResponseEntity<CreateCollectableResponse> createCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableRequest body) {

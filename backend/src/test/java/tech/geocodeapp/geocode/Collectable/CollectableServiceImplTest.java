@@ -9,6 +9,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
+import tech.geocodeapp.geocode.Collectable.Repository.CollectableSetRepository;
+import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
 import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse;
 import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
@@ -20,8 +22,13 @@ import java.util.UUID;
 @ExtendWith( MockitoExtension.class )
 public class CollectableServiceImplTest {
     @Mock
-    @Autowired
     private CollectableRepository collectableRepo;
+
+    @Mock
+    private CollectableSetRepository collectableSetRepo;
+
+    @Mock
+    private CollectableTypeRepository collectableTypeRepo;
 
     private CollectableService collectableService;
 
@@ -31,7 +38,7 @@ public class CollectableServiceImplTest {
 
     @BeforeEach
     void setup() {
-        collectableService = new CollectableServiceImpl();
+        collectableService = new CollectableServiceImpl(collectableRepo, collectableSetRepo, collectableTypeRepo);
     }
 
     @Test

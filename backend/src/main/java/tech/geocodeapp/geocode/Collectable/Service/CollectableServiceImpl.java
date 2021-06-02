@@ -19,17 +19,16 @@ import java.util.UUID;
  */
 @Service
 public class CollectableServiceImpl implements CollectableService {
-    @Autowired
-    private CollectableRepository collectableRepo;
+    private final CollectableRepository collectableRepo;
 
-    @Autowired
-    private CollectableSetRepository collectableSetRepo;
+    private final CollectableSetRepository collectableSetRepo;
 
-    @Autowired
-    private CollectableTypeRepository collectableTypeRepo;
+    private final CollectableTypeRepository collectableTypeRepo;
 
-    public CollectableServiceImpl() {
-
+    public CollectableServiceImpl(CollectableRepository collectableRepo, CollectableSetRepository collectableSetRepo, CollectableTypeRepository collectableTypeRepo) {
+        this.collectableRepo = collectableRepo;
+        this.collectableSetRepo = collectableSetRepo;
+        this.collectableTypeRepo = collectableTypeRepo;
     }
 
     public CreateCollectableSetResponse createCollectableSet(CreateCollectableSetRequest request){
