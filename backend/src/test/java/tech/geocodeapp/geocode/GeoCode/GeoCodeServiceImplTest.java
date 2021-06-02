@@ -27,6 +27,8 @@ public class GeoCodeServiceImplTest {
     @Mock
     private GeoCodeRepository geoCodeRepo;
 
+    private UUID createdId;
+
     GeoCodeService geoCodeService;
 
     GeoCodeServiceImplTest() {
@@ -49,7 +51,6 @@ public class GeoCodeServiceImplTest {
              * and assign values to it
              * */
             CreateGeoCodeRequest request = new CreateGeoCodeRequest();
-            request.setId( UUID.randomUUID() );
             request.setAvailable( true );
             request.setDescription( "The GeoCode is stored at the art Museum in Jhb South" );
             request.setDifficulty( Difficulty.INSANE );
@@ -62,7 +63,8 @@ public class GeoCodeServiceImplTest {
             request.setHints( hints );
             request.setLocation( "Jhb" );
 
-            geoCodeService.createGeoCode( request );
+            CreateGeoCodeResponse response = geoCodeService.createGeoCode( request );
+            createdId = response.getGeoCode().getId();
         } catch ( InvalidRequestException | QRCodeException | RepoException e ) {
 
             e.printStackTrace();
@@ -82,7 +84,6 @@ public class GeoCodeServiceImplTest {
          * and assign values to it
          * */
         CreateGeoCodeRequest request = new CreateGeoCodeRequest();
-        request.setId( UUID.randomUUID() );
         request.setAvailable( true );
         request.setDescription( null );
         request.setDifficulty( Difficulty.INSANE );
@@ -99,10 +100,9 @@ public class GeoCodeServiceImplTest {
 
     @Test
     public void getAllGeoCodeTest() {
-
+        createGeoCodeTest();
         try {
-
-            geoCodeService.getAllGeoCodes( );
+            GetGeoCodesResponse response = geoCodeService.getAllGeoCodes( );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
