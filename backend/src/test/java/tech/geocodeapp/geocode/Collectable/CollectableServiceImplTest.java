@@ -36,148 +36,16 @@ public class CollectableServiceImplTest {
 
     @BeforeEach
     void setup() {
-        collectableService = new CollectableServiceImpl(new CollectableMockRepository(), new CollectableSetMockRepository(), new CollectableTypeRepository() {
-            @Override
-            public List<CollectableType> getCollectableTypesByRarity(Rarity rarity) {
-                return null;
-            }
+        collectableService = new CollectableServiceImpl(new CollectableMockRepository(), new CollectableSetMockRepository(), new CollectableTypeMockRepository());
+        {
 
-            @Override
-            public List<CollectableType> getCollectableTypesBySet(CollectableSet set) {
-                return null;
-            }
+            CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
+            setRequest.setName("Test");
+            setRequest.setDescription("Test Set");
+            CreateCollectableSetResponse setResponse = collectableService.createCollectableSet(setRequest);
+            setResponse.getCollectableSet().setId(UUID.fromString("dc40c921-ca14-414f-8332-2493c8b351ff"));
 
-            @Override
-            public long deleteCollectableTypesBySet(CollectableSet set) {
-                return 0;
-            }
-
-            @Override
-            public List<CollectableType> findAll() {
-                return null;
-            }
-
-            @Override
-            public List<CollectableType> findAll(Sort sort) {
-                return null;
-            }
-
-            @Override
-            public List<CollectableType> findAllById(Iterable<UUID> iterable) {
-                return null;
-            }
-
-            @Override
-            public <S extends CollectableType> List<S> saveAll(Iterable<S> iterable) {
-                return null;
-            }
-
-            @Override
-            public void flush() {
-
-            }
-
-            @Override
-            public <S extends CollectableType> S saveAndFlush(S s) {
-                return null;
-            }
-
-            @Override
-            public void deleteInBatch(Iterable<CollectableType> iterable) {
-
-            }
-
-            @Override
-            public void deleteAllInBatch() {
-
-            }
-
-            @Override
-            public CollectableType getOne(UUID uuid) {
-                return null;
-            }
-
-            @Override
-            public <S extends CollectableType> List<S> findAll(Example<S> example) {
-                return null;
-            }
-
-            @Override
-            public <S extends CollectableType> List<S> findAll(Example<S> example, Sort sort) {
-                return null;
-            }
-
-            @Override
-            public Page<CollectableType> findAll(Pageable pageable) {
-                return null;
-            }
-
-            @Override
-            public <S extends CollectableType> S save(S s) {
-                return null;
-            }
-
-            @Override
-            public Optional<CollectableType> findById(UUID uuid) {
-                return Optional.empty();
-            }
-
-            @Override
-            public boolean existsById(UUID uuid) {
-                return false;
-            }
-
-            @Override
-            public long count() {
-                return 0;
-            }
-
-            @Override
-            public void deleteById(UUID uuid) {
-
-            }
-
-            @Override
-            public void delete(CollectableType collectableType) {
-
-            }
-
-            @Override
-            public void deleteAll(Iterable<? extends CollectableType> iterable) {
-
-            }
-
-            @Override
-            public void deleteAll() {
-
-            }
-
-            @Override
-            public <S extends CollectableType> Optional<S> findOne(Example<S> example) {
-                return Optional.empty();
-            }
-
-            @Override
-            public <S extends CollectableType> Page<S> findAll(Example<S> example, Pageable pageable) {
-                return null;
-            }
-
-            @Override
-            public <S extends CollectableType> long count(Example<S> example) {
-                return 0;
-            }
-
-            @Override
-            public <S extends CollectableType> boolean exists(Example<S> example) {
-                return false;
-            }
-        });
-        CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
-        setRequest.setName("Test");
-        setRequest.setDescription("Test Set");
-        CreateCollectableSetResponse setResponse = collectableService.createCollectableSet(setRequest);
-        setResponse.getCollectableSet().setId(UUID.fromString("dc40c921-ca14-414f-8332-2493c8b351ff"));
-
+        }
     }
 
     @Test
