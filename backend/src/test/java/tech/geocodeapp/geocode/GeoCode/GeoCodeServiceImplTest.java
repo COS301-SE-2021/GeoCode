@@ -102,7 +102,7 @@ public class GeoCodeServiceImplTest {
 
         try {
 
-            geoCodeService.getAllGeoCode( );
+            geoCodeService.getAllGeoCodes( );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
