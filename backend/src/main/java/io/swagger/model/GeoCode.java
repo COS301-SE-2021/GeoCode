@@ -9,10 +9,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -39,9 +40,13 @@ public class GeoCode   {
 
   @JsonProperty("hints")
   @Valid
+  @ElementCollection
   private List<String> hints = new ArrayList<String>();
 
   @JsonProperty("collectables")
+  @ManyToOne
+  @JoinColumn(name = "COLLECTABLE_ID")
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Collectable collectables = null;
 
   @JsonProperty("trackables")
