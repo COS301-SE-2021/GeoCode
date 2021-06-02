@@ -15,5 +15,5 @@ public interface GeoCodeService {
 
     CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException;
 
-    GetGeoCodesResponse getAllGeoCode( GetGeoCodesRequest request ) throws RepoException;
+    GetGeoCodesResponse getAllGeoCode( ) throws RepoException;
 }

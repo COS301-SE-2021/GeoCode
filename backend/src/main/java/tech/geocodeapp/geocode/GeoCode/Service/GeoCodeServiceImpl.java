@@ -57,30 +57,45 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /** Validate the request */
         if ( request == null ) {
 
-            throw new InvalidRequestException( "An error occurred." );
+            throw new InvalidRequestException( "The given request is empty." );
+        } else if ( ( request.getLocation() == null ) || ( request.getHints() == null ) ||
+                    ( request.getDifficulty() == null ) || ( request.getDescription() == null ) ||
+                    ( request.isAvailable() == null ) || ( request.getId() == null ) ) {
+
+            throw new InvalidRequestException( "The given request is missing parameter/s." );
         }
 
+        /**
+         * Create the GeoCode object
+         * and set its attributes to the given attributes in the request
+         */
         GeoCode newGeoCode = new GeoCode();
-        // ToDo: need to get and set the ID
+        newGeoCode.setId( request.getId() );
         newGeoCode.setAvailable( request.isAvailable() );
         newGeoCode.setDescription( request.getDescription() );
         newGeoCode.setDifficulty( request.getDifficulty() );
         newGeoCode.setHints( request.getHints() );
         newGeoCode.setLocation( request.getLocation() );
 
-        // ToDo: need to get and set the QR Code => how will this be generated
         /** Try and create the relevant image with the newly create GeoCode instance */
         try {
 
-            /** Create the image with the specified name */
-            createQR( "QRCode" );
+            /**
+             * Create the image with the specified name
+             * and set the GeoCode to the create QR Code
+             * */
+            newGeoCode.setQrCode( createQR( "QRCode" ) );
         } catch ( IOException | WriterException e ) {
 
             throw new QRCodeException( "The QR Code could not be created." );
         }
 
-        // ToDo: need to save to the repo
+        /** Save the created GeoCode to the repository */
+        geoCodeRepo.save( newGeoCode );
 
+        /** Create the new response
+         *  and add the created GeoCode to it
+         */
         CreateGeoCodeResponse response = new CreateGeoCodeResponse();
         response.setGeoCode( newGeoCode );
 
@@ -90,14 +105,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     /**
      * Get all the stored GeoCodes in the Repo
      *
-     * @param request the attributes the response should be created from
-     *
      * @return the newly create response instance from the specified GetAllGeoCodesRequest
      *
      * @throws RepoException there was an issue accessing the repository
      */
     @Override
-    public GetGeoCodesResponse getAllGeoCode( GetGeoCodesRequest request ) throws RepoException {
+    public GetGeoCodesResponse getAllGeoCode( ) throws RepoException {
 
         /** Validate the repo */
         if ( geoCodeRepo == null ) {
@@ -125,10 +138,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      *
      * @param imageName the name to label the jpg image to
      *
+     * @return the unique Identifier to indicate the GeoCode
+     *
      * @throws IOException the file path or image name given was invalid
      * @throws WriterException the image could not be created
      */
-    public void createQR( String imageName ) throws IOException, WriterException {
+    public String createQR( String imageName ) throws IOException, WriterException {
 
         /** The file path the image should be created in */
         String path = "src/main/java/tech/geocodeapp/geocode/GeoCode/QRImages/"+ imageName + ".jpg";
@@ -138,6 +153,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /** Create the image and store it in the given path */
         MatrixToImageWriter.writeToPath( matrix, "jpg", Paths.get( path ) );
+
+        return "AAAA";
     }
 
 }

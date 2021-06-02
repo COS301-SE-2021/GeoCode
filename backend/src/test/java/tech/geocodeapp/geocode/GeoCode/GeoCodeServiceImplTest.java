@@ -48,7 +48,7 @@ public class GeoCodeServiceImplTest {
 
         try {
 
-            geoCodeService.getAllGeoCode( new GetGeoCodesRequest() );
+            geoCodeService.getAllGeoCode( );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
