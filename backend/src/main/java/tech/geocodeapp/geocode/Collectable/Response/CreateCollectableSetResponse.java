@@ -3,7 +3,7 @@ package tech.geocodeapp.geocode.Collectable.Response;
 import io.swagger.model.CollectableSet;
 
 /**
- * A class to write a response for a createCollectableSetRequest
+ * A class to write a response to for a createCollectableSetRequest
  */
 public class CreateCollectableSetResponse {
     boolean success;
