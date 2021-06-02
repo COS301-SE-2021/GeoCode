@@ -3,8 +3,8 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -13,53 +13,31 @@ import javax.validation.constraints.*;
  * CreateGeoCodeResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T21:20:54.086Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 
 
 public class CreateGeoCodeResponse   {
-  @JsonProperty("id")
-  private UUID id = null;
+  @JsonProperty("geoCode")
+  private GeoCode geoCode = null;
 
-  @JsonProperty("qrCode")
-  private String qrCode = null;
-
-  public CreateGeoCodeResponse id(UUID id) {
-    this.id = id;
+  public CreateGeoCodeResponse geoCode(GeoCode geoCode) {
+    this.geoCode = geoCode;
     return this;
   }
 
   /**
-   * Get id
-   * @return id
+   * Get geoCode
+   * @return geoCode
    **/
   @Schema(description = "")
   
     @Valid
-    public UUID getId() {
-    return id;
+    public GeoCode getGeoCode() {
+    return geoCode;
   }
 
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public CreateGeoCodeResponse qrCode(String qrCode) {
-    this.qrCode = qrCode;
-    return this;
-  }
-
-  /**
-   * Get qrCode
-   * @return qrCode
-   **/
-  @Schema(description = "")
-  
-    public String getQrCode() {
-    return qrCode;
-  }
-
-  public void setQrCode(String qrCode) {
-    this.qrCode = qrCode;
+  public void setGeoCode(GeoCode geoCode) {
+    this.geoCode = geoCode;
   }
 
 
@@ -72,13 +50,12 @@ public class CreateGeoCodeResponse   {
       return false;
     }
     CreateGeoCodeResponse createGeoCodeResponse = (CreateGeoCodeResponse) o;
-    return Objects.equals(this.id, createGeoCodeResponse.id) &&
-        Objects.equals(this.qrCode, createGeoCodeResponse.qrCode);
+    return Objects.equals(this.geoCode, createGeoCodeResponse.geoCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, qrCode);
+    return Objects.hash(geoCode);
   }
 
   @Override
@@ -86,8 +63,7 @@ public class CreateGeoCodeResponse   {
     StringBuilder sb = new StringBuilder();
     sb.append("class CreateGeoCodeResponse {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    qrCode: ").append(toIndentedString(qrCode)).append("\n");
+    sb.append("    geoCode: ").append(toIndentedString(geoCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }
