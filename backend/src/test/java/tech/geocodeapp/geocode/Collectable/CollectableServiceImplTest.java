@@ -245,6 +245,7 @@ public class CollectableServiceImplTest {
          *  Create a request object
          * and assign values to it
          * */
+
         //create the set
         CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
         setRequest.setName("Easter");
