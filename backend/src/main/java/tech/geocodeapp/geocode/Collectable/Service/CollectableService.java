@@ -8,9 +8,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface CollectableService {
+    //Creators
     CollectableSet createCollectableSet(CreateCollectableSetRequest request);
-
     CollectableType createCollectableType(CreateCollectableTypeRequest request);
-
     Collectable createCollectable(CreateCollectableRequest request);
+
+    //Getters
+    GetCollectablesResponse getCollectables();
+    GetCollectableTypesResponse getCollectableTypes();
+    GetCollectableSetsResponse getCollectableSets();
 }
