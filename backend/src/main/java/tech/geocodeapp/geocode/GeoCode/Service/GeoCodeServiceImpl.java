@@ -60,7 +60,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new InvalidRequestException( "The given request is empty." );
         } else if ( ( request.getLocation() == null ) || ( request.getHints() == null ) ||
                     ( request.getDifficulty() == null ) || ( request.getDescription() == null ) ||
-                    ( request.isAvailable() == null ) || ( request.getId() == null ) ) {
+                    ( request.isAvailable() == null ) ) {
 
             throw new InvalidRequestException( "The given request is missing parameter/s." );
         }
@@ -70,12 +70,14 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * and set its attributes to the given attributes in the request
          */
         GeoCode newGeoCode = new GeoCode();
-        newGeoCode.setId( request.getId() );
         newGeoCode.setAvailable( request.isAvailable() );
         newGeoCode.setDescription( request.getDescription() );
         newGeoCode.setDifficulty( request.getDifficulty() );
         newGeoCode.setHints( request.getHints() );
         newGeoCode.setLocation( request.getLocation() );
+
+        Collectable collectable = new Collectable(new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description")));
+        newGeoCode.setCollectables(collectable);
 
         /** Try and create the relevant image with the newly create GeoCode instance */
         try {
