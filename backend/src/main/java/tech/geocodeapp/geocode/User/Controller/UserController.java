@@ -14,7 +14,7 @@ import tech.geocodeapp.geocode.User.Service.UserServiceImpl;
 @CrossOrigin("*")
 @RestController
 public class UserController /*implements UserApi*/ {//TODO: generate UserApi
-    @Autowired
-    private UserServiceImpl userService;
+    //@Autowired
+   // private UserServiceImpl userService;
 
 }
