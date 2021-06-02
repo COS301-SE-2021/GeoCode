@@ -10,7 +10,7 @@ import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeRespons
  * This interface is for the User subsystem
  */
 @Service
-public interface CollectableService {//success, message, object
+public interface CollectableService {
     //Creators
     CreateCollectableSetResponse createCollectableSet(CreateCollectableSetRequest request);
     CreateCollectableTypeResponse createCollectableType(CreateCollectableTypeRequest request);

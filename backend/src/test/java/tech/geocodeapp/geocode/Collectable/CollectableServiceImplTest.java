@@ -81,7 +81,7 @@ public class CollectableServiceImplTest {
         request.setName("Santa");
         request.setImage("dgergergnhtfhjhg");
         request.setRarity(Rarity.RARE);
-        request.setId(UUID.fromString(""));//
+        request.setId(UUID.fromString("dc40c921-ca14-414f-8332-2493c8b351ff"));
         CreateCollectableTypeResponse response = collectableService.createCollectableType(request);
 
         Assertions.assertTrue(response.isSuccess());

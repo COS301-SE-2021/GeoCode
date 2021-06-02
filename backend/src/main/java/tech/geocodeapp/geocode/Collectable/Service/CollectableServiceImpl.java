@@ -31,6 +31,7 @@ public class CollectableServiceImpl implements CollectableService {
         this.collectableTypeRepo = collectableTypeRepo;
     }
 
+    @Transactional
     public CreateCollectableSetResponse createCollectableSet(CreateCollectableSetRequest request){
         if (request == null) {
             return new CreateCollectableSetResponse(false, "The CreateCollectableSetRequest object passed was NULL", null);
@@ -41,6 +42,7 @@ public class CollectableServiceImpl implements CollectableService {
         return new CreateCollectableSetResponse(true, "The CollectableSet was successfully created", collectableSet);
     }
 
+    @Transactional
     public CreateCollectableTypeResponse createCollectableType(CreateCollectableTypeRequest request){
         if (request == null) {
             return new CreateCollectableTypeResponse(false, "The CreateCollectableTypeRequest object passed was NULL", null);
@@ -58,6 +60,7 @@ public class CollectableServiceImpl implements CollectableService {
         }
     }
 
+    @Transactional
     public CreateCollectableResponse createCollectable(CreateCollectableRequest request){
         if (request == null) {
             return new CreateCollectableResponse(false, "The CreateCollectableSetRequest object passed was NULL", null);
@@ -75,18 +78,21 @@ public class CollectableServiceImpl implements CollectableService {
         }
     }
 
+    @Transactional
     public GetCollectablesResponse getCollectables(){
         GetCollectablesResponse response = new GetCollectablesResponse();
         response.setCollectables(collectableRepo.findAll());
         return response;
     }
 
+    @Transactional
     public GetCollectableTypesResponse getCollectableTypes(){
         GetCollectableTypesResponse response = new GetCollectableTypesResponse();
         response.setCollectableTypes(collectableTypeRepo.findAll());
         return response;
     }
 
+    @Transactional
     public GetCollectableSetsResponse getCollectableSets(){
         GetCollectableSetsResponse response = new GetCollectableSetsResponse();
         response.setCollectableSets(collectableSetRepo.findAll());
