@@ -72,7 +72,7 @@ public class CollectableSetMockRepository implements CollectableSetRepository {
     @Override
     public Optional<CollectableSet> findById(UUID uuid) {
         CollectableSet collectableSet=map.get(uuid);
-        return Optional.empty();
+        return Optional.ofNullable(collectableSet);
     }
 
     @Override
