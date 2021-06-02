@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,6 +37,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
 import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
 
 import javax.validation.constraints.*;
@@ -55,6 +59,7 @@ public class CollectableApiController implements CollectableApi {
 
     private final HttpServletRequest request;
 
+    @Autowired
     private CollectableServiceImpl collectableService;
 
     @org.springframework.beans.factory.annotation.Autowired
@@ -62,22 +67,36 @@ public class CollectableApiController implements CollectableApi {
         this.objectMapper = objectMapper;
         this.request = request;
 
-        this.collectableService = new CollectableServiceImpl();
     }
 
-    public ResponseEntity<Collectable> createCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableRequest body) {
-        Collectable responseBody = collectableService.createCollectable(body);
-        return new ResponseEntity<Collectable>(responseBody, HttpStatus.OK);
+    public ResponseEntity<CreateCollectableResponse> createCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableRequest body) {
+        CreateCollectableResponse response = collectableService.createCollectable(body);
+
+        if(response.isSuccess()){
+            return new ResponseEntity<CreateCollectableResponse>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<CreateCollectableResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity<CollectableSet> createCollectableSet(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable Set", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableSetRequest body) {
-        CollectableSet responseBody = collectableService.createCollectableSet(body);
-        return new ResponseEntity<CollectableSet>(responseBody, HttpStatus.OK);
+    public ResponseEntity<CreateCollectableSetResponse> createCollectableSet(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable Set", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableSetRequest body) {
+        CreateCollectableSetResponse response = collectableService.createCollectableSet(body);
+
+        if(response.isSuccess()){
+            return new ResponseEntity<CreateCollectableSetResponse>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<CreateCollectableSetResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity<CollectableType> createCollectableType(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable Type", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableTypeRequest body) {
-        CollectableType responseBody = collectableService.createCollectableType(body);
-        return new ResponseEntity<CollectableType>(responseBody, HttpStatus.OK);
+    public ResponseEntity<CreateCollectableTypeResponse> createCollectableType(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable Type", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableTypeRequest body) {
+        CreateCollectableTypeResponse response = collectableService.createCollectableType(body);
+
+        if(response.isSuccess()){
+            return new ResponseEntity<CreateCollectableTypeResponse>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<CreateCollectableTypeResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
     public ResponseEntity<GetCollectablesResponse> getCollectableByType(@Parameter(in = ParameterIn.DEFAULT, description = "Request Collectables by type", required=true, schema=@Schema()) @Valid @RequestBody GetCollectableByTypeRequest body) {
@@ -95,8 +114,13 @@ public class CollectableApiController implements CollectableApi {
     }
 
     public ResponseEntity<GetCollectableSetsResponse> getCollectableSets() {
-        GetCollectableSetsResponse responseBody = collectableService.getCollectableSets();
-        return new ResponseEntity<GetCollectableSetsResponse>(responseBody, HttpStatus.OK);
+        GetCollectableSetsResponse response = collectableService.getCollectableSets();
+
+        if(!response.getCollectableSets().isEmpty()){
+            return new ResponseEntity<GetCollectableSetsResponse>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<GetCollectableSetsResponse>(response, HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<GetCollectableTypesResponse> getCollectableTypeByRarity(@Parameter(in = ParameterIn.DEFAULT, description = "Request Collectable Types by rarity", required=true, schema=@Schema()) @Valid @RequestBody GetCollectableTypeByRarityRequest body) {
@@ -128,13 +152,23 @@ public class CollectableApiController implements CollectableApi {
     }
 
     public ResponseEntity<GetCollectableTypesResponse> getCollectableTypes() {
-        GetCollectableTypesResponse responseBody = collectableService.getCollectableTypes();
-        return new ResponseEntity<GetCollectableTypesResponse>(responseBody, HttpStatus.OK);
+        GetCollectableTypesResponse response = collectableService.getCollectableTypes();
+
+        if(!response.getCollectableTypes().isEmpty()){
+            return new ResponseEntity<GetCollectableTypesResponse>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<GetCollectableTypesResponse>(response, HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<GetCollectablesResponse> getCollectables() {
-        GetCollectablesResponse responseBody = collectableService.getCollectables();
-        return new ResponseEntity<GetCollectablesResponse>(responseBody, HttpStatus.OK);
+        GetCollectablesResponse response = collectableService.getCollectables();
+
+        if(!response.getCollectables().isEmpty()){
+            return new ResponseEntity<GetCollectablesResponse>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<GetCollectablesResponse>(response, HttpStatus.NOT_FOUND);
+        }
     }
 
 }
