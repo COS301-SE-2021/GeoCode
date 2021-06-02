@@ -120,24 +120,14 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws RepoException there was an issue accessing the repository
      */
     @Override
-    public GetGeoCodesResponse getAllGeoCode( ) throws RepoException {
+    public GetGeoCodesResponse getAllGeoCodes( ) throws RepoException {
 
         /** Validate the repo */
         if ( geoCodeRepo == null ) {
-
             throw new RepoException( "The GeoCode Repository is empty." );
         }
 
-        /*ListIterator< GeoCode > it;
-        ArrayList< GeoCode > allGeoCodes = new ArrayList<>();
-
-        while ( it.hasNext() ) {
-
-            allGeoCodes.add( ( GeoCode ) it );
-            it.next();
-        }*/
-
-        return new GetGeoCodesResponse();
+        return new GetGeoCodesResponse().geocodes(geoCodeRepo.findAll());
     }
 
 
