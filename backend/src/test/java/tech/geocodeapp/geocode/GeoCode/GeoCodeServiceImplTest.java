@@ -8,10 +8,9 @@ import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
-import tech.geocodeapp.geocode.GeoCode.Request.CreateGeoCodeRequest;
-import tech.geocodeapp.geocode.GeoCode.Request.GetAllGeoCodesRequest;
 import tech.geocodeapp.geocode.GeoCode.Service.*;
 
+import io.swagger.model.*;
 
 public class GeoCodeServiceImplTest {
 
@@ -46,12 +45,6 @@ public class GeoCodeServiceImplTest {
     @Test
     public void getAllGeoCodeTest() {
 
-        try {
-
-            geoCodeService.getAllGeoCode( new GetAllGeoCodesRequest() );
-        } catch ( RepoException e ) {
-
-            e.printStackTrace();
-        }
+        geoCodeService.getGeoCodes(  );
     }
 }

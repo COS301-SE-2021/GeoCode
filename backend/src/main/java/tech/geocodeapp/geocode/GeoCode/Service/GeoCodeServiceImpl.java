@@ -5,28 +5,17 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
-import io.swagger.model.CreateGeoCodeRequest;
-import io.swagger.model.CreateGeoCodeResponse;
-import io.swagger.model.GeoCode;
-import io.swagger.model.GetGeoCodesResponse;
 import org.springframework.stereotype.Service;
 
+import io.swagger.model.*;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 
 
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
-
-
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.ListIterator;
 
 
 
@@ -88,35 +77,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         return new GetGeoCodesResponse().geocodes(geoCodeRepo.findAll());
     }
 
-    /**
-     * Get all the stored GeoCodes in the Repo
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly create response instance from the specified GetAllGeoCodesRequest
-     *
-     * @throws RepoException there was an issue accessing the repository
-     */
-    @Override
-    public GetAllGeoCodesResponse getAllGeoCode( GetAllGeoCodesRequest request ) throws RepoException {
-
-        /** Validate the repo */
-        if ( geoCodeRepo == null ) {
-
-            throw new RepoException( "The GeoCode Repository is empty." );
-        }
-
-        ListIterator< GeoCode > it = geoCodeRepo.findAll().listIterator();
-        ArrayList< GeoCode > allGeoCodes = new ArrayList<>();
-
-        while ( it.hasNext() ) {
-
-            allGeoCodes.add( ( GeoCode ) it );
-            it.next();
-        }
-
-        return new GetAllGeoCodesResponse( allGeoCodes );
-    }
 
     /**
      * This helper function helps create the QR Code image and stores
