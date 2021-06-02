@@ -1,10 +1,12 @@
 package tech.geocodeapp.geocode.GeoCode;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,14 +22,10 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
 
 @ExtendWith( MockitoExtension.class )
 public class GeoCodeServiceImplTest {
-
-    @Mock
-    private GeoCodeRepository geoCodeRepo;
-
-    private UUID createdId;
 
     GeoCodeService geoCodeService;
 
@@ -37,8 +35,7 @@ public class GeoCodeServiceImplTest {
 
     @BeforeEach
     void setup() {
-
-        geoCodeService = new GeoCodeServiceImpl( geoCodeRepo );
+        geoCodeService = new GeoCodeServiceImpl( new GeoCodeMockRepository() );
     }
 
     @Test
@@ -64,7 +61,8 @@ public class GeoCodeServiceImplTest {
             request.setLocation( "Jhb" );
 
             CreateGeoCodeResponse response = geoCodeService.createGeoCode( request );
-            createdId = response.getGeoCode().getId();
+            Assertions.assertEquals(response.getGeoCode().getDescription(), request.getDescription());
+
         } catch ( InvalidRequestException | QRCodeException | RepoException e ) {
 
             e.printStackTrace();
@@ -102,8 +100,25 @@ public class GeoCodeServiceImplTest {
     public void getAllGeoCodeTest() {
         createGeoCodeTest();
         try {
+            CreateGeoCodeRequest request = new CreateGeoCodeRequest();
+            request.setAvailable( true );
+            request.setDescription( "The GeoCode is stored at the art Museum in Jhb South" );
+            request.setDifficulty( Difficulty.INSANE );
+            List<String> hints = new ArrayList<>();
+            hints.add( "This " );
+            hints.add( "is " );
+            hints.add( "a " );
+            hints.add( "secret " );
+            hints.add( "hint." );
+            request.setHints( hints );
+            request.setLocation( "Jhb" );
+
+            CreateGeoCodeResponse createResp = geoCodeService.createGeoCode( request );
+
             GetGeoCodesResponse response = geoCodeService.getAllGeoCodes( );
-        } catch ( RepoException e ) {
+            List<GeoCode> geocodes = response.getGeocodes();
+            Assertions.assertEquals(geocodes.get(0).getDescription(), "The GeoCode is stored at the art Museum in Jhb South");
+        } catch ( Exception e ) {
 
             e.printStackTrace();
         }
