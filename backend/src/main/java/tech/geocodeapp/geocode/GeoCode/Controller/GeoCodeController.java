@@ -1,20 +1,23 @@
-package tech.geocodeapp.geocode.User.Controller;
+package tech.geocodeapp.geocode.GeoCode.Controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import tech.geocodeapp.geocode.APIObjectMapper;
-import tech.geocodeapp.geocode.User.Service.UserInterfaceServiceImpl.UserServiceImpl;
+
+
+import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeServiceImpl;
 
 /**
- * This class implements the functionality of the UserAPI interface.
+ * This class implements the functionality of the GeoCodeAPI interface.
  */
 @CrossOrigin("*")
 @RestController
-public class UserController implements UserApi {//TODO: generate UserApi
+public class GeoCodeController {
+
     @Autowired
-    private UserServiceImpl userService;
+    private GeoCodeServiceImpl geoCodeService;
 
     @Autowired
     private APIObjectMapper apiObjectMapper;
