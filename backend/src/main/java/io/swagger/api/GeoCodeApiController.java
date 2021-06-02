@@ -50,7 +50,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T21:20:54.086Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 @RestController
 public class GeoCodeApiController implements GeoCodeApi {
 
@@ -70,7 +70,7 @@ public class GeoCodeApiController implements GeoCodeApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<CreateGeoCodeResponse>(objectMapper.readValue("{\n  \"qrCode\" : \"qrCode\",\n  \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n}", CreateGeoCodeResponse.class), HttpStatus.NOT_IMPLEMENTED);
+                return new ResponseEntity<CreateGeoCodeResponse>(objectMapper.readValue("{\n  \"geoCode\" : {\n    \"difficulty\" : \"EASY\",\n    \"collectables\" : {\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"type\" : {\n        \"image\" : \"image\",\n        \"set\" : {\n          \"name\" : \"name\",\n          \"description\" : \"description\",\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n        },\n        \"name\" : \"name\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n        \"rarity\" : \"COMMON\"\n      }\n    },\n    \"qrCode\" : \"qrCode\",\n    \"hints\" : [ \"hints\", \"hints\" ],\n    \"available\" : true,\n    \"description\" : \"description\",\n    \"trackables\" : \"trackables\",\n    \"location\" : \"location\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }\n}", CreateGeoCodeResponse.class), HttpStatus.NOT_IMPLEMENTED);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<CreateGeoCodeResponse>(HttpStatus.INTERNAL_SERVER_ERROR);

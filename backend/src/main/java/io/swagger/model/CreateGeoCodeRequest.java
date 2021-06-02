@@ -7,6 +7,7 @@ import io.swagger.model.Difficulty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -15,10 +16,13 @@ import javax.validation.constraints.*;
  * CreateGeoCodeRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T21:20:54.086Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 
 
 public class CreateGeoCodeRequest   {
+  @JsonProperty("id")
+  private UUID id = null;
+
   @JsonProperty("description")
   private String description = null;
 
@@ -31,6 +35,30 @@ public class CreateGeoCodeRequest   {
 
   @JsonProperty("difficulty")
   private Difficulty difficulty = null;
+
+  @JsonProperty("available")
+  private Boolean available = null;
+
+  public CreateGeoCodeRequest id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    @Valid
+    public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
   public CreateGeoCodeRequest description(String description) {
     this.description = description;
@@ -118,6 +146,26 @@ public class CreateGeoCodeRequest   {
     this.difficulty = difficulty;
   }
 
+  public CreateGeoCodeRequest available(Boolean available) {
+    this.available = available;
+    return this;
+  }
+
+  /**
+   * Get available
+   * @return available
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    public Boolean isAvailable() {
+    return available;
+  }
+
+  public void setAvailable(Boolean available) {
+    this.available = available;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -128,15 +176,17 @@ public class CreateGeoCodeRequest   {
       return false;
     }
     CreateGeoCodeRequest createGeoCodeRequest = (CreateGeoCodeRequest) o;
-    return Objects.equals(this.description, createGeoCodeRequest.description) &&
+    return Objects.equals(this.id, createGeoCodeRequest.id) &&
+        Objects.equals(this.description, createGeoCodeRequest.description) &&
         Objects.equals(this.location, createGeoCodeRequest.location) &&
         Objects.equals(this.hints, createGeoCodeRequest.hints) &&
-        Objects.equals(this.difficulty, createGeoCodeRequest.difficulty);
+        Objects.equals(this.difficulty, createGeoCodeRequest.difficulty) &&
+        Objects.equals(this.available, createGeoCodeRequest.available);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, location, hints, difficulty);
+    return Objects.hash(id, description, location, hints, difficulty, available);
   }
 
   @Override
@@ -144,10 +194,12 @@ public class CreateGeoCodeRequest   {
     StringBuilder sb = new StringBuilder();
     sb.append("class CreateGeoCodeRequest {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    location: ").append(toIndentedString(location)).append("\n");
     sb.append("    hints: ").append(toIndentedString(hints)).append("\n");
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
+    sb.append("    available: ").append(toIndentedString(available)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -17,10 +20,11 @@ import javax.validation.constraints.*;
  * GeoCode
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-01T21:20:54.086Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 
-
+@Entity
 public class GeoCode   {
+  @Id
   @JsonProperty("id")
   private UUID id = null;
 
