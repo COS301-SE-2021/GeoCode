@@ -27,9 +27,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith( MockitoExtension.class )
 public class GeoCodeServiceImplTest {
 
-
-    private UUID createdId;
-
     GeoCodeService geoCodeService;
 
     GeoCodeServiceImplTest() {
@@ -64,7 +61,8 @@ public class GeoCodeServiceImplTest {
             request.setLocation( "Jhb" );
 
             CreateGeoCodeResponse response = geoCodeService.createGeoCode( request );
-            createdId = response.getGeoCode().getId();
+            Assertions.assertEquals(response.getGeoCode().getDescription(), request.getDescription());
+
         } catch ( InvalidRequestException | QRCodeException | RepoException e ) {
 
             e.printStackTrace();
