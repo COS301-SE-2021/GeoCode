@@ -98,7 +98,6 @@ public class GeoCodeServiceImplTest {
 
     @Test
     public void getAllGeoCodeTest() {
-        createGeoCodeTest();
         try {
             CreateGeoCodeRequest request = new CreateGeoCodeRequest();
             request.setAvailable( true );
