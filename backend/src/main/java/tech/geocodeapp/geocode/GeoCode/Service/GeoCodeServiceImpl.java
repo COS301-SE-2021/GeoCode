@@ -23,7 +23,7 @@ import java.util.ListIterator;
 /**
  * This class implements the UserService interface
  */
-@Service
+@Service( "GeoCodeService" )
 public class GeoCodeServiceImpl implements GeoCodeService {
 
     /**
@@ -52,7 +52,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws QRCodeException an error occurred when attempting to create the QR Image
      */
     @Override
-    public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException {
+    public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException, RepoException {
 
         /** Validate the request */
         if ( request == null ) {
@@ -90,10 +90,20 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new QRCodeException( "The QR Code could not be created." );
         }
 
-        /** Save the created GeoCode to the repository */
-        geoCodeRepo.save( newGeoCode );
+        /**
+         * Check the repo exists before trying to access it
+         */
+        if ( geoCodeRepo != null ) {
 
-        /** Create the new response
+            /** Save the created GeoCode to the repository */
+            geoCodeRepo.save( newGeoCode );
+        } else {
+
+            throw new RepoException( "Could not save to the repository." );
+        }
+
+        /**
+         * Create the new response
          *  and add the created GeoCode to it
          */
         CreateGeoCodeResponse response = new CreateGeoCodeResponse();

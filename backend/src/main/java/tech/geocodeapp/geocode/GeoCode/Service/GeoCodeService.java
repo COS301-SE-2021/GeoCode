@@ -10,10 +10,9 @@ import io.swagger.model.*;
  * This is the main interface is for the GeoCode subsystem,
  * it is used to call the relevant use cases to create, manipulate and delete GeoCodes.
  */
-@Service
 public interface GeoCodeService {
 
-    CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException;
+    CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException, RepoException;
 
     GetGeoCodesResponse getAllGeoCode( ) throws RepoException;
 }
