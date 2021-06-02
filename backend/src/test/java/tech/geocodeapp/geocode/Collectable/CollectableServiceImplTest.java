@@ -39,6 +39,12 @@ public class CollectableServiceImplTest {
     @BeforeEach
     void setup() {
         collectableService = new CollectableServiceImpl(collectableRepo, collectableSetRepo, collectableTypeRepo);
+        CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
+        setRequest.setName("Test");
+        setRequest.setDescription("Test Set");
+        CreateCollectableSetResponse setResponse = collectableService.createCollectableSet(setRequest);
+        setResponse.getCollectableSet().setId(UUID.fromString("dc40c921-ca14-414f-8332-2493c8b351ff"));
+
     }
 
     @Test
