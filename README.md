@@ -1,8 +1,16 @@
+<div align="center">
+  <img align="left" width="80" src="https://drive.google.com/uc?export=view&id=14tcYhY4PgTOkXN-oUasKH8UpUKQcx_cn">
+</div>
 <h1 align="center" style="color:green; font-size: 300%;" > GeoCode – Virtual Global Treasure Hunt </h1>
 
+<br>
 
 [![Coverage Status](https://coveralls.io/repos/github/COS301-SE-2021/GeoCode/badge.svg?branch=master)](https://coveralls.io/github/COS301-SE-2021/GeoCode?branch=master)
 [![Build Status](https://img.shields.io/github/issues/COS301-SE-2021/GeoCode.svg)](https://github.com/COS301-SE-2021/GeoCode/issues)
+[![Build Status](https://img.shields.io/github/issues-closed/COS301-SE-2021/GeoCode)](https://img.shields.io/github/issues-closed/COS301-SE-2021/GeoCode)
+[![Build Status](https://img.shields.io/github/milestones/open/COS301-SE-2021/GeoCode)](https://img.shields.io/github/milestones/open/COS301-SE-2021/GeoCode)
+![Total Views](https://hitcounter.pythonanywhere.com/count/tag.svg?url=https://github.com/COS301-SE-2021/GeoCode.svg)
+
 
 <!---
 [![Build Status](https://github.com/COS301-SE-2021/GeoCode/workflows/{workflowName}/badge.svg)](https://github.com/COS301-SE-2021/GeoCode/actions)
@@ -124,7 +132,7 @@ Industry Mentor:
 * Kyle Pretorius:  kyle.pretorius@5dt.com
 
 University Mentor:
-* TBA
+* Andrew Broekman: andrew.broekman@up.ac.za
 
 </div>
 
@@ -134,7 +142,7 @@ University Mentor:
 
 The following software engineers contributed to the GeoCode project:
 
-<img align="left" width="80" src="https://raw.githubusercontent.com/Michael-Stroh/capstone/main/teamPhotos/Michael%20Stroh.jpg?token=APMNYWOVQ6RF4MEV4QULXB3AWZJMS">
+<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1_OiHlqj6YBQIg5iIfT0zQbJZkdsbCjx1">
 <h1 style="color:green; font-size: 200%;" > Michael Ströh </h1>
 <br/>
 
@@ -144,10 +152,11 @@ The following software engineers contributed to the GeoCode project:
             excellence. Through working as a Teaching Assistant for COS 212 (Data Structures)
             and a Student Lab Technician in the CBT labs at the University Of Pretoria he has
             learnt how to manage his time wisely and effectively communicate not only as a team
-            but also as an individual. As an Artificial Intelligence project Michael Ströh successfully
-            completed a Sudoku solver using Generic Algorithms and a flower specimens classifier
-            using Machine Learning with back propagation to identify the different species of the iris
-            flower, namely, iris setosa, iris versicolour and iris virginica.
+            but also as an individual. As an Artificial Intelligence project Michael Ströh 
+            successfully completed a Sudoku solver using Generic Algorithms and a flower 
+            specimens classifier using Machine Learning with back propagation to identify 
+            the different species of the iris flower, namely, iris setosa, iris versicolour 
+            and iris virginica.
    </pre>
 
 * <a href="https://github.com/Michael-Stroh"> Github Account </a>
@@ -160,12 +169,12 @@ The following software engineers contributed to the GeoCode project:
            - GitHub Readme creation and maintenance.
            - Documentation: Coding Standards
            - Documentation: Software Requirements Specification
-           - Backend
+           - Backend: GeoCode Subsystem
        </pre>
    </details>
 
 
-<img align="left" width="80" src="https://raw.githubusercontent.com/Michael-Stroh/capstone/main/teamPhotos/Liam.jpg?token=APMNYWJDAGWL4HD2HDNTTUTAWZJOQ">
+<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1A2cEQ7wslTqTWvZy7f6A4TBXakVAcWcQ">
 <h1 style="color:green; font-size: 200%;" > Liam Moore </h1>
 <br/>
 
@@ -190,12 +199,12 @@ The following software engineers contributed to the GeoCode project:
        <summary><b> Responsibilities </b></summary>
        <pre>
            - Documentation: Software Requirements Specification
-           - Backend
+           - Backend: Collectable Subsystem
        </pre>
    </details>
 
 
-<img align="left" width="80" src="https://raw.githubusercontent.com/Michael-Stroh/capstone/main/teamPhotos/Jenna.jpg?token=APMNYWOKVZDS2SSHGZAMTH3AWZJPQ">
+<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1vofqN3uiCv7RwSIVo-SRCgzG7G2lrOcu">
 <h1 style="color:green; font-size: 200%;" > Jenna Gallagher </h1>
 <br/>
 
@@ -217,12 +226,12 @@ The following software engineers contributed to the GeoCode project:
        <summary><b> Responsibilities </b></summary>
        <pre>
            - Documentation: Software Requirements Specification
-           - Frontend
+           - Frontend: Key Cloak
        </pre>
    </details>
 
 
-<img align="left" width="80" src="https://raw.githubusercontent.com/Michael-Stroh/capstone/main/teamPhotos/Caleb.jpg?token=APMNYWMFRNQBPRTHQWLNMU3AWZJQI">
+<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1QDGS-md4cPuMLbopvBIPRxzjDHnoCbLw">
 <h1 style="color:green; font-size: 200%;" > Caleb Johnstone </h1>
 <br/>
 
@@ -248,12 +257,12 @@ The following software engineers contributed to the GeoCode project:
        <summary><b> Responsibilities </b></summary>
        <pre>
            - Documentation: Software Requirements Specification
-           - Backend
+           - Backend: Collectable Subsystem
        </pre>
    </details>
 
 
-<img align="left" width="80" src="https://raw.githubusercontent.com/Michael-Stroh/capstone/main/teamPhotos/Michael%20Harvey.jpg?token=APMNYWJT5I3XXQ3NC4ZAF2TAWZJRM">
+<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1jeukx2dfvmPY8R6NiL92o8rqUoTZrXb0">
 <h1 style="color:green; font-size: 200%;" > Michael Harvey </h1>
 <br/>
 
@@ -261,8 +270,8 @@ The following software engineers contributed to the GeoCode project:
       
          Michael Harvey graduated from Richards Bay Christian School in 2018 with 4 distinctions,
          and is currently in his 3rd year studying BSc Computer Science. In his first two
-         years of university he achieved 21 distinctions in 24 modules, and he ranked as the 3rd highest 
-         first-year Computer Science student at UP in 2019. On the side he maintains
+         years of university he achieved 21 distinctions in 24 modules, and he ranked as the 
+         3rd highest first-year Computer Science student at UP in 2019. On the side he maintains
          various Python projects that make use of the API for the mobile game Clash of Clans: 2
          Discord bots, as well as a program collecting Clan War League participation data from
          hundreds of thousands of clans for statistical purposes.
@@ -276,7 +285,8 @@ The following software engineers contributed to the GeoCode project:
        <summary><b> Responsibilities </b></summary>
        <pre>
            - Documentation: Software Requirements Specification
-           - Frontend
+           - Frontend: Key Cloak
+           - Backend: GeoCode Subsystem
        </pre>
    </details>
 
