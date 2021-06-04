@@ -10,7 +10,7 @@ import java.util.UUID;
  * This class implements the repository for the User Subsystem
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface UserRepository extends JpaRepository<User, String> {
     //SELECT
 
     //UPDATE
