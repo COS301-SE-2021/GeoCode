@@ -3,10 +3,10 @@ package tech.geocodeapp.geocode;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class GeocodeApplicationTests {
 
-	@Test
+	//@Test
 	void contextLoads() {
 	}
 
