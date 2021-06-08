@@ -3,6 +3,41 @@
 
 /** Ionic CSS Variables **/
 :root {
+  /** app colour scheme**/
+
+  /** teal **/
+  --ion-color-teal: #4B878B;
+  --ion-color-teal-rgb: 75,135,139;
+  --ion-color-teal-contrast: #ffffff;
+  --ion-color-teal-contrast-rgb: 255,255,255;
+  --ion-color-teal-shade: #42777a;
+  --ion-color-teal-tint: #5d9397;
+
+  /** wine red **/
+  --ion-color-winered: #D01C1F;
+  --ion-color-winered-rgb: 208,28,31;
+  --ion-color-winered-contrast: #ffffff;
+  --ion-color-winered-contrast-rgb: 255,255,255;
+  --ion-color-winered-shade: #b7191b;
+  --ion-color-winered-tint: #d53335;
+
+  /** aqua **/
+  --ion-color-aqua: #3DC2AB;
+  --ion-color-aqua-rgb: 61,194,171;
+  --ion-color-aqua-contrast: #000000;
+  --ion-color-aqua-contrast-rgb: 0,0,0;
+  --ion-color-aqua-shade: #36ab96;
+  --ion-color-aqua-tint: #50c8b3;
+
+  /** purple **/
+  --ion-color-purple: #A54298;
+  --ion-color-purple-rgb: 165,66,152;
+  --ion-color-purple-contrast: #ffffff;
+  --ion-color-purple-contrast-rgb: 255,255,255;
+  --ion-color-purple-shade: #913a86;
+  --ion-color-purple-tint: #ae55a2;
+
+
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -76,7 +111,7 @@
   --ion-color-light-tint: #f5f6f9;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   /*
    * Dark Colors
    * -------------------------------------------
@@ -233,4 +268,43 @@
 
     --ion-card-background: #1e1e1e;
   }
+
+  /** my colours **/
+  .ion-color-teal {
+    --ion-color-base: var(--ion-color-teal);
+    --ion-color-base-rgb: var(--ion-color-teal-rgb);
+    --ion-color-contrast: var(--ion-color-teal-contrast);
+    --ion-color-contrast-rgb: var(--ion-color-teal-contrast-rgb);
+    --ion-color-shade: var(--ion-color-teal-shade);
+    --ion-color-tint: var(--ion-color-teal-tint);
+  }
+
+
+  .ion-color-winered {
+    --ion-color-base: var(--ion-color-winered);
+    --ion-color-base-rgb: var(--ion-color-winered-rgb);
+    --ion-color-contrast: var(--ion-color-winered-contrast);
+    --ion-color-contrast-rgb: var(--ion-color-winered-contrast-rgb);
+    --ion-color-shade: var(--ion-color-winered-shade);
+    --ion-color-tint: var(--ion-color-winered-tint);
+  }
+
+  .ion-color-aqua {
+    --ion-color-base: var(--ion-color-aqua);
+    --ion-color-base-rgb: var(--ion-color-aqua-rgb);
+    --ion-color-contrast: var(--ion-color-aqua-contrast);
+    --ion-color-contrast-rgb: var(--ion-color-aqua-contrast-rgb);
+    --ion-color-shade: var(--ion-color-aqua-shade);
+    --ion-color-tint: var(--ion-color-aqua-tint);
+  }
+
+  .ion-color-purple {
+    --ion-color-base: var(--ion-color-purple);
+    --ion-color-base-rgb: var(--ion-color-purple-rgb);
+    --ion-color-contrast: var(--ion-color-purple-contrast);
+    --ion-color-contrast-rgb: var(--ion-color-purple-contrast-rgb);
+    --ion-color-shade: var(--ion-color-purple-shade);
+    --ion-color-tint: var(--ion-color-purple-tint);
+  }
+
 }
