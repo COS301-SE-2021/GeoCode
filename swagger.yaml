@@ -1098,6 +1098,50 @@ components:
       xml:
         name: "GetCollectableTypeBySet"
 
+    Point:
+      type: "object"
+      required: 
+        - id
+        - amount
+        - userId
+        - leaderBoardId
+      properties:
+        id:
+          type: string
+          format: uuid
+        amount:
+          type: integer
+        userId:
+          type: string
+          format: uuid
+        leaderBoardId:
+          type: string
+          format: uuid
+      xml:
+        name: "Point"
+
+    LeaderBoard:
+      type: "object"
+      required:
+        - id
+        - name
+        - eventId
+        - pointId
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        eventId:
+          type: string
+          format: uuid
+        pointId:
+          type: string
+          format: uuid
+      xml:
+        name: "LeaderBoard"
+
     User:
       type: "object"
       required:
