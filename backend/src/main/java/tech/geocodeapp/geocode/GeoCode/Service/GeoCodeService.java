@@ -19,4 +19,20 @@ public interface GeoCodeService {
     CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException, RepoException;
 
     GetGeoCodesResponse getAllGeoCodes( ) throws RepoException;
+
+    GetCollectablesResponse getCollectables( GetCollectablesRequest request );
+
+    GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request );
+
+    GetHintsResponse getHints( GetHintsRequest request );
+
+    GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request );
+
+    GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request );
+
+    GetTrackablesResponse getTrackables( GetTrackablesRequest request );
+
+    SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request );
+
+    UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request );
 }
