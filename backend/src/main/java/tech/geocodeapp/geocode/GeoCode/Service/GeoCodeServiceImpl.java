@@ -13,11 +13,8 @@ import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 
-
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.List;
-
 
 
 /**
@@ -54,7 +51,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     @Override
     public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException, RepoException {
 
-        /** Validate the request */
+        /* Validate the request */
         if ( request == null ) {
 
             throw new InvalidRequestException( "The given request is empty." );
@@ -65,7 +62,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new InvalidRequestException( "The given request is missing parameter/s." );
         }
 
-        /**
+        /*
          * Create the GeoCode object
          * and set its attributes to the given attributes in the request
          */
@@ -79,32 +76,32 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         Collectable collectable = new Collectable(new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description")));
         newGeoCode.setCollectables(collectable);
 
-        /** Try and create the relevant image with the newly create GeoCode instance */
+        /* Try and create the relevant image with the newly create GeoCode instance */
         try {
 
-            /**
+            /*
              * Create the image with the specified name
              * and set the GeoCode to the create QR Code
-             * */
+             */
             newGeoCode.setQrCode( createQR( "QRCode" ) );
         } catch ( IOException | WriterException e ) {
 
             throw new QRCodeException( "The QR Code could not be created." );
         }
 
-        /**
+        /*
          * Check the repo exists before trying to access it
          */
         if ( geoCodeRepo != null ) {
 
-            /** Save the created GeoCode to the repository */
+            /* Save the created GeoCode to the repository */
             geoCodeRepo.save( newGeoCode );
         } else {
 
             throw new RepoException( "Could not save to the repository." );
         }
 
-        /**
+        /*
          * Create the new response
          *  and add the created GeoCode to it
          */
@@ -124,7 +121,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     @Override
     public GetGeoCodesResponse getAllGeoCodes( ) throws RepoException {
 
-        /** Validate the repo */
+        /* Validate the repo */
         if ( geoCodeRepo == null ) {
             throw new RepoException( "The GeoCode Repository is empty." );
         }
@@ -132,8 +129,112 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         return new GetGeoCodesResponse().geocodes(geoCodeRepo.findAll());
     }
 
+    /**
+     * Get tje stored Collectables inside of a GeoCode
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetCollectablesRequest
+     */
+    @Override
+    public GetCollectablesResponse getCollectables( GetCollectablesRequest request ) {
+
+        return null;
+    }
+
+    /**
+     * Get all the GeoCodes with a certain level of difficulty
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetGeoCodesByDifficultyRequest
+     */
+    @Override
+    public GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) {
+
+        return null;
+    }
+
+    /**
+     * Get the Hints of how to locate a GeoCode in the real world
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetHintsRequest
+     */
+    @Override
+    public GetHintsResponse getHints( GetHintsRequest request ) {
+
+        return null;
+    }
+
+    /**
+     * Finds the stored GeoCode associated with the generated QR Code
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetGeoCodeByQRCodeRequest
+     */
+    @Override
+    public GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request ) {
+
+        return null;
+    }
+
+    /**
+     * Finds the stored GeoCode associated at the given Location
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetGeoCodeByLocationRequest
+     */
+    @Override
+    public GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) {
+
+        return null;
+    }
+
+    /**
+     *  Gets the Trackables stored in the GeoCode
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetTrackablesRequest
+     */
+    @Override
+    public GetTrackablesResponse getTrackables( GetTrackablesRequest request ) {
+
+        return null;
+    }
+
+    /**
+     * Swaps a stored Collectable in a GeoCode with the Users GeoCode
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified SwapCollectablesRequest
+     */
+    @Override
+    public SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) {
+
+        return null;
+    }
+
+    /**
+     * Updates the availability of a GeoCode
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified UpdateAvailabilityRequest
+     */
+    @Override
+    public UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) {
+
+        return null;
+    }
 
 
+    ////////////////Helper functions////////////////
 
     /**
      * This helper function helps create the QR Code image and stores
@@ -148,13 +249,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      */
     public String createQR( String imageName ) throws IOException, WriterException {
 
-        /** The file path the image should be created in */
+        /* The file path the image should be created in */
         String path = "src/main/java/tech/geocodeapp/geocode/GeoCode/QRImages/"+ imageName + ".jpg";
 
-        /** Create the QR Code and link it to the specified website */
+        /* Create the QR Code and link it to the specified website */
         BitMatrix matrix = new MultiFormatWriter().encode( "https://www.example.com/", BarcodeFormat.QR_CODE, 400, 400 );
 
-        /** Create the image and store it in the given path */
+        /* Create the image and store it in the given path */
         MatrixToImageWriter.writeToPath( matrix, "jpg", Paths.get( path ) );
 
         return "AAAA";
