@@ -605,10 +605,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetOwnedGeocodesResponse'
+                $ref: '#/components/schemas/GetOwnedGeoCodesResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetOwnedGeocodesResponse'
+                $ref: '#/components/schemas/GetOwnedGeoCodesResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -1491,8 +1491,9 @@ components:
     GetFoundCollectablesResponse:
       type: "object"
       properties:
-        type: array
-        items:
+        collectables:
+          type: array
+          items:
             $ref: '#/components/schemas/Collectable'
       xml:
         name: "GetFoundCollectablesResponse"

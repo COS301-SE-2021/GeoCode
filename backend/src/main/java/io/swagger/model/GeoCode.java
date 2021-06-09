@@ -9,11 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
-
-import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -21,13 +17,11 @@ import javax.validation.constraints.*;
  * GeoCode
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 
-@Entity
+
 public class GeoCode   {
-  @Id
   @JsonProperty("id")
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("difficulty")
@@ -41,13 +35,9 @@ public class GeoCode   {
 
   @JsonProperty("hints")
   @Valid
-  @ElementCollection
   private List<String> hints = new ArrayList<String>();
 
   @JsonProperty("collectables")
-  @ManyToOne
-  @JoinColumn(name = "COLLECTABLE_ID")
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Collectable collectables = null;
 
   @JsonProperty("trackables")
