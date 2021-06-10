@@ -15,7 +15,10 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "www",
-            "index": "src/index.html",
+            "index": {
+              "input": "src/index.withsecrets.html",
+              "output": "src/index.html"
+            },
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
