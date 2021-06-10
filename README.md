@@ -24,6 +24,7 @@
 - [Project Overview](#project-overview)
 - [GitHub Management](#github-management)
 - [Deployment](#deployment)
+- [Software Requirements Specification](#software-requirements-specification)
 - [Documentation](#documentation)
 - [Project Management Tools](#project-management-tools)
 - [Demo Video Links](#demo-video-links)
@@ -79,13 +80,24 @@ This will be announced after the first stable release of the GeoCode project.
 
 </div>    
 
+# Software Requirements Specification
+
+<div style="margin-left: 4%">
+
+The following documentation was done in LaTeX and is to document the process followed when designing <br/> and structure of the GeoCode project.
+
+* <a href="https://www.overleaf.com/read/ysgpfdqtrrkw"> GeoCode - SRS Version One </a>
+* <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> GeoCode - SRS Version Two </a>
+
+</div>
+
 # Documentation
 
 <div style="margin-left: 4%">
 
 The following documentation was done in LaTeX and is to document the methods used to create, how <br/> to install and use the GeoCode project.
 
-* <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> GeoCode - Software Requirements Specification </a>
+
 * <a href="https://www.overleaf.com/read/byjsbnwxcgnm"> Coding Standards </a>
 * <a href="https://michael-stroh.github.io/capstone/">Technical Installation Guide</a>
 * <a href="https://michael-stroh.github.io/capstone/">User Manual</a>
@@ -115,7 +127,7 @@ To aid with the management of the GeoCode project the following tools were used:
 The following links are the live demo videos held on blackboard collaborate to present the different <br/>
 phases of the project to the stakeholders of the GeoCode project.
 
-* <a href="https://michael-stroh.github.io/capstone/"> Demo 1 </a>
+* <a href="https://drive.google.com/file/d/1OqOuoMHSyd4rTUqWW5j_ME1EZcIJHre4/view?usp=sharing"> Demo 1 </a>
 * <a href="https://michael-stroh.github.io/capstone/"> Demo 2 </a>
 * <a href="https://michael-stroh.github.io/capstone/"> Demo 3 </a>
 * <a href="https://michael-stroh.github.io/capstone/"> Demo 4 </a>
@@ -129,10 +141,18 @@ phases of the project to the stakeholders of the GeoCode project.
 The team Peak Performers had the following mentor from <a href="https://5dt.com/"> Fifth Dimension Technologies </a> and the <a href="https://www.up.ac.za/"> University of Pretoria</a>:
 
 Industry Mentor:
-* Kyle Pretorius:  kyle.pretorius@5dt.com
+  <pre>
+    <p style="font-size: 150%;" > Kyle Pretorius </p>
+    - <a href="https://www.linkedin.com/in/kyle-pretorius-1880a8160/">LinkedIn Account </a>
+    - kyle.pretorius@5dt.com
+  </pre>
 
 University Mentor:
-* Andrew Broekman: andrew.broekman@up.ac.za
+  <pre>
+    <p style="font-size: 150%;" > Andrew Broekman  </p>
+    - <a href="https://www.linkedin.com/in/andrewbroekman/">LinkedIn Account</a>
+    - andrew.broekman@up.ac.za
+  </pre>
 
 </div>
 
@@ -160,7 +180,7 @@ The following software engineers contributed to the GeoCode project:
    </pre>
 
 * <a href="https://github.com/Michael-Stroh"> Github Account </a>
-* <a href="https://www.linkedin.com/in/stroh-michael"> Linkedin Account </a>
+* <a href="https://www.linkedin.com/in/stroh-michael"> LinkedIn Account </a>
 * <a href="https://michael-stroh.github.io/myCV/"> Personal Website </a>
 * m.stroh@tuks.co.za
    <details>
@@ -192,7 +212,7 @@ The following software engineers contributed to the GeoCode project:
 
 
 * <a href="https://github.com/NitronBiohazard"> Github Account</a>
-* <a href="https://www.linkedin.com/in/liam-moore-410004210/"> Linkedin  Account </a>
+* <a href="https://www.linkedin.com/in/liam-moore-410004210/"> LinkedIn  Account </a>
 * liam.moore@tuks.co.za
 
    <details>
@@ -218,7 +238,7 @@ The following software engineers contributed to the GeoCode project:
   </pre>
 
 * <a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> Github Account </a>
-* <a href="www.linkedin.com/in/jenna-gallagher-a79149204"> Linkedin  Account </a>
+* <a href="www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a>
 * <a href="https://jennalyngallagher.github.io/"> Personal Website </a>
 * jenna.gallagher@tuks.co.za
 
@@ -250,7 +270,7 @@ The following software engineers contributed to the GeoCode project:
   </pre>
 
 * <a href="https://github.com/CalebJohnstone"> Github Account</a>
-* <a href="https://www.linkedin.com/in/caleb-johnstone-94368a132/"> Linkedin  Account </a>
+* <a href="https://www.linkedin.com/in/caleb-johnstone-94368a132/"> LinkedIn  Account </a>
 * caleb.johnstone@tuks.co.za
 
    <details>
@@ -278,7 +298,7 @@ The following software engineers contributed to the GeoCode project:
   </pre>
 
 * <a href="https://github.com/robotic-coder"> Github Account</a>
-* <a href="https://www.linkedin.com/in/michaelharvey-123/"> Linkedin  Account </a>
+* <a href="https://www.linkedin.com/in/michaelharvey-123/"> LinkedIn  Account </a>
 * michael.harvey@tuks.co.za
 
    <details>
