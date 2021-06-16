@@ -5,16 +5,23 @@
 
 <br>
 
-[![Coverage Status](https://coveralls.io/repos/github/COS301-SE-2021/GeoCode/badge.svg?branch=master)](https://coveralls.io/github/COS301-SE-2021/GeoCode?branch=master)
-[![Build Status](https://img.shields.io/github/issues/COS301-SE-2021/GeoCode.svg)](https://github.com/COS301-SE-2021/GeoCode/issues)
-[![Build Status](https://img.shields.io/github/issues-closed/COS301-SE-2021/GeoCode)](https://img.shields.io/github/issues-closed/COS301-SE-2021/GeoCode)
-[![Build Status](https://img.shields.io/github/milestones/open/COS301-SE-2021/GeoCode)](https://img.shields.io/github/milestones/open/COS301-SE-2021/GeoCode)
-![Total Views](https://hitcounter.pythonanywhere.com/count/tag.svg?url=https://github.com/COS301-SE-2021/GeoCode.svg)
-
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=bugs)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=code_smells)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=ncloc)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=alert_status)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=security_rating)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=sqale_index)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
 
 <!---
+
+[![Coverage Status](https://coveralls.io/repos/github/COS301-SE-2021/GeoCode/badge.svg?branch=master)](https://coveralls.io/github/COS301-SE-2021/GeoCode?branch=master)
+[![Total Views]](https://hitcounter.pythonanywhere.com/count/tag.svg?url=https://github.com/COS301-SE-2021/GeoCode.svg)
 [![Build Status](https://github.com/COS301-SE-2021/GeoCode/workflows/{workflowName}/badge.svg)](https://github.com/COS301-SE-2021/GeoCode/actions)
 [![Requirements](https://img.shields.io/requires/github/COS301-SE-2021/GeoCode)](https://img.shields.io/requires/github/COS301-SE-2021/GeoCode)
+
 -->
 
 <h1> Table of Contents</h1>
@@ -50,6 +57,10 @@ With the use of GeoCodes as QR codes it also means if someone stumbles upon the 
 </div>
 
 # GitHub Management
+
+[![Build Status](https://img.shields.io/github/issues/COS301-SE-2021/GeoCode.svg)](https://github.com/COS301-SE-2021/GeoCode/issues)
+[![Build Status](https://img.shields.io/github/issues-closed/COS301-SE-2021/GeoCode)](https://img.shields.io/github/issues-closed/COS301-SE-2021/GeoCode)
+[![Build Status](https://img.shields.io/github/milestones/open/COS301-SE-2021/GeoCode)](https://img.shields.io/github/milestones/open/COS301-SE-2021/GeoCode)
 
 <div style="margin-left: 4%">
 
@@ -143,15 +154,15 @@ The team Peak Performers had the following mentor from <a href="https://5dt.com/
 Industry Mentor:
   <pre>
     <p style="font-size: 150%;" > Kyle Pretorius </p>
-    - <a href="https://www.linkedin.com/in/kyle-pretorius-1880a8160/">LinkedIn Account </a>
     - kyle.pretorius@5dt.com
+    - <a href="https://www.linkedin.com/in/kyle-pretorius-1880a8160/">LinkedIn Account </a>
   </pre>
 
 University Mentor:
   <pre>
     <p style="font-size: 150%;" > Andrew Broekman  </p>
-    - <a href="https://www.linkedin.com/in/andrewbroekman/">LinkedIn Account</a>
     - andrew.broekman@up.ac.za
+    - <a href="https://www.linkedin.com/in/andrewbroekman/">LinkedIn Account</a>
   </pre>
 
 </div>
