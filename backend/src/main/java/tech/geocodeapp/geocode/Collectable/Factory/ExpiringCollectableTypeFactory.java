@@ -30,6 +30,7 @@ public class ExpiringCollectableTypeFactory extends AbstractCollectableTypeFacto
 
         CollectableTypeComponent toReturn = new ExpiringCollectableTypeDecorator(collectableTypeComponent);
         toReturn.setExpiryDate(expiryDate);
+
         return toReturn;
     }
 }
