@@ -76,7 +76,7 @@ public class ExpiringCollectableTypeDecorator extends CollectableTypeDecorator{
     }
 
     /**
-     * @return the expiryDate of the decoratedType
+     * @return the expiryDate
      */
     @Override
     public GregorianCalendar getExpiryDate() {
@@ -84,7 +84,7 @@ public class ExpiringCollectableTypeDecorator extends CollectableTypeDecorator{
     }
 
     /**
-     * Sets the decoratedType's expiryDate
+     * Sets the expiryDate
      * @param date the calendar date on which the collectableType expires
      */
     @Override
