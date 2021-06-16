@@ -9,10 +9,10 @@ import java.util.UUID;
 public class BasicCollectableTypeFactory extends AbstractCollectableTypeFactory {
 
     /**
-     * Creates the a new ConcreteCollectableType and sets its variables to the values obtained from parsing properties
+     * Creates the a new {@link ConcreteCollectableType} and sets its variables to the values obtained from parsing properties
      * @param property A String containing the values of name, rarity and id in that order separated by a #
      * @param collectableTypeComponent Null as it is created here and decorated by the other factories if required
-     * @return the created ConcreteCollectableType returned as a CollectableTypeComponent interface object
+     * @return the created {@link ConcreteCollectableType} returned as a {@link CollectableTypeComponent} interface object
      */
     @Override
     CollectableTypeComponent decorateCollectableType(String property, CollectableTypeComponent collectableTypeComponent) {
