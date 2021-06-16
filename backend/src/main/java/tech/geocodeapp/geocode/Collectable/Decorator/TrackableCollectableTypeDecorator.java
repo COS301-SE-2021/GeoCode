@@ -5,7 +5,7 @@ import io.swagger.model.Rarity;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
-public class TrackableCollectableTypeDecorator extends CollectableTypeDecorator{
+public class TrackableCollectableTypeDecorator extends CollectableTypeDecorator {
 
     /**
      * @param decoratedType the CollectableTypeComponent to decorate

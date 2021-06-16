@@ -1,4 +1,4 @@
 package tech.geocodeapp.geocode.Collectable.Factory;
 
-public class ExpiringCollectableTypeFactory extends AbstractCollectableTypeFactory{
+public class ExpiringCollectableTypeFactory extends AbstractCollectableTypeFactory {
 }

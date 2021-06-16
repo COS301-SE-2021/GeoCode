@@ -5,7 +5,7 @@ import io.swagger.model.Rarity;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
-public class GeofencedCollectableTypeDecorator extends CollectableTypeDecorator{
+public class GeofencedCollectableTypeDecorator extends CollectableTypeDecorator {
 
     String area;
 
