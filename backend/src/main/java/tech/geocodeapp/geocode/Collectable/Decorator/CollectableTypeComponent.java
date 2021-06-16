@@ -47,4 +47,5 @@ public interface CollectableTypeComponent {
      * Setter for area used to set the area variable from {@link GeofencedCollectableTypeDecorator}
      */
     void setArea(String area);
+
 }
