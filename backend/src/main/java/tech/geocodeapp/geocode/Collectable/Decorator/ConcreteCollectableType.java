@@ -5,7 +5,7 @@ import io.swagger.model.Rarity;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
-public class ConcreteCollectableType implements CollectableTypeComponent{
+public class ConcreteCollectableType implements CollectableTypeComponent {
 
     private String name;
     private Rarity rarity;
@@ -46,7 +46,6 @@ public class ConcreteCollectableType implements CollectableTypeComponent{
     }
 
     /**
-     *
      * @return false as trackable isn't contained in the concreteComponent
      */
     @Override
@@ -55,7 +54,6 @@ public class ConcreteCollectableType implements CollectableTypeComponent{
     }
 
     /**
-     *
      * @return null because expiry date isn't contained in the concreteComponent
      */
     @Override
@@ -73,7 +71,6 @@ public class ConcreteCollectableType implements CollectableTypeComponent{
     }
 
     /**
-     *
      * @return null because area is not contained in the concreteComponent
      */
     @Override
