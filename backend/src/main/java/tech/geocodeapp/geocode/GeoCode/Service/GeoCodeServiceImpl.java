@@ -78,7 +78,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         newGeoCode.setLocation( request.getLocation() );
 
         Collectable collectable = new Collectable(new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description")));
-        newGeoCode.setCollectables(collectable);
+        newGeoCode.setCollectables( collectable );
 
         /* Try and create the relevant image with the newly create GeoCode instance */
         try {
