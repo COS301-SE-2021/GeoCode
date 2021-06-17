@@ -896,7 +896,7 @@ paths:
       security:
         - bearerAuth: []
 
-  /Collectable/getCollectableTypeBySet:
+  /Collectable/getCollectableTypesBySet:
     post:
       tags:
         - "Collectable"
@@ -908,10 +908,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCollectableTypeBySetRequest'
+              $ref: '#/components/schemas/GetCollectableTypesBySetRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCollectableTypeBySetRequest'
+              $ref: '#/components/schemas/GetCollectableTypesBySetRequest'
       responses:
         '200':
           description: "Successfully returned Collectable Types of given set"
@@ -1261,6 +1261,7 @@ components:
           format: uuid
       xml:
         name: "getCollectablesRequest"
+        
     CollectableType:
       type: "object"
       required:
@@ -1281,6 +1282,10 @@ components:
           $ref: "#/components/schemas/Rarity"
         set:
           $ref: "#/components/schemas/CollectableSet"
+        properties:
+          type: object
+          additionalProperties:
+            type: string
       xml:
         name: "CollectableType"
 
@@ -1343,6 +1348,10 @@ components:
         setId:
           type: string
           format: uuid
+        properties:
+          type: object
+          additionalProperties:
+            type: string
       xml:
         name: "CreateCollectableTypeRequest"
 
@@ -1377,9 +1386,35 @@ components:
         collectableTypes:
           type: array
           items:
-            $ref: '#/components/schemas/CollectableType'
+            $ref: '#/components/schemas/CollectableTypeComponent'
       xml:
         name: "CollectableTypeResponse"
+    
+    CollectableTypeComponent:
+      type: "object"
+      required:
+        - name
+        - rarity
+        - id
+        - set
+      properties:
+        name:
+          type: string
+        rarity:
+          $ref: "#/components/schemas/Rarity"
+        id:
+          type: string
+          format: uuid
+        set:
+         $ref: "#/components/schemas/CollectableSet"
+        expiraryDate:
+          type: string
+          format: date-time
+        area:
+          type: string
+        trackable:
+          type: boolean
+        
     GetCollectableSetsResponse:
       type: "object"
       required:
@@ -1411,7 +1446,7 @@ components:
       xml:
         name: "GetCollectableTypeByRarity"
 
-    GetCollectableTypeBySetRequest:
+    GetCollectableTypesBySetRequest:
       type: "object"
       required:
         - setId
