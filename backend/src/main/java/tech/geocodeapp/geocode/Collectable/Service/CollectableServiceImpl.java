@@ -3,6 +3,8 @@ package tech.geocodeapp.geocode.Collectable.Service;
 import io.swagger.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
+import tech.geocodeapp.geocode.Collectable.Manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableSetRepository;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
@@ -11,6 +13,8 @@ import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse
 import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -85,10 +89,30 @@ public class CollectableServiceImpl implements CollectableService {
         return response;
     }
 
+    /**
+     * Creates a response object to return all {@link CollectableType} objects
+     * @return the response object containing a list of {@link CollectableTypeComponent} objects
+     */
     @Transactional
     public GetCollectableTypesResponse getCollectableTypes(){
         GetCollectableTypesResponse response = new GetCollectableTypesResponse();
-        response.setCollectableTypes(collectableTypeRepo.findAll());
+
+        //create CollectableTypeManager instance to handle conversion
+        CollectableTypeManager manager = new CollectableTypeManager();
+
+        //create an empty list of CollectableTypeComponent objects to add converted retrieved CollectableTypes to
+        List<CollectableTypeComponent> collectableTypeComponents = new ArrayList<>();
+
+        //retrieve all CollectableTypes
+        List<CollectableType> collectableTypes = new ArrayList<>(collectableTypeRepo.findAll());
+
+        //iterate through the collectableTypes list and add converted CollectableTypeComponents to the collectableTypeComponents list
+        for (CollectableType collectableType : collectableTypes) {
+            collectableTypeComponents.add(manager.buildCollectableType(collectableType));
+        }
+
+        //set the response objects CollectableTypes list to the collectableTypeComponents list
+        response.setCollectableTypes(collectableTypeComponents);
         return response;
     }
 
