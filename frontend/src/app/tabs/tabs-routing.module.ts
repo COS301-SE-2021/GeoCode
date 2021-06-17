@@ -20,7 +20,7 @@ const routes: Routes = [
         loadChildren: () => import('../events/events.module').then(m => m.EventsPageModule)
       },
       {
-        path: 'user',
+        path: 'profile',
         loadChildren: () => import('../user/user.module').then(m => m.UserPageModule)
       },
       {
@@ -29,11 +29,6 @@ const routes: Routes = [
         pathMatch: 'full'
       }
     ]
-  },
-  {
-    path: '',
-    redirectTo: '/tabs/geocode',
-    pathMatch: 'full'
   }
 ];
 
