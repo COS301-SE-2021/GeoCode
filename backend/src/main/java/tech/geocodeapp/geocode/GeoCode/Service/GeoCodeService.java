@@ -32,7 +32,7 @@ public interface GeoCodeService {
 
     GetTrackablesResponse getTrackables( GetTrackablesRequest request );
 
-    SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request );
+    SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException, RepoException;
 
     UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request );
 }

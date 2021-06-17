@@ -136,5 +136,10 @@ public class GeoCodeServiceImplTest {
 
     }
 
+    @Test
+    public void swapCollectablesTest() {
+
+
+    }
 
 }
