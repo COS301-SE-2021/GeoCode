@@ -15,7 +15,7 @@ public class BasicCollectableTypeFactory extends AbstractCollectableTypeFactory 
      * @return the created {@link ConcreteCollectableType} returned as a {@link CollectableTypeComponent} interface object
      */
     @Override
-    CollectableTypeComponent decorateCollectableType(String property, CollectableTypeComponent collectableTypeComponent) {
+   public CollectableTypeComponent decorateCollectableType(String property, CollectableTypeComponent collectableTypeComponent) {
         //split into separate values for variables
         String[] split = property.split("#");
 
@@ -29,5 +29,5 @@ public class BasicCollectableTypeFactory extends AbstractCollectableTypeFactory 
         toReturn.setId(id);
 
         return toReturn;
-    }
+   }
 }

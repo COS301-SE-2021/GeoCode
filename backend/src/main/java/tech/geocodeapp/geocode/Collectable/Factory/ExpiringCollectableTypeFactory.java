@@ -17,7 +17,7 @@ public class ExpiringCollectableTypeFactory extends AbstractCollectableTypeFacto
      * @return the decorated ExpiringCollectableTypeDecorator as a CollectableTypeComponent object
      */
     @Override
-    CollectableTypeComponent decorateCollectableType(String property, CollectableTypeComponent collectableTypeComponent) {
+    public CollectableTypeComponent decorateCollectableType(String property, CollectableTypeComponent collectableTypeComponent) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         GregorianCalendar expiryDate = new GregorianCalendar();
 

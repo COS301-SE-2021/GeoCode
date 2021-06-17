@@ -12,7 +12,7 @@ public class TrackableCollectableTypeFactory extends AbstractCollectableTypeFact
      * @return The decorated {@link CollectableTypeComponent}
      */
     @Override
-    CollectableTypeComponent decorateCollectableType(String property, CollectableTypeComponent collectableTypeComponent) {
+    public CollectableTypeComponent decorateCollectableType(String property, CollectableTypeComponent collectableTypeComponent) {
         return new TrackableCollectableTypeDecorator(collectableTypeComponent);
     }
 }

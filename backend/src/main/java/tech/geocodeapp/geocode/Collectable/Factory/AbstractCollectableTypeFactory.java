@@ -13,5 +13,5 @@ public abstract class AbstractCollectableTypeFactory {
      * @param collectableTypeComponent The collectableTypeComponent to decorate or null if there is none in the case of a {@link BasicCollectableTypeFactory}
      * @return the decorated CollectableTypeComponent created
      */
-    abstract CollectableTypeComponent decorateCollectableType(String property, CollectableTypeComponent collectableTypeComponent);
+    public abstract CollectableTypeComponent decorateCollectableType(String property, CollectableTypeComponent collectableTypeComponent);
 }

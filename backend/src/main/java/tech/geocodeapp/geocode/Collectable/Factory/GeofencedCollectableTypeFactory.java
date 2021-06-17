@@ -12,10 +12,10 @@ public class GeofencedCollectableTypeFactory extends AbstractCollectableTypeFact
      * @return The decorated CollectableTypeComponent
      */
     @Override
-    CollectableTypeComponent decorateCollectableType(String property, CollectableTypeComponent collectableTypeComponent) {
+   public CollectableTypeComponent decorateCollectableType(String property, CollectableTypeComponent collectableTypeComponent) {
         CollectableTypeComponent toReturn = new GeofencedCollectableTypeDecorator(collectableTypeComponent);
         toReturn.setArea(property);
 
         return toReturn;
-    }
+   }
 }
