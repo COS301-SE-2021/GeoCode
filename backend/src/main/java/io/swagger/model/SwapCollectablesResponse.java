@@ -4,7 +4,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -13,53 +12,30 @@ import javax.validation.constraints.*;
  * SwapCollectablesResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T15:47:52.307Z[GMT]")
 
 
 public class SwapCollectablesResponse   {
-  @JsonProperty("id")
-  private UUID id = null;
+  @JsonProperty("success")
+  private Boolean success = null;
 
-  @JsonProperty("qrCode")
-  private String qrCode = null;
-
-  public SwapCollectablesResponse id(UUID id) {
-    this.id = id;
+  public SwapCollectablesResponse success(Boolean success) {
+    this.success = success;
     return this;
   }
 
   /**
-   * Get id
-   * @return id
+   * Get success
+   * @return success
    **/
   @Schema(description = "")
   
-    @Valid
-    public UUID getId() {
-    return id;
+    public Boolean isSuccess() {
+    return success;
   }
 
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public SwapCollectablesResponse qrCode(String qrCode) {
-    this.qrCode = qrCode;
-    return this;
-  }
-
-  /**
-   * Get qrCode
-   * @return qrCode
-   **/
-  @Schema(description = "")
-  
-    public String getQrCode() {
-    return qrCode;
-  }
-
-  public void setQrCode(String qrCode) {
-    this.qrCode = qrCode;
+  public void setSuccess(Boolean success) {
+    this.success = success;
   }
 
 
@@ -72,13 +48,12 @@ public class SwapCollectablesResponse   {
       return false;
     }
     SwapCollectablesResponse swapCollectablesResponse = (SwapCollectablesResponse) o;
-    return Objects.equals(this.id, swapCollectablesResponse.id) &&
-        Objects.equals(this.qrCode, swapCollectablesResponse.qrCode);
+    return Objects.equals(this.success, swapCollectablesResponse.success);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, qrCode);
+    return Objects.hash(success);
   }
 
   @Override
@@ -86,8 +61,7 @@ public class SwapCollectablesResponse   {
     StringBuilder sb = new StringBuilder();
     sb.append("class SwapCollectablesResponse {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    qrCode: ").append(toIndentedString(qrCode)).append("\n");
+    sb.append("    success: ").append(toIndentedString(success)).append("\n");
     sb.append("}");
     return sb.toString();
   }

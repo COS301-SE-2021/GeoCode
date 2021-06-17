@@ -3,10 +3,9 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.Difficulty;
+import io.swagger.model.Collectable;
+import io.swagger.model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -15,107 +14,56 @@ import javax.validation.constraints.*;
  * SwapCollectablesRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T15:47:52.307Z[GMT]")
 
 
 public class SwapCollectablesRequest   {
-  @JsonProperty("description")
-  private String description = null;
+  @JsonProperty("collectable")
+  private Collectable collectable = null;
 
-  @JsonProperty("location")
-  private String location = null;
+  @JsonProperty("geoCode")
+  private GeoCode geoCode = null;
 
-  @JsonProperty("hints")
-  @Valid
-  private List<String> hints = new ArrayList<String>();
-
-  @JsonProperty("difficulty")
-  private Difficulty difficulty = null;
-
-  public SwapCollectablesRequest description(String description) {
-    this.description = description;
+  public SwapCollectablesRequest collectable(Collectable collectable) {
+    this.collectable = collectable;
     return this;
   }
 
   /**
-   * Get description
-   * @return description
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public SwapCollectablesRequest location(String location) {
-    this.location = location;
-    return this;
-  }
-
-  /**
-   * Get location
-   * @return location
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public String getLocation() {
-    return location;
-  }
-
-  public void setLocation(String location) {
-    this.location = location;
-  }
-
-  public SwapCollectablesRequest hints(List<String> hints) {
-    this.hints = hints;
-    return this;
-  }
-
-  public SwapCollectablesRequest addHintsItem(String hintsItem) {
-    this.hints.add(hintsItem);
-    return this;
-  }
-
-  /**
-   * Get hints
-   * @return hints
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public List<String> getHints() {
-    return hints;
-  }
-
-  public void setHints(List<String> hints) {
-    this.hints = hints;
-  }
-
-  public SwapCollectablesRequest difficulty(Difficulty difficulty) {
-    this.difficulty = difficulty;
-    return this;
-  }
-
-  /**
-   * Get difficulty
-   * @return difficulty
+   * Get collectable
+   * @return collectable
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public Difficulty getDifficulty() {
-    return difficulty;
+    public Collectable getCollectable() {
+    return collectable;
   }
 
-  public void setDifficulty(Difficulty difficulty) {
-    this.difficulty = difficulty;
+  public void setCollectable(Collectable collectable) {
+    this.collectable = collectable;
+  }
+
+  public SwapCollectablesRequest geoCode(GeoCode geoCode) {
+    this.geoCode = geoCode;
+    return this;
+  }
+
+  /**
+   * Get geoCode
+   * @return geoCode
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    @Valid
+    public GeoCode getGeoCode() {
+    return geoCode;
+  }
+
+  public void setGeoCode(GeoCode geoCode) {
+    this.geoCode = geoCode;
   }
 
 
@@ -128,15 +76,13 @@ public class SwapCollectablesRequest   {
       return false;
     }
     SwapCollectablesRequest swapCollectablesRequest = (SwapCollectablesRequest) o;
-    return Objects.equals(this.description, swapCollectablesRequest.description) &&
-        Objects.equals(this.location, swapCollectablesRequest.location) &&
-        Objects.equals(this.hints, swapCollectablesRequest.hints) &&
-        Objects.equals(this.difficulty, swapCollectablesRequest.difficulty);
+    return Objects.equals(this.collectable, swapCollectablesRequest.collectable) &&
+        Objects.equals(this.geoCode, swapCollectablesRequest.geoCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, location, hints, difficulty);
+    return Objects.hash(collectable, geoCode);
   }
 
   @Override
@@ -144,10 +90,8 @@ public class SwapCollectablesRequest   {
     StringBuilder sb = new StringBuilder();
     sb.append("class SwapCollectablesRequest {\n");
     
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    location: ").append(toIndentedString(location)).append("\n");
-    sb.append("    hints: ").append(toIndentedString(hints)).append("\n");
-    sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
+    sb.append("    collectable: ").append(toIndentedString(collectable)).append("\n");
+    sb.append("    geoCode: ").append(toIndentedString(geoCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -3,8 +3,10 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -13,53 +15,39 @@ import javax.validation.constraints.*;
  * GetGeoCodesByDifficultyResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T15:08:00.890Z[GMT]")
 
 
 public class GetGeoCodesByDifficultyResponse   {
-  @JsonProperty("id")
-  private UUID id = null;
+  @JsonProperty("geocodes")
+  @Valid
+  private List<GeoCode> geocodes = null;
 
-  @JsonProperty("qrCode")
-  private String qrCode = null;
+  public GetGeoCodesByDifficultyResponse geocodes(List<GeoCode> geocodes) {
+    this.geocodes = geocodes;
+    return this;
+  }
 
-  public GetGeoCodesByDifficultyResponse id(UUID id) {
-    this.id = id;
+  public GetGeoCodesByDifficultyResponse addGeocodesItem(GeoCode geocodesItem) {
+    if (this.geocodes == null) {
+      this.geocodes = new ArrayList<GeoCode>();
+    }
+    this.geocodes.add(geocodesItem);
     return this;
   }
 
   /**
-   * Get id
-   * @return id
+   * Get geocodes
+   * @return geocodes
    **/
   @Schema(description = "")
-  
-    @Valid
-    public UUID getId() {
-    return id;
+      @Valid
+    public List<GeoCode> getGeocodes() {
+    return geocodes;
   }
 
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public GetGeoCodesByDifficultyResponse qrCode(String qrCode) {
-    this.qrCode = qrCode;
-    return this;
-  }
-
-  /**
-   * Get qrCode
-   * @return qrCode
-   **/
-  @Schema(description = "")
-  
-    public String getQrCode() {
-    return qrCode;
-  }
-
-  public void setQrCode(String qrCode) {
-    this.qrCode = qrCode;
+  public void setGeocodes(List<GeoCode> geocodes) {
+    this.geocodes = geocodes;
   }
 
 
@@ -72,13 +60,12 @@ public class GetGeoCodesByDifficultyResponse   {
       return false;
     }
     GetGeoCodesByDifficultyResponse getGeoCodesByDifficultyResponse = (GetGeoCodesByDifficultyResponse) o;
-    return Objects.equals(this.id, getGeoCodesByDifficultyResponse.id) &&
-        Objects.equals(this.qrCode, getGeoCodesByDifficultyResponse.qrCode);
+    return Objects.equals(this.geocodes, getGeoCodesByDifficultyResponse.geocodes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, qrCode);
+    return Objects.hash(geocodes);
   }
 
   @Override
@@ -86,8 +73,7 @@ public class GetGeoCodesByDifficultyResponse   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetGeoCodesByDifficultyResponse {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    qrCode: ").append(toIndentedString(qrCode)).append("\n");
+    sb.append("    geocodes: ").append(toIndentedString(geocodes)).append("\n");
     sb.append("}");
     return sb.toString();
   }
