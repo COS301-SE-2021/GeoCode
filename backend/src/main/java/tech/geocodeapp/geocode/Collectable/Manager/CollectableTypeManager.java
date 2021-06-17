@@ -31,7 +31,7 @@ public class CollectableTypeManager {
         builtType.setCollectableSet(type.getSet());
 
         //check if no additional properties exist
-        if(type.getProperties().isEmpty()) {
+        if(type.getProperties()==null || type.getProperties().isEmpty()) {
             return builtType;
         }
 
