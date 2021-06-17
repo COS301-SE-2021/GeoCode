@@ -56,7 +56,7 @@ public class CollectableServiceImpl implements CollectableService {
         Optional<CollectableSet> collectableSetOptional = collectableSetRepo.findById(setID);
 
         if(collectableSetOptional.isPresent()){
-            CollectableType collectableType = new CollectableType(request.getName(), request.getImage(), request.getRarity(), collectableSetOptional.get());
+            CollectableType collectableType = new CollectableType(request.getName(), request.getImage(), request.getRarity(), collectableSetOptional.get(), request.getProperties());
             CollectableType savedCollectableType = collectableTypeRepo.save(collectableType);
             return new CreateCollectableTypeResponse(true, "The CollectableType was successfully created", collectableType);
         }else{

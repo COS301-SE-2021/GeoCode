@@ -44,17 +44,19 @@ public class CollectableType   {
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private CollectableSet set = null;
 
+  @JsonProperty("properties")
   private HashMap<String,String> properties;
 
   public CollectableType() {
   }
 
   //main constructor for creating new CollectableTypes
-  public CollectableType(String name, String image, Rarity rarity, CollectableSet set) {
+  public CollectableType(String name, String image, Rarity rarity, CollectableSet set, HashMap<String,String> properties) {
     this.name = name;
     this.image = image;
     this.rarity = rarity;
     this.set = set;
+    this.properties = properties;
   }
 
   public HashMap<String, String> getProperties() {
