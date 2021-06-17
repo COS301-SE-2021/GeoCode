@@ -35,6 +35,7 @@ public class GeoCodeServiceImplTest {
 
     @BeforeEach
     void setup() {
+
         geoCodeService = new GeoCodeServiceImpl( new GeoCodeMockRepository() );
     }
 
@@ -94,7 +95,6 @@ public class GeoCodeServiceImplTest {
                 .hasMessageContaining("The given request is missing parameter/s." );
 
     }
-
 
     @Test
     public void getAllGeoCodeTest() {
