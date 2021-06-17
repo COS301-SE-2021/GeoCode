@@ -965,19 +965,8 @@ components:
     GetGeoCodesByDifficultyRequest:
       type: "object"
       required:
-        - description
-        - location
         - difficulty
-        - hints
       properties:
-        description:
-          type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
         difficulty:
           $ref: '#/components/schemas/Difficulty'
       xml:
@@ -985,11 +974,10 @@ components:
     GetGeoCodesByDifficultyResponse:
       type: "object"
       properties:
-        id:
-          type: string
-          format: uuid
-        qrCode:
-          type: string
+        geocodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoCode'
       xml:
         name: "getGeoCodesByDifficultyResponse"
     GetGeoCodesResponse:
@@ -1006,31 +994,19 @@ components:
     GetHintsRequest:
       type: "object"
       required:
-        - description
-        - location
-        - difficulty
-        - hints
+        - geoCode
       properties:
-        description:
-          type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
+        geoCode:
+          $ref: '#/components/schemas/GeoCode'
       xml:
         name: "getGeoCodesByDifficultyRequest"
     GetHintsResponse:
       type: "object"
       properties:
-        id:
-          type: string
-          format: uuid
-        qrCode:
-          type: string
+        hints:
+          type: array
+          items:
+            type: string
       xml:
         name: "getGeoCodesByDifficultyResponse"
     GetGeoCodeByQRCodeRequest:
@@ -1126,61 +1102,39 @@ components:
     SwapCollectablesRequest:
       type: "object"
       required:
-        - description
-        - location
-        - difficulty
-        - hints
+        - collectable
+        - geoCode
       properties:
-        description:
-          type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
+        collectable:
+          $ref: '#/components/schemas/Collectable'
+        geoCode:
+          $ref: '#/components/schemas/GeoCode'
       xml:
         name: "swapCollectablesRequest"
     SwapCollectablesResponse:
       type: "object"
       properties:
-        id:
-          type: string
-          format: uuid
-        qrCode:
-          type: string
+        success:
+          type: boolean
       xml:
         name: "swapCollectablesResponse"
     UpdateAvailabilityRequest:
       type: "object"
       required:
-        - description
-        - location
-        - difficulty
-        - hints
+        - geoCode
+        - available
       properties:
-        description:
-          type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
+        geoCode:
+          $ref: '#/components/schemas/GeoCode'
+        available:
+          type: boolean
       xml:
         name: "updateAvailabilityRequest"
     UpdateAvailabilityResponse:
       type: "object"
       properties:
-        id:
-          type: string
-          format: uuid
-        qrCode:
-          type: string
+        success:
+          type: boolean
       xml:
         name: "updateAvailabilityResponse"
 

@@ -1,0 +1,24 @@
+#Clones the application to the GeoCode server on push.
+#In future this will be used to build a Docker container and launch it.
+
+name: Remote SSH Commands
+
+on:
+  push:
+    branches: [ dev/Configuration ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy Spring Boot app
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{secrets.SSH_ADDRESS}}
+        username: ${{secrets.SSH_USERNAME}}
+        key: ${{secrets.SSH_PRIVATE_KEY}}
+        port: ${{secrets.SSH_PORT}}
+        script: |
+          rm -rf GeoCode
+          git clone git@github.com:COS301-SE-2021/GeoCode.git
+          echo "Deployment completed successfully"
