@@ -12,6 +12,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '11'
+        distribution: 'adopt'
     - name: Analyze with SonarCloud
       run: ./mvnw -B verify sonar:sonar -Dsonar.projectKey=COS301-SE-2021_GeoCode -Dsonar.organization=cos301-se-2021 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN
       env:
