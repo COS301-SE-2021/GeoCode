@@ -6,7 +6,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.CollectableType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
+
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -14,16 +18,32 @@ import javax.validation.constraints.*;
  * Collectable
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 
-
+@Entity
+@Table(name = "")
 public class Collectable   {
   @JsonProperty("id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("type")
+  @ManyToOne
+  @JoinColumn(name = "COLLECTABLE_TYPE_ID")
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private CollectableType type = null;
 
+  public Collectable() {
+  }
+
+  //main constructor for creating new collectables
+  public Collectable(CollectableType type) {
+    id = UUID.randomUUID();
+    this.type = type;
+  }
+
+  //property for id
   public Collectable id(UUID id) {
     this.id = id;
     return this;
@@ -45,6 +65,7 @@ public class Collectable   {
     this.id = id;
   }
 
+  //property for type
   public Collectable type(CollectableType type) {
     this.type = type;
     return this;
