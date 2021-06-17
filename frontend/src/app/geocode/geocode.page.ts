@@ -93,7 +93,7 @@ export class GeocodePage implements AfterViewInit  {
         geocode
       }
     };
-   this.navCtrl.navigateForward('geocode-contents',navigationExtras);
+   this.navCtrl.navigateForward('/geocode/geocode-contents',navigationExtras);
   }
 
 
