@@ -980,7 +980,9 @@ components:
           items:
             type: string
         collectables:
-          $ref: '#/components/schemas/Collectable'
+          type: array
+          items:
+            $ref: '#/components/schemas/Collectable'
         trackables:
           type: string
         qrCode:
@@ -1029,8 +1031,19 @@ components:
     GetGeoCodesByDifficultyRequest:
       type: "object"
       required:
+        - description
+        - location
         - difficulty
+        - hints
       properties:
+        description:
+          type: string
+        location:
+          type: string
+        hints:
+          type: array
+          items:
+            type: string
         difficulty:
           $ref: '#/components/schemas/Difficulty'
       xml:
@@ -1038,10 +1051,11 @@ components:
     GetGeoCodesByDifficultyResponse:
       type: "object"
       properties:
-        geocodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/GeoCode'
+        id:
+          type: string
+          format: uuid
+        qrCode:
+          type: string
       xml:
         name: "getGeoCodesByDifficultyResponse"
     GetGeoCodesResponse:
@@ -1058,19 +1072,31 @@ components:
     GetHintsRequest:
       type: "object"
       required:
-        - geoCode
+        - description
+        - location
+        - difficulty
+        - hints
       properties:
-        geoCode:
-          $ref: '#/components/schemas/GeoCode'
+        description:
+          type: string
+        location:
+          type: string
+        hints:
+          type: array
+          items:
+            type: string
+        difficulty:
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodesByDifficultyRequest"
     GetHintsResponse:
       type: "object"
       properties:
-        hints:
-          type: array
-          items:
-            type: string
+        id:
+          type: string
+          format: uuid
+        qrCode:
+          type: string
       xml:
         name: "getGeoCodesByDifficultyResponse"
     GetGeoCodeByQRCodeRequest:
@@ -1166,39 +1192,61 @@ components:
     SwapCollectablesRequest:
       type: "object"
       required:
-        - collectable
-        - geoCode
+        - description
+        - location
+        - difficulty
+        - hints
       properties:
-        collectable:
-          $ref: '#/components/schemas/Collectable'
-        geoCode:
-          $ref: '#/components/schemas/GeoCode'
+        description:
+          type: string
+        location:
+          type: string
+        hints:
+          type: array
+          items:
+            type: string
+        difficulty:
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "swapCollectablesRequest"
     SwapCollectablesResponse:
       type: "object"
       properties:
-        success:
-          type: boolean
+        id:
+          type: string
+          format: uuid
+        qrCode:
+          type: string
       xml:
         name: "swapCollectablesResponse"
     UpdateAvailabilityRequest:
       type: "object"
       required:
-        - geoCode
-        - available
+        - description
+        - location
+        - difficulty
+        - hints
       properties:
-        geoCode:
-          $ref: '#/components/schemas/GeoCode'
-        available:
-          type: boolean
+        description:
+          type: string
+        location:
+          type: string
+        hints:
+          type: array
+          items:
+            type: string
+        difficulty:
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "updateAvailabilityRequest"
     UpdateAvailabilityResponse:
       type: "object"
       properties:
-        success:
-          type: boolean
+        id:
+          type: string
+          format: uuid
+        qrCode:
+          type: string
       xml:
         name: "updateAvailabilityResponse"
 
@@ -1417,7 +1465,6 @@ components:
           format: uuid
       xml:
         name: "LeaderBoard"
-
     User:
       type: "object"
       required:
