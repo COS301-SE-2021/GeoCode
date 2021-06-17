@@ -170,20 +170,29 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new RepoException( "The GeoCode Repository is empty." );
         }
 
-
-        //List<GeoCode> hold =  geoCodeRepo.findAll();
-
+        /*
+         * Sort through the stored GeoCodes and
+         * find all the GeoCodes with the specified difficulty
+         */
         List<GeoCode> hold = new ArrayList<>();
         for ( GeoCode code: geoCodeRepo.findAll() ) {
 
+            /* Check if the current GeoCode has the Difficulty wanted */
             if ( code.getDifficulty().equals( request.getDifficulty() ) ) {
 
+                /*
+                * The current GeoCode has the valid GeoCode
+                * add it to the list
+                */
                 hold.add( code );
             }
         }
 
+        /*
+         * Create the new response
+         * and add valid GeoCodes to it
+         */
         GetGeoCodesByDifficultyResponse response = new GetGeoCodesByDifficultyResponse();
-
         response.setGeocodes( hold );
 
         return response;
