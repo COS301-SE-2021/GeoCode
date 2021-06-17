@@ -6,6 +6,35 @@
 
 <ion-content>
 
-  <div #mapElement class="map"></div>
+
+
+    <div #mapElement class="map" [hidden]="isHidden"></div>
+    <ion-item class="barcode" [hidden]="isHidden">
+      <ion-label>GeoCode</ion-label>
+      <ion-input class="barcode-input" type="text"></ion-input>
+      <ion-button color="danger" (click)="found()">Found</ion-button>
+    </ion-item>
+    <div class="hints" [hidden]="isHidden">
+      <ion-row>Hints</ion-row>
+      <ion-grid *ngFor="let hint of hints">
+
+        <ion-row>
+          <ion-col>1.</ion-col>
+          <ion-col>{{hint.clue}}</ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col>Difficulty</ion-col>
+          <ion-col>{{geocode.difficulty}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <div>
+      <h2>Collectables</h2>
+
+    </div>
 
 </ion-content>
