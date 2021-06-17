@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {ModalController} from '@ionic/angular';
+import {TrackableLocationsComponent} from './trackable-locations/trackable-locations.component';
 
 @Component({
   selector: 'app-user',
@@ -7,9 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private modalController: ModalController
+  ) { }
 
   ngOnInit() {
+  }
+
+  async showTrackableLocations() {
+    const modal = await this.modalController.create({
+      component: TrackableLocationsComponent,
+      swipeToClose: true,
+      componentProps: {
+        trackableID: 'random'
+      }
+    });
+    await modal.present();
   }
 
 }

@@ -23,11 +23,13 @@
             Description
           </ion-card-subtitle>
         </div>
-        <div class="add">
-          <ion-button size="small" [routerLink]="['/collectables/sets/randomID/addType']">
-            <ion-icon name="add-outline"></ion-icon>
-          </ion-button>
-        </div>
+        <ng-template [ngIf]="isAdmin()">
+          <div class="add">
+            <ion-button size="small" [routerLink]="['/collectables/sets/randomID/addType']">
+              <ion-icon name="add-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </ng-template>
       </div>
       <div class="horizontalscroll">
         <div class="items">
