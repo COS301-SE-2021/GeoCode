@@ -7,7 +7,7 @@ import {Platform} from '@ionic/angular';
   styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
-  tabsPlacement: string='bottom';
+  tabsPlacement = 'bottom';
 
 
   constructor(public platform: Platform) {

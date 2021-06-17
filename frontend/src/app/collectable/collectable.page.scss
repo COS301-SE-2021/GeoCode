@@ -23,3 +23,15 @@
 .notfound {
   opacity: 0.4;
 }
+
+.header {
+  display: flex;
+}
+
+.header .details {
+  flex-grow: 1;
+}
+
+.header ion-button {
+  margin-top: 0px
+}

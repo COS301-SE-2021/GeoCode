@@ -1,18 +1,34 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Collectable</ion-title>
+    <ion-title>Collectables</ion-title>
+    <ng-template [ngIf]="isAdmin()">
+      <ion-buttons slot="end">
+        <ion-button [routerLink]="['/collectables/sets/add']">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ng-template>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-card>
     <ion-card-content>
-      <ion-card-title>
-        Set Name
-      </ion-card-title>
-      <ion-card-subtitle>
-        Description
-      </ion-card-subtitle>
+      <div class="header">
+        <div class="details">
+          <ion-card-title>
+            Set Name
+          </ion-card-title>
+          <ion-card-subtitle>
+            Description
+          </ion-card-subtitle>
+        </div>
+        <div class="add">
+          <ion-button size="small" [routerLink]="['/collectables/sets/randomID/addType']">
+            <ion-icon name="add-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
       <div class="horizontalscroll">
         <div class="items">
           <div class="collectable">

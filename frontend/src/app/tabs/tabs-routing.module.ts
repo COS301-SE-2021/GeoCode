@@ -4,7 +4,7 @@ import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
   {
-    path: 'tabs',
+    path: '',
     component: TabsPage,
     children: [
       {
@@ -12,7 +12,7 @@ const routes: Routes = [
         loadChildren: () => import('../geocode/geocode.module').then(m => m.GeocodePageModule)
       },
       {
-        path: 'collectable',
+        path: 'collectables',
         loadChildren: () => import('../collectable/collectable.module').then(m => m.CollectablePageModule)
       },
       {
@@ -25,7 +25,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/geocode',
+        redirectTo: '/geocode',
         pathMatch: 'full'
       }
     ]

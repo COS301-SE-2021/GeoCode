@@ -12,4 +12,8 @@ export class CollectablePage implements OnInit {
   ngOnInit() {
   }
 
+  isAdmin() {
+    return true;
+  }
+
 }
