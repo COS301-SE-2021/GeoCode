@@ -1,70 +1,70 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.User.Request;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
- * GetCollectablesRequest
+ * GetUserTrackableRequest
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
 
 
-public class GetCollectablesRequest   {
-  @JsonProperty("id")
-  private UUID id = null;
+public class GetUserTrackableRequest {
+  @JsonProperty("userID")
+  private UUID userID = null;
 
-  public GetCollectablesRequest id(UUID id) {
-    this.id = id;
+  public GetUserTrackableRequest userID(UUID userID) {
+    this.userID = userID;
     return this;
   }
 
   /**
-   * Get id
-   * @return id
+   * Get userID
+   * @return userID
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public UUID getId() {
-    return id;
+    public UUID getUserID() {
+    return userID;
   }
 
-  public void setId(UUID id) {
-    this.id = id;
+  public void setUserID(UUID userID) {
+    this.userID = userID;
   }
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetCollectablesRequest getCollectablesRequest = (GetCollectablesRequest) o;
-    return Objects.equals(this.id, getCollectablesRequest.id);
+    GetUserTrackableRequest getUserTrackableRequest = (GetUserTrackableRequest) o;
+    return Objects.equals(this.userID, getUserTrackableRequest.userID);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id);
+    return Objects.hash(userID);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetCollectablesRequest {\n");
+    sb.append("class GetUserTrackableRequest {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    userID: ").append(toIndentedString(userID)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -73,7 +73,7 @@ public class GetCollectablesRequest   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

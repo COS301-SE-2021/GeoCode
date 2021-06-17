@@ -1,56 +1,22 @@
-package io.swagger.api;
+package tech.geocodeapp.geocode.User.Controller;
 
-import io.swagger.model.BlockUserRequest;
-import io.swagger.model.GetCurrentCollectableRequest;
-import io.swagger.model.GetCurrentCollectableResponse;
-import io.swagger.model.GetFoundCollectablesRequest;
-import io.swagger.model.GetFoundCollectablesResponse;
-import io.swagger.model.GetFoundGeoCodesRequest;
-import io.swagger.model.GetFoundGeoCodesResponse;
-import io.swagger.model.GetOwnedGeoCodesRequest;
-import io.swagger.model.GetOwnedGeoCodesResponse;
-import io.swagger.model.GetUserTrackableRequest;
-import io.swagger.model.GetUserTrackableResponse;
-import io.swagger.model.GetUsersRequest;
-import io.swagger.model.GetUsersResponse;
-import io.swagger.model.SetAdminRequest;
-import io.swagger.model.SwapCollectableRequest;
-import io.swagger.model.SwapCollectableResponse;
-import io.swagger.model.UpdateLocationRequest;
-import io.swagger.model.UpdateLocationResponse;
-import io.swagger.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.model.*;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.*;
-import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 @RestController
 public class UserApiController implements UserApi {
 
@@ -150,20 +116,6 @@ public class UserApiController implements UserApi {
         return new ResponseEntity<GetOwnedGeoCodesResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<GetUserTrackableResponse> getUserTrackable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's trackable", required=true, schema=@Schema()) @Valid @RequestBody GetUserTrackableRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<GetUserTrackableResponse>(objectMapper.readValue("{\n  \"Trackable\" : {\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"type\" : {\n      \"image\" : \"image\",\n      \"set\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      },\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"rarity\" : \"COMMON\"\n    }\n  }\n}", GetUserTrackableResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<GetUserTrackableResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        return new ResponseEntity<GetUserTrackableResponse>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
     public ResponseEntity<GetUsersResponse> getUsers(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all users in the system", required=true, schema=@Schema()) @Valid @RequestBody GetUsersRequest body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
@@ -204,20 +156,6 @@ public class UserApiController implements UserApi {
         }
 
         return new ResponseEntity<SwapCollectableResponse>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    public ResponseEntity<UpdateLocationResponse> updateLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update the location of the user's trackable", required=true, schema=@Schema()) @Valid @RequestBody UpdateLocationRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<UpdateLocationResponse>(objectMapper.readValue("{\n  \"Trackable\" : {\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"type\" : {\n      \"image\" : \"image\",\n      \"set\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      },\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"rarity\" : \"COMMON\"\n    }\n  }\n}", UpdateLocationResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<UpdateLocationResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        return new ResponseEntity<UpdateLocationResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

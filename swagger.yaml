@@ -90,6 +90,70 @@ paths:
       security:
         - bearerAuth: []
         
+  /User/getUserTrackable:
+    post:
+      tags:
+        - "User"
+      summary: "Gets the user's trackable"
+      description: "Get the given user's trackable"
+      operationId: "getUserTrackable"
+      requestBody:
+        required: true
+        description: "Request to get the user's trackable"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetUserTrackableRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetUserTrackableRequest'
+      responses:
+        '200':
+          description: "The user's trackable was successfully returned"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserTrackableResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUserTrackableResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+        
+  /User/updateLocation:
+    post:
+      tags:
+        - "User"
+      summary: "Update the location of the user's trackable"
+      description: "Update the location of the user's trackable when they place it"
+      operationId: "updateLocation"
+      requestBody:
+        required: true
+        description: "Request to update the location of the user's trackable"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLocationRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UpdateLocationRequest'
+      responses:
+        '200':
+          description: "The user's trackable had it's location successfully updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateLocationResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UpdateLocationResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+        
   /User/getFoundCollectables:
     post:
       tags:
@@ -1476,6 +1540,47 @@ components:
       xml:
         name: "GetCurrentCollectableResponse"
         
+    GetUserTrackableRequest:
+      type: "object"
+      required:
+        - userID
+      properties:
+        userID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetUserTrackableRequest"
+    
+    GetUserTrackableResponse:
+      type: "object"
+      required:
+        - Trackable
+      properties:
+        Trackable:
+          $ref: '#/components/schemas/Collectable' 
+      xml:
+        name: "GetUserTrackableResponse"
+        
+    UpdateLocationRequest:
+      type: "object"
+      required:
+        - userID
+      properties:
+        userID:
+          type: string
+          format: uuid
+      xml:
+        name: "UpdateLocationRequest"
+        
+    UpdateLocationResponse:
+      type: "object"
+      required:
+        - Trackable
+      properties:
+        Trackable:
+          $ref: '#/components/schemas/Collectable' 
+      xml:
+        name: "UpdateLocationResponse"
         
     GetFoundCollectablesRequest:
       type: "object"

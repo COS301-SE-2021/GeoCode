@@ -3,54 +3,26 @@
  * https://github.com/swagger-api/swagger-codegen
  * Do not edit the class manually.
  */
-package io.swagger.api;
+package tech.geocodeapp.geocode.User.Controller;
 
-import io.swagger.model.BlockUserRequest;
-import io.swagger.model.GetCurrentCollectableRequest;
-import io.swagger.model.GetCurrentCollectableResponse;
-import io.swagger.model.GetFoundCollectablesRequest;
-import io.swagger.model.GetFoundCollectablesResponse;
-import io.swagger.model.GetFoundGeoCodesRequest;
-import io.swagger.model.GetFoundGeoCodesResponse;
-import io.swagger.model.GetOwnedGeoCodesRequest;
-import io.swagger.model.GetOwnedGeoCodesResponse;
-import io.swagger.model.GetUserTrackableRequest;
-import io.swagger.model.GetUserTrackableResponse;
-import io.swagger.model.GetUsersRequest;
-import io.swagger.model.GetUsersResponse;
-import io.swagger.model.SetAdminRequest;
-import io.swagger.model.SwapCollectableRequest;
-import io.swagger.model.SwapCollectableResponse;
-import io.swagger.model.UpdateLocationRequest;
-import io.swagger.model.UpdateLocationResponse;
-import io.swagger.model.User;
+import io.swagger.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
-import java.util.List;
-import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 @Validated
 public interface UserApi {
 
@@ -64,7 +36,7 @@ public interface UserApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<User> blockUser(@Parameter(in = ParameterIn.DEFAULT, description = "Request to block a user", required=true, schema=@Schema()) @Valid @RequestBody BlockUserRequest body);
+    ResponseEntity<User> blockUser(@Parameter(in = ParameterIn.DEFAULT, description = "Request to block a user", required = true, schema = @Schema()) @Valid @RequestBody BlockUserRequest body);
 
 
     @Operation(summary = "Get the Collectable the User is currently holding", description = "Get the user's current Collectable", security = {
@@ -77,7 +49,7 @@ public interface UserApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetCurrentCollectableResponse> getCurrentCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's current Collectable", required=true, schema=@Schema()) @Valid @RequestBody GetCurrentCollectableRequest body);
+    ResponseEntity<GetCurrentCollectableResponse> getCurrentCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's current Collectable", required = true, schema = @Schema()) @Valid @RequestBody GetCurrentCollectableRequest body);
 
 
     @Operation(summary = "Gets the Collectables that the user has ever found", description = "Get a user's found Collectables", security = {
@@ -90,7 +62,7 @@ public interface UserApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetFoundCollectablesResponse> getFoundCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's found Collectables", required=true, schema=@Schema()) @Valid @RequestBody GetFoundCollectablesRequest body);
+    ResponseEntity<GetFoundCollectablesResponse> getFoundCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's found Collectables", required = true, schema = @Schema()) @Valid @RequestBody GetFoundCollectablesRequest body);
 
 
     @Operation(summary = "Gets the GeoCodes that the user has ever found", description = "Gets the user's found GeoCodes", security = {
@@ -103,7 +75,7 @@ public interface UserApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetFoundGeoCodesResponse> getFoundGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's found GeoCodes", required=true, schema=@Schema()) @Valid @RequestBody GetFoundGeoCodesRequest body);
+    ResponseEntity<GetFoundGeoCodesResponse> getFoundGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's found GeoCodes", required = true, schema = @Schema()) @Valid @RequestBody GetFoundGeoCodesRequest body);
 
 
     @Operation(summary = "Gets the user's owned GeoCodes", description = "Get's the user's owned GeoCodes", security = {
@@ -116,7 +88,7 @@ public interface UserApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetOwnedGeoCodesResponse> getOwnedGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's owned GeoCodes", required=true, schema=@Schema()) @Valid @RequestBody GetOwnedGeoCodesRequest body);
+    ResponseEntity<GetOwnedGeoCodesResponse> getOwnedGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's owned GeoCodes", required = true, schema = @Schema()) @Valid @RequestBody GetOwnedGeoCodesRequest body);
 
 
     @Operation(summary = "Get all geocodes associated with a user", description = "Get My Geocodes", security = {
@@ -129,20 +101,7 @@ public interface UserApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetOwnedGeoCodesResponse> getOwnedGeocodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get geocodes belonging to user", required=true, schema=@Schema()) @Valid @RequestBody GetOwnedGeoCodesRequest body);
-
-
-    @Operation(summary = "Gets the user's trackable", description = "Get the given user's trackable", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "The user's trackable was successfully returned", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetUserTrackableResponse.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
-    @RequestMapping(value = "/User/getUserTrackable",
-        produces = { "application/json", "application/xml" }, 
-        consumes = { "application/json", "application/xml" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<GetUserTrackableResponse> getUserTrackable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's trackable", required=true, schema=@Schema()) @Valid @RequestBody GetUserTrackableRequest body);
+    ResponseEntity<GetOwnedGeoCodesResponse> getOwnedGeocodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get geocodes belonging to user", required = true, schema = @Schema()) @Valid @RequestBody GetOwnedGeoCodesRequest body);
 
 
     @Operation(summary = "Get all of the users in the system", description = "Get all of the users", security = {
@@ -155,7 +114,7 @@ public interface UserApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetUsersResponse> getUsers(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all users in the system", required=true, schema=@Schema()) @Valid @RequestBody GetUsersRequest body);
+    ResponseEntity<GetUsersResponse> getUsers(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all users in the system", required = true, schema = @Schema()) @Valid @RequestBody GetUsersRequest body);
 
 
     @Operation(summary = "Sets the given user to be an administrator", description = "Sets the given user to be an administrator", security = {
@@ -168,7 +127,7 @@ public interface UserApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<User> setAdmin(@Parameter(in = ParameterIn.DEFAULT, description = "Request to set a user to be an administrator", required=true, schema=@Schema()) @Valid @RequestBody SetAdminRequest body);
+    ResponseEntity<User> setAdmin(@Parameter(in = ParameterIn.DEFAULT, description = "Request to set a user to be an administrator", required = true, schema = @Schema()) @Valid @RequestBody SetAdminRequest body);
 
 
     @Operation(summary = "Swaps the Collectable the user is currently holding with the given Collectable in the given GeoCode", description = "Swap held Collectable", security = {
@@ -181,20 +140,7 @@ public interface UserApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<SwapCollectableResponse> swapCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap the held Collectable", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectableRequest body);
-
-
-    @Operation(summary = "Update the location of the user's trackable", description = "Update the location of the user's trackable when they place it", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "The user's trackable had it's location successfully updated", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UpdateLocationResponse.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
-    @RequestMapping(value = "/User/updateLocation",
-        produces = { "application/json", "application/xml" }, 
-        consumes = { "application/json", "application/xml" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<UpdateLocationResponse> updateLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update the location of the user's trackable", required=true, schema=@Schema()) @Valid @RequestBody UpdateLocationRequest body);
+    ResponseEntity<SwapCollectableResponse> swapCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap the held Collectable", required = true, schema = @Schema()) @Valid @RequestBody SwapCollectableRequest body);
 
 }
 
