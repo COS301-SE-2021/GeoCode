@@ -8,7 +8,11 @@ import tech.geocodeapp.geocode.Collectable.Strategy.BasicCollectableTypeStrategy
 
 public class CollectableTypeManager {
 
-
+    /**
+     * Converts a {@link CollectableType} to a decorated {@link CollectableTypeComponent}
+     * @param type The {@link CollectableType} to convert
+     * @return The {@link CollectableTypeComponent} that has been created
+     */
     public CollectableTypeComponent buildCollectableType(CollectableType type){
         CollectableTypeComponent builtType;
         CollectableTypeContext context = new CollectableTypeContext(new BasicCollectableTypeStrategy());
