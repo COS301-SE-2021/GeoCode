@@ -7,7 +7,7 @@ public class BasicCollectableTypeStrategy implements CollectableTypeStrategy {
 
     /**
      * Creates and returns the corresponding CollectableTypeFactory Class
-     * @return A new BasicCollectableTypeFactory to use
+     * @return A new {@link BasicCollectableTypeFactory} using an {@link AbstractCollectableTypeFactory}
      */
     @Override
     public AbstractCollectableTypeFactory getCollectableTypeFactory() {
