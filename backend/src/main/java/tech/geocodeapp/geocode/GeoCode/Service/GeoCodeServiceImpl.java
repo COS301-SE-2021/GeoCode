@@ -5,6 +5,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import io.swagger.model.*;
@@ -23,6 +24,7 @@ import java.util.List;
  * This class implements the UserService interface
  */
 @Service( "GeoCodeService" )
+//@RequiredArgsConstructor
 public class GeoCodeServiceImpl implements GeoCodeService {
 
     /**
@@ -390,12 +392,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         SwapCollectablesResponse response = new SwapCollectablesResponse();
         response.setSuccess( true );
+
         return response;
     }
 
     /**
      * Updates the availability of a GeoCode
-     *
+     *lombok
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified UpdateAvailabilityRequest
