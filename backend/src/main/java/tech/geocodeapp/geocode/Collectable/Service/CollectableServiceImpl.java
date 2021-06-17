@@ -100,19 +100,13 @@ public class CollectableServiceImpl implements CollectableService {
         //create CollectableTypeManager instance to handle conversion
         CollectableTypeManager manager = new CollectableTypeManager();
 
-        //create an empty list of CollectableTypeComponent objects to add converted retrieved CollectableTypes to
-        List<CollectableTypeComponent> collectableTypeComponents = new ArrayList<>();
-
         //retrieve all CollectableTypes
         List<CollectableType> collectableTypes = new ArrayList<>(collectableTypeRepo.findAll());
 
         //iterate through the collectableTypes list and add converted CollectableTypeComponents to the collectableTypeComponents list
         for (CollectableType collectableType : collectableTypes) {
-            collectableTypeComponents.add(manager.buildCollectableType(collectableType));
+           response.addCollectableTypesItem(manager.buildCollectableType(collectableType));
         }
-
-        //set the response objects CollectableTypes list to the collectableTypeComponents list
-        response.setCollectableTypes(collectableTypeComponents);
         return response;
     }
 
@@ -120,6 +114,25 @@ public class CollectableServiceImpl implements CollectableService {
     public GetCollectableSetsResponse getCollectableSets(){
         GetCollectableSetsResponse response = new GetCollectableSetsResponse();
         response.setCollectableSets(collectableSetRepo.findAll());
+        return response;
+    }
+
+    @Override
+    public GetCollectableTypesResponse getCollectableTypesBySet(GetCollectableTypesBySetRequest request) {
+        GetCollectableTypesResponse response = new GetCollectableTypesResponse();
+
+        //create CollectableTypeManager instance to handle conversion
+        CollectableTypeManager manager = new CollectableTypeManager();
+
+        //retrieve all CollectableTypes
+        List<CollectableType> collectableTypes = new ArrayList<>(collectableTypeRepo.findAll());
+
+        //iterate through the collectableTypes list and add converted CollectableTypeComponents to the collectableTypeComponents list if the set matches
+        for (CollectableType collectableType : collectableTypes) {
+            if(request.getSetId().equals(collectableType.getSet().getId())) {
+                response.addCollectableTypesItem(manager.buildCollectableType(collectableType));
+            }
+        }
         return response;
     }
 }
