@@ -1,4 +1,9 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import { AlertController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
+import {GeocodeContentsPage} from '../geocode-contents/geocode-contents.page';
+import {NavigationExtras} from '@angular/router';
+
 declare let google;
 @Component({
   selector: 'app-geocode',
@@ -11,23 +16,27 @@ export class GeocodePage implements AfterViewInit  {
   map;
   mapmarker;
   geocodes;
+  selected=[{id: 1, lat: -25.75625115327836, long: 28.235629260918344,difficulty:'Medium',isAvailable: true}];
+  geocodeContentsPage: GeocodeContentsPage;
 
-  constructor() {
-    this.geocodes = [{id: 1, lat: -25.75625115327836, long: 28.235629260918344,difficulty:'Medium'}, {
+  constructor(public alertController: AlertController,public navCtrl: NavController) {
+    this.geocodes = [{id: 1, lat: -25.75625115327836, long: 28.235629260918344,difficulty:'Medium',isAvailable: true}, {
       id: 2,
       lat: -25.755678678528565,
       long: 28.243631816539157,
-      difficulty:'Easy'
+      difficulty:'Easy',
+      isAvailable: true
     },
       {
         id: 3,
         lat: -25.75756288427446,
         long: 28.260916229007645,
-        difficulty:'Hard'
+        difficulty:'Hard',
+        isAvailable: true
       }];
   }
 
-
+  //Create map and add mapmarkers of geocodes
   loadMap(){
     this.mapmarker = {
       url:'/assets/images/logo.png',
@@ -48,14 +57,20 @@ export class GeocodePage implements AfterViewInit  {
         title: '',
 
       });
-      const infowindow = new google.maps.InfoWindow({
-        content:     '<div style="color: black">' +
-          '<p> Difficulty:'+code.difficulty+'</p>' +
-          '</div>'
-      });
+
+      // const infowindow = new google.maps.InfoWindow({
+      //   content:     '<div style="color: black">' +
+      //     '<p> Difficulty:'+code.difficulty+'</p>' +
+      //     '<ion-button (click)="presentAlert()">Find GeoCode</ion-button>' +
+      //     '</div>',
+      //
+      // });
+
+
       marker.addListener('click' , ()=> {
-        infowindow.open(this.map,marker);
+       this.addToSelected(code);
       });
+
     }
 
 
@@ -64,5 +79,34 @@ export class GeocodePage implements AfterViewInit  {
   ngAfterViewInit(): void {
      this.loadMap();
   }
+  async presentAlert(){
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Alert',
+      subHeader: 'Subtitle',
+      message: 'This is an alert message.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+
+  };
+
+  addToSelected(geocode){
+    this.selected= [];
+    this.selected.push(geocode);
+
+  }
+
+  findGeoCode(geocode){
+   console.log(geocode.id);
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        geocode
+      }
+    };
+   this.navCtrl.navigateForward('geocode-contents',navigationExtras);
+  }
+
 
 }

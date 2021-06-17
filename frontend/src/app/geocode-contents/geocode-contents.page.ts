@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-geocode-contents',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GeocodeContentsPage implements OnInit {
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      console.log(params);
+    });
   }
 
 }
