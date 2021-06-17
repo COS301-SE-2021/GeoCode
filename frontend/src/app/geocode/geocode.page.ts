@@ -14,7 +14,7 @@ export class GeocodePage implements AfterViewInit  {
   @ViewChild('mapElement',{static:false}) mapElement;
   mapOptions;
   map;
-  mapmarker;
+  mapMarker;
   geocodes;
   selected=[{id: 1, lat: -25.75625115327836, long: 28.235629260918344,difficulty:'Medium',isAvailable: true}];
 
@@ -38,7 +38,7 @@ export class GeocodePage implements AfterViewInit  {
 
   //Create map and add mapmarkers of geocodes
   loadMap(){
-    this.mapmarker = {
+    this.mapMarker = {
       url:'/assets/images/logo.png',
       scaledSize: new google.maps.Size(22,32),
 
