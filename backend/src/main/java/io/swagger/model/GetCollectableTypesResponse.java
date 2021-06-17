@@ -3,11 +3,12 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.CollectableType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
+
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -21,14 +22,14 @@ import javax.validation.constraints.*;
 public class GetCollectableTypesResponse   {
   @JsonProperty("collectableTypes")
   @Valid
-  private List<CollectableType> collectableTypes = new ArrayList<CollectableType>();
+  private List<CollectableTypeComponent> collectableTypes = new ArrayList<CollectableTypeComponent>();
 
-  public GetCollectableTypesResponse collectableTypes(List<CollectableType> collectableTypes) {
+  public GetCollectableTypesResponse collectableTypes(List<CollectableTypeComponent> collectableTypes) {
     this.collectableTypes = collectableTypes;
     return this;
   }
 
-  public GetCollectableTypesResponse addCollectableTypesItem(CollectableType collectableTypesItem) {
+  public GetCollectableTypesResponse addCollectableTypesItem(CollectableTypeComponent collectableTypesItem) {
     this.collectableTypes.add(collectableTypesItem);
     return this;
   }
@@ -40,11 +41,11 @@ public class GetCollectableTypesResponse   {
   @Schema(required = true, description = "")
       @NotNull
     @Valid
-    public List<CollectableType> getCollectableTypes() {
+    public List<CollectableTypeComponent> getCollectableTypes() {
     return collectableTypes;
   }
 
-  public void setCollectableTypes(List<CollectableType> collectableTypes) {
+  public void setCollectableTypes(List<CollectableTypeComponent> collectableTypes) {
     this.collectableTypes = collectableTypes;
   }
 
