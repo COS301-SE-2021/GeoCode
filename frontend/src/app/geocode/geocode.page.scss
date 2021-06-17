@@ -13,6 +13,9 @@ ion-title{
   width: 100%;
   height: 50%;
   border-width: 0px;
+  padding: 0px;
+  background-color: white;
+
 }
 
 
@@ -22,6 +25,7 @@ ion-title{
   height: 50%;
   background-color: white;
   color:black;
+  padding: 0px;
 }
 
 .row {
@@ -35,6 +39,20 @@ ion-title{
 
 ion-grid{
   border-color:  var(--ion-color-purple);
-  border-width: .01em;
+  border-width: 1px;
 }
+
+ion-content{
+  --ion-background-color:white;
+}
+
+ion-checkbox{
+  --checkmark-color: white;
+  --background-checked:var(--ion-color-winered);
+  --border-color:var(--ion-color-winered);
+  --border-color-checked:var(--ion-color-winered);
+  --background: white;
+}
+
+
 
