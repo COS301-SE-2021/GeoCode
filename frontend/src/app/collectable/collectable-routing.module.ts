@@ -8,14 +8,6 @@ const routes: Routes = [
     path: '',
     component: CollectablePage
   },
-  {
-    path: 'sets/add',
-    loadChildren: () => import('./add-set/add-set.module').then( m => m.AddSetPageModule)
-  },
-  {
-    path: 'sets/:setID/addType',
-    loadChildren: () => import('./add-type/add-type.module').then( m => m.AddTypePageModule)
-  },
 
 
 ];

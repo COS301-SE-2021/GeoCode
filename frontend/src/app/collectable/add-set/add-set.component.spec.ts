@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { AddTypePage } from './add-type.page';
+import { AddSetComponent } from './add-set.component';
 
-describe('AddTypePage', () => {
-  let component: AddTypePage;
-  let fixture: ComponentFixture<AddTypePage>;
+describe('AddSetComponent', () => {
+  let component: AddSetComponent;
+  let fixture: ComponentFixture<AddSetComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddTypePage ],
+      declarations: [ AddSetComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AddTypePage);
+    fixture = TestBed.createComponent(AddSetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

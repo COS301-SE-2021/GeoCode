@@ -3,7 +3,7 @@
     <ion-title>Collectables</ion-title>
     <ng-template [ngIf]="isAdmin()">
       <ion-buttons slot="end">
-        <ion-button [routerLink]="['/collectables/sets/add']">
+        <ion-button (click)="addSet()">
           <ion-icon name="add-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -25,7 +25,7 @@
         </div>
         <ng-template [ngIf]="isAdmin()">
           <div class="add">
-            <ion-button size="small" [routerLink]="['/collectables/sets/randomID/addType']">
+            <ion-button size="small" (click)="addType('randomID')">
               <ion-icon name="add-outline"></ion-icon>
             </ion-button>
           </div>
