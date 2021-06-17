@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.Collectable.Decorator;
 
+import io.swagger.model.CollectableSet;
 import io.swagger.model.Rarity;
 
 import java.util.GregorianCalendar;
@@ -10,6 +11,7 @@ public class ConcreteCollectableType implements CollectableTypeComponent {
     private String name;
     private Rarity rarity;
     private UUID id;
+    private CollectableSet set;
 
     public ConcreteCollectableType() {
 
@@ -44,6 +46,17 @@ public class ConcreteCollectableType implements CollectableTypeComponent {
     public void setId(UUID id) {
         this.id = id;
     }
+
+    @Override
+    public CollectableSet getCollectableSet() {
+        return set;
+    }
+
+    @Override
+    public void setCollectableSet(CollectableSet set) {
+        this.set = set;
+    }
+
 
     /**
      * @return false as trackable isn't contained in the concreteComponent

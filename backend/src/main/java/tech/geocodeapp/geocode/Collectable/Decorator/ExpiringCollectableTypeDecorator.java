@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.Collectable.Decorator;
 
+import io.swagger.model.CollectableSet;
 import io.swagger.model.Rarity;
 
 import java.util.GregorianCalendar;
@@ -65,6 +66,23 @@ public class ExpiringCollectableTypeDecorator extends CollectableTypeDecorator {
     @Override
     public void setId(UUID id) {
         super.setId(id);
+    }
+
+    /**
+     * @return the CollectableSet of the decoratedType
+     */
+    @Override
+    public CollectableSet getCollectableSet() {
+        return decoratedType.getCollectableSet();
+    }
+
+    /**
+     * Sets the decoratedType's set
+     * @param set the {@link CollectableSet} the decoratedType is a part of
+     */
+    @Override
+    public void setCollectableSet(CollectableSet set) {
+        decoratedType.setCollectableSet(set);
     }
 
     /**

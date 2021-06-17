@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.Collectable.Decorator;
 
+import io.swagger.model.CollectableSet;
 import io.swagger.model.Rarity;
 
 import java.util.GregorianCalendar;
@@ -22,6 +23,10 @@ public interface CollectableTypeComponent {
     UUID getId();
 
     void setId(UUID id);
+
+    CollectableSet getCollectableSet();
+
+    void setCollectableSet(CollectableSet set);
 
     /**
      * Getter for trackable used to get the trackable variable from {@link TrackableCollectableTypeDecorator}

@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.Collectable.Decorator;
 
+import io.swagger.model.CollectableSet;
 import io.swagger.model.Rarity;
 
 import java.util.GregorianCalendar;
@@ -59,6 +60,21 @@ public abstract class CollectableTypeDecorator implements CollectableTypeCompone
      */
     public void setId(UUID id) {
         decoratedType.setId(id);
+    }
+
+    /**
+     * @return the CollectableSet of the decoratedType
+     */
+    public CollectableSet getCollectableSet() {
+        return decoratedType.getCollectableSet();
+    }
+
+    /**
+     * Sets the decoratedType's set
+     * @param set the {@link CollectableSet} the decoratedType is a part of
+     */
+    public void setCollectableSet(CollectableSet set){
+        decoratedType.setCollectableSet(set);
     }
 
     /**
