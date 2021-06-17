@@ -19,6 +19,30 @@ import java.util.Objects;
 public class GetUserTrackableResponse {
   @JsonProperty("Trackable")
   private Collectable trackable = null;
+  private boolean success;
+  private String message;
+
+  public GetUserTrackableResponse(boolean success, String message, Collectable trackable) {
+    this.success = success;
+    this.message = message;
+    this.trackable = trackable;
+  }
+
+  public boolean isSuccess() {
+    return success;
+  }
+
+  public void setSuccess(boolean success) {
+    this.success = success;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
   public GetUserTrackableResponse trackable(Collectable trackable) {
     this.trackable = trackable;

@@ -19,10 +19,34 @@ import java.util.Objects;
 public class UpdateLocationResponse {
   @JsonProperty("Trackable")
   private Collectable trackable = null;
+  private boolean success;
+  private String message;
+
+  public UpdateLocationResponse(boolean success, String message, Collectable trackable) {
+    this.success = success;
+    this.message = message;
+    this.trackable = trackable;
+  }
 
   public UpdateLocationResponse trackable(Collectable trackable) {
     this.trackable = trackable;
     return this;
+  }
+
+  public boolean isSuccess() {
+    return success;
+  }
+
+  public void setSuccess(boolean success) {
+    this.success = success;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
   }
 
   /**

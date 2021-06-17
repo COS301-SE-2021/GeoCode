@@ -17,7 +17,31 @@ import java.util.Objects;
 
 public class GetCurrentCollectableResponse   {
   @JsonProperty("Collectable")
-  private Collectable collectable = null;
+  private Collectable collectable;
+  private boolean success;
+  private String message;
+
+  public GetCurrentCollectableResponse(boolean success, String message, Collectable collectable) {
+    this.success = success;
+    this.message = message;
+    this.collectable = collectable;
+  }
+
+  public boolean isSuccess() {
+    return success;
+  }
+
+  public void setSuccess(boolean success) {
+    this.success = success;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
   public GetCurrentCollectableResponse collectable(Collectable collectable) {
     this.collectable = collectable;

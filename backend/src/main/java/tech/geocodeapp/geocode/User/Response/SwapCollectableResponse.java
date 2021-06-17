@@ -18,10 +18,34 @@ import java.util.Objects;
 public class SwapCollectableResponse {
   @JsonProperty("Collectable")
   private Collectable collectable = null;
+  private boolean success;
+  private String message;
+
+  public SwapCollectableResponse(boolean success, String message, Collectable collectable) {
+    this.success = success;
+    this.message = message;
+    this.collectable = collectable;
+  }
 
   public SwapCollectableResponse collectable(Collectable collectable) {
     this.collectable = collectable;
     return this;
+  }
+
+  public boolean isSuccess() {
+    return success;
+  }
+
+  public void setSuccess(boolean success) {
+    this.success = success;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
   }
 
   /**
