@@ -9,7 +9,7 @@ import tech.geocodeapp.geocode.Collectable.Strategy.BasicCollectableTypeStrategy
 public class CollectableTypeManager {
 
 
-    public CollectableTypeComponent buildCollectable(CollectableType type){
+    public CollectableTypeComponent buildCollectableType(CollectableType type){
         CollectableTypeComponent builtType;
         CollectableTypeContext context = new CollectableTypeContext(new BasicCollectableTypeStrategy());
         AbstractCollectableTypeFactory factory = context.executeStrategy();
