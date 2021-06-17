@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
-import {GeocodeContentsPage} from '../geocode-contents/geocode-contents.page';
 import {NavigationExtras} from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 declare let google;
 @Component({
@@ -17,7 +17,7 @@ export class GeocodePage implements AfterViewInit  {
   mapmarker;
   geocodes;
   selected=[{id: 1, lat: -25.75625115327836, long: 28.235629260918344,difficulty:'Medium',isAvailable: true}];
-  geocodeContentsPage: GeocodeContentsPage;
+
 
   constructor(public alertController: AlertController,public navCtrl: NavController) {
     this.geocodes = [{id: 1, lat: -25.75625115327836, long: 28.235629260918344,difficulty:'Medium',isAvailable: true}, {
@@ -79,18 +79,6 @@ export class GeocodePage implements AfterViewInit  {
   ngAfterViewInit(): void {
      this.loadMap();
   }
-  async presentAlert(){
-    const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      header: 'Alert',
-      subHeader: 'Subtitle',
-      message: 'This is an alert message.',
-      buttons: ['OK']
-    });
-
-    await alert.present();
-
-  };
 
   addToSelected(geocode){
     this.selected= [];
