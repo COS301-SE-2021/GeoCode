@@ -5,6 +5,10 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+  },
+  {
+    path: 'geocode-contents',
+    loadChildren: () => import('./geocode-contents/geocode-contents.module').then( m => m.GeocodeContentsPageModule)
   }
 
 ];
