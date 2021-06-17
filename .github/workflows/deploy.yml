@@ -10,7 +10,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps
+    steps:
     - name: Deploy Spring Boot app
       uses: appleboy/ssh-action@master
       with:
