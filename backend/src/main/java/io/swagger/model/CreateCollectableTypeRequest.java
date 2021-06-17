@@ -32,7 +32,7 @@ public class CreateCollectableTypeRequest   {
   private UUID setId = null;
 
   @JsonProperty("properties")
-  private HashMap<String,String> properties = null;
+  private HashMap<String,String> properties = new HashMap<>();
 
   public CreateCollectableTypeRequest name(String name) {
     this.name = name;

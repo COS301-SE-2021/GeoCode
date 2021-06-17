@@ -117,7 +117,7 @@ public class CollectableServiceImpl implements CollectableService {
         return response;
     }
 
-    @Override
+    @Transactional
     public GetCollectableTypesResponse getCollectableTypesBySet(GetCollectableTypesBySetRequest request) {
         GetCollectableTypesResponse response = new GetCollectableTypesResponse();
 
@@ -134,5 +134,20 @@ public class CollectableServiceImpl implements CollectableService {
             }
         }
         return response;
+    }
+
+    @Transactional
+    public void deleteCollectables() {
+        collectableRepo.deleteAll();
+    }
+
+    @Transactional
+    public void deleteCollectableTypes() {
+        collectableTypeRepo.deleteAll();
+    }
+
+    @Transactional
+    public void deleteCollectableSets() {
+        collectableSetRepo.deleteAll();
     }
 }

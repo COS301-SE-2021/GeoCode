@@ -39,6 +39,7 @@ public class Collectable   {
 
   //main constructor for creating new collectables
   public Collectable(CollectableType type) {
+    id = UUID.randomUUID();
     this.type = type;
   }
 

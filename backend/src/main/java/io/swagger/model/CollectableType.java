@@ -52,6 +52,7 @@ public class CollectableType   {
 
   //main constructor for creating new CollectableTypes
   public CollectableType(String name, String image, Rarity rarity, CollectableSet set, HashMap<String,String> properties) {
+    id = UUID.randomUUID();
     this.name = name;
     this.image = image;
     this.rarity = rarity;

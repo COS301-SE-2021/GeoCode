@@ -40,6 +40,7 @@ public class CollectableSet   {
 
   //main constructor for creating new CollectableSets
   public CollectableSet(String name, String description) {
+    id = UUID.randomUUID();
     this.name = name;
     this.description = description;
   }
