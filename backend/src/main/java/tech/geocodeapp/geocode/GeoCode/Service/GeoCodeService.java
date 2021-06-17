@@ -22,7 +22,7 @@ public interface GeoCodeService {
 
     GetCollectablesResponse getCollectables( GetCollectablesRequest request );
 
-    GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request );
+    GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException, RepoException;
 
     GetHintsResponse getHints( GetHintsRequest request );
 

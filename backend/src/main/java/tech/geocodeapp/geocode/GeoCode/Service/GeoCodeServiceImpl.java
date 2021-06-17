@@ -15,6 +15,8 @@ import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -123,6 +125,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /* Validate the repo */
         if ( geoCodeRepo == null ) {
+
             throw new RepoException( "The GeoCode Repository is empty." );
         }
 
@@ -150,9 +153,40 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetGeoCodesByDifficultyRequest
      */
     @Override
-    public GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) {
+    public GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException, RepoException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( "The given request is empty." );
+        } else if ( request.getDifficulty() != null ) {
+
+            throw new InvalidRequestException( "The given request is missing parameter/s." );
+        }
+
+        /* Validate the repo */
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+
+
+        //List<GeoCode> hold =  geoCodeRepo.findAll();
+
+        List<GeoCode> hold = new ArrayList<>();
+        for ( GeoCode code: geoCodeRepo.findAll() ) {
+
+            if ( code.getDifficulty().equals( request.getDifficulty() ) ) {
+
+                hold.add( code );
+            }
+        }
+
+        GetGeoCodesByDifficultyResponse response = new GetGeoCodesByDifficultyResponse();
+
+        response.setGeocodes( hold );
+
+        return response;
     }
 
     /**
