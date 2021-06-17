@@ -17,7 +17,6 @@ import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
 import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
 import tech.geocodeapp.geocode.User.Response.SwapCollectableResponse;
 import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
-//import tech.geocodeapp.geocode.User.Service.UserService;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -39,7 +38,11 @@ public class UserServiceImpl implements UserService {
         this.geocodeRepo = geocodeRepo;
     }
 
-    @Transactional
+    /**
+     * Gets the Collectable that the User is currently holding
+     * @param request The GetCurrentCollectableRequest object
+     * @return A GetCurrentCollectableResponse object: (success, message, object)
+     */
     public GetCurrentCollectableResponse getCurrentCollectable(GetCurrentCollectableRequest request){
         if (request == null) {
             return new GetCurrentCollectableResponse(false, "The GetCurrentCollectableRequest object passed was NULL", null);
@@ -55,7 +58,11 @@ public class UserServiceImpl implements UserService {
         return new GetCurrentCollectableResponse(true, "The user's Collectable was successfully returned", currentUserCollectable);
     }
 
-    @Transactional
+    /**
+     * Gets the User's trackableObject
+     * @param request The GetUserTrackableRequest object
+     * @return A GetUserTrackableResponse object: (success, message, object)
+     */
     public GetUserTrackableResponse getUserTrackable(GetUserTrackableRequest request){
         if (request == null) {
             return new GetUserTrackableResponse(false, "The GetUserTrackableRequest object passed was NULL", null);
@@ -71,7 +78,11 @@ public class UserServiceImpl implements UserService {
         return new GetUserTrackableResponse(true, "The user's Trackable was successfully returned", userTrackable);
     }
 
-    @Transactional
+    /**
+     * Swaps the Collectable that the User is currently holding with a Collectable held within a GeoCode
+     * @param request The SwapCollectableRequest object
+     * @return A SwapCollectableResponse object: (success, message, object)
+     */
     public SwapCollectableResponse swapCollectable(SwapCollectableRequest request){
         if (request == null) {
             return new SwapCollectableResponse(false, "The SwapCollectableRequest object passed was NULL", null);
@@ -117,7 +128,11 @@ public class UserServiceImpl implements UserService {
         return new SwapCollectableResponse(false, "The given targetCollectable is not in the targetGeoCode", null);
     }
 
-    @Transactional
+    /**
+     * Updates the location of the User's trackable
+     * @param request The UpdateLocationRequest object
+     * @return A UpdateLocationResponse object: (success, message, object)
+     */
     public UpdateLocationResponse updateLocation(UpdateLocationRequest request){
         if (request == null) {
             return new UpdateLocationResponse(false, "The GetUserTrackableRequest object passed was NULL", null);
