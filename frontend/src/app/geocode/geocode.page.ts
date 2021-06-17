@@ -96,5 +96,9 @@ export class GeocodePage implements AfterViewInit  {
    this.navCtrl.navigateForward('/geocode/geocode-contents',navigationExtras);
   }
 
+  createGeoCode(){
+    console.log('Create');
+  }
+
 
 }
