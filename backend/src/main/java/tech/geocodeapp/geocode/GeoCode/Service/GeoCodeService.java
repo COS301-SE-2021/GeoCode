@@ -24,7 +24,7 @@ public interface GeoCodeService {
 
     GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException, RepoException;
 
-    GetHintsResponse getHints( GetHintsRequest request );
+    GetHintsResponse getHints( GetHintsRequest request ) throws InvalidRequestException, RepoException;
 
     GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request );
 

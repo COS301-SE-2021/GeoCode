@@ -105,7 +105,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /*
          * Create the new response
-         *  and add the created GeoCode to it
+         * and add the created GeoCode to it
          */
         CreateGeoCodeResponse response = new CreateGeoCodeResponse();
         response.setGeoCode( newGeoCode );
@@ -206,9 +206,31 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetHintsRequest
      */
     @Override
-    public GetHintsResponse getHints( GetHintsRequest request ) {
+    public GetHintsResponse getHints( GetHintsRequest request ) throws InvalidRequestException, RepoException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( "The given request is empty." );
+        } else if ( ( request.getGeoCode() == null ) || ( request.getGeoCode().getHints() == null ) ) {
+
+            throw new InvalidRequestException( "The given request is missing parameter/s." );
+        }
+
+        /* Validate the repo */
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+
+        /*
+         * Create the new response
+         * and add the list of hints to it
+         */
+        GetHintsResponse response = new GetHintsResponse();
+        response.setHints( request.getGeoCode().getHints() );
+
+        return response;
     }
 
     /**

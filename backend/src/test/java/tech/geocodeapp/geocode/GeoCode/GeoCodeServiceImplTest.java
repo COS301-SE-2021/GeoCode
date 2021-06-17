@@ -129,4 +129,12 @@ public class GeoCodeServiceImplTest {
 
 
     }
+
+    @Test
+    public void getHintsTest() {
+
+
+    }
+
+
 }

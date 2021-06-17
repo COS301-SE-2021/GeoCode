@@ -736,31 +736,19 @@ components:
     GetHintsRequest:
       type: "object"
       required:
-        - description
-        - location
-        - difficulty
-        - hints
+        - geoCode
       properties:
-        description:
-          type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
+        geoCode:
+          $ref: '#/components/schemas/GeoCode'
       xml:
         name: "getGeoCodesByDifficultyRequest"
     GetHintsResponse:
       type: "object"
       properties:
-        id:
-          type: string
-          format: uuid
-        qrCode:
-          type: string
+        hints:
+          type: array
+          items:
+            type: string
       xml:
         name: "getGeoCodesByDifficultyResponse"
     GetGeoCodeByQRCodeRequest:
