@@ -11,11 +11,30 @@ ion-title{
 
 .map{
   width: 100%;
-  height: 100%;
+  height: 50%;
+  border-width: 0px;
 }
 
-.content{
-  color: #0d0d0d;
+
+
+#geoCodeDetails{
+  width: 100%;
+  height: 50%;
+  background-color: white;
+  color:black;
 }
 
+.row {
+
+  border-color:  var(--ion-color-purple);
+  border-width: .01em;
+  border-style:solid; margin-bottom : -1px;
+  height: max-content;
+
+}
+
+ion-grid{
+  border-color:  var(--ion-color-purple);
+  border-width: .01em;
+}
 
