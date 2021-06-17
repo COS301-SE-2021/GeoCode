@@ -5,7 +5,6 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import io.swagger.model.*;
