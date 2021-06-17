@@ -3,7 +3,7 @@ package tech.geocodeapp.geocode.GeoCode.Service;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
+//import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import org.springframework.stereotype.Service;
 
@@ -155,7 +155,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         BitMatrix matrix = new MultiFormatWriter().encode( "https://www.example.com/", BarcodeFormat.QR_CODE, 400, 400 );
 
         /** Create the image and store it in the given path */
-        MatrixToImageWriter.writeToPath( matrix, "jpg", Paths.get( path ) );
+        //MatrixToImageWriter.writeToPath( matrix, "jpg", Paths.get( path ) );
 
         return "AAAA";
     }

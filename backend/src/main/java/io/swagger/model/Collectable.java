@@ -6,7 +6,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.CollectableType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
+
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -14,16 +18,31 @@ import javax.validation.constraints.*;
  * Collectable
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 
-
+@Entity
+@Table(name = "")
 public class Collectable   {
   @JsonProperty("id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("type")
+  @ManyToOne
+  @JoinColumn(name = "COLLECTABLE_TYPE_ID")
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private CollectableType type = null;
 
+  public Collectable() {
+  }
+
+  //main constructor for creating new collectables
+  public Collectable(CollectableType type) {
+    this.type = type;
+  }
+
+  //property for id
   public Collectable id(UUID id) {
     this.id = id;
     return this;
@@ -34,10 +53,10 @@ public class Collectable   {
    * @return id
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public UUID getId() {
+  @Valid
+  public UUID getId() {
     return id;
   }
 
@@ -45,6 +64,7 @@ public class Collectable   {
     this.id = id;
   }
 
+  //property for type
   public Collectable type(CollectableType type) {
     this.type = type;
     return this;
@@ -55,10 +75,10 @@ public class Collectable   {
    * @return type
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public CollectableType getType() {
+  @Valid
+  public CollectableType getType() {
     return type;
   }
 
@@ -77,7 +97,7 @@ public class Collectable   {
     }
     Collectable collectable = (Collectable) o;
     return Objects.equals(this.id, collectable.id) &&
-        Objects.equals(this.type, collectable.type);
+            Objects.equals(this.type, collectable.type);
   }
 
   @Override
@@ -89,7 +109,7 @@ public class Collectable   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Collectable {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("}");

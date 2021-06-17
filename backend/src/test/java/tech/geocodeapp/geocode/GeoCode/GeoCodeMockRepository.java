@@ -90,7 +90,22 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
     }
 
     @Override
+    public <S extends GeoCode> List<S> saveAllAndFlush(Iterable<S> iterable) {
+        return null;
+    }
+
+    @Override
     public void deleteInBatch(Iterable<GeoCode> entities) {
+
+    }
+
+    @Override
+    public void deleteAllInBatch(Iterable<GeoCode> iterable) {
+
+    }
+
+    @Override
+    public void deleteAllByIdInBatch(Iterable<UUID> iterable) {
 
     }
 
@@ -101,6 +116,11 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
 
     @Override
     public GeoCode getOne(UUID uuid) {
+        return null;
+    }
+
+    @Override
+    public GeoCode getById(UUID uuid) {
         return null;
     }
 

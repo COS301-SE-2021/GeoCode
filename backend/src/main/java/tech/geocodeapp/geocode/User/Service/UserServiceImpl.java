@@ -18,7 +18,6 @@ import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
 import tech.geocodeapp.geocode.User.Response.SwapCollectableResponse;
 import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -110,7 +109,7 @@ public class UserServiceImpl implements UserService {
 
         //check is targetCollectableID for a Collectable that is in the GeoCode
         GeoCode geoCode = optionalGeoCode.get();
-        List<Collectable> geoCodeCollectables = geoCode.getCollectables();
+        /*List<Collectable> geoCodeCollectables = geoCode.getCollectables();
 
         for(int i=0; i<geoCodeCollectables.size(); ++i){
             Collectable currentCollectable = geoCodeCollectables.get(i);
@@ -123,7 +122,7 @@ public class UserServiceImpl implements UserService {
 
                 return new SwapCollectableResponse(true, "The user's Collectable was successfully swapped with the Collectable in the GeoCode", currentCollectable);
             }
-        }
+        }*/
 
         return new SwapCollectableResponse(false, "The given targetCollectable is not in the targetGeoCode", null);
     }

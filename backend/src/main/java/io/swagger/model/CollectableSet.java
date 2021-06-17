@@ -5,7 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
+
 import org.springframework.validation.annotation.Validated;
+
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -13,11 +20,13 @@ import javax.validation.constraints.*;
  * CollectableSet
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 
-
+@Entity
 public class CollectableSet   {
   @JsonProperty("id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("name")
@@ -26,6 +35,16 @@ public class CollectableSet   {
   @JsonProperty("description")
   private String description = null;
 
+  public CollectableSet() {
+  }
+
+  //main constructor for creating new CollectableSets
+  public CollectableSet(String name, String description) {
+    this.name = name;
+    this.description = description;
+  }
+
+  //id property
   public CollectableSet id(UUID id) {
     this.id = id;
     return this;
@@ -36,10 +55,10 @@ public class CollectableSet   {
    * @return id
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public UUID getId() {
+  @Valid
+  public UUID getId() {
     return id;
   }
 
@@ -47,6 +66,7 @@ public class CollectableSet   {
     this.id = id;
   }
 
+  //name property
   public CollectableSet name(String name) {
     this.name = name;
     return this;
@@ -57,9 +77,9 @@ public class CollectableSet   {
    * @return name
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getName() {
+  public String getName() {
     return name;
   }
 
@@ -67,6 +87,7 @@ public class CollectableSet   {
     this.name = name;
   }
 
+  //description property
   public CollectableSet description(String description) {
     this.description = description;
     return this;
@@ -77,9 +98,9 @@ public class CollectableSet   {
    * @return description
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getDescription() {
+  public String getDescription() {
     return description;
   }
 
@@ -98,8 +119,8 @@ public class CollectableSet   {
     }
     CollectableSet collectableSet = (CollectableSet) o;
     return Objects.equals(this.id, collectableSet.id) &&
-        Objects.equals(this.name, collectableSet.name) &&
-        Objects.equals(this.description, collectableSet.description);
+            Objects.equals(this.name, collectableSet.name) &&
+            Objects.equals(this.description, collectableSet.description);
   }
 
   @Override
@@ -111,7 +132,7 @@ public class CollectableSet   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CollectableSet {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");

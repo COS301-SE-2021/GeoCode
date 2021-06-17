@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.Collectable;
 
+import com.sun.xml.bind.v2.model.core.ID;
 import io.swagger.model.Collectable;
 import io.swagger.model.CollectableType;
 import org.springframework.data.domain.Example;
@@ -90,7 +91,22 @@ public class CollectableMockRepository implements CollectableRepository {
     }
 
     @Override
+    public <S extends Collectable> List<S> saveAllAndFlush(Iterable<S> iterable) {
+        return null;
+    }
+
+    @Override
     public void deleteInBatch(Iterable<Collectable> entities) {
+
+    }
+
+    @Override
+    public void deleteAllInBatch(Iterable<Collectable> iterable) {
+
+    }
+
+    @Override
+    public void deleteAllByIdInBatch(Iterable<UUID> iterable) {
 
     }
 
@@ -101,6 +117,11 @@ public class CollectableMockRepository implements CollectableRepository {
 
     @Override
     public Collectable getOne(UUID uuid) {
+        return null;
+    }
+
+    @Override
+    public Collectable getById(UUID uuid) {
         return null;
     }
 

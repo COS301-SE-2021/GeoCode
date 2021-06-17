@@ -9,7 +9,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -17,11 +21,13 @@ import javax.validation.constraints.*;
  * GeoCode
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T15:09:55.395Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 
-
+@Entity
 public class GeoCode   {
+  @Id
   @JsonProperty("id")
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("difficulty")
@@ -35,11 +41,14 @@ public class GeoCode   {
 
   @JsonProperty("hints")
   @Valid
+  @ElementCollection
   private List<String> hints = new ArrayList<String>();
 
   @JsonProperty("collectables")
-  @Valid
-  private List<Collectable> collectables = null;
+  @ManyToOne
+  @JoinColumn(name = "COLLECTABLE_ID")
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private Collectable collectables = null;
 
   @JsonProperty("trackables")
   private String trackables = null;
@@ -60,10 +69,10 @@ public class GeoCode   {
    * @return id
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public UUID getId() {
+  @Valid
+  public UUID getId() {
     return id;
   }
 
@@ -81,10 +90,10 @@ public class GeoCode   {
    * @return difficulty
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public Difficulty getDifficulty() {
+  @Valid
+  public Difficulty getDifficulty() {
     return difficulty;
   }
 
@@ -102,9 +111,9 @@ public class GeoCode   {
    * @return available
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public Boolean isAvailable() {
+  public Boolean isAvailable() {
     return available;
   }
 
@@ -122,9 +131,9 @@ public class GeoCode   {
    * @return description
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getDescription() {
+  public String getDescription() {
     return description;
   }
 
@@ -147,9 +156,9 @@ public class GeoCode   {
    * @return hints
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public List<String> getHints() {
+  public List<String> getHints() {
     return hints;
   }
 
@@ -157,16 +166,8 @@ public class GeoCode   {
     this.hints = hints;
   }
 
-  public GeoCode collectables(List<Collectable> collectables) {
+  public GeoCode collectables(Collectable collectables) {
     this.collectables = collectables;
-    return this;
-  }
-
-  public GeoCode addCollectablesItem(Collectable collectablesItem) {
-    if (this.collectables == null) {
-      this.collectables = new ArrayList<Collectable>();
-    }
-    this.collectables.add(collectablesItem);
     return this;
   }
 
@@ -175,12 +176,13 @@ public class GeoCode   {
    * @return collectables
    **/
   @Schema(description = "")
-      @Valid
-    public List<Collectable> getCollectables() {
+
+  @Valid
+  public Collectable getCollectables() {
     return collectables;
   }
 
-  public void setCollectables(List<Collectable> collectables) {
+  public void setCollectables(Collectable collectables) {
     this.collectables = collectables;
   }
 
@@ -194,8 +196,8 @@ public class GeoCode   {
    * @return trackables
    **/
   @Schema(description = "")
-  
-    public String getTrackables() {
+
+  public String getTrackables() {
     return trackables;
   }
 
@@ -213,9 +215,9 @@ public class GeoCode   {
    * @return qrCode
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getQrCode() {
+  public String getQrCode() {
     return qrCode;
   }
 
@@ -233,9 +235,9 @@ public class GeoCode   {
    * @return location
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getLocation() {
+  public String getLocation() {
     return location;
   }
 
@@ -254,14 +256,14 @@ public class GeoCode   {
     }
     GeoCode geoCode = (GeoCode) o;
     return Objects.equals(this.id, geoCode.id) &&
-        Objects.equals(this.difficulty, geoCode.difficulty) &&
-        Objects.equals(this.available, geoCode.available) &&
-        Objects.equals(this.description, geoCode.description) &&
-        Objects.equals(this.hints, geoCode.hints) &&
-        Objects.equals(this.collectables, geoCode.collectables) &&
-        Objects.equals(this.trackables, geoCode.trackables) &&
-        Objects.equals(this.qrCode, geoCode.qrCode) &&
-        Objects.equals(this.location, geoCode.location);
+            Objects.equals(this.difficulty, geoCode.difficulty) &&
+            Objects.equals(this.available, geoCode.available) &&
+            Objects.equals(this.description, geoCode.description) &&
+            Objects.equals(this.hints, geoCode.hints) &&
+            Objects.equals(this.collectables, geoCode.collectables) &&
+            Objects.equals(this.trackables, geoCode.trackables) &&
+            Objects.equals(this.qrCode, geoCode.qrCode) &&
+            Objects.equals(this.location, geoCode.location);
   }
 
   @Override
@@ -273,7 +275,7 @@ public class GeoCode   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeoCode {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    available: ").append(toIndentedString(available)).append("\n");
