@@ -1,32 +1,35 @@
 package tech.geocodeapp.geocode.User.Model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Collectable;
 import io.swagger.model.GeoCode;
 import io.swagger.model.Point;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
  * User
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T14:53:26.496Z[GMT]")
 
 
-public class User {
+public class User   {
   @JsonProperty("id")
   private UUID id = null;
 
   @JsonProperty("username")
   private String username = null;
+
+  @JsonProperty("trackableObject")
+  private Collectable trackableObject = null;
 
   @JsonProperty("points")
   @Valid
@@ -57,10 +60,10 @@ public class User {
    * @return id
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public UUID getId() {
+  @Valid
+  public UUID getId() {
     return id;
   }
 
@@ -78,14 +81,34 @@ public class User {
    * @return username
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getUsername() {
+  public String getUsername() {
     return username;
   }
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public User trackableObject(Collectable trackableObject) {
+    this.trackableObject = trackableObject;
+    return this;
+  }
+
+  /**
+   * Get trackableObject
+   * @return trackableObject
+   **/
+  @Schema(description = "")
+
+  @Valid
+  public Collectable getTrackableObject() {
+    return trackableObject;
+  }
+
+  public void setTrackableObject(Collectable trackableObject) {
+    this.trackableObject = trackableObject;
   }
 
   public User points(List<Point> points) {
@@ -106,8 +129,8 @@ public class User {
    * @return points
    **/
   @Schema(description = "")
-      @Valid
-    public List<Point> getPoints() {
+  @Valid
+  public List<Point> getPoints() {
     return points;
   }
 
@@ -125,9 +148,9 @@ public class User {
    * @return currentCollectable
    **/
   @Schema(description = "")
-  
-    @Valid
-    public Collectable getCurrentCollectable() {
+
+  @Valid
+  public Collectable getCurrentCollectable() {
     return currentCollectable;
   }
 
@@ -153,8 +176,8 @@ public class User {
    * @return foundCollectables
    **/
   @Schema(description = "")
-      @Valid
-    public List<Collectable> getFoundCollectables() {
+  @Valid
+  public List<Collectable> getFoundCollectables() {
     return foundCollectables;
   }
 
@@ -180,8 +203,8 @@ public class User {
    * @return foundGeocodes
    **/
   @Schema(description = "")
-      @Valid
-    public List<GeoCode> getFoundGeocodes() {
+  @Valid
+  public List<GeoCode> getFoundGeocodes() {
     return foundGeocodes;
   }
 
@@ -207,8 +230,8 @@ public class User {
    * @return ownedGeocodes
    **/
   @Schema(description = "")
-      @Valid
-    public List<GeoCode> getOwnedGeocodes() {
+  @Valid
+  public List<GeoCode> getOwnedGeocodes() {
     return ownedGeocodes;
   }
 
@@ -218,7 +241,7 @@ public class User {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -227,26 +250,28 @@ public class User {
     }
     User user = (User) o;
     return Objects.equals(this.id, user.id) &&
-        Objects.equals(this.username, user.username) &&
-        Objects.equals(this.points, user.points) &&
-        Objects.equals(this.currentCollectable, user.currentCollectable) &&
-        Objects.equals(this.foundCollectables, user.foundCollectables) &&
-        Objects.equals(this.foundGeocodes, user.foundGeocodes) &&
-        Objects.equals(this.ownedGeocodes, user.ownedGeocodes);
+            Objects.equals(this.username, user.username) &&
+            Objects.equals(this.trackableObject, user.trackableObject) &&
+            Objects.equals(this.points, user.points) &&
+            Objects.equals(this.currentCollectable, user.currentCollectable) &&
+            Objects.equals(this.foundCollectables, user.foundCollectables) &&
+            Objects.equals(this.foundGeocodes, user.foundGeocodes) &&
+            Objects.equals(this.ownedGeocodes, user.ownedGeocodes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, username, points, currentCollectable, foundCollectables, foundGeocodes, ownedGeocodes);
+    return Objects.hash(id, username, trackableObject, points, currentCollectable, foundCollectables, foundGeocodes, ownedGeocodes);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class User {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    trackableObject: ").append(toIndentedString(trackableObject)).append("\n");
     sb.append("    points: ").append(toIndentedString(points)).append("\n");
     sb.append("    currentCollectable: ").append(toIndentedString(currentCollectable)).append("\n");
     sb.append("    foundCollectables: ").append(toIndentedString(foundCollectables)).append("\n");
@@ -260,7 +285,7 @@ public class User {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

@@ -17,7 +17,7 @@ import javax.validation.constraints.*;
  * GeoCode
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T15:09:55.395Z[GMT]")
 
 
 public class GeoCode   {
@@ -38,7 +38,8 @@ public class GeoCode   {
   private List<String> hints = new ArrayList<String>();
 
   @JsonProperty("collectables")
-  private Collectable collectables = null;
+  @Valid
+  private List<Collectable> collectables = null;
 
   @JsonProperty("trackables")
   private String trackables = null;
@@ -156,8 +157,16 @@ public class GeoCode   {
     this.hints = hints;
   }
 
-  public GeoCode collectables(Collectable collectables) {
+  public GeoCode collectables(List<Collectable> collectables) {
     this.collectables = collectables;
+    return this;
+  }
+
+  public GeoCode addCollectablesItem(Collectable collectablesItem) {
+    if (this.collectables == null) {
+      this.collectables = new ArrayList<Collectable>();
+    }
+    this.collectables.add(collectablesItem);
     return this;
   }
 
@@ -166,13 +175,12 @@ public class GeoCode   {
    * @return collectables
    **/
   @Schema(description = "")
-  
-    @Valid
-    public Collectable getCollectables() {
+      @Valid
+    public List<Collectable> getCollectables() {
     return collectables;
   }
 
-  public void setCollectables(Collectable collectables) {
+  public void setCollectables(List<Collectable> collectables) {
     this.collectables = collectables;
   }
 
