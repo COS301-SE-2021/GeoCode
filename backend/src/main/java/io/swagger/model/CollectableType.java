@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import java.util.HashMap;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -43,6 +44,8 @@ public class CollectableType   {
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private CollectableSet set = null;
 
+  private HashMap<String,String> properties;
+
   public CollectableType() {
   }
 
@@ -52,6 +55,14 @@ public class CollectableType   {
     this.image = image;
     this.rarity = rarity;
     this.set = set;
+  }
+
+  public HashMap<String, String> getProperties() {
+    return properties;
+  }
+
+  public void setProperties(HashMap<String, String> properties) {
+    this.properties = properties;
   }
 
   //property for id
