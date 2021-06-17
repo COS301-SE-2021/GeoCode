@@ -863,31 +863,20 @@ components:
     UpdateAvailabilityRequest:
       type: "object"
       required:
-        - description
-        - location
-        - difficulty
-        - hints
+        - geoCode
+        - available
       properties:
-        description:
-          type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
+        geoCode:
+          $ref: '#/components/schemas/GeoCode'
+        available:
+          type: boolean
       xml:
         name: "updateAvailabilityRequest"
     UpdateAvailabilityResponse:
       type: "object"
       properties:
-        id:
-          type: string
-          format: uuid
-        qrCode:
-          type: string
+        success:
+          type: boolean
       xml:
         name: "updateAvailabilityResponse"
 

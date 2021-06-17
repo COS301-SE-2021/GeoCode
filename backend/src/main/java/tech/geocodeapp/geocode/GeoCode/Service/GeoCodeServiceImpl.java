@@ -159,7 +159,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( "The given request is empty." );
-        } else if ( request.getDifficulty() != null ) {
+        } else if ( request.getDifficulty() == null ) {
 
             throw new InvalidRequestException( "The given request is missing parameter/s." );
         }
@@ -313,9 +313,32 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified UpdateAvailabilityRequest
      */
     @Override
-    public UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) {
+    public UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws RepoException, InvalidRequestException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( "The given request is empty." );
+        } else if ( ( request.getGeoCode() == null ) || ( request.isAvailable() == null ) ) {
+
+            throw new InvalidRequestException( "The given request is missing parameter/s." );
+        }
+
+        /* Validate the repo */
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+
+        request.getGeoCode().setAvailable( request.isAvailable() );
+        /*
+         * Create the new response
+         * and set the success of the operation
+         */
+        UpdateAvailabilityResponse response = new UpdateAvailabilityResponse();
+        response.setSuccess( true );
+
+        return response;
     }
 
 

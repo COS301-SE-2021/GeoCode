@@ -34,5 +34,5 @@ public interface GeoCodeService {
 
     SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException, RepoException;
 
-    UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request );
+    UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws RepoException, InvalidRequestException;
 }
