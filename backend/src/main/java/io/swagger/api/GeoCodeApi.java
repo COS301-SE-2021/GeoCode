@@ -44,6 +44,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.CookieValue;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -64,7 +67,7 @@ public interface GeoCodeApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<CreateGeoCodeResponse> createGeoCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new GeoCode", required=true, schema=@Schema()) @Valid @RequestBody CreateGeoCodeRequest body);
+    ResponseEntity<CreateGeoCodeResponse> createGeoCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new GeoCode", required=true, schema=@Schema()) @Valid @RequestBody CreateGeoCodeRequest body) throws InvalidRequestException, QRCodeException, RepoException;
 
 
     @Operation(summary = "Get the GeoCode at or near the given location", description = "Get the GeoCode at or near the given location", security = {
@@ -77,7 +80,7 @@ public interface GeoCodeApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetGeoCodeByLocationResponse> getGeoCodeByLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode at or near the given location", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodeByLocationRequest body);
+    ResponseEntity<GetGeoCodeByLocationResponse> getGeoCodeByLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode at or near the given location", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodeByLocationRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Get the GeoCode associated with the given QR Code", description = "Get the GeoCode associated with the given QR Code", security = {
@@ -90,7 +93,7 @@ public interface GeoCodeApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetGeoCodeByQRCodeResponse> getGeoCodeByQRCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's associated with the given QR Code", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodeByQRCodeRequest body);
+    ResponseEntity<GetGeoCodeByQRCodeResponse> getGeoCodeByQRCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's associated with the given QR Code", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodeByQRCodeRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Get all Collectables for a certain GeoCode", description = "Get a GeoCode's Collectables", security = {
@@ -103,7 +106,7 @@ public interface GeoCodeApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetCollectablesResponse> getGeoCodeCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody GetCollectablesRequest body);
+    ResponseEntity<GetCollectablesResponse> getGeoCodeCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody GetCollectablesRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Get all the GeoCodes on the platform", description = "Get all the GeoCodes that are stored on the platform", security = {
@@ -115,7 +118,7 @@ public interface GeoCodeApi {
     @RequestMapping(value = "/GeoCode/getGeoCodes",
         produces = { "application/json", "application/xml" }, 
         method = RequestMethod.GET)
-    ResponseEntity<GetGeoCodesResponse> getGeoCodes();
+    ResponseEntity<GetGeoCodesResponse> getGeoCodes() throws RepoException;
 
 
     @Operation(summary = "Get all all the stored GeoCodes by the specified difficulty", description = "Get all GeoCodes by difficulty", security = {
@@ -128,7 +131,7 @@ public interface GeoCodeApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetGeoCodesByDifficultyResponse> getGeoCodesByDifficulty(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all the GeoCodes by the specified difficulty", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodesByDifficultyRequest body);
+    ResponseEntity<GetGeoCodesByDifficultyResponse> getGeoCodesByDifficulty(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all the GeoCodes by the specified difficulty", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodesByDifficultyRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Get the hints for the specified GeoCode", description = "Get the hints for the specified GeoCode to help locate it", security = {
@@ -141,7 +144,7 @@ public interface GeoCodeApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetHintsResponse> getHints(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the hints from the specified GeoCode", required=true, schema=@Schema()) @Valid @RequestBody GetHintsRequest body);
+    ResponseEntity<GetHintsResponse> getHints(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the hints from the specified GeoCode", required=true, schema=@Schema()) @Valid @RequestBody GetHintsRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Get the Trackable for a certain GeoCode", description = "Get a GeoCode's Trackable", security = {
@@ -154,7 +157,7 @@ public interface GeoCodeApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetTrackablesResponse> getTrackables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Trackable", required=true, schema=@Schema()) @Valid @RequestBody GetTrackablesRequest body);
+    ResponseEntity<GetTrackablesResponse> getTrackables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Trackable", required=true, schema=@Schema()) @Valid @RequestBody GetTrackablesRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Swap a specific GeoCode's Collectable", description = "Swap a specific GeoCode's Collectable", security = {
@@ -167,7 +170,7 @@ public interface GeoCodeApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<SwapCollectablesResponse> swapCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectablesRequest body);
+    ResponseEntity<SwapCollectablesResponse> swapCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectablesRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Update the availability for a certain GeoCode", description = "Update the availability for a certain GeoCode", security = {
@@ -180,7 +183,7 @@ public interface GeoCodeApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<UpdateAvailabilityResponse> updateAvailability(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update a GeoCode's availability", required=true, schema=@Schema()) @Valid @RequestBody UpdateAvailabilityRequest body);
+    ResponseEntity<UpdateAvailabilityResponse> updateAvailability(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update a GeoCode's availability", required=true, schema=@Schema()) @Valid @RequestBody UpdateAvailabilityRequest body) throws InvalidRequestException, RepoException;
 
 }
 

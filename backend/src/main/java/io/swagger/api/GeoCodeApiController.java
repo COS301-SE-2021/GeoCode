@@ -31,6 +31,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,6 +43,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
+import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeService;
 
 import javax.validation.constraints.*;
 import javax.validation.Valid;
@@ -50,7 +56,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 @RestController
 public class GeoCodeApiController implements GeoCodeApi {
 
@@ -60,150 +66,143 @@ public class GeoCodeApiController implements GeoCodeApi {
 
     private final HttpServletRequest request;
 
+    @Autowired
+    private GeoCodeService geoCodeService;
+
     @org.springframework.beans.factory.annotation.Autowired
     public GeoCodeApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
     }
 
-    public ResponseEntity<CreateGeoCodeResponse> createGeoCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new GeoCode", required=true, schema=@Schema()) @Valid @RequestBody CreateGeoCodeRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<CreateGeoCodeResponse>(objectMapper.readValue("{\n  \"geoCode\" : {\n    \"difficulty\" : \"EASY\",\n    \"collectables\" : {\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"type\" : {\n        \"image\" : \"image\",\n        \"set\" : {\n          \"name\" : \"name\",\n          \"description\" : \"description\",\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n        },\n        \"name\" : \"name\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n        \"rarity\" : \"COMMON\"\n      }\n    },\n    \"qrCode\" : \"qrCode\",\n    \"hints\" : [ \"hints\", \"hints\" ],\n    \"available\" : true,\n    \"description\" : \"description\",\n    \"trackables\" : \"trackables\",\n    \"location\" : \"location\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }\n}", CreateGeoCodeResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<CreateGeoCodeResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<CreateGeoCodeResponse> createGeoCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new GeoCode", required=true, schema=@Schema()) @Valid @RequestBody CreateGeoCodeRequest body) throws InvalidRequestException, QRCodeException, RepoException {
 
-        return new ResponseEntity<CreateGeoCodeResponse>(HttpStatus.NOT_IMPLEMENTED);
+        CreateGeoCodeResponse response = geoCodeService.createGeoCode( body );
+
+        if ( ( response.getGeoCode() != null ) && ( !response.getGeoCode().getQrCode().isEmpty() ) ) {
+
+            return new ResponseEntity<CreateGeoCodeResponse>(response, HttpStatus.OK);
+        }else{
+
+            return new ResponseEntity<CreateGeoCodeResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity<GetGeoCodeByLocationResponse> getGeoCodeByLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode at or near the given location", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodeByLocationRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<GetGeoCodeByLocationResponse>(objectMapper.readValue("{\n  \"qrCode\" : \"qrCode\",\n  \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n}", GetGeoCodeByLocationResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<GetGeoCodeByLocationResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<GetGeoCodeByLocationResponse> getGeoCodeByLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode at or near the given location", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodeByLocationRequest body) throws InvalidRequestException, RepoException {
 
-        return new ResponseEntity<GetGeoCodeByLocationResponse>(HttpStatus.NOT_IMPLEMENTED);
+        GetGeoCodeByLocationResponse response = geoCodeService.getGeoCodesByLocation( body );
+
+        if ( ( response.getQrCode() != null ) || ( !response.getQrCode().isEmpty() ) ) {
+
+            return new ResponseEntity<GetGeoCodeByLocationResponse>(response, HttpStatus.OK);
+        }else{
+
+            return new ResponseEntity<GetGeoCodeByLocationResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity<GetGeoCodeByQRCodeResponse> getGeoCodeByQRCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's associated with the given QR Code", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodeByQRCodeRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<GetGeoCodeByQRCodeResponse>(objectMapper.readValue("{\n  \"qrCode\" : \"qrCode\",\n  \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n}", GetGeoCodeByQRCodeResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<GetGeoCodeByQRCodeResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<GetGeoCodeByQRCodeResponse> getGeoCodeByQRCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's associated with the given QR Code", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodeByQRCodeRequest body) throws InvalidRequestException, RepoException {
 
-        return new ResponseEntity<GetGeoCodeByQRCodeResponse>(HttpStatus.NOT_IMPLEMENTED);
+        GetGeoCodeByQRCodeResponse response = geoCodeService.getGeocodeByQRCode( body );
+
+        if ( ( response.getQrCode() != null ) || ( !response.getQrCode().isEmpty() ) ) {
+
+            return new ResponseEntity<GetGeoCodeByQRCodeResponse>(response, HttpStatus.OK);
+        }else{
+
+            return new ResponseEntity<GetGeoCodeByQRCodeResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity<GetCollectablesResponse> getGeoCodeCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody GetCollectablesRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<GetCollectablesResponse>(objectMapper.readValue("{\n  \"collectables\" : [ {\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"type\" : {\n      \"image\" : \"image\",\n      \"set\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      },\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"rarity\" : \"COMMON\"\n    }\n  }, {\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"type\" : {\n      \"image\" : \"image\",\n      \"set\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      },\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"rarity\" : \"COMMON\"\n    }\n  } ]\n}", GetCollectablesResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<GetCollectablesResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<GetCollectablesResponse> getGeoCodeCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody GetCollectablesRequest body) throws InvalidRequestException, RepoException {
 
-        return new ResponseEntity<GetCollectablesResponse>(HttpStatus.NOT_IMPLEMENTED);
+        GetCollectablesResponse response = geoCodeService.getCollectables( body );
+
+        if ( ( response.getCollectables() != null ) || ( !response.getCollectables().isEmpty() ) ) {
+
+            return new ResponseEntity<GetCollectablesResponse>(response, HttpStatus.OK);
+        }else{
+
+            return new ResponseEntity<GetCollectablesResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity<GetGeoCodesResponse> getGeoCodes() {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<GetGeoCodesResponse>(objectMapper.readValue("{\n  \"geocodes\" : [ {\n    \"difficulty\" : \"EASY\",\n    \"collectables\" : {\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"type\" : {\n        \"image\" : \"image\",\n        \"set\" : {\n          \"name\" : \"name\",\n          \"description\" : \"description\",\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n        },\n        \"name\" : \"name\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n        \"rarity\" : \"COMMON\"\n      }\n    },\n    \"qrCode\" : \"qrCode\",\n    \"hints\" : [ \"hints\", \"hints\" ],\n    \"available\" : true,\n    \"description\" : \"description\",\n    \"trackables\" : \"trackables\",\n    \"location\" : \"location\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }, {\n    \"difficulty\" : \"EASY\",\n    \"collectables\" : {\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"type\" : {\n        \"image\" : \"image\",\n        \"set\" : {\n          \"name\" : \"name\",\n          \"description\" : \"description\",\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n        },\n        \"name\" : \"name\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n        \"rarity\" : \"COMMON\"\n      }\n    },\n    \"qrCode\" : \"qrCode\",\n    \"hints\" : [ \"hints\", \"hints\" ],\n    \"available\" : true,\n    \"description\" : \"description\",\n    \"trackables\" : \"trackables\",\n    \"location\" : \"location\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  } ]\n}", GetGeoCodesResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<GetGeoCodesResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<GetGeoCodesResponse> getGeoCodes() throws RepoException {
 
-        return new ResponseEntity<GetGeoCodesResponse>(HttpStatus.NOT_IMPLEMENTED);
+        GetGeoCodesResponse response = geoCodeService.getAllGeoCodes();
+
+        if ( ( response.getGeocodes() != null ) || ( !response.getGeocodes().isEmpty() ) ) {
+
+            return new ResponseEntity<GetGeoCodesResponse>(response, HttpStatus.OK);
+        }else{
+
+            return new ResponseEntity<GetGeoCodesResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity<GetGeoCodesByDifficultyResponse> getGeoCodesByDifficulty(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all the GeoCodes by the specified difficulty", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodesByDifficultyRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<GetGeoCodesByDifficultyResponse>(objectMapper.readValue("{\n  \"qrCode\" : \"qrCode\",\n  \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n}", GetGeoCodesByDifficultyResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<GetGeoCodesByDifficultyResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<GetGeoCodesByDifficultyResponse> getGeoCodesByDifficulty(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all the GeoCodes by the specified difficulty", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodesByDifficultyRequest body) throws InvalidRequestException, RepoException {
 
-        return new ResponseEntity<GetGeoCodesByDifficultyResponse>(HttpStatus.NOT_IMPLEMENTED);
+        GetGeoCodesByDifficultyResponse response = geoCodeService.getGeoCodesByDifficulty( body );
+
+        if ( ( response.getGeocodes() != null ) || ( !response.getGeocodes().isEmpty() ) ) {
+
+            return new ResponseEntity<GetGeoCodesByDifficultyResponse>(response, HttpStatus.OK);
+        }else{
+
+            return new ResponseEntity<GetGeoCodesByDifficultyResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity<GetHintsResponse> getHints(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the hints from the specified GeoCode", required=true, schema=@Schema()) @Valid @RequestBody GetHintsRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<GetHintsResponse>(objectMapper.readValue("{\n  \"qrCode\" : \"qrCode\",\n  \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n}", GetHintsResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<GetHintsResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<GetHintsResponse> getHints(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the hints from the specified GeoCode", required=true, schema=@Schema()) @Valid @RequestBody GetHintsRequest body) throws InvalidRequestException, RepoException {
 
-        return new ResponseEntity<GetHintsResponse>(HttpStatus.NOT_IMPLEMENTED);
+        GetHintsResponse response = geoCodeService.getHints( body );
+
+        if ( ( response.getHints() != null ) || ( !response.getHints().isEmpty() ) ) {
+
+            return new ResponseEntity<GetHintsResponse>(response, HttpStatus.OK);
+        }else{
+
+            return new ResponseEntity<GetHintsResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity<GetTrackablesResponse> getTrackables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Trackable", required=true, schema=@Schema()) @Valid @RequestBody GetTrackablesRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<GetTrackablesResponse>(objectMapper.readValue("{\n  \"qrCode\" : \"qrCode\",\n  \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n}", GetTrackablesResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<GetTrackablesResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<GetTrackablesResponse> getTrackables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Trackable", required=true, schema=@Schema()) @Valid @RequestBody GetTrackablesRequest body) throws InvalidRequestException, RepoException {
 
-        return new ResponseEntity<GetTrackablesResponse>(HttpStatus.NOT_IMPLEMENTED);
+        GetTrackablesResponse response = geoCodeService.getTrackables( body );
+
+        if ( ( response.getQrCode() != null ) || ( !response.getQrCode().isEmpty() ) ) {
+
+            return new ResponseEntity<GetTrackablesResponse>(response, HttpStatus.OK);
+        }else{
+
+            return new ResponseEntity<GetTrackablesResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity<SwapCollectablesResponse> swapCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectablesRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<SwapCollectablesResponse>(objectMapper.readValue("{\n  \"qrCode\" : \"qrCode\",\n  \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n}", SwapCollectablesResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<SwapCollectablesResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<SwapCollectablesResponse> swapCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectablesRequest body) throws InvalidRequestException, RepoException {
 
-        return new ResponseEntity<SwapCollectablesResponse>(HttpStatus.NOT_IMPLEMENTED);
+        SwapCollectablesResponse response = geoCodeService.swapCollectables( body );
+
+        if ( response.isSuccess() != null ) {
+
+            return new ResponseEntity<SwapCollectablesResponse>(response, HttpStatus.OK);
+        }else{
+
+            return new ResponseEntity<SwapCollectablesResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity<UpdateAvailabilityResponse> updateAvailability(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update a GeoCode's availability", required=true, schema=@Schema()) @Valid @RequestBody UpdateAvailabilityRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<UpdateAvailabilityResponse>(objectMapper.readValue("{\n  \"qrCode\" : \"qrCode\",\n  \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n}", UpdateAvailabilityResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<UpdateAvailabilityResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<UpdateAvailabilityResponse> updateAvailability(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update a GeoCode's availability", required=true, schema=@Schema()) @Valid @RequestBody UpdateAvailabilityRequest body) throws InvalidRequestException, RepoException {
 
-        return new ResponseEntity<UpdateAvailabilityResponse>(HttpStatus.NOT_IMPLEMENTED);
+        UpdateAvailabilityResponse response = geoCodeService.updateAvailability( body );
+
+        if ( response.isSuccess() != null ) {
+
+            return new ResponseEntity<UpdateAvailabilityResponse>(response, HttpStatus.OK);
+        }else{
+
+            return new ResponseEntity<UpdateAvailabilityResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

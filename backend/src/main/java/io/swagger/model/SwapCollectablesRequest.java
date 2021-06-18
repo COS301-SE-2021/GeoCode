@@ -4,8 +4,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Collectable;
-import io.swagger.model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -14,15 +14,15 @@ import javax.validation.constraints.*;
  * SwapCollectablesRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T15:47:52.307Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-18T04:32:33.769Z[GMT]")
 
 
 public class SwapCollectablesRequest   {
   @JsonProperty("collectable")
   private Collectable collectable = null;
 
-  @JsonProperty("geoCode")
-  private GeoCode geoCode = null;
+  @JsonProperty("geoCodeID")
+  private UUID geoCodeID = null;
 
   public SwapCollectablesRequest collectable(Collectable collectable) {
     this.collectable = collectable;
@@ -45,25 +45,25 @@ public class SwapCollectablesRequest   {
     this.collectable = collectable;
   }
 
-  public SwapCollectablesRequest geoCode(GeoCode geoCode) {
-    this.geoCode = geoCode;
+  public SwapCollectablesRequest geoCodeID(UUID geoCodeID) {
+    this.geoCodeID = geoCodeID;
     return this;
   }
 
   /**
-   * Get geoCode
-   * @return geoCode
+   * Get geoCodeID
+   * @return geoCodeID
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public GeoCode getGeoCode() {
-    return geoCode;
+    public UUID getGeoCodeID() {
+    return geoCodeID;
   }
 
-  public void setGeoCode(GeoCode geoCode) {
-    this.geoCode = geoCode;
+  public void setGeoCodeID(UUID geoCodeID) {
+    this.geoCodeID = geoCodeID;
   }
 
 
@@ -77,12 +77,12 @@ public class SwapCollectablesRequest   {
     }
     SwapCollectablesRequest swapCollectablesRequest = (SwapCollectablesRequest) o;
     return Objects.equals(this.collectable, swapCollectablesRequest.collectable) &&
-        Objects.equals(this.geoCode, swapCollectablesRequest.geoCode);
+        Objects.equals(this.geoCodeID, swapCollectablesRequest.geoCodeID);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(collectable, geoCode);
+    return Objects.hash(collectable, geoCodeID);
   }
 
   @Override
@@ -91,7 +91,7 @@ public class SwapCollectablesRequest   {
     sb.append("class SwapCollectablesRequest {\n");
     
     sb.append("    collectable: ").append(toIndentedString(collectable)).append("\n");
-    sb.append("    geoCode: ").append(toIndentedString(geoCode)).append("\n");
+    sb.append("    geoCodeID: ").append(toIndentedString(geoCodeID)).append("\n");
     sb.append("}");
     return sb.toString();
   }
