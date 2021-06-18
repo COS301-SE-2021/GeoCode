@@ -34,8 +34,14 @@
       <ion-col>Longitude</ion-col>
       <ion-col>{{geocode.long}} </ion-col>
     </ion-row>
-    <ion-button (click)="findGeoCode(geocode)">Find GeoCode</ion-button>
+    <ion-button (click)="findGeoCode(geocode)" >Find GeoCode</ion-button>
 
   </ion-grid>
 </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="danger">
+      <ion-icon  name="add-outline"(click)="createGeoCode()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

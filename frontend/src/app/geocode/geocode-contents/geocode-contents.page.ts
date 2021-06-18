@@ -8,15 +8,19 @@ declare let google;
 })
 export class GeocodeContentsPage implements AfterViewInit {
   @ViewChild('mapElement',{static:false}) mapElement;
+  @ViewChild('Container',{static:false}) container;
   map;
   geocode;
   mapOptions;
+  hints;
+  isHidden=false;
 
 
   constructor(private route: ActivatedRoute) {
     this.route.queryParams.subscribe(params => {
           this.geocode= params.geocode;
         });
+    this.hints=[{clue:'Where the cars go around'},{clue:'Our house in the middle of the street'}];
   }
 
 
@@ -47,6 +51,10 @@ export class GeocodeContentsPage implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.loadMap();
+  }
+
+  found(){
+    this.isHidden=true;
   }
 
 }

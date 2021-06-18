@@ -7,8 +7,10 @@ import {Platform} from '@ionic/angular';
   styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
-  tabsPlacement = 'bottom';
-
+  tabsPlacement: string='bottom';
+  geoCodeIcon = '/assets/images/GeoCodeLogoWhite.svg';
+  eventsIcon = '/assets/images/CalendarIconWht.svg';
+  collectableIcon = '/assets/images/coinbagiconWht.svg';
 
   constructor(public platform: Platform) {
   if(!this.platform.is('mobile')){
