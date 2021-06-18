@@ -5,7 +5,6 @@
  */
 package tech.geocodeapp.geocode.User.Controller;
 
-import io.swagger.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -19,14 +18,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import tech.geocodeapp.geocode.User.Response.GetFoundCollectablesResponse;
+import tech.geocodeapp.geocode.User.Response.GetFoundGeoCodesResponse;
 import tech.geocodeapp.geocode.User.Model.User;
-import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
-import tech.geocodeapp.geocode.User.Request.SwapCollectableRequest;
-import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
-import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
-import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
-import tech.geocodeapp.geocode.User.Response.SwapCollectableResponse;
-import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
+import tech.geocodeapp.geocode.User.Request.*;
+import tech.geocodeapp.geocode.User.Response.*;
 
 import javax.validation.Valid;
 

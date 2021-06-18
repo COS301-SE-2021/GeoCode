@@ -1,8 +1,7 @@
 package tech.geocodeapp.geocode.Collectable;
 
-import com.sun.xml.bind.v2.model.core.ID;
-import io.swagger.model.Collectable;
-import io.swagger.model.CollectableType;
+import tech.geocodeapp.geocode.Collectable.Model.Collectable;
+import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
