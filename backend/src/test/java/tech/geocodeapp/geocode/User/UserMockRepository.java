@@ -92,22 +92,7 @@ public class UserMockRepository implements UserRepository {
     }
 
     @Override
-    public <S extends User> List<S> saveAllAndFlush(Iterable<S> iterable) {
-        return null;
-    }
-
-    @Override
-    public void deleteInBatch(Iterable<User> entities) {
-        UserRepository.super.deleteInBatch(entities);
-    }
-
-    @Override
-    public void deleteAllInBatch(Iterable<User> iterable) {
-
-    }
-
-    @Override
-    public void deleteAllByIdInBatch(Iterable<UUID> iterable) {
+    public void deleteInBatch(Iterable<User> iterable) {
 
     }
 
@@ -118,11 +103,6 @@ public class UserMockRepository implements UserRepository {
 
     @Override
     public User getOne(UUID uuid) {
-        return null;
-    }
-
-    @Override
-    public User getById(UUID uuid) {
         return null;
     }
 

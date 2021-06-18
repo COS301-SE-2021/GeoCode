@@ -13,6 +13,14 @@ import java.util.UUID;
  */
 @Repository
 public interface CollectableRepository extends JpaRepository<Collectable, UUID> {
+    <S extends Collectable> List<S> saveAllAndFlush(Iterable<S> iterable);
+
+    void deleteAllInBatch(Iterable<Collectable> iterable);
+
+    void deleteAllByIdInBatch(Iterable<UUID> iterable);
+
+    Collectable getById(UUID uuid);
+
     /**
      * Gets all Collectables of a provided CollectableType
      * @param type The CollectableType to search by
