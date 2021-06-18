@@ -5,6 +5,7 @@
       <ion-buttons slot="end">
         <ion-button (click)="addSet()">
           <ion-icon name="add-outline"></ion-icon>
+          <ion-label>New Set</ion-label>
         </ion-button>
       </ion-buttons>
     </ng-template>
@@ -27,6 +28,97 @@
           <div class="add">
             <ion-button size="small" (click)="addType('randomID')">
               <ion-icon name="add-outline"></ion-icon>
+              <ion-label>Add to Set</ion-label>
+            </ion-button>
+          </div>
+        </ng-template>
+      </div>
+      <div class="horizontalscroll">
+        <div class="items">
+          <div class="collectable">
+            <div class="image">
+              <img src="https://via.placeholder.com/100">
+            </div>
+            <div class="name">
+              Collectable Name
+            </div>
+          </div>
+          <div class="collectable">
+            <div class="image">
+              <img src="https://via.placeholder.com/100">
+            </div>
+            <div class="name">
+              Collectable Name
+            </div>
+          </div>
+          <div class="collectable">
+            <div class="image">
+              <img src="https://via.placeholder.com/100">
+            </div>
+            <div class="name">
+              Collectable Name
+            </div>
+          </div>
+          <div class="collectable">
+            <div class="image">
+              <img src="https://via.placeholder.com/100">
+            </div>
+            <div class="name">
+              Collectable Name
+            </div>
+          </div>
+          <div class="collectable">
+            <div class="image">
+              <img src="https://via.placeholder.com/100">
+            </div>
+            <div class="name">
+              Collectable Name
+            </div>
+          </div>
+          <div class="collectable">
+            <div class="image">
+              <img src="https://via.placeholder.com/100">
+            </div>
+            <div class="name">
+              Collectable Name
+            </div>
+          </div>
+          <div class="collectable notfound">
+            <div class="image">
+              <img src="https://via.placeholder.com/100">
+            </div>
+            <div class="name">
+              Collectable Name
+            </div>
+          </div>
+          <div class="collectable">
+            <div class="image">
+              <img src="https://via.placeholder.com/100">
+            </div>
+            <div class="name">
+              Collectable Name
+            </div>
+          </div>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-content>
+      <div class="header">
+        <div class="details">
+          <ion-card-title>
+            Set Name
+          </ion-card-title>
+          <ion-card-subtitle>
+            Description
+          </ion-card-subtitle>
+        </div>
+        <ng-template [ngIf]="isAdmin()">
+          <div class="add">
+            <ion-button size="small" (click)="addType('randomID')">
+              <ion-icon name="add-outline"></ion-icon>
+              <ion-label>Add to Set</ion-label>
             </ion-button>
           </div>
         </ng-template>
