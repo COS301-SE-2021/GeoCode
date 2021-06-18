@@ -8,6 +8,7 @@ import tech.geocodeapp.geocode.Collectable.Manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableSetRepository;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
+import tech.geocodeapp.geocode.Collectable.Response.CollectableResponse;
 import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse;
 import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
@@ -80,7 +81,15 @@ public class CollectableServiceImpl implements CollectableService {
         if(collectableTypeOptional.isPresent()){
             Collectable collectable = new Collectable(collectableTypeOptional.get());
             Collectable savedCollectable = collectableRepo.save(collectable);
-            return new CreateCollectableResponse(true, "The Collectable was successfully created", collectable);
+
+            /*
+             * Create CollectableResponse from collectable
+             * Use CollectableTypeManager to convert the CollectableType to a CollectableTypeComponent
+             */
+            CollectableTypeManager manager = new CollectableTypeManager();
+            CollectableResponse collectableResponse = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()));
+
+            return new CreateCollectableResponse(true, "The Collectable was successfully created", collectableResponse);
         }else{
             return new CreateCollectableResponse(false, "The given collectableTypeId was invalid", null);
         }
