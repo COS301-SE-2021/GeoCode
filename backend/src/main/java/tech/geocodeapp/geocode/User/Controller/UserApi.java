@@ -19,6 +19,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import tech.geocodeapp.geocode.User.Model.User;
+import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
+import tech.geocodeapp.geocode.User.Request.SwapCollectableRequest;
+import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
+import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
+import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
+import tech.geocodeapp.geocode.User.Response.SwapCollectableResponse;
+import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
 
 import javax.validation.Valid;
 
@@ -51,6 +59,29 @@ public interface UserApi {
         method = RequestMethod.POST)
     ResponseEntity<GetCurrentCollectableResponse> getCurrentCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's current Collectable", required = true, schema = @Schema()) @Valid @RequestBody GetCurrentCollectableRequest body);
 
+    @Operation(summary = "Gets the user's trackable", description = "Get the given user's trackable", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The user's trackable was successfully returned", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetUserTrackableResponse.class))),
+
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/getUserTrackable",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" },
+            method = RequestMethod.POST)
+    ResponseEntity<GetUserTrackableResponse> getUserTrackable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's trackable", required=true, schema=@Schema()) @RequestBody tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest body);
+
+    @Operation(summary = "Update the location of the user's trackable", description = "Update the location of the user's trackable when they place it", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The user's trackable had it's location successfully updated", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UpdateLocationResponse.class))),
+
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/updateLocation",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" },
+            method = RequestMethod.POST)
+    ResponseEntity<UpdateLocationResponse> updateLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update the location of the user's trackable", required=true, schema=@Schema()) @Valid @RequestBody UpdateLocationRequest body);
 
     @Operation(summary = "Gets the Collectables that the user has ever found", description = "Get a user's found Collectables", security = {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
