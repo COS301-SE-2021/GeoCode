@@ -76,7 +76,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         newGeoCode.setHints( request.getHints() );
         newGeoCode.setLocation( request.getLocation() );
 
-        Collectable collectable = new Collectable(new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description")));
+        Collectable collectable = new Collectable(new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description"), null));
         newGeoCode.setCollectables(collectable);
 
         /** Try and create the relevant image with the newly create GeoCode instance */
@@ -132,7 +132,45 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         return new GetGeoCodesResponse().geocodes(geoCodeRepo.findAll());
     }
 
+    @Override
+    public GetCollectablesResponse getCollectables(GetCollectablesRequest request) throws InvalidRequestException, RepoException {
+        return null;
+    }
 
+    @Override
+    public GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty(GetGeoCodesByDifficultyRequest request) throws InvalidRequestException, RepoException {
+        return null;
+    }
+
+    @Override
+    public GetHintsResponse getHints(GetHintsRequest request) throws InvalidRequestException, RepoException {
+        return null;
+    }
+
+    @Override
+    public GetGeoCodeByQRCodeResponse getGeocodeByQRCode(GetGeoCodeByQRCodeRequest request) throws InvalidRequestException, RepoException {
+        return null;
+    }
+
+    @Override
+    public GetGeoCodeByLocationResponse getGeoCodesByLocation(GetGeoCodeByLocationRequest request) throws InvalidRequestException, RepoException {
+        return null;
+    }
+
+    @Override
+    public GetTrackablesResponse getTrackables(GetTrackablesRequest request) throws InvalidRequestException, RepoException {
+        return null;
+    }
+
+    @Override
+    public SwapCollectablesResponse swapCollectables(SwapCollectablesRequest request) throws InvalidRequestException, RepoException {
+        return null;
+    }
+
+    @Override
+    public UpdateAvailabilityResponse updateAvailability(UpdateAvailabilityRequest request) throws RepoException, InvalidRequestException {
+        return null;
+    }
 
 
     /**

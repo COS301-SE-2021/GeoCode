@@ -14,7 +14,7 @@ import io.swagger.model.CreateCollectableTypeRequest;
 import io.swagger.model.GetCollectableByTypeRequest;
 import io.swagger.model.GetCollectableSetsResponse;
 import io.swagger.model.GetCollectableTypeByRarityRequest;
-import io.swagger.model.GetCollectableTypeBySetRequest;
+import io.swagger.model.GetCollectableTypesBySetRequest;
 import io.swagger.model.GetCollectableTypesResponse;
 import io.swagger.model.GetCollectablesResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -134,7 +134,7 @@ public interface CollectableApi {
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetCollectableTypesResponse> getCollectableTypeBySet(@Parameter(in = ParameterIn.DEFAULT, description = "Request Collectable Types by set", required=true, schema=@Schema()) @Valid @RequestBody GetCollectableTypeBySetRequest body);
+    ResponseEntity<GetCollectableTypesResponse> getCollectableTypeBySet(@Parameter(in = ParameterIn.DEFAULT, description = "Request Collectable Types by set", required=true, schema=@Schema()) @Valid @RequestBody GetCollectableTypesBySetRequest body);
 
 
     @Operation(summary = "", description = "Returns all Collectable Types", security = {

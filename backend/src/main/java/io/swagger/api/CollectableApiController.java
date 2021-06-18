@@ -9,7 +9,7 @@ import io.swagger.model.CreateCollectableTypeRequest;
 import io.swagger.model.GetCollectableByTypeRequest;
 import io.swagger.model.GetCollectableSetsResponse;
 import io.swagger.model.GetCollectableTypeByRarityRequest;
-import io.swagger.model.GetCollectableTypeBySetRequest;
+import io.swagger.model.GetCollectableTypesBySetRequest;
 import io.swagger.model.GetCollectableTypesResponse;
 import io.swagger.model.GetCollectablesResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -143,7 +143,7 @@ public class CollectableApiController implements CollectableApi {
         return new ResponseEntity<GetCollectableTypesResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<GetCollectableTypesResponse> getCollectableTypeBySet(@Parameter(in = ParameterIn.DEFAULT, description = "Request Collectable Types by set", required=true, schema=@Schema()) @Valid @RequestBody GetCollectableTypeBySetRequest body) {
+    public ResponseEntity<GetCollectableTypesResponse> getCollectableTypeBySet(@Parameter(in = ParameterIn.DEFAULT, description = "Request Collectable Types by set", required=true, schema=@Schema()) @Valid @RequestBody GetCollectableTypesBySetRequest body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
