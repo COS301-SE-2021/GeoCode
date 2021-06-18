@@ -1,50 +1,31 @@
-package io.swagger.api;
+package tech.geocodeapp.geocode.User.Controller;
 
-import io.swagger.model.BlockUserRequest;
-import io.swagger.model.GetCurrentCollectableRequest;
-import io.swagger.model.GetCurrentCollectableResponse;
-import io.swagger.model.GetFoundCollectablesRequest;
-import io.swagger.model.GetFoundCollectablesResponse;
-import io.swagger.model.GetFoundGeoCodesRequest;
-import io.swagger.model.GetFoundGeoCodesResponse;
-import io.swagger.model.GetOwnedGeoCodesRequest;
-import io.swagger.model.GetOwnedGeoCodesResponse;
-import io.swagger.model.GetUsersRequest;
-import io.swagger.model.GetUsersResponse;
-import io.swagger.model.SetAdminRequest;
-import io.swagger.model.SwapCollectableRequest;
-import io.swagger.model.SwapCollectableResponse;
-import io.swagger.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.model.*;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import tech.geocodeapp.geocode.User.Model.User;
+import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
+import tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest;
+import tech.geocodeapp.geocode.User.Request.SwapCollectableRequest;
+import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
+import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
+import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
+import tech.geocodeapp.geocode.User.Response.SwapCollectableResponse;
+import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
+import tech.geocodeapp.geocode.User.Service.UserServiceImpl;
 
-import javax.validation.constraints.*;
-import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 @RestController
@@ -55,6 +36,9 @@ public class UserApiController implements UserApi {
     private final ObjectMapper objectMapper;
 
     private final HttpServletRequest request;
+
+    @Autowired
+    private UserServiceImpl userService;
 
     @org.springframework.beans.factory.annotation.Autowired
     public UserApiController(ObjectMapper objectMapper, HttpServletRequest request) {
@@ -77,17 +61,43 @@ public class UserApiController implements UserApi {
     }
 
     public ResponseEntity<GetCurrentCollectableResponse> getCurrentCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's current Collectable", required=true, schema=@Schema()) @Valid @RequestBody GetCurrentCollectableRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<GetCurrentCollectableResponse>(objectMapper.readValue("{\n  \"Collectable\" : {\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"type\" : {\n      \"image\" : \"image\",\n      \"set\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      },\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"rarity\" : \"COMMON\"\n    }\n  }\n}", GetCurrentCollectableResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<GetCurrentCollectableResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+        GetCurrentCollectableResponse response = userService.getCurrentCollectable(body);
 
-        return new ResponseEntity<GetCurrentCollectableResponse>(HttpStatus.NOT_IMPLEMENTED);
+        if(response.isSuccess()){
+            return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<GetUserTrackableResponse> getUserTrackable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's trackable", required=true, schema=@Schema()) @RequestBody GetUserTrackableRequest body) {
+        GetUserTrackableResponse response = userService.getUserTrackable(body);
+
+        if(response.isSuccess()){
+            return new ResponseEntity<GetUserTrackableResponse>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<GetUserTrackableResponse>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<SwapCollectableResponse> swapCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap the held Collectable", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectableRequest body) {
+        SwapCollectableResponse response = userService.swapCollectable(body);
+
+        if(response.isSuccess()){
+            return new ResponseEntity<SwapCollectableResponse>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<SwapCollectableResponse>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<UpdateLocationResponse> updateLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update the location of the user's trackable", required=true, schema=@Schema()) @Valid @RequestBody UpdateLocationRequest body) {
+        UpdateLocationResponse response = userService.updateLocation(body);
+
+        if(response.isSuccess()){
+            return new ResponseEntity<UpdateLocationResponse>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<UpdateLocationResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
     public ResponseEntity<GetFoundCollectablesResponse> getFoundCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's found Collectables", required=true, schema=@Schema()) @Valid @RequestBody GetFoundCollectablesRequest body) {
@@ -172,20 +182,6 @@ public class UserApiController implements UserApi {
         }
 
         return new ResponseEntity<User>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    public ResponseEntity<SwapCollectableResponse> swapCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap the held Collectable", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectableRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<SwapCollectableResponse>(objectMapper.readValue("{\n  \"Collectable\" : {\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"type\" : {\n      \"image\" : \"image\",\n      \"set\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      },\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"rarity\" : \"COMMON\"\n    }\n  }\n}", SwapCollectableResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<SwapCollectableResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        return new ResponseEntity<SwapCollectableResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

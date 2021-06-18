@@ -1,5 +1,7 @@
 package io.swagger.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -21,11 +23,10 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 
 @Entity
-@Table(name = "")
+@Table(name = "collectable")
 public class Collectable   {
   @JsonProperty("id")
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("type")
@@ -34,13 +35,17 @@ public class Collectable   {
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private CollectableType type = null;
 
+  @ElementCollection
+  private List<String> pastLocations = new ArrayList<String>();
+
   public Collectable() {
+    id = UUID.randomUUID();
   }
 
   //main constructor for creating new collectables
   public Collectable(CollectableType type) {
-    id = UUID.randomUUID();
     this.type = type;
+    id = UUID.randomUUID();
   }
 
   //property for id
@@ -49,15 +54,37 @@ public class Collectable   {
     return this;
   }
 
+  public List<String> getPastLocations() {
+    return pastLocations;
+  }
+
+  public void setPastLocations(List<String> pastLocations) {
+    this.pastLocations = pastLocations;
+  }
+
+  /**
+   * A method to update the current location of a Collectable and to ensure only Collectables with a trackable property
+   * in their CollectableType have the history of past locations saved
+   * @param location the new location of the Collectable
+   */
+  public void changeLocation(String location) {
+    if(type.getProperties()!=null && type.getProperties().containsKey("trackable")){
+      pastLocations.add(location);
+    }else{
+      pastLocations.clear();
+      pastLocations.add(location);
+    }
+  }
+
   /**
    * Get id
    * @return id
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public UUID getId() {
+  @Valid
+  public UUID getId() {
     return id;
   }
 
@@ -76,10 +103,10 @@ public class Collectable   {
    * @return type
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public CollectableType getType() {
+  @Valid
+  public CollectableType getType() {
     return type;
   }
 
@@ -98,7 +125,7 @@ public class Collectable   {
     }
     Collectable collectable = (Collectable) o;
     return Objects.equals(this.id, collectable.id) &&
-        Objects.equals(this.type, collectable.type);
+            Objects.equals(this.type, collectable.type);
   }
 
   @Override
@@ -110,7 +137,7 @@ public class Collectable   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Collectable {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("}");
