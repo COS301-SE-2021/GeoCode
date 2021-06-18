@@ -149,6 +149,8 @@ public class UserServiceImpl implements UserService {
         //update the trackable's location
 
 
+        collectableRepo.save(trackableObject);
+
         return new UpdateLocationResponse(true, "The trackable object's location was successfully updated", trackableObject);
     }
 
