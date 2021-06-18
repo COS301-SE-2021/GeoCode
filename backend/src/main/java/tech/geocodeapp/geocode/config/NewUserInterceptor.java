@@ -8,27 +8,32 @@ import tech.geocodeapp.geocode.User.Model.User;
 import tech.geocodeapp.geocode.User.Service.UserService;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import java.io.IOException;
 import java.util.UUID;
 
 @Component
 public class NewUserInterceptor extends GenericFilterBean {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public NewUserInterceptor(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException {
         KeycloakSecurityContext ctx = (KeycloakSecurityContext) servletRequest.getAttribute(KeycloakSecurityContext.class.getName());
         if (ctx != null) {
             UUID uuid = UUID.fromString(ctx.getToken().getSubject());
             String username = ctx.getToken().getPreferredUsername();
-            System.out.println(userService);
             User existingUser = userService.getUserById(uuid);
             if (existingUser == null) {
                 userService.registerNewUser(uuid, username);
             }
         }
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }
