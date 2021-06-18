@@ -1,51 +1,43 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.GeoCode.Response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * GetGeoCodesResponse
+ * CreateGeoCodeResponse
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 
 
-public class GetGeoCodesResponse   {
-  @JsonProperty("geocodes")
-  @Valid
-  private List<GeoCode> geocodes = new ArrayList<GeoCode>();
+public class CreateGeoCodeResponse   {
+  @JsonProperty("geoCode")
+  private GeoCode geoCode = null;
 
-  public GetGeoCodesResponse geocodes(List<GeoCode> geocodes) {
-    this.geocodes = geocodes;
-    return this;
-  }
-
-  public GetGeoCodesResponse addGeocodesItem(GeoCode geocodesItem) {
-    this.geocodes.add(geocodesItem);
+  public CreateGeoCodeResponse geoCode(GeoCode geoCode) {
+    this.geoCode = geoCode;
     return this;
   }
 
   /**
-   * Get geocodes
-   * @return geocodes
+   * Get geoCode
+   * @return geoCode
    **/
-  @Schema(required = true, description = "")
-      @NotNull
+  @Schema(description = "")
+  
     @Valid
-    public List<GeoCode> getGeocodes() {
-    return geocodes;
+    public GeoCode getGeoCode() {
+    return geoCode;
   }
 
-  public void setGeocodes(List<GeoCode> geocodes) {
-    this.geocodes = geocodes;
+  public void setGeoCode(GeoCode geoCode) {
+    this.geoCode = geoCode;
   }
 
 
@@ -57,21 +49,21 @@ public class GetGeoCodesResponse   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetGeoCodesResponse getGeoCodesResponse = (GetGeoCodesResponse) o;
-    return Objects.equals(this.geocodes, getGeoCodesResponse.geocodes);
+    CreateGeoCodeResponse createGeoCodeResponse = (CreateGeoCodeResponse) o;
+    return Objects.equals(this.geoCode, createGeoCodeResponse.geoCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(geocodes);
+    return Objects.hash(geoCode);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetGeoCodesResponse {\n");
+    sb.append("class CreateGeoCodeResponse {\n");
     
-    sb.append("    geocodes: ").append(toIndentedString(geocodes)).append("\n");
+    sb.append("    geoCode: ").append(toIndentedString(geoCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

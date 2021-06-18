@@ -1,4 +1,4 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.GeoCode.Request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,13 +12,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * GetGeoCodeByQRCodeRequest
+ * GetGeoCodeByLocationRequest
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 
 
-public class GetGeoCodeByQRCodeRequest   {
+public class GetGeoCodeByLocationRequest   {
   @JsonProperty("description")
   private String description = null;
 
@@ -32,7 +32,7 @@ public class GetGeoCodeByQRCodeRequest   {
   @JsonProperty("difficulty")
   private Difficulty difficulty = null;
 
-  public GetGeoCodeByQRCodeRequest description(String description) {
+  public GetGeoCodeByLocationRequest description(String description) {
     this.description = description;
     return this;
   }
@@ -52,7 +52,7 @@ public class GetGeoCodeByQRCodeRequest   {
     this.description = description;
   }
 
-  public GetGeoCodeByQRCodeRequest location(String location) {
+  public GetGeoCodeByLocationRequest location(String location) {
     this.location = location;
     return this;
   }
@@ -72,12 +72,12 @@ public class GetGeoCodeByQRCodeRequest   {
     this.location = location;
   }
 
-  public GetGeoCodeByQRCodeRequest hints(List<String> hints) {
+  public GetGeoCodeByLocationRequest hints(List<String> hints) {
     this.hints = hints;
     return this;
   }
 
-  public GetGeoCodeByQRCodeRequest addHintsItem(String hintsItem) {
+  public GetGeoCodeByLocationRequest addHintsItem(String hintsItem) {
     this.hints.add(hintsItem);
     return this;
   }
@@ -97,7 +97,7 @@ public class GetGeoCodeByQRCodeRequest   {
     this.hints = hints;
   }
 
-  public GetGeoCodeByQRCodeRequest difficulty(Difficulty difficulty) {
+  public GetGeoCodeByLocationRequest difficulty(Difficulty difficulty) {
     this.difficulty = difficulty;
     return this;
   }
@@ -127,11 +127,11 @@ public class GetGeoCodeByQRCodeRequest   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetGeoCodeByQRCodeRequest getGeoCodeByQRCodeRequest = (GetGeoCodeByQRCodeRequest) o;
-    return Objects.equals(this.description, getGeoCodeByQRCodeRequest.description) &&
-        Objects.equals(this.location, getGeoCodeByQRCodeRequest.location) &&
-        Objects.equals(this.hints, getGeoCodeByQRCodeRequest.hints) &&
-        Objects.equals(this.difficulty, getGeoCodeByQRCodeRequest.difficulty);
+    GetGeoCodeByLocationRequest getGeoCodeByLocationRequest = (GetGeoCodeByLocationRequest) o;
+    return Objects.equals(this.description, getGeoCodeByLocationRequest.description) &&
+        Objects.equals(this.location, getGeoCodeByLocationRequest.location) &&
+        Objects.equals(this.hints, getGeoCodeByLocationRequest.hints) &&
+        Objects.equals(this.difficulty, getGeoCodeByLocationRequest.difficulty);
   }
 
   @Override
@@ -142,7 +142,7 @@ public class GetGeoCodeByQRCodeRequest   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetGeoCodeByQRCodeRequest {\n");
+    sb.append("class GetGeoCodeByLocationRequest {\n");
     
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    location: ").append(toIndentedString(location)).append("\n");

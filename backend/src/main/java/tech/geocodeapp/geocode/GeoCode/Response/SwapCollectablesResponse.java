@@ -1,52 +1,41 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.GeoCode.Response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * GetHintsResponse
+ * SwapCollectablesResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-18T04:07:38.973Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-18T04:32:33.769Z[GMT]")
 
 
-public class GetHintsResponse   {
-  @JsonProperty("hints")
-  @Valid
-  private List<String> hints = null;
+public class SwapCollectablesResponse   {
+  @JsonProperty("success")
+  private Boolean success = null;
 
-  public GetHintsResponse hints(List<String> hints) {
-    this.hints = hints;
-    return this;
-  }
-
-  public GetHintsResponse addHintsItem(String hintsItem) {
-    if (this.hints == null) {
-      this.hints = new ArrayList<String>();
-    }
-    this.hints.add(hintsItem);
+  public SwapCollectablesResponse success(Boolean success) {
+    this.success = success;
     return this;
   }
 
   /**
-   * Get hints
-   * @return hints
+   * Get success
+   * @return success
    **/
   @Schema(description = "")
   
-    public List<String> getHints() {
-    return hints;
+    public Boolean isSuccess() {
+    return success;
   }
 
-  public void setHints(List<String> hints) {
-    this.hints = hints;
+  public void setSuccess(Boolean success) {
+    this.success = success;
   }
 
 
@@ -58,21 +47,21 @@ public class GetHintsResponse   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetHintsResponse getHintsResponse = (GetHintsResponse) o;
-    return Objects.equals(this.hints, getHintsResponse.hints);
+    SwapCollectablesResponse swapCollectablesResponse = (SwapCollectablesResponse) o;
+    return Objects.equals(this.success, swapCollectablesResponse.success);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(hints);
+    return Objects.hash(success);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetHintsResponse {\n");
+    sb.append("class SwapCollectablesResponse {\n");
     
-    sb.append("    hints: ").append(toIndentedString(hints)).append("\n");
+    sb.append("    success: ").append(toIndentedString(success)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -1,4 +1,4 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.GeoCode.Response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,26 +12,23 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * GetGeoCodesByDifficultyResponse
+ * GetGeoCodesResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T15:08:00.890Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 
 
-public class GetGeoCodesByDifficultyResponse   {
+public class GetGeoCodesResponse   {
   @JsonProperty("geocodes")
   @Valid
-  private List<GeoCode> geocodes = null;
+  private List<GeoCode> geocodes = new ArrayList<GeoCode>();
 
-  public GetGeoCodesByDifficultyResponse geocodes(List<GeoCode> geocodes) {
+  public GetGeoCodesResponse geocodes(List<GeoCode> geocodes) {
     this.geocodes = geocodes;
     return this;
   }
 
-  public GetGeoCodesByDifficultyResponse addGeocodesItem(GeoCode geocodesItem) {
-    if (this.geocodes == null) {
-      this.geocodes = new ArrayList<GeoCode>();
-    }
+  public GetGeoCodesResponse addGeocodesItem(GeoCode geocodesItem) {
     this.geocodes.add(geocodesItem);
     return this;
   }
@@ -40,8 +37,9 @@ public class GetGeoCodesByDifficultyResponse   {
    * Get geocodes
    * @return geocodes
    **/
-  @Schema(description = "")
-      @Valid
+  @Schema(required = true, description = "")
+      @NotNull
+    @Valid
     public List<GeoCode> getGeocodes() {
     return geocodes;
   }
@@ -59,8 +57,8 @@ public class GetGeoCodesByDifficultyResponse   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetGeoCodesByDifficultyResponse getGeoCodesByDifficultyResponse = (GetGeoCodesByDifficultyResponse) o;
-    return Objects.equals(this.geocodes, getGeoCodesByDifficultyResponse.geocodes);
+    GetGeoCodesResponse getGeoCodesResponse = (GetGeoCodesResponse) o;
+    return Objects.equals(this.geocodes, getGeoCodesResponse.geocodes);
   }
 
   @Override
@@ -71,7 +69,7 @@ public class GetGeoCodesByDifficultyResponse   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetGeoCodesByDifficultyResponse {\n");
+    sb.append("class GetGeoCodesResponse {\n");
     
     sb.append("    geocodes: ").append(toIndentedString(geocodes)).append("\n");
     sb.append("}");

@@ -1,4 +1,4 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.GeoCode.Response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,20 +10,20 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * GetGeoCodeByLocationResponse
+ * GetGeoCodeByQRCodeResponse
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 
 
-public class GetGeoCodeByLocationResponse   {
+public class GetGeoCodeByQRCodeResponse   {
   @JsonProperty("id")
   private UUID id = null;
 
   @JsonProperty("qrCode")
   private String qrCode = null;
 
-  public GetGeoCodeByLocationResponse id(UUID id) {
+  public GetGeoCodeByQRCodeResponse id(UUID id) {
     this.id = id;
     return this;
   }
@@ -43,7 +43,7 @@ public class GetGeoCodeByLocationResponse   {
     this.id = id;
   }
 
-  public GetGeoCodeByLocationResponse qrCode(String qrCode) {
+  public GetGeoCodeByQRCodeResponse qrCode(String qrCode) {
     this.qrCode = qrCode;
     return this;
   }
@@ -71,9 +71,9 @@ public class GetGeoCodeByLocationResponse   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetGeoCodeByLocationResponse getGeoCodeByLocationResponse = (GetGeoCodeByLocationResponse) o;
-    return Objects.equals(this.id, getGeoCodeByLocationResponse.id) &&
-        Objects.equals(this.qrCode, getGeoCodeByLocationResponse.qrCode);
+    GetGeoCodeByQRCodeResponse getGeoCodeByQRCodeResponse = (GetGeoCodeByQRCodeResponse) o;
+    return Objects.equals(this.id, getGeoCodeByQRCodeResponse.id) &&
+        Objects.equals(this.qrCode, getGeoCodeByQRCodeResponse.qrCode);
   }
 
   @Override
@@ -84,7 +84,7 @@ public class GetGeoCodeByLocationResponse   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetGeoCodeByLocationResponse {\n");
+    sb.append("class GetGeoCodeByQRCodeResponse {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    qrCode: ").append(toIndentedString(qrCode)).append("\n");
