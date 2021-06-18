@@ -15,12 +15,16 @@ import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
  * This class implements the UserService interface
  */
 @Service( "GeoCodeService" )
+//@RequiredArgsConstructor
 public class GeoCodeServiceImpl implements GeoCodeService {
 
     /**
@@ -73,8 +77,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         newGeoCode.setHints( request.getHints() );
         newGeoCode.setLocation( request.getLocation() );
 
-        Collectable collectable = new Collectable(new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description")));
-        newGeoCode.setCollectables(collectable);
+        Collectable collectable = new Collectable(new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description"), null ) );
+        newGeoCode.setCollectables( collectable );
 
         /* Try and create the relevant image with the newly create GeoCode instance */
         try {
@@ -103,7 +107,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /*
          * Create the new response
-         *  and add the created GeoCode to it
+         * and add the created GeoCode to it
          */
         CreateGeoCodeResponse response = new CreateGeoCodeResponse();
         response.setGeoCode( newGeoCode );
@@ -123,6 +127,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /* Validate the repo */
         if ( geoCodeRepo == null ) {
+
             throw new RepoException( "The GeoCode Repository is empty." );
         }
 
@@ -137,9 +142,31 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetCollectablesRequest
      */
     @Override
-    public GetCollectablesResponse getCollectables( GetCollectablesRequest request ) {
+    public GetCollectablesResponse getCollectables( GetCollectablesRequest request ) throws InvalidRequestException, RepoException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( "The given request is empty." );
+        } /*else if ( ( request().getID != null ) || ( request.getDescription() == null ) ) {
+
+            throw new InvalidRequestException( "The given request is missing parameter/s." );
+        }*/
+
+        /* Validate the repo */
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+
+        /*
+         * Create the new response
+         *
+         */
+        GetCollectablesResponse response = new GetCollectablesResponse();
+
+
+        return response;
     }
 
     /**
@@ -150,9 +177,49 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetGeoCodesByDifficultyRequest
      */
     @Override
-    public GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) {
+    public GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException, RepoException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( "The given request is empty." );
+        } else if ( request.getDifficulty() == null ) {
+
+            throw new InvalidRequestException( "The given request is missing parameter/s." );
+        }
+
+        /* Validate the repo */
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+
+        /*
+         * Sort through the stored GeoCodes and
+         * find all the GeoCodes with the specified difficulty
+         */
+        List<GeoCode> hold = new ArrayList<>();
+        for ( GeoCode code: geoCodeRepo.findAll() ) {
+
+            /* Check if the current GeoCode has the Difficulty wanted */
+            if ( code.getDifficulty().equals( request.getDifficulty() ) ) {
+
+                /*
+                * The current GeoCode has the valid GeoCode
+                * add it to the list
+                */
+                hold.add( code );
+            }
+        }
+
+        /*
+         * Create the new response
+         * and add valid GeoCodes to it
+         */
+        GetGeoCodesByDifficultyResponse response = new GetGeoCodesByDifficultyResponse();
+        response.setGeocodes( hold );
+
+        return response;
     }
 
     /**
@@ -163,9 +230,33 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetHintsRequest
      */
     @Override
-    public GetHintsResponse getHints( GetHintsRequest request ) {
+    public GetHintsResponse getHints( GetHintsRequest request ) throws InvalidRequestException, RepoException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( "The given request is empty." );
+        } else if ( request.getGeoCodeID() == null ) {
+
+            throw new InvalidRequestException( "The given request is missing parameter/s." );
+        }
+
+        /* Validate the repo */
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+
+        Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
+
+        /*
+         * Create the new response
+         * and add the list of hints to it
+         */
+        GetHintsResponse response = new GetHintsResponse();
+        temp.ifPresent( geoCode -> response.setHints( geoCode.getHints() ) );
+
+        return response;
     }
 
     /**
@@ -176,9 +267,31 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetGeoCodeByQRCodeRequest
      */
     @Override
-    public GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request ) {
+    public GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException, RepoException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( "The given request is empty." );
+        } else if ( ( request.getDifficulty() != null ) || ( request.getDescription() == null ) ) {
+
+            throw new InvalidRequestException( "The given request is missing parameter/s." );
+        }
+
+        /* Validate the repo */
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+
+        /*
+         * Create the new response
+         *
+         */
+        GetGeoCodeByQRCodeResponse response = new GetGeoCodeByQRCodeResponse();
+
+
+        return response;
     }
 
     /**
@@ -189,9 +302,31 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetGeoCodeByLocationRequest
      */
     @Override
-    public GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) {
+    public GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException, RepoException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( "The given request is empty." );
+        } else if ( ( request.getDifficulty() == null ) || ( request.getDescription() == null ) ) {
+
+            throw new InvalidRequestException( "The given request is missing parameter/s." );
+        }
+
+        /* Validate the repo */
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+
+        /*
+         * Create the new response
+         *
+         */
+        GetGeoCodeByLocationResponse response = new GetGeoCodeByLocationResponse();
+
+
+        return response;
     }
 
     /**
@@ -202,9 +337,31 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetTrackablesRequest
      */
     @Override
-    public GetTrackablesResponse getTrackables( GetTrackablesRequest request ) {
+    public GetTrackablesResponse getTrackables( GetTrackablesRequest request ) throws InvalidRequestException, RepoException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( "The given request is empty." );
+        } else if ( ( request.getDifficulty() != null ) || ( request.getDescription() == null ) ) {
+
+            throw new InvalidRequestException( "The given request is missing parameter/s." );
+        }
+
+        /* Validate the repo */
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+
+        /*
+         * Create the new response
+         *
+         */
+        GetTrackablesResponse response = new GetTrackablesResponse();
+
+
+        return response;
     }
 
     /**
@@ -215,22 +372,70 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified SwapCollectablesRequest
      */
     @Override
-    public SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) {
+    public SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException, RepoException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( "The given request is empty." );
+        } else if ( ( request.getCollectable() == null ) || ( request.getGeoCodeID() == null ) ) {
+
+            throw new InvalidRequestException( "The given request is missing parameter/s." );
+        }
+
+        /* Validate the repo */
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+
+        /*
+         * Create the new response
+         */
+        SwapCollectablesResponse response = new SwapCollectablesResponse();
+        response.setSuccess( true );
+
+        return response;
     }
 
     /**
      * Updates the availability of a GeoCode
-     *
+     *lombok
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified UpdateAvailabilityRequest
      */
     @Override
-    public UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) {
+    public UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws RepoException, InvalidRequestException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( "The given request is empty." );
+        } else if ( ( request.getGeoCodeID() == null ) || ( request.isAvailable() == null ) ) {
+
+            throw new InvalidRequestException( "The given request is missing parameter/s." );
+        }
+
+        /* Validate the repo */
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+
+        /* Find and set the GeoCode to the new Availability */
+        Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
+        temp.ifPresent( geoCode -> geoCode.setAvailable( request.isAvailable() ) );
+
+
+        /*
+         * Create the new response
+         * and set the success of the operation
+         */
+        UpdateAvailabilityResponse response = new UpdateAvailabilityResponse();
+        response.setSuccess( true );
+
+        return response;
     }
 
 

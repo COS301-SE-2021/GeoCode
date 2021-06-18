@@ -101,7 +101,21 @@
 			<artifactId>threetenbp</artifactId>
 			<version>1.3.1</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>2.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-models</artifactId>
+			<version>2.1.2</version>
+		</dependency>
+    </dependencies>
 
 	<dependencyManagement>
 		<dependencies>
@@ -124,6 +138,11 @@
 				<configuration>
 					<mainClass>tech.geocodeapp.geocode.GeocodeApplication</mainClass>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.7.0.1746</version>
 			</plugin>
 		</plugins>
 	</build>

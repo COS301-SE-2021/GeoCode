@@ -55,7 +55,7 @@ public class CollectableSetMockRepository implements CollectableSetRepository {
 
     @Override
     public void deleteAll() {
-
+        map.clear();
     }
 
     @Override

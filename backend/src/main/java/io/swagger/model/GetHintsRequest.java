@@ -3,10 +3,8 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.Difficulty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -15,107 +13,32 @@ import javax.validation.constraints.*;
  * GetHintsRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-18T04:07:38.973Z[GMT]")
 
 
 public class GetHintsRequest   {
-  @JsonProperty("description")
-  private String description = null;
+  @JsonProperty("geoCodeID")
+  private UUID geoCodeID = null;
 
-  @JsonProperty("location")
-  private String location = null;
-
-  @JsonProperty("hints")
-  @Valid
-  private List<String> hints = new ArrayList<String>();
-
-  @JsonProperty("difficulty")
-  private Difficulty difficulty = null;
-
-  public GetHintsRequest description(String description) {
-    this.description = description;
+  public GetHintsRequest geoCodeID(UUID geoCodeID) {
+    this.geoCodeID = geoCodeID;
     return this;
   }
 
   /**
-   * Get description
-   * @return description
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public GetHintsRequest location(String location) {
-    this.location = location;
-    return this;
-  }
-
-  /**
-   * Get location
-   * @return location
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public String getLocation() {
-    return location;
-  }
-
-  public void setLocation(String location) {
-    this.location = location;
-  }
-
-  public GetHintsRequest hints(List<String> hints) {
-    this.hints = hints;
-    return this;
-  }
-
-  public GetHintsRequest addHintsItem(String hintsItem) {
-    this.hints.add(hintsItem);
-    return this;
-  }
-
-  /**
-   * Get hints
-   * @return hints
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public List<String> getHints() {
-    return hints;
-  }
-
-  public void setHints(List<String> hints) {
-    this.hints = hints;
-  }
-
-  public GetHintsRequest difficulty(Difficulty difficulty) {
-    this.difficulty = difficulty;
-    return this;
-  }
-
-  /**
-   * Get difficulty
-   * @return difficulty
+   * Get geoCodeID
+   * @return geoCodeID
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public Difficulty getDifficulty() {
-    return difficulty;
+    public UUID getGeoCodeID() {
+    return geoCodeID;
   }
 
-  public void setDifficulty(Difficulty difficulty) {
-    this.difficulty = difficulty;
+  public void setGeoCodeID(UUID geoCodeID) {
+    this.geoCodeID = geoCodeID;
   }
 
 
@@ -128,15 +51,12 @@ public class GetHintsRequest   {
       return false;
     }
     GetHintsRequest getHintsRequest = (GetHintsRequest) o;
-    return Objects.equals(this.description, getHintsRequest.description) &&
-        Objects.equals(this.location, getHintsRequest.location) &&
-        Objects.equals(this.hints, getHintsRequest.hints) &&
-        Objects.equals(this.difficulty, getHintsRequest.difficulty);
+    return Objects.equals(this.geoCodeID, getHintsRequest.geoCodeID);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, location, hints, difficulty);
+    return Objects.hash(geoCodeID);
   }
 
   @Override
@@ -144,10 +64,7 @@ public class GetHintsRequest   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetHintsRequest {\n");
     
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    location: ").append(toIndentedString(location)).append("\n");
-    sb.append("    hints: ").append(toIndentedString(hints)).append("\n");
-    sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
+    sb.append("    geoCodeID: ").append(toIndentedString(geoCodeID)).append("\n");
     sb.append("}");
     return sb.toString();
   }

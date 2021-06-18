@@ -20,19 +20,19 @@ public interface GeoCodeService {
 
     GetGeoCodesResponse getAllGeoCodes( ) throws RepoException;
 
-    GetCollectablesResponse getCollectables( GetCollectablesRequest request );
+    GetCollectablesResponse getCollectables( GetCollectablesRequest request ) throws InvalidRequestException, RepoException;
 
-    GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request );
+    GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException, RepoException;
 
-    GetHintsResponse getHints( GetHintsRequest request );
+    GetHintsResponse getHints( GetHintsRequest request ) throws InvalidRequestException, RepoException;
 
-    GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request );
+    GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException, RepoException;
 
-    GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request );
+    GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException, RepoException;
 
-    GetTrackablesResponse getTrackables( GetTrackablesRequest request );
+    GetTrackablesResponse getTrackables( GetTrackablesRequest request ) throws InvalidRequestException, RepoException;
 
-    SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request );
+    SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException, RepoException;
 
-    UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request );
+    UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws RepoException, InvalidRequestException;
 }
