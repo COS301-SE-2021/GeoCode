@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
     //SELECT
-    Optional<User> findById(UUID id);
+    //Optional<User> findById(UUID id);
 
     //UPDATE
 
