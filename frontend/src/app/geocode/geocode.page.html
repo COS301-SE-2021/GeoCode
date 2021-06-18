@@ -1,9 +1,47 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>geocode</ion-title>
+  <ion-toolbar >
+    <ion-title>Geocode</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+<div #mapElement class="map">
 
+</div>
+
+<div  id ="geoCodeDetails">
+
+  <ion-grid class="ion-margin" *ngFor="let geocode of selected">
+
+  <ion-row>GeoCode Information</ion-row>
+    <ion-row class="row">
+      <ion-col>ID</ion-col>
+      <ion-col>{{geocode.id}}</ion-col>
+    </ion-row>
+    <ion-row class="row">
+      <ion-col>Available</ion-col>
+      <ion-col><ion-checkbox disabled="false" [(ngModel)]="geocode.isAvailable"></ion-checkbox></ion-col>
+    </ion-row>
+    <ion-row class="row">
+      <ion-col>Difficulty</ion-col>
+      <ion-col>{{geocode.difficulty}}</ion-col>
+    </ion-row>
+    <ion-row class="row">
+      <ion-col>Latitude</ion-col>
+      <ion-col>{{geocode.lat}} </ion-col>
+    </ion-row>
+    <ion-row class="row" >
+      <ion-col>Longitude</ion-col>
+      <ion-col>{{geocode.long}} </ion-col>
+    </ion-row>
+    <ion-button (click)="findGeoCode(geocode)" >Find GeoCode</ion-button>
+
+  </ion-grid>
+</div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="danger">
+      <ion-icon  name="add-outline"(click)="createGeoCode()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

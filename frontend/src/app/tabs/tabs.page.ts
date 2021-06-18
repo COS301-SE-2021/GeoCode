@@ -8,7 +8,9 @@ import {Platform} from '@ionic/angular';
 })
 export class TabsPage {
   tabsPlacement: string='bottom';
-
+  geoCodeIcon = '/assets/images/GeoCodeLogoWhite.svg';
+  eventsIcon = '/assets/images/CalendarIconWht.svg';
+  collectableIcon = '/assets/images/coinbagiconWht.svg';
 
   constructor(public platform: Platform) {
   if(!this.platform.is('mobile')){
