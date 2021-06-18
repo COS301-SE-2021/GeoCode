@@ -12,7 +12,7 @@ const routes: Routes = [
         loadChildren: () => import('../geocode/geocode.module').then(m => m.GeocodePageModule)
       },
       {
-        path: 'collectable',
+        path: 'collectables',
         loadChildren: () => import('../collectable/collectable.module').then(m => m.CollectablePageModule)
       },
       {
@@ -20,7 +20,7 @@ const routes: Routes = [
         loadChildren: () => import('../events/events.module').then(m => m.EventsPageModule)
       },
       {
-        path: 'user',
+        path: 'profile',
         loadChildren: () => import('../user/user.module').then(m => m.UserPageModule)
       },
       {
@@ -29,11 +29,6 @@ const routes: Routes = [
         pathMatch: 'full'
       }
     ]
-  },
-  {
-    path: '',
-    redirectTo: '/tabs/geocode',
-    pathMatch: 'full'
   }
 ];
 

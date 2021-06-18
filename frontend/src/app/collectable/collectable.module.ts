@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { CollectablePageRoutingModule } from './collectable-routing.module';
 
 import { CollectablePage } from './collectable.page';
+import {AddTypeComponent} from './add-type/add-type.component';
+import {AddSetComponent} from './add-set/add-set.component';
 
 @NgModule({
   imports: [
@@ -15,6 +17,6 @@ import { CollectablePage } from './collectable.page';
     IonicModule,
     CollectablePageRoutingModule
   ],
-  declarations: [CollectablePage]
+  declarations: [CollectablePage, AddTypeComponent, AddSetComponent]
 })
 export class CollectablePageModule {}
