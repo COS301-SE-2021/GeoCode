@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Difficulty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -15,87 +13,12 @@ import javax.validation.constraints.*;
  * GetGeoCodesByDifficultyRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T15:08:00.890Z[GMT]")
 
 
 public class GetGeoCodesByDifficultyRequest   {
-  @JsonProperty("description")
-  private String description = null;
-
-  @JsonProperty("location")
-  private String location = null;
-
-  @JsonProperty("hints")
-  @Valid
-  private List<String> hints = new ArrayList<String>();
-
   @JsonProperty("difficulty")
   private Difficulty difficulty = null;
-
-  public GetGeoCodesByDifficultyRequest description(String description) {
-    this.description = description;
-    return this;
-  }
-
-  /**
-   * Get description
-   * @return description
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public GetGeoCodesByDifficultyRequest location(String location) {
-    this.location = location;
-    return this;
-  }
-
-  /**
-   * Get location
-   * @return location
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public String getLocation() {
-    return location;
-  }
-
-  public void setLocation(String location) {
-    this.location = location;
-  }
-
-  public GetGeoCodesByDifficultyRequest hints(List<String> hints) {
-    this.hints = hints;
-    return this;
-  }
-
-  public GetGeoCodesByDifficultyRequest addHintsItem(String hintsItem) {
-    this.hints.add(hintsItem);
-    return this;
-  }
-
-  /**
-   * Get hints
-   * @return hints
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public List<String> getHints() {
-    return hints;
-  }
-
-  public void setHints(List<String> hints) {
-    this.hints = hints;
-  }
 
   public GetGeoCodesByDifficultyRequest difficulty(Difficulty difficulty) {
     this.difficulty = difficulty;
@@ -128,15 +51,12 @@ public class GetGeoCodesByDifficultyRequest   {
       return false;
     }
     GetGeoCodesByDifficultyRequest getGeoCodesByDifficultyRequest = (GetGeoCodesByDifficultyRequest) o;
-    return Objects.equals(this.description, getGeoCodesByDifficultyRequest.description) &&
-        Objects.equals(this.location, getGeoCodesByDifficultyRequest.location) &&
-        Objects.equals(this.hints, getGeoCodesByDifficultyRequest.hints) &&
-        Objects.equals(this.difficulty, getGeoCodesByDifficultyRequest.difficulty);
+    return Objects.equals(this.difficulty, getGeoCodesByDifficultyRequest.difficulty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, location, hints, difficulty);
+    return Objects.hash(difficulty);
   }
 
   @Override
@@ -144,9 +64,6 @@ public class GetGeoCodesByDifficultyRequest   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetGeoCodesByDifficultyRequest {\n");
     
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    location: ").append(toIndentedString(location)).append("\n");
-    sb.append("    hints: ").append(toIndentedString(hints)).append("\n");
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("}");
     return sb.toString();
