@@ -2,7 +2,6 @@ package tech.geocodeapp.geocode.User.Service;
 
 import io.swagger.model.Collectable;
 import io.swagger.model.GeoCode;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
