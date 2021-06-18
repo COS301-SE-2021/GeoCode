@@ -736,10 +736,11 @@ components:
     GetHintsRequest:
       type: "object"
       required:
-        - geoCode
+        - geoCodeID
       properties:
-        geoCode:
-          $ref: '#/components/schemas/GeoCode'
+        geoCodeID:
+          type: string
+          format: uuid
       xml:
         name: "getGeoCodesByDifficultyRequest"
     GetHintsResponse:
@@ -845,12 +846,13 @@ components:
       type: "object"
       required:
         - collectable
-        - geoCode
+        - geoCodeID
       properties:
         collectable:
           $ref: '#/components/schemas/Collectable'
-        geoCode:
-          $ref: '#/components/schemas/GeoCode'
+        geoCodeID:
+          type: string
+          format: uuid
       xml:
         name: "swapCollectablesRequest"
     SwapCollectablesResponse:
@@ -863,11 +865,12 @@ components:
     UpdateAvailabilityRequest:
       type: "object"
       required:
-        - geoCode
+        - geoCodeID
         - available
       properties:
-        geoCode:
-          $ref: '#/components/schemas/GeoCode'
+        geoCodeID:
+          type: string
+          format: uuid
         available:
           type: boolean
       xml:

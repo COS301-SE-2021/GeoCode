@@ -3,8 +3,8 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -13,32 +13,32 @@ import javax.validation.constraints.*;
  * GetHintsRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T15:32:28.418Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-18T04:07:38.973Z[GMT]")
 
 
 public class GetHintsRequest   {
-  @JsonProperty("geoCode")
-  private GeoCode geoCode = null;
+  @JsonProperty("geoCodeID")
+  private UUID geoCodeID = null;
 
-  public GetHintsRequest geoCode(GeoCode geoCode) {
-    this.geoCode = geoCode;
+  public GetHintsRequest geoCodeID(UUID geoCodeID) {
+    this.geoCodeID = geoCodeID;
     return this;
   }
 
   /**
-   * Get geoCode
-   * @return geoCode
+   * Get geoCodeID
+   * @return geoCodeID
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public GeoCode getGeoCode() {
-    return geoCode;
+    public UUID getGeoCodeID() {
+    return geoCodeID;
   }
 
-  public void setGeoCode(GeoCode geoCode) {
-    this.geoCode = geoCode;
+  public void setGeoCodeID(UUID geoCodeID) {
+    this.geoCodeID = geoCodeID;
   }
 
 
@@ -51,12 +51,12 @@ public class GetHintsRequest   {
       return false;
     }
     GetHintsRequest getHintsRequest = (GetHintsRequest) o;
-    return Objects.equals(this.geoCode, getHintsRequest.geoCode);
+    return Objects.equals(this.geoCodeID, getHintsRequest.geoCodeID);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(geoCode);
+    return Objects.hash(geoCodeID);
   }
 
   @Override
@@ -64,7 +64,7 @@ public class GetHintsRequest   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetHintsRequest {\n");
     
-    sb.append("    geoCode: ").append(toIndentedString(geoCode)).append("\n");
+    sb.append("    geoCodeID: ").append(toIndentedString(geoCodeID)).append("\n");
     sb.append("}");
     return sb.toString();
   }
