@@ -26,7 +26,6 @@ import javax.validation.constraints.*;
 public class CollectableType   {
   @JsonProperty("id")
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("name")
