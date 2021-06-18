@@ -134,7 +134,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws RepoException there was an issue accessing the repository
      */
     @Override
-    public GetGeoCodesResponse getAllGeoCodes( ) throws RepoException {
+    public GetGeoCodesResponse getAllGeoCodes() throws RepoException {
 
         /* Validate the repo */
         if ( geoCodeRepo == null ) {
