@@ -11,7 +11,7 @@ import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-package tech.geocodeapp.geocode.GeoCode.Request;
+
 /**
  * CreateGeoCodeRequest
  */

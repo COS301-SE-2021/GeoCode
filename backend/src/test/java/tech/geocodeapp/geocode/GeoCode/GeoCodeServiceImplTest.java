@@ -43,6 +43,15 @@ public class GeoCodeServiceImplTest {
     }
 
     @Test
+    public void createGeoCodeNullRepoTest() {
+
+        /* Null request check */
+        assertThatThrownBy( ()->geoCodeService.createGeoCode( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining("The given request is empty." );
+    }
+
+    @Test
     public void createGeoCodeExceptionTest() {
 
         /* Null request check */
@@ -128,12 +137,16 @@ public class GeoCodeServiceImplTest {
     }
 
     @Test
-    public void getGeoCodesByDifficultyExceptionTest() {
+    public void getGeoCodesByDifficultyNullRepoTest() {
 
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.getGeoCodesByDifficulty( null ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining("The given request is empty." );
+    }
+
+    @Test
+    public void getGeoCodesByDifficultyExceptionTest() {
 
         /*
          *  Create a request object
@@ -146,7 +159,6 @@ public class GeoCodeServiceImplTest {
         assertThatThrownBy( ()->geoCodeService.getGeoCodesByDifficulty( request ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining("The given request is missing parameter/s." );
-
     }
 
     @Test
@@ -156,12 +168,16 @@ public class GeoCodeServiceImplTest {
     }
 
     @Test
-    public void getHintsExceptionTest() {
+    public void getHintsNullRepoTest() {
 
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.getHints( null ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining("The given request is empty." );
+    }
+
+    @Test
+    public void getHintsExceptionTest() {
 
         /*
          *  Create a request object
@@ -173,7 +189,6 @@ public class GeoCodeServiceImplTest {
         assertThatThrownBy( ()->geoCodeService.getHints( request ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining("The given request is missing parameter/s." );
-
     }
 
     @Test
@@ -183,12 +198,16 @@ public class GeoCodeServiceImplTest {
     }
 
     @Test
-    public void swapCollectablesExceptionTest() {
+    public void swapCollectablesNullRepoTest() {
 
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.swapCollectables( null ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining("The given request is empty." );
+    }
+
+    @Test
+    public void swapCollectablesExceptionTest() {
 
         /*
          *  Create a request object
@@ -200,7 +219,6 @@ public class GeoCodeServiceImplTest {
         assertThatThrownBy( ()->geoCodeService.swapCollectables( request ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining("The given request is missing parameter/s." );
-
     }
 
     @Test
@@ -210,12 +228,16 @@ public class GeoCodeServiceImplTest {
     }
 
     @Test
-    public void updateAvailabilityExceptionTest() {
+    public void updateAvailabilityNullRepoTest() {
 
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.updateAvailability( null ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining("The given request is empty." );
+    }
+
+    @Test
+    public void updateAvailabilityExceptionTest() {
 
         /*
          *  Create a request object
@@ -228,7 +250,6 @@ public class GeoCodeServiceImplTest {
         assertThatThrownBy( ()->geoCodeService.updateAvailability( request ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining("The given request is missing parameter/s." );
-
     }
 
     @Test
