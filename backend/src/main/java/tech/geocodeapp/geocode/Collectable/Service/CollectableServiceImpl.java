@@ -98,7 +98,21 @@ public class CollectableServiceImpl implements CollectableService {
     @Transactional
     public GetCollectablesResponse getCollectables(){
         GetCollectablesResponse response = new GetCollectablesResponse();
-        response.setCollectables(collectableRepo.findAll());
+
+        //create a list of CollectableResponses
+        List<CollectableResponse> collectableResponses = new ArrayList<>();
+
+        //Create CollectableTypeManager to convert CollectableTypes
+        CollectableTypeManager manager = new CollectableTypeManager();
+
+        //get all Collectables and build collectableResponses from them
+        List<Collectable> collectables = collectableRepo.findAll();
+        for (Collectable collectable : collectables) {
+            CollectableResponse temp = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()));
+            collectableResponses.add(temp);
+        }
+
+        response.setCollectables(collectableResponses);
         return response;
     }
 
