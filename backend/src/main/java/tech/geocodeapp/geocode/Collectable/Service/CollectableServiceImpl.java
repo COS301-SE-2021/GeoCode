@@ -87,7 +87,7 @@ public class CollectableServiceImpl implements CollectableService {
              * Use CollectableTypeManager to convert the CollectableType to a CollectableTypeComponent
              */
             CollectableTypeManager manager = new CollectableTypeManager();
-            CollectableResponse collectableResponse = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()));
+            CollectableResponse collectableResponse = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()), collectable.getPastLocations());
 
             return new CreateCollectableResponse(true, "The Collectable was successfully created", collectableResponse);
         }else{
@@ -108,7 +108,7 @@ public class CollectableServiceImpl implements CollectableService {
         //get all Collectables and build collectableResponses from them
         List<Collectable> collectables = collectableRepo.findAll();
         for (Collectable collectable : collectables) {
-            CollectableResponse temp = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()));
+            CollectableResponse temp = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()), collectable.getPastLocations());
             collectableResponses.add(temp);
         }
 
