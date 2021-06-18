@@ -3,11 +3,12 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.Collectable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.Collectable.Response.CollectableResponse;
+
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -21,14 +22,14 @@ import javax.validation.constraints.*;
 public class GetCollectablesResponse   {
   @JsonProperty("collectables")
   @Valid
-  private List<Collectable> collectables = new ArrayList<Collectable>();
+  private List<CollectableResponse> collectables = new ArrayList<CollectableResponse>();
 
-  public GetCollectablesResponse collectables(List<Collectable> collectables) {
+  public GetCollectablesResponse collectables(List<CollectableResponse> collectables) {
     this.collectables = collectables;
     return this;
   }
 
-  public GetCollectablesResponse addCollectablesItem(Collectable collectablesItem) {
+  public GetCollectablesResponse addCollectablesItem(CollectableResponse collectablesItem) {
     this.collectables.add(collectablesItem);
     return this;
   }
@@ -40,11 +41,11 @@ public class GetCollectablesResponse   {
   @Schema(required = true, description = "")
       @NotNull
     @Valid
-    public List<Collectable> getCollectables() {
+    public List<CollectableResponse> getCollectables() {
     return collectables;
   }
 
-  public void setCollectables(List<Collectable> collectables) {
+  public void setCollectables(List<CollectableResponse> collectables) {
     this.collectables = collectables;
   }
 

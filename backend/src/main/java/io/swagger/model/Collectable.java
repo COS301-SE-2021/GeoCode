@@ -1,5 +1,7 @@
 package io.swagger.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -32,6 +34,7 @@ public class Collectable   {
   @JoinColumn(name = "COLLECTABLE_TYPE_ID")
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private CollectableType type = null;
+  private List<String> pastLocations = new ArrayList<>();
 
   public Collectable() {
   }
@@ -46,6 +49,28 @@ public class Collectable   {
   public Collectable id(UUID id) {
     this.id = id;
     return this;
+  }
+
+  public List<String> getPastLocations() {
+    return pastLocations;
+  }
+
+  public void setPastLocations(List<String> pastLocations) {
+    this.pastLocations = pastLocations;
+  }
+
+  /**
+   * A method to update the current location of a Collectable and to ensure only Collectables with a trackable property
+   * in their CollectableType have the history of past locations saved
+   * @param location the new location of the Collectable
+   */
+  public void changeLocation(String location) {
+    if(type.getProperties()!=null && type.getProperties().containsKey("trackable")){
+      pastLocations.add(location);
+    }else{
+      pastLocations.clear();
+      pastLocations.add(location);
+    }
   }
 
   /**
