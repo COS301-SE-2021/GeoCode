@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - development
       - dev/Configuration
   pull_request:
     types: [opened, synchronize, reopened]
