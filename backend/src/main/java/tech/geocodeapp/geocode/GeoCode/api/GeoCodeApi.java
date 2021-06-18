@@ -3,52 +3,30 @@
  * https://github.com/swagger-api/swagger-codegen
  * Do not edit the class manually.
  */
-package io.swagger.api;
+package tech.geocodeapp.geocode.GeoCode.api;
 
-import io.swagger.model.CreateGeoCodeRequest;
-import io.swagger.model.CreateGeoCodeResponse;
-import io.swagger.model.GetCollectablesRequest;
-import io.swagger.model.GetCollectablesResponse;
-import io.swagger.model.GetGeoCodeByLocationRequest;
-import io.swagger.model.GetGeoCodeByLocationResponse;
-import io.swagger.model.GetGeoCodeByQRCodeRequest;
-import io.swagger.model.GetGeoCodeByQRCodeResponse;
-import io.swagger.model.GetGeoCodesByDifficultyRequest;
-import io.swagger.model.GetGeoCodesByDifficultyResponse;
-import io.swagger.model.GetGeoCodesResponse;
-import io.swagger.model.GetHintsRequest;
-import io.swagger.model.GetHintsResponse;
-import io.swagger.model.GetTrackablesRequest;
-import io.swagger.model.GetTrackablesResponse;
-import io.swagger.model.SwapCollectablesRequest;
-import io.swagger.model.SwapCollectablesResponse;
-import io.swagger.model.UpdateAvailabilityRequest;
-import io.swagger.model.UpdateAvailabilityResponse;
+
+import io.swagger.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.CookieValue;
-
+import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
-import java.util.List;
-import java.util.Map;
+
+import tech.geocodeapp.geocode.GeoCode.Response.*;
+import tech.geocodeapp.geocode.GeoCode.Request.*;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 @Validated
@@ -61,10 +39,10 @@ public interface GeoCodeApi {
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/GeoCode/createGeoCode",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST)
-    ResponseEntity<CreateGeoCodeResponse> createGeoCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new GeoCode", required=true, schema=@Schema()) @Valid @RequestBody CreateGeoCodeRequest body);
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<CreateGeoCodeResponse> createGeoCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new GeoCode", required=true, schema=@Schema()) @Valid @RequestBody CreateGeoCodeRequest body) throws InvalidRequestException, QRCodeException, RepoException;
 
 
     @Operation(summary = "Get the GeoCode at or near the given location", description = "Get the GeoCode at or near the given location", security = {
@@ -74,10 +52,10 @@ public interface GeoCodeApi {
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/GeoCode/getGeoCodeByLocation",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST)
-    ResponseEntity<GetGeoCodeByLocationResponse> getGeoCodeByLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode at or near the given location", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodeByLocationRequest body);
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<GetGeoCodeByLocationResponse> getGeoCodeByLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode at or near the given location", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodeByLocationRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Get the GeoCode associated with the given QR Code", description = "Get the GeoCode associated with the given QR Code", security = {
@@ -87,10 +65,10 @@ public interface GeoCodeApi {
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/GeoCode/getGeoCodeByQRCode",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST)
-    ResponseEntity<GetGeoCodeByQRCodeResponse> getGeoCodeByQRCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's associated with the given QR Code", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodeByQRCodeRequest body);
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<GetGeoCodeByQRCodeResponse> getGeoCodeByQRCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's associated with the given QR Code", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodeByQRCodeRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Get all Collectables for a certain GeoCode", description = "Get a GeoCode's Collectables", security = {
@@ -100,10 +78,10 @@ public interface GeoCodeApi {
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/GeoCode/getCollectables",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST)
-    ResponseEntity<GetCollectablesResponse> getGeoCodeCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody GetCollectablesRequest body);
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<GetCollectablesResponse> getGeoCodeCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody GetCollectablesRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Get all the GeoCodes on the platform", description = "Get all the GeoCodes that are stored on the platform", security = {
@@ -113,9 +91,9 @@ public interface GeoCodeApi {
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/GeoCode/getGeoCodes",
-            produces = { "application/json", "application/xml" },
-            method = RequestMethod.GET)
-    ResponseEntity<GetGeoCodesResponse> getGeoCodes();
+        produces = { "application/json", "application/xml" }, 
+        method = RequestMethod.GET)
+    ResponseEntity<GetGeoCodesResponse> getGeoCodes() throws RepoException;
 
 
     @Operation(summary = "Get all all the stored GeoCodes by the specified difficulty", description = "Get all GeoCodes by difficulty", security = {
@@ -125,10 +103,10 @@ public interface GeoCodeApi {
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/GeoCode/getGeoCodesByDifficulty",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST)
-    ResponseEntity<GetGeoCodesByDifficultyResponse> getGeoCodesByDifficulty(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all the GeoCodes by the specified difficulty", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodesByDifficultyRequest body);
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<GetGeoCodesByDifficultyResponse> getGeoCodesByDifficulty(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all the GeoCodes by the specified difficulty", required=true, schema=@Schema()) @Valid @RequestBody GetGeoCodesByDifficultyRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Get the hints for the specified GeoCode", description = "Get the hints for the specified GeoCode to help locate it", security = {
@@ -138,10 +116,10 @@ public interface GeoCodeApi {
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/GeoCode/getHints",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST)
-    ResponseEntity<GetHintsResponse> getHints(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the hints from the specified GeoCode", required=true, schema=@Schema()) @Valid @RequestBody GetHintsRequest body);
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<GetHintsResponse> getHints(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the hints from the specified GeoCode", required=true, schema=@Schema()) @Valid @RequestBody GetHintsRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Get the Trackable for a certain GeoCode", description = "Get a GeoCode's Trackable", security = {
@@ -151,10 +129,10 @@ public interface GeoCodeApi {
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/GeoCode/getTrackables",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST)
-    ResponseEntity<GetTrackablesResponse> getTrackables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Trackable", required=true, schema=@Schema()) @Valid @RequestBody GetTrackablesRequest body);
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<GetTrackablesResponse> getTrackables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Trackable", required=true, schema=@Schema()) @Valid @RequestBody GetTrackablesRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Swap a specific GeoCode's Collectable", description = "Swap a specific GeoCode's Collectable", security = {
@@ -164,10 +142,10 @@ public interface GeoCodeApi {
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/GeoCode/swapCollectables",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST)
-    ResponseEntity<SwapCollectablesResponse> swapCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectablesRequest body);
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<SwapCollectablesResponse> swapCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectablesRequest body) throws InvalidRequestException, RepoException;
 
 
     @Operation(summary = "Update the availability for a certain GeoCode", description = "Update the availability for a certain GeoCode", security = {
@@ -177,9 +155,9 @@ public interface GeoCodeApi {
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/GeoCode/updateAvailability",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST)
-    ResponseEntity<UpdateAvailabilityResponse> updateAvailability(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update a GeoCode's availability", required=true, schema=@Schema()) @Valid @RequestBody UpdateAvailabilityRequest body);
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<UpdateAvailabilityResponse> updateAvailability(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update a GeoCode's availability", required=true, schema=@Schema()) @Valid @RequestBody UpdateAvailabilityRequest body) throws InvalidRequestException, RepoException;
 
 }

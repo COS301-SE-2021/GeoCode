@@ -1,43 +1,41 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.GeoCode.Response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateGeoCodeResponse
+ * UpdateAvailabilityResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-18T04:32:33.769Z[GMT]")
 
 
-public class CreateGeoCodeResponse   {
-  @JsonProperty("geoCode")
-  private GeoCode geoCode = null;
+public class UpdateAvailabilityResponse   {
+  @JsonProperty("success")
+  private Boolean success = null;
 
-  public CreateGeoCodeResponse geoCode(GeoCode geoCode) {
-    this.geoCode = geoCode;
+  public UpdateAvailabilityResponse success(Boolean success) {
+    this.success = success;
     return this;
   }
 
   /**
-   * Get geoCode
-   * @return geoCode
+   * Get success
+   * @return success
    **/
   @Schema(description = "")
   
-    @Valid
-    public GeoCode getGeoCode() {
-    return geoCode;
+    public Boolean isSuccess() {
+    return success;
   }
 
-  public void setGeoCode(GeoCode geoCode) {
-    this.geoCode = geoCode;
+  public void setSuccess(Boolean success) {
+    this.success = success;
   }
 
 
@@ -49,21 +47,21 @@ public class CreateGeoCodeResponse   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CreateGeoCodeResponse createGeoCodeResponse = (CreateGeoCodeResponse) o;
-    return Objects.equals(this.geoCode, createGeoCodeResponse.geoCode);
+    UpdateAvailabilityResponse updateAvailabilityResponse = (UpdateAvailabilityResponse) o;
+    return Objects.equals(this.success, updateAvailabilityResponse.success);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(geoCode);
+    return Objects.hash(success);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CreateGeoCodeResponse {\n");
+    sb.append("class UpdateAvailabilityResponse {\n");
     
-    sb.append("    geoCode: ").append(toIndentedString(geoCode)).append("\n");
+    sb.append("    success: ").append(toIndentedString(success)).append("\n");
     sb.append("}");
     return sb.toString();
   }
