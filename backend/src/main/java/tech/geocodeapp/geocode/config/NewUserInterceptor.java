@@ -8,8 +8,10 @@ import tech.geocodeapp.geocode.User.Model.User;
 import tech.geocodeapp.geocode.User.Service.UserService;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import java.io.IOException;
 import java.util.UUID;
 
 @Component
@@ -22,7 +24,7 @@ public class NewUserInterceptor extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException {
         KeycloakSecurityContext ctx = (KeycloakSecurityContext) servletRequest.getAttribute(KeycloakSecurityContext.class.getName());
         if (ctx != null) {
             UUID uuid = UUID.fromString(ctx.getToken().getSubject());
@@ -32,5 +34,6 @@ public class NewUserInterceptor extends GenericFilterBean {
                 userService.registerNewUser(uuid, username);
             }
         }
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }
