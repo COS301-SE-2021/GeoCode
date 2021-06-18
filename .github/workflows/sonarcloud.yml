@@ -1,8 +1,9 @@
-name: Build
+name: Sonar Cloud
 on:
   push:
     branches:
       - master
+      - dev/Configuration
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -33,4 +34,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        run: |
+          cd backend
+          mvn -B verify sonar:sonar -Dsonar.projectKey=COS301-SE-2021_GeoCode -Dsonar.organization=cos301-se-2021 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN
