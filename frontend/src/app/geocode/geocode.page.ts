@@ -38,11 +38,7 @@ export class GeocodePage implements AfterViewInit  {
 
   //Create map and add mapmarkers of geocodes
   loadMap(){
-    this.mapMarker = {
-      url:'/assets/images/logo.png',
-      scaledSize: new google.maps.Size(22,32),
 
-    };
     this.mapOptions = {
       center: {lat: -25.75625115327836, lng: 28.235629260918344},
       zoom: 15,
@@ -97,7 +93,7 @@ export class GeocodePage implements AfterViewInit  {
   }
 
   createGeoCode(){
-    console.log('Create');
+    this.navCtrl.navigateForward('/geocode/geocode-create');
   }
 
 
