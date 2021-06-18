@@ -14,10 +14,22 @@ ion-content{
 }
 
 .map{
-  width: 100%;
+  width: 80%;
   height: 50%;
   border-width: 0px;
   padding: 0px;
   background-color: white;
+ margin: auto;
 
+}
+
+ion-item{
+  --background:white;
+  color: purple;
+}
+
+.button{
+  margin:auto;
+  text-align: center;
+  align-content: center;
 }

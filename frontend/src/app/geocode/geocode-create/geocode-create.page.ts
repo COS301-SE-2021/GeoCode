@@ -15,6 +15,7 @@ let mapMarker;
 
 export class GeocodeCreatePage implements AfterViewInit {
 @ViewChild('mapElement',{static:false}) mapElement;
+@ViewChild('location',{static:false}) location;
 
 
   constructor() { }
@@ -74,5 +75,6 @@ function placeMarker(location){
   });
 
   map.setCenter(location);
+
   console.log(location);
 }
