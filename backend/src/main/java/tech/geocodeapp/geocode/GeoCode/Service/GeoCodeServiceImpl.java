@@ -8,11 +8,9 @@ import com.google.zxing.common.BitMatrix;
 import org.springframework.stereotype.Service;
 
 import io.swagger.model.*;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
-import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 
+import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
 
