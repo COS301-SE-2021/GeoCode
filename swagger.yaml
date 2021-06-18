@@ -1132,11 +1132,10 @@ components:
     GetGeoCodesByDifficultyResponse:
       type: "object"
       properties:
-        id:
-          type: string
-          format: uuid
-        qrCode:
-          type: string
+        geocodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoCode'
       xml:
         name: "getGeoCodesByDifficultyResponse"
     GetGeoCodesResponse:
@@ -1153,31 +1152,20 @@ components:
     GetHintsRequest:
       type: "object"
       required:
-        - description
-        - location
-        - difficulty
-        - hints
+        - geoCodeID
       properties:
-        description:
+        geoCodeID:
           type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
+          format: uuid
       xml:
         name: "getGeoCodesByDifficultyRequest"
     GetHintsResponse:
       type: "object"
       properties:
-        id:
-          type: string
-          format: uuid
-        qrCode:
-          type: string
+        hints:
+          type: array
+          items:
+            type: string
       xml:
         name: "getGeoCodesByDifficultyResponse"
     GetGeoCodeByQRCodeRequest:
@@ -1273,64 +1261,43 @@ components:
     SwapCollectablesRequest:
       type: "object"
       required:
-        - description
-        - location
-        - difficulty
-        - hints
+        - collectable
+        - geoCodeID
       properties:
-        description:
+        collectable:
+          $ref: '#/components/schemas/Collectable'
+        geoCodeID:
           type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
+          format: uuid
       xml:
         name: "swapCollectablesRequest"
     SwapCollectablesResponse:
       type: "object"
       properties:
-        id:
-          type: string
-          format: uuid
-        qrCode:
-          type: string
+        success:
+          type: boolean
       xml:
         name: "swapCollectablesResponse"
     UpdateAvailabilityRequest:
       type: "object"
       required:
-        - description
-        - location
-        - difficulty
-        - hints
+        - geoCodeID
+        - available
       properties:
-        description:
+        geoCodeID:
           type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
+          format: uuid
+        available:
+          type: boolean
       xml:
         name: "updateAvailabilityRequest"
     UpdateAvailabilityResponse:
       type: "object"
       properties:
-        id:
-          type: string
-          format: uuid
-        qrCode:
-          type: string
+        success:
+          type: boolean
       xml:
         name: "updateAvailabilityResponse"
-
 
     GetCollectablesRequest:
       type: "object"
