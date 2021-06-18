@@ -147,8 +147,7 @@ public class UserServiceImpl implements UserService {
         Collectable trackableObject = currentUser.getTrackableObject();
 
         //update the trackable's location
-        //trackableObject.changeLocation(location);
-
+        trackableObject.changeLocation(request.getLocation());
         collectableRepo.save(trackableObject);
 
         return new UpdateLocationResponse(true, "The trackable object's location was successfully updated", trackableObject);
