@@ -2,7 +2,6 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
@@ -16,11 +15,11 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
 
 
-public class GetCollectableTypeBySetRequest   {
+public class GetCollectableTypesBySetRequest {
   @JsonProperty("setId")
   private UUID setId = null;
 
-  public GetCollectableTypeBySetRequest setId(UUID setId) {
+  public GetCollectableTypesBySetRequest setId(UUID setId) {
     this.setId = setId;
     return this;
   }
@@ -50,8 +49,8 @@ public class GetCollectableTypeBySetRequest   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetCollectableTypeBySetRequest getCollectableTypeBySetRequest = (GetCollectableTypeBySetRequest) o;
-    return Objects.equals(this.setId, getCollectableTypeBySetRequest.setId);
+    GetCollectableTypesBySetRequest getCollectableTypesBySetRequest = (GetCollectableTypesBySetRequest) o;
+    return Objects.equals(this.setId, getCollectableTypesBySetRequest.setId);
   }
 
   @Override

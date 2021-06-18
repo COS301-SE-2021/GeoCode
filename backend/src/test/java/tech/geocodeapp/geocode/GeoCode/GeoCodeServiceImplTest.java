@@ -35,6 +35,7 @@ public class GeoCodeServiceImplTest {
 
     @BeforeEach
     void setup() {
+
         geoCodeService = new GeoCodeServiceImpl( new GeoCodeMockRepository() );
     }
 
@@ -43,10 +44,10 @@ public class GeoCodeServiceImplTest {
 
         try {
 
-            /**
+            /*
              *  Create a request object
              * and assign values to it
-             * */
+             */
             CreateGeoCodeRequest request = new CreateGeoCodeRequest();
             request.setAvailable( true );
             request.setDescription( "The GeoCode is stored at the art Museum in Jhb South" );
@@ -72,12 +73,12 @@ public class GeoCodeServiceImplTest {
     @Test
     public void createGeoCodeExceptionTest() {
 
-        /** Null request check */
+        /* Null request check */
         assertThatThrownBy( ()->geoCodeService.createGeoCode( null ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining("The given request is empty." );
 
-        /**
+        /*
          *  Create a request object
          * and assign values to it
          * */
@@ -88,16 +89,16 @@ public class GeoCodeServiceImplTest {
         request.setHints( null );
         request.setLocation( "Jhb" );
 
-        /** Null parameter request check */
+        /* Null parameter request check */
         assertThatThrownBy( ()->geoCodeService.createGeoCode( request ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining("The given request is missing parameter/s." );
 
     }
 
-
     @Test
     public void getAllGeoCodeTest() {
+
         try {
             CreateGeoCodeRequest request = new CreateGeoCodeRequest();
             request.setAvailable( true );
@@ -121,5 +122,29 @@ public class GeoCodeServiceImplTest {
 
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void getGeoCodesByDifficultyTest() {
+
+
+    }
+
+    @Test
+    public void getHintsTest() {
+
+
+    }
+
+    @Test
+    public void swapCollectablesTest() {
+
+
+    }
+
+    @Test
+    public void updateAvailabilityTest() {
+
+
     }
 }
