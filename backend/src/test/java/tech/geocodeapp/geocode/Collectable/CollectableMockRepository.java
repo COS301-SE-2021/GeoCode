@@ -91,22 +91,7 @@ public class CollectableMockRepository implements CollectableRepository {
     }
 
     @Override
-    public <S extends Collectable> List<S> saveAllAndFlush(Iterable<S> iterable) {
-        return null;
-    }
-
-    @Override
     public void deleteInBatch(Iterable<Collectable> entities) {
-
-    }
-
-    @Override
-    public void deleteAllInBatch(Iterable<Collectable> iterable) {
-
-    }
-
-    @Override
-    public void deleteAllByIdInBatch(Iterable<UUID> iterable) {
 
     }
 
@@ -117,11 +102,6 @@ public class CollectableMockRepository implements CollectableRepository {
 
     @Override
     public Collectable getOne(UUID uuid) {
-        return null;
-    }
-
-    @Override
-    public Collectable getById(UUID uuid) {
         return null;
     }
 

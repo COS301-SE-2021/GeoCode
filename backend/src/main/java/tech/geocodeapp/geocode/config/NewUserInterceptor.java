@@ -24,6 +24,7 @@ public class NewUserInterceptor extends GenericFilterBean {
         if (ctx != null) {
             UUID uuid = UUID.fromString(ctx.getToken().getSubject());
             String username = ctx.getToken().getPreferredUsername();
+            System.out.println(userService);
             User existingUser = userService.getUserById(uuid);
             if (existingUser == null) {
                 userService.registerNewUser(uuid, username);

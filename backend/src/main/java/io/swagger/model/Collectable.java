@@ -23,11 +23,10 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 
 @Entity
-@Table(name = "")
+@Table(name = "collectable")
 public class Collectable   {
   @JsonProperty("id")
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("type")
@@ -35,14 +34,18 @@ public class Collectable   {
   @JoinColumn(name = "COLLECTABLE_TYPE_ID")
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private CollectableType type = null;
-  private List<String> pastLocations = new ArrayList<>();
+
+  @ElementCollection
+  private List<String> pastLocations = new ArrayList<String>();
 
   public Collectable() {
+    id = UUID.randomUUID();
   }
 
   //main constructor for creating new collectables
   public Collectable(CollectableType type) {
     this.type = type;
+    id = UUID.randomUUID();
   }
 
   //property for id

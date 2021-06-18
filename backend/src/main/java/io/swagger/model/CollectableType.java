@@ -47,6 +47,7 @@ public class CollectableType   {
   private HashMap<String,String> properties;
 
   public CollectableType() {
+    id = UUID.randomUUID();
   }
 
   //main constructor for creating new CollectableTypes

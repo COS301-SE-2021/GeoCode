@@ -26,7 +26,6 @@ import javax.validation.constraints.*;
 public class CollectableSet   {
   @JsonProperty("id")
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id = null;
 
   @JsonProperty("name")
@@ -36,12 +35,14 @@ public class CollectableSet   {
   private String description = null;
 
   public CollectableSet() {
+    id = UUID.randomUUID();
   }
 
   //main constructor for creating new CollectableSets
   public CollectableSet(String name, String description) {
     this.name = name;
     this.description = description;
+    id = UUID.randomUUID();
   }
 
   //id property

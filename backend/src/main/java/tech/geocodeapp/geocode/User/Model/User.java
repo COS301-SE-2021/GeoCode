@@ -1,16 +1,16 @@
 package tech.geocodeapp.geocode.User.Model;
 
-import java.util.Objects;
+import java.util.*;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Collectable;
 import io.swagger.model.GeoCode;
 import io.swagger.model.Point;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -20,8 +20,10 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T14:53:26.496Z[GMT]")
 
-
+@Entity
+@Table(name="user_table")
 public class User   {
+  @Id
   @JsonProperty("id")
   private UUID id = null;
 
@@ -29,26 +31,32 @@ public class User   {
   private String username = null;
 
   @JsonProperty("trackableObject")
+  @ManyToOne
   private Collectable trackableObject = null;
 
   @JsonProperty("points")
   @Valid
-  private List<Point> points = null;
+  @ManyToMany
+  private Set<Point> points = null;
 
   @JsonProperty("currentCollectable")
+  @ManyToOne
   private Collectable currentCollectable = null;
 
   @JsonProperty("foundCollectables")
   @Valid
-  private List<Collectable> foundCollectables = null;
+  @ManyToMany
+  private Set<Collectable> foundCollectables = null;
 
   @JsonProperty("foundGeocodes")
   @Valid
-  private List<GeoCode> foundGeocodes = null;
+  @ManyToMany
+  private Set<GeoCode> foundGeocodes = null;
 
   @JsonProperty("ownedGeocodes")
   @Valid
-  private List<GeoCode> ownedGeocodes = null;
+  @ManyToMany
+  private Set<GeoCode> ownedGeocodes = null;
 
   public User id(UUID id) {
     this.id = id;
@@ -111,14 +119,14 @@ public class User   {
     this.trackableObject = trackableObject;
   }
 
-  public User points(List<Point> points) {
+  public User points(Set<Point> points) {
     this.points = points;
     return this;
   }
 
   public User addPointsItem(Point pointsItem) {
     if (this.points == null) {
-      this.points = new ArrayList<Point>();
+      this.points = new HashSet<Point>();
     }
     this.points.add(pointsItem);
     return this;
@@ -130,11 +138,11 @@ public class User   {
    **/
   @Schema(description = "")
   @Valid
-  public List<Point> getPoints() {
+  public Set<Point> getPoints() {
     return points;
   }
 
-  public void setPoints(List<Point> points) {
+  public void setPoints(Set<Point> points) {
     this.points = points;
   }
 
@@ -158,14 +166,14 @@ public class User   {
     this.currentCollectable = currentCollectable;
   }
 
-  public User foundCollectables(List<Collectable> foundCollectables) {
+  public User foundCollectables(Set<Collectable> foundCollectables) {
     this.foundCollectables = foundCollectables;
     return this;
   }
 
   public User addFoundCollectablesItem(Collectable foundCollectablesItem) {
     if (this.foundCollectables == null) {
-      this.foundCollectables = new ArrayList<Collectable>();
+      this.foundCollectables = new HashSet<Collectable>();
     }
     this.foundCollectables.add(foundCollectablesItem);
     return this;
@@ -177,22 +185,22 @@ public class User   {
    **/
   @Schema(description = "")
   @Valid
-  public List<Collectable> getFoundCollectables() {
+  public Set<Collectable> getFoundCollectables() {
     return foundCollectables;
   }
 
-  public void setFoundCollectables(List<Collectable> foundCollectables) {
+  public void setFoundCollectables(Set<Collectable> foundCollectables) {
     this.foundCollectables = foundCollectables;
   }
 
-  public User foundGeocodes(List<GeoCode> foundGeocodes) {
+  public User foundGeocodes(Set<GeoCode> foundGeocodes) {
     this.foundGeocodes = foundGeocodes;
     return this;
   }
 
   public User addFoundGeocodesItem(GeoCode foundGeocodesItem) {
     if (this.foundGeocodes == null) {
-      this.foundGeocodes = new ArrayList<GeoCode>();
+      this.foundGeocodes = new HashSet<GeoCode>();
     }
     this.foundGeocodes.add(foundGeocodesItem);
     return this;
@@ -204,22 +212,22 @@ public class User   {
    **/
   @Schema(description = "")
   @Valid
-  public List<GeoCode> getFoundGeocodes() {
+  public Set<GeoCode> getFoundGeocodes() {
     return foundGeocodes;
   }
 
-  public void setFoundGeocodes(List<GeoCode> foundGeocodes) {
+  public void setFoundGeocodes(Set<GeoCode> foundGeocodes) {
     this.foundGeocodes = foundGeocodes;
   }
 
-  public User ownedGeocodes(List<GeoCode> ownedGeocodes) {
+  public User ownedGeocodes(Set<GeoCode> ownedGeocodes) {
     this.ownedGeocodes = ownedGeocodes;
     return this;
   }
 
   public User addOwnedGeocodesItem(GeoCode ownedGeocodesItem) {
     if (this.ownedGeocodes == null) {
-      this.ownedGeocodes = new ArrayList<GeoCode>();
+      this.ownedGeocodes = new HashSet<GeoCode>();
     }
     this.ownedGeocodes.add(ownedGeocodesItem);
     return this;
@@ -231,11 +239,11 @@ public class User   {
    **/
   @Schema(description = "")
   @Valid
-  public List<GeoCode> getOwnedGeocodes() {
+  public Set<GeoCode> getOwnedGeocodes() {
     return ownedGeocodes;
   }
 
-  public void setOwnedGeocodes(List<GeoCode> ownedGeocodes) {
+  public void setOwnedGeocodes(Set<GeoCode> ownedGeocodes) {
     this.ownedGeocodes = ownedGeocodes;
   }
 
