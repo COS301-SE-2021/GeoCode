@@ -88,10 +88,20 @@ public class GeoCodeServiceImpl implements GeoCodeService {
              * Create the image with the specified name
              * and set the GeoCode to the create QR Code
              */
-            newGeoCode.setQrCode( createQR( "QRCode" ) );
+
+            String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+
+                /*StringBuilder sb = new StringBuilder(8);
+                for(int i = 0; i < 8; i++)
+                    sb.append(AB.charAt(rnd.nextInt(AB.length())));
+
+            newGeoCode.setQrCode( sb.toString() );
         } catch ( IOException | WriterException e ) {
 
-            throw new QRCodeException( "The QR Code could not be created." );
+            throw new QRCodeException( "The QR Code could not be created." );*/
+        } catch ( Exception e ) {
+            e.printStackTrace();
         }
 
         /*
