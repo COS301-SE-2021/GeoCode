@@ -23,5 +23,6 @@ jobs:
           cd GeoCode/backend
           mvn spring-boot:build-image -Dspring-boot.build-image.imageName=geocode/backend
           docker stop spring
-          docker-compose up -d
+          cd ..
+          docker-compose --env-file ../.env up -d
           echo "Deployment completed successfully"
