@@ -13,6 +13,9 @@ import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 
+import tech.geocodeapp.geocode.GeoCode.Response.*;
+import tech.geocodeapp.geocode.GeoCode.Request.*;
+
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
