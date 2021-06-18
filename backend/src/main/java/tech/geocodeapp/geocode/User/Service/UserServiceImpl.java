@@ -2,6 +2,8 @@ package tech.geocodeapp.geocode.User.Service;
 
 import io.swagger.model.Collectable;
 import io.swagger.model.GeoCode;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 
@@ -18,7 +20,6 @@ import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
 import tech.geocodeapp.geocode.User.Response.SwapCollectableResponse;
 import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService {
      * @param request The SwapCollectableRequest object
      * @return A SwapCollectableResponse object: (success, message, object)
      */
-    public SwapCollectableResponse swapCollectable(SwapCollectableRequest request){
+    public SwapCollectableResponse swapCollectable(SwapCollectableRequest request){//will be under GeoCode subsystem
         if (request == null) {
             return new SwapCollectableResponse(false, "The SwapCollectableRequest object passed was NULL", null);
         }
@@ -150,5 +151,40 @@ public class UserServiceImpl implements UserService {
 
 
         return new UpdateLocationResponse(true, "The trackable object's location was successfully updated", trackableObject);
+    }
+
+    /**
+     * Gets the User for the given id if they exist
+     * @param id The id for the User
+     * @return The User if they exist, else NULL
+     */
+    public User getUserById(UUID id){
+        Optional<User> optionalUser = userRepo.findById(id);
+
+        if(optionalUser.isPresent()){
+            return optionalUser.get();
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     *  Gets the current User using the Keycloak details
+     * @return The current User
+     */
+    public User getCurrentUser(){
+        String uuid = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getUserById(UUID.fromString(uuid));
+    }
+
+    /**
+     * Registers a new user
+     * @param id The id for the User
+     */
+    public void registerNewUser(UUID id, String username){
+        User newUser = new User();
+        newUser.setId(id);
+        newUser.setUsername(username);
+        userRepo.save(newUser);
     }
 }
