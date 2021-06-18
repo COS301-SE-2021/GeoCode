@@ -47,6 +47,7 @@ public class CollectableType   {
   private HashMap<String,String> properties;
 
   public CollectableType() {
+    id = UUID.randomUUID();
   }
 
   //main constructor for creating new CollectableTypes
@@ -78,10 +79,10 @@ public class CollectableType   {
    * @return id
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public UUID getId() {
+  @Valid
+  public UUID getId() {
     return id;
   }
 
@@ -100,9 +101,9 @@ public class CollectableType   {
    * @return name
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getName() {
+  public String getName() {
     return name;
   }
 
@@ -121,9 +122,9 @@ public class CollectableType   {
    * @return image
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getImage() {
+  public String getImage() {
     return image;
   }
 
@@ -142,10 +143,10 @@ public class CollectableType   {
    * @return rarity
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public Rarity getRarity() {
+  @Valid
+  public Rarity getRarity() {
     return rarity;
   }
 
@@ -164,10 +165,10 @@ public class CollectableType   {
    * @return set
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public CollectableSet getSet() {
+  @Valid
+  public CollectableSet getSet() {
     return set;
   }
 
@@ -186,10 +187,10 @@ public class CollectableType   {
     }
     CollectableType collectableType = (CollectableType) o;
     return Objects.equals(this.id, collectableType.id) &&
-        Objects.equals(this.name, collectableType.name) &&
-        Objects.equals(this.image, collectableType.image) &&
-        Objects.equals(this.rarity, collectableType.rarity) &&
-        Objects.equals(this.set, collectableType.set);
+            Objects.equals(this.name, collectableType.name) &&
+            Objects.equals(this.image, collectableType.image) &&
+            Objects.equals(this.rarity, collectableType.rarity) &&
+            Objects.equals(this.set, collectableType.set);
   }
 
   @Override
@@ -201,7 +202,7 @@ public class CollectableType   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CollectableType {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    image: ").append(toIndentedString(image)).append("\n");
