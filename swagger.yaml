@@ -696,14 +696,23 @@ paths:
               $ref: '#/components/schemas/CreateCollectableTypeRequest'
       responses:
         '200':
-          description: "Collectable Type created successfully"
+          description: "CollectableType created successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CollectableType'
+                $ref: '#/components/schemas/CreateCollectableTypeResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/CollectableType'
+                $ref: '#/components/schemas/CreateCollectableTypeResponse'
+        '400':
+          description: "Failed to create CollectableType"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCollectableTypeResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateCollectableTypeResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -731,10 +740,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Collectable'
+                $ref: '#/components/schemas/CreateCollectableResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Collectable'
+                $ref: '#/components/schemas/CreateCollectableResponse'
+        '400':
+          description: "Failed to create Collectable"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCollectableResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateCollectableResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -758,14 +776,23 @@ paths:
               $ref: '#/components/schemas/CreateCollectableSetRequest'
       responses:
         '200':
-          description: "Successfully created Collectable Set"
+          description: "Successfully created CollectableSet"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CollectableSet'
+                $ref: '#/components/schemas/CreateCollectableSetResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/CollectableSet'
+                $ref: '#/components/schemas/CreateCollectableSetResponse'
+        '400':
+          description: "Failed to create CollectableSet"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCollectableSetResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateCollectableSetResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -780,6 +807,15 @@ paths:
       responses:
         '200':
           description: "Successfully returned Collectables"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectablesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCollectablesResponse'
+        '404':
+          description: "No Collectables found"
           content:
             application/json:
               schema:
@@ -808,6 +844,15 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/GetCollectableTypesResponse'
+        '404':
+          description: "No CollectableTypes found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectableTypesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCollectableTypesResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -822,6 +867,15 @@ paths:
       responses:
         '200':
           description: "Successfully returned Collectable Sets"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectableSetsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCollectableSetsResponse'
+        '404':
+          description: "No CollectableSets found"
           content:
             application/json:
               schema:
@@ -860,6 +914,15 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/GetCollectablesResponse'
+        '404':
+          description: "Unable to find Collectables of the given type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectablesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCollectablesResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -891,6 +954,15 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/GetCollectableTypesResponse'
+        '404':
+          description: "Unable to find CollectableTypes of provided rarity"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectableTypesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCollectableTypesResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -914,7 +986,16 @@ paths:
               $ref: '#/components/schemas/GetCollectableTypesBySetRequest'
       responses:
         '200':
-          description: "Successfully returned Collectable Types of given set"
+          description: "Successfully returned CollectableTypes of given set"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectableTypesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCollectableTypesResponse'
+        '404':
+          description: "Unable to find CollectableTypes of given set"
           content:
             application/json:
               schema:
@@ -1374,9 +1455,9 @@ components:
         collectables:
           type: array
           items:
-            $ref: '#/components/schemas/Collectable'
+            $ref: '#/components/schemas/CollectableResponse'
       xml:
-        name: "CollectableResponse"
+        name: "GetCollectablesResponse"
 
     GetCollectableTypesResponse:
       type: "object"
@@ -1388,7 +1469,7 @@ components:
           items:
             $ref: '#/components/schemas/CollectableTypeComponent'
       xml:
-        name: "CollectableTypeResponse"
+        name: "GetCollectableTypeResponse"
     
     CollectableTypeComponent:
       type: "object"
@@ -1414,7 +1495,71 @@ components:
           type: string
         trackable:
           type: boolean
+      xml:
+        name: "CollectableTypeComponent"
         
+    CreateCollectableTypeResponse:
+      type: "object"
+      required:
+        - success
+        - meassage
+        - collectableType
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        collectableType:
+          $ref: "#/components/schemas/CollectableTypeComponent"
+      xml:
+        name: "CreateCollectableTypeResponse"
+          
+    CreateCollectableSetResponse:
+      type: "object"
+      required:
+        - success
+        - message
+        - collectableSet
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        collectableSet:
+          $ref: "#/components/schemas/CollectableSet"
+      xml:
+        name: "CreateCollectableSetResponse"
+          
+    CollectableResponse:
+      type: "object"
+      required:
+        - id
+        - type
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: "#/components/schemas/CollectableTypeComponent"
+      xml:
+        name: "CollectableResponse"
+          
+    CreateCollectableResponse:
+      type: "object"
+      required:
+        - success
+        - message
+        - collectable
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        collectable:
+          $ref: "#/components/schemas/CollectableResponse"
+      xml:
+        name: "CreateCollectableResponse"
+      
     GetCollectableSetsResponse:
       type: "object"
       required:
@@ -1424,6 +1569,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CollectableSet'
+      xml:
+        name: "GetCollectableSetsResponse"
 
     GetCollectableByTypeRequest:
       type: "object"
