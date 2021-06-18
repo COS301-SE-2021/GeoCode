@@ -16,4 +16,5 @@ export interface CreateCollectableTypeRequest {
     image: string;
     rarity: Rarity;
     setId: string;
+    properties?: { [key: string]: string; };
 }

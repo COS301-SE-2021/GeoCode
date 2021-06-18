@@ -9,8 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GeoCode } from './geoCode';
+import { CollectableTypeComponent } from './collectableTypeComponent';
 
-export interface GetMyGeocodeResponse { 
-    geocodes?: Array<GeoCode>;
+export interface CollectableResponse { 
+    id: string;
+    type: CollectableTypeComponent;
 }

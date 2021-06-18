@@ -11,12 +11,15 @@
  */
 import { Collectable } from './collectable';
 import { GeoCode } from './geoCode';
+import { Point } from './point';
 
 export interface User { 
-    id?: string;
+    id: string;
     username: string;
+    trackableObject?: Collectable;
+    points?: Array<Point>;
     currentCollectable?: Collectable;
     foundCollectables?: Array<Collectable>;
     foundGeocodes?: Array<GeoCode>;
-    myGeocodes?: Array<GeoCode>;
+    ownedGeocodes?: Array<GeoCode>;
 }

@@ -10,6 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface GetMyGeocodeRequest { 
-    id: string;
+export interface GetCollectableTypesBySetRequest { 
+    setId: string;
 }

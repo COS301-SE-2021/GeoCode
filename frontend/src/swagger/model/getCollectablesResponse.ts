@@ -9,8 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Collectable } from './collectable';
+import { CollectableResponse } from './collectableResponse';
 
 export interface GetCollectablesResponse { 
-    collectables: Array<Collectable>;
+    collectables: Array<CollectableResponse>;
 }

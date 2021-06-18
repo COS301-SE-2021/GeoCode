@@ -17,16 +17,16 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { Collectable } from '../model/collectable';
-import { CollectableSet } from '../model/collectableSet';
-import { CollectableType } from '../model/collectableType';
 import { CreateCollectableRequest } from '../model/createCollectableRequest';
+import { CreateCollectableResponse } from '../model/createCollectableResponse';
 import { CreateCollectableSetRequest } from '../model/createCollectableSetRequest';
+import { CreateCollectableSetResponse } from '../model/createCollectableSetResponse';
 import { CreateCollectableTypeRequest } from '../model/createCollectableTypeRequest';
+import { CreateCollectableTypeResponse } from '../model/createCollectableTypeResponse';
 import { GetCollectableByTypeRequest } from '../model/getCollectableByTypeRequest';
 import { GetCollectableSetsResponse } from '../model/getCollectableSetsResponse';
 import { GetCollectableTypeByRarityRequest } from '../model/getCollectableTypeByRarityRequest';
-import { GetCollectableTypeBySetRequest } from '../model/getCollectableTypeBySetRequest';
+import { GetCollectableTypesBySetRequest } from '../model/getCollectableTypesBySetRequest';
 import { GetCollectableTypesResponse } from '../model/getCollectableTypesResponse';
 import { GetCollectablesResponse } from '../model/getCollectablesResponse';
 
@@ -73,9 +73,9 @@ export class CollectableService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createCollectable(body: CreateCollectableRequest, observe?: 'body', reportProgress?: boolean): Observable<Collectable>;
-    public createCollectable(body: CreateCollectableRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Collectable>>;
-    public createCollectable(body: CreateCollectableRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Collectable>>;
+    public createCollectable(body: CreateCollectableRequest, observe?: 'body', reportProgress?: boolean): Observable<CreateCollectableResponse>;
+    public createCollectable(body: CreateCollectableRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CreateCollectableResponse>>;
+    public createCollectable(body: CreateCollectableRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CreateCollectableResponse>>;
     public createCollectable(body: CreateCollectableRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -111,7 +111,7 @@ export class CollectableService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<Collectable>('post',`${this.basePath}/Collectable/createCollectable`,
+        return this.httpClient.request<CreateCollectableResponse>('post',`${this.basePath}/Collectable/createCollectable`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -129,9 +129,9 @@ export class CollectableService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createCollectableSet(body: CreateCollectableSetRequest, observe?: 'body', reportProgress?: boolean): Observable<CollectableSet>;
-    public createCollectableSet(body: CreateCollectableSetRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CollectableSet>>;
-    public createCollectableSet(body: CreateCollectableSetRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CollectableSet>>;
+    public createCollectableSet(body: CreateCollectableSetRequest, observe?: 'body', reportProgress?: boolean): Observable<CreateCollectableSetResponse>;
+    public createCollectableSet(body: CreateCollectableSetRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CreateCollectableSetResponse>>;
+    public createCollectableSet(body: CreateCollectableSetRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CreateCollectableSetResponse>>;
     public createCollectableSet(body: CreateCollectableSetRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -167,7 +167,7 @@ export class CollectableService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<CollectableSet>('post',`${this.basePath}/Collectable/createCollectableSet`,
+        return this.httpClient.request<CreateCollectableSetResponse>('post',`${this.basePath}/Collectable/createCollectableSet`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -185,9 +185,9 @@ export class CollectableService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createCollectableType(body: CreateCollectableTypeRequest, observe?: 'body', reportProgress?: boolean): Observable<CollectableType>;
-    public createCollectableType(body: CreateCollectableTypeRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CollectableType>>;
-    public createCollectableType(body: CreateCollectableTypeRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CollectableType>>;
+    public createCollectableType(body: CreateCollectableTypeRequest, observe?: 'body', reportProgress?: boolean): Observable<CreateCollectableTypeResponse>;
+    public createCollectableType(body: CreateCollectableTypeRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CreateCollectableTypeResponse>>;
+    public createCollectableType(body: CreateCollectableTypeRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CreateCollectableTypeResponse>>;
     public createCollectableType(body: CreateCollectableTypeRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -223,7 +223,7 @@ export class CollectableService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<CollectableType>('post',`${this.basePath}/Collectable/createCollectableType`,
+        return this.httpClient.request<CreateCollectableTypeResponse>('post',`${this.basePath}/Collectable/createCollectableType`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -397,10 +397,10 @@ export class CollectableService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getCollectableTypeBySet(body: GetCollectableTypeBySetRequest, observe?: 'body', reportProgress?: boolean): Observable<GetCollectableTypesResponse>;
-    public getCollectableTypeBySet(body: GetCollectableTypeBySetRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetCollectableTypesResponse>>;
-    public getCollectableTypeBySet(body: GetCollectableTypeBySetRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetCollectableTypesResponse>>;
-    public getCollectableTypeBySet(body: GetCollectableTypeBySetRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getCollectableTypeBySet(body: GetCollectableTypesBySetRequest, observe?: 'body', reportProgress?: boolean): Observable<GetCollectableTypesResponse>;
+    public getCollectableTypeBySet(body: GetCollectableTypesBySetRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetCollectableTypesResponse>>;
+    public getCollectableTypeBySet(body: GetCollectableTypesBySetRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetCollectableTypesResponse>>;
+    public getCollectableTypeBySet(body: GetCollectableTypesBySetRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling getCollectableTypeBySet.');
@@ -435,7 +435,7 @@ export class CollectableService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<GetCollectableTypesResponse>('post',`${this.basePath}/Collectable/getCollectableTypeBySet`,
+        return this.httpClient.request<GetCollectableTypesResponse>('post',`${this.basePath}/Collectable/getCollectableTypesBySet`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
