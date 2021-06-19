@@ -72,7 +72,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws QRCodeException an error occurred when attempting to create the QR Image
      */
     @Override
-    public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException, RepoException {
+    public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, RepoException {
 
         /* Validate the request */
         if ( request == null ) {
