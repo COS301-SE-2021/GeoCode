@@ -1,6 +1,6 @@
 package tech.geocodeapp.geocode.Collectable.Response;
 
-import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
+import io.swagger.model.CollectableType;
 
 /**
  * A class to write a response to for a createCollectableTypeRequest
@@ -8,12 +8,12 @@ import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
 public class CreateCollectableTypeResponse {
     boolean success;
     String message;
-    CollectableTypeComponent collectableType;
+    CollectableType collectableType;
 
     public CreateCollectableTypeResponse() {
     }
 
-    public CreateCollectableTypeResponse(boolean success, String message, CollectableTypeComponent collectableType) {
+    public CreateCollectableTypeResponse(boolean success, String message, CollectableType collectableType) {
         this.success = success;
         this.message = message;
         this.collectableType = collectableType;
@@ -35,11 +35,11 @@ public class CreateCollectableTypeResponse {
         this.message = message;
     }
 
-    public CollectableTypeComponent getCollectableType() {
+    public CollectableType getCollectableType() {
         return collectableType;
     }
 
-    public void setCollectableType(CollectableTypeComponent collectableType) {
+    public void setCollectableType(CollectableType collectableType) {
         this.collectableType = collectableType;
     }
 }

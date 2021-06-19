@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.Collectable.Response;
 
+import io.swagger.model.Collectable;
 
 /**
  * A class to write a response to for a createCollectableRequest
@@ -7,12 +8,12 @@ package tech.geocodeapp.geocode.Collectable.Response;
 public class CreateCollectableResponse {
     boolean success;
     String message;
-    CollectableResponse collectable;
+    Collectable collectable;
 
     public CreateCollectableResponse() {
     }
 
-    public CreateCollectableResponse(boolean success, String message, CollectableResponse collectable) {
+    public CreateCollectableResponse(boolean success, String message, Collectable collectable) {
         this.success = success;
         this.message = message;
         this.collectable = collectable;
@@ -34,11 +35,11 @@ public class CreateCollectableResponse {
         this.message = message;
     }
 
-    public CollectableResponse getCollectable() {
+    public Collectable getCollectable() {
         return collectable;
     }
 
-    public void setCollectable(CollectableResponse collectable) {
+    public void setCollectable(Collectable collectable) {
         this.collectable = collectable;
     }
 }

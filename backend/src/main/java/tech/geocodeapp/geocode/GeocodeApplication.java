@@ -8,6 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 import javax.persistence.EntityListeners;
 
 @SpringBootApplication
+@EntityScan(basePackages = {"tech.geocodeapp.geocode", "io.swagger"})
+@ComponentScan(basePackages = {"tech.geocodeapp.geocode", "io.swagger"})
 public class GeocodeApplication {
 
 	public static void main(String[] args) {

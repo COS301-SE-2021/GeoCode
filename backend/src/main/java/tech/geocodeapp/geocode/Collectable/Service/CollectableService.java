@@ -1,11 +1,10 @@
 package tech.geocodeapp.geocode.Collectable.Service;
 
+import io.swagger.model.*;
 import org.springframework.stereotype.Service;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableSetRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableTypeRequest;
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectableTypesBySetRequest;
-import tech.geocodeapp.geocode.Collectable.Response.*;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
 
 /**
  * This interface is for the User subsystem
@@ -21,10 +20,4 @@ public interface CollectableService {
     GetCollectablesResponse getCollectables();
     GetCollectableTypesResponse getCollectableTypes();
     GetCollectableSetsResponse getCollectableSets();
-    GetCollectableTypesResponse getCollectableTypesBySet(GetCollectableTypesBySetRequest request);
-
-    //Deletes
-    void deleteCollectables();
-    void deleteCollectableTypes();
-    void deleteCollectableSets();
 }
