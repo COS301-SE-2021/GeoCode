@@ -1,6 +1,6 @@
 package tech.geocodeapp.geocode.Collectable;
 
-import io.swagger.model.CollectableSet;
+import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +55,7 @@ public class CollectableSetMockRepository implements CollectableSetRepository {
 
     @Override
     public void deleteAll() {
-
+        map.clear();
     }
 
     @Override

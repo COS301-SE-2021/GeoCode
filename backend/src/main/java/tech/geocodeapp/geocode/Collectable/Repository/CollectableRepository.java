@@ -1,7 +1,7 @@
 package tech.geocodeapp.geocode.Collectable.Repository;
 
-import io.swagger.model.Collectable;
-import io.swagger.model.CollectableType;
+import tech.geocodeapp.geocode.Collectable.Model.Collectable;
+import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -7,23 +7,31 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import org.springframework.stereotype.Service;
 
-import io.swagger.model.*;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
+import tech.geocodeapp.geocode.Collectable.Model.*;
+import tech.geocodeapp.geocode.Collectable.Request.*;
+import tech.geocodeapp.geocode.Collectable.Response.*;
+import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
-
+import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
+import tech.geocodeapp.geocode.GeoCode.Response.*;
+import tech.geocodeapp.geocode.GeoCode.Request.*;
+import tech.geocodeapp.geocode.Trackable.Request.*;
+import tech.geocodeapp.geocode.Trackable.Response.*;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
+import java.util.UUID;
 
 
 /**
  * This class implements the UserService interface
  */
 @Service( "GeoCodeService" )
+//@RequiredArgsConstructor
 public class GeoCodeServiceImpl implements GeoCodeService {
 
     /**
@@ -36,9 +44,18 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      *
      * @param geoCodeRepo the repo the created response attributes should save to
      */
-    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo ) {
+    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo ) throws RepoException {
 
-        this.geoCodeRepo = geoCodeRepo;
+        /* Check if the given repo exists */
+        if ( geoCodeRepo != null ) {
+
+            /* The repo exists therefore it can be set for the class */
+            this.geoCodeRepo = geoCodeRepo;
+        } else {
+
+            /* The repo does not exist throw an error */
+            throw new RepoException();
+        }
     }
 
     /**
@@ -49,23 +66,23 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified CreateGeoCodeRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     * @throws QRCodeException an error occurred when attempting to create the QR Image
+     * @throws RepoException an error occurred when trying to access the repo
      */
     @Override
-    public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException, RepoException {
+    public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, RepoException {
 
-        /** Validate the request */
+        /* Validate the request */
         if ( request == null ) {
 
-            throw new InvalidRequestException( "The given request is empty." );
+            throw new InvalidRequestException( true );
         } else if ( ( request.getLocation() == null ) || ( request.getHints() == null ) ||
                     ( request.getDifficulty() == null ) || ( request.getDescription() == null ) ||
                     ( request.isAvailable() == null ) ) {
 
-            throw new InvalidRequestException( "The given request is missing parameter/s." );
+            throw new InvalidRequestException();
         }
 
-        /**
+        /*
          * Create the GeoCode object
          * and set its attributes to the given attributes in the request
          */
@@ -75,41 +92,63 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         newGeoCode.setDifficulty( request.getDifficulty() );
         newGeoCode.setHints( request.getHints() );
         newGeoCode.setLocation( request.getLocation() );
+        UUID id = UUID.randomUUID();
+        newGeoCode.setId( id );
 
-        Collectable collectable = new Collectable(new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description")));
-        newGeoCode.setCollectables(collectable);
+        Collectable collectable = new Collectable(new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description"), null ) );
+        newGeoCode.setCollectables( collectable );
 
-        /** Try and create the relevant image with the newly create GeoCode instance */
+        /* Try and create the relevant image with the newly create GeoCode instance */
         try {
 
-            /**
-             * Create the image with the specified name
-             * and set the GeoCode to the create QR Code
-             * */
-            newGeoCode.setQrCode( createQR( "QRCode" ) );
-        } catch ( IOException | WriterException e ) {
+            int size = 8;
+            String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-            throw new QRCodeException( "The QR Code could not be created." );
+
+            // create StringBuffer size of AlphaNumericString
+            StringBuilder QR = new StringBuilder( size );
+
+            for ( int i = 0; i < size; i++ ) {
+
+                /* generate a random number between 0 to AlphaNumericString variable length */
+                int index = (  new SecureRandom() ).nextInt(chars.length() );
+
+                /* add Character one by one in end of sb */
+                QR.append( chars.charAt( index ) );
+            }
+
+            newGeoCode.setQrCode( QR.toString() );
+        } catch ( Exception e ) {
+
+            e.printStackTrace();
         }
 
-        /**
+        /*
          * Check the repo exists before trying to access it
          */
         if ( geoCodeRepo != null ) {
 
-            /** Save the created GeoCode to the repository */
+            /* Save the created GeoCode to the repository */
             geoCodeRepo.save( newGeoCode );
         } else {
 
             throw new RepoException( "Could not save to the repository." );
         }
 
-        /**
+        /*
          * Create the new response
-         *  and add the created GeoCode to it
+         * and add the created GeoCode to it
          */
         CreateGeoCodeResponse response = new CreateGeoCodeResponse();
-        response.setGeoCode( newGeoCode );
+
+        /*if ( ( geoCodeRepo.findById( id ).get().getId().equals( id ) ) ) {
+
+            response.setIsSuccess( true );
+        } else {
+
+            response.setIsSuccess( false );
+        }*/
+        response.setIsSuccess( true );
 
         return response;
     }
@@ -122,18 +161,312 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws RepoException there was an issue accessing the repository
      */
     @Override
-    public GetGeoCodesResponse getAllGeoCodes( ) throws RepoException {
+    public GetGeoCodesResponse getAllGeoCodes() throws RepoException {
 
-        /** Validate the repo */
-        if ( geoCodeRepo == null ) {
-            throw new RepoException( "The GeoCode Repository is empty." );
-        }
+        /* Validate the repo */
+        checkRepo();
 
         return new GetGeoCodesResponse().geocodes(geoCodeRepo.findAll());
     }
 
+    /**
+     * Get tje stored Collectables inside of a GeoCode
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetCollectablesRequest
+     */
+    @Override
+    public GetCollectablesResponse getCollectables(GetCollectablesRequest request ) throws InvalidRequestException, RepoException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } /*else if ( ( request().getID != null ) || ( request.getDescription() == null ) ) {
+
+            throw new InvalidRequestException();
+        }*/
+
+        /* Validate the repo */
+        checkRepo();
+
+        /*
+         * Create the new response
+         *
+         */
+        GetCollectablesResponse response = new GetCollectablesResponse();
+        response.setCollectables( null );
+
+        return response;
+    }
+
+    /**
+     * Get all the GeoCodes with a certain level of difficulty
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetGeoCodesByDifficultyRequest
+     */
+    @Override
+    public GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException, RepoException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getDifficulty() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Validate the repo */
+        checkRepo();
+
+        /*
+         * Sort through the stored GeoCodes and
+         * find all the GeoCodes with the specified difficulty
+         */
+        List<GeoCode> hold = new ArrayList<>();
+        for ( GeoCode code: geoCodeRepo.findAll() ) {
+
+            /* Check if the current GeoCode has the Difficulty wanted */
+            if ( code.getDifficulty().equals( request.getDifficulty() ) ) {
+
+                /*
+                * The current GeoCode has the valid GeoCode
+                * add it to the list
+                */
+                hold.add( code );
+            }
+        }
+
+        /*
+         * Create the new response
+         * and add valid GeoCodes to it
+         */
+        GetGeoCodesByDifficultyResponse response = new GetGeoCodesByDifficultyResponse();
+        response.setGeocodes( hold );
+
+        return response;
+    }
+
+    /**
+     * Get the Hints of how to locate a GeoCode in the real world
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetHintsRequest
+     */
+    @Override
+    public GetHintsResponse getHints( GetHintsRequest request ) throws InvalidRequestException, RepoException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getGeoCodeID() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Validate the repo */
+        checkRepo();
+
+        Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
+
+        /*
+         * Create the new response
+         * and add the list of hints to it
+         */
+        GetHintsResponse response = new GetHintsResponse();
+        if ( temp.isEmpty() ) {
+
+            List<String> hold = new ArrayList<>();
+            hold.add( "No hints available." );
+            response.setHints( hold );
+        } else {
+
+            response.setHints( temp.get().getHints() );
+        }
+
+        return response;
+    }
+
+    /**
+     * Finds the stored GeoCode associated with the generated QR Code
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetGeoCodeByQRCodeRequest
+     */
+    @Override
+    public GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException, RepoException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getId() != null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Validate the repo */
+        checkRepo();
+
+        /*
+         * Create the new response
+         *
+         */
+        GetGeoCodeByQRCodeResponse response = new GetGeoCodeByQRCodeResponse();
+        response.setAvailable( true );
+
+        return response;
+    }
+
+    /**
+     * Finds the stored GeoCode associated at the given Location
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetGeoCodeByLocationRequest
+     */
+    @Override
+    public GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException, RepoException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getId() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Validate the repo */
+        checkRepo();
+
+        /*
+         * Create the new response
+         *
+         */
+        GetGeoCodeByLocationResponse response = new GetGeoCodeByLocationResponse();
+        response.setAvailable( true );
+
+        return response;
+    }
+
+    /**
+     *  Gets the Trackables stored in the GeoCode
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetTrackablesRequest
+     */
+    @Override
+    public GetTrackablesResponse getTrackables(GetTrackablesRequest request ) throws InvalidRequestException, RepoException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( ( request.getDifficulty() != null ) || ( request.getDescription() == null ) ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Validate the repo */
+        checkRepo();
+
+        /*
+         * Create the new response
+         *
+         */
+        GetTrackablesResponse response = new GetTrackablesResponse();
+        response.setQrCode( "test" );
+
+        return response;
+    }
+
+    /**
+     * Swaps a stored Collectable in a GeoCode with the Users GeoCode
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified SwapCollectablesRequest
+     */
+    @Override
+    public SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException, RepoException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( ( request.getCollectable() == null ) || ( request.getGeoCodeID() == null ) ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Validate the repo */
+        checkRepo();
+
+        /*
+         * Create the new response
+         */
+        SwapCollectablesResponse response = new SwapCollectablesResponse();
+        response.setIsSuccess( true );
+
+        return response;
+    }
+
+    /**
+     * Updates the availability of a GeoCode
+     *lombok
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified UpdateAvailabilityRequest
+     */
+    @Override
+    public UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws RepoException, InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( ( request.getGeoCodeID() == null ) || ( request.isIsAvailable() == null ) ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Validate the repo */
+        checkRepo();
+
+        /* Find and set the GeoCode to the new Availability */
+        Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
+        temp.ifPresent( geoCode -> geoCode.setAvailable( request.isIsAvailable() ) );
 
 
+        /*
+         * Create the new response
+         * and set the success of the operation
+         */
+        UpdateAvailabilityResponse response = new UpdateAvailabilityResponse();
+        response.setIsSuccess( true );
+
+        return response;
+    }
+
+
+    ////////////////Helper functions////////////////
+
+    private void checkRepo() throws RepoException {
+
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException();
+        }
+    }
 
     /**
      * This helper function helps create the QR Code image and stores
@@ -148,13 +481,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      */
     public String createQR( String imageName ) throws IOException, WriterException {
 
-        /** The file path the image should be created in */
+        /* The file path the image should be created in */
         String path = "src/main/java/tech/geocodeapp/geocode/GeoCode/QRImages/"+ imageName + ".jpg";
 
-        /** Create the QR Code and link it to the specified website */
+        /* Create the QR Code and link it to the specified website */
         BitMatrix matrix = new MultiFormatWriter().encode( "https://www.example.com/", BarcodeFormat.QR_CODE, 400, 400 );
 
-        /** Create the image and store it in the given path */
+        /* Create the image and store it in the given path */
         MatrixToImageWriter.writeToPath( matrix, "jpg", Paths.get( path ) );
 
         return "AAAA";

@@ -1,14 +1,12 @@
 package tech.geocodeapp.geocode.GeoCode.Service;
 
-import io.swagger.model.CreateGeoCodeRequest;
-import io.swagger.model.CreateGeoCodeResponse;
-import io.swagger.model.GetGeoCodesResponse;
-import org.springframework.stereotype.Service;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
-
-import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
-import io.swagger.model.*;
+import tech.geocodeapp.geocode.Collectable.Request.GetCollectablesRequest;
+import tech.geocodeapp.geocode.Collectable.Response.GetCollectablesResponse;
+import tech.geocodeapp.geocode.GeoCode.Response.*;
+import tech.geocodeapp.geocode.GeoCode.Request.*;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
+import tech.geocodeapp.geocode.Trackable.Request.GetTrackablesRequest;
+import tech.geocodeapp.geocode.Trackable.Response.GetTrackablesResponse;
 
 /**
  * This is the main interface is for the GeoCode subsystem,
@@ -16,7 +14,23 @@ import io.swagger.model.*;
  */
 public interface GeoCodeService {
 
-    CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException, RepoException;
+    CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, RepoException;
 
     GetGeoCodesResponse getAllGeoCodes( ) throws RepoException;
+
+    GetCollectablesResponse getCollectables(GetCollectablesRequest request ) throws InvalidRequestException, RepoException;
+
+    GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException, RepoException;
+
+    GetHintsResponse getHints( GetHintsRequest request ) throws InvalidRequestException, RepoException;
+
+    GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException, RepoException;
+
+    GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException, RepoException;
+
+    GetTrackablesResponse getTrackables(GetTrackablesRequest request ) throws InvalidRequestException, RepoException;
+
+    SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException, RepoException;
+
+    UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws RepoException, InvalidRequestException;
 }
