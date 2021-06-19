@@ -20,7 +20,7 @@
 <!--    </ion-row>-->
     <ion-row class="row">
       <ion-col>Available</ion-col>
-      <ion-col><ion-checkbox disabled="false" [(ngModel)]="geocode.isAvailable"></ion-checkbox></ion-col>
+      <ion-col><ion-checkbox disabled="false"  (ionChange)="updateAvailability(geocode)" [(ngModel)]="geocode.available"></ion-checkbox></ion-col>
     </ion-row>
     <ion-row class="row">
       <ion-col>Difficulty</ion-col>
