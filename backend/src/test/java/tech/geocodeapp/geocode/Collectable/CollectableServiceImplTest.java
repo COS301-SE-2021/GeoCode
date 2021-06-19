@@ -1,19 +1,16 @@
 package tech.geocodeapp.geocode.Collectable;
 
-import io.swagger.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableSetRepository;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
-import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
-import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse;
-import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
+import tech.geocodeapp.geocode.Collectable.Model.Rarity;
+import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
+import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableSetRequest;
+import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableTypeRequest;
+import tech.geocodeapp.geocode.Collectable.Request.GetCollectableTypesBySetRequest;
+import tech.geocodeapp.geocode.Collectable.Response.*;
 import tech.geocodeapp.geocode.Collectable.Service.CollectableService;
 import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
 
@@ -21,14 +18,6 @@ import java.util.UUID;
 
 @ExtendWith( MockitoExtension.class )
 public class CollectableServiceImplTest {
-    @Mock
-    private CollectableRepository collectableRepo;
-
-    @Mock
-    private CollectableSetRepository collectableSetRepo;
-
-    @Mock
-    private CollectableTypeRepository collectableTypeRepo;
 
     private CollectableService collectableService;
 
@@ -38,7 +27,12 @@ public class CollectableServiceImplTest {
 
     @BeforeEach
     void setup() {
-        collectableService = new CollectableServiceImpl(collectableRepo, collectableSetRepo, collectableTypeRepo);
+        collectableService = new CollectableServiceImpl(new CollectableMockRepository(), new CollectableSetMockRepository(), new CollectableTypeMockRepository());
+        {
+            collectableService.deleteCollectableSets();
+            collectableService.deleteCollectables();
+            collectableService.deleteCollectableTypes();
+        }
     }
 
     @Test
@@ -77,11 +71,19 @@ public class CollectableServiceImplTest {
          *  Create a request object
          * and assign values to it
          * */
+        //create the set
+        CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
+        setRequest.setName("Easter");
+        setRequest.setDescription("Themed collectables that can be collected over the Easter weekend");
+
+        CreateCollectableSetResponse setResponse = collectableService.createCollectableSet(setRequest);
+
         CreateCollectableTypeRequest request = new CreateCollectableTypeRequest();
         request.setName("Santa");
         request.setImage("dgergergnhtfhjhg");
         request.setRarity(Rarity.RARE);
-        request.setId(UUID.fromString("dc40c921-ca14-414f-8332-2493c8b351ff"));
+        request.setId(setResponse.getCollectableSet().getId());
+
         CreateCollectableTypeResponse response = collectableService.createCollectableType(request);
 
         Assertions.assertTrue(response.isSuccess());
@@ -106,11 +108,29 @@ public class CollectableServiceImplTest {
          *  Create a request object
          * and assign values to it
          * */
-        CreateCollectableRequest request = new CreateCollectableRequest();
-        request.setCollectableTypeId(UUID.fromString(""));//
-        CreateCollectableResponse response = collectableService.createCollectable(request);
 
-        Assertions.assertTrue(response.isSuccess());
+        //create the set
+        CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
+        setRequest.setName("Easter");
+        setRequest.setDescription("Themed collectables that can be collected over the Easter weekend");
+
+        CreateCollectableSetResponse setResponse = collectableService.createCollectableSet(setRequest);
+
+        //create the type
+        CreateCollectableTypeRequest typeRequest = new CreateCollectableTypeRequest();
+        typeRequest.setName("Bunny");
+        typeRequest.setImage("kasnvklnvd");
+        typeRequest.setRarity(Rarity.RARE);
+        typeRequest.setId(setResponse.getCollectableSet().getId());
+
+        CreateCollectableTypeResponse typeResponse = collectableService.createCollectableType(typeRequest);
+
+        //create the Collectable
+        CreateCollectableRequest collectableRequest = new CreateCollectableRequest();
+        collectableRequest.setCollectableTypeId(typeResponse.getCollectableType().getId());
+
+        CreateCollectableResponse collectableResponse = collectableService.createCollectable(collectableRequest);
+        Assertions.assertTrue(collectableResponse.isSuccess());
     }
 
     @Test
@@ -119,6 +139,13 @@ public class CollectableServiceImplTest {
          *  Create a request object
          * and assign values to it
          * */
+        //create set
+        CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
+        setRequest.setName("Christmas");
+        setRequest.setDescription("Christmas themed Collectables");
+
+        CreateCollectableSetResponse setResponse = collectableService.createCollectableSet(setRequest);
+
         GetCollectableSetsResponse response = collectableService.getCollectableSets();
         Assertions.assertTrue(!response.getCollectableSets().isEmpty());
     }
@@ -129,8 +156,90 @@ public class CollectableServiceImplTest {
          *  Create a request object
          * and assign values to it
          * */
+        //create set
+        CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
+        setRequest.setName("Christmas");
+        setRequest.setDescription("Christmas themed Collectables");
+
+        CreateCollectableSetResponse setResponse = collectableService.createCollectableSet(setRequest);
+
+        //create type
+        CreateCollectableTypeRequest typeRequest = new CreateCollectableTypeRequest();
+        typeRequest.setName("Santa");
+        typeRequest.setImage("jsilgjnskgndfkjg");
+        typeRequest.setRarity(Rarity.RARE);
+        typeRequest.setId(setResponse.getCollectableSet().getId());
+
+        CreateCollectableTypeResponse typeResponse = collectableService.createCollectableType(typeRequest);
+
         GetCollectableTypesResponse response = collectableService.getCollectableTypes();
         Assertions.assertTrue(!response.getCollectableTypes().isEmpty());
+    }
+
+    @Test
+    public void getCollectableTypesTestEmpty() {
+        GetCollectableTypesResponse response = collectableService.getCollectableTypes();
+        Assertions.assertTrue(response.getCollectableTypes().isEmpty());
+    }
+
+    @Test
+    public void getCollectableTypesBySetTest(){
+        /**
+         *  Create a request object
+         * and assign values to it
+         * */
+        //create set
+        CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
+        setRequest.setName("Christmas");
+        setRequest.setDescription("Christmas themed Collectables");
+
+        CreateCollectableSetResponse setResponse = collectableService.createCollectableSet(setRequest);
+
+        //create type
+        CreateCollectableTypeRequest typeRequest = new CreateCollectableTypeRequest();
+        typeRequest.setName("Santa");
+        typeRequest.setImage("jsilgjnskgndfkjg");
+        typeRequest.setRarity(Rarity.RARE);
+        typeRequest.setId(setResponse.getCollectableSet().getId());
+
+        CreateCollectableTypeResponse typeResponse = collectableService.createCollectableType(typeRequest);
+
+        //create the request
+        GetCollectableTypesBySetRequest typesBySetRequest = new GetCollectableTypesBySetRequest();
+        typesBySetRequest.setSetId(setResponse.getCollectableSet().getId());
+
+        GetCollectableTypesResponse response = collectableService.getCollectableTypesBySet(typesBySetRequest);
+        Assertions.assertTrue(!response.getCollectableTypes().isEmpty());
+    }
+
+    @Test
+    public void getCollectableTypesBySetTestNoTypeWithSet(){
+        /**
+         *  Create a request object
+         * and assign values to it
+         * */
+        //create set
+        CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
+        setRequest.setName("Christmas");
+        setRequest.setDescription("Christmas themed Collectables");
+
+        CreateCollectableSetResponse setResponse = collectableService.createCollectableSet(setRequest);
+
+        //create type
+        CreateCollectableTypeRequest typeRequest = new CreateCollectableTypeRequest();
+        typeRequest.setName("Santa");
+        typeRequest.setImage("jsilgjnskgndfkjg");
+        typeRequest.setRarity(Rarity.RARE);
+        typeRequest.setId(setResponse.getCollectableSet().getId());
+
+        CreateCollectableTypeResponse typeResponse = collectableService.createCollectableType(typeRequest);
+
+        //create the request
+        GetCollectableTypesBySetRequest typesBySetRequest = new GetCollectableTypesBySetRequest();
+        typesBySetRequest.setSetId(UUID.randomUUID());
+
+        GetCollectableTypesResponse response = collectableService.getCollectableTypesBySet(typesBySetRequest);
+        Assertions.assertTrue(response.getCollectableTypes().isEmpty());
     }
 
     @Test
@@ -139,6 +248,28 @@ public class CollectableServiceImplTest {
         *  Create a request object
         * and assign values to it
         * */
+        //create the set
+        CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
+        setRequest.setName("Easter");
+        setRequest.setDescription("Themed collectables that can be collected over the Easter weekend");
+
+        CreateCollectableSetResponse setResponse = collectableService.createCollectableSet(setRequest);
+
+        //create the type
+        CreateCollectableTypeRequest typeRequest = new CreateCollectableTypeRequest();
+        typeRequest.setName("Bunny");
+        typeRequest.setImage("kasnvklnvd");
+        typeRequest.setRarity(Rarity.RARE);
+        typeRequest.setId(setResponse.getCollectableSet().getId());
+
+        CreateCollectableTypeResponse typeResponse = collectableService.createCollectableType(typeRequest);
+
+        //create the Collectable
+        CreateCollectableRequest collectableRequest = new CreateCollectableRequest();
+        collectableRequest.setCollectableTypeId(typeResponse.getCollectableType().getId());
+
+        CreateCollectableResponse collectableResponse = collectableService.createCollectable(collectableRequest);
+
         GetCollectablesResponse response = collectableService.getCollectables();
         Assertions.assertTrue(!response.getCollectables().isEmpty());
     }
