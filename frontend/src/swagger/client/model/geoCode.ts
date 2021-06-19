@@ -19,7 +19,7 @@ export interface GeoCode {
     description: string;
     hints: Array<string>;
     collectables?: Array<Collectable>;
-    trackables?: string;
     qrCode: string;
-    location: string;
+    longitude: string;
+    latitude: string;
 }

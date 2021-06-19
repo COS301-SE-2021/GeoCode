@@ -12,6 +12,7 @@
 import { Collectable } from './collectable';
 
 export interface SwapCollectablesRequest { 
-    collectable: Collectable;
+    targetGeoCodeID: Collectable;
+    targetCollectableID: Collectable;
     geoCodeID: string;
 }

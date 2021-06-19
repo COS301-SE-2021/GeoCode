@@ -9,11 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Difficulty } from './difficulty';
 
 export interface GetGeoCodeByLocationRequest { 
-    description: string;
-    location: string;
-    hints: Array<string>;
-    difficulty: Difficulty;
+    longitude: string;
+    latitude: string;
 }

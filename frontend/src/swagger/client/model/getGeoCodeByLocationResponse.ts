@@ -9,8 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Difficulty } from './difficulty';
 
 export interface GetGeoCodeByLocationResponse { 
-    id?: string;
-    qrCode?: string;
+    id: string;
+    available: boolean;
+    description: string;
+    longitude: string;
+    latitude: string;
+    difficulty: Difficulty;
 }

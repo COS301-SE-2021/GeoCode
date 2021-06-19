@@ -12,8 +12,5 @@
 import { Difficulty } from './difficulty';
 
 export interface GetGeoCodesByDifficultyRequest { 
-    description: string;
-    location: string;
-    hints: Array<string>;
     difficulty: Difficulty;
 }

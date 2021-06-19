@@ -11,5 +11,5 @@
  */
 
 export interface UpdateAvailabilityResponse { 
-    success?: boolean;
+    isSuccess: boolean;
 }
