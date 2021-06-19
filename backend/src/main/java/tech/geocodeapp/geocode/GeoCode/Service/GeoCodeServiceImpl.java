@@ -354,6 +354,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Validate the repo */
         checkRepo();
 
+        List< GeoCode > temp = geoCodeRepo.findAll();
+
+
         /*
          * Create the new response
          *
@@ -453,7 +456,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
         temp.ifPresent( geoCode -> geoCode.setAvailable( request.isIsAvailable() ) );
 
-        geoCodeRepo.save( temp.get() );
+        GeoCode hold = new GeoCode();
+        if ( temp.isPresent( ) ) {
+
+            hold = temp.get();
+        }
+
+        geoCodeRepo.save( hold );
         /*
          * Create the new response
          * and set the success of the operation
