@@ -11,5 +11,6 @@
  */
 
 export interface GetGeoCodeByLocationRequest { 
-    id: string;
+    longitude: string;
+    latitude: string;
 }
