@@ -3,18 +3,24 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import {ApiModule, BASE_PATH} from '../swagger';
+import {ApiModule, BASE_PATH} from '../swagger/client';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {environment} from '../environments/environment';
+import {RequestInterceptor} from '../swagger/RequestInterceptor';
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ApiModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: BASE_PATH, useValue: environment.serverAddress+'/api' },
+    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
