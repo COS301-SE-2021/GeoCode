@@ -12,5 +12,5 @@
 
 export interface UpdateAvailabilityRequest { 
     geoCodeID: string;
-    available: boolean;
+    isAvailable: boolean;
 }

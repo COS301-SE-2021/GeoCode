@@ -11,5 +11,5 @@
  */
 
 export interface SwapCollectablesResponse { 
-    success?: boolean;
+    isSuccess: boolean;
 }
