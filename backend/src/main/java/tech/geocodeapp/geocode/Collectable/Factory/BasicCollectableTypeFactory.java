@@ -1,6 +1,6 @@
 package tech.geocodeapp.geocode.Collectable.Factory;
 
-import io.swagger.model.Rarity;
+import tech.geocodeapp.geocode.Collectable.Model.Rarity;
 import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.Collectable.Decorator.ConcreteCollectableType;
 

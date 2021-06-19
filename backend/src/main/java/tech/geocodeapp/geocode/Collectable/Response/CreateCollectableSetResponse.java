@@ -1,6 +1,6 @@
 package tech.geocodeapp.geocode.Collectable.Response;
 
-import io.swagger.model.CollectableSet;
+import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
 
 /**
  * A class to write a response to for a createCollectableSetRequest

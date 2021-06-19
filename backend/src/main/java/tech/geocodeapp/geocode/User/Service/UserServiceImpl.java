@@ -1,7 +1,10 @@
 package tech.geocodeapp.geocode.User.Service;
 
-import io.swagger.model.Collectable;
-import io.swagger.model.GeoCode;
+import org.springframework.util.Assert;
+import tech.geocodeapp.geocode.Collectable.Model.Collectable;
+import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
+import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
+import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +32,13 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final CollectableRepository collectableRepo;
+    private final CollectableTypeRepository collectableTypeRepo;
     private final GeoCodeRepository geocodeRepo;
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, GeoCodeRepository geocodeRepo) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, CollectableTypeRepository collectableTypeRepo, GeoCodeRepository geocodeRepo) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
+        this.collectableTypeRepo = collectableTypeRepo;
         this.geocodeRepo = geocodeRepo;
     }
 
@@ -185,6 +190,14 @@ public class UserServiceImpl implements UserService {
         User newUser = new User();
         newUser.setId(id);
         newUser.setUsername(username);
+
+        //get the CollectableType object for trackables
+        Optional<CollectableType> optionalCollectableType = collectableTypeRepo.findById(UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3"));
+        CollectableType trackableCollectableType = optionalCollectableType.get();
+
+        Collectable trackableObject = new Collectable(trackableCollectableType);
+        newUser.setTrackableObject(trackableObject);
+        newUser.setCurrentCollectable(trackableObject);
         userRepo.save(newUser);
     }
 }
