@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {GeoCodeService, GetHintsRequest,GetHintsResponse} from "../../../swagger/client";
 declare let google;
 @Component({
   selector: 'app-geocode-contents',
@@ -16,10 +17,20 @@ export class GeocodeContentsPage implements AfterViewInit {
   isHidden=false;
 
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,public geocodeApi:GeoCodeService) {
     this.route.queryParams.subscribe(params => {
           this.geocode= params.geocode;
+      console.log(this.geocode);
+      const hintsRequest: GetHintsRequest={
+        geoCodeID: this.geocode.id
+      };
+      this.geocodeApi.getHints(hintsRequest)
+        .subscribe((response : GetHintsResponse)=>{
+          console.log(response);
         });
+        });
+
+
     this.hints=[{clue:'Where the cars go around'},{clue:'Our house in the middle of the street'}];
   }
 
