@@ -162,22 +162,27 @@ public class GeoCodeServiceImplTest {
             request.setHints( hints );
             request.setLocation( "Jhb" );
 
+            /* create the GeoCode in the repository */
+            CreateGeoCodeResponse createResp = geoCodeService.createGeoCode( request );
+
             /* Get the response by calling the getAllGeoCodes use case */
-            GetGeoCodesResponse response = geoCodeService.getAllGeoCodes();
+            GetGeoCodesResponse response = geoCodeService.getAllGeoCodes( );
 
             /* Get a geocode from the response */
-            GeoCode temp = response.getGeocodes().get( 0 );
+            List<GeoCode> geocodes = response.getGeocodes();
+            System.out.println(geocodes);
 
             /*
              * Check if all the GeoCodes were returned correctly
              * through checking the description created with the code
              */
-            Assertions.assertEquals( temp.getDescription(), "The GeoCode is stored at the art Museum in Jhb South" );
+            Assertions.assertEquals(geocodes.get(0).getDescription(), "The GeoCode is stored at the art Museum in Jhb South");
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
         }
+
     }
 
     /**
@@ -234,7 +239,7 @@ public class GeoCodeServiceImplTest {
             GetGeoCodesByDifficultyRequest request = new GetGeoCodesByDifficultyRequest();
             request.setDifficulty( difficulty );
 
-            /* Get the response by calling the getAllGeoCodes use case */
+            /* Get the response by calling the getGeoCodesByDifficulty use case */
             GetGeoCodesByDifficultyResponse response = geoCodeService.getGeoCodesByDifficulty( request );
 
             boolean valid = true;

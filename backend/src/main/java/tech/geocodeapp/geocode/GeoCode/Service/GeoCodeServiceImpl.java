@@ -107,18 +107,25 @@ public class GeoCodeServiceImpl implements GeoCodeService {
              * and set the GeoCode to the create QR Code
              */
 
-            String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            int size = 8;
+            String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 
-                /*StringBuilder sb = new StringBuilder(8);
-                for(int i = 0; i < 8; i++)
-                    sb.append(AB.charAt(rnd.nextInt(AB.length())));
+            // create StringBuffer size of AlphaNumericString
+            StringBuilder QR = new StringBuilder( 9 );
 
-            newGeoCode.setQrCode( sb.toString() );
-        } catch ( IOException | WriterException e ) {
+            for ( int i = 0; i < 8; i++ ) {
 
-            throw new QRCodeException( "The QR Code could not be created." );*/
+                /* generate a random number between 0 to AlphaNumericString variable length */
+                int index = ( int ) ( chars.length() * Math.random() );
+
+                /* add Character one by one in end of sb */
+                QR.append( chars.charAt( index ) );
+            }
+
+            newGeoCode.setQrCode( QR.toString() );
         } catch ( Exception e ) {
+
             e.printStackTrace();
         }
 
