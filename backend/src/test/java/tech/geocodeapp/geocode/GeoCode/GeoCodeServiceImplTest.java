@@ -91,7 +91,8 @@ public class GeoCodeServiceImplTest {
         request.setDescription( null );
         request.setDifficulty( Difficulty.INSANE );
         request.setHints( null );
-        request.setLocation( "Jhb" );
+        request.setLatitude( "Jhb" );
+        request.setLongitude( "Jhb" );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.createGeoCode( request ) )
@@ -123,7 +124,8 @@ public class GeoCodeServiceImplTest {
                 hints.add( "secret " );
                 hints.add( "hint." );
             request.setHints( hints );
-            request.setLocation( "Jhb" );
+            request.setLatitude( "Jhb" );
+            request.setLongitude( "Jhb" );
 
             CreateGeoCodeResponse response = geoCodeService.createGeoCode( request );
 
@@ -164,7 +166,8 @@ public class GeoCodeServiceImplTest {
                 hints.add( "secret " );
                 hints.add( "hint." );
             request.setHints( hints );
-            request.setLocation( "Jhb" );
+            request.setLatitude( "Jhb" );
+            request.setLongitude( "Jhb" );
 
             /* create the GeoCode in the repository */
             geoCodeService.createGeoCode( request );
@@ -352,7 +355,8 @@ public class GeoCodeServiceImplTest {
          * */
         SwapCollectablesRequest request = new SwapCollectablesRequest();
         request.setGeoCodeID( null );
-        request.setCollectable( null );
+        request.setTargetCollectableID( null );
+        request.setTargetGeoCodeID( null );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.swapCollectables( request ) )
@@ -379,7 +383,8 @@ public class GeoCodeServiceImplTest {
             /* Create the request with the ID of the GeoCode we want */
             SwapCollectablesRequest request = new SwapCollectablesRequest();
             request.setGeoCodeID( temp.get( 0 ).getId() );
-            request.setCollectable( collectable );
+            request.setTargetCollectableID( collectable );
+            request.setTargetGeoCodeID( collectable );
 
             /* Get the response by calling the swapCollectables use case */
             SwapCollectablesResponse response = geoCodeService.swapCollectables( request );
@@ -552,7 +557,9 @@ public class GeoCodeServiceImplTest {
                     hints.add( "Hint two for: " + x );
                     hints.add( "Hint three for: " + x );
                     request.setHints( hints );
-                    request.setLocation( "Jhb " + x );
+                    request.setLatitude( "Lat " + x );
+                    request.setLongitude( "Long " + x );
+
 
                     /* Add the created GeoCode to the list */
                     geoCodeService.createGeoCode( request );
@@ -572,7 +579,8 @@ public class GeoCodeServiceImplTest {
                     hints.add( "Hint two for: " + x );
                     hints.add( "Hint three for: " + x );
                     request.setHints( hints );
-                    request.setLocation( "Jhb " + x );
+                    request.setLatitude( "Lat " + x );
+                    request.setLongitude( "Long " + x );
 
                     /* Add the created GeoCode to the list */
                     geoCodeService.createGeoCode( request );
@@ -592,7 +600,8 @@ public class GeoCodeServiceImplTest {
                     hints.add( "Hint two for: " + x );
                     hints.add( "Hint three for: " + x );
                 request.setHints( hints );
-                request.setLocation( "Jhb " + x );
+                request.setLatitude( "Lat " + x );
+                request.setLongitude( "Long " + x );
 
                 /* Add the created GeoCode to the list */
                 geoCodeService.createGeoCode( request );

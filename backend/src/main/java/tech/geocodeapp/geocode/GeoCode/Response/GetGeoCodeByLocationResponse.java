@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  * GetGeoCodeByLocationResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T19:40:54.656Z[GMT]")
 
 
 public class GetGeoCodeByLocationResponse   {
@@ -27,8 +27,11 @@ public class GetGeoCodeByLocationResponse   {
   @JsonProperty("description")
   private String description = null;
 
-  @JsonProperty("location")
-  private String location = null;
+  @JsonProperty("longitude")
+  private String longitude = null;
+
+  @JsonProperty("latitude")
+  private String latitude = null;
 
   @JsonProperty("difficulty")
   private Difficulty difficulty = null;
@@ -94,24 +97,44 @@ public class GetGeoCodeByLocationResponse   {
     this.description = description;
   }
 
-  public GetGeoCodeByLocationResponse location(String location) {
-    this.location = location;
+  public GetGeoCodeByLocationResponse longitude(String longitude) {
+    this.longitude = longitude;
     return this;
   }
 
   /**
-   * Get location
-   * @return location
+   * Get longitude
+   * @return longitude
    **/
   @Schema(required = true, description = "")
       @NotNull
 
-    public String getLocation() {
-    return location;
+    public String getLongitude() {
+    return longitude;
   }
 
-  public void setLocation(String location) {
-    this.location = location;
+  public void setLongitude(String longitude) {
+    this.longitude = longitude;
+  }
+
+  public GetGeoCodeByLocationResponse latitude(String latitude) {
+    this.latitude = latitude;
+    return this;
+  }
+
+  /**
+   * Get latitude
+   * @return latitude
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    public String getLatitude() {
+    return latitude;
+  }
+
+  public void setLatitude(String latitude) {
+    this.latitude = latitude;
   }
 
   public GetGeoCodeByLocationResponse difficulty(Difficulty difficulty) {
@@ -148,13 +171,14 @@ public class GetGeoCodeByLocationResponse   {
     return Objects.equals(this.id, getGeoCodeByLocationResponse.id) &&
         Objects.equals(this.available, getGeoCodeByLocationResponse.available) &&
         Objects.equals(this.description, getGeoCodeByLocationResponse.description) &&
-        Objects.equals(this.location, getGeoCodeByLocationResponse.location) &&
+        Objects.equals(this.longitude, getGeoCodeByLocationResponse.longitude) &&
+        Objects.equals(this.latitude, getGeoCodeByLocationResponse.latitude) &&
         Objects.equals(this.difficulty, getGeoCodeByLocationResponse.difficulty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, available, description, location, difficulty);
+    return Objects.hash(id, available, description, longitude, latitude, difficulty);
   }
 
   @Override
@@ -165,7 +189,8 @@ public class GetGeoCodeByLocationResponse   {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    available: ").append(toIndentedString(available)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    location: ").append(toIndentedString(location)).append("\n");
+    sb.append("    longitude: ").append(toIndentedString(longitude)).append("\n");
+    sb.append("    latitude: ").append(toIndentedString(latitude)).append("\n");
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("}");
     return sb.toString();

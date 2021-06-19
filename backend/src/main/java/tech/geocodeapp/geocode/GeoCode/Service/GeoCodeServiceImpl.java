@@ -75,9 +75,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( ( request.getLocation() == null ) || ( request.getHints() == null ) ||
-                    ( request.getDifficulty() == null ) || ( request.getDescription() == null ) ||
-                    ( request.isAvailable() == null ) ) {
+        } else if ( ( request.getLatitude() == null ) || ( request.getLongitude() == null ) ||
+                    ( request.getHints() == null ) || ( request.getDifficulty() == null ) ||
+                    ( request.getDescription() == null ) || ( request.isAvailable() == null ) ) {
 
             throw new InvalidRequestException();
         }
@@ -91,7 +91,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         newGeoCode.setDescription( request.getDescription() );
         newGeoCode.setDifficulty( request.getDifficulty() );
         newGeoCode.setHints( request.getHints() );
-        newGeoCode.setLocation( request.getLocation() );
+        newGeoCode.setLocation( request.getLatitude() );
+        newGeoCode.setLocation( request.getLongitude() );
         UUID id = UUID.randomUUID();
         newGeoCode.setId( id );
 
@@ -403,7 +404,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( ( request.getCollectable() == null ) || ( request.getGeoCodeID() == null ) ) {
+        } else if ( ( request.getTargetCollectableID() == null ) || ( request.getTargetGeoCodeID() == null ) || ( request.getGeoCodeID() == null ) ) {
 
             throw new InvalidRequestException();
         }
