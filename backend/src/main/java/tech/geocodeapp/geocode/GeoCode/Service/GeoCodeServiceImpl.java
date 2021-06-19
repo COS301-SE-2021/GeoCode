@@ -314,7 +314,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( request.getId() != null ) {
+        } else if ( request.getQrCode() == null ) {
 
             throw new InvalidRequestException();
         }
@@ -322,12 +322,27 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Validate the repo */
         checkRepo();
 
+        List< GeoCode > temp = geoCodeRepo.findAll();
+        int x = 0;
+        for ( x = 0; x < temp.size(); x++ ) {
+
+            if ( temp.get( x ).getQrCode().equals( request.getQrCode() ) ) {
+
+                break;
+            }
+        }
+
         /*
          * Create the new response
          *
          */
         GetGeoCodeByQRCodeResponse response = new GetGeoCodeByQRCodeResponse();
-        response.setAvailable( true );
+        response.setDescription( temp.get( x ).getDescription() );
+        response.setDifficulty( temp.get( x ).getDifficulty() );
+        response.setId( temp.get( x ).getId() );
+        response.setLatitude( temp.get( x ).getLatitude() );
+        response.setLongitude( temp.get( x ).getLongitude() );
+        response.setAvailable( temp.get( x ).isAvailable() );
 
         return response;
     }
