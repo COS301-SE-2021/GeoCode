@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import java.util.HashMap;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -14,7 +15,7 @@ import javax.validation.constraints.*;
  * CreateCollectableTypeRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 
 
 public class CreateCollectableTypeRequest   {
@@ -30,9 +31,20 @@ public class CreateCollectableTypeRequest   {
   @JsonProperty("setId")
   private UUID setId = null;
 
+  @JsonProperty("properties")
+  private HashMap<String,String> properties = new HashMap<>();
+
   public CreateCollectableTypeRequest name(String name) {
     this.name = name;
     return this;
+  }
+
+  public HashMap<String, String> getProperties() {
+    return properties;
+  }
+
+  public void setProperties(HashMap<String, String> properties) {
+    this.properties = properties;
   }
 
   /**
@@ -125,7 +137,8 @@ public class CreateCollectableTypeRequest   {
     return Objects.equals(this.name, createCollectableTypeRequest.name) &&
         Objects.equals(this.image, createCollectableTypeRequest.image) &&
         Objects.equals(this.rarity, createCollectableTypeRequest.rarity) &&
-        Objects.equals(this.setId, createCollectableTypeRequest.setId);
+        Objects.equals(this.setId, createCollectableTypeRequest.setId) &&
+        Objects.equals(this.properties, createCollectableTypeRequest.properties);
   }
 
   @Override
@@ -142,6 +155,7 @@ public class CreateCollectableTypeRequest   {
     sb.append("    image: ").append(toIndentedString(image)).append("\n");
     sb.append("    rarity: ").append(toIndentedString(rarity)).append("\n");
     sb.append("    setId: ").append(toIndentedString(setId)).append("\n");
+    sb.append("    properties: ").append(toIndentedString(properties)).append("\n");
     sb.append("}");
     return sb.toString();
   }

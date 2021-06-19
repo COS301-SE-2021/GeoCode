@@ -5,8 +5,21 @@
  */
 package io.swagger.api;
 
-import io.swagger.model.GetMyGeocodeRequest;
-import io.swagger.model.GetMyGeocodeResponse;
+import io.swagger.model.BlockUserRequest;
+import io.swagger.model.GetCurrentCollectableRequest;
+import io.swagger.model.GetCurrentCollectableResponse;
+import io.swagger.model.GetFoundCollectablesRequest;
+import io.swagger.model.GetFoundCollectablesResponse;
+import io.swagger.model.GetFoundGeoCodesRequest;
+import io.swagger.model.GetFoundGeoCodesResponse;
+import io.swagger.model.GetOwnedGeoCodesRequest;
+import io.swagger.model.GetOwnedGeoCodesResponse;
+import io.swagger.model.GetUsersRequest;
+import io.swagger.model.GetUsersResponse;
+import io.swagger.model.SetAdminRequest;
+import io.swagger.model.SwapCollectableRequest;
+import io.swagger.model.SwapCollectableResponse;
+import io.swagger.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -33,21 +46,125 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 @Validated
 public interface UserApi {
+
+    @Operation(summary = "Administrator blocks the given user", description = "Block a user", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successfully blocked the user", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+        
+        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/blockUser",
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<User> blockUser(@Parameter(in = ParameterIn.DEFAULT, description = "Request to block a user", required=true, schema=@Schema()) @Valid @RequestBody BlockUserRequest body);
+
+
+    @Operation(summary = "Get the Collectable the User is currently holding", description = "Get the user's current Collectable", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Create GeoCode Response", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentCollectableResponse.class))),
+        
+        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/getCurrentCollectable",
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<GetCurrentCollectableResponse> getCurrentCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's current Collectable", required=true, schema=@Schema()) @Valid @RequestBody GetCurrentCollectableRequest body);
+
+
+    @Operation(summary = "Gets the Collectables that the user has ever found", description = "Get a user's found Collectables", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successfully returned the user's found collectables", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetFoundCollectablesResponse.class))),
+        
+        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/getFoundCollectables",
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<GetFoundCollectablesResponse> getFoundCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's found Collectables", required=true, schema=@Schema()) @Valid @RequestBody GetFoundCollectablesRequest body);
+
+
+    @Operation(summary = "Gets the GeoCodes that the user has ever found", description = "Gets the user's found GeoCodes", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successfully returned all owned GeoCodes for the user", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetFoundGeoCodesResponse.class))),
+        
+        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/getFoundGeoCodes",
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<GetFoundGeoCodesResponse> getFoundGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's found GeoCodes", required=true, schema=@Schema()) @Valid @RequestBody GetFoundGeoCodesRequest body);
+
+
+    @Operation(summary = "Gets the user's owned GeoCodes", description = "Get's the user's owned GeoCodes", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successfully returned all owned GeoCodes for the user", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetOwnedGeoCodesResponse.class))),
+        
+        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/getOwnedGeoCodes",
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<GetOwnedGeoCodesResponse> getOwnedGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's owned GeoCodes", required=true, schema=@Schema()) @Valid @RequestBody GetOwnedGeoCodesRequest body);
+
 
     @Operation(summary = "Get all geocodes associated with a user", description = "Get My Geocodes", security = {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Successfully gotten geocodes", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetMyGeocodeResponse.class))),
+        @ApiResponse(responseCode = "200", description = "Successfully gotten geocodes", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetOwnedGeoCodesResponse.class))),
         
         @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
-    @RequestMapping(value = "/User/getMyGeocodes",
+    @RequestMapping(value = "/User/getOwnedGeocodes",
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
-    ResponseEntity<GetMyGeocodeResponse> getMyGeocodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get geocodes belonging to user", required=true, schema=@Schema()) @Valid @RequestBody GetMyGeocodeRequest body);
+    ResponseEntity<GetOwnedGeoCodesResponse> getOwnedGeocodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get geocodes belonging to user", required=true, schema=@Schema()) @Valid @RequestBody GetOwnedGeoCodesRequest body);
+
+
+    @Operation(summary = "Get all of the users in the system", description = "Get all of the users", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successfully returned all of the users", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetUsersResponse.class))),
+        
+        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/getUsers",
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<GetUsersResponse> getUsers(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all users in the system", required=true, schema=@Schema()) @Valid @RequestBody GetUsersRequest body);
+
+
+    @Operation(summary = "Sets the given user to be an administrator", description = "Sets the given user to be an administrator", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successfully set the user to be an administrator", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+        
+        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/setAdmin",
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<User> setAdmin(@Parameter(in = ParameterIn.DEFAULT, description = "Request to set a user to be an administrator", required=true, schema=@Schema()) @Valid @RequestBody SetAdminRequest body);
+
+
+    @Operation(summary = "Swaps the Collectable the user is currently holding with the given Collectable in the given GeoCode", description = "Swap held Collectable", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "The user's current Collectable was successfully swapped", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SwapCollectableResponse.class))),
+        
+        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/swapCollectable",
+        produces = { "application/json", "application/xml" }, 
+        consumes = { "application/json", "application/xml" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<SwapCollectableResponse> swapCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap the held Collectable", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectableRequest body);
 
 }
 

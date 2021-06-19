@@ -4,7 +4,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -13,53 +14,39 @@ import javax.validation.constraints.*;
  * GetHintsResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-18T04:07:38.973Z[GMT]")
 
 
 public class GetHintsResponse   {
-  @JsonProperty("id")
-  private UUID id = null;
+  @JsonProperty("hints")
+  @Valid
+  private List<String> hints = null;
 
-  @JsonProperty("qrCode")
-  private String qrCode = null;
+  public GetHintsResponse hints(List<String> hints) {
+    this.hints = hints;
+    return this;
+  }
 
-  public GetHintsResponse id(UUID id) {
-    this.id = id;
+  public GetHintsResponse addHintsItem(String hintsItem) {
+    if (this.hints == null) {
+      this.hints = new ArrayList<String>();
+    }
+    this.hints.add(hintsItem);
     return this;
   }
 
   /**
-   * Get id
-   * @return id
+   * Get hints
+   * @return hints
    **/
   @Schema(description = "")
   
-    @Valid
-    public UUID getId() {
-    return id;
+    public List<String> getHints() {
+    return hints;
   }
 
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public GetHintsResponse qrCode(String qrCode) {
-    this.qrCode = qrCode;
-    return this;
-  }
-
-  /**
-   * Get qrCode
-   * @return qrCode
-   **/
-  @Schema(description = "")
-  
-    public String getQrCode() {
-    return qrCode;
-  }
-
-  public void setQrCode(String qrCode) {
-    this.qrCode = qrCode;
+  public void setHints(List<String> hints) {
+    this.hints = hints;
   }
 
 
@@ -72,13 +59,12 @@ public class GetHintsResponse   {
       return false;
     }
     GetHintsResponse getHintsResponse = (GetHintsResponse) o;
-    return Objects.equals(this.id, getHintsResponse.id) &&
-        Objects.equals(this.qrCode, getHintsResponse.qrCode);
+    return Objects.equals(this.hints, getHintsResponse.hints);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, qrCode);
+    return Objects.hash(hints);
   }
 
   @Override
@@ -86,8 +72,7 @@ public class GetHintsResponse   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetHintsResponse {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    qrCode: ").append(toIndentedString(qrCode)).append("\n");
+    sb.append("    hints: ").append(toIndentedString(hints)).append("\n");
     sb.append("}");
     return sb.toString();
   }

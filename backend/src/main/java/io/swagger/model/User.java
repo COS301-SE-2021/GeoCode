@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Collectable;
 import io.swagger.model.GeoCode;
+import io.swagger.model.Point;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import javax.validation.constraints.*;
  * User
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 
 
 public class User   {
@@ -26,6 +27,10 @@ public class User   {
 
   @JsonProperty("username")
   private String username = null;
+
+  @JsonProperty("points")
+  @Valid
+  private List<Point> points = null;
 
   @JsonProperty("currentCollectable")
   private Collectable currentCollectable = null;
@@ -38,9 +43,9 @@ public class User   {
   @Valid
   private List<GeoCode> foundGeocodes = null;
 
-  @JsonProperty("myGeocodes")
+  @JsonProperty("ownedGeocodes")
   @Valid
-  private List<GeoCode> myGeocodes = null;
+  private List<GeoCode> ownedGeocodes = null;
 
   public User id(UUID id) {
     this.id = id;
@@ -51,8 +56,9 @@ public class User   {
    * Get id
    * @return id
    **/
-  @Schema(description = "")
-  
+  @Schema(required = true, description = "")
+      @NotNull
+
     @Valid
     public UUID getId() {
     return id;
@@ -80,6 +86,33 @@ public class User   {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public User points(List<Point> points) {
+    this.points = points;
+    return this;
+  }
+
+  public User addPointsItem(Point pointsItem) {
+    if (this.points == null) {
+      this.points = new ArrayList<Point>();
+    }
+    this.points.add(pointsItem);
+    return this;
+  }
+
+  /**
+   * Get points
+   * @return points
+   **/
+  @Schema(description = "")
+      @Valid
+    public List<Point> getPoints() {
+    return points;
+  }
+
+  public void setPoints(List<Point> points) {
+    this.points = points;
   }
 
   public User currentCollectable(Collectable currentCollectable) {
@@ -156,31 +189,31 @@ public class User   {
     this.foundGeocodes = foundGeocodes;
   }
 
-  public User myGeocodes(List<GeoCode> myGeocodes) {
-    this.myGeocodes = myGeocodes;
+  public User ownedGeocodes(List<GeoCode> ownedGeocodes) {
+    this.ownedGeocodes = ownedGeocodes;
     return this;
   }
 
-  public User addMyGeocodesItem(GeoCode myGeocodesItem) {
-    if (this.myGeocodes == null) {
-      this.myGeocodes = new ArrayList<GeoCode>();
+  public User addOwnedGeocodesItem(GeoCode ownedGeocodesItem) {
+    if (this.ownedGeocodes == null) {
+      this.ownedGeocodes = new ArrayList<GeoCode>();
     }
-    this.myGeocodes.add(myGeocodesItem);
+    this.ownedGeocodes.add(ownedGeocodesItem);
     return this;
   }
 
   /**
-   * Get myGeocodes
-   * @return myGeocodes
+   * Get ownedGeocodes
+   * @return ownedGeocodes
    **/
   @Schema(description = "")
       @Valid
-    public List<GeoCode> getMyGeocodes() {
-    return myGeocodes;
+    public List<GeoCode> getOwnedGeocodes() {
+    return ownedGeocodes;
   }
 
-  public void setMyGeocodes(List<GeoCode> myGeocodes) {
-    this.myGeocodes = myGeocodes;
+  public void setOwnedGeocodes(List<GeoCode> ownedGeocodes) {
+    this.ownedGeocodes = ownedGeocodes;
   }
 
 
@@ -195,15 +228,16 @@ public class User   {
     User user = (User) o;
     return Objects.equals(this.id, user.id) &&
         Objects.equals(this.username, user.username) &&
+        Objects.equals(this.points, user.points) &&
         Objects.equals(this.currentCollectable, user.currentCollectable) &&
         Objects.equals(this.foundCollectables, user.foundCollectables) &&
         Objects.equals(this.foundGeocodes, user.foundGeocodes) &&
-        Objects.equals(this.myGeocodes, user.myGeocodes);
+        Objects.equals(this.ownedGeocodes, user.ownedGeocodes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, username, currentCollectable, foundCollectables, foundGeocodes, myGeocodes);
+    return Objects.hash(id, username, points, currentCollectable, foundCollectables, foundGeocodes, ownedGeocodes);
   }
 
   @Override
@@ -213,10 +247,11 @@ public class User   {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    points: ").append(toIndentedString(points)).append("\n");
     sb.append("    currentCollectable: ").append(toIndentedString(currentCollectable)).append("\n");
     sb.append("    foundCollectables: ").append(toIndentedString(foundCollectables)).append("\n");
     sb.append("    foundGeocodes: ").append(toIndentedString(foundGeocodes)).append("\n");
-    sb.append("    myGeocodes: ").append(toIndentedString(myGeocodes)).append("\n");
+    sb.append("    ownedGeocodes: ").append(toIndentedString(ownedGeocodes)).append("\n");
     sb.append("}");
     return sb.toString();
   }
