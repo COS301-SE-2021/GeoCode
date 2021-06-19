@@ -9,8 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GeoCode } from './geoCode';
 
 export interface CreateGeoCodeResponse { 
-    geoCode?: GeoCode;
+    isSuccess: boolean;
 }

@@ -28,6 +28,7 @@ public class GeoCodeServiceImplTest {
      */
     GeoCodeService geoCodeService;
 
+    GeoCodeMockRepository repo;
     /**
      * Default Constructor
      */
@@ -45,7 +46,10 @@ public class GeoCodeServiceImplTest {
     @BeforeEach
     void setup() throws RepoException {
 
-        geoCodeService = new GeoCodeServiceImpl( new GeoCodeMockRepository() );
+        repo = new GeoCodeMockRepository();
+        repo.deleteAll();
+
+        geoCodeService = new GeoCodeServiceImpl( repo );
     }
 
     /**
@@ -127,9 +131,9 @@ public class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the description created with the code
              */
-            Assertions.assertEquals( response.getGeoCode().getDescription(), request.getDescription() );
+            Assertions.assertTrue( response.isIsSuccess() );
 
-        } catch ( InvalidRequestException | QRCodeException | RepoException e ) {
+        } catch ( InvalidRequestException | RepoException e ) {
 
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
@@ -163,20 +167,19 @@ public class GeoCodeServiceImplTest {
             request.setLocation( "Jhb" );
 
             /* create the GeoCode in the repository */
-            CreateGeoCodeResponse createResp = geoCodeService.createGeoCode( request );
+            geoCodeService.createGeoCode( request );
 
             /* Get the response by calling the getAllGeoCodes use case */
-            GetGeoCodesResponse response = geoCodeService.getAllGeoCodes( );
+            GetGeoCodesResponse response = geoCodeService.getAllGeoCodes();
 
             /* Get a geocode from the response */
-            List<GeoCode> geocodes = response.getGeocodes();
-            System.out.println(geocodes);
+            List< GeoCode > geocodes = response.getGeocodes();
 
             /*
              * Check if all the GeoCodes were returned correctly
              * through checking the description created with the code
              */
-            Assertions.assertEquals(geocodes.get(0).getDescription(), "The GeoCode is stored at the art Museum in Jhb South");
+            Assertions.assertEquals( geocodes.get( 0 ).getDescription(), "The GeoCode is stored at the art Museum in Jhb South" );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -204,11 +207,11 @@ public class GeoCodeServiceImplTest {
     public void getGeoCodesByDifficultyInvalidRequestTest() {
 
         /*
-         *  Create a request object
+         * Create a request object
          * and assign values to it
          * */
         GetGeoCodesByDifficultyRequest request = new GetGeoCodesByDifficultyRequest();
-        request.setDifficulty( Difficulty.INSANE );
+        request.setDifficulty( null );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.getGeoCodesByDifficulty( request ) )
@@ -230,7 +233,7 @@ public class GeoCodeServiceImplTest {
             Difficulty difficulty = Difficulty.INSANE;
 
             /* Populate the repo with the given amount of GeoCodes */
-            List< GeoCode > temp = populate( size );
+            populate( size );
 
             /*
              * Create a request object
@@ -302,11 +305,13 @@ public class GeoCodeServiceImplTest {
 
         try {
 
-            List< GeoCode > temp = populate( 1 );
+            populate( 1 );
+
+            List< GeoCode > temp = repo.findAll();
 
             /* Create the request with the ID of the GeoCode we want */
             GetHintsRequest request = new GetHintsRequest();
-                request.setGeoCodeID( temp.get( 0 ).getId() );
+            request.setGeoCodeID( temp.get( 0 ).getId() );
 
             /* Get the response by calling the getHints use case */
             GetHintsResponse response = geoCodeService.getHints( request );
@@ -392,7 +397,7 @@ public class GeoCodeServiceImplTest {
          * and assign values to it
          * */
         UpdateAvailabilityRequest request = new UpdateAvailabilityRequest();
-        request.setAvailable( true );
+        request.setIsAvailable( true );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.updateAvailability( request ) )
@@ -424,7 +429,7 @@ public class GeoCodeServiceImplTest {
      *
      * @return the list of GeoCodes to be used to
      */
-    private List<GeoCode > populate( int size ) {
+    private void populate( int size ) {
 
         /* A list to hold the created GeoCodes */
         List< GeoCode > geoCodeSample = new ArrayList<>();
@@ -449,7 +454,8 @@ public class GeoCodeServiceImplTest {
                     request.setLocation( "Jhb " + x );
 
                     /* Add the created GeoCode to the list */
-                    geoCodeSample.add( geoCodeService.createGeoCode( request ).getGeoCode() );
+                    geoCodeService.createGeoCode( request );
+//                    geoCodeSample.add( geoCodeService.createGeoCode( request ) );
                 }
 
                 /* Populate half with EASY geoCodes to give variability */
@@ -468,7 +474,8 @@ public class GeoCodeServiceImplTest {
                     request.setLocation( "Jhb " + x );
 
                     /* Add the created GeoCode to the list */
-                    geoCodeSample.add( geoCodeService.createGeoCode( request ).getGeoCode() );
+                    geoCodeService.createGeoCode( request );
+//                    geoCodeSample.add( geoCodeService.createGeoCode( request ).getGeoCode() );
                 }
             } else if ( size == 1 ) {
 
@@ -487,16 +494,16 @@ public class GeoCodeServiceImplTest {
                 request.setLocation( "Jhb " + x );
 
                 /* Add the created GeoCode to the list */
-                geoCodeSample.add( geoCodeService.createGeoCode( request ).getGeoCode() );
+                geoCodeService.createGeoCode( request );
+//                geoCodeSample.add( geoCodeService.createGeoCode( request ).getGeoCode() );
             }
 
-        } catch ( InvalidRequestException | RepoException | QRCodeException e ) {
+        } catch ( InvalidRequestException | RepoException e ) {
 
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
         }
 
-        return geoCodeSample;
     }
 
 }

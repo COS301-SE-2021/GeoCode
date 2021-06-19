@@ -10,12 +10,13 @@
  * Do not edit the class manually.
  */
 
-export type Rarity = 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
+export type Rarity = 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY' | 'null';
 
 export const Rarity = {
     COMMON: 'COMMON' as Rarity,
     UNCOMMON: 'UNCOMMON' as Rarity,
     RARE: 'RARE' as Rarity,
     EPIC: 'EPIC' as Rarity,
-    LEGENDARY: 'LEGENDARY' as Rarity
+    LEGENDARY: 'LEGENDARY' as Rarity,
+    Null: 'null' as Rarity
 };
