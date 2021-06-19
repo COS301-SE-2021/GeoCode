@@ -1,9 +1,6 @@
 package tech.geocodeapp.geocode.Collectable.Factory;
 
-import io.swagger.model.Rarity;
 import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
-
-import java.util.UUID;
 
 public abstract class AbstractCollectableTypeFactory {
 

@@ -1,6 +1,6 @@
 package tech.geocodeapp.geocode.GeoCode;
 
-import io.swagger.model.GeoCode;
+import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,28 +1,19 @@
 package tech.geocodeapp.geocode.Collectable;
 
-import io.swagger.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableSetRepository;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
-import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
-import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse;
-import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
+import tech.geocodeapp.geocode.Collectable.Model.Rarity;
+import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
+import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableSetRequest;
+import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableTypeRequest;
+import tech.geocodeapp.geocode.Collectable.Request.GetCollectableTypesBySetRequest;
+import tech.geocodeapp.geocode.Collectable.Response.*;
 import tech.geocodeapp.geocode.Collectable.Service.CollectableService;
 import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @ExtendWith( MockitoExtension.class )
