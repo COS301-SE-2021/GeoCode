@@ -1,11 +1,10 @@
-#Clones the application to the GeoCode server on push.
-#In future this will be used to build a Docker container and launch it.
+# Clones the application to the GeoCode server on push.
 
 name: Remote SSH Commands
 
 on:
   push:
-    branches: [ dev/Configuration ]
+    branches: [ master ]
 
 jobs:
   deploy:
@@ -21,4 +20,9 @@ jobs:
         script: |
           rm -rf GeoCode
           git clone git@github.com:COS301-SE-2021/GeoCode.git
+          cd GeoCode/backend
+          mvn spring-boot:build-image -Dspring-boot.build-image.imageName=geocode/backend
+          docker stop spring
+          cd ..
+          docker-compose --env-file ../.env up -d
           echo "Deployment completed successfully"

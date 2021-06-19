@@ -1,6 +1,6 @@
 package tech.geocodeapp.geocode.GeoCode.Repository;
 
-import io.swagger.model.GeoCode;
+import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
