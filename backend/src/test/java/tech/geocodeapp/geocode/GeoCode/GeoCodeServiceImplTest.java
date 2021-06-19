@@ -381,7 +381,7 @@ public class GeoCodeServiceImplTest {
             request.setGeoCodeID( temp.get( 0 ).getId() );
             request.setCollectable( collectable );
 
-            /* Get the response by calling the getHints use case */
+            /* Get the response by calling the swapCollectables use case */
             SwapCollectablesResponse response = geoCodeService.swapCollectables( request );
 
             /*
@@ -392,6 +392,7 @@ public class GeoCodeServiceImplTest {
 
         } catch ( InvalidRequestException | RepoException e ) {
 
+            /* An error occurred, print the stack to identify */
             e.printStackTrace();
         }
     }
@@ -434,8 +435,25 @@ public class GeoCodeServiceImplTest {
     @Test
     public void updateAvailabilityTest() {
 
+        /* Create a GeoCode */
+        populate( 1 );
+        List< GeoCode > temp = repo.findAll();
+
         try {
 
+            /* Create the request with the ID of the GeoCode we want */
+            UpdateAvailabilityRequest request = new UpdateAvailabilityRequest();
+            request.setGeoCodeID( temp.get( 0 ).getId() );
+            request.setIsAvailable( false );
+
+            /* Get the response by calling the updateAvailability use case */
+            UpdateAvailabilityResponse response = geoCodeService.updateAvailability( request );
+
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the returned hints from a known hint
+             */
+            Assertions.assertTrue( response.isIsSuccess() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
