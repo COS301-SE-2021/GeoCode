@@ -174,7 +174,6 @@ public class GeoCodeServiceImplTest {
 
             /* Get a geocode from the response */
             List< GeoCode > geocodes = response.getGeocodes();
-            System.out.println( geocodes );
 
             /*
              * Check if all the GeoCodes were returned correctly
@@ -430,7 +429,6 @@ public class GeoCodeServiceImplTest {
      */
     private List<GeoCode > populate( int size ) {
 
-        System.out.println( "Populate is being called................." );
         /* A list to hold the created GeoCodes */
         List< GeoCode > geoCodeSample = new ArrayList<>();
 

@@ -23,6 +23,7 @@ import tech.geocodeapp.geocode.Trackable.Response.GetTrackablesResponse;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -112,12 +113,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
 
             // create StringBuffer size of AlphaNumericString
-            StringBuilder QR = new StringBuilder( 9 );
+            StringBuilder QR = new StringBuilder( size );
 
-            for ( int i = 0; i < 8; i++ ) {
+            for ( int i = 0; i < size; i++ ) {
 
                 /* generate a random number between 0 to AlphaNumericString variable length */
-                int index = ( int ) ( chars.length() * Math.random() );
+                int index = ( int ) (  new SecureRandom() ).nextInt(chars.length() );
 
                 /* add Character one by one in end of sb */
                 QR.append( chars.charAt( index ) );
@@ -290,7 +291,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * and add the list of hints to it
          */
         GetHintsResponse response = new GetHintsResponse();
-        temp.ifPresent( geoCode -> response.setHints( geoCode.getHints() ) );
+        if ( temp.isEmpty() ) {
+
+            List<String> hold = new ArrayList<>();
+            hold.add( "No hints available." );
+            response.setHints( hold );
+        } else {
+
+            response.setHints( temp.get().getHints() );
+        }
 
         return response;
     }
