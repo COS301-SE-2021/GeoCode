@@ -5,6 +5,7 @@
  */
 package tech.geocodeapp.geocode.Collectable.Controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import tech.geocodeapp.geocode.Collectable.Model.Collectable;
 import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
 import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
@@ -38,6 +39,7 @@ import javax.validation.Valid;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 @Validated
+@CrossOrigin(origins = "${web_referrer}", maxAge = 3600)
 public interface CollectableApi {
 
     @Operation(summary = "Creates a new Collectable", description = "Create Collectable", security = {

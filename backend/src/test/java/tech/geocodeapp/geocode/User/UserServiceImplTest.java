@@ -6,6 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tech.geocodeapp.geocode.Collectable.CollectableMockRepository;
+import tech.geocodeapp.geocode.Collectable.CollectableSetMockRepository;
+import tech.geocodeapp.geocode.Collectable.CollectableTypeMockRepository;
+import tech.geocodeapp.geocode.Collectable.Model.Collectable;
+import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
+import tech.geocodeapp.geocode.Collectable.Service.CollectableService;
+import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.GeoCode.GeoCodeMockRepository;
 import tech.geocodeapp.geocode.User.Service.UserService;
 import tech.geocodeapp.geocode.User.Service.UserServiceImpl;
@@ -24,6 +30,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class UserServiceImplTest {
 
     private UserService userService;
+    private CollectableService collectableService;
+    private CollectableTypeMockRepository collectableTypeMockRepo;
 
     UserServiceImplTest() {
 
@@ -31,7 +39,16 @@ public class UserServiceImplTest {
 
     @BeforeEach
     void setup() {
-        userService = new UserServiceImpl( new UserMockRepository(), new CollectableMockRepository(), new GeoCodeMockRepository());
+        collectableTypeMockRepo = new CollectableTypeMockRepository();
+        userService = new UserServiceImpl( new UserMockRepository(), new CollectableMockRepository(), collectableTypeMockRepo, new GeoCodeMockRepository());
+
+        //save the valid trackable CollectableType
+        CollectableType trackableCollectableType = new CollectableType();
+        trackableCollectableType.setId(UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3"));
+        collectableTypeMockRepo.save(trackableCollectableType);
+
+        //save the valid user to the MockRepo
+        userService.registerNewUser(UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f"), "john_smith");
     }
 
     @Test
@@ -41,7 +58,7 @@ public class UserServiceImplTest {
          * and assign values to it
          * */
         GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
-        request.setUserID(UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055"));
+        request.setUserID(UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055"));//invalid UUID (no user has it)
 
         GetCurrentCollectableResponse response = userService.getCurrentCollectable(request);
         Assertions.assertFalse(response.isSuccess());
@@ -55,7 +72,7 @@ public class UserServiceImplTest {
          * and assign values to it
          * */
         GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
-        request.setUserID(UUID.fromString(""));//input once have UUID for a user
+        request.setUserID(UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f"));
 
         GetCurrentCollectableResponse response = userService.getCurrentCollectable(request);
         Assertions.assertTrue(response.isSuccess());
@@ -82,7 +99,7 @@ public class UserServiceImplTest {
          * and assign values to it
          * */
         GetUserTrackableRequest request = new GetUserTrackableRequest();
-        request.setUserID(UUID.fromString(""));
+        request.setUserID(UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f"));
 
         GetUserTrackableResponse response = userService.getUserTrackable(request);
         Assertions.assertTrue(response.isSuccess());
@@ -109,7 +126,7 @@ public class UserServiceImplTest {
          * and assign values to it
          * */
         UpdateLocationRequest request = new UpdateLocationRequest();
-        request.setUserID(UUID.fromString(""));
+        request.setUserID(UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f"));
 
         UpdateLocationResponse response = userService.updateLocation(request);
         Assertions.assertTrue(response.isSuccess());
