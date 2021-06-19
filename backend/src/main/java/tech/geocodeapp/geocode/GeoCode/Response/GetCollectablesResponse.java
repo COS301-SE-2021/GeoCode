@@ -1,12 +1,13 @@
 package tech.geocodeapp.geocode.GeoCode.Response;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.springframework.validation.annotation.Validated;
-import tech.geocodeapp.geocode.Collectable.Response.CollectableResponse;
+import tech.geocodeapp.geocode.Collectable.Model.Collectable;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -15,20 +16,20 @@ import javax.validation.constraints.*;
  * GetCollectablesResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T20:33:08.210Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T20:43:37.106Z[GMT]")
 
 
 public class GetCollectablesResponse   {
   @JsonProperty("collectables")
   @Valid
-  private List< CollectableResponse > collectables = new ArrayList<CollectableResponse>();
+  private List< Collectable > collectables = new ArrayList<Collectable>();
 
-  public GetCollectablesResponse collectables(List<CollectableResponse> collectables) {
+  public GetCollectablesResponse collectables( List<Collectable> collectables ) {
     this.collectables = collectables;
     return this;
   }
 
-  public GetCollectablesResponse addCollectablesItem(CollectableResponse collectablesItem) {
+  public GetCollectablesResponse addCollectablesItem(Collectable collectablesItem) {
     this.collectables.add(collectablesItem);
     return this;
   }
@@ -40,11 +41,11 @@ public class GetCollectablesResponse   {
   @Schema(required = true, description = "")
       @NotNull
     @Valid
-    public List<CollectableResponse> getCollectables() {
+    public List<Collectable> getCollectables() {
     return collectables;
   }
 
-  public void setCollectables(List<CollectableResponse> collectables) {
+  public void setCollectables(List<Collectable> collectables) {
     this.collectables = collectables;
   }
 
