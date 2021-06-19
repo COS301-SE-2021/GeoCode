@@ -1,6 +1,6 @@
 package tech.geocodeapp.geocode.Collectable.Manager;
 
-import io.swagger.model.CollectableType;
+import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
 import tech.geocodeapp.geocode.Collectable.Context.CollectableTypeContext;
 import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.Collectable.Factory.AbstractCollectableTypeFactory;

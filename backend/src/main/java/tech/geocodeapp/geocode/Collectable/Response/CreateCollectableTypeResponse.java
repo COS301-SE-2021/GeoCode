@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.Collectable.Response;
 
-import io.swagger.model.CollectableType;
 import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
 
 /**

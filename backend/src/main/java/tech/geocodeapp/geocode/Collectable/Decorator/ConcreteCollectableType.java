@@ -1,7 +1,7 @@
 package tech.geocodeapp.geocode.Collectable.Decorator;
 
-import io.swagger.model.CollectableSet;
-import io.swagger.model.Rarity;
+import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
+import tech.geocodeapp.geocode.Collectable.Model.Rarity;
 
 import java.util.GregorianCalendar;
 import java.util.UUID;

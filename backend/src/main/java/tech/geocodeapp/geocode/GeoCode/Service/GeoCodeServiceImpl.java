@@ -7,12 +7,19 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import org.springframework.stereotype.Service;
 
-import io.swagger.model.*;
-
+import tech.geocodeapp.geocode.Collectable.Model.Collectable;
+import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
+import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
+import tech.geocodeapp.geocode.Collectable.Model.Rarity;
+import tech.geocodeapp.geocode.Collectable.Request.GetCollectablesRequest;
+import tech.geocodeapp.geocode.Collectable.Response.GetCollectablesResponse;
+import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
+import tech.geocodeapp.geocode.Trackable.Request.GetTrackablesRequest;
+import tech.geocodeapp.geocode.Trackable.Response.GetTrackablesResponse;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -153,7 +160,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetCollectablesRequest
      */
     @Override
-    public GetCollectablesResponse getCollectables( GetCollectablesRequest request ) throws InvalidRequestException, RepoException {
+    public GetCollectablesResponse getCollectables(GetCollectablesRequest request ) throws InvalidRequestException, RepoException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -348,7 +355,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetTrackablesRequest
      */
     @Override
-    public GetTrackablesResponse getTrackables( GetTrackablesRequest request ) throws InvalidRequestException, RepoException {
+    public GetTrackablesResponse getTrackables(GetTrackablesRequest request ) throws InvalidRequestException, RepoException {
 
         /* Validate the request */
         if ( request == null ) {

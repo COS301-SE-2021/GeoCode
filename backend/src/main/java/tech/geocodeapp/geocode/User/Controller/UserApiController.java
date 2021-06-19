@@ -1,7 +1,6 @@
 package tech.geocodeapp.geocode.User.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.model.*;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,15 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import tech.geocodeapp.geocode.User.Response.GetFoundCollectablesResponse;
+import tech.geocodeapp.geocode.User.Response.GetFoundGeoCodesResponse;
 import tech.geocodeapp.geocode.User.Model.User;
-import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
-import tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest;
-import tech.geocodeapp.geocode.User.Request.SwapCollectableRequest;
-import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
-import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
-import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
-import tech.geocodeapp.geocode.User.Response.SwapCollectableResponse;
-import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
+import tech.geocodeapp.geocode.User.Request.*;
+import tech.geocodeapp.geocode.User.Response.*;
 import tech.geocodeapp.geocode.User.Service.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
