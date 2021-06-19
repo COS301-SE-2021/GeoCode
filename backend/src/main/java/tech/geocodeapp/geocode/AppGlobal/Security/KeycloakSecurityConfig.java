@@ -30,7 +30,7 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http.cors();
+        http.cors().and().csrf().disable();
         http.addFilterBefore(interceptor, BasicAuthenticationFilter.class);
         http.authorizeRequests()
                 .anyRequest()
