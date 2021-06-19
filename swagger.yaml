@@ -1468,7 +1468,7 @@ components:
         collectables:
           type: array
           items:
-            $ref: '#/components/schemas/CollectableResponse'
+            $ref: '#/components/schemas/Collectable'
       xml:
         name: "GetCollectablesResponse"
 
