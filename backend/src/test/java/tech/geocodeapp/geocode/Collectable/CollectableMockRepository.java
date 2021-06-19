@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.Collectable;
 
+import com.sun.xml.bind.v2.model.core.ID;
 import io.swagger.model.Collectable;
 import io.swagger.model.CollectableType;
 import org.springframework.data.domain.Example;

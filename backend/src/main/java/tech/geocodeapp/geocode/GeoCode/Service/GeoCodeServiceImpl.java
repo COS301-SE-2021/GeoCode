@@ -8,10 +8,11 @@ import com.google.zxing.common.BitMatrix;
 import org.springframework.stereotype.Service;
 
 import io.swagger.model.*;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
+
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
+import tech.geocodeapp.geocode.GeoCode.Response.*;
+import tech.geocodeapp.geocode.GeoCode.Request.*;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -87,10 +88,20 @@ public class GeoCodeServiceImpl implements GeoCodeService {
              * Create the image with the specified name
              * and set the GeoCode to the create QR Code
              */
-            newGeoCode.setQrCode( createQR( "QRCode" ) );
+
+            String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+
+                /*StringBuilder sb = new StringBuilder(8);
+                for(int i = 0; i < 8; i++)
+                    sb.append(AB.charAt(rnd.nextInt(AB.length())));
+
+            newGeoCode.setQrCode( sb.toString() );
         } catch ( IOException | WriterException e ) {
 
-            throw new QRCodeException( "The QR Code could not be created." );
+            throw new QRCodeException( "The QR Code could not be created." );*/
+        } catch ( Exception e ) {
+            e.printStackTrace();
         }
 
         /*
@@ -123,7 +134,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws RepoException there was an issue accessing the repository
      */
     @Override
-    public GetGeoCodesResponse getAllGeoCodes( ) throws RepoException {
+    public GetGeoCodesResponse getAllGeoCodes() throws RepoException {
 
         /* Validate the repo */
         if ( geoCodeRepo == null ) {
