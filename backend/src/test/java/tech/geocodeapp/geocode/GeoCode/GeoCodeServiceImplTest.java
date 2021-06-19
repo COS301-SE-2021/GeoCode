@@ -529,8 +529,6 @@ public class GeoCodeServiceImplTest {
 
     /**
      * This function creates numerous GeoCodes to be used for testing.
-     *
-     * @return the list of GeoCodes to be used to
      */
     private void populate( int size ) {
 
