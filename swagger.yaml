@@ -1076,8 +1076,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Collectable'
-        trackables:
-          type: string
         qrCode:
           type: string
         location:
