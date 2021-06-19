@@ -14,7 +14,7 @@ import tech.geocodeapp.geocode.Trackable.Response.GetTrackablesResponse;
  */
 public interface GeoCodeService {
 
-    CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException, RepoException;
+    CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, RepoException;
 
     GetGeoCodesResponse getAllGeoCodes( ) throws RepoException;
 
