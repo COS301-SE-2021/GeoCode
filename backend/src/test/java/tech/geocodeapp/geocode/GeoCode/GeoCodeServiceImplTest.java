@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import tech.geocodeapp.geocode.Collectable.Model.Difficulty;
+import tech.geocodeapp.geocode.Collectable.Model.*;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Service.*;
@@ -351,6 +351,8 @@ public class GeoCodeServiceImplTest {
          * and assign values to it
          * */
         SwapCollectablesRequest request = new SwapCollectablesRequest();
+        request.setGeoCodeID( null );
+        request.setCollectable( null );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.swapCollectables( request ) )
@@ -365,11 +367,31 @@ public class GeoCodeServiceImplTest {
     @Test
     public void swapCollectablesTest() {
 
+        /* Create a GeoCode */
+        populate( 1 );
+        List< GeoCode > temp = repo.findAll();
+
         try {
 
-        } catch ( Exception e ) {
+            /* Create the Collectable we want to swap with */
+            Collectable collectable = new Collectable( new CollectableType( "name", "imageURL", Rarity.COMMON, new CollectableSet( "setName", "description" ), null ) );
 
-            /* An error occurred, print the stack to identify */
+            /* Create the request with the ID of the GeoCode we want */
+            SwapCollectablesRequest request = new SwapCollectablesRequest();
+            request.setGeoCodeID( temp.get( 0 ).getId() );
+            request.setCollectable( collectable );
+
+            /* Get the response by calling the getHints use case */
+            SwapCollectablesResponse response = geoCodeService.swapCollectables( request );
+
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the returned hints from a known hint
+             */
+            Assertions.assertTrue( response.isIsSuccess() );
+
+        } catch ( InvalidRequestException | RepoException e ) {
+
             e.printStackTrace();
         }
     }

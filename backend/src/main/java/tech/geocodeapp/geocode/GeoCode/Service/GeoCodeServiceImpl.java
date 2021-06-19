@@ -95,7 +95,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         UUID id = UUID.randomUUID();
         newGeoCode.setId( id );
 
-        Collectable collectable = new Collectable(new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description"), null ) );
+        Collectable collectable = new Collectable( new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description"), null ) );
         newGeoCode.setCollectables( collectable );
 
         /* Try and create the relevant image with the newly create GeoCode instance */
@@ -446,7 +446,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
         temp.ifPresent( geoCode -> geoCode.setAvailable( request.isIsAvailable() ) );
 
-
+        geoCodeRepo.save( temp.get() );
         /*
          * Create the new response
          * and set the success of the operation
