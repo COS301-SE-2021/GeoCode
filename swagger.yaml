@@ -1056,7 +1056,8 @@ components:
         - description
         - hints
         - qrCode
-        - location
+        - longitude
+        - latitude
         - available
       properties:
         id:
@@ -1078,7 +1079,9 @@ components:
             $ref: '#/components/schemas/Collectable'
         qrCode:
           type: string
-        location:
+        longitude:
+          type: string
+        latitude:
           type: string
       xml:
         name: "GeoCode"
@@ -1088,7 +1091,8 @@ components:
       required:
         - id
         - description
-        - location
+        - longitude
+        - latitude
         - difficulty
         - hints
         - available
@@ -1098,7 +1102,9 @@ components:
           format: uuid
         description:
           type: string
-        location:
+        longitude:
+          type: string
+        latitude:
           type: string
         hints:
           type: array
@@ -1192,7 +1198,8 @@ components:
         - available
         - description
         - difficulty
-        - location
+        - longitude
+        - latitude
       properties:
         id:
           type: string
@@ -1201,7 +1208,9 @@ components:
           type: boolean
         description:
           type: string
-        location:
+        longitude:
+          type: string
+        latitude:
           type: string
         difficulty:
           $ref: '#/components/schemas/Difficulty'
@@ -1226,7 +1235,8 @@ components:
         - available
         - description
         - difficulty
-        - location
+        - longitude
+        - latitude
       properties:
         id:
           type: string
@@ -1235,7 +1245,9 @@ components:
           type: boolean
         description:
           type: string
-        location:
+        longitude:
+          type: string
+        latitude:
           type: string
         difficulty:
           $ref: '#/components/schemas/Difficulty'
@@ -1277,10 +1289,13 @@ components:
     SwapCollectablesRequest:
       type: "object"
       required:
-        - collectable
+        - targetGeoCodeID
+        - targetCollectableID
         - geoCodeID
       properties:
-        collectable:
+        targetGeoCodeID:
+          $ref: '#/components/schemas/Collectable'
+        targetCollectableID:
           $ref: '#/components/schemas/Collectable'
         geoCodeID:
           type: string
