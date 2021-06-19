@@ -1,12 +1,9 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {GeoCodeService, CreateGeoCodeRequest, CreateGeoCodeResponse} from "../../../swagger/client";
 import {NavController} from "@ionic/angular";
-import {closestNode} from "@angular/core/schematics/utils/typescript/nodes";
 
 declare let google;
 let map;
-
-let mapMarker;
 @Component({
   selector: 'app-geocode-create',
   templateUrl: './geocode-create.page.html',
@@ -17,7 +14,6 @@ let mapMarker;
 
 export class GeocodeCreatePage implements AfterViewInit {
 @ViewChild('mapElement',{static:false}) mapElement;
-//@ViewChild('location',{static:false}) location;
 locations;
 mapOptions;
 hints = [];
@@ -34,14 +30,9 @@ request : CreateGeoCodeRequest= {
 
   constructor(public geocodeAPI: GeoCodeService,public navCtrl:NavController) { }
 
-
-  // AfterViewInit() {
-  //   initMap();
-  // }
-
+  //create map
   initMap() {
     // Create a map after the view is ready and the native platform is ready.
-
     this.mapOptions = {
       center: {lat: -25.75625115327836, lng: 28.235629260918344},
       zoom: 15,
@@ -68,14 +59,17 @@ request : CreateGeoCodeRequest= {
 
   };
 
+  //create map
   ngAfterViewInit(): void {
     this.initMap();
   }
 
-  updateRequest(e: any, field: ('location'| 'description')){
+  //update the description field for the request
+  updateRequest(e: any, field: ('description')){
     this.request[field] = e.target.value;
   }
 
+  //create the geocode and update the remaining fields
   createGeoCode(){
     this.request['location']=this.locations.lat + ',' + this.locations.lng;
     this.request['hints']=this.hints;
@@ -89,21 +83,24 @@ request : CreateGeoCodeRequest= {
 
   }
 
+  //update location for the request
   updateLocation(location){
     this.locations=location;
   }
 
+  //update difficulty field for request
   updateDifficulty(event){
     this.difficulty=event;
   }
 
+  //update hints array with user input
   updateHints(event){
      this.hints.push(event.target.value);
   }
 
 }
 
-
+//Place the marker in the users selected location and update that maps center
 function placeMarker(location){
   const marker = new google.maps.Marker({
     map,
