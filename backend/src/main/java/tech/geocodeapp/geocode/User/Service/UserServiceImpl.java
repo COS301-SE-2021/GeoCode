@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.User.Service;
 
 import tech.geocodeapp.geocode.Collectable.Model.Collectable;
+import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -185,6 +186,7 @@ public class UserServiceImpl implements UserService {
         User newUser = new User();
         newUser.setId(id);
         newUser.setUsername(username);
+        newUser.setTrackableObject(new Collectable(/*trackable CollectableType id*/));
         userRepo.save(newUser);
     }
 }
