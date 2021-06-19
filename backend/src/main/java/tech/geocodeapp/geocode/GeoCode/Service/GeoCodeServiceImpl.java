@@ -45,9 +45,18 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      *
      * @param geoCodeRepo the repo the created response attributes should save to
      */
-    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo ) {
+    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo ) throws RepoException {
 
-        this.geoCodeRepo = geoCodeRepo;
+        /* Check if the given repo exists */
+        if ( geoCodeRepo != null ) {
+
+            /* The repo exists therefore it can be set for the class */
+            this.geoCodeRepo = geoCodeRepo;
+        } else {
+
+            /* The repo does not exist throw an error */
+            throw new RepoException( "The given repository does not exist." );
+        }
     }
 
     /**

@@ -43,7 +43,7 @@ public class GeoCodeServiceImplTest {
      * by some other test or data.
      */
     @BeforeEach
-    void setup() {
+    void setup() throws RepoException {
 
         geoCodeService = new GeoCodeServiceImpl( new GeoCodeMockRepository() );
     }
@@ -52,7 +52,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the repository being null
      */
     @Test
-    public void createGeoCodeNullRepoTest() {
+    public void createGeoCodeNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.createGeoCode( null ) )
@@ -64,7 +64,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    public void createGeoCodeExceptionTest() {
+    public void createGeoCodeInvalidRequestTest() {
 
         /*
          *  Create a request object
@@ -154,7 +154,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the repository being null
      */
     @Test
-    public void getGeoCodesByDifficultyNullRepoTest() {
+    public void getGeoCodesByDifficultyNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.getGeoCodesByDifficulty( null ) )
@@ -166,7 +166,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    public void getGeoCodesByDifficultyExceptionTest() {
+    public void getGeoCodesByDifficultyInvalidRequestTest() {
 
         /*
          *  Create a request object
@@ -195,7 +195,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the repository being null
      */
     @Test
-    public void getHintsNullRepoTest() {
+    public void getHintsNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.getHints( null ) )
@@ -207,7 +207,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    public void getHintsExceptionTest() {
+    public void getHintsInvalidRequestTest() {
 
         /*
          *  Create a request object
@@ -235,7 +235,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the repository being null
      */
     @Test
-    public void swapCollectablesNullRepoTest() {
+    public void swapCollectablesNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.swapCollectables( null ) )
@@ -247,7 +247,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    public void swapCollectablesExceptionTest() {
+    public void swapCollectablesInvalidRequestTest() {
 
         /*
          *  Create a request object
@@ -275,7 +275,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the repository being null
      */
     @Test
-    public void updateAvailabilityNullRepoTest() {
+    public void updateAvailabilityNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.updateAvailability( null ) )
@@ -287,7 +287,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    public void updateAvailabilityExceptionTest() {
+    public void updateAvailabilityInvalidRequestTest() {
 
         /*
          *  Create a request object
