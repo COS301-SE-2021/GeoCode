@@ -44,11 +44,6 @@ public class GeoCodeServiceImplTest {
     @Test
     public void createGeoCodeExceptionTest() {
 
-        /* Null request check */
-        assertThatThrownBy( ()->geoCodeService.createGeoCode( null ) )
-                .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining("The given request is empty." );
-
         /*
          *  Create a request object
          * and assign values to it
@@ -64,7 +59,6 @@ public class GeoCodeServiceImplTest {
         assertThatThrownBy( ()->geoCodeService.createGeoCode( request ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining("The given request is missing parameter/s." );
-
     }
 
     @Test
