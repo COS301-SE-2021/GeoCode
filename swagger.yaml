@@ -1359,12 +1359,17 @@ components:
       required:
         - id
         - type
+        - pastLocations
       properties:
         id:
           type: string
           format: uuid
         type:
           $ref: "#/components/schemas/CollectableType"
+        pastLocations:
+          type: array
+          items:
+            type: string
       xml:
         name: "Collectable"
     CreateCollectableSetRequest:
@@ -1502,12 +1507,18 @@ components:
       required:
         - id
         - type
+        - pastLocations
       properties:
         id:
           type: string
           format: uuid
         type:
           $ref: "#/components/schemas/CollectableTypeComponent"
+        pastLocations:
+          type: array
+          items:
+            type: string
+            
       xml:
         name: "CollectableResponse"
           
