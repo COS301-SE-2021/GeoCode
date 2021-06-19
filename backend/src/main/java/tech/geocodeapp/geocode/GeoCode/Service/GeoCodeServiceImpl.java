@@ -163,10 +163,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     public GetGeoCodesResponse getAllGeoCodes() throws RepoException {
 
         /* Validate the repo */
-        if ( geoCodeRepo == null ) {
-
-            throw new RepoException( "The GeoCode Repository is empty." );
-        }
+        checkRepo();
 
         return new GetGeoCodesResponse().geocodes(geoCodeRepo.findAll());
     }
@@ -191,10 +188,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }*/
 
         /* Validate the repo */
-        if ( geoCodeRepo == null ) {
-
-            throw new RepoException( "The GeoCode Repository is empty." );
-        }
+        checkRepo();
 
         /*
          * Create the new response
@@ -226,10 +220,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Validate the repo */
-        if ( geoCodeRepo == null ) {
-
-            throw new RepoException( "The GeoCode Repository is empty." );
-        }
+        checkRepo();
 
         /*
          * Sort through the stored GeoCodes and
@@ -279,10 +270,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Validate the repo */
-        if ( geoCodeRepo == null ) {
-
-            throw new RepoException( "The GeoCode Repository is empty." );
-        }
+        checkRepo();
 
         Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
 
@@ -324,10 +312,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Validate the repo */
-        if ( geoCodeRepo == null ) {
-
-            throw new RepoException( "The GeoCode Repository is empty." );
-        }
+        checkRepo();
 
         /*
          * Create the new response
@@ -359,10 +344,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Validate the repo */
-        if ( geoCodeRepo == null ) {
-
-            throw new RepoException( "The GeoCode Repository is empty." );
-        }
+        checkRepo();
 
         /*
          * Create the new response
@@ -394,10 +376,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Validate the repo */
-        if ( geoCodeRepo == null ) {
-
-            throw new RepoException( "The GeoCode Repository is empty." );
-        }
+        checkRepo();
 
         /*
          * Create the new response
@@ -429,10 +408,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Validate the repo */
-        if ( geoCodeRepo == null ) {
-
-            throw new RepoException( "The GeoCode Repository is empty." );
-        }
+        checkRepo();
 
         /*
          * Create the new response
@@ -463,10 +439,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Validate the repo */
-        if ( geoCodeRepo == null ) {
-
-            throw new RepoException( "The GeoCode Repository is empty." );
-        }
+        checkRepo();
 
         /* Find and set the GeoCode to the new Availability */
         Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
@@ -485,6 +458,14 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
 
     ////////////////Helper functions////////////////
+
+    private void checkRepo() throws RepoException {
+
+        if ( geoCodeRepo == null ) {
+
+            throw new RepoException( "The GeoCode Repository is empty." );
+        }
+    }
 
     /**
      * This helper function helps create the QR Code image and stores
