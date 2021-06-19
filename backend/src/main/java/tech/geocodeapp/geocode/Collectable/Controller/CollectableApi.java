@@ -129,7 +129,7 @@ public interface CollectableApi {
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" },
             method = RequestMethod.POST)
-    ResponseEntity<GetCollectableTypesResponse> getCollectableTypeBySet(@Parameter(in = ParameterIn.DEFAULT, description = "Request Collectable Types by set", required=true, schema=@Schema()) @Valid @RequestBody GetCollectableTypesBySetRequest body);
+    ResponseEntity<GetCollectableTypesResponse> getCollectableTypesBySet(@Parameter(in = ParameterIn.DEFAULT, description = "Request Collectable Types by set", required=true, schema=@Schema()) @Valid @RequestBody GetCollectableTypesBySetRequest body);
 
 
     @Operation(summary = "", description = "Returns all Collectable Types", security = {
