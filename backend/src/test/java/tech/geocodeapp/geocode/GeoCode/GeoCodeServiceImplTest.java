@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.event.annotation.BeforeTestMethod;
 import tech.geocodeapp.geocode.Collectable.Model.Difficulty;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
@@ -123,11 +121,13 @@ public class GeoCodeServiceImplTest {
             request.setHints( hints );
             request.setLocation( "Jhb" );
 
+            CreateGeoCodeResponse response = geoCodeService.createGeoCode( request );
+
             /*
              * Check if the GeoCode was created correctly
              * through checking the description created with the code
              */
-            Assertions.assertEquals( geoCodeService.createGeoCode( request ).getGeoCode().getDescription(), request.getDescription() );
+            Assertions.assertEquals( response.getGeoCode().getDescription(), request.getDescription() );
 
         } catch ( InvalidRequestException | QRCodeException | RepoException e ) {
 
@@ -216,7 +216,28 @@ public class GeoCodeServiceImplTest {
     public void getGeoCodesByDifficultyTest() {
 
         try {
+            GeoCodeMockRepository repo = new GeoCodeMockRepository();
 
+            int size = 6;
+            List< GeoCode > temp = populate( size );
+            for ( int x = 0; x < size; x++ ) {
+
+                repo.save( temp.get( x ) );
+            }
+
+            List< GeoCode > hold = geoCodeService.getAllGeoCodes().getGeocodes();
+
+            geoCodeService = new GeoCodeServiceImpl( repo );
+            boolean valid = true;
+            for ( int x = 0; x < size; x++ ) {
+
+                if ( !temp.get( x ).equals( geoCodeService.getAllGeoCodes().getGeocodes().get( x ) ) ) {
+
+                    valid = false;
+                }
+            }
+
+            Assertions.assertTrue( valid );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -247,6 +268,7 @@ public class GeoCodeServiceImplTest {
          * and assign values to it
          * */
         GetHintsRequest request = new GetHintsRequest();
+        request.setGeoCodeID( null );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.getHints( request ) )
@@ -263,6 +285,20 @@ public class GeoCodeServiceImplTest {
 
         try {
 
+            List< GeoCode > temp = populate( 1 );
+
+            /* Create the request with the ID of the GeoCode we want */
+            GetHintsRequest request = new GetHintsRequest();
+                request.setGeoCodeID( temp.get( 0 ).getId() );
+
+            /* Get the response by calling the getHints use case */
+            GetHintsResponse response = geoCodeService.getHints( request );
+
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the returned hints from a known hint
+             */
+            Assertions.assertEquals( response.getHints().get( 0 ), "Hint one for: 1" );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -424,8 +460,8 @@ public class GeoCodeServiceImplTest {
                 /* Create the request with the following mock data */
                 CreateGeoCodeRequest request = new CreateGeoCodeRequest();
                 request.setAvailable( true );
-                request.setDescription( "The INSANE GeoCode is stored at location " + x );
-                request.setDifficulty( Difficulty.INSANE );
+                request.setDescription( "The DIFFICULTY GeoCode is stored at location " + x );
+                request.setDifficulty( Difficulty.DIFFICULTY );
                 List< String > hints = new ArrayList<>();
                     hints.add( "Hint one for: " + x );
                     hints.add( "Hint two for: " + x );
