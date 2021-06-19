@@ -3,6 +3,8 @@ package tech.geocodeapp.geocode.GeoCode.Model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,9 +22,12 @@ import java.util.UUID;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T19:40:54.656Z[GMT]")
 
-
+@Entity
+@Table(name = "geocode")
 public class GeoCode   {
+
   @JsonProperty("id")
+  @Id
   private UUID id = null;
 
   @JsonProperty("difficulty")
@@ -35,10 +40,12 @@ public class GeoCode   {
   private String description = null;
 
   @JsonProperty("hints")
+  @ElementCollection
   @Valid
   private List<String> hints = new ArrayList<String>();
 
   @JsonProperty("collectables")
+  @ManyToMany
   @Valid
   private List<Collectable> collectables = null;
 
