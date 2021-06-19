@@ -9,11 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Difficulty } from './difficulty';
+import { Collectable } from './collectable';
 
 export interface SwapCollectablesRequest { 
-    description: string;
-    location: string;
-    hints: Array<string>;
-    difficulty: Difficulty;
+    collectable: Collectable;
+    geoCodeID: string;
 }

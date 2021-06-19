@@ -12,5 +12,7 @@
 import { Collectable } from './collectable';
 
 export interface UpdateLocationResponse { 
-    trackable: Collectable;
+    success: boolean;
+    message: string;
+    trackable?: Collectable;
 }

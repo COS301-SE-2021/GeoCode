@@ -11,6 +11,5 @@
  */
 
 export interface UpdateAvailabilityResponse { 
-    id?: string;
-    qrCode?: string;
+    success?: boolean;
 }

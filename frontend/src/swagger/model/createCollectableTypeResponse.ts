@@ -13,6 +13,6 @@ import { CollectableTypeComponent } from './collectableTypeComponent';
 
 export interface CreateCollectableTypeResponse { 
     success: boolean;
-    message?: string;
+    message: string;
     collectableType: CollectableTypeComponent;
 }

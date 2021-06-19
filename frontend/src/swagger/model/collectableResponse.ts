@@ -14,4 +14,5 @@ import { CollectableTypeComponent } from './collectableTypeComponent';
 export interface CollectableResponse { 
     id: string;
     type: CollectableTypeComponent;
+    pastLocations: Array<string>;
 }

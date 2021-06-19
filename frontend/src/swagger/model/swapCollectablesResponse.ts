@@ -11,6 +11,5 @@
  */
 
 export interface SwapCollectablesResponse { 
-    id?: string;
-    qrCode?: string;
+    success?: boolean;
 }

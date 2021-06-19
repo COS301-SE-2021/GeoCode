@@ -12,5 +12,7 @@
 import { Collectable } from './collectable';
 
 export interface GetUserTrackableResponse { 
+    success: boolean;
+    message: string;
     trackable: Collectable;
 }

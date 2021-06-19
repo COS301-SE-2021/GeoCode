@@ -12,5 +12,7 @@
 import { Collectable } from './collectable';
 
 export interface GetCurrentCollectableResponse { 
-    collectable?: Collectable;
+    success: boolean;
+    message: string;
+    collectable: Collectable;
 }
