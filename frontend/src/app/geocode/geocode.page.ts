@@ -2,6 +2,7 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 import {NavigationExtras} from '@angular/router';
+import {GeoCodeService, GetGeoCodesResponse} from "../../swagger/client";
 import { RouterModule } from '@angular/router';
 
 declare let google;
@@ -19,21 +20,27 @@ export class GeocodePage implements AfterViewInit  {
   selected=[{id: 1, lat: -25.75625115327836, long: 28.235629260918344,difficulty:'Medium',isAvailable: true}];
 
 
-  constructor(public alertController: AlertController,public navCtrl: NavController) {
-    this.geocodes = [{id: 1, lat: -25.75625115327836, long: 28.235629260918344,difficulty:'Medium',isAvailable: true}, {
-      id: 2,
-      lat: -25.755678678528565,
-      long: 28.243631816539157,
-      difficulty:'Easy',
-      isAvailable: true
-    },
-      {
-        id: 3,
-        lat: -25.75756288427446,
-        long: 28.260916229007645,
-        difficulty:'Hard',
-        isAvailable: true
-      }];
+  constructor(public alertController: AlertController,public navCtrl: NavController,public geocodeApi:GeoCodeService) {
+    // this.geocodes = [{id: 1, lat: -25.75625115327836, long: 28.235629260918344,difficulty:'Medium',isAvailable: true}, {
+    //   id: 2,
+    //   lat: -25.755678678528565,
+    //   long: 28.243631816539157,
+    //   difficulty:'Easy',
+    //   isAvailable: true
+    // },
+    //   {
+    //     id: 3,
+    //     lat: -25.75756288427446,
+    //     long: 28.260916229007645,
+    //     difficulty:'Hard',
+    //     isAvailable: true
+    //   }];
+    this.geocodeApi.getGeoCodes().subscribe((response: GetGeoCodesResponse)=>{
+      console.log(response);
+    },(error)=>{
+      console.log("Error");
+      console.log(error);
+    });
   }
 
   //Create map and add mapmarkers of geocodes
@@ -73,6 +80,7 @@ export class GeocodePage implements AfterViewInit  {
   }
 
   ngAfterViewInit(): void {
+
      this.loadMap();
   }
 
