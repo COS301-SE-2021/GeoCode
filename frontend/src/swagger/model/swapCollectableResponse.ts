@@ -9,7 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Collectable } from './collectable';
 
-export interface GetCollectableTypeBySetRequest { 
-    setId: string;
+export interface SwapCollectableResponse { 
+    success: boolean;
+    message: string;
+    collectable: Collectable;
 }

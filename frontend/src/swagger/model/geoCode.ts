@@ -18,7 +18,7 @@ export interface GeoCode {
     available: boolean;
     description: string;
     hints: Array<string>;
-    collectables?: Collectable;
+    collectables?: Array<Collectable>;
     trackables?: string;
     qrCode: string;
     location: string;

@@ -14,4 +14,5 @@ import { CollectableType } from './collectableType';
 export interface Collectable { 
     id: string;
     type: CollectableType;
+    pastLocations: Array<string>;
 }

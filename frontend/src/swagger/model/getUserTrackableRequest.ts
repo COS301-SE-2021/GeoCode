@@ -9,14 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { CollectableSet } from './collectableSet';
-import { Rarity } from './rarity';
 
-export interface CollectableType { 
-    id: string;
-    name: string;
-    image: string;
-    rarity: Rarity;
-    set: CollectableSet;
-    properties?: { [key: string]: string; };
+export interface GetUserTrackableRequest { 
+    userID: string;
 }

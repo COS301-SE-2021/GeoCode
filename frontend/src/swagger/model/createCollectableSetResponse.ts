@@ -9,7 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { CollectableSet } from './collectableSet';
 
-export interface GetMyGeocodeRequest { 
-    id: string;
+export interface CreateCollectableSetResponse { 
+    success: boolean;
+    message: string;
+    collectableSet: CollectableSet;
 }

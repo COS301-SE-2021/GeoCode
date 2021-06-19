@@ -11,6 +11,5 @@
  */
 
 export interface GetHintsResponse { 
-    id?: string;
-    qrCode?: string;
+    hints?: Array<string>;
 }

@@ -12,11 +12,12 @@
 import { CollectableSet } from './collectableSet';
 import { Rarity } from './rarity';
 
-export interface CollectableType { 
-    id: string;
+export interface CollectableTypeComponent { 
     name: string;
-    image: string;
     rarity: Rarity;
+    id: string;
     set: CollectableSet;
-    properties?: { [key: string]: string; };
+    expiraryDate?: Date;
+    area?: string;
+    trackable?: boolean;
 }

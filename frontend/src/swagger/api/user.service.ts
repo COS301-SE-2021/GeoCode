@@ -17,8 +17,25 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { GetMyGeocodeRequest } from '../model/getMyGeocodeRequest';
-import { GetMyGeocodeResponse } from '../model/getMyGeocodeResponse';
+import { BlockUserRequest } from '../model/blockUserRequest';
+import { GetCurrentCollectableRequest } from '../model/getCurrentCollectableRequest';
+import { GetCurrentCollectableResponse } from '../model/getCurrentCollectableResponse';
+import { GetFoundCollectablesRequest } from '../model/getFoundCollectablesRequest';
+import { GetFoundCollectablesResponse } from '../model/getFoundCollectablesResponse';
+import { GetFoundGeoCodesRequest } from '../model/getFoundGeoCodesRequest';
+import { GetFoundGeoCodesResponse } from '../model/getFoundGeoCodesResponse';
+import { GetOwnedGeoCodesRequest } from '../model/getOwnedGeoCodesRequest';
+import { GetOwnedGeoCodesResponse } from '../model/getOwnedGeoCodesResponse';
+import { GetUserTrackableRequest } from '../model/getUserTrackableRequest';
+import { GetUserTrackableResponse } from '../model/getUserTrackableResponse';
+import { GetUsersRequest } from '../model/getUsersRequest';
+import { GetUsersResponse } from '../model/getUsersResponse';
+import { SetAdminRequest } from '../model/setAdminRequest';
+import { SwapCollectableRequest } from '../model/swapCollectableRequest';
+import { SwapCollectableResponse } from '../model/swapCollectableResponse';
+import { UpdateLocationRequest } from '../model/updateLocationRequest';
+import { UpdateLocationResponse } from '../model/updateLocationResponse';
+import { User } from '../model/user';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -57,19 +74,19 @@ export class UserService {
 
 
     /**
-     * Get all geocodes associated with a user
-     * Get My Geocodes
-     * @param body Request to get geocodes belonging to user
+     * Administrator blocks the given user
+     * Block a user
+     * @param body Request to block a user
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMyGeocodes(body: GetMyGeocodeRequest, observe?: 'body', reportProgress?: boolean): Observable<GetMyGeocodeResponse>;
-    public getMyGeocodes(body: GetMyGeocodeRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetMyGeocodeResponse>>;
-    public getMyGeocodes(body: GetMyGeocodeRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetMyGeocodeResponse>>;
-    public getMyGeocodes(body: GetMyGeocodeRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public blockUser(body: BlockUserRequest, observe?: 'body', reportProgress?: boolean): Observable<User>;
+    public blockUser(body: BlockUserRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
+    public blockUser(body: BlockUserRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
+    public blockUser(body: BlockUserRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getMyGeocodes.');
+            throw new Error('Required parameter body was null or undefined when calling blockUser.');
         }
 
         let headers = this.defaultHeaders;
@@ -101,7 +118,567 @@ export class UserService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<GetMyGeocodeResponse>('post',`${this.basePath}/User/getMyGeocodes`,
+        return this.httpClient.request<User>('post',`${this.basePath}/User/blockUser`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get the Collectable the User is currently holding
+     * Get the user&#x27;s current Collectable
+     * @param body Request to get the user&#x27;s current Collectable
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getCurrentCollectable(body: GetCurrentCollectableRequest, observe?: 'body', reportProgress?: boolean): Observable<GetCurrentCollectableResponse>;
+    public getCurrentCollectable(body: GetCurrentCollectableRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetCurrentCollectableResponse>>;
+    public getCurrentCollectable(body: GetCurrentCollectableRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetCurrentCollectableResponse>>;
+    public getCurrentCollectable(body: GetCurrentCollectableRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getCurrentCollectable.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetCurrentCollectableResponse>('post',`${this.basePath}/User/getCurrentCollectable`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Gets the Collectables that the user has ever found
+     * Get a user&#x27;s found Collectables
+     * @param body Request to get the user&#x27;s found Collectables
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFoundCollectables(body: GetFoundCollectablesRequest, observe?: 'body', reportProgress?: boolean): Observable<GetFoundCollectablesResponse>;
+    public getFoundCollectables(body: GetFoundCollectablesRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetFoundCollectablesResponse>>;
+    public getFoundCollectables(body: GetFoundCollectablesRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetFoundCollectablesResponse>>;
+    public getFoundCollectables(body: GetFoundCollectablesRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getFoundCollectables.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetFoundCollectablesResponse>('post',`${this.basePath}/User/getFoundCollectables`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Gets the GeoCodes that the user has ever found
+     * Gets the user&#x27;s found GeoCodes
+     * @param body Request to get the user&#x27;s found GeoCodes
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFoundGeoCodes(body: GetFoundGeoCodesRequest, observe?: 'body', reportProgress?: boolean): Observable<GetFoundGeoCodesResponse>;
+    public getFoundGeoCodes(body: GetFoundGeoCodesRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetFoundGeoCodesResponse>>;
+    public getFoundGeoCodes(body: GetFoundGeoCodesRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetFoundGeoCodesResponse>>;
+    public getFoundGeoCodes(body: GetFoundGeoCodesRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getFoundGeoCodes.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetFoundGeoCodesResponse>('post',`${this.basePath}/User/getFoundGeoCodes`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Gets the user&#x27;s owned GeoCodes
+     * Get&#x27;s the user&#x27;s owned GeoCodes
+     * @param body Request to get the user&#x27;s owned GeoCodes
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getOwnedGeoCodes(body: GetOwnedGeoCodesRequest, observe?: 'body', reportProgress?: boolean): Observable<GetOwnedGeoCodesResponse>;
+    public getOwnedGeoCodes(body: GetOwnedGeoCodesRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetOwnedGeoCodesResponse>>;
+    public getOwnedGeoCodes(body: GetOwnedGeoCodesRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetOwnedGeoCodesResponse>>;
+    public getOwnedGeoCodes(body: GetOwnedGeoCodesRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getOwnedGeoCodes.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetOwnedGeoCodesResponse>('post',`${this.basePath}/User/getOwnedGeoCodes`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get all geocodes associated with a user
+     * Get My Geocodes
+     * @param body Request to get geocodes belonging to user
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getOwnedGeocodes(body: GetOwnedGeoCodesRequest, observe?: 'body', reportProgress?: boolean): Observable<GetOwnedGeoCodesResponse>;
+    public getOwnedGeocodes(body: GetOwnedGeoCodesRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetOwnedGeoCodesResponse>>;
+    public getOwnedGeocodes(body: GetOwnedGeoCodesRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetOwnedGeoCodesResponse>>;
+    public getOwnedGeocodes(body: GetOwnedGeoCodesRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getOwnedGeocodes.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetOwnedGeoCodesResponse>('post',`${this.basePath}/User/getOwnedGeocodes`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Gets the user&#x27;s trackable
+     * Get the given user&#x27;s trackable
+     * @param body Request to get the user&#x27;s trackable
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getUserTrackable(body: GetUserTrackableRequest, observe?: 'body', reportProgress?: boolean): Observable<GetUserTrackableResponse>;
+    public getUserTrackable(body: GetUserTrackableRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetUserTrackableResponse>>;
+    public getUserTrackable(body: GetUserTrackableRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetUserTrackableResponse>>;
+    public getUserTrackable(body: GetUserTrackableRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getUserTrackable.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetUserTrackableResponse>('post',`${this.basePath}/User/getUserTrackable`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get all of the users in the system
+     * Get all of the users
+     * @param body Request to get all users in the system
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getUsers(body: GetUsersRequest, observe?: 'body', reportProgress?: boolean): Observable<GetUsersResponse>;
+    public getUsers(body: GetUsersRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetUsersResponse>>;
+    public getUsers(body: GetUsersRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetUsersResponse>>;
+    public getUsers(body: GetUsersRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getUsers.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetUsersResponse>('post',`${this.basePath}/User/getUsers`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Sets the given user to be an administrator
+     * Sets the given user to be an administrator
+     * @param body Request to set a user to be an administrator
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public setAdmin(body: SetAdminRequest, observe?: 'body', reportProgress?: boolean): Observable<User>;
+    public setAdmin(body: SetAdminRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
+    public setAdmin(body: SetAdminRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
+    public setAdmin(body: SetAdminRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling setAdmin.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<User>('post',`${this.basePath}/User/setAdmin`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Swaps the Collectable the user is currently holding with the given Collectable in the given GeoCode
+     * Swap held Collectable
+     * @param body Request to swap the held Collectable
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public swapCollectable(body: SwapCollectableRequest, observe?: 'body', reportProgress?: boolean): Observable<SwapCollectableResponse>;
+    public swapCollectable(body: SwapCollectableRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SwapCollectableResponse>>;
+    public swapCollectable(body: SwapCollectableRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SwapCollectableResponse>>;
+    public swapCollectable(body: SwapCollectableRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling swapCollectable.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<SwapCollectableResponse>('post',`${this.basePath}/User/swapCollectable`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Update the location of the user&#x27;s trackable
+     * Update the location of the user&#x27;s trackable when they place it
+     * @param body Request to update the location of the user&#x27;s trackable
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateLocation(body: UpdateLocationRequest, observe?: 'body', reportProgress?: boolean): Observable<UpdateLocationResponse>;
+    public updateLocation(body: UpdateLocationRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UpdateLocationResponse>>;
+    public updateLocation(body: UpdateLocationRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UpdateLocationResponse>>;
+    public updateLocation(body: UpdateLocationRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling updateLocation.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<UpdateLocationResponse>('post',`${this.basePath}/User/updateLocation`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
