@@ -108,17 +108,13 @@ public class CollectableApiController implements CollectableApi {
     }
 
     public ResponseEntity<GetCollectableTypesResponse> getCollectableTypesBySet(@Parameter(in = ParameterIn.DEFAULT, description = "Request Collectable Types by set", required=true, schema=@Schema()) @Valid @RequestBody GetCollectableTypesBySetRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<GetCollectableTypesResponse>(objectMapper.readValue("{\n  \"collectableTypes\" : [ {\n    \"image\" : \"image\",\n    \"set\" : {\n      \"name\" : \"name\",\n      \"description\" : \"description\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n    },\n    \"name\" : \"name\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"rarity\" : \"COMMON\"\n  }, {\n    \"image\" : \"image\",\n    \"set\" : {\n      \"name\" : \"name\",\n      \"description\" : \"description\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n    },\n    \"name\" : \"name\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"rarity\" : \"COMMON\"\n  } ]\n}", GetCollectableTypesResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<GetCollectableTypesResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+        GetCollectableTypesResponse response = collectableService.getCollectableTypesBySet(body);
 
-        return new ResponseEntity<GetCollectableTypesResponse>(HttpStatus.NOT_IMPLEMENTED);
+        if(!response.getCollectableTypes().isEmpty()){
+            return new ResponseEntity<GetCollectableTypesResponse>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<GetCollectableTypesResponse>(response, HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<GetCollectableTypesResponse> getCollectableTypes() {
