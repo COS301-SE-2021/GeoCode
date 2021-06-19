@@ -7,8 +7,13 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">
-        <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+      <ion-button (click)="proceed()">
+        <ng-template [ngIf]="!loading" [ngIfElse]="isLoading">
+          <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+        </ng-template>
+        <ng-template #isLoading>
+          <ion-spinner></ion-spinner>
+        </ng-template>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -18,11 +23,11 @@
   <ion-list>
     <ion-item>
       <ion-label position="floating">Name</ion-label>
-      <ion-input></ion-input>
+      <ion-input (ionBlur)="updateRequest($event, 'name')"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Description</ion-label>
-      <ion-textarea></ion-textarea>
+      <ion-textarea (ionBlur)="updateRequest($event, 'description')"></ion-textarea>
     </ion-item>
   </ion-list>
 </ion-content>

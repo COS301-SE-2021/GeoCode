@@ -11,5 +11,5 @@
  */
 
 export interface GetGeoCodeByQRCodeRequest { 
-    id: string;
+    qRCode: string;
 }
