@@ -20,18 +20,37 @@ import java.util.List;
 @ExtendWith( MockitoExtension.class )
 public class GeoCodeServiceImplTest {
 
+    /**
+     * The service for the GeoCode subsystem
+     *
+     * This is used to access the different use cases
+     * needed for functionality
+     */
     GeoCodeService geoCodeService;
 
+    /**
+     * Default Constructor
+     */
     GeoCodeServiceImplTest() {
 
     }
 
+    /**
+     * Create the GeoCodeServiceImpl with the relevant repositories.
+     *
+     * This is done to ensure a repository with no data is created each time
+     * and the service implementation contains fresh code that has not been affected
+     * by some other test or data.
+     */
     @BeforeEach
     void setup() {
 
         geoCodeService = new GeoCodeServiceImpl( new GeoCodeMockRepository() );
     }
 
+    /**
+     * Check how the use case handles the repository being null
+     */
     @Test
     public void createGeoCodeNullRepoTest() {
 
@@ -41,6 +60,9 @@ public class GeoCodeServiceImplTest {
                 .hasMessageContaining("The given request is empty." );
     }
 
+    /**
+     * Check how the use case handles an invalid request
+     */
     @Test
     public void createGeoCodeExceptionTest() {
 
@@ -61,6 +83,10 @@ public class GeoCodeServiceImplTest {
                 .hasMessageContaining("The given request is missing parameter/s." );
     }
 
+    /**
+     * Using valid data does the createGeoCode use case test
+     * complete successfully
+     */
     @Test
     public void createGeoCodeTest() {
 
@@ -92,6 +118,10 @@ public class GeoCodeServiceImplTest {
         }
     }
 
+    /**
+     * Using valid data does the getAllGeoCode use case test
+     * complete successfully
+     */
     @Test
     public void getAllGeoCodeTest() {
 
@@ -120,6 +150,9 @@ public class GeoCodeServiceImplTest {
         }
     }
 
+    /**
+     * Check how the use case handles the repository being null
+     */
     @Test
     public void getGeoCodesByDifficultyNullRepoTest() {
 
@@ -129,6 +162,9 @@ public class GeoCodeServiceImplTest {
                 .hasMessageContaining("The given request is empty." );
     }
 
+    /**
+     * Check how the use case handles an invalid request
+     */
     @Test
     public void getGeoCodesByDifficultyExceptionTest() {
 
@@ -145,12 +181,19 @@ public class GeoCodeServiceImplTest {
                 .hasMessageContaining("The given request is missing parameter/s." );
     }
 
+    /**
+     * Using valid data does the getGeoCodesByDifficulty use case test
+     * complete successfully
+     */
     @Test
     public void getGeoCodesByDifficultyTest() {
 
 
     }
 
+    /**
+     * Check how the use case handles the repository being null
+     */
     @Test
     public void getHintsNullRepoTest() {
 
@@ -160,6 +203,9 @@ public class GeoCodeServiceImplTest {
                 .hasMessageContaining("The given request is empty." );
     }
 
+    /**
+     * Check how the use case handles an invalid request
+     */
     @Test
     public void getHintsExceptionTest() {
 
@@ -175,12 +221,19 @@ public class GeoCodeServiceImplTest {
                 .hasMessageContaining("The given request is missing parameter/s." );
     }
 
+    /**
+     * Using valid data does the getHints use case test
+     * complete successfully
+     */
     @Test
     public void getHintsTest() {
 
 
     }
 
+    /**
+     * Check how the use case handles the repository being null
+     */
     @Test
     public void swapCollectablesNullRepoTest() {
 
@@ -190,6 +243,9 @@ public class GeoCodeServiceImplTest {
                 .hasMessageContaining("The given request is empty." );
     }
 
+    /**
+     * Check how the use case handles an invalid request
+     */
     @Test
     public void swapCollectablesExceptionTest() {
 
@@ -205,12 +261,19 @@ public class GeoCodeServiceImplTest {
                 .hasMessageContaining("The given request is missing parameter/s." );
     }
 
+    /**
+     * Using valid data does the swapCollectables use case test
+     * complete successfully
+     */
     @Test
     public void swapCollectablesTest() {
 
 
     }
 
+    /**
+     * Check how the use case handles the repository being null
+     */
     @Test
     public void updateAvailabilityNullRepoTest() {
 
@@ -220,6 +283,9 @@ public class GeoCodeServiceImplTest {
                 .hasMessageContaining("The given request is empty." );
     }
 
+    /**
+     * Check how the use case handles an invalid request
+     */
     @Test
     public void updateAvailabilityExceptionTest() {
 
@@ -236,6 +302,10 @@ public class GeoCodeServiceImplTest {
                 .hasMessageContaining("The given request is missing parameter/s." );
     }
 
+    /**
+     * Using valid data does the updateAvailability use case test
+     * complete successfully
+     */
     @Test
     public void updateAvailabilityTest() {
 
