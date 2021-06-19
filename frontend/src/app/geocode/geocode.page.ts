@@ -35,46 +35,48 @@ export class GeocodePage implements AfterViewInit  {
     //     difficulty:'Hard',
     //     isAvailable: true
     //   }];
-    this.geocodeApi.getGeoCodes().subscribe((response: GetGeoCodesResponse)=>{
-      console.log(response);
-    },(error)=>{
-      console.log("Error");
-      console.log(error);
-    });
+
   }
 
   //Create map and add mapmarkers of geocodes
   loadMap(){
-
     this.mapOptions = {
       center: {lat: -25.75625115327836, lng: 28.235629260918344},
       zoom: 15,
     };
     this.map = new google.maps.Map(this.mapElement.nativeElement,this.mapOptions);
+    this.geocodeApi.getGeoCodes().subscribe((response: GetGeoCodesResponse)=>{
+      this.geocodes=response.geocodes;
+      console.log(this.geocodes);
+      for(const code of this.geocodes){
+        const marker=new google.maps.Marker({
+          position: {lat: code.lat, lng: code.long},
+          map: this.map,
+          title: '',
+
+        });
+
+        // const infowindow = new google.maps.InfoWindow({
+        //   content:     '<div style="color: black">' +
+        //     '<p> Difficulty:'+code.difficulty+'</p>' +
+        //     '<ion-button (click)="presentAlert()">Find GeoCode</ion-button>' +
+        //     '</div>',
+        //
+        // });
 
 
-    for(const code of this.geocodes){
-      const marker=new google.maps.Marker({
-        position: {lat: code.lat, lng: code.long},
-        map: this.map,
-        title: '',
+        marker.addListener('click' , ()=> {
+          this.addToSelected(code);
+        });
 
-      });
-
-      // const infowindow = new google.maps.InfoWindow({
-      //   content:     '<div style="color: black">' +
-      //     '<p> Difficulty:'+code.difficulty+'</p>' +
-      //     '<ion-button (click)="presentAlert()">Find GeoCode</ion-button>' +
-      //     '</div>',
-      //
-      // });
+      }
+    },(error)=>{
+      console.log(error);
+    });
 
 
-      marker.addListener('click' , ()=> {
-       this.addToSelected(code);
-      });
 
-    }
+
 
 
   }
