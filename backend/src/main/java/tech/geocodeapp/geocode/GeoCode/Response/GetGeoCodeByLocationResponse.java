@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  * GetGeoCodeByLocationResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T19:40:54.656Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T20:06:36.916Z[GMT]")
 
 
 public class GetGeoCodeByLocationResponse   {

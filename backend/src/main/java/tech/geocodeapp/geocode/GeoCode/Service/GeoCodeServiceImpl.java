@@ -346,7 +346,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( request.getId() == null ) {
+        } else if ( ( request.getLatitude() == null ) || ( request.getLongitude() == null ) ) {
 
             throw new InvalidRequestException();
         }
@@ -355,14 +355,26 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         checkRepo();
 
         List< GeoCode > temp = geoCodeRepo.findAll();
+        int x = 0;
+        for ( x = 0; x < temp.size(); x++ ) {
 
+            if ( ( temp.get( x ).getLatitude().equals( request.getLatitude() ) ) && ( temp.get( x ).getLongitude().equals( request.getLongitude() ) ) ) {
+
+                break;
+            }
+        }
 
         /*
          * Create the new response
          *
          */
         GetGeoCodeByLocationResponse response = new GetGeoCodeByLocationResponse();
-        response.setAvailable( true );
+            response.setDescription( temp.get( x ).getDescription() );
+            response.setDifficulty( temp.get( x ).getDifficulty() );
+            response.setId( temp.get( x ).getId() );
+            response.setLatitude( temp.get( x ).getLatitude() );
+            response.setLongitude( temp.get( x ).getLongitude() );
+            response.setAvailable( temp.get( x ).isAvailable() );
 
         return response;
     }
