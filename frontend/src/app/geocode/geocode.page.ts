@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 import {NavigationExtras} from '@angular/router';
-import {GeoCodeService, GetGeoCodesResponse} from "../../swagger/client";
+import {GeoCodeService, GetGeoCodesResponse,UpdateAvailabilityRequest,UpdateAvailabilityResponse} from "../../swagger/client";
 import { RouterModule } from '@angular/router';
 
 declare let google;
@@ -17,26 +17,10 @@ export class GeocodePage implements AfterViewInit  {
   map;
   mapMarker;
   geocodes;
-  selected=[{id: 1, lat: -25.75625115327836, long: 28.235629260918344,difficulty:'Medium',isAvailable: true}];
+  selected=[{id: '6726e306-3f47-43d1-9942-42d8024f2a47', lat: -25.75625115327836, long: 28.235629260918344,difficulty:'Medium',available: true}];
 
 
-  constructor(public alertController: AlertController,public navCtrl: NavController,public geocodeApi:GeoCodeService) {
-    // this.geocodes = [{id: 1, lat: -25.75625115327836, long: 28.235629260918344,difficulty:'Medium',isAvailable: true}, {
-    //   id: 2,
-    //   lat: -25.755678678528565,
-    //   long: 28.243631816539157,
-    //   difficulty:'Easy',
-    //   isAvailable: true
-    // },
-    //   {
-    //     id: 3,
-    //     lat: -25.75756288427446,
-    //     long: 28.260916229007645,
-    //     difficulty:'Hard',
-    //     isAvailable: true
-    //   }];
-
-  }
+  constructor(public alertController: AlertController,public navCtrl: NavController,public geocodeApi:GeoCodeService) {}
 
   //Create map and add mapmarkers of geocodes
   loadMap(){
@@ -56,15 +40,6 @@ export class GeocodePage implements AfterViewInit  {
 
         });
 
-        // const infowindow = new google.maps.InfoWindow({
-        //   content:     '<div style="color: black">' +
-        //     '<p> Difficulty:'+code.difficulty+'</p>' +
-        //     '<ion-button (click)="presentAlert()">Find GeoCode</ion-button>' +
-        //     '</div>',
-        //
-        // });
-
-
         marker.addListener('click' , ()=> {
           this.addToSelected(code);
         });
@@ -73,27 +48,22 @@ export class GeocodePage implements AfterViewInit  {
     },(error)=>{
       console.log(error);
     });
-
-
-
-
-
-
   }
 
   ngAfterViewInit(): void {
-
      this.loadMap();
+  }
+
+  ionViewDidLoad(){
+
   }
 
   addToSelected(geocode){
     this.selected= [];
     this.selected.push(geocode);
-
   }
 
   findGeoCode(geocode){
-   console.log(geocode.id);
     const navigationExtras: NavigationExtras = {
       queryParams: {
         geocode
@@ -102,8 +72,26 @@ export class GeocodePage implements AfterViewInit  {
    this.navCtrl.navigateForward('/geocode/geocode-contents',navigationExtras);
   }
 
+  //navigate to the create geocode page
   createGeoCode(){
     this.navCtrl.navigateForward('/geocode/geocode-create');
+  }
+
+  //Call Geocode service and update Availibility
+  updateAvailability(geocode){
+    const request: UpdateAvailabilityRequest={
+      geoCodeID: geocode.id,
+      isAvailable: geocode.available
+    };
+  console.log(request);
+    this.geocodeApi.updateAvailability(request).subscribe((response: UpdateAvailabilityResponse)=>{
+      console.log(response);
+
+    },(error)=>{
+      console.log(error);
+    });
+
+
   }
 
 
