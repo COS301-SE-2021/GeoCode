@@ -488,7 +488,8 @@ public class GeoCodeServiceImplTest {
          * and assign values to it
          */
         GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
-        request.setId( null );
+        request.setLatitude( null );
+        request.setLongitude( null );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( request ) )
@@ -504,14 +505,15 @@ public class GeoCodeServiceImplTest {
     public void getGeoCodesByLocationTest() {
 
         /* Create a GeoCode */
-        populate( 6 );
+        populate( 1 );
         List< GeoCode > temp = repo.findAll();
 
         try {
 
             /* Create the request with the ID of the GeoCode we want */
             GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
-            request.setId( temp.get( 0 ).getId() );
+            request.setLatitude( temp.get( 0 ).getLatitude() );
+            request.setLongitude( temp.get( 0 ).getLongitude() );
 
 
             /* Get the response by calling the updateAvailability use case */
@@ -521,7 +523,70 @@ public class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals( response.getDescription(), null );
+            Assertions.assertEquals( response.getDescription(), "The DIFFICULTY GeoCode is stored at location 1" );
+        } catch ( Exception e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    public void getGeoCodesByQRCodeNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> geoCodeService.getGeocodeByQRCode( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( "The given request is empty." );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    public void getGeoCodesByQRCodeInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetGeoCodeByQRCodeRequest request = new GetGeoCodeByQRCodeRequest();
+        request.setQrCode( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.getGeocodeByQRCode( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( "The given request is missing parameter/s." );
+    }
+
+    /**
+     * Using valid data does the getGeoCodesByLocation use case test
+     * complete successfully
+     */
+    @Test
+    public void getGeoCodesByQRCodeLocationTest() {
+
+        /* Create a GeoCode */
+        populate( 1 );
+        List< GeoCode > temp = repo.findAll();
+
+        try {
+
+            /* Create the request with the ID of the GeoCode we want */
+            GetGeoCodeByQRCodeRequest request = new GetGeoCodeByQRCodeRequest();
+            request.setQrCode( temp.get( 0 ).getQrCode() );
+
+            /* Get the response by calling the updateAvailability use case */
+            GetGeoCodeByQRCodeResponse response = geoCodeService.getGeocodeByQRCode( request );
+
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the returned hints from a known hint
+             */
+            Assertions.assertEquals( response.getDescription(), "The DIFFICULTY GeoCode is stored at location 1" );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
