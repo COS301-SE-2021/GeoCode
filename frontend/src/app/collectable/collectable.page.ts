@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import {AddTypeComponent} from './add-type/add-type.component';
 import {AddSetComponent} from './add-set/add-set.component';
+import {CollectableService, GetCollectableSetsResponse} from '../../swagger/client';
 
 @Component({
   selector: 'app-collectable',
@@ -11,8 +12,15 @@ import {AddSetComponent} from './add-set/add-set.component';
 export class CollectablePage implements OnInit {
 
   constructor(
-    private modalController: ModalController
-  ) { }
+    private modalController: ModalController,
+    private collectableService: CollectableService
+  ) {
+    this.collectableService.getCollectableSets().subscribe((response: GetCollectableSetsResponse) => {
+      console.log(response);
+    }, (error) => {
+      console.log(error);
+    });
+  }
 
   ngOnInit() {
   }
