@@ -173,7 +173,21 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Validate the repo */
         checkRepo();
 
-        return new GetGeoCodesResponse().geocodes(geoCodeRepo.findAll());
+        List< GeoCode > temp = geoCodeRepo.findAll();
+
+        for ( GeoCode geoCode : temp ) {
+
+            geoCode.setLatitude( null );
+            geoCode.setLongitude( null );
+            geoCode.setHints( null );
+            geoCode.setQrCode( null );
+            geoCode.setCollectables( null );
+        }
+
+        GetGeoCodesResponse response = new GetGeoCodesResponse();
+        response.setGeocodes( temp );
+
+        return response;
     }
 
     /**
@@ -200,7 +214,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /*
          * Create the new response
-         *
+         * and set the values
          */
         GetCollectablesResponse response = new GetCollectablesResponse();
         response.setCollectables( null );
