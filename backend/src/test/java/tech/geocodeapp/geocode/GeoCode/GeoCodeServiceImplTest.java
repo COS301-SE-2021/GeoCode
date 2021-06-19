@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.event.annotation.BeforeTestMethod;
 import tech.geocodeapp.geocode.Collectable.Model.Difficulty;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
@@ -49,7 +51,19 @@ public class GeoCodeServiceImplTest {
     }
 
     /**
-     * Check how the use case handles the repository being null
+     * Check how the constructor handles the repository being null
+     */
+    @Test
+    public void RepositoryNullTest() {
+
+        /* Null request check */
+        assertThatThrownBy( ()->geoCodeService = new GeoCodeServiceImpl( null ) )
+                .isInstanceOf( RepoException.class )
+                .hasMessageContaining( "The given repository does not exist." );
+    }
+
+    /**
+     * Check how the use case handles the request being null
      */
     @Test
     public void createGeoCodeNullRequestTest() {
@@ -57,7 +71,7 @@ public class GeoCodeServiceImplTest {
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.createGeoCode( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining("The given request is empty." );
+                .hasMessageContaining( "The given request is empty." );
     }
 
     /**
@@ -80,7 +94,7 @@ public class GeoCodeServiceImplTest {
         /* Null parameter request check */
         assertThatThrownBy( ()->geoCodeService.createGeoCode( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining("The given request is missing parameter/s." );
+                .hasMessageContaining( "The given request is missing parameter/s." );
     }
 
     /**
@@ -151,7 +165,7 @@ public class GeoCodeServiceImplTest {
     }
 
     /**
-     * Check how the use case handles the repository being null
+     * Check how the use case handles the request being null
      */
     @Test
     public void getGeoCodesByDifficultyNullRequestTest() {
@@ -159,7 +173,7 @@ public class GeoCodeServiceImplTest {
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.getGeoCodesByDifficulty( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining("The given request is empty." );
+                .hasMessageContaining( "The given request is empty." );
     }
 
     /**
@@ -178,7 +192,7 @@ public class GeoCodeServiceImplTest {
         /* Null parameter request check */
         assertThatThrownBy( ()->geoCodeService.getGeoCodesByDifficulty( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining("The given request is missing parameter/s." );
+                .hasMessageContaining( "The given request is missing parameter/s." );
     }
 
     /**
@@ -192,7 +206,7 @@ public class GeoCodeServiceImplTest {
     }
 
     /**
-     * Check how the use case handles the repository being null
+     * Check how the use case handles the request being null
      */
     @Test
     public void getHintsNullRequestTest() {
@@ -200,7 +214,7 @@ public class GeoCodeServiceImplTest {
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.getHints( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining("The given request is empty." );
+                .hasMessageContaining( "The given request is empty." );
     }
 
     /**
@@ -218,7 +232,7 @@ public class GeoCodeServiceImplTest {
         /* Null parameter request check */
         assertThatThrownBy( ()->geoCodeService.getHints( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining("The given request is missing parameter/s." );
+                .hasMessageContaining( "The given request is missing parameter/s." );
     }
 
     /**
@@ -232,7 +246,7 @@ public class GeoCodeServiceImplTest {
     }
 
     /**
-     * Check how the use case handles the repository being null
+     * Check how the use case handles the request being null
      */
     @Test
     public void swapCollectablesNullRequestTest() {
@@ -240,7 +254,7 @@ public class GeoCodeServiceImplTest {
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.swapCollectables( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining("The given request is empty." );
+                .hasMessageContaining( "The given request is empty." );
     }
 
     /**
@@ -258,7 +272,7 @@ public class GeoCodeServiceImplTest {
         /* Null parameter request check */
         assertThatThrownBy( ()->geoCodeService.swapCollectables( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining("The given request is missing parameter/s." );
+                .hasMessageContaining( "The given request is missing parameter/s." );
     }
 
     /**
@@ -272,7 +286,7 @@ public class GeoCodeServiceImplTest {
     }
 
     /**
-     * Check how the use case handles the repository being null
+     * Check how the use case handles the request being null
      */
     @Test
     public void updateAvailabilityNullRequestTest() {
@@ -280,7 +294,7 @@ public class GeoCodeServiceImplTest {
         /* Null request check */
         assertThatThrownBy( ()->geoCodeService.updateAvailability( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining("The given request is empty." );
+                .hasMessageContaining( "The given request is empty." );
     }
 
     /**
@@ -299,7 +313,7 @@ public class GeoCodeServiceImplTest {
         /* Null parameter request check */
         assertThatThrownBy( ()->geoCodeService.updateAvailability( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining("The given request is missing parameter/s." );
+                .hasMessageContaining( "The given request is missing parameter/s." );
     }
 
     /**
