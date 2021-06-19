@@ -41,7 +41,6 @@ public class UserServiceImplTest {
     void setup() {
         collectableTypeMockRepo = new CollectableTypeMockRepository();
         userService = new UserServiceImpl( new UserMockRepository(), new CollectableMockRepository(), collectableTypeMockRepo, new GeoCodeMockRepository());
-        //collectableService = new CollectableServiceImpl(new CollectableMockRepository(), new CollectableSetMockRepository(), new CollectableTypeMockRepository());
 
         //save the valid trackable CollectableType
         CollectableType trackableCollectableType = new CollectableType();
