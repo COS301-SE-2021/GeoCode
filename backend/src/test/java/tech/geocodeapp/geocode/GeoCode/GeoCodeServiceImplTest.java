@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import tech.geocodeapp.geocode.Collectable.Model.Difficulty;
+import tech.geocodeapp.geocode.Collectable.Model.*;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Service.*;
@@ -91,7 +91,8 @@ public class GeoCodeServiceImplTest {
         request.setDescription( null );
         request.setDifficulty( Difficulty.INSANE );
         request.setHints( null );
-        request.setLocation( "Jhb" );
+        request.setLatitude( "Jhb" );
+        request.setLongitude( "Jhb" );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.createGeoCode( request ) )
@@ -123,7 +124,8 @@ public class GeoCodeServiceImplTest {
                 hints.add( "secret " );
                 hints.add( "hint." );
             request.setHints( hints );
-            request.setLocation( "Jhb" );
+            request.setLatitude( "Jhb" );
+            request.setLongitude( "Jhb" );
 
             CreateGeoCodeResponse response = geoCodeService.createGeoCode( request );
 
@@ -164,7 +166,8 @@ public class GeoCodeServiceImplTest {
                 hints.add( "secret " );
                 hints.add( "hint." );
             request.setHints( hints );
-            request.setLocation( "Jhb" );
+            request.setLatitude( "Jhb" );
+            request.setLongitude( "Jhb" );
 
             /* create the GeoCode in the repository */
             geoCodeService.createGeoCode( request );
@@ -351,6 +354,9 @@ public class GeoCodeServiceImplTest {
          * and assign values to it
          * */
         SwapCollectablesRequest request = new SwapCollectablesRequest();
+        request.setGeoCodeID( null );
+        request.setTargetCollectableID( null );
+        request.setTargetGeoCodeID( null );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.swapCollectables( request ) )
@@ -365,9 +371,30 @@ public class GeoCodeServiceImplTest {
     @Test
     public void swapCollectablesTest() {
 
+        /* Create a GeoCode */
+        populate( 1 );
+        List< GeoCode > temp = repo.findAll();
+
         try {
 
-        } catch ( Exception e ) {
+            /* Create the Collectable we want to swap with */
+            Collectable collectable = new Collectable( new CollectableType( "name", "imageURL", Rarity.COMMON, new CollectableSet( "setName", "description" ), null ) );
+
+            /* Create the request with the ID of the GeoCode we want */
+            SwapCollectablesRequest request = new SwapCollectablesRequest();
+            request.setGeoCodeID( temp.get( 0 ).getId() );
+            request.setTargetCollectableID( collectable );
+            request.setTargetGeoCodeID( collectable );
+
+            /* Get the response by calling the swapCollectables use case */
+            SwapCollectablesResponse response = geoCodeService.swapCollectables( request );
+
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the returned hints from a known hint
+             */
+            Assertions.assertTrue( response.isIsSuccess() );
+        } catch ( InvalidRequestException | RepoException e ) {
 
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
@@ -412,8 +439,154 @@ public class GeoCodeServiceImplTest {
     @Test
     public void updateAvailabilityTest() {
 
+        /* Create a GeoCode */
+        populate( 1 );
+        List< GeoCode > temp = repo.findAll();
+
         try {
 
+            /* Create the request with the ID of the GeoCode we want */
+            UpdateAvailabilityRequest request = new UpdateAvailabilityRequest();
+            request.setGeoCodeID( temp.get( 0 ).getId() );
+            request.setIsAvailable( false );
+
+            /* Get the response by calling the updateAvailability use case */
+            UpdateAvailabilityResponse response = geoCodeService.updateAvailability( request );
+
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the returned hints from a known hint
+             */
+            Assertions.assertTrue( response.isIsSuccess() );
+        } catch ( Exception e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    public void getGeoCodesByLocationNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( "The given request is empty." );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    public void getGeoCodesByLocationInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
+        request.setLatitude( null );
+        request.setLongitude( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( "The given request is missing parameter/s." );
+    }
+
+    /**
+     * Using valid data does the getGeoCodesByLocation use case test
+     * complete successfully
+     */
+    @Test
+    public void getGeoCodesByLocationTest() {
+
+        /* Create a GeoCode */
+        populate( 1 );
+        List< GeoCode > temp = repo.findAll();
+
+        try {
+
+            /* Create the request with the ID of the GeoCode we want */
+            GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
+            request.setLatitude( temp.get( 0 ).getLatitude() );
+            request.setLongitude( temp.get( 0 ).getLongitude() );
+
+
+            /* Get the response by calling the updateAvailability use case */
+            GetGeoCodeByLocationResponse response = geoCodeService.getGeoCodesByLocation( request );
+
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the returned hints from a known hint
+             */
+            Assertions.assertEquals( response.getDescription(), "The DIFFICULTY GeoCode is stored at location 1" );
+        } catch ( Exception e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    public void getGeoCodesByQRCodeNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> geoCodeService.getGeocodeByQRCode( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( "The given request is empty." );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    public void getGeoCodesByQRCodeInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetGeoCodeByQRCodeRequest request = new GetGeoCodeByQRCodeRequest();
+        request.setQrCode( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.getGeocodeByQRCode( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( "The given request is missing parameter/s." );
+    }
+
+    /**
+     * Using valid data does the getGeoCodesByLocation use case test
+     * complete successfully
+     */
+    @Test
+    public void getGeoCodesByQRCodeLocationTest() {
+
+        /* Create a GeoCode */
+        populate( 1 );
+        List< GeoCode > temp = repo.findAll();
+
+        try {
+
+            /* Create the request with the ID of the GeoCode we want */
+            GetGeoCodeByQRCodeRequest request = new GetGeoCodeByQRCodeRequest();
+            request.setQrCode( temp.get( 0 ).getQrCode() );
+
+            /* Get the response by calling the updateAvailability use case */
+            GetGeoCodeByQRCodeResponse response = geoCodeService.getGeocodeByQRCode( request );
+
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the returned hints from a known hint
+             */
+            Assertions.assertEquals( response.getDescription(), "The DIFFICULTY GeoCode is stored at location 1" );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -422,12 +595,74 @@ public class GeoCodeServiceImplTest {
     }
 
 
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    public void getCollectablesNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> geoCodeService.getCollectables( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( "The given request is empty." );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    public void getCollectablesInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetCollectablesRequest request = new GetCollectablesRequest();
+        request.setGeoCodeID( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.getCollectables( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( "The given request is missing parameter/s." );
+    }
+
+    /**
+     * Using valid data does the getGeoCodesByLocation use case test
+     * complete successfully
+     */
+    @Test
+    public void getCollectablesTest() {
+
+        /* Create a GeoCode */
+        populate( 1 );
+        List< GeoCode > temp = repo.findAll();
+
+        try {
+
+            /* Create the request with the ID of the GeoCode we want */
+            GetCollectablesRequest request = new GetCollectablesRequest();
+            request.setGeoCodeID( temp.get( 0 ).getId() );
+
+            /* Get the response by calling the updateAvailability use case */
+            GetCollectablesResponse response = geoCodeService.getCollectables( request );
+
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the returned hints from a known hint
+             */
+//            Assertions.assertEquals( response.getCollectables().get( 0 ).getPastLocations().get( 0 ), "The DIFFICULTY GeoCode is stored at location 1" );
+            Assertions.assertTrue( true );
+        } catch ( Exception e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
     ////////////////Helper functions////////////////
 
     /**
      * This function creates numerous GeoCodes to be used for testing.
-     *
-     * @return the list of GeoCodes to be used to
      */
     private void populate( int size ) {
 
@@ -451,7 +686,9 @@ public class GeoCodeServiceImplTest {
                     hints.add( "Hint two for: " + x );
                     hints.add( "Hint three for: " + x );
                     request.setHints( hints );
-                    request.setLocation( "Jhb " + x );
+                    request.setLatitude( "Lat " + x );
+                    request.setLongitude( "Long " + x );
+
 
                     /* Add the created GeoCode to the list */
                     geoCodeService.createGeoCode( request );
@@ -471,7 +708,8 @@ public class GeoCodeServiceImplTest {
                     hints.add( "Hint two for: " + x );
                     hints.add( "Hint three for: " + x );
                     request.setHints( hints );
-                    request.setLocation( "Jhb " + x );
+                    request.setLatitude( "Lat " + x );
+                    request.setLongitude( "Long " + x );
 
                     /* Add the created GeoCode to the list */
                     geoCodeService.createGeoCode( request );
@@ -491,7 +729,8 @@ public class GeoCodeServiceImplTest {
                     hints.add( "Hint two for: " + x );
                     hints.add( "Hint three for: " + x );
                 request.setHints( hints );
-                request.setLocation( "Jhb " + x );
+                request.setLatitude( "Lat " + x );
+                request.setLongitude( "Long " + x );
 
                 /* Add the created GeoCode to the list */
                 geoCodeService.createGeoCode( request );

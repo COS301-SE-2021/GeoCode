@@ -1056,7 +1056,8 @@ components:
         - description
         - hints
         - qrCode
-        - location
+        - longitude
+        - latitude
         - available
       properties:
         id:
@@ -1078,7 +1079,9 @@ components:
             $ref: '#/components/schemas/Collectable'
         qrCode:
           type: string
-        location:
+        longitude:
+          type: string
+        latitude:
           type: string
       xml:
         name: "GeoCode"
@@ -1088,7 +1091,8 @@ components:
       required:
         - id
         - description
-        - location
+        - longitude
+        - latitude
         - difficulty
         - hints
         - available
@@ -1098,7 +1102,9 @@ components:
           format: uuid
         description:
           type: string
-        location:
+        longitude:
+          type: string
+        latitude:
           type: string
         hints:
           type: array
@@ -1177,11 +1183,10 @@ components:
     GetGeoCodeByQRCodeRequest:
       type: "object"
       required:
-        - id
+        - QRCode
       properties:
-        id:
+        QRCode:
           type: string
-          format: uuid
       xml:
         name: "getGeoCodeByQRCodeRequest"
 
@@ -1192,7 +1197,8 @@ components:
         - available
         - description
         - difficulty
-        - location
+        - longitude
+        - latitude
       properties:
         id:
           type: string
@@ -1201,7 +1207,9 @@ components:
           type: boolean
         description:
           type: string
-        location:
+        longitude:
+          type: string
+        latitude:
           type: string
         difficulty:
           $ref: '#/components/schemas/Difficulty'
@@ -1211,11 +1219,13 @@ components:
     GetGeoCodeByLocationRequest:
       type: "object"
       required:
-        - id
+        - longitude
+        - latitude
       properties:
-        id:
+        longitude:
           type: string
-          format: uuid
+        latitude:
+          type: string
       xml:
         name: "getGeoCodeByLocationRequest"
 
@@ -1226,7 +1236,8 @@ components:
         - available
         - description
         - difficulty
-        - location
+        - longitude
+        - latitude
       properties:
         id:
           type: string
@@ -1235,7 +1246,9 @@ components:
           type: boolean
         description:
           type: string
-        location:
+        longitude:
+          type: string
+        latitude:
           type: string
         difficulty:
           $ref: '#/components/schemas/Difficulty'
@@ -1277,10 +1290,13 @@ components:
     SwapCollectablesRequest:
       type: "object"
       required:
-        - collectable
+        - targetGeoCodeID
+        - targetCollectableID
         - geoCodeID
       properties:
-        collectable:
+        targetGeoCodeID:
+          $ref: '#/components/schemas/Collectable'
+        targetCollectableID:
           $ref: '#/components/schemas/Collectable'
         geoCodeID:
           type: string
@@ -1325,9 +1341,9 @@ components:
     GetCollectablesRequest:
       type: "object"
       required:
-        - id
+        - geoCodeID
       properties:
-        id:
+        geoCodeID:
           type: string
           format: uuid
       xml:
@@ -1452,7 +1468,7 @@ components:
         collectables:
           type: array
           items:
-            $ref: '#/components/schemas/CollectableResponse'
+            $ref: '#/components/schemas/Collectable'
       xml:
         name: "GetCollectablesResponse"
 

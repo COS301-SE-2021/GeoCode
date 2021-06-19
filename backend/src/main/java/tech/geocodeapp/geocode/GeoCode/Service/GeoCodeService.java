@@ -1,7 +1,5 @@
 package tech.geocodeapp.geocode.GeoCode.Service;
 
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectablesRequest;
-import tech.geocodeapp.geocode.Collectable.Response.GetCollectablesResponse;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
