@@ -389,7 +389,6 @@ public class GeoCodeServiceImplTest {
              * through checking the returned hints from a known hint
              */
             Assertions.assertTrue( response.isIsSuccess() );
-
         } catch ( InvalidRequestException | RepoException e ) {
 
             /* An error occurred, print the stack to identify */
@@ -454,6 +453,70 @@ public class GeoCodeServiceImplTest {
              * through checking the returned hints from a known hint
              */
             Assertions.assertTrue( response.isIsSuccess() );
+        } catch ( Exception e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    public void getGeoCodesByLocationNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( "The given request is empty." );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    public void getGeoCodesByLocationInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
+        request.setId( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( "The given request is missing parameter/s." );
+    }
+
+    /**
+     * Using valid data does the getGeoCodesByLocation use case test
+     * complete successfully
+     */
+    @Test
+    public void getGeoCodesByLocationTest() {
+
+        /* Create a GeoCode */
+        populate( 6 );
+        List< GeoCode > temp = repo.findAll();
+
+        try {
+
+            /* Create the request with the ID of the GeoCode we want */
+            GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
+            request.setId( temp.get( 0 ).getId() );
+
+
+            /* Get the response by calling the updateAvailability use case */
+            GetGeoCodeByLocationResponse response = geoCodeService.getGeoCodesByLocation( request );
+
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the returned hints from a known hint
+             */
+            Assertions.assertEquals( response.getDescription(), "Test" );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
