@@ -1341,9 +1341,9 @@ components:
     GetCollectablesRequest:
       type: "object"
       required:
-        - id
+        - geoCodeID
       properties:
-        id:
+        geoCodeID:
           type: string
           format: uuid
       xml:
