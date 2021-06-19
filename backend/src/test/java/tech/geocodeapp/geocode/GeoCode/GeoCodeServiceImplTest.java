@@ -133,7 +133,7 @@ public class GeoCodeServiceImplTest {
              */
             Assertions.assertEquals( response.getGeoCode().getDescription(), request.getDescription() );
 
-        } catch ( InvalidRequestException | QRCodeException | RepoException e ) {
+        } catch ( InvalidRequestException | RepoException e ) {
 
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
@@ -493,7 +493,7 @@ public class GeoCodeServiceImplTest {
                 geoCodeSample.add( geoCodeService.createGeoCode( request ).getGeoCode() );
             }
 
-        } catch ( InvalidRequestException | RepoException | QRCodeException e ) {
+        } catch ( InvalidRequestException | RepoException e ) {
 
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
