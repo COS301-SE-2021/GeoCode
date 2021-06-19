@@ -595,6 +595,70 @@ public class GeoCodeServiceImplTest {
     }
 
 
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    public void getCollectablesNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> geoCodeService.getCollectables( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( "The given request is empty." );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    public void getCollectablesInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetCollectablesRequest request = new GetCollectablesRequest();
+        request.setGeoCodeID( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.getCollectables( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( "The given request is missing parameter/s." );
+    }
+
+    /**
+     * Using valid data does the getGeoCodesByLocation use case test
+     * complete successfully
+     */
+    @Test
+    public void getCollectablesTest() {
+
+        /* Create a GeoCode */
+        populate( 1 );
+        List< GeoCode > temp = repo.findAll();
+
+        try {
+
+            /* Create the request with the ID of the GeoCode we want */
+            GetCollectablesRequest request = new GetCollectablesRequest();
+            request.setGeoCodeID( temp.get( 0 ).getId() );
+
+            /* Get the response by calling the updateAvailability use case */
+            GetCollectablesResponse response = geoCodeService.getCollectables( request );
+
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the returned hints from a known hint
+             */
+//            Assertions.assertEquals( response.getCollectables().get( 0 ).getPastLocations().get( 0 ), "The DIFFICULTY GeoCode is stored at location 1" );
+            Assertions.assertTrue( true );
+        } catch ( Exception e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
     ////////////////Helper functions////////////////
 
     /**

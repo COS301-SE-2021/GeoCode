@@ -203,7 +203,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( request.getGeoCodeID() != null ) {
+        } else if ( request.getGeoCodeID() == null ) {
 
             throw new InvalidRequestException();
         }
