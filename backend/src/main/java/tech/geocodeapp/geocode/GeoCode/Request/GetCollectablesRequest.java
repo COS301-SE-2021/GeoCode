@@ -1,42 +1,44 @@
-package tech.geocodeapp.geocode.GeoCode.Response;
+package tech.geocodeapp.geocode.GeoCode.Request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * SwapCollectablesResponse
+ * GetCollectablesRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T19:40:54.656Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T20:33:08.210Z[GMT]")
 
 
-public class SwapCollectablesResponse   {
-  @JsonProperty("isSuccess")
-  private Boolean isSuccess = null;
+public class GetCollectablesRequest   {
+  @JsonProperty("geoCodeID")
+  private UUID geoCodeID = null;
 
-  public SwapCollectablesResponse isSuccess(Boolean isSuccess) {
-    this.isSuccess = isSuccess;
+  public GetCollectablesRequest geoCodeID(UUID geoCodeID) {
+    this.geoCodeID = geoCodeID;
     return this;
   }
 
   /**
-   * Get isSuccess
-   * @return isSuccess
+   * Get geoCodeID
+   * @return geoCodeID
    **/
   @Schema(required = true, description = "")
       @NotNull
 
-    public Boolean isIsSuccess() {
-    return isSuccess;
+    @Valid
+    public UUID getGeoCodeID() {
+    return geoCodeID;
   }
 
-  public void setIsSuccess(Boolean isSuccess) {
-    this.isSuccess = isSuccess;
+  public void setGeoCodeID(UUID geoCodeID) {
+    this.geoCodeID = geoCodeID;
   }
 
 
@@ -48,21 +50,21 @@ public class SwapCollectablesResponse   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SwapCollectablesResponse swapCollectablesResponse = (SwapCollectablesResponse) o;
-    return Objects.equals(this.isSuccess, swapCollectablesResponse.isSuccess);
+    GetCollectablesRequest getCollectablesRequest = (GetCollectablesRequest) o;
+    return Objects.equals(this.geoCodeID, getCollectablesRequest.geoCodeID);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(isSuccess);
+    return Objects.hash(geoCodeID);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SwapCollectablesResponse {\n");
+    sb.append("class GetCollectablesRequest {\n");
     
-    sb.append("    isSuccess: ").append(toIndentedString(isSuccess)).append("\n");
+    sb.append("    geoCodeID: ").append(toIndentedString(geoCodeID)).append("\n");
     sb.append("}");
     return sb.toString();
   }

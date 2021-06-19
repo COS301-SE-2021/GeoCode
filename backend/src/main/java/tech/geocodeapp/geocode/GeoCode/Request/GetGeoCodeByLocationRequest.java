@@ -2,43 +2,62 @@ package tech.geocodeapp.geocode.GeoCode.Request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * GetGeoCodeByLocationRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T20:06:36.916Z[GMT]")
 
 
 public class GetGeoCodeByLocationRequest   {
-  @JsonProperty("id")
-  private UUID id = null;
+  @JsonProperty("longitude")
+  private String longitude = null;
 
-  public GetGeoCodeByLocationRequest id(UUID id) {
-    this.id = id;
+  @JsonProperty("latitude")
+  private String latitude = null;
+
+  public GetGeoCodeByLocationRequest longitude(String longitude) {
+    this.longitude = longitude;
     return this;
   }
 
   /**
-   * Get id
-   * @return id
+   * Get longitude
+   * @return longitude
    **/
   @Schema(required = true, description = "")
       @NotNull
 
-    @Valid
-    public UUID getId() {
-    return id;
+    public String getLongitude() {
+    return longitude;
   }
 
-  public void setId(UUID id) {
-    this.id = id;
+  public void setLongitude(String longitude) {
+    this.longitude = longitude;
+  }
+
+  public GetGeoCodeByLocationRequest latitude(String latitude) {
+    this.latitude = latitude;
+    return this;
+  }
+
+  /**
+   * Get latitude
+   * @return latitude
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    public String getLatitude() {
+    return latitude;
+  }
+
+  public void setLatitude(String latitude) {
+    this.latitude = latitude;
   }
 
 
@@ -51,12 +70,13 @@ public class GetGeoCodeByLocationRequest   {
       return false;
     }
     GetGeoCodeByLocationRequest getGeoCodeByLocationRequest = (GetGeoCodeByLocationRequest) o;
-    return Objects.equals(this.id, getGeoCodeByLocationRequest.id);
+    return Objects.equals(this.longitude, getGeoCodeByLocationRequest.longitude) &&
+        Objects.equals(this.latitude, getGeoCodeByLocationRequest.latitude);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id);
+    return Objects.hash(longitude, latitude);
   }
 
   @Override
@@ -64,7 +84,8 @@ public class GetGeoCodeByLocationRequest   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetGeoCodeByLocationRequest {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    longitude: ").append(toIndentedString(longitude)).append("\n");
+    sb.append("    latitude: ").append(toIndentedString(latitude)).append("\n");
     sb.append("}");
     return sb.toString();
   }

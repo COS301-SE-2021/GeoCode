@@ -16,7 +16,7 @@ import javax.validation.constraints.*;
  * CreateGeoCodeRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T19:40:54.656Z[GMT]")
 
 
 public class CreateGeoCodeRequest   {
@@ -26,8 +26,11 @@ public class CreateGeoCodeRequest   {
   @JsonProperty("description")
   private String description = null;
 
-  @JsonProperty("location")
-  private String location = null;
+  @JsonProperty("longitude")
+  private String longitude = null;
+
+  @JsonProperty("latitude")
+  private String latitude = null;
 
   @JsonProperty("hints")
   @Valid
@@ -80,24 +83,44 @@ public class CreateGeoCodeRequest   {
     this.description = description;
   }
 
-  public CreateGeoCodeRequest location(String location) {
-    this.location = location;
+  public CreateGeoCodeRequest longitude(String longitude) {
+    this.longitude = longitude;
     return this;
   }
 
   /**
-   * Get location
-   * @return location
+   * Get longitude
+   * @return longitude
    **/
   @Schema(required = true, description = "")
       @NotNull
 
-    public String getLocation() {
-    return location;
+    public String getLongitude() {
+    return longitude;
   }
 
-  public void setLocation(String location) {
-    this.location = location;
+  public void setLongitude(String longitude) {
+    this.longitude = longitude;
+  }
+
+  public CreateGeoCodeRequest latitude(String latitude) {
+    this.latitude = latitude;
+    return this;
+  }
+
+  /**
+   * Get latitude
+   * @return latitude
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    public String getLatitude() {
+    return latitude;
+  }
+
+  public void setLatitude(String latitude) {
+    this.latitude = latitude;
   }
 
   public CreateGeoCodeRequest hints(List<String> hints) {
@@ -178,7 +201,8 @@ public class CreateGeoCodeRequest   {
     CreateGeoCodeRequest createGeoCodeRequest = (CreateGeoCodeRequest) o;
     return Objects.equals(this.id, createGeoCodeRequest.id) &&
         Objects.equals(this.description, createGeoCodeRequest.description) &&
-        Objects.equals(this.location, createGeoCodeRequest.location) &&
+        Objects.equals(this.longitude, createGeoCodeRequest.longitude) &&
+        Objects.equals(this.latitude, createGeoCodeRequest.latitude) &&
         Objects.equals(this.hints, createGeoCodeRequest.hints) &&
         Objects.equals(this.difficulty, createGeoCodeRequest.difficulty) &&
         Objects.equals(this.available, createGeoCodeRequest.available);
@@ -186,7 +210,7 @@ public class CreateGeoCodeRequest   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, location, hints, difficulty, available);
+    return Objects.hash(id, description, longitude, latitude, hints, difficulty, available);
   }
 
   @Override
@@ -196,7 +220,8 @@ public class CreateGeoCodeRequest   {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    location: ").append(toIndentedString(location)).append("\n");
+    sb.append("    longitude: ").append(toIndentedString(longitude)).append("\n");
+    sb.append("    latitude: ").append(toIndentedString(latitude)).append("\n");
     sb.append("    hints: ").append(toIndentedString(hints)).append("\n");
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    available: ").append(toIndentedString(available)).append("\n");
