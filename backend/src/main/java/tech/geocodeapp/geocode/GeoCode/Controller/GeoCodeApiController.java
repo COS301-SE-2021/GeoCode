@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectablesRequest;
-import tech.geocodeapp.geocode.Collectable.Response.GetCollectablesResponse;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
