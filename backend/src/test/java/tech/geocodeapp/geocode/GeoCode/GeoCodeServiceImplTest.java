@@ -162,14 +162,17 @@ public class GeoCodeServiceImplTest {
             request.setHints( hints );
             request.setLocation( "Jhb" );
 
+            /* Get the response by calling the getAllGeoCodes use case */
+            GetGeoCodesResponse response = geoCodeService.getAllGeoCodes();
 
-            List< GeoCode > geocodes = geoCodeService.getAllGeoCodes().getGeocodes();
+            /* Get a geocode from the response */
+            GeoCode temp = response.getGeocodes().get( 0 );
 
             /*
              * Check if all the GeoCodes were returned correctly
              * through checking the description created with the code
              */
-            Assertions.assertEquals( geocodes.get( 0 ).getDescription(), "The GeoCode is stored at the art Museum in Jhb South" );
+            Assertions.assertEquals( temp.getDescription(), "The GeoCode is stored at the art Museum in Jhb South" );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -216,24 +219,33 @@ public class GeoCodeServiceImplTest {
     public void getGeoCodesByDifficultyTest() {
 
         try {
-            GeoCodeMockRepository repo = new GeoCodeMockRepository();
 
+            /* Control variables */
             int size = 6;
+            Difficulty difficulty = Difficulty.INSANE;
+
+            /* Populate the repo with the given amount of GeoCodes */
             List< GeoCode > temp = populate( size );
-            for ( int x = 0; x < size; x++ ) {
 
-                repo.save( temp.get( x ) );
-            }
+            /*
+             * Create a request object
+             * and assign values to it
+             */
+            GetGeoCodesByDifficultyRequest request = new GetGeoCodesByDifficultyRequest();
+            request.setDifficulty( difficulty );
 
-            List< GeoCode > hold = geoCodeService.getAllGeoCodes().getGeocodes();
+            /* Get the response by calling the getAllGeoCodes use case */
+            GetGeoCodesByDifficultyResponse response = geoCodeService.getGeoCodesByDifficulty( request );
 
-            geoCodeService = new GeoCodeServiceImpl( repo );
             boolean valid = true;
-            for ( int x = 0; x < size; x++ ) {
+            for ( int x = 0; x < response.getGeocodes().size(); x++ ) {
 
-                if ( !temp.get( x ).equals( geoCodeService.getAllGeoCodes().getGeocodes().get( x ) ) ) {
+                /* Check if the GeoCode is of the correct difficulty type */
+                if ( !response.getGeocodes().get( x ).getDifficulty().equals( difficulty ) ) {
 
+                    /* The GeoCode was not of the correct difficulty type */
                     valid = false;
+                    break;
                 }
             }
 
