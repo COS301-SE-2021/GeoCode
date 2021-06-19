@@ -43,6 +43,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
     @org.springframework.beans.factory.annotation.Autowired
     public GeoCodeApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+
         this.objectMapper = objectMapper;
         this.request = request;
     }
@@ -51,7 +52,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         CreateGeoCodeResponse response = geoCodeService.createGeoCode( body );
 
-        if ( ( response.getGeoCode() != null ) && ( !response.getGeoCode().getQrCode().isEmpty() ) ) {
+        if ( ( response.isIsSuccess() != null ) && ( response.isIsSuccess() ) ) {
 
             return new ResponseEntity<CreateGeoCodeResponse>(response, HttpStatus.OK);
         }else{
@@ -64,7 +65,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         GetGeoCodeByLocationResponse response = geoCodeService.getGeoCodesByLocation( body );
 
-        if ( ( response.getQrCode() != null ) || ( !response.getQrCode().isEmpty() ) ) {
+        if ( response.getId() != null ) {
 
             return new ResponseEntity<GetGeoCodeByLocationResponse>(response, HttpStatus.OK);
         }else{
@@ -77,7 +78,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         GetGeoCodeByQRCodeResponse response = geoCodeService.getGeocodeByQRCode( body );
 
-        if ( ( response.getQrCode() != null ) || ( !response.getQrCode().isEmpty() ) ) {
+        if ( response.getId() != null ) {
 
             return new ResponseEntity<GetGeoCodeByQRCodeResponse>(response, HttpStatus.OK);
         }else{
@@ -155,7 +156,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         SwapCollectablesResponse response = geoCodeService.swapCollectables( body );
 
-        if ( response.isSuccess() != null ) {
+        if ( response.isIsSuccess() != null ) {
 
             return new ResponseEntity<SwapCollectablesResponse>(response, HttpStatus.OK);
         }else{
@@ -168,7 +169,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         UpdateAvailabilityResponse response = geoCodeService.updateAvailability( body );
 
-        if ( response.isSuccess() != null ) {
+        if ( ( response.isIsSuccess() != null ) && ( response.isIsSuccess() ) ) {
 
             return new ResponseEntity<UpdateAvailabilityResponse>(response, HttpStatus.OK);
         }else{

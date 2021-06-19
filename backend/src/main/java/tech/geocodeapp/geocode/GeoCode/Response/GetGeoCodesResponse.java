@@ -2,11 +2,12 @@ package tech.geocodeapp.geocode.GeoCode.Response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
+
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -14,13 +15,13 @@ import javax.validation.constraints.*;
  * GetGeoCodesResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
 
 
 public class GetGeoCodesResponse   {
   @JsonProperty("geocodes")
   @Valid
-  private List<GeoCode> geocodes = new ArrayList<GeoCode>();
+  private List< GeoCode > geocodes = new ArrayList<GeoCode>();
 
   public GetGeoCodesResponse geocodes(List<GeoCode> geocodes) {
     this.geocodes = geocodes;

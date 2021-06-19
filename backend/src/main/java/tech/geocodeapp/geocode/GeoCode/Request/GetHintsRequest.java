@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
  * GetHintsRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-18T04:07:38.973Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
 
 
 public class GetHintsRequest   {

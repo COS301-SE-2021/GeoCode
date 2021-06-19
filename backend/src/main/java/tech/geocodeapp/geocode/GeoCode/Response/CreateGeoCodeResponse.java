@@ -2,40 +2,39 @@ package tech.geocodeapp.geocode.GeoCode.Response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
  * CreateGeoCodeResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
 
 
 public class CreateGeoCodeResponse   {
-  @JsonProperty("geoCode")
-  private GeoCode geoCode = null;
+  @JsonProperty("isSuccess")
+  private Boolean isSuccess = null;
 
-  public CreateGeoCodeResponse geoCode(GeoCode geoCode) {
-    this.geoCode = geoCode;
+  public CreateGeoCodeResponse isSuccess(Boolean isSuccess) {
+    this.isSuccess = isSuccess;
     return this;
   }
 
   /**
-   * Get geoCode
-   * @return geoCode
+   * Get isSuccess
+   * @return isSuccess
    **/
-  @Schema(description = "")
-  
-    @Valid
-    public GeoCode getGeoCode() {
-    return geoCode;
+  @Schema(required = true, description = "")
+      @NotNull
+
+    public Boolean isIsSuccess() {
+    return isSuccess;
   }
 
-  public void setGeoCode(GeoCode geoCode) {
-    this.geoCode = geoCode;
+  public void setIsSuccess(Boolean isSuccess) {
+    this.isSuccess = isSuccess;
   }
 
 
@@ -48,12 +47,12 @@ public class CreateGeoCodeResponse   {
       return false;
     }
     CreateGeoCodeResponse createGeoCodeResponse = (CreateGeoCodeResponse) o;
-    return Objects.equals(this.geoCode, createGeoCodeResponse.geoCode);
+    return Objects.equals(this.isSuccess, createGeoCodeResponse.isSuccess);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(geoCode);
+    return Objects.hash(isSuccess);
   }
 
   @Override
@@ -61,7 +60,7 @@ public class CreateGeoCodeResponse   {
     StringBuilder sb = new StringBuilder();
     sb.append("class CreateGeoCodeResponse {\n");
     
-    sb.append("    geoCode: ").append(toIndentedString(geoCode)).append("\n");
+    sb.append("    isSuccess: ").append(toIndentedString(isSuccess)).append("\n");
     sb.append("}");
     return sb.toString();
   }
