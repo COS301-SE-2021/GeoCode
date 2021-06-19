@@ -2,10 +2,11 @@ package tech.geocodeapp.geocode.GeoCode.Response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.Collectable.Model.Difficulty;
+
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -13,15 +14,24 @@ import javax.validation.constraints.*;
  * GetGeoCodeByQRCodeResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
 
 
 public class GetGeoCodeByQRCodeResponse   {
   @JsonProperty("id")
   private UUID id = null;
 
-  @JsonProperty("qrCode")
-  private String qrCode = null;
+  @JsonProperty("available")
+  private Boolean available = null;
+
+  @JsonProperty("description")
+  private String description = null;
+
+  @JsonProperty("location")
+  private String location = null;
+
+  @JsonProperty("difficulty")
+  private Difficulty difficulty = null;
 
   public GetGeoCodeByQRCodeResponse id(UUID id) {
     this.id = id;
@@ -32,8 +42,9 @@ public class GetGeoCodeByQRCodeResponse   {
    * Get id
    * @return id
    **/
-  @Schema(description = "")
-  
+  @Schema(required = true, description = "")
+      @NotNull
+
     @Valid
     public UUID getId() {
     return id;
@@ -43,23 +54,85 @@ public class GetGeoCodeByQRCodeResponse   {
     this.id = id;
   }
 
-  public GetGeoCodeByQRCodeResponse qrCode(String qrCode) {
-    this.qrCode = qrCode;
+  public GetGeoCodeByQRCodeResponse available(Boolean available) {
+    this.available = available;
     return this;
   }
 
   /**
-   * Get qrCode
-   * @return qrCode
+   * Get available
+   * @return available
    **/
-  @Schema(description = "")
-  
-    public String getQrCode() {
-    return qrCode;
+  @Schema(required = true, description = "")
+      @NotNull
+
+    public Boolean isAvailable() {
+    return available;
   }
 
-  public void setQrCode(String qrCode) {
-    this.qrCode = qrCode;
+  public void setAvailable(Boolean available) {
+    this.available = available;
+  }
+
+  public GetGeoCodeByQRCodeResponse description(String description) {
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * Get description
+   * @return description
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public GetGeoCodeByQRCodeResponse location(String location) {
+    this.location = location;
+    return this;
+  }
+
+  /**
+   * Get location
+   * @return location
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public GetGeoCodeByQRCodeResponse difficulty(Difficulty difficulty) {
+    this.difficulty = difficulty;
+    return this;
+  }
+
+  /**
+   * Get difficulty
+   * @return difficulty
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    @Valid
+    public Difficulty getDifficulty() {
+    return difficulty;
+  }
+
+  public void setDifficulty(Difficulty difficulty) {
+    this.difficulty = difficulty;
   }
 
 
@@ -73,12 +146,15 @@ public class GetGeoCodeByQRCodeResponse   {
     }
     GetGeoCodeByQRCodeResponse getGeoCodeByQRCodeResponse = (GetGeoCodeByQRCodeResponse) o;
     return Objects.equals(this.id, getGeoCodeByQRCodeResponse.id) &&
-        Objects.equals(this.qrCode, getGeoCodeByQRCodeResponse.qrCode);
+        Objects.equals(this.available, getGeoCodeByQRCodeResponse.available) &&
+        Objects.equals(this.description, getGeoCodeByQRCodeResponse.description) &&
+        Objects.equals(this.location, getGeoCodeByQRCodeResponse.location) &&
+        Objects.equals(this.difficulty, getGeoCodeByQRCodeResponse.difficulty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, qrCode);
+    return Objects.hash(id, available, description, location, difficulty);
   }
 
   @Override
@@ -87,7 +163,10 @@ public class GetGeoCodeByQRCodeResponse   {
     sb.append("class GetGeoCodeByQRCodeResponse {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    qrCode: ").append(toIndentedString(qrCode)).append("\n");
+    sb.append("    available: ").append(toIndentedString(available)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    location: ").append(toIndentedString(location)).append("\n");
+    sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -7,19 +7,16 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import org.springframework.stereotype.Service;
 
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
-import tech.geocodeapp.geocode.Collectable.Model.Rarity;
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectablesRequest;
-import tech.geocodeapp.geocode.Collectable.Response.GetCollectablesResponse;
+import tech.geocodeapp.geocode.Collectable.Model.*;
+import tech.geocodeapp.geocode.Collectable.Request.*;
+import tech.geocodeapp.geocode.Collectable.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
-import tech.geocodeapp.geocode.Trackable.Request.GetTrackablesRequest;
-import tech.geocodeapp.geocode.Trackable.Response.GetTrackablesResponse;
+import tech.geocodeapp.geocode.Trackable.Request.*;
+import tech.geocodeapp.geocode.Trackable.Response.*;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -69,7 +66,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified CreateGeoCodeRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     * @throws QRCodeException an error occurred when attempting to create the QR Image
+     * @throws RepoException an error occurred when trying to access the repo
      */
     @Override
     public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, RepoException {
@@ -95,18 +92,14 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         newGeoCode.setDifficulty( request.getDifficulty() );
         newGeoCode.setHints( request.getHints() );
         newGeoCode.setLocation( request.getLocation() );
-        newGeoCode.setId( UUID.randomUUID() );
+        UUID id = UUID.randomUUID();
+        newGeoCode.setId( id );
 
         Collectable collectable = new Collectable(new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description"), null ) );
         newGeoCode.setCollectables( collectable );
 
         /* Try and create the relevant image with the newly create GeoCode instance */
         try {
-
-            /*
-             * Create the image with the specified name
-             * and set the GeoCode to the create QR Code
-             */
 
             int size = 8;
             String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -118,7 +111,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             for ( int i = 0; i < size; i++ ) {
 
                 /* generate a random number between 0 to AlphaNumericString variable length */
-                int index = ( int ) (  new SecureRandom() ).nextInt(chars.length() );
+                int index = (  new SecureRandom() ).nextInt(chars.length() );
 
                 /* add Character one by one in end of sb */
                 QR.append( chars.charAt( index ) );
@@ -147,7 +140,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * and add the created GeoCode to it
          */
         CreateGeoCodeResponse response = new CreateGeoCodeResponse();
-        response.setGeoCode( newGeoCode );
+
+        /*if ( ( geoCodeRepo.findById( id ).get().getId().equals( id ) ) ) {
+
+            response.setIsSuccess( true );
+        } else {
+
+            response.setIsSuccess( false );
+        }*/
+        response.setIsSuccess( true );
 
         return response;
     }
@@ -195,7 +196,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          *
          */
         GetCollectablesResponse response = new GetCollectablesResponse();
-
+        response.setCollectables( null );
 
         return response;
     }
@@ -306,7 +307,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( ( request.getDifficulty() != null ) || ( request.getDescription() == null ) ) {
+        } else if ( request.getId() != null ) {
 
             throw new InvalidRequestException();
         }
@@ -319,7 +320,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          *
          */
         GetGeoCodeByQRCodeResponse response = new GetGeoCodeByQRCodeResponse();
-
+        response.setAvailable( true );
 
         return response;
     }
@@ -338,7 +339,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( ( request.getDifficulty() == null ) || ( request.getDescription() == null ) ) {
+        } else if ( request.getId() == null ) {
 
             throw new InvalidRequestException();
         }
@@ -351,7 +352,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          *
          */
         GetGeoCodeByLocationResponse response = new GetGeoCodeByLocationResponse();
-
+        response.setAvailable( true );
 
         return response;
     }
@@ -383,7 +384,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          *
          */
         GetTrackablesResponse response = new GetTrackablesResponse();
-
+        response.setQrCode( "test" );
 
         return response;
     }
@@ -414,7 +415,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          */
         SwapCollectablesResponse response = new SwapCollectablesResponse();
-        response.setSuccess( true );
+        response.setIsSuccess( true );
 
         return response;
     }
@@ -433,7 +434,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( ( request.getGeoCodeID() == null ) || ( request.isAvailable() == null ) ) {
+        } else if ( ( request.getGeoCodeID() == null ) || ( request.isIsAvailable() == null ) ) {
 
             throw new InvalidRequestException();
         }
@@ -443,7 +444,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /* Find and set the GeoCode to the new Availability */
         Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
-        temp.ifPresent( geoCode -> geoCode.setAvailable( request.isAvailable() ) );
+        temp.ifPresent( geoCode -> geoCode.setAvailable( request.isIsAvailable() ) );
 
 
         /*
@@ -451,7 +452,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * and set the success of the operation
          */
         UpdateAvailabilityResponse response = new UpdateAvailabilityResponse();
-        response.setSuccess( true );
+        response.setIsSuccess( true );
 
         return response;
     }

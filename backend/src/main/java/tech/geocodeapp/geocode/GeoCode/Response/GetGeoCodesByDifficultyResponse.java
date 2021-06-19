@@ -2,24 +2,25 @@ package tech.geocodeapp.geocode.GeoCode.Response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
+
 import javax.validation.Valid;
 
 /**
  * GetGeoCodesByDifficultyResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T15:08:00.890Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
 
 
 public class GetGeoCodesByDifficultyResponse   {
   @JsonProperty("geocodes")
   @Valid
-  private List<GeoCode> geocodes = null;
+  private List< GeoCode > geocodes = null;
 
   public GetGeoCodesByDifficultyResponse geocodes(List<GeoCode> geocodes) {
     this.geocodes = geocodes;
