@@ -8,13 +8,12 @@ import com.google.zxing.common.BitMatrix;
 import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.Collectable.Model.*;
-import tech.geocodeapp.geocode.Collectable.Request.*;
-import tech.geocodeapp.geocode.Collectable.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
+import tech.geocodeapp.geocode.GeoCode.Response.GetCollectablesResponse;
 import tech.geocodeapp.geocode.Trackable.Request.*;
 import tech.geocodeapp.geocode.Trackable.Response.*;
 
@@ -198,26 +197,34 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetCollectablesRequest
      */
     @Override
-    public GetCollectablesResponse getCollectables(GetCollectablesRequest request ) throws InvalidRequestException, RepoException {
+    public GetCollectablesResponse getCollectables( GetCollectablesRequest request ) throws InvalidRequestException, RepoException {
 
         /* Validate the request */
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } /*else if ( ( request().getID != null ) || ( request.getDescription() == null ) ) {
+        } else if ( request.getGeoCodeID() != null ) {
 
             throw new InvalidRequestException();
-        }*/
+        }
 
         /* Validate the repo */
         checkRepo();
+
+        Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
+
+        GeoCode hold = new GeoCode();
+        if ( temp.isPresent( ) ) {
+
+            hold = temp.get();
+        }
 
         /*
          * Create the new response
          * and set the values
          */
         GetCollectablesResponse response = new GetCollectablesResponse();
-        response.setCollectables( null );
+        response.setCollectables( hold.getCollectables() );
 
         return response;
     }
