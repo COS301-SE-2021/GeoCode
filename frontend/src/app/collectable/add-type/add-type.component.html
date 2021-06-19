@@ -7,8 +7,13 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">
-        <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+      <ion-button (click)="proceed()">
+        <ng-template [ngIf]="!loading" [ngIfElse]="isLoading">
+          <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+        </ng-template>
+        <ng-template #isLoading>
+          <ion-spinner></ion-spinner>
+        </ng-template>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -18,11 +23,11 @@
   <ion-list>
     <ion-item>
       <ion-label position="floating">Name</ion-label>
-      <ion-input></ion-input>
+      <ion-input (ionBlur)="updateRequest($event, 'name')"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Rarity</ion-label>
-      <ion-select placeholder="Select" interface="popover">
+      <ion-select placeholder="Select" interface="popover" (ionBlur)="updateRequest($event, 'rarity')">
         <ion-select-option value="COMMON">Common</ion-select-option>
         <ion-select-option value="UNCOMMON">Uncommon</ion-select-option>
         <ion-select-option value="RARE">Rare</ion-select-option>
@@ -33,15 +38,26 @@
 
     <ion-item>
       <ion-label>Trackable</ion-label>
-      <ion-checkbox></ion-checkbox>
+      <ion-checkbox [(ngModel)]="trackable"></ion-checkbox>
     </ion-item>
     <ion-item>
       <ion-label>Expiring</ion-label>
-      <ion-checkbox></ion-checkbox>
+      <ion-checkbox [(ngModel)]="showDatePicker"></ion-checkbox>
+
     </ion-item>
+    <ng-template [ngIf]="showDatePicker">
+      <ion-item>
+        <ion-datetime (ionChange)="setDate($event)" placeholder="Set Expiry Date"></ion-datetime>
+      </ion-item>
+    </ng-template>
     <ion-item>
       <ion-label>Geofenced</ion-label>
-      <ion-checkbox></ion-checkbox>
+      <ion-checkbox [(ngModel)]="showMap" (ionChange)="loadMap()"></ion-checkbox>
+    </ion-item>
+    <ion-item #mapContainer class="mapContainer">
+      <div #mapElement class="map"></div>
     </ion-item>
   </ion-list>
+
+
 </ion-content>

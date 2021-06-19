@@ -20,5 +20,6 @@ export interface GeoCode {
     hints: Array<string>;
     collectables?: Array<Collectable>;
     qrCode: string;
-    location: string;
+    longitude: string;
+    latitude: string;
 }

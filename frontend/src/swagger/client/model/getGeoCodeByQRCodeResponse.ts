@@ -15,6 +15,7 @@ export interface GetGeoCodeByQRCodeResponse {
     id: string;
     available: boolean;
     description: string;
-    location: string;
+    longitude: string;
+    latitude: string;
     difficulty: Difficulty;
 }

@@ -11,5 +11,5 @@
  */
 
 export interface GetCollectablesRequest { 
-    id: string;
+    geoCodeID: string;
 }
