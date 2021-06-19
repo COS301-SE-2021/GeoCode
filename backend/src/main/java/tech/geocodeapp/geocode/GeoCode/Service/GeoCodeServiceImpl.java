@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -45,9 +46,18 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      *
      * @param geoCodeRepo the repo the created response attributes should save to
      */
-    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo ) {
+    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo ) throws RepoException {
 
-        this.geoCodeRepo = geoCodeRepo;
+        /* Check if the given repo exists */
+        if ( geoCodeRepo != null ) {
+
+            /* The repo exists therefore it can be set for the class */
+            this.geoCodeRepo = geoCodeRepo;
+        } else {
+
+            /* The repo does not exist throw an error */
+            throw new RepoException( "The given repository does not exist." );
+        }
     }
 
     /**
@@ -84,6 +94,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         newGeoCode.setDifficulty( request.getDifficulty() );
         newGeoCode.setHints( request.getHints() );
         newGeoCode.setLocation( request.getLocation() );
+        newGeoCode.setId( UUID.randomUUID() );
 
         Collectable collectable = new Collectable(new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description"), null ) );
         newGeoCode.setCollectables( collectable );
@@ -96,18 +107,25 @@ public class GeoCodeServiceImpl implements GeoCodeService {
              * and set the GeoCode to the create QR Code
              */
 
-            String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            int size = 8;
+            String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 
-                /*StringBuilder sb = new StringBuilder(8);
-                for(int i = 0; i < 8; i++)
-                    sb.append(AB.charAt(rnd.nextInt(AB.length())));
+            // create StringBuffer size of AlphaNumericString
+            StringBuilder QR = new StringBuilder( 9 );
 
-            newGeoCode.setQrCode( sb.toString() );
-        } catch ( IOException | WriterException e ) {
+            for ( int i = 0; i < 8; i++ ) {
 
-            throw new QRCodeException( "The QR Code could not be created." );*/
+                /* generate a random number between 0 to AlphaNumericString variable length */
+                int index = ( int ) ( chars.length() * Math.random() );
+
+                /* add Character one by one in end of sb */
+                QR.append( chars.charAt( index ) );
+            }
+
+            newGeoCode.setQrCode( QR.toString() );
         } catch ( Exception e ) {
+
             e.printStackTrace();
         }
 
