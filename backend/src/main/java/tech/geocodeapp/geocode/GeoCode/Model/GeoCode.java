@@ -3,6 +3,8 @@ package tech.geocodeapp.geocode.GeoCode.Model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,9 +22,12 @@ import java.util.UUID;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T19:40:54.656Z[GMT]")
 
-
+@Entity
+@Table(name = "geocode")
 public class GeoCode   {
+
   @JsonProperty("id")
+  @Id
   private UUID id = null;
 
   @JsonProperty("difficulty")
@@ -35,10 +40,12 @@ public class GeoCode   {
   private String description = null;
 
   @JsonProperty("hints")
+  @ElementCollection
   @Valid
   private List<String> hints = new ArrayList<String>();
 
   @JsonProperty("collectables")
+  @ManyToMany
   @Valid
   private List<Collectable> collectables = null;
 
@@ -61,10 +68,10 @@ public class GeoCode   {
    * @return id
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public UUID getId() {
+  @Valid
+  public UUID getId() {
     return id;
   }
 
@@ -82,10 +89,10 @@ public class GeoCode   {
    * @return difficulty
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public Difficulty getDifficulty() {
+  @Valid
+  public Difficulty getDifficulty() {
     return difficulty;
   }
 
@@ -103,9 +110,9 @@ public class GeoCode   {
    * @return available
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public Boolean isAvailable() {
+  public Boolean isAvailable() {
     return available;
   }
 
@@ -123,9 +130,9 @@ public class GeoCode   {
    * @return description
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getDescription() {
+  public String getDescription() {
     return description;
   }
 
@@ -148,9 +155,9 @@ public class GeoCode   {
    * @return hints
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public List<String> getHints() {
+  public List<String> getHints() {
     return hints;
   }
 
@@ -176,8 +183,8 @@ public class GeoCode   {
    * @return collectables
    **/
   @Schema(description = "")
-      @Valid
-    public List<Collectable> getCollectables() {
+  @Valid
+  public List<Collectable> getCollectables() {
     return collectables;
   }
 
@@ -195,9 +202,9 @@ public class GeoCode   {
    * @return qrCode
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getQrCode() {
+  public String getQrCode() {
     return qrCode;
   }
 
@@ -215,9 +222,9 @@ public class GeoCode   {
    * @return longitude
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getLongitude() {
+  public String getLongitude() {
     return longitude;
   }
 
@@ -235,9 +242,9 @@ public class GeoCode   {
    * @return latitude
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getLatitude() {
+  public String getLatitude() {
     return latitude;
   }
 
@@ -256,14 +263,14 @@ public class GeoCode   {
     }
     GeoCode geoCode = (GeoCode) o;
     return Objects.equals(this.id, geoCode.id) &&
-        Objects.equals(this.difficulty, geoCode.difficulty) &&
-        Objects.equals(this.available, geoCode.available) &&
-        Objects.equals(this.description, geoCode.description) &&
-        Objects.equals(this.hints, geoCode.hints) &&
-        Objects.equals(this.collectables, geoCode.collectables) &&
-        Objects.equals(this.qrCode, geoCode.qrCode) &&
-        Objects.equals(this.longitude, geoCode.longitude) &&
-        Objects.equals(this.latitude, geoCode.latitude);
+            Objects.equals(this.difficulty, geoCode.difficulty) &&
+            Objects.equals(this.available, geoCode.available) &&
+            Objects.equals(this.description, geoCode.description) &&
+            Objects.equals(this.hints, geoCode.hints) &&
+            Objects.equals(this.collectables, geoCode.collectables) &&
+            Objects.equals(this.qrCode, geoCode.qrCode) &&
+            Objects.equals(this.longitude, geoCode.longitude) &&
+            Objects.equals(this.latitude, geoCode.latitude);
   }
 
   @Override
@@ -275,7 +282,7 @@ public class GeoCode   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeoCode {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    available: ").append(toIndentedString(available)).append("\n");
