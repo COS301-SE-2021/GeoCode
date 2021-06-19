@@ -1183,11 +1183,10 @@ components:
     GetGeoCodeByQRCodeRequest:
       type: "object"
       required:
-        - id
+        - QRCode
       properties:
-        id:
+        QRCode:
           type: string
-          format: uuid
       xml:
         name: "getGeoCodeByQRCodeRequest"
 
@@ -1220,11 +1219,13 @@ components:
     GetGeoCodeByLocationRequest:
       type: "object"
       required:
-        - id
+        - longitude
+        - latitude
       properties:
-        id:
+        longitude:
           type: string
-          format: uuid
+        latitude:
+          type: string
       xml:
         name: "getGeoCodeByLocationRequest"
 
