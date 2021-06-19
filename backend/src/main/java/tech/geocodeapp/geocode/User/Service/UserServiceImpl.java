@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
      */
     public UpdateLocationResponse updateLocation(UpdateLocationRequest request){
         if (request == null) {
-            return new UpdateLocationResponse(false, "The GetUserTrackableRequest object passed was NULL", null);
+            return new UpdateLocationResponse(false, "The UpdateLocationRequest object passed was NULL", null);
         }
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());

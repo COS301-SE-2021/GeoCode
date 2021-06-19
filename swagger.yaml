@@ -1474,7 +1474,7 @@ components:
       type: "object"
       required:
         - success
-        - meassage
+        - message
         - collectableType
       properties:
         success:
@@ -1678,7 +1678,16 @@ components:
         
     SwapCollectableResponse:
       type: "object"
+      required:
+        - success
+        - message
+        - Collectable
       properties:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: "The user's Collectable was successfully swapped with the Collectable in the GeoCode"
         Collectable:
           $ref: '#/components/schemas/Collectable'
       xml:
@@ -1697,7 +1706,16 @@ components:
         
     GetCurrentCollectableResponse:
       type: "object"
+      required:
+        - success
+        - message
+        - Collectable
       properties:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: "The user's Collectable was successfully returned"
         Collectable:
           $ref: '#/components/schemas/Collectable'
       xml:
@@ -1717,8 +1735,15 @@ components:
     GetUserTrackableResponse:
       type: "object"
       required:
+        - success
+        - message
         - Trackable
       properties:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: "The user's Trackable was successfully returned"
         Trackable:
           $ref: '#/components/schemas/Collectable' 
       xml:
@@ -1738,8 +1763,15 @@ components:
     UpdateLocationResponse:
       type: "object"
       required:
-        - Trackable
+        - success
+        - message
+        - Collectable
       properties:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: "The trackable object's location was successfully updated"
         Trackable:
           $ref: '#/components/schemas/Collectable' 
       xml:
