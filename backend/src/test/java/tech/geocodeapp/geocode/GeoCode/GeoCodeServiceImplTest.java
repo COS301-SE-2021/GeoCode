@@ -521,7 +521,7 @@ public class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals( response.getDescription(), "Test" );
+            Assertions.assertEquals( response.getDescription(), null );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */

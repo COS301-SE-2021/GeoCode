@@ -1,17 +1,18 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.GeoCode.Model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.Collectable;
-import io.swagger.model.Difficulty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import tech.geocodeapp.geocode.Collectable.Model.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 
 /**
  * GeoCode

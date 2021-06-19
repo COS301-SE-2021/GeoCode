@@ -91,12 +91,18 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         newGeoCode.setDescription( request.getDescription() );
         newGeoCode.setDifficulty( request.getDifficulty() );
         newGeoCode.setHints( request.getHints() );
-        newGeoCode.setLocation( request.getLatitude() );
-        newGeoCode.setLocation( request.getLongitude() );
+        newGeoCode.setLatitude( request.getLatitude() );
+        newGeoCode.setLongitude( request.getLongitude() );
         UUID id = UUID.randomUUID();
         newGeoCode.setId( id );
 
-        Collectable collectable = new Collectable( new CollectableType("name", "imageURL", Rarity.COMMON, new CollectableSet("setName", "description"), null ) );
+        List <Collectable > collectable = new ArrayList<>();
+
+        for ( int x = 0; x < 5; x++ ) {
+
+            collectable.add( new Collectable( new CollectableType( "name", "imageURL", Rarity.COMMON, new CollectableSet( "setName", "description" ), null ) ) );
+        }
+
         newGeoCode.setCollectables( collectable );
 
         /* Try and create the relevant image with the newly create GeoCode instance */
