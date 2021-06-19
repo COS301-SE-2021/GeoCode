@@ -1,14 +1,11 @@
 package tech.geocodeapp.geocode.User.Service;
 
-import org.springframework.util.Assert;
 import tech.geocodeapp.geocode.Collectable.Model.Collectable;
 import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.User.Model.User;
@@ -35,6 +32,8 @@ public class UserServiceImpl implements UserService {
     private final CollectableTypeRepository collectableTypeRepo;
     private final GeoCodeRepository geocodeRepo;
 
+    private final String invalidUserId = "Invalid user id";
+
     public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, CollectableTypeRepository collectableTypeRepo, GeoCodeRepository geocodeRepo) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
@@ -54,8 +53,8 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
-        if(!optionalUser.isPresent()){
-            return new GetCurrentCollectableResponse(false, "Invalid user id", null);
+        if(optionalUser.isEmpty()){
+            return new GetCurrentCollectableResponse(false, invalidUserId, null);
         }
 
         Collectable currentUserCollectable = optionalUser.get().getCurrentCollectable();
@@ -74,8 +73,8 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
-        if(!optionalUser.isPresent()){
-            return new GetUserTrackableResponse(false, "Invalid user id", null);
+        if(optionalUser.isEmpty()){
+            return new GetUserTrackableResponse(false, invalidUserId, null);
         }
 
         Collectable userTrackable = optionalUser.get().getTrackableObject();
@@ -94,13 +93,13 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
-        if(!optionalUser.isPresent()){
-            return new SwapCollectableResponse(false, "Invalid user id", null);
+        if(optionalUser.isEmpty()){
+            return new SwapCollectableResponse(false, invalidUserId, null);
         }
 
         Optional<GeoCode> optionalGeoCode = geocodeRepo.findById(request.getTargetGeoCodeID());
 
-        if(!optionalGeoCode.isPresent()){
+        if(optionalGeoCode.isEmpty()){
             return new SwapCollectableResponse(false, "Invalid GeoCode id", null);
         }
 
@@ -108,13 +107,13 @@ public class UserServiceImpl implements UserService {
         UUID targetCollectableID = request.getTargetCollectableID();
         Optional<Collectable> optionalTargetCollectable = collectableRepo.findById(targetCollectableID);
 
-        if(!optionalTargetCollectable.isPresent()){
+        if(optionalTargetCollectable.isEmpty()){
             return new SwapCollectableResponse(false, "Invalid Collectable id for the targetCollectableID", null);
         }
 
         //check is targetCollectableID for a Collectable that is in the GeoCode
-        GeoCode geoCode = optionalGeoCode.get();
-        /*List<Collectable> geoCodeCollectables = geoCode.getCollectables();
+        /*GeoCode geoCode = optionalGeoCode.get();
+        List<Collectable> geoCodeCollectables = geoCode.getCollectables();
 
         for(int i=0; i<geoCodeCollectables.size(); ++i){
             Collectable currentCollectable = geoCodeCollectables.get(i);
@@ -139,13 +138,13 @@ public class UserServiceImpl implements UserService {
      */
     public UpdateLocationResponse updateLocation(UpdateLocationRequest request){
         if (request == null) {
-            return new UpdateLocationResponse(false, "The GetUserTrackableRequest object passed was NULL", null);
+            return new UpdateLocationResponse(false, "The UpdateLocationRequest object passed was NULL", null);
         }
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
-        if(!optionalUser.isPresent()){
-            return new UpdateLocationResponse(false, "Invalid user id", null);
+        if(optionalUser.isEmpty()){
+            return new UpdateLocationResponse(false, invalidUserId, null);
         }
 
         User currentUser = optionalUser.get();
@@ -165,12 +164,7 @@ public class UserServiceImpl implements UserService {
      */
     public User getUserById(UUID id){
         Optional<User> optionalUser = userRepo.findById(id);
-
-        if(optionalUser.isPresent()){
-            return optionalUser.get();
-        }else{
-            return null;
-        }
+        return optionalUser.orElse(null);
     }
 
     /**

@@ -2,7 +2,6 @@ package tech.geocodeapp.geocode.GeoCode.Request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
@@ -13,15 +12,15 @@ import javax.validation.constraints.*;
  * UpdateAvailabilityRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-18T04:32:33.769Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
 
 
 public class UpdateAvailabilityRequest   {
   @JsonProperty("geoCodeID")
   private UUID geoCodeID = null;
 
-  @JsonProperty("available")
-  private Boolean available = null;
+  @JsonProperty("isAvailable")
+  private Boolean isAvailable = null;
 
   public UpdateAvailabilityRequest geoCodeID(UUID geoCodeID) {
     this.geoCodeID = geoCodeID;
@@ -44,24 +43,24 @@ public class UpdateAvailabilityRequest   {
     this.geoCodeID = geoCodeID;
   }
 
-  public UpdateAvailabilityRequest available(Boolean available) {
-    this.available = available;
+  public UpdateAvailabilityRequest isAvailable(Boolean isAvailable) {
+    this.isAvailable = isAvailable;
     return this;
   }
 
   /**
-   * Get available
-   * @return available
+   * Get isAvailable
+   * @return isAvailable
    **/
   @Schema(required = true, description = "")
       @NotNull
 
-    public Boolean isAvailable() {
-    return available;
+    public Boolean isIsAvailable() {
+    return isAvailable;
   }
 
-  public void setAvailable(Boolean available) {
-    this.available = available;
+  public void setIsAvailable(Boolean isAvailable) {
+    this.isAvailable = isAvailable;
   }
 
 
@@ -75,12 +74,12 @@ public class UpdateAvailabilityRequest   {
     }
     UpdateAvailabilityRequest updateAvailabilityRequest = (UpdateAvailabilityRequest) o;
     return Objects.equals(this.geoCodeID, updateAvailabilityRequest.geoCodeID) &&
-        Objects.equals(this.available, updateAvailabilityRequest.available);
+        Objects.equals(this.isAvailable, updateAvailabilityRequest.isAvailable);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(geoCodeID, available);
+    return Objects.hash(geoCodeID, isAvailable);
   }
 
   @Override
@@ -89,7 +88,7 @@ public class UpdateAvailabilityRequest   {
     sb.append("class UpdateAvailabilityRequest {\n");
     
     sb.append("    geoCodeID: ").append(toIndentedString(geoCodeID)).append("\n");
-    sb.append("    available: ").append(toIndentedString(available)).append("\n");
+    sb.append("    isAvailable: ").append(toIndentedString(isAvailable)).append("\n");
     sb.append("}");
     return sb.toString();
   }
