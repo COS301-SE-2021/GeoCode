@@ -1183,11 +1183,10 @@ components:
     GetGeoCodeByQRCodeRequest:
       type: "object"
       required:
-        - id
+        - QRCode
       properties:
-        id:
+        QRCode:
           type: string
-          format: uuid
       xml:
         name: "getGeoCodeByQRCodeRequest"
 
@@ -1220,11 +1219,13 @@ components:
     GetGeoCodeByLocationRequest:
       type: "object"
       required:
-        - id
+        - longitude
+        - latitude
       properties:
-        id:
+        longitude:
           type: string
-          format: uuid
+        latitude:
+          type: string
       xml:
         name: "getGeoCodeByLocationRequest"
 
@@ -1340,9 +1341,9 @@ components:
     GetCollectablesRequest:
       type: "object"
       required:
-        - id
+        - geoCodeID
       properties:
-        id:
+        geoCodeID:
           type: string
           format: uuid
       xml:
@@ -1467,7 +1468,7 @@ components:
         collectables:
           type: array
           items:
-            $ref: '#/components/schemas/CollectableResponse'
+            $ref: '#/components/schemas/Collectable'
       xml:
         name: "GetCollectablesResponse"
 
