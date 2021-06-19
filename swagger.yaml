@@ -1115,9 +1115,11 @@ components:
 
     CreateGeoCodeResponse:
       type: "object"
+      required:
+        - isSuccess
       properties:
-        geoCode:
-          $ref: '#/components/schemas/GeoCode'
+        isSuccess:
+          type: boolean
       xml:
         name: "CreateGeoCodeResponse"
 
@@ -1177,64 +1179,68 @@ components:
     GetGeoCodeByQRCodeRequest:
       type: "object"
       required:
-        - description
-        - location
-        - difficulty
-        - hints
+        - id
       properties:
-        description:
+        id:
           type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
+          format: uuid
       xml:
         name: "getGeoCodeByQRCodeRequest"
 
     GetGeoCodeByQRCodeResponse:
       type: "object"
+      required:
+        - id
+        - available
+        - description
+        - difficulty
+        - location
       properties:
         id:
           type: string
           format: uuid
-        qrCode:
+        available:
+          type: boolean
+        description:
           type: string
+        location:
+          type: string
+        difficulty:
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodeByQRCodeResponse"
 
     GetGeoCodeByLocationRequest:
       type: "object"
       required:
-        - description
-        - location
-        - difficulty
-        - hints
+        - id
       properties:
-        description:
+        id:
           type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
+          format: uuid
       xml:
         name: "getGeoCodeByLocationRequest"
 
     GetGeoCodeByLocationResponse:
       type: "object"
+      required:
+        - id
+        - available
+        - description
+        - difficulty
+        - location
       properties:
         id:
           type: string
           format: uuid
-        qrCode:
+        available:
+          type: boolean
+        description:
           type: string
+        location:
+          type: string
+        difficulty:
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodeByLocationResponse"
 
@@ -1286,8 +1292,10 @@ components:
 
     SwapCollectablesResponse:
       type: "object"
+      required:
+        - isSuccess
       properties:
-        success:
+        isSuccess:
           type: boolean
       xml:
         name: "swapCollectablesResponse"
@@ -1296,20 +1304,22 @@ components:
       type: "object"
       required:
         - geoCodeID
-        - available
+        - isAvailable
       properties:
         geoCodeID:
           type: string
           format: uuid
-        available:
+        isAvailable:
           type: boolean
       xml:
         name: "updateAvailabilityRequest"
 
     UpdateAvailabilityResponse:
       type: "object"
+      required:
+        - isSuccess
       properties:
-        success:
+        isSuccess:
           type: boolean
       xml:
         name: "updateAvailabilityResponse"
