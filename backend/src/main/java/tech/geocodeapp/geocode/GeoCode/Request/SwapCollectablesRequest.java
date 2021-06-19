@@ -2,10 +2,11 @@ package tech.geocodeapp.geocode.GeoCode.Request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.Collectable.Model.Collectable;
+
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -13,7 +14,7 @@ import javax.validation.constraints.*;
  * SwapCollectablesRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-18T04:32:33.769Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
 
 
 public class SwapCollectablesRequest   {
