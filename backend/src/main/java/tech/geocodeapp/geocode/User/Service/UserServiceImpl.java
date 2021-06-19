@@ -186,7 +186,9 @@ public class UserServiceImpl implements UserService {
         User newUser = new User();
         newUser.setId(id);
         newUser.setUsername(username);
-        newUser.setTrackableObject(new Collectable(/*trackable CollectableType id*/));
+        Collectable trackableObject = new Collectable(/*trackable CollectableType id*/);
+        newUser.setTrackableObject(trackableObject);
+        newUser.setCurrentCollectable(trackableObject);
         userRepo.save(newUser);
     }
 }
