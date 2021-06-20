@@ -24,10 +24,7 @@ public interface UserService {
     //U1.2 getUserTrackable
     GetUserTrackableResponse getUserTrackable(GetUserTrackableRequest request);
 
-    //U1.3 swapCollectable
-    SwapCollectableResponse swapCollectable(SwapCollectableRequest request);
-
-    //U1.4 updateLocation
+    //U1.3 updateLocation
     UpdateLocationResponse updateLocation(UpdateLocationRequest request);
 
     //helper functions
