@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {IonicModule, ModalController} from '@ionic/angular';
 
 import { AddSetComponent } from './add-set.component';
+import {CollectableService} from '../../../services/geocode-api';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('AddSetComponent', () => {
   let component: AddSetComponent;
@@ -10,7 +12,8 @@ describe('AddSetComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AddSetComponent ],
-      imports: [IonicModule.forRoot()]
+      providers: [ModalController, CollectableService],
+      imports: [IonicModule.forRoot(), HttpClientTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddSetComponent);

@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {IonicModule, ModalController} from '@ionic/angular';
 
 import { ProfilePage } from './profile.page';
+import {UserService} from '../../services/geocode-api';
+import {UserInformationService} from '../../services/UserInformationService';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('UserPage', () => {
   let component: ProfilePage;
@@ -10,7 +13,8 @@ describe('UserPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ProfilePage ],
-      imports: [IonicModule.forRoot()]
+      providers: [ModalController, UserService, UserInformationService],
+      imports: [IonicModule.forRoot(), HttpClientTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProfilePage);

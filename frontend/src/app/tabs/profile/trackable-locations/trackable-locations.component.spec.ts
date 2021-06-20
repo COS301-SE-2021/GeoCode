@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {IonicModule, ModalController, NavParams} from '@ionic/angular';
 
 import { TrackableLocationsComponent } from './trackable-locations.component';
 
@@ -10,6 +10,7 @@ describe('TrackableLocationsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ TrackableLocationsComponent ],
+      providers: [ModalController, NavParams],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

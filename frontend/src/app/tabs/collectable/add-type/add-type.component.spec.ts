@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {IonicModule, ModalController, NavParams, ToastController} from '@ionic/angular';
 
 import { AddTypeComponent } from './add-type.component';
+import {CollectableService} from '../../../services/geocode-api';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('AddTypeComponent', () => {
   let component: AddTypeComponent;
@@ -10,7 +12,8 @@ describe('AddTypeComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AddTypeComponent ],
-      imports: [IonicModule.forRoot()]
+      providers: [ModalController, CollectableService, ToastController, NavParams],
+      imports: [IonicModule.forRoot(), HttpClientTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddTypeComponent);

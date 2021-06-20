@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {IonicModule, ModalController} from '@ionic/angular';
 
 import { CollectablePage } from './collectable.page';
+import {CollectableService} from '../../services/geocode-api';
+import {UserInformationService} from '../../services/UserInformationService';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('CollectablePage', () => {
   let component: CollectablePage;
@@ -10,7 +13,8 @@ describe('CollectablePage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CollectablePage ],
-      imports: [IonicModule.forRoot()]
+      providers: [ModalController, CollectableService, UserInformationService],
+      imports: [IonicModule.forRoot(), HttpClientTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CollectablePage);
