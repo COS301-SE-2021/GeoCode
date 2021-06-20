@@ -9,6 +9,6 @@ import {environment} from '../environments/environment';
 })
 export class AppComponent {
   constructor() {
-    localStorage.setItem("accessToken", environment.hardcodedKeycloakToken);
+    localStorage.setItem('accessToken', environment.hardcodedKeycloakToken);
   }
 }

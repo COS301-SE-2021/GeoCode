@@ -7,10 +7,13 @@ module.exports = function (config) {
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
       require('karma-jasmine'),
-      require('karma-chrome-launcher'),
+      require('@chiragrupani/karma-chromium-edge-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma')
+    ],
+    files: [
+      'src/app/mocks/google-maps-api.js'
     ],
     client: {
       jasmine: {
@@ -37,7 +40,8 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
+    usePolling: true,
+    browsers: ['Edge'],
     singleRun: false,
     restartOnFileChange: true
   });
