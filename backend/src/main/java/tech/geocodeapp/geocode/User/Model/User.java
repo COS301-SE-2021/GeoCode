@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.User.Model;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Cascade;
 import tech.geocodeapp.geocode.Collectable.Model.Collectable;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.Leaderboard.Model.Point;
@@ -31,30 +32,36 @@ public class User   {
 
   @JsonProperty("trackableObject")
   @ManyToOne
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Collectable trackableObject = null;
 
   @JsonProperty("points")
   @Valid
   @ManyToMany
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Set<Point> points = null;
 
   @JsonProperty("currentCollectable")
   @ManyToOne
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Collectable currentCollectable = null;
 
   @JsonProperty("foundCollectables")
   @Valid
   @ManyToMany
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Set<Collectable> foundCollectables = null;
 
   @JsonProperty("foundGeocodes")
   @Valid
   @ManyToMany
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Set<GeoCode> foundGeocodes = null;
 
   @JsonProperty("ownedGeocodes")
   @Valid
   @ManyToMany
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Set<GeoCode> ownedGeocodes = null;
 
   public User id(UUID id) {
