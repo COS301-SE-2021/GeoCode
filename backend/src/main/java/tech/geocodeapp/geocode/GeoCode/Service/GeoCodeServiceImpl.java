@@ -444,7 +444,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
     /**
      * Updates the availability of a GeoCode
-     *lombok
+     *
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified UpdateAvailabilityRequest
