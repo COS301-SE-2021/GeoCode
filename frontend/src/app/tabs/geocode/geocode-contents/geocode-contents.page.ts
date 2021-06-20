@@ -22,6 +22,7 @@ export class GeocodeContentsPage implements AfterViewInit {
   mapOptions;
   hints=[];
   isHidden=false;
+  collectables =[];
 
 
   constructor(private route: ActivatedRoute,public geocodeApi: GeoCodeService) {
@@ -88,6 +89,7 @@ export class GeocodeContentsPage implements AfterViewInit {
         };
         this.geocodeApi.getGeoCodeCollectables(requestCollectables).subscribe((response2 :GetCollectablesResponse) =>{
           console.log(response2);
+          this.collectables= response2.collectables;
         });
       }else{
 
