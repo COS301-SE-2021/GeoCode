@@ -9,10 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
-import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
-import tech.geocodeapp.geocode.User.Repository.UserRepository;
 import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
 import tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest;
 import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
@@ -26,6 +22,8 @@ import tech.geocodeapp.geocode.User.Service.UserService;
 public class UserServiceImplIT {
     @Autowired
     private UserService userService;
+    private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
+    private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
 
     @Test
     public void getCurrentCollectableTestInvalidUser(){
@@ -34,7 +32,7 @@ public class UserServiceImplIT {
           and assign values to it
           */
         GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
-        request.setUserID(UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055"));//invalid UUID (no user has it)
+        request.setUserID(invalidUserId);//invalid UUID (no user has it)
 
         GetCurrentCollectableResponse response = userService.getCurrentCollectable(request);
         Assertions.assertFalse(response.isSuccess());
@@ -48,7 +46,7 @@ public class UserServiceImplIT {
           and assign values to it
           */
         GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
-        request.setUserID(UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f"));
+        request.setUserID(validUserId);
 
         GetCurrentCollectableResponse response = userService.getCurrentCollectable(request);
         Assertions.assertTrue(response.isSuccess());
@@ -61,7 +59,7 @@ public class UserServiceImplIT {
           and assign values to it
           */
         GetUserTrackableRequest request = new GetUserTrackableRequest();
-        request.setUserID(UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055"));
+        request.setUserID(invalidUserId);
 
         GetUserTrackableResponse response = userService.getUserTrackable(request);
         Assertions.assertFalse(response.isSuccess());
@@ -75,7 +73,7 @@ public class UserServiceImplIT {
           and assign values to it
           */
         GetUserTrackableRequest request = new GetUserTrackableRequest();
-        request.setUserID(UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f"));
+        request.setUserID(validUserId);
 
         GetUserTrackableResponse response = userService.getUserTrackable(request);
         Assertions.assertTrue(response.isSuccess());
@@ -88,7 +86,7 @@ public class UserServiceImplIT {
           and assign values to it
           */
         UpdateLocationRequest request = new UpdateLocationRequest();
-        request.setUserID(UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055"));
+        request.setUserID(invalidUserId);
 
         UpdateLocationResponse response = userService.updateLocation(request);
         Assertions.assertFalse(response.isSuccess());
@@ -102,7 +100,7 @@ public class UserServiceImplIT {
           and assign values to it
           */
         UpdateLocationRequest request = new UpdateLocationRequest();
-        request.setUserID(UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f"));
+        request.setUserID(validUserId);
 
         UpdateLocationResponse response = userService.updateLocation(request);
         Assertions.assertTrue(response.isSuccess());
