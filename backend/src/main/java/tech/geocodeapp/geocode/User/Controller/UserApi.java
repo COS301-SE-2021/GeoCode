@@ -13,12 +13,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import tech.geocodeapp.geocode.User.Response.GetFoundCollectablesResponse;
 import tech.geocodeapp.geocode.User.Response.GetFoundGeoCodesResponse;
 import tech.geocodeapp.geocode.User.Model.User;
@@ -31,19 +33,6 @@ import javax.validation.Valid;
 @Validated
 @CrossOrigin(origins = "${web_referrer}", maxAge = 3600)
 public interface UserApi {
-
-    @Operation(summary = "Administrator blocks the given user", description = "Block a user", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Successfully blocked the user", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
-    @RequestMapping(value = "/User/blockUser",
-        produces = { "application/json", "application/xml" }, 
-        consumes = { "application/json", "application/xml" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<User> blockUser(@Parameter(in = ParameterIn.DEFAULT, description = "Request to block a user", required = true, schema = @Schema()) @Valid @RequestBody BlockUserRequest body);
-
 
     @Operation(summary = "Get the Collectable the User is currently holding", description = "Get the user's current Collectable", security = {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
@@ -144,32 +133,5 @@ public interface UserApi {
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
     ResponseEntity<GetUsersResponse> getUsers(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all users in the system", required = true, schema = @Schema()) @Valid @RequestBody GetUsersRequest body);
-
-
-    @Operation(summary = "Sets the given user to be an administrator", description = "Sets the given user to be an administrator", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Successfully set the user to be an administrator", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
-    @RequestMapping(value = "/User/setAdmin",
-        produces = { "application/json", "application/xml" }, 
-        consumes = { "application/json", "application/xml" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<User> setAdmin(@Parameter(in = ParameterIn.DEFAULT, description = "Request to set a user to be an administrator", required = true, schema = @Schema()) @Valid @RequestBody SetAdminRequest body);
-
-
-    @Operation(summary = "Swaps the Collectable the user is currently holding with the given Collectable in the given GeoCode", description = "Swap held Collectable", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "The user's current Collectable was successfully swapped", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SwapCollectableResponse.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
-    @RequestMapping(value = "/User/swapCollectable",
-        produces = { "application/json", "application/xml" }, 
-        consumes = { "application/json", "application/xml" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<SwapCollectableResponse> swapCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap the held Collectable", required = true, schema = @Schema()) @Valid @RequestBody SwapCollectableRequest body);
-
 }
 

@@ -1,65 +1,125 @@
 package tech.geocodeapp.geocode.GeoCode;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import tech.geocodeapp.geocode.Collectable.CollectableMockRepository;
+import tech.geocodeapp.geocode.Collectable.CollectableSetMockRepository;
+import tech.geocodeapp.geocode.Collectable.CollectableTypeMockRepository;
 import tech.geocodeapp.geocode.Collectable.Model.*;
+import tech.geocodeapp.geocode.Collectable.Service.*;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Service.*;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
+import tech.geocodeapp.geocode.User.Service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+/**
+ * This is the unit testing class for the GeoCode subsystem
+ *
+ * Testing for if the requests, request attributes
+ * and the repository are working in valid order
+ * and what exceptions are thrown if not.
+ */
+@TestMethodOrder( MethodOrderer.OrderAnnotation.class )
 @ExtendWith( MockitoExtension.class )
 public class GeoCodeServiceImplTest {
 
     /**
      * The service for the GeoCode subsystem
-     * <p>
+     *
      * This is used to access the different use cases
      * needed for functionality
      */
     GeoCodeService geoCodeService;
 
-    GeoCodeMockRepository repo;
     /**
-     * Default Constructor
-     */
-    GeoCodeServiceImplTest() {
+    * The mock repository for the GeoCode subsystem
+    * All the data will be saved here and is used to mock the JPA repository
+    */
+    GeoCodeMockRepository repo;
 
-    }
+    /**
+     * The collectable service accessor
+     */
+    CollectableService collectableService;
+
+    /**
+     * A mock service for the User subsystem
+     *
+     * This is used to access User subsystem in some use cases
+     */
+    @Mock(name = "userServiceImpl")
+    UserService userService;
+
+    /**
+     * The expected exception message for if the given request has invalid attributes
+     */
+    String reqParamError = "The given request is missing parameter/s.";
+
+    /**
+     * The expected exception message for if the given request has invalid attributes
+     */
+    String reqEmptyError = "The given request is empty.";
 
     /**
      * Create the GeoCodeServiceImpl with the relevant repositories.
-     * <p>
+     *
      * This is done to ensure a repository with no data is created each time
      * and the service implementation contains fresh code that has not been affected
      * by some other test or data.
      */
     @BeforeEach
-    void setup() throws RepoException {
+    void setup() {
 
+        /* Create a new repository instance and make sure there is no data in it */
         repo = new GeoCodeMockRepository();
         repo.deleteAll();
 
-        geoCodeService = new GeoCodeServiceImpl( repo );
+        CollectableTypeMockRepository typeMockRepo = new CollectableTypeMockRepository();
+
+        CollectableType type = new CollectableType();
+        type.setId( UUID.fromString( "208e042a-530b-403e-bf3e-dafd95009b8f" ) );
+        type.setName( "name" );
+        type.setImage( "Image" );
+        type.setRarity( Rarity.RARE );
+        type.setSet( new CollectableSet() );
+
+        typeMockRepo.save( type );
+
+        collectableService = new CollectableServiceImpl( new CollectableMockRepository(),
+                                                         new CollectableSetMockRepository(),
+                                                         typeMockRepo );
+
+        try {
+
+            /* Create a new GeoCodeServiceImpl instance to access the different use cases */
+            geoCodeService = new GeoCodeServiceImpl( repo, collectableService, userService );
+        } catch ( RepoException e ) {
+
+            e.printStackTrace();
+        }
     }
 
     /**
      * Check how the constructor handles the repository being null
      */
     @Test
+    @Order( 1 )
+    @Tag( "Tests" )
+    @DisplayName( "Test Null repository handling" )
     public void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null ) )
+        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }
@@ -68,18 +128,21 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
+    @Order( 2 )
+    @DisplayName( "Test createGeoCode Null repository handling" )
     public void createGeoCodeNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.createGeoCode( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is empty." );
+                .hasMessageContaining( reqEmptyError );
     }
 
     /**
      * Check how the use case handles an invalid request
      */
     @Test
+    @Order( 10 )
     public void createGeoCodeInvalidRequestTest() {
 
         /*
@@ -97,7 +160,7 @@ public class GeoCodeServiceImplTest {
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.createGeoCode( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is missing parameter/s." );
+                .hasMessageContaining( reqParamError );
     }
 
     /**
@@ -105,6 +168,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
+    @Order( 18 )
     public void createGeoCodeTest() {
 
         try {
@@ -147,6 +211,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
+    @Order( 19 )
     public void getAllGeoCodeTest() {
 
         try {
@@ -182,7 +247,7 @@ public class GeoCodeServiceImplTest {
              * Check if all the GeoCodes were returned correctly
              * through checking the description created with the code
              */
-            Assertions.assertEquals( geocodes.get( 0 ).getDescription(), "The GeoCode is stored at the art Museum in Jhb South" );
+            Assertions.assertEquals( "The GeoCode is stored at the art Museum in Jhb South", geocodes.get( 0 ).getDescription() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -195,18 +260,20 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
+    @Order( 3 )
     public void getGeoCodesByDifficultyNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.getGeoCodesByDifficulty( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is empty." );
+                .hasMessageContaining( reqEmptyError );
     }
 
     /**
      * Check how the use case handles an invalid request
      */
     @Test
+    @Order( 11 )
     public void getGeoCodesByDifficultyInvalidRequestTest() {
 
         /*
@@ -219,7 +286,7 @@ public class GeoCodeServiceImplTest {
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.getGeoCodesByDifficulty( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is missing parameter/s." );
+                .hasMessageContaining( reqParamError );
     }
 
     /**
@@ -227,6 +294,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
+    @Order( 20 )
     public void getGeoCodesByDifficultyTest() {
 
         try {
@@ -272,18 +340,20 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
+    @Order( 4 )
     public void getHintsNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.getHints( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is empty." );
+                .hasMessageContaining( reqEmptyError );
     }
 
     /**
      * Check how the use case handles an invalid request
      */
     @Test
+    @Order( 12 )
     public void getHintsInvalidRequestTest() {
 
         /*
@@ -296,7 +366,7 @@ public class GeoCodeServiceImplTest {
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.getHints( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is missing parameter/s." );
+                .hasMessageContaining( reqParamError );
     }
 
     /**
@@ -304,6 +374,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
+    @Order( 21 )
     public void getHintsTest() {
 
         try {
@@ -323,7 +394,7 @@ public class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals( response.getHints().get( 0 ), "Hint one for: 1" );
+            Assertions.assertEquals( "Hint one for: 1", new ArrayList<>( response.getHints() ).get( 0 ) );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -335,18 +406,20 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
+    @Order( 5 )
     public void swapCollectablesNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.swapCollectables( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is empty." );
+                .hasMessageContaining( reqEmptyError );
     }
 
     /**
      * Check how the use case handles an invalid request
      */
     @Test
+    @Order( 13 )
     public void swapCollectablesInvalidRequestTest() {
 
         /*
@@ -354,69 +427,33 @@ public class GeoCodeServiceImplTest {
          * and assign values to it
          * */
         SwapCollectablesRequest request = new SwapCollectablesRequest();
-        request.setGeoCodeID( null );
         request.setTargetCollectableID( null );
         request.setTargetGeoCodeID( null );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.swapCollectables( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is missing parameter/s." );
-    }
-
-    /**
-     * Using valid data does the swapCollectables use case test
-     * complete successfully
-     */
-    @Test
-    public void swapCollectablesTest() {
-
-        /* Create a GeoCode */
-        populate( 1 );
-        List< GeoCode > temp = repo.findAll();
-
-        try {
-
-            /* Create the Collectable we want to swap with */
-            Collectable collectable = new Collectable( new CollectableType( "name", "imageURL", Rarity.COMMON, new CollectableSet( "setName", "description" ), null ) );
-
-            /* Create the request with the ID of the GeoCode we want */
-            SwapCollectablesRequest request = new SwapCollectablesRequest();
-            request.setGeoCodeID( temp.get( 0 ).getId() );
-            request.setTargetCollectableID( collectable );
-            request.setTargetGeoCodeID( collectable );
-
-            /* Get the response by calling the swapCollectables use case */
-            SwapCollectablesResponse response = geoCodeService.swapCollectables( request );
-
-            /*
-             * Check if the GeoCode was created correctly
-             * through checking the returned hints from a known hint
-             */
-            Assertions.assertTrue( response.isIsSuccess() );
-        } catch ( InvalidRequestException | RepoException e ) {
-
-            /* An error occurred, print the stack to identify */
-            e.printStackTrace();
-        }
+                .hasMessageContaining( reqParamError );
     }
 
     /**
      * Check how the use case handles the request being null
      */
     @Test
+    @Order( 6 )
     public void updateAvailabilityNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.updateAvailability( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is empty." );
+                .hasMessageContaining( reqEmptyError );
     }
 
     /**
      * Check how the use case handles an invalid request
      */
     @Test
+    @Order( 14 )
     public void updateAvailabilityInvalidRequestTest() {
 
         /*
@@ -429,7 +466,7 @@ public class GeoCodeServiceImplTest {
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.updateAvailability( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is missing parameter/s." );
+                .hasMessageContaining( reqParamError );
     }
 
     /**
@@ -437,6 +474,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
+    @Order( 23 )
     public void updateAvailabilityTest() {
 
         /* Create a GeoCode */
@@ -469,18 +507,20 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
+    @Order( 7 )
     public void getGeoCodesByLocationNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is empty." );
+                .hasMessageContaining( reqEmptyError );
     }
 
     /**
      * Check how the use case handles an invalid request
      */
     @Test
+    @Order( 15 )
     public void getGeoCodesByLocationInvalidRequestTest() {
 
         /*
@@ -494,7 +534,7 @@ public class GeoCodeServiceImplTest {
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is missing parameter/s." );
+                .hasMessageContaining( reqParamError );
     }
 
     /**
@@ -502,6 +542,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
+    @Order( 24 )
     public void getGeoCodesByLocationTest() {
 
         /* Create a GeoCode */
@@ -523,7 +564,7 @@ public class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals( response.getDescription(), "The DIFFICULTY GeoCode is stored at location 1" );
+            Assertions.assertEquals( "The DIFFICULTY GeoCode is stored at location 1", response.getDescription() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -535,18 +576,20 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
+    @Order( 8 )
     public void getGeoCodesByQRCodeNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.getGeocodeByQRCode( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is empty." );
+                .hasMessageContaining( reqEmptyError );
     }
 
     /**
      * Check how the use case handles an invalid request
      */
     @Test
+    @Order( 16 )
     public void getGeoCodesByQRCodeInvalidRequestTest() {
 
         /*
@@ -559,7 +602,7 @@ public class GeoCodeServiceImplTest {
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.getGeocodeByQRCode( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is missing parameter/s." );
+                .hasMessageContaining( reqParamError );
     }
 
     /**
@@ -567,7 +610,8 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    public void getGeoCodesByQRCodeLocationTest() {
+    @Order( 25 )
+    public void getGeoCodesByQRCodeTest() {
 
         /* Create a GeoCode */
         populate( 1 );
@@ -586,7 +630,7 @@ public class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals( response.getDescription(), "The DIFFICULTY GeoCode is stored at location 1" );
+            Assertions.assertEquals( "The DIFFICULTY GeoCode is stored at location 1", response.getDescription() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -599,18 +643,20 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
+    @Order( 8 )
     public void getCollectablesNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.getCollectables( null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is empty." );
+                .hasMessageContaining( reqEmptyError );
     }
 
     /**
      * Check how the use case handles an invalid request
      */
     @Test
+    @Order( 17 )
     public void getCollectablesInvalidRequestTest() {
 
         /*
@@ -623,7 +669,7 @@ public class GeoCodeServiceImplTest {
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.getCollectables( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The given request is missing parameter/s." );
+                .hasMessageContaining( reqParamError );
     }
 
     /**
@@ -631,6 +677,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
+    @Order( 26 )
     public void getCollectablesTest() {
 
         /* Create a GeoCode */
@@ -650,8 +697,8 @@ public class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-//            Assertions.assertEquals( response.getCollectables().get( 0 ).getPastLocations().get( 0 ), "The DIFFICULTY GeoCode is stored at location 1" );
-            Assertions.assertTrue( true );
+
+            Assertions.assertEquals( "name", response.getCollectables().get( 0 ).getType().getName() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -666,11 +713,9 @@ public class GeoCodeServiceImplTest {
      */
     private void populate( int size ) {
 
-        /* A list to hold the created GeoCodes */
-        List< GeoCode > geoCodeSample = new ArrayList<>();
-
         try {
 
+            /* check if the size is valid */
             if ( size >= 2 ) {
 
                 /* Populate half with INSANE geoCodes to give variability */
@@ -682,9 +727,9 @@ public class GeoCodeServiceImplTest {
                     request.setDescription( "The INSANE GeoCode is stored at location " + x );
                     request.setDifficulty( Difficulty.INSANE );
                     List< String > hints = new ArrayList<>();
-                    hints.add( "Hint one for: " + x );
-                    hints.add( "Hint two for: " + x );
-                    hints.add( "Hint three for: " + x );
+                        hints.add( "Hint one for: " + x );
+                        hints.add( "Hint two for: " + x );
+                        hints.add( "Hint three for: " + x );
                     request.setHints( hints );
                     request.setLatitude( "Lat " + x );
                     request.setLongitude( "Long " + x );
@@ -692,7 +737,6 @@ public class GeoCodeServiceImplTest {
 
                     /* Add the created GeoCode to the list */
                     geoCodeService.createGeoCode( request );
-//                    geoCodeSample.add( geoCodeService.createGeoCode( request ) );
                 }
 
                 /* Populate half with EASY geoCodes to give variability */
@@ -713,7 +757,6 @@ public class GeoCodeServiceImplTest {
 
                     /* Add the created GeoCode to the list */
                     geoCodeService.createGeoCode( request );
-//                    geoCodeSample.add( geoCodeService.createGeoCode( request ).getGeoCode() );
                 }
             } else if ( size == 1 ) {
 
@@ -734,7 +777,6 @@ public class GeoCodeServiceImplTest {
 
                 /* Add the created GeoCode to the list */
                 geoCodeService.createGeoCode( request );
-//                geoCodeSample.add( geoCodeService.createGeoCode( request ).getGeoCode() );
             }
 
         } catch ( InvalidRequestException | RepoException e ) {

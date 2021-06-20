@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * This class implements the UserService interface
+ * This class implements the CollectableService interface
  */
 @Service
 public class CollectableServiceImpl implements CollectableService {
