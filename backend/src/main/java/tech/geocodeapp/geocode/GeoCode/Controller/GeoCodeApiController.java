@@ -11,13 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeService;
-
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
-import tech.geocodeapp.geocode.Trackable.Request.GetTrackablesRequest;
-import tech.geocodeapp.geocode.Trackable.Response.GetTrackablesResponse;
+
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;

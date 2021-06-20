@@ -21,8 +21,7 @@ import javax.validation.Valid;
 
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
-import tech.geocodeapp.geocode.Trackable.Request.GetTrackablesRequest;
-import tech.geocodeapp.geocode.Trackable.Response.GetTrackablesResponse;
+
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 @Validated

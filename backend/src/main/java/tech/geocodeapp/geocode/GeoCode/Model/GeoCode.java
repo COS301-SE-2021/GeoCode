@@ -3,7 +3,6 @@ package tech.geocodeapp.geocode.GeoCode.Model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
-
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
