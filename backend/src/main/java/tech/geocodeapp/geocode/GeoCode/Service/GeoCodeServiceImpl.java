@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.GeoCode.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
@@ -8,7 +7,6 @@ import tech.geocodeapp.geocode.Collectable.Model.*;
 import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.Collectable.Service.CollectableService;
-import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;

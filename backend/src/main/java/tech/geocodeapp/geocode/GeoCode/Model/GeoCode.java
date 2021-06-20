@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import tech.geocodeapp.geocode.Collectable.Model.*;
 
-
 /**
  * GeoCode
  */
