@@ -3,8 +3,6 @@ package tech.geocodeapp.geocode.GeoCode.Service;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
-import tech.geocodeapp.geocode.Trackable.Request.GetTrackablesRequest;
-import tech.geocodeapp.geocode.Trackable.Response.GetTrackablesResponse;
 
 /**
  * This is the main interface is for the GeoCode subsystem,
@@ -25,8 +23,6 @@ public interface GeoCodeService {
     GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException, RepoException;
 
     GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException, RepoException;
-
-    GetTrackablesResponse getTrackables(GetTrackablesRequest request ) throws InvalidRequestException, RepoException;
 
     SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException, RepoException;
 

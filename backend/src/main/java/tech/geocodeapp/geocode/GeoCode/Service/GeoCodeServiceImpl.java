@@ -416,38 +416,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     }
 
     /**
-     *  Gets the Trackables stored in the GeoCode
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly create response instance from the specified GetTrackablesRequest
-     */
-    @Override
-    public GetTrackablesResponse getTrackables(GetTrackablesRequest request ) throws InvalidRequestException, RepoException {
-
-        /* Validate the request */
-        if ( request == null ) {
-
-            throw new InvalidRequestException( true );
-        } else if ( ( request.getDifficulty() != null ) || ( request.getDescription() == null ) ) {
-
-            throw new InvalidRequestException();
-        }
-
-        /* Validate the repo */
-        checkRepo();
-
-        /*
-         * Create the new response
-         *
-         */
-        GetTrackablesResponse response = new GetTrackablesResponse();
-        response.setQrCode( "test" );
-
-        return response;
-    }
-
-    /**
      * Swaps a stored Collectable in a GeoCode with the Users GeoCode
      *
      * @param request the attributes the response should be created from
