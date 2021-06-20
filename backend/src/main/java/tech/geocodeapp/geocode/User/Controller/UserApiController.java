@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.User.Response.GetFoundCollectablesResponse;
 import tech.geocodeapp.geocode.User.Response.GetFoundGeoCodesResponse;
 import tech.geocodeapp.geocode.User.Model.User;
@@ -56,41 +57,46 @@ public class UserApiController implements UserApi {
     }
 
     public ResponseEntity<GetCurrentCollectableResponse> getCurrentCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's current Collectable", required=true, schema=@Schema()) @Valid @RequestBody GetCurrentCollectableRequest body) {
-        GetCurrentCollectableResponse response = userService.getCurrentCollectable(body);
+        try{
+            GetCurrentCollectableResponse response = userService.getCurrentCollectable(body);
 
-        if(response.isSuccess()){
-            return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.OK);
-        }else{
+            if(response.isSuccess()){
+                return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (NullUserRequestParameterException e){
+            GetCurrentCollectableResponse response = new GetCurrentCollectableResponse(false, e.getMessage(), null);
             return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
     public ResponseEntity<GetUserTrackableResponse> getUserTrackable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's trackable", required=true, schema=@Schema()) @RequestBody GetUserTrackableRequest body) {
-        GetUserTrackableResponse response = userService.getUserTrackable(body);
+        try{
+            GetUserTrackableResponse response = userService.getUserTrackable(body);
 
-        if(response.isSuccess()){
-            return new ResponseEntity<GetUserTrackableResponse>(response, HttpStatus.OK);
-        }else{
+            if(response.isSuccess()){
+                return new ResponseEntity<GetUserTrackableResponse>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<GetUserTrackableResponse>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (NullUserRequestParameterException e){
+            GetUserTrackableResponse response = new GetUserTrackableResponse(false, e.getMessage(), null);
             return new ResponseEntity<GetUserTrackableResponse>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
-    public ResponseEntity<SwapCollectableResponse> swapCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap the held Collectable", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectableRequest body) {
-        SwapCollectableResponse response = userService.swapCollectable(body);
-
-        if(response.isSuccess()){
-            return new ResponseEntity<SwapCollectableResponse>(response, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<SwapCollectableResponse>(response, HttpStatus.BAD_REQUEST);
-        }
-    }
-
     public ResponseEntity<UpdateLocationResponse> updateLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update the location of the user's trackable", required=true, schema=@Schema()) @Valid @RequestBody UpdateLocationRequest body) {
-        UpdateLocationResponse response = userService.updateLocation(body);
+        try{
+            UpdateLocationResponse response = userService.updateLocation(body);
 
-        if(response.isSuccess()){
-            return new ResponseEntity<UpdateLocationResponse>(response, HttpStatus.OK);
-        }else{
+            if(response.isSuccess()){
+                return new ResponseEntity<UpdateLocationResponse>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<UpdateLocationResponse>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch(NullUserRequestParameterException e){
+            UpdateLocationResponse response = new UpdateLocationResponse(false, e.getMessage(), null);
             return new ResponseEntity<UpdateLocationResponse>(response, HttpStatus.BAD_REQUEST);
         }
     }

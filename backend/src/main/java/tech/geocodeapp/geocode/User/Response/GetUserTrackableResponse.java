@@ -17,7 +17,7 @@ import java.util.Objects;
 
 
 public class GetUserTrackableResponse {
-  @JsonProperty("Trackable")
+  @JsonProperty("trackable")
   private Collectable trackable = null;
   private boolean success;
   private String message;
