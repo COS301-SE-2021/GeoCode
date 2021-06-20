@@ -48,8 +48,6 @@ export * from './leaderBoard';
 export * from './point';
 export * from './rarity';
 export * from './setAdminRequest';
-export * from './swapCollectableRequest';
-export * from './swapCollectableResponse';
 export * from './swapCollectablesRequest';
 export * from './swapCollectablesResponse';
 export * from './updateAvailabilityRequest';

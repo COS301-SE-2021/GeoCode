@@ -31,8 +31,6 @@ import { GetUserTrackableResponse } from '../model/getUserTrackableResponse';
 import { GetUsersRequest } from '../model/getUsersRequest';
 import { GetUsersResponse } from '../model/getUsersResponse';
 import { SetAdminRequest } from '../model/setAdminRequest';
-import { SwapCollectableRequest } from '../model/swapCollectableRequest';
-import { SwapCollectableResponse } from '../model/swapCollectableResponse';
 import { UpdateLocationRequest } from '../model/updateLocationRequest';
 import { UpdateLocationResponse } from '../model/updateLocationResponse';
 import { User } from '../model/user';
@@ -567,62 +565,6 @@ export class UserService {
         }
 
         return this.httpClient.request<User>('post',`${this.basePath}/User/setAdmin`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Swaps the Collectable the profile is currently holding with the given Collectable in the given GeoCode
-     * Swap held Collectable
-     * @param body Request to swap the held Collectable
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public swapCollectable(body: SwapCollectableRequest, observe?: 'body', reportProgress?: boolean): Observable<SwapCollectableResponse>;
-    public swapCollectable(body: SwapCollectableRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SwapCollectableResponse>>;
-    public swapCollectable(body: SwapCollectableRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SwapCollectableResponse>>;
-    public swapCollectable(body: SwapCollectableRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling swapCollectable.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<SwapCollectableResponse>('post',`${this.basePath}/User/swapCollectable`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
