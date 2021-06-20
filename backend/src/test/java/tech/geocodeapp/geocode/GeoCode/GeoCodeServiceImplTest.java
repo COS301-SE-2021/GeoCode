@@ -105,7 +105,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    @Order( 9 )
+    @Order( 10 )
     public void createGeoCodeInvalidRequestTest() {
 
         /*
@@ -131,7 +131,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 17 )
+    @Order( 18 )
     public void createGeoCodeTest() {
 
         try {
@@ -174,7 +174,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 18 )
+    @Order( 19 )
     public void getAllGeoCodeTest() {
 
         try {
@@ -236,7 +236,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    @Order( 10 )
+    @Order( 11 )
     public void getGeoCodesByDifficultyInvalidRequestTest() {
 
         /*
@@ -257,7 +257,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 19 )
+    @Order( 20 )
     public void getGeoCodesByDifficultyTest() {
 
         try {
@@ -303,7 +303,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
-    @Order( 3 )
+    @Order( 4 )
     public void getHintsNullRequestTest() {
 
         /* Null request check */
@@ -316,7 +316,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    @Order( 11 )
+    @Order( 12 )
     public void getHintsInvalidRequestTest() {
 
         /*
@@ -337,7 +337,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 20 )
+    @Order( 21 )
     public void getHintsTest() {
 
         try {
@@ -369,7 +369,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
-    @Order( 4 )
+    @Order( 5 )
     public void swapCollectablesNullRequestTest() {
 
         /* Null request check */
@@ -382,7 +382,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    @Order( 12 )
+    @Order( 13 )
     public void swapCollectablesInvalidRequestTest() {
 
         /*
@@ -405,7 +405,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 21 )
+    @Order( 22 )
     public void swapCollectablesTest() {
 
         /* Create a GeoCode */
@@ -442,7 +442,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
-    @Order( 5 )
+    @Order( 6 )
     public void updateAvailabilityNullRequestTest() {
 
         /* Null request check */
@@ -455,7 +455,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    @Order( 13 )
+    @Order( 14 )
     public void updateAvailabilityInvalidRequestTest() {
 
         /*
@@ -476,7 +476,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 22 )
+    @Order( 23 )
     public void updateAvailabilityTest() {
 
         /* Create a GeoCode */
@@ -509,7 +509,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
-    @Order( 6 )
+    @Order( 7 )
     public void getGeoCodesByLocationNullRequestTest() {
 
         /* Null request check */
@@ -522,7 +522,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    @Order( 14 )
+    @Order( 15 )
     public void getGeoCodesByLocationInvalidRequestTest() {
 
         /*
@@ -544,7 +544,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 23 )
+    @Order( 24 )
     public void getGeoCodesByLocationTest() {
 
         /* Create a GeoCode */
@@ -578,7 +578,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
-    @Order( 7 )
+    @Order( 8 )
     public void getGeoCodesByQRCodeNullRequestTest() {
 
         /* Null request check */
@@ -591,7 +591,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    @Order( 15 )
+    @Order( 16 )
     public void getGeoCodesByQRCodeInvalidRequestTest() {
 
         /*
@@ -612,7 +612,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 24 )
+    @Order( 25 )
     public void getGeoCodesByQRCodeLocationTest() {
 
         /* Create a GeoCode */
@@ -658,7 +658,7 @@ public class GeoCodeServiceImplTest {
      * Check how the use case handles an invalid request
      */
     @Test
-    @Order( 16 )
+    @Order( 17 )
     public void getCollectablesInvalidRequestTest() {
 
         /*
@@ -679,7 +679,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 25 )
+    @Order( 26 )
     public void getCollectablesTest() {
 
         /* Create a GeoCode */
