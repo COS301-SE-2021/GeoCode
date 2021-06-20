@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.Collectable.Response;
 import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,12 +13,12 @@ import java.util.UUID;
 public class CollectableResponse {
     UUID id;
     CollectableTypeComponent type;
-    List<String> pastLocations = new ArrayList<>();
+    Collection<String> pastLocations = new ArrayList<>();
 
     public CollectableResponse() {
     }
 
-    public CollectableResponse(UUID id, CollectableTypeComponent type, List<String> pastLocations) {
+    public CollectableResponse(UUID id, CollectableTypeComponent type, Collection<String> pastLocations) {
         this.id = id;
         this.type = type;
         this.pastLocations = pastLocations;
@@ -39,7 +40,7 @@ public class CollectableResponse {
         this.type = type;
     }
 
-    public List<String> getPastLocations() {
+    public Collection<String> getPastLocations() {
         return pastLocations;
     }
 

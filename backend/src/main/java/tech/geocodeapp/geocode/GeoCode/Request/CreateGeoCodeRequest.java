@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
-import tech.geocodeapp.geocode.Collectable.Model.Difficulty;
-
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+
+import tech.geocodeapp.geocode.Collectable.Model.Difficulty;
 
 /**
  * CreateGeoCodeRequest

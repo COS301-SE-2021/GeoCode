@@ -1,9 +1,11 @@
 package tech.geocodeapp.geocode.User.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +13,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.io.IOException;
+
+import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.User.Response.GetFoundCollectablesResponse;
 import tech.geocodeapp.geocode.User.Response.GetFoundGeoCodesResponse;
 import tech.geocodeapp.geocode.User.Model.User;
 import tech.geocodeapp.geocode.User.Request.*;
 import tech.geocodeapp.geocode.User.Response.*;
 import tech.geocodeapp.geocode.User.Service.UserServiceImpl;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.io.IOException;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 @RestController
@@ -41,56 +45,47 @@ public class UserApiController implements UserApi {
         this.request = request;
     }
 
-    public ResponseEntity<User> blockUser(@Parameter(in = ParameterIn.DEFAULT, description = "Request to block a user", required=true, schema=@Schema()) @Valid @RequestBody BlockUserRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<User>(objectMapper.readValue("{\n  \"currentCollectable\" : {\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"type\" : {\n      \"image\" : \"image\",\n      \"set\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      },\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"rarity\" : \"COMMON\"\n    }\n  },\n  \"foundGeocodes\" : [ {\n    \"difficulty\" : \"EASY\",\n    \"collectables\" : {\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"type\" : {\n        \"image\" : \"image\",\n        \"set\" : {\n          \"name\" : \"name\",\n          \"description\" : \"description\",\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n        },\n        \"name\" : \"name\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n        \"rarity\" : \"COMMON\"\n      }\n    },\n    \"qrCode\" : \"qrCode\",\n    \"hints\" : [ \"hints\", \"hints\" ],\n    \"available\" : true,\n    \"description\" : \"description\",\n    \"trackables\" : \"trackables\",\n    \"location\" : \"location\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }, {\n    \"difficulty\" : \"EASY\",\n    \"collectables\" : {\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"type\" : {\n        \"image\" : \"image\",\n        \"set\" : {\n          \"name\" : \"name\",\n          \"description\" : \"description\",\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n        },\n        \"name\" : \"name\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n        \"rarity\" : \"COMMON\"\n      }\n    },\n    \"qrCode\" : \"qrCode\",\n    \"hints\" : [ \"hints\", \"hints\" ],\n    \"available\" : true,\n    \"description\" : \"description\",\n    \"trackables\" : \"trackables\",\n    \"location\" : \"location\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  } ],\n  \"foundCollectables\" : [ null, null ],\n  \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n  \"ownedGeocodes\" : [ null, null ],\n  \"username\" : \"username\",\n  \"points\" : [ {\n    \"amount\" : 0,\n    \"leaderBoardId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"userId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }, {\n    \"amount\" : 0,\n    \"leaderBoardId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"userId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  } ]\n}", User.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        return new ResponseEntity<User>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
     public ResponseEntity<GetCurrentCollectableResponse> getCurrentCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's current Collectable", required=true, schema=@Schema()) @Valid @RequestBody GetCurrentCollectableRequest body) {
-        GetCurrentCollectableResponse response = userService.getCurrentCollectable(body);
+        try{
+            GetCurrentCollectableResponse response = userService.getCurrentCollectable(body);
 
-        if(response.isSuccess()){
-            return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.OK);
-        }else{
+            if(response.isSuccess()){
+                return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (NullUserRequestParameterException e){
+            GetCurrentCollectableResponse response = new GetCurrentCollectableResponse(false, e.getMessage(), null);
             return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
     public ResponseEntity<GetUserTrackableResponse> getUserTrackable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's trackable", required=true, schema=@Schema()) @RequestBody GetUserTrackableRequest body) {
-        GetUserTrackableResponse response = userService.getUserTrackable(body);
+        try{
+            GetUserTrackableResponse response = userService.getUserTrackable(body);
 
-        if(response.isSuccess()){
-            return new ResponseEntity<GetUserTrackableResponse>(response, HttpStatus.OK);
-        }else{
+            if(response.isSuccess()){
+                return new ResponseEntity<GetUserTrackableResponse>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<GetUserTrackableResponse>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (NullUserRequestParameterException e){
+            GetUserTrackableResponse response = new GetUserTrackableResponse(false, e.getMessage(), null);
             return new ResponseEntity<GetUserTrackableResponse>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
-    public ResponseEntity<SwapCollectableResponse> swapCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap the held Collectable", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectableRequest body) {
-        SwapCollectableResponse response = userService.swapCollectable(body);
-
-        if(response.isSuccess()){
-            return new ResponseEntity<SwapCollectableResponse>(response, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<SwapCollectableResponse>(response, HttpStatus.BAD_REQUEST);
-        }
-    }
-
     public ResponseEntity<UpdateLocationResponse> updateLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update the location of the user's trackable", required=true, schema=@Schema()) @Valid @RequestBody UpdateLocationRequest body) {
-        UpdateLocationResponse response = userService.updateLocation(body);
+        try{
+            UpdateLocationResponse response = userService.updateLocation(body);
 
-        if(response.isSuccess()){
-            return new ResponseEntity<UpdateLocationResponse>(response, HttpStatus.OK);
-        }else{
+            if(response.isSuccess()){
+                return new ResponseEntity<UpdateLocationResponse>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<UpdateLocationResponse>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch(NullUserRequestParameterException e){
+            UpdateLocationResponse response = new UpdateLocationResponse(false, e.getMessage(), null);
             return new ResponseEntity<UpdateLocationResponse>(response, HttpStatus.BAD_REQUEST);
         }
     }
@@ -164,19 +159,4 @@ public class UserApiController implements UserApi {
 
         return new ResponseEntity<GetUsersResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
-
-    public ResponseEntity<User> setAdmin(@Parameter(in = ParameterIn.DEFAULT, description = "Request to set a user to be an administrator", required=true, schema=@Schema()) @Valid @RequestBody SetAdminRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<User>(objectMapper.readValue("{\n  \"currentCollectable\" : {\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"type\" : {\n      \"image\" : \"image\",\n      \"set\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      },\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"rarity\" : \"COMMON\"\n    }\n  },\n  \"foundGeocodes\" : [ {\n    \"difficulty\" : \"EASY\",\n    \"collectables\" : {\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"type\" : {\n        \"image\" : \"image\",\n        \"set\" : {\n          \"name\" : \"name\",\n          \"description\" : \"description\",\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n        },\n        \"name\" : \"name\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n        \"rarity\" : \"COMMON\"\n      }\n    },\n    \"qrCode\" : \"qrCode\",\n    \"hints\" : [ \"hints\", \"hints\" ],\n    \"available\" : true,\n    \"description\" : \"description\",\n    \"trackables\" : \"trackables\",\n    \"location\" : \"location\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }, {\n    \"difficulty\" : \"EASY\",\n    \"collectables\" : {\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"type\" : {\n        \"image\" : \"image\",\n        \"set\" : {\n          \"name\" : \"name\",\n          \"description\" : \"description\",\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n        },\n        \"name\" : \"name\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n        \"rarity\" : \"COMMON\"\n      }\n    },\n    \"qrCode\" : \"qrCode\",\n    \"hints\" : [ \"hints\", \"hints\" ],\n    \"available\" : true,\n    \"description\" : \"description\",\n    \"trackables\" : \"trackables\",\n    \"location\" : \"location\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  } ],\n  \"foundCollectables\" : [ null, null ],\n  \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n  \"ownedGeocodes\" : [ null, null ],\n  \"username\" : \"username\",\n  \"points\" : [ {\n    \"amount\" : 0,\n    \"leaderBoardId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"userId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }, {\n    \"amount\" : 0,\n    \"leaderBoardId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"userId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  } ]\n}", User.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        return new ResponseEntity<User>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
 }

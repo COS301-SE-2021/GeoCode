@@ -16,7 +16,7 @@ import java.util.Objects;
 
 
 public class GetCurrentCollectableResponse   {
-  @JsonProperty("Collectable")
+  @JsonProperty("collectable")
   private Collectable collectable;
   private boolean success;
   private String message;
