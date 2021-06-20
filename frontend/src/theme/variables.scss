@@ -4,6 +4,9 @@
 /** Ionic CSS Variables **/
 :root {
   /** app colour scheme**/
+  --ion-tab-bar-background: var(--ion-color-teal);
+  --ion-toolbar-background: var(--ion-color-teal);
+  --ion-toolbar-color: white;
 
   /** teal **/
   --ion-color-teal: #4B878B;
@@ -262,9 +265,9 @@
 
     --ion-item-background: #1e1e1e;
 
-    --ion-toolbar-background: #1f1f1f;
+    //--ion-toolbar-background: #1f1f1f;
 
-    --ion-tab-bar-background: #1f1f1f;
+    //--ion-tab-bar-background: #1f1f1f;
 
     --ion-card-background: #1e1e1e;
   }
