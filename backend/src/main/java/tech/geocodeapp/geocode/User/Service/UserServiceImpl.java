@@ -140,7 +140,6 @@ public class UserServiceImpl implements UserService {
         CollectableType trackableCollectableType = optionalCollectableType.get();
 
         Collectable trackableObject = new Collectable(trackableCollectableType);
-        collectableRepo.save(trackableObject);
         newUser.setTrackableObject(trackableObject);
         newUser.setCurrentCollectable(trackableObject);
         userRepo.save(newUser);
