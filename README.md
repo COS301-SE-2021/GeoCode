@@ -69,18 +69,33 @@ A monorepo with the Git Flow structure will be used in the COS301-SE-2021 organi
 
 The following type of branches will be used in the repository:
 <br/>
-* **master:** The current stable release version of the product. There will only be one of these branches. <br/>
-* **release:** Each time the master branch is updated a new release branch is created such that there is a record of all the previous builds of the project (e.g. release 1.0). <br/>
-* **develop:** All the new features integrated into the current version. There will only be one of these branches. <br/>
-* **feature:** Used to indicate a new feature being implemented and tested (e.g. feature/userLogin). There can be multiple of this type of branch at any time. <br/>
-* **hotfix:** To fix a bug/issue found in the develop branch (e.g. hotfix/addUser). There can be multiple of this type of branch at any time. <br/>
+* **master:** The current stable release version of the product. There will only be one of these branches.
+* **release/vN.N:** A copy of the master branch for version N.N of the system.
+* **development:** A branch consisting of finished code that will be included in the next push to master.
+* **dev/SubsystemName:** The main development branch of a single subsystem.
+* **dev/SubsystemName-FeatureName:** Used to indicate a new feature being implemented and tested.
 
  <br/>
       For the management of the project at least two team members will work on a single feature. When a feature has been implemented and tested it will be merged into the develop branch, 
       to merge the feature branch into the development branch a Pull Request will be made where a team member who did not work on the branch being merged will need to be assigned on the 
       branch to review the code and accept the Pull Request or request changes. This is done to ensure the separate subsystems of the project are integrated correctly and help ensure the 
       development branch will contain code and features that work correctly.
+<br/><br/>
+      The file structure for each of the different subsystem identified in the subsystem will be as such:
 
+    ExampleSubsystem
+
+    |------ Controller
+               |------ ExampleSubsystemApi
+               |------ ExampleSubsystemApiController
+    |------ Exception
+    |------ Model
+    |------ Repository
+    |------ Request
+    |------ Response
+    |------ Service
+               |------ ExampleSubsystemService
+               |------ ExampleSubsystemServiceImpl
 </div>
 
 # Deployment
@@ -111,7 +126,7 @@ The following documentation was done in LaTeX and is to document the methods use
 
 * <a href="https://www.overleaf.com/read/byjsbnwxcgnm"> Coding Standards </a>
 * <a href="https://michael-stroh.github.io/capstone/">Technical Installation Guide</a>
-* <a href="https://michael-stroh.github.io/capstone/">User Manual</a>
+* <a href="https://www.overleaf.com/read/rgwgjxtdvnzg">User Manual</a>
 
 </div>
 
@@ -124,7 +139,7 @@ To aid with the management of the GeoCode project the following tools were used:
 * <a href="https://github.com/COS301-SE-2021/GeoCode/projects">GitHub project boards:</a> Task allocations and progress tracking.
 * <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
 * <a href="https://discord.com/brand-newover">Discord:</a> Informal team meetings for quick debriefs, communication.
-* <a href="https://discord.com/developers/docs/resources/webhooks">Github and Discord Webhooks:</a> Notifications sent to the team's discord server when a commit is made to the GitHub repository.
+* <a href="https://discord.com/developers/docs/resources/webhooks">GitHub and Discord Webhooks:</a> Notifications sent to the team's discord server when a commit is made to the GitHub repository.
 * <a href="https://www.overleaf.com">Overleaf:</a> LaTeX editor that allows collaboration on creating documentation.
 
 </div>
@@ -138,10 +153,10 @@ To aid with the management of the GeoCode project the following tools were used:
 The following links are the live demo videos held on blackboard collaborate to present the different <br/>
 phases of the project to the stakeholders of the GeoCode project.
 
-* <a href="https://drive.google.com/file/d/1OqOuoMHSyd4rTUqWW5j_ME1EZcIJHre4/view?usp=sharing"> Demo 1 </a>
-* <a href="https://michael-stroh.github.io/capstone/"> Demo 2 </a>
-* <a href="https://michael-stroh.github.io/capstone/"> Demo 3 </a>
-* <a href="https://michael-stroh.github.io/capstone/"> Demo 4 </a>
+* <a href="https://drive.google.com/file/d/1OqOuoMHSyd4rTUqWW5j_ME1EZcIJHre4/view?usp=sharing"> Demo 1 </a> - :calendar: 2021-06-14
+* <a href="https://michael-stroh.github.io/capstone/"> Demo 2  </a> - :calendar: 2021-06-21 
+* <a href="https://michael-stroh.github.io/capstone/"> Demo 3  </a> - :calendar: 2021-08-20 
+* <a href="https://michael-stroh.github.io/capstone/"> Demo 4  </a> - :calendar: 2021-09-24 
 
 </div>
 
@@ -191,15 +206,16 @@ The following software engineers contributed to the GeoCode project:
    </pre>
 
 * <a href="https://github.com/Michael-Stroh"> Github Account </a>
-* <a href="https://www.linkedin.com/in/stroh-michael"> LinkedIn Account </a>
-* <a href="https://michael-stroh.github.io/myCV/"> Personal Website </a>
-* m.stroh@tuks.co.za
+* :mortar_board: <a href="https://www.linkedin.com/in/stroh-michael"> LinkedIn Account </a>
+* :wave: <a href="https://michael-stroh.github.io/myCV/"> Personal Website </a>
+* :email: m.stroh@tuks.co.za
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
            - GitHub Readme creation and maintenance.
            - Documentation: Coding Standards
            - Documentation: Software Requirements Specification
+           - Documentation: Architecture Requirements and Design Specifications
            - Backend: GeoCode Subsystem
        </pre>
    </details>
@@ -223,13 +239,14 @@ The following software engineers contributed to the GeoCode project:
 
 
 * <a href="https://github.com/NitronBiohazard"> Github Account</a>
-* <a href="https://www.linkedin.com/in/liam-moore-410004210/"> LinkedIn  Account </a>
-* liam.moore@tuks.co.za
+* :mortar_board: <a href="https://www.linkedin.com/in/liam-moore-410004210/"> LinkedIn  Account </a>
+* :email: liam.moore@tuks.co.za
 
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
            - Documentation: Software Requirements Specification
+           - Documentation: Architecture Requirements and Design Specifications
            - Backend: Collectable Subsystem
        </pre>
    </details>
@@ -249,15 +266,16 @@ The following software engineers contributed to the GeoCode project:
   </pre>
 
 * <a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> Github Account </a>
-* <a href="www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a>
-* <a href="https://jennalyngallagher.github.io/"> Personal Website </a>
-* jenna.gallagher@tuks.co.za
+* :mortar_board: <a href="www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a>
+* :wave: <a href="https://jennalyngallagher.github.io/"> Personal Website </a>
+* :email: jenna.gallagher@tuks.co.za
 
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
            - Documentation: Software Requirements Specification
-           - Frontend: Key Cloak
+           - Documentation: Architecture Requirements and Design Specifications
+           - Frontend: GeoCode Pages
        </pre>
    </details>
 
@@ -281,14 +299,16 @@ The following software engineers contributed to the GeoCode project:
   </pre>
 
 * <a href="https://github.com/CalebJohnstone"> Github Account</a>
-* <a href="https://www.linkedin.com/in/caleb-johnstone-94368a132/"> LinkedIn  Account </a>
-* caleb.johnstone@tuks.co.za
+* :mortar_board: <a href="https://www.linkedin.com/in/caleb-johnstone-94368a132/"> LinkedIn  Account </a>
+* :email: caleb.johnstone@tuks.co.za
 
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
            - Documentation: Software Requirements Specification
+           - Documentation: Architecture Requirements and Design Specifications
            - Backend: Collectable Subsystem
+           - Backend: User Subsystem  
        </pre>
    </details>
 
@@ -309,15 +329,15 @@ The following software engineers contributed to the GeoCode project:
   </pre>
 
 * <a href="https://github.com/robotic-coder"> Github Account</a>
-* <a href="https://www.linkedin.com/in/michaelharvey-123/"> LinkedIn  Account </a>
-* michael.harvey@tuks.co.za
+* :mortar_board: <a href="https://www.linkedin.com/in/michaelharvey-123/"> LinkedIn  Account </a>
+* :email: michael.harvey@tuks.co.za
 
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
            - Documentation: Software Requirements Specification
-           - Frontend: Key Cloak
-           - Backend: GeoCode Subsystem
+           - Documentation: Architecture Requirements and Design Specifications
+           - Frontend: Collectable Pages
        </pre>
    </details>
 
