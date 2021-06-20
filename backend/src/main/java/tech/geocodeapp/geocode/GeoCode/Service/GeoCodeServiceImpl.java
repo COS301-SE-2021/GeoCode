@@ -9,6 +9,7 @@ import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
 import tech.geocodeapp.geocode.GeoCode.Response.GetCollectablesResponse;
+import tech.geocodeapp.geocode.User.Service.UserService;
 
 import java.security.SecureRandom;
 import java.util.*;
@@ -27,11 +28,17 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     private final GeoCodeRepository geoCodeRepo;
 
     /**
+     * A handle to the user service
+     */
+    private final UserService userService;
+
+    /**
      * Constructor
      *
      * @param geoCodeRepo the repo the created response attributes should save to
      */
-    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo ) throws RepoException {
+    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo, UserService userService ) throws RepoException {
+        this.userService = userService;
 
         /* Check if the given repo exists */
         if ( geoCodeRepo != null ) {
@@ -422,7 +429,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( ( request.getTargetCollectableID() == null ) || ( request.getTargetGeoCodeID() == null ) || ( request.getGeoCodeID() == null ) ) {
+        } else if ( ( request.getTargetCollectableID() == null ) || ( request.getTargetGeoCodeID() == null ) ) {
 
             throw new InvalidRequestException();
         }
@@ -430,13 +437,38 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Validate the repo */
         checkRepo();
 
-        /*
-         * Create the new response
-         */
-        SwapCollectablesResponse response = new SwapCollectablesResponse();
-        response.setIsSuccess( true );
+        /* Find the target geocode */
+        Optional<GeoCode> target = geoCodeRepo.findById(request.getTargetGeoCodeID());
+        if (target.isEmpty()) {
+            return new SwapCollectablesResponse().isSuccess(false);
+        }
+        GeoCode geocode = target.get();
 
-        return response;
+        /* Find the target collectable */
+        int replaceIndex = -1; //the index of the collectable we want to replace in the geocode
+        List<Collectable> storedCollectables = new ArrayList<>(geocode.getCollectables());
+        for (int i = 0; i < storedCollectables.size(); i++) {
+            if (storedCollectables.get(i).getId().equals(request.getTargetCollectableID())) {
+                replaceIndex = i;
+                break;
+            }
+        }
+        if (replaceIndex == -1) {
+            return new SwapCollectablesResponse().isSuccess(false);
+        }
+        Collectable geocodeToUser = storedCollectables.get(replaceIndex);
+
+        /* Perform the swap */
+        Collectable userToGeocode = userService.swapCollectable(geocodeToUser);
+        userToGeocode.changeLocation(geocode.getLatitude()+" "+geocode.getLongitude());
+        storedCollectables.set(replaceIndex, userToGeocode);
+        geocode.setCollectables(storedCollectables);
+        geoCodeRepo.save(geocode);
+
+        /*
+         * Create and return a 'success' response
+         */
+        return new SwapCollectablesResponse().isSuccess(true);
     }
 
     /**

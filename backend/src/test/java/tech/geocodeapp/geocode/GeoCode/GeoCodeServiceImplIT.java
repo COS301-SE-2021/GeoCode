@@ -13,6 +13,7 @@ import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeService;
 import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeServiceImpl;
 import tech.geocodeapp.geocode.GeocodeApplication;
+import tech.geocodeapp.geocode.User.Service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,14 @@ public class GeoCodeServiceImplIT {
     GeoCodeRepository repo;
 
     /**
+     * The service for the User subsystem
+     *
+     * This is used to access User subsystem in some use cases
+     */
+    @Autowired
+    UserService userService;
+
+    /**
      * The expected exception message for if the given request has invalid attributes
      */
     String reqParamError = "The given request is missing parameter/s.";
@@ -66,7 +75,7 @@ public class GeoCodeServiceImplIT {
         try {
 
             /* Create a new GeoCodeServiceImpl instance to access the different use cases */
-            geoCodeService = new GeoCodeServiceImpl( repo );
+            geoCodeService = new GeoCodeServiceImpl( repo, userService );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
@@ -81,7 +90,7 @@ public class GeoCodeServiceImplIT {
     public void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null ) )
+        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, userService ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }
@@ -388,7 +397,6 @@ public class GeoCodeServiceImplIT {
          * and assign values to it
          * */
         SwapCollectablesRequest request = new SwapCollectablesRequest();
-        request.setGeoCodeID( null );
         request.setTargetCollectableID( null );
         request.setTargetGeoCodeID( null );
 
@@ -417,9 +425,8 @@ public class GeoCodeServiceImplIT {
 
             /* Create the request with the ID of the GeoCode we want */
             SwapCollectablesRequest request = new SwapCollectablesRequest();
-            request.setGeoCodeID( temp.get( 0 ).getId() );
-            request.setTargetCollectableID( collectable );
-            request.setTargetGeoCodeID( collectable );
+            request.setTargetCollectableID( collectable.getId() );
+            request.setTargetGeoCodeID( temp.get( 0 ).getId() );
 
             /* Get the response by calling the swapCollectables use case */
             SwapCollectablesResponse response = geoCodeService.swapCollectables( request );

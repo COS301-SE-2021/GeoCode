@@ -19,15 +19,12 @@ import tech.geocodeapp.geocode.Collectable.Model.Collectable;
 
 public class SwapCollectablesRequest   {
   @JsonProperty("targetGeoCodeID")
-  private Collectable targetGeoCodeID = null;
+  private UUID targetGeoCodeID = null;
 
   @JsonProperty("targetCollectableID")
-  private Collectable targetCollectableID = null;
+  private UUID targetCollectableID = null;
 
-  @JsonProperty("geoCodeID")
-  private UUID geoCodeID = null;
-
-  public SwapCollectablesRequest targetGeoCodeID(Collectable targetGeoCodeID) {
+  public SwapCollectablesRequest targetGeoCodeID(UUID targetGeoCodeID) {
     this.targetGeoCodeID = targetGeoCodeID;
     return this;
   }
@@ -40,15 +37,15 @@ public class SwapCollectablesRequest   {
       @NotNull
 
     @Valid
-    public Collectable getTargetGeoCodeID() {
+    public UUID getTargetGeoCodeID() {
     return targetGeoCodeID;
   }
 
-  public void setTargetGeoCodeID(Collectable targetGeoCodeID) {
+  public void setTargetGeoCodeID(UUID targetGeoCodeID) {
     this.targetGeoCodeID = targetGeoCodeID;
   }
 
-  public SwapCollectablesRequest targetCollectableID(Collectable targetCollectableID) {
+  public SwapCollectablesRequest targetCollectableID(UUID targetCollectableID) {
     this.targetCollectableID = targetCollectableID;
     return this;
   }
@@ -61,33 +58,12 @@ public class SwapCollectablesRequest   {
       @NotNull
 
     @Valid
-    public Collectable getTargetCollectableID() {
+    public UUID getTargetCollectableID() {
     return targetCollectableID;
   }
 
-  public void setTargetCollectableID(Collectable targetCollectableID) {
+  public void setTargetCollectableID(UUID targetCollectableID) {
     this.targetCollectableID = targetCollectableID;
-  }
-
-  public SwapCollectablesRequest geoCodeID(UUID geoCodeID) {
-    this.geoCodeID = geoCodeID;
-    return this;
-  }
-
-  /**
-   * Get geoCodeID
-   * @return geoCodeID
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    @Valid
-    public UUID getGeoCodeID() {
-    return geoCodeID;
-  }
-
-  public void setGeoCodeID(UUID geoCodeID) {
-    this.geoCodeID = geoCodeID;
   }
 
 
@@ -101,13 +77,12 @@ public class SwapCollectablesRequest   {
     }
     SwapCollectablesRequest swapCollectablesRequest = (SwapCollectablesRequest) o;
     return Objects.equals(this.targetGeoCodeID, swapCollectablesRequest.targetGeoCodeID) &&
-        Objects.equals(this.targetCollectableID, swapCollectablesRequest.targetCollectableID) &&
-        Objects.equals(this.geoCodeID, swapCollectablesRequest.geoCodeID);
+        Objects.equals(this.targetCollectableID, swapCollectablesRequest.targetCollectableID);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(targetGeoCodeID, targetCollectableID, geoCodeID);
+    return Objects.hash(targetGeoCodeID, targetCollectableID);
   }
 
   @Override
@@ -117,7 +92,6 @@ public class SwapCollectablesRequest   {
     
     sb.append("    targetGeoCodeID: ").append(toIndentedString(targetGeoCodeID)).append("\n");
     sb.append("    targetCollectableID: ").append(toIndentedString(targetCollectableID)).append("\n");
-    sb.append("    geoCodeID: ").append(toIndentedString(geoCodeID)).append("\n");
     sb.append("}");
     return sb.toString();
   }

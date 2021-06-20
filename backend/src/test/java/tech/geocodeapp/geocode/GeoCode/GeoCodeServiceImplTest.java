@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.GeoCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import tech.geocodeapp.geocode.Collectable.Model.*;
@@ -11,6 +12,8 @@ import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Service.*;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
+import tech.geocodeapp.geocode.User.Service.UserService;
+import tech.geocodeapp.geocode.User.UserMockRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +44,14 @@ public class GeoCodeServiceImplTest {
     GeoCodeMockRepository repo;
 
     /**
+     * A mock service for the User subsystem
+     *
+     * This is used to access User subsystem in some use cases
+     */
+    @Mock(name = "userServiceImpl")
+    UserService userService;
+
+    /**
      * The expected exception message for if the given request has invalid attributes
      */
     String reqParamError = "The given request is missing parameter/s.";
@@ -67,7 +78,7 @@ public class GeoCodeServiceImplTest {
         try {
 
             /* Create a new GeoCodeServiceImpl instance to access the different use cases */
-            geoCodeService = new GeoCodeServiceImpl( repo );
+            geoCodeService = new GeoCodeServiceImpl( repo, userService );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
@@ -84,7 +95,7 @@ public class GeoCodeServiceImplTest {
     public void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null ) )
+        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, userService ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }
@@ -392,7 +403,6 @@ public class GeoCodeServiceImplTest {
          * and assign values to it
          * */
         SwapCollectablesRequest request = new SwapCollectablesRequest();
-        request.setGeoCodeID( null );
         request.setTargetCollectableID( null );
         request.setTargetGeoCodeID( null );
 
@@ -400,44 +410,6 @@ public class GeoCodeServiceImplTest {
         assertThatThrownBy( () -> geoCodeService.swapCollectables( request ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqParamError );
-    }
-
-    /**
-     * Using valid data does the swapCollectables use case test
-     * complete successfully
-     */
-    @Test
-    @Order( 22 )
-    public void swapCollectablesTest() {
-
-        /* Create a GeoCode */
-        populate( 1 );
-        List< GeoCode > temp = repo.findAll();
-
-        try {
-
-            /* Create the Collectable we want to swap with */
-            Collectable collectable = new Collectable( new CollectableType( "name", "imageURL", Rarity.COMMON, new CollectableSet( "setName", "description" ), null ) );
-
-            /* Create the request with the ID of the GeoCode we want */
-            SwapCollectablesRequest request = new SwapCollectablesRequest();
-            request.setGeoCodeID( temp.get( 0 ).getId() );
-            request.setTargetCollectableID( collectable );
-            request.setTargetGeoCodeID( collectable );
-
-            /* Get the response by calling the swapCollectables use case */
-            SwapCollectablesResponse response = geoCodeService.swapCollectables( request );
-
-            /*
-             * Check if the GeoCode was created correctly
-             * through checking the returned hints from a known hint
-             */
-            Assertions.assertTrue( response.isIsSuccess() );
-        } catch ( InvalidRequestException | RepoException e ) {
-
-            /* An error occurred, print the stack to identify */
-            e.printStackTrace();
-        }
     }
 
     /**
