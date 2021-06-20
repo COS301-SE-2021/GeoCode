@@ -1,10 +1,5 @@
 package tech.geocodeapp.geocode.GeoCode.Service;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
 import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.Collectable.Model.*;
@@ -14,11 +9,7 @@ import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
 import tech.geocodeapp.geocode.GeoCode.Response.GetCollectablesResponse;
-import tech.geocodeapp.geocode.Trackable.Request.*;
-import tech.geocodeapp.geocode.Trackable.Response.*;
 
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -499,30 +490,4 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new RepoException();
         }
     }
-
-    /**
-     * This helper function helps create the QR Code image and stores
-     * it in the QRImages folder.
-     *
-     * @param imageName the name to label the jpg image to
-     *
-     * @return the unique Identifier to indicate the GeoCode
-     *
-     * @throws IOException the file path or image name given was invalid
-     * @throws WriterException the image could not be created
-     */
-    public String createQR( String imageName ) throws IOException, WriterException {
-
-        /* The file path the image should be created in */
-        String path = "src/main/java/tech/geocodeapp/geocode/GeoCode/QRImages/"+ imageName + ".jpg";
-
-        /* Create the QR Code and link it to the specified website */
-        BitMatrix matrix = new MultiFormatWriter().encode( "https://www.example.com/", BarcodeFormat.QR_CODE, 400, 400 );
-
-        /* Create the image and store it in the given path */
-        MatrixToImageWriter.writeToPath( matrix, "jpg", Paths.get( path ) );
-
-        return "AAAA";
-    }
-
 }
