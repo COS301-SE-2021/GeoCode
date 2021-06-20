@@ -58,14 +58,20 @@ public class GeoCodeServiceImplTest {
      * by some other test or data.
      */
     @BeforeEach
-    void setup() throws RepoException {
+    void setup() {
 
         /* Create a new repository instance and make sure there is no data in it */
         repo = new GeoCodeMockRepository();
         repo.deleteAll();
 
-        /* Create a new GeoCodeServiceImpl instance to access the different use cases */
-        geoCodeService = new GeoCodeServiceImpl( repo );
+        try {
+
+            /* Create a new GeoCodeServiceImpl instance to access the different use cases */
+            geoCodeService = new GeoCodeServiceImpl( repo );
+        } catch ( RepoException e ) {
+
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -125,6 +131,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
+    @Order( 17 )
     public void createGeoCodeTest() {
 
         try {
@@ -167,6 +174,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
+    @Order( 18 )
     public void getAllGeoCodeTest() {
 
         try {
@@ -249,7 +257,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 17 )
+    @Order( 19 )
     public void getGeoCodesByDifficultyTest() {
 
         try {
@@ -329,7 +337,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 18 )
+    @Order( 20 )
     public void getHintsTest() {
 
         try {
@@ -397,7 +405,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 19 )
+    @Order( 21 )
     public void swapCollectablesTest() {
 
         /* Create a GeoCode */
@@ -468,7 +476,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 20 )
+    @Order( 22 )
     public void updateAvailabilityTest() {
 
         /* Create a GeoCode */
@@ -536,7 +544,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 21 )
+    @Order( 23 )
     public void getGeoCodesByLocationTest() {
 
         /* Create a GeoCode */
@@ -604,7 +612,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 22 )
+    @Order( 24 )
     public void getGeoCodesByQRCodeLocationTest() {
 
         /* Create a GeoCode */
@@ -671,7 +679,7 @@ public class GeoCodeServiceImplTest {
      * complete successfully
      */
     @Test
-    @Order( 22 )
+    @Order( 25 )
     public void getCollectablesTest() {
 
         /* Create a GeoCode */
