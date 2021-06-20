@@ -51,7 +51,7 @@ public class CollectableServiceImplTest {
     public void createCollectableSetNullRequestTest(){
         CreateCollectableSetResponse response = collectableService.createCollectableSet(null);
 
-        Assertions.assertEquals("The CreateCollectableTypeRequest object passed was NULL", response.getMessage());
+        Assertions.assertEquals("The CreateCollectableSetRequest object passed was NULL", response.getMessage());
     }
 
     @Test
