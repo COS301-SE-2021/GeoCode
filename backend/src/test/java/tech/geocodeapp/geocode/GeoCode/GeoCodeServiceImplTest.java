@@ -80,6 +80,7 @@ public class GeoCodeServiceImplTest {
     @Test
     @Order( 1 )
     @Tag( "Tests" )
+    @DisplayName( "Test Null repository handling" )
     public void RepositoryNullTest() {
 
         /* Null request check */
@@ -93,6 +94,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 2 )
+    @DisplayName( "Test createGeoCode Null repository handling" )
     public void createGeoCodeNullRequestTest() {
 
         /* Null request check */
@@ -210,7 +212,7 @@ public class GeoCodeServiceImplTest {
              * Check if all the GeoCodes were returned correctly
              * through checking the description created with the code
              */
-            Assertions.assertEquals( geocodes.get( 0 ).getDescription(), "The GeoCode is stored at the art Museum in Jhb South" );
+            Assertions.assertEquals( "The GeoCode is stored at the art Museum in Jhb South", geocodes.get( 0 ).getDescription() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -357,7 +359,7 @@ public class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals( response.getHints().get( 0 ), "Hint one for: 1" );
+            Assertions.assertEquals( "Hint one for: 1", response.getHints().get( 0 ) );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -566,7 +568,7 @@ public class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals( response.getDescription(), "The DIFFICULTY GeoCode is stored at location 1" );
+            Assertions.assertEquals( "The DIFFICULTY GeoCode is stored at location 1", response.getDescription() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -613,7 +615,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 25 )
-    public void getGeoCodesByQRCodeLocationTest() {
+    public void getGeoCodesByQRCodeTest() {
 
         /* Create a GeoCode */
         populate( 1 );
@@ -632,7 +634,7 @@ public class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals( response.getDescription(), "The DIFFICULTY GeoCode is stored at location 1" );
+            Assertions.assertEquals( "The DIFFICULTY GeoCode is stored at location 1", response.getDescription() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -700,7 +702,7 @@ public class GeoCodeServiceImplTest {
              * through checking the returned hints from a known hint
              */
 
-            Assertions.assertEquals( response.getCollectables().get( 0 ).getType().getName(), "name" );
+            Assertions.assertEquals( "name", response.getCollectables().get( 0 ).getType().getName() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
