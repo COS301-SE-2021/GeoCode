@@ -4,13 +4,14 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import tech.geocodeapp.geocode.User.Model.User;
-import tech.geocodeapp.geocode.User.Repository.UserRepository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import tech.geocodeapp.geocode.User.Model.User;
+import tech.geocodeapp.geocode.User.Repository.UserRepository;
 
 public class UserMockRepository implements UserRepository {
     private static HashMap<UUID, User> map = new HashMap<UUID, User>();

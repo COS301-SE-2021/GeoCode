@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.User.Service;
 
 import org.springframework.stereotype.Service;
+import tech.geocodeapp.geocode.Collectable.Model.Collectable;
 import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.User.Model.User;
 import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
@@ -28,8 +29,11 @@ public interface UserService {
     //U1.3 updateLocation
     UpdateLocationResponse updateLocation(UpdateLocationRequest request) throws NullUserRequestParameterException;
 
-    //helper functions
+    //User helper functions
     User getUserById(UUID id);
     User getCurrentUser();
     void registerNewUser(UUID id, String username);
+
+    //GeoCode helper functions
+    Collectable swapCollectable(Collectable collectable);
 }
