@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.GeoCode.Model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
@@ -46,6 +47,7 @@ public class GeoCode   {
 
   @JsonProperty("collectables")
   @ManyToMany
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   @Valid
   private List<Collectable> collectables = null;
 

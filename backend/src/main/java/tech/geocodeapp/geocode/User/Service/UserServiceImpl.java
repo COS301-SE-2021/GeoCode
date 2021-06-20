@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     private final CollectableTypeRepository collectableTypeRepo;
     private final GeoCodeRepository geocodeRepo;
 
-    private final String invalidUserId = "Invalid user id";
+    private final String invalidUserIdMessage = "Invalid user id";
 
     public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, CollectableTypeRepository collectableTypeRepo, GeoCodeRepository geocodeRepo) {
         this.userRepo = userRepo;
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
-            return new GetCurrentCollectableResponse(false, invalidUserId, null);
+            return new GetCurrentCollectableResponse(false, invalidUserIdMessage, null);
         }
 
         Collectable currentUserCollectable = optionalUser.get().getCurrentCollectable();
@@ -74,61 +74,11 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
-            return new GetUserTrackableResponse(false, invalidUserId, null);
+            return new GetUserTrackableResponse(false, invalidUserIdMessage, null);
         }
 
         Collectable userTrackable = optionalUser.get().getTrackableObject();
         return new GetUserTrackableResponse(true, "The user's Trackable was successfully returned", userTrackable);
-    }
-
-    /**
-     * Swaps the Collectable that the User is currently holding with a Collectable held within a GeoCode
-     * @param request The SwapCollectableRequest object
-     * @return A SwapCollectableResponse object: (success, message, object)
-     */
-    public SwapCollectableResponse swapCollectable(SwapCollectableRequest request){//will be under GeoCode subsystem
-        if (request == null) {
-            return new SwapCollectableResponse(false, "The SwapCollectableRequest object passed was NULL", null);
-        }
-
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
-
-        if(optionalUser.isEmpty()){
-            return new SwapCollectableResponse(false, invalidUserId, null);
-        }
-
-        Optional<GeoCode> optionalGeoCode = geocodeRepo.findById(request.getTargetGeoCodeID());
-
-        if(optionalGeoCode.isEmpty()){
-            return new SwapCollectableResponse(false, "Invalid GeoCode id", null);
-        }
-
-        //check if targetCollectableID is for an existing Collectable
-        UUID targetCollectableID = request.getTargetCollectableID();
-        Optional<Collectable> optionalTargetCollectable = collectableRepo.findById(targetCollectableID);
-
-        if(optionalTargetCollectable.isEmpty()){
-            return new SwapCollectableResponse(false, "Invalid Collectable id for the targetCollectableID", null);
-        }
-
-        //check is targetCollectableID for a Collectable that is in the GeoCode
-        /*GeoCode geoCode = optionalGeoCode.get();
-        List<Collectable> geoCodeCollectables = geoCode.getCollectables();
-
-        for(int i=0; i<geoCodeCollectables.size(); ++i){
-            Collectable currentCollectable = geoCodeCollectables.get(i);
-
-            if(currentCollectable.getId().equals(targetCollectableID)){
-                //swap the user's current Collectable with the given Collectable in the GeoCode
-                User currentUser = optionalUser.get();
-                geoCodeCollectables.set(i, currentUser.getCurrentCollectable());
-                geocodeRepo.save(geoCode);
-
-                return new SwapCollectableResponse(true, "The user's Collectable was successfully swapped with the Collectable in the GeoCode", currentCollectable);
-            }
-        }*/
-
-        return new SwapCollectableResponse(false, "The given targetCollectable is not in the targetGeoCode", null);
     }
 
     /**
@@ -144,7 +94,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
-            return new UpdateLocationResponse(false, invalidUserId, null);
+            return new UpdateLocationResponse(false, invalidUserIdMessage, null);
         }
 
         User currentUser = optionalUser.get();
@@ -190,7 +140,6 @@ public class UserServiceImpl implements UserService {
         CollectableType trackableCollectableType = optionalCollectableType.get();
 
         Collectable trackableObject = new Collectable(trackableCollectableType);
-        collectableRepo.save(trackableObject);
         newUser.setTrackableObject(trackableObject);
         newUser.setCurrentCollectable(trackableObject);
         userRepo.save(newUser);

@@ -18,10 +18,16 @@ import java.util.UUID;
  */
 @Service
 public interface UserService {
+    //U1.1 getCurrentCollectable
     GetCurrentCollectableResponse getCurrentCollectable(GetCurrentCollectableRequest request);
+
+    //U1.2 getUserTrackable
     GetUserTrackableResponse getUserTrackable(GetUserTrackableRequest request);
-    SwapCollectableResponse swapCollectable(SwapCollectableRequest request);
+
+    //U1.3 updateLocation
     UpdateLocationResponse updateLocation(UpdateLocationRequest request);
+
+    //helper functions
     User getUserById(UUID id);
     User getCurrentUser();
     void registerNewUser(UUID id, String username);
