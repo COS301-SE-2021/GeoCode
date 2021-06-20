@@ -609,7 +609,7 @@ public class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 25 )
-    public void getGeoCodesByQRCodeLocationTest() {
+    public void getGeoCodesByQRCodeTest() {
 
         /* Create a GeoCode */
         populate( 1 );
