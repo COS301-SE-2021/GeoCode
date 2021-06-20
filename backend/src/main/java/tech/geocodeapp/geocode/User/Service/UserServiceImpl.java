@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     private final CollectableTypeRepository collectableTypeRepo;
     private final GeoCodeRepository geocodeRepo;
 
-    private final String invalidUserId = "Invalid user id";
+    private final String invalidUserIdMessage = "Invalid user id";
 
     public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, CollectableTypeRepository collectableTypeRepo, GeoCodeRepository geocodeRepo) {
         this.userRepo = userRepo;
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
-            return new GetCurrentCollectableResponse(false, invalidUserId, null);
+            return new GetCurrentCollectableResponse(false, invalidUserIdMessage, null);
         }
 
         Collectable currentUserCollectable = optionalUser.get().getCurrentCollectable();
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
-            return new GetUserTrackableResponse(false, invalidUserId, null);
+            return new GetUserTrackableResponse(false, invalidUserIdMessage, null);
         }
 
         Collectable userTrackable = optionalUser.get().getTrackableObject();
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
-            return new SwapCollectableResponse(false, invalidUserId, null);
+            return new SwapCollectableResponse(false, invalidUserIdMessage, null);
         }
 
         Optional<GeoCode> optionalGeoCode = geocodeRepo.findById(request.getTargetGeoCodeID());
@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
-            return new UpdateLocationResponse(false, invalidUserId, null);
+            return new UpdateLocationResponse(false, invalidUserIdMessage, null);
         }
 
         User currentUser = optionalUser.get();
