@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.GeoCode.Controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -12,17 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectablesRequest;
-import tech.geocodeapp.geocode.Collectable.Response.GetCollectablesResponse;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
-import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeService;
 
+import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
+import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeService;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
-import tech.geocodeapp.geocode.Trackable.Request.GetTrackablesRequest;
-import tech.geocodeapp.geocode.Trackable.Response.GetTrackablesResponse;
+
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
@@ -136,19 +130,6 @@ public class GeoCodeApiController implements GeoCodeApi {
         }else{
 
             return new ResponseEntity<GetHintsResponse>(response, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    public ResponseEntity<GetTrackablesResponse> getTrackables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Trackable", required=true, schema=@Schema()) @Valid @RequestBody GetTrackablesRequest body) throws InvalidRequestException, RepoException {
-
-        GetTrackablesResponse response = geoCodeService.getTrackables( body );
-
-        if ( ( response.getQrCode() != null ) || ( !response.getQrCode().isEmpty() ) ) {
-
-            return new ResponseEntity<GetTrackablesResponse>(response, HttpStatus.OK);
-        }else{
-
-            return new ResponseEntity<GetTrackablesResponse>(response, HttpStatus.BAD_REQUEST);
         }
     }
 

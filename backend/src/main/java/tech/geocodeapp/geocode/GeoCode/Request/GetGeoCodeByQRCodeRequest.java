@@ -2,43 +2,39 @@ package tech.geocodeapp.geocode.GeoCode.Request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * GetGeoCodeByQRCodeRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T20:06:36.916Z[GMT]")
 
 
 public class GetGeoCodeByQRCodeRequest   {
-  @JsonProperty("id")
-  private UUID id = null;
+  @JsonProperty("QRCode")
+  private String qrCode = null;
 
-  public GetGeoCodeByQRCodeRequest id(UUID id) {
-    this.id = id;
+  public GetGeoCodeByQRCodeRequest qrCode(String qrCode) {
+    this.qrCode = qrCode;
     return this;
   }
 
   /**
-   * Get id
-   * @return id
+   * Get qrCode
+   * @return qrCode
    **/
   @Schema(required = true, description = "")
       @NotNull
 
-    @Valid
-    public UUID getId() {
-    return id;
+    public String getQrCode() {
+    return qrCode;
   }
 
-  public void setId(UUID id) {
-    this.id = id;
+  public void setQrCode(String qrCode) {
+    this.qrCode = qrCode;
   }
 
 
@@ -51,12 +47,12 @@ public class GetGeoCodeByQRCodeRequest   {
       return false;
     }
     GetGeoCodeByQRCodeRequest getGeoCodeByQRCodeRequest = (GetGeoCodeByQRCodeRequest) o;
-    return Objects.equals(this.id, getGeoCodeByQRCodeRequest.id);
+    return Objects.equals(this.qrCode, getGeoCodeByQRCodeRequest.qrCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id);
+    return Objects.hash(qrCode);
   }
 
   @Override
@@ -64,7 +60,7 @@ public class GetGeoCodeByQRCodeRequest   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetGeoCodeByQRCodeRequest {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    qrCode: ").append(toIndentedString(qrCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

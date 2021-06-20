@@ -1,11 +1,9 @@
 package tech.geocodeapp.geocode.Collectable.Model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 
 import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
@@ -33,8 +31,8 @@ public class Collectable   {
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private CollectableType type = null;
 
-  @ElementCollection
-  private List<String> pastLocations = new ArrayList<String>();
+  @ElementCollection(fetch = FetchType.EAGER)
+  private Collection<String> pastLocations = new ArrayList<String>();
 
   public Collectable() {
     id = UUID.randomUUID();
@@ -52,7 +50,7 @@ public class Collectable   {
     return this;
   }
 
-  public List<String> getPastLocations() {
+  public Collection<String> getPastLocations() {
     return pastLocations;
   }
 

@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Collectables</ion-title>
+    <ng-template [ngIf]="isAdmin()">
+      <ion-buttons slot="end">
+        <ion-button (click)="addSet()">
+          <ion-icon name="add-outline"></ion-icon>
+          <ion-label>New Set</ion-label>
+        </ion-button>
+      </ion-buttons>
+    </ng-template>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngFor="let set of sets">
+    <ion-card-content>
+      <div class="header">
+        <div class="details">
+          <ion-card-title>
+            {{set.name}}
+          </ion-card-title>
+          <ion-card-subtitle>
+            {{set.description}}
+          </ion-card-subtitle>
+        </div>
+        <ng-template [ngIf]="isAdmin()">
+          <div class="add">
+            <ion-button size="small" (click)="addType(set.id)">
+              <ion-icon name="add-outline"></ion-icon>
+              <ion-label>Add to Set</ion-label>
+            </ion-button>
+          </div>
+        </ng-template>
+      </div>
+      <div class="horizontalscroll">
+        <div class="items">
+          <div class="collectable" *ngFor="let type of types[set.id]">
+            <div class="image">
+              <img src="https://via.placeholder.com/100">
+            </div>
+            <div class="name">
+              {{type.name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
