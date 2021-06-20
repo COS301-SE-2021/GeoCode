@@ -11,8 +11,8 @@
     <div #mapElement class="map" [hidden]="isHidden"></div>
     <ion-item class="barcode" [hidden]="isHidden">
       <ion-label>GeoCode</ion-label>
-      <ion-input class="barcode-input" type="text"></ion-input>
-      <ion-button color="danger" (click)="found()">Found</ion-button>
+      <ion-input #QR class="barcode-input" type="text"></ion-input>
+      <ion-button color="danger" (click)="found(QR)">Found</ion-button>
     </ion-item>
     <div class="hints" [hidden]="isHidden">
       <ion-row>Hints</ion-row>

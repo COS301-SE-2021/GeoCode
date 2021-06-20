@@ -8,18 +8,15 @@
 
   <ion-button color="Dark" (click)="getAllMap()">Get all GeoCodes</ion-button>
 
-<div #mapElement class="map">
-
-</div>
-  <ion-list>
-    <ion-label>Get GeoCodes by Difficulty</ion-label>
-
-    <ion-button color="success" (click)="easyMap()">Easy</ion-button>
-    <ion-button color="secondary" (click)="mediumMap()">Medium </ion-button>
-    <ion-button color="warning" (click)="difficultMap()">Difficult</ion-button>
-    <ion-button color="danger" (click)="insaneMap()">Insane</ion-button>
-  </ion-list>
-<div  id ="geoCodeDetails">
+  <div #mapElement class="map"></div>
+    <ion-list>
+      <ion-label>Get GeoCodes by Difficulty</ion-label>
+      <ion-button color="success" (click)="easyMap()">Easy</ion-button>
+      <ion-button color="secondary" (click)="mediumMap()">Medium </ion-button>
+      <ion-button color="warning" (click)="difficultMap()">Difficult</ion-button>
+      <ion-button color="danger" (click)="insaneMap()">Insane</ion-button>
+    </ion-list>
+  <div  id ="geoCodeDetails">
 
   <ion-grid class="ion-margin" *ngFor="let geocode of selected">
 
