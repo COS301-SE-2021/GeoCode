@@ -6,6 +6,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import tech.geocodeapp.geocode.Collectable.CollectableMockRepository;
 import tech.geocodeapp.geocode.Collectable.CollectableTypeMockRepository;
 import tech.geocodeapp.geocode.Collectable.Model.Collectable;
@@ -20,11 +25,6 @@ import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
 import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
 import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
 import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 
 @ExtendWith( MockitoExtension.class )
 public class UserServiceImplTest {
