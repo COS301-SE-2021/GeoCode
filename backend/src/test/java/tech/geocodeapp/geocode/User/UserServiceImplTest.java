@@ -44,6 +44,14 @@ public class UserServiceImplTest {
     }
 
     @Test
+    public void getCurrentCollectableTestNullRequest(){
+        GetCurrentCollectableResponse response = userService.getCurrentCollectable(null);
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals("The GetCurrentCollectableRequest object passed was NULL", response.getMessage());
+        Assertions.assertNull(response.getCollectable());
+    }
+
+    @Test
     public void getCurrentCollectableTestInvalidUser(){
         /*
            Create a request object
