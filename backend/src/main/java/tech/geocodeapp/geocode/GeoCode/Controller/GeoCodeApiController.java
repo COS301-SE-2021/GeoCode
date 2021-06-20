@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.GeoCode.Controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -12,9 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeService;
 
 import tech.geocodeapp.geocode.GeoCode.Response.*;

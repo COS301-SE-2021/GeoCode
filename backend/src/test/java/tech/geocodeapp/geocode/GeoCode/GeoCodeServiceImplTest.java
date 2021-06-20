@@ -650,8 +650,8 @@ public class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-//            Assertions.assertEquals( response.getCollectables().get( 0 ).getPastLocations().get( 0 ), "The DIFFICULTY GeoCode is stored at location 1" );
-            Assertions.assertTrue( true );
+
+            Assertions.assertEquals( response.getCollectables().get( 0 ).getType().getName(), "name" );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
