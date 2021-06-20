@@ -21,11 +21,11 @@ difficulty;
 request : CreateGeoCodeRequest= {
   description: 'Testing insert',
     available: true,
-    difficulty:"EASY",
-    hints:["Hint1","Hint2"],
-    latitude:"",
-  longitude:"",
-    id:""
+    difficulty:'EASY',
+    hints:['Hint1','Hint2'],
+    latitude:'',
+  longitude:'',
+    id:''
 
 };
 
@@ -72,10 +72,10 @@ request : CreateGeoCodeRequest= {
 
   //create the geocode and update the remaining fields
   createGeoCode(){
-    this.request['latitude']=this.locations.lat;
-    this.request['longitude']=this.locations.lng;
-    this.request['hints']=this.hints;
-    this.request['difficulty'] = this.difficulty;
+    this.request.latitude=this.locations.lat;
+    this.request.longitude=this.locations.lng;
+    this.request.hints=this.hints;
+    this.request.difficulty = this.difficulty;
     console.log(this.request);
     this.geocodeAPI.createGeoCode(this.request)
       .subscribe((response:CreateGeoCodeResponse) =>{
@@ -103,6 +103,7 @@ request : CreateGeoCodeRequest= {
 }
 
 //Place the marker in the users selected location and update that maps center
+// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 function placeMarker(location){
   const marker = new google.maps.Marker({
     map,
