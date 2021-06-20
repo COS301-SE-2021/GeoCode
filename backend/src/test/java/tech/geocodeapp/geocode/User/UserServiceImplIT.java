@@ -22,6 +22,7 @@ import tech.geocodeapp.geocode.User.Service.UserService;
 public class UserServiceImplIT {
     @Autowired
     private UserService userService;
+
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
 
