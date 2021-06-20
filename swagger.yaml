@@ -18,46 +18,12 @@ tags:
     description: "Everything about QR Codes known as GeoCodes"
   - name: "Collectable"
     description: "Everything about the collectables that users can trade"
-  - name: "Trackable"
-    description: "Everything about the trackables users can create and follow"
   - name: "Leaderboard"
     description: "Everything about the different scores and rankings of users"
   - name: "Notifications"
     description: "Everything about how users are notified"
 
 paths:
-  /User/swapCollectable:
-    post:
-      tags:
-        - "User"
-      summary: "Swaps the Collectable the user is currently holding with the given Collectable in the given GeoCode"
-      description: "Swap held Collectable"
-      operationId: "swapCollectable"
-      requestBody:
-        required: true
-        description: "Request to swap the held Collectable"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SwapCollectableRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/SwapCollectableRequest'
-      responses:
-        '200':
-          description: "The user's current Collectable was successfully swapped"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapCollectableResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/SwapCollectableResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-      security:
-        - bearerAuth: []
-        
   /User/getCurrentCollectable:
     post:
       tags:
@@ -245,70 +211,6 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/GetOwnedGeoCodesResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-      security:
-        - bearerAuth: []
-      
-  /User/setAdmin:
-    post:
-      tags:
-        - "User"
-      summary: "Sets the given user to be an administrator"
-      description: "Sets the given user to be an administrator"
-      operationId: "setAdmin"
-      requestBody:
-        required: true
-        description: "Request to set a user to be an administrator"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SetAdminRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/SetAdminRequest'
-      responses:
-        '200':
-          description: "Successfully set the user to be an administrator"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-      security:
-        - bearerAuth: []
-        
-  /User/blockUser:
-    post:
-      tags:
-        - "User"
-      summary: "Administrator blocks the given user"
-      description: "Block a user"
-      operationId: "blockUser"
-      requestBody:
-        required: true
-        description: "Request to block a user"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BlockUserRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/BlockUserRequest'
-      responses:
-        '200':
-          description: "Successfully blocked the user"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -646,37 +548,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-  /User/getOwnedGeocodes:
-    post:
-      tags:
-        - "User"
-      summary: "Get all geocodes associated with a user"
-      description: "Get My Geocodes"
-      operationId: "getOwnedGeocodes"
-      requestBody:
-        required: true
-        description: "Request to get geocodes belonging to user"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GetOwnedGeoCodesRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/GetOwnedGeoCodesRequest'
-      responses:
-        '200':
-          description: "Successfully gotten geocodes"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetOwnedGeoCodesResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/GetOwnedGeoCodesResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-      security:
-        - bearerAuth: []
+  
   /Collectable/createCollectableType:
     post:
       tags:
@@ -1261,11 +1133,12 @@ components:
     SwapCollectablesRequest:
       type: "object"
       required:
-        - collectable
-        - geoCodeID
+        - targetGeoCodeID
+        - targetCollectableID
       properties:
         collectable:
-          $ref: '#/components/schemas/Collectable'
+          type: string
+          format: uuid
         geoCodeID:
           type: string
           format: uuid
@@ -1625,6 +1498,7 @@ components:
           format: uuid
       xml:
         name: "LeaderBoard"
+        
     User:
       type: "object"
       required:
@@ -1656,42 +1530,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GeoCode'
-            
-    SwapCollectableRequest:
-      type: "object"
-      required:
-        - userID
-        - targetGeoCodeID
-        - targetCollectableID
-      properties:
-        userID:
-          type: string
-          format: uuid
-        targetGeoCodeID:
-          type: string
-          format: uuid
-        targetCollectableID:
-          type: string
-          format: uuid
-      xml:
-        name: "SwapCollectableRequest"
-        
-    SwapCollectableResponse:
-      type: "object"
-      required:
-        - success
-        - message
-        - Collectable
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-          example: "The user's Collectable was successfully swapped with the Collectable in the GeoCode"
-        Collectable:
-          $ref: '#/components/schemas/Collectable'
-      xml:
-        name: "SwapCollectableResponse"
         
     GetCurrentCollectableRequest:
       type: "object"
@@ -1838,36 +1676,6 @@ components:
             $ref: '#/components/schemas/GeoCode'
       xml:
         name: "GetOwnedGeocodesResponse"
-        
-    SetAdminRequest:
-      type: "object"
-      required:
-        - userID
-        - adminID
-      properties:
-        userID:
-          type: string
-          format: uuid
-        adminID:
-          type: string
-          format: uuid
-      xml:
-        name: "SetAdminRequest"
-        
-    BlockUserRequest:
-      type: "object"
-      required:
-        - userID
-        - adminID
-      properties:
-        userID:
-          type: string
-          format: uuid
-        adminID:
-          type: string
-          format: uuid
-      xml:
-        name: "BlockUserRequest"
         
     GetUsersRequest:
       type: "object"
