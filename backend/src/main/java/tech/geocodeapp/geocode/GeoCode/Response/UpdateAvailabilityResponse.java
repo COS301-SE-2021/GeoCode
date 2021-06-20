@@ -12,30 +12,31 @@ import javax.validation.constraints.*;
  * UpdateAvailabilityResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-18T04:32:33.769Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
 
 
 public class UpdateAvailabilityResponse   {
-  @JsonProperty("success")
-  private Boolean success = null;
+  @JsonProperty("isSuccess")
+  private Boolean isSuccess = null;
 
-  public UpdateAvailabilityResponse success(Boolean success) {
-    this.success = success;
+  public UpdateAvailabilityResponse isSuccess(Boolean isSuccess) {
+    this.isSuccess = isSuccess;
     return this;
   }
 
   /**
-   * Get success
-   * @return success
+   * Get isSuccess
+   * @return isSuccess
    **/
-  @Schema(description = "")
-  
-    public Boolean isSuccess() {
-    return success;
+  @Schema(required = true, description = "")
+      @NotNull
+
+    public Boolean isIsSuccess() {
+    return isSuccess;
   }
 
-  public void setSuccess(Boolean success) {
-    this.success = success;
+  public void setIsSuccess(Boolean isSuccess) {
+    this.isSuccess = isSuccess;
   }
 
 
@@ -48,12 +49,12 @@ public class UpdateAvailabilityResponse   {
       return false;
     }
     UpdateAvailabilityResponse updateAvailabilityResponse = (UpdateAvailabilityResponse) o;
-    return Objects.equals(this.success, updateAvailabilityResponse.success);
+    return Objects.equals(this.isSuccess, updateAvailabilityResponse.isSuccess);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(success);
+    return Objects.hash(isSuccess);
   }
 
   @Override
@@ -61,7 +62,7 @@ public class UpdateAvailabilityResponse   {
     StringBuilder sb = new StringBuilder();
     sb.append("class UpdateAvailabilityResponse {\n");
     
-    sb.append("    success: ").append(toIndentedString(success)).append("\n");
+    sb.append("    isSuccess: ").append(toIndentedString(isSuccess)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -2,31 +2,32 @@ package tech.geocodeapp.geocode.GeoCode.Model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-import tech.geocodeapp.geocode.Collectable.Model.Difficulty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import tech.geocodeapp.geocode.Collectable.Model.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 
 /**
  * GeoCode
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T19:40:54.656Z[GMT]")
 
 @Entity
+@Table(name = "geocode")
 public class GeoCode   {
-  @Id
+
   @JsonProperty("id")
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Id
   private UUID id = null;
 
   @JsonProperty("difficulty")
@@ -39,24 +40,23 @@ public class GeoCode   {
   private String description = null;
 
   @JsonProperty("hints")
-  @Valid
   @ElementCollection
+  @Valid
   private List<String> hints = new ArrayList<String>();
 
   @JsonProperty("collectables")
-  @ManyToOne
-  @JoinColumn(name = "COLLECTABLE_ID")
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Collectable collectables = null;
-
-  @JsonProperty("trackables")
-  private String trackables = null;
+  @ManyToMany
+  @Valid
+  private List<Collectable> collectables = null;
 
   @JsonProperty("qrCode")
   private String qrCode = null;
 
-  @JsonProperty("location")
-  private String location = null;
+  @JsonProperty("longitude")
+  private String longitude = null;
+
+  @JsonProperty("latitude")
+  private String latitude = null;
 
   public GeoCode id(UUID id) {
     this.id = id;
@@ -165,8 +165,16 @@ public class GeoCode   {
     this.hints = hints;
   }
 
-  public GeoCode collectables(Collectable collectables) {
+  public GeoCode collectables(List<Collectable> collectables) {
     this.collectables = collectables;
+    return this;
+  }
+
+  public GeoCode addCollectablesItem(Collectable collectablesItem) {
+    if (this.collectables == null) {
+      this.collectables = new ArrayList<Collectable>();
+    }
+    this.collectables.add(collectablesItem);
     return this;
   }
 
@@ -175,33 +183,13 @@ public class GeoCode   {
    * @return collectables
    **/
   @Schema(description = "")
-
   @Valid
-  public Collectable getCollectables() {
+  public List<Collectable> getCollectables() {
     return collectables;
   }
 
-  public void setCollectables(Collectable collectables) {
+  public void setCollectables(List<Collectable> collectables) {
     this.collectables = collectables;
-  }
-
-  public GeoCode trackables(String trackables) {
-    this.trackables = trackables;
-    return this;
-  }
-
-  /**
-   * Get trackables
-   * @return trackables
-   **/
-  @Schema(description = "")
-
-  public String getTrackables() {
-    return trackables;
-  }
-
-  public void setTrackables(String trackables) {
-    this.trackables = trackables;
   }
 
   public GeoCode qrCode(String qrCode) {
@@ -224,24 +212,44 @@ public class GeoCode   {
     this.qrCode = qrCode;
   }
 
-  public GeoCode location(String location) {
-    this.location = location;
+  public GeoCode longitude(String longitude) {
+    this.longitude = longitude;
     return this;
   }
 
   /**
-   * Get location
-   * @return location
+   * Get longitude
+   * @return longitude
    **/
   @Schema(required = true, description = "")
   @NotNull
 
-  public String getLocation() {
-    return location;
+  public String getLongitude() {
+    return longitude;
   }
 
-  public void setLocation(String location) {
-    this.location = location;
+  public void setLongitude(String longitude) {
+    this.longitude = longitude;
+  }
+
+  public GeoCode latitude(String latitude) {
+    this.latitude = latitude;
+    return this;
+  }
+
+  /**
+   * Get latitude
+   * @return latitude
+   **/
+  @Schema(required = true, description = "")
+  @NotNull
+
+  public String getLatitude() {
+    return latitude;
+  }
+
+  public void setLatitude(String latitude) {
+    this.latitude = latitude;
   }
 
 
@@ -260,14 +268,14 @@ public class GeoCode   {
             Objects.equals(this.description, geoCode.description) &&
             Objects.equals(this.hints, geoCode.hints) &&
             Objects.equals(this.collectables, geoCode.collectables) &&
-            Objects.equals(this.trackables, geoCode.trackables) &&
             Objects.equals(this.qrCode, geoCode.qrCode) &&
-            Objects.equals(this.location, geoCode.location);
+            Objects.equals(this.longitude, geoCode.longitude) &&
+            Objects.equals(this.latitude, geoCode.latitude);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, difficulty, available, description, hints, collectables, trackables, qrCode, location);
+    return Objects.hash(id, difficulty, available, description, hints, collectables, qrCode, longitude, latitude);
   }
 
   @Override
@@ -281,9 +289,9 @@ public class GeoCode   {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    hints: ").append(toIndentedString(hints)).append("\n");
     sb.append("    collectables: ").append(toIndentedString(collectables)).append("\n");
-    sb.append("    trackables: ").append(toIndentedString(trackables)).append("\n");
     sb.append("    qrCode: ").append(toIndentedString(qrCode)).append("\n");
-    sb.append("    location: ").append(toIndentedString(location)).append("\n");
+    sb.append("    longitude: ").append(toIndentedString(longitude)).append("\n");
+    sb.append("    latitude: ").append(toIndentedString(latitude)).append("\n");
     sb.append("}");
     return sb.toString();
   }

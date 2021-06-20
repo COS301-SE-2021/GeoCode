@@ -80,7 +80,18 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
     @Override
     public Optional< GeoCode > findById( UUID uuid ) {
 
-        return Optional.empty();
+        Optional< GeoCode > hold = Optional.empty();
+
+        for ( int x = 0; x < map.size(); x++ ) {
+
+            if ( map.containsKey( uuid ) ) {
+
+                hold = Optional.ofNullable( map.get( uuid ) );
+            }
+        }
+
+
+        return hold;
     }
 
     @Override
