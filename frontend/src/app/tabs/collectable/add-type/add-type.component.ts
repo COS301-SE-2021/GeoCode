@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ModalController, NavParams, ToastController} from '@ionic/angular';
 import {
-  CollectableService,
+  CollectableService, CollectableTypeComponent,
   CreateCollectableTypeRequest,
 } from '../../../services/geocode-api';
 
@@ -34,7 +34,7 @@ export class AddTypeComponent implements OnInit {
   showDatePicker = false;
   date: Date = null;
 
-  loading: false;
+  loading = false;
 
   constructor(
     private modalController: ModalController,
@@ -59,16 +59,17 @@ export class AddTypeComponent implements OnInit {
     if (!this.validate()) {
       return;
     }
+    this.loading = true;
     if (this.trackable) { this.request.properties.trackable = 'true'; }
     if (this.showMap) { this.request.properties.geofenced = this.location.getPosition().lat()+' '+this.location.getPosition().lng(); }
     if (this.showDatePicker) { this.request.properties.expiring = this.getDate(); }
     const response = await this.collectableService.createCollectableType(this.request).toPromise();
     console.log(response);
-    await this.dismiss();
+    await this.dismiss(response.collectableType);
   }
 
-  async dismiss() {
-    await this.modalController.dismiss();
+  async dismiss(createdType: CollectableTypeComponent = null) {
+    await this.modalController.dismiss(createdType);
   }
 
   updateRequest(event: any, field: keyof CreateCollectableTypeRequest) {

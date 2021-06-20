@@ -63,6 +63,10 @@ export class CollectablePage implements OnInit {
       }
     });
     await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data != null) {
+      this.types[selectedSetID].push(data);
+    }
   }
 
   async addSet() {
@@ -72,6 +76,10 @@ export class CollectablePage implements OnInit {
       componentProps: {}
     });
     await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data != null) {
+      this.sets.push(data);
+    }
   }
 
 }

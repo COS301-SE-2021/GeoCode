@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ModalController, ToastController} from '@ionic/angular';
-import {CollectableService, CreateCollectableSetRequest} from '../../../services/geocode-api';
+import {ModalController} from '@ionic/angular';
+import {CollectableService, CollectableSet, CreateCollectableSetRequest} from '../../../services/geocode-api';
 
 @Component({
   selector: 'app-add-set',
@@ -14,12 +14,11 @@ export class AddSetComponent implements OnInit {
     description: ''
   };
 
-  loading: false;
+  loading = false;
 
   constructor(
     private modalController: ModalController,
-    private collectableService: CollectableService,
-    private toastController: ToastController
+    private collectableService: CollectableService
   ) {}
 
 
@@ -36,13 +35,14 @@ export class AddSetComponent implements OnInit {
     if (!this.validate()) {
       return;
     }
+    this.loading = true;
     const response = await this.collectableService.createCollectableSet(this.request).toPromise();
     console.log(response);
-    await this.dismiss();
+    await this.dismiss(response.collectableSet);
   }
 
-  async dismiss() {
-    await this.modalController.dismiss();
+  async dismiss(createdSet: CollectableSet = null) {
+    await this.modalController.dismiss(createdSet);
   }
 
   updateRequest(event: any, field: keyof CreateCollectableSetRequest) {
