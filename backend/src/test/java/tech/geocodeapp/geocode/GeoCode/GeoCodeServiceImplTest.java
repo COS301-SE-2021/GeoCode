@@ -6,15 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import tech.geocodeapp.geocode.Collectable.CollectableMockRepository;
 import tech.geocodeapp.geocode.Collectable.CollectableSetMockRepository;
 import tech.geocodeapp.geocode.Collectable.CollectableTypeMockRepository;
 import tech.geocodeapp.geocode.Collectable.Model.*;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableSetRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableTypeRequest;
-import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse;
-import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
 import tech.geocodeapp.geocode.Collectable.Service.*;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
@@ -22,7 +17,6 @@ import tech.geocodeapp.geocode.GeoCode.Service.*;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
 import tech.geocodeapp.geocode.User.Service.UserService;
-import tech.geocodeapp.geocode.User.UserMockRepository;
 
 import java.util.ArrayList;
 import java.util.List;

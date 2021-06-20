@@ -8,8 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-
 /**
  * SwapCollectablesRequest
  */
