@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.geocodeapp.geocode.Collectable.Model.*;
+import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
@@ -42,6 +43,12 @@ public class GeoCodeServiceImplIT {
     GeoCodeRepository repo;
 
     /**
+     * The collectable service accessor
+     */
+    @Autowired
+    CollectableServiceImpl collectableService;
+
+    /**
      * The service for the User subsystem
      *
      * This is used to access User subsystem in some use cases
@@ -75,7 +82,7 @@ public class GeoCodeServiceImplIT {
         try {
 
             /* Create a new GeoCodeServiceImpl instance to access the different use cases */
-            geoCodeService = new GeoCodeServiceImpl( repo, userService );
+            geoCodeService = new GeoCodeServiceImpl( repo, collectableService, userService );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
@@ -87,10 +94,12 @@ public class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 1 )
+    @Tag( "Tests" )
+    @DisplayName( "Test Null repository handling" )
     public void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, userService ) )
+        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }
@@ -100,6 +109,7 @@ public class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 2 )
+    @DisplayName( "Test createGeoCode Null repository handling" )
     public void createGeoCodeNullRequestTest() {
 
         /* Null request check */
@@ -217,7 +227,7 @@ public class GeoCodeServiceImplIT {
              * Check if all the GeoCodes were returned correctly
              * through checking the description created with the code
              */
-            Assertions.assertEquals( geocodes.get( 0 ).getDescription(), "The GeoCode is stored at the art Museum in Jhb South" );
+            Assertions.assertEquals( "The GeoCode is stored at the art Museum in Jhb South", geocodes.get( 0 ).getDescription() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -364,7 +374,7 @@ public class GeoCodeServiceImplIT {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals(  "Hint one for: 1", ( new ArrayList<>( response.getHints() ) ).get( 0 ) );
+            Assertions.assertEquals( "Hint one for: 1", new ArrayList<>( response.getHints() ).get( 0 ) );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -571,7 +581,7 @@ public class GeoCodeServiceImplIT {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals( response.getDescription(), "The DIFFICULTY GeoCode is stored at location 1" );
+            Assertions.assertEquals( "The DIFFICULTY GeoCode is stored at location 1", response.getDescription() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -637,7 +647,7 @@ public class GeoCodeServiceImplIT {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals( response.getDescription(), "The DIFFICULTY GeoCode is stored at location 1" );
+            Assertions.assertEquals( "The DIFFICULTY GeoCode is stored at location 1", response.getDescription() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -705,7 +715,7 @@ public class GeoCodeServiceImplIT {
              * through checking the returned hints from a known hint
              */
 
-            Assertions.assertEquals( response.getCollectables().get( 0 ).getType().getName(), "name" );
+            Assertions.assertEquals( "name", response.getCollectables().get( 0 ).getType().getName() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -793,6 +803,5 @@ public class GeoCodeServiceImplIT {
         }
 
     }
-
 
 }

@@ -6,7 +6,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import tech.geocodeapp.geocode.Collectable.CollectableMockRepository;
+import tech.geocodeapp.geocode.Collectable.CollectableSetMockRepository;
+import tech.geocodeapp.geocode.Collectable.CollectableTypeMockRepository;
 import tech.geocodeapp.geocode.Collectable.Model.*;
+import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableSetRequest;
+import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableTypeRequest;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
+import tech.geocodeapp.geocode.Collectable.Service.*;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Service.*;
@@ -44,6 +53,11 @@ public class GeoCodeServiceImplTest {
     GeoCodeMockRepository repo;
 
     /**
+     * The collectable service accessor
+     */
+    CollectableService collectableService;
+
+    /**
      * A mock service for the User subsystem
      *
      * This is used to access User subsystem in some use cases
@@ -75,10 +89,28 @@ public class GeoCodeServiceImplTest {
         repo = new GeoCodeMockRepository();
         repo.deleteAll();
 
+        collectableService = new CollectableServiceImpl( new CollectableMockRepository(),
+                                                         new CollectableSetMockRepository(),
+                                                         new CollectableTypeMockRepository() );
+
+        CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
+        setRequest.setName( "Easter" );
+        setRequest.setDescription( "Themed collectables that can be collected over the Easter weekend" );
+
+        CreateCollectableSetResponse setResponse = collectableService.createCollectableSet( setRequest );
+
+        CreateCollectableTypeRequest request = new CreateCollectableTypeRequest();
+        request.setName( "Santa" );
+        request.setImage( "dgergergnhtfhjhg" );
+        request.setRarity( Rarity.RARE );
+        request.setId( setResponse.getCollectableSet().getId() );
+
+        CreateCollectableTypeResponse response = collectableService.createCollectableType( request );
+
         try {
 
             /* Create a new GeoCodeServiceImpl instance to access the different use cases */
-            geoCodeService = new GeoCodeServiceImpl( repo, userService );
+            geoCodeService = new GeoCodeServiceImpl( repo, collectableService, userService );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
@@ -95,7 +127,7 @@ public class GeoCodeServiceImplTest {
     public void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, userService ) )
+        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }

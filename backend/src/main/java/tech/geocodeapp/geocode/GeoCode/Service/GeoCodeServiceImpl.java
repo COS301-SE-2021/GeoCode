@@ -1,8 +1,14 @@
 package tech.geocodeapp.geocode.GeoCode.Service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.Collectable.Model.*;
+import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.Collectable.Service.CollectableService;
+import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
@@ -28,6 +34,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     private final GeoCodeRepository geoCodeRepo;
 
     /**
+     * The collectable service to access the use cases and
+     * collectable repository
+     */
+    private final CollectableService collectableService;
+
+    /**
      * A handle to the user service
      */
     private final UserService userService;
@@ -37,7 +49,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      *
      * @param geoCodeRepo the repo the created response attributes should save to
      */
-    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo, UserService userService ) throws RepoException {
+    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo, CollectableService collectableService, UserService userService ) throws RepoException {
         this.userService = userService;
 
         /* Check if the given repo exists */
@@ -45,6 +57,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* The repo exists therefore it can be set for the class */
             this.geoCodeRepo = geoCodeRepo;
+            this.collectableService = collectableService;
         } else {
 
             /* The repo does not exist throw an error */
@@ -70,8 +83,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             throw new InvalidRequestException( true );
         } else if ( ( request.getLatitude() == null ) || ( request.getLongitude() == null ) ||
-                    ( request.getHints() == null ) || ( request.getDifficulty() == null ) ||
-                    ( request.getDescription() == null ) || ( request.isAvailable() == null ) ) {
+                ( request.getHints() == null ) || ( request.getDifficulty() == null ) ||
+                ( request.getDescription() == null ) || ( request.isAvailable() == null ) ) {
 
             throw new InvalidRequestException();
         }
@@ -90,11 +103,37 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         UUID id = UUID.randomUUID();
         newGeoCode.setId( id );
 
-        List <Collectable > collectable = new ArrayList<>();
+        /* Hold the crated Collectables */
+        List< Collectable > collectable = new ArrayList<>();
 
         for ( int x = 0; x < 5; x++ ) {
 
-            collectable.add( new Collectable( new CollectableType( "name", "imageURL", Rarity.COMMON, new CollectableSet( "setName", "description" ), null ) ) );
+            /* Create the response and give it a Collectable type */
+            CreateCollectableRequest collectableRequest = new CreateCollectableRequest();
+            collectableRequest.setCollectableTypeId( UUID.fromString( "f94d35a2-ca09-49fc-9fdd-ad0bac0b8dd0" ) );
+
+            /* Get the response from the created request */
+            CreateCollectableResponse collectableResponse = collectableService.createCollectable( collectableRequest );
+
+            /* Building a collectable from a collectable response */
+            Collectable temp = new Collectable();
+            temp.setId( collectableResponse.getCollectable().getId() );
+            CollectableTypeComponent type = collectableResponse.getCollectable().getType();
+
+            /* Building a collectable type from a collectable type component */
+            CollectableType tempType = new CollectableType();
+            tempType.setId( type.getId() );
+            tempType.setName( type.getName() );
+            tempType.setRarity( type.getRarity() );
+            tempType.setImage( "randomImage" );
+            tempType.setSet( type.getCollectableSet() );
+
+            temp.setType( tempType );
+
+            /* Adding the created Collectable to the list */
+            collectable.add( temp );
+
+            //collectable.add( new Collectable( new CollectableType( "name", "imageURL", Rarity.COMMON, new CollectableSet( "setName", "description" ), null ) ) );
         }
 
         newGeoCode.setCollectables( collectable );
