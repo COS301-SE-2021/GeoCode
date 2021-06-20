@@ -1,10 +1,16 @@
 package tech.geocodeapp.geocode.User;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import tech.geocodeapp.geocode.Collectable.CollectableMockRepository;
 import tech.geocodeapp.geocode.Collectable.CollectableTypeMockRepository;
 import tech.geocodeapp.geocode.Collectable.Model.Collectable;
@@ -20,9 +26,6 @@ import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
 import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
 import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
 
-import java.util.List;
-import java.util.UUID;
-
 @ExtendWith( MockitoExtension.class )
 public class UserServiceImplTest {
     private UserService userService;
@@ -30,6 +33,9 @@ public class UserServiceImplTest {
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
     private final String invalidUserIdMessage = "Invalid user id";
+    private GetCurrentCollectableResponse getCurrentCollectableResponse;
+    private GetUserTrackableResponse getUserTrackableResponse;
+    private UpdateLocationResponse updateLocationResponse;
 
     UserServiceImplTest() {
 
@@ -59,6 +65,16 @@ public class UserServiceImplTest {
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void getCurrentCollectableTestNullId(){
+           GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
+           request.setUserID(null);
+
+           //GetCurrentCollectableResponse response = userService.getCurrentCollectable(request);
+           assertThatThrownBy(() -> getCurrentCollectableResponse = userService.getCurrentCollectable(request))
+            .isInstanceOf(NullUserRequestParameterException.class);
     }
 
     @Test
@@ -109,6 +125,15 @@ public class UserServiceImplTest {
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void getUserTrackableTestNullId(){
+        GetUserTrackableRequest request = new GetUserTrackableRequest();
+        request.setUserID(null);
+
+        assertThatThrownBy(() -> getUserTrackableResponse = userService.getUserTrackable(request))
+                .isInstanceOf(NullUserRequestParameterException.class);
     }
 
     @Test
@@ -165,6 +190,15 @@ public class UserServiceImplTest {
     }
 
     @Test
+    public void updateLocationTestNullId(){
+        UpdateLocationRequest request = new UpdateLocationRequest();
+        request.setUserID(null);
+
+        assertThatThrownBy(() -> updateLocationResponse = userService.updateLocation(request))
+                .isInstanceOf(NullUserRequestParameterException.class);
+    }
+
+    @Test
     public void updateLocationTestInvalidUser() {
         try{
             /*
@@ -202,7 +236,7 @@ public class UserServiceImplTest {
             Collectable trackableObject = response.getTrackable();
             Assertions.assertNotNull(trackableObject);
 
-            List<String> pastLocations = trackableObject.getPastLocations();
+            List<String> pastLocations = new ArrayList<>(trackableObject.getPastLocations());
             Assertions.assertEquals(location, pastLocations.get(pastLocations.size()-1));
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());

@@ -157,4 +157,23 @@ public class UserServiceImpl implements UserService {
         newUser.setCurrentCollectable(trackableObject);
         userRepo.save(newUser);
     }
+
+    //GeoCode helper functions
+
+    /**
+     * Swaps the currentCollectable of the current user with the given Collectable
+     * @param newCurrentCollectable The given Collectable to swap in
+     * @return The original currentCollectable
+     */
+    public Collectable swapCollectable(Collectable newCurrentCollectable){
+        //currentCollectable to swap out
+        User currentUser = getCurrentUser();
+        Collectable oldCurrentCollectable = currentUser.getCurrentCollectable();
+
+        //swap in newCurrentCollectable
+        currentUser.setCurrentCollectable(newCurrentCollectable);
+        userRepo.save(currentUser);
+
+        return oldCurrentCollectable;
+    }
 }
