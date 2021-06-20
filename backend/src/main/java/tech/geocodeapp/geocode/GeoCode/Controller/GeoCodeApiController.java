@@ -134,19 +134,6 @@ public class GeoCodeApiController implements GeoCodeApi {
         }
     }
 
-    public ResponseEntity<GetTrackablesResponse> getTrackables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Trackable", required=true, schema=@Schema()) @Valid @RequestBody GetTrackablesRequest body) throws InvalidRequestException, RepoException {
-
-        GetTrackablesResponse response = geoCodeService.getTrackables( body );
-
-        if ( ( response.getQrCode() != null ) || ( !response.getQrCode().isEmpty() ) ) {
-
-            return new ResponseEntity<GetTrackablesResponse>(response, HttpStatus.OK);
-        }else{
-
-            return new ResponseEntity<GetTrackablesResponse>(response, HttpStatus.BAD_REQUEST);
-        }
-    }
-
     public ResponseEntity<SwapCollectablesResponse> swapCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap a GeoCode's Collectables", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectablesRequest body) throws InvalidRequestException, RepoException {
 
         SwapCollectablesResponse response = geoCodeService.swapCollectables( body );

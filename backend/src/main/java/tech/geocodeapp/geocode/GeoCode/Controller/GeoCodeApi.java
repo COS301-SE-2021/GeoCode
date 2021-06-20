@@ -118,20 +118,6 @@ public interface GeoCodeApi {
         method = RequestMethod.POST)
     ResponseEntity<GetHintsResponse> getHints(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the hints from the specified GeoCode", required=true, schema=@Schema()) @Valid @RequestBody GetHintsRequest body) throws InvalidRequestException, RepoException;
 
-
-    @Operation(summary = "Get the Trackable for a certain GeoCode", description = "Get a GeoCode's Trackable", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "GeoCode" })
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Returned the GeoCode's Trackable successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetTrackablesResponse.class))),
-
-            @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
-    @RequestMapping(value = "/GeoCode/getTrackables",
-        produces = { "application/json", "application/xml" }, 
-        consumes = { "application/json", "application/xml" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<GetTrackablesResponse> getTrackables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's Trackable", required=true, schema=@Schema()) @Valid @RequestBody GetTrackablesRequest body) throws InvalidRequestException, RepoException;
-
-
     @Operation(summary = "Swap a specific GeoCode's Collectable", description = "Swap a specific GeoCode's Collectable", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "GeoCode" })
     @ApiResponses(value = {
