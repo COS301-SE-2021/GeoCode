@@ -50,3 +50,25 @@ ion-content{
 #Container{
   display: block;
 }
+
+.horizontalscroll {
+  position: relative;
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  height: auto;
+}
+
+.items {
+  width: auto;
+  white-space: nowrap;
+  position: relative;
+}
+
+.collectable {
+  width: 100px;
+  display: inline-block;
+  white-space: normal;
+  text-align: center;
+  margin: 5px;
+}

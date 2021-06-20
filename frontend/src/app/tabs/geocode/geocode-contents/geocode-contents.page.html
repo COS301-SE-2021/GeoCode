@@ -11,8 +11,8 @@
     <div #mapElement class="map" [hidden]="isHidden"></div>
     <ion-item class="barcode" [hidden]="isHidden">
       <ion-label>GeoCode</ion-label>
-      <ion-input class="barcode-input" type="text"></ion-input>
-      <ion-button color="danger" (click)="found()">Found</ion-button>
+      <ion-input #QR class="barcode-input" type="text"></ion-input>
+      <ion-button color="danger" (click)="found(QR)">Found</ion-button>
     </ion-item>
     <div class="hints" [hidden]="isHidden">
       <ion-row>Hints</ion-row>
@@ -33,7 +33,18 @@
 
     <div>
       <h2>Collectables</h2>
-
+      <div class="horizontalscroll">
+        <div class="items">
+          <div class="collectable" *ngFor="let type of collectables">
+            <div class="image">
+              <img src="https://via.placeholder.com/100">
+            </div>
+            <div class="name">
+              {{type.type.name}}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
 </ion-content>
