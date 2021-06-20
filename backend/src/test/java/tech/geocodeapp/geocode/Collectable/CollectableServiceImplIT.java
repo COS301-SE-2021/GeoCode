@@ -4,31 +4,20 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.geocodeapp.geocode.Collectable.Model.Rarity;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableSetRepository;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
 import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableSetRequest;
 import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableTypeRequest;
 import tech.geocodeapp.geocode.Collectable.Request.GetCollectableTypesBySetRequest;
 import tech.geocodeapp.geocode.Collectable.Response.*;
-import tech.geocodeapp.geocode.Collectable.Service.CollectableService;
 import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
 
-import java.util.HashMap;
+
 import java.util.UUID;
 
 @SpringBootTest
 public class CollectableServiceImplIT {
     @Autowired
     private CollectableServiceImpl collectableService;
-
-    @Autowired
-    private CollectableRepository collectableRepository;
-    @Autowired
-    private CollectableSetRepository collectableSetRepository;
-    @Autowired
-    private CollectableTypeRepository collectableTypeRepository;
 
     @Test
     public void createCollectableSetTest(){
