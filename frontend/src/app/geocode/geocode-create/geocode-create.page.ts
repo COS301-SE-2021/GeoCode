@@ -1,10 +1,9 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {GeoCodeService, CreateGeoCodeRequest, CreateGeoCodeResponse} from "../../../swagger/client";
+import {NavController} from "@ionic/angular";
 
 declare let google;
 let map;
-
-let mapOptions;
-let mapMarker;
 @Component({
   selector: 'app-geocode-create',
   templateUrl: './geocode-create.page.html',
@@ -15,24 +14,31 @@ let mapMarker;
 
 export class GeocodeCreatePage implements AfterViewInit {
 @ViewChild('mapElement',{static:false}) mapElement;
-@ViewChild('location',{static:false}) location;
+locations;
+mapOptions;
+hints = [];
+difficulty;
+request : CreateGeoCodeRequest= {
+  description: 'Testing insert',
+    available: true,
+    difficulty:"EASY",
+    hints:["Hint1","Hint2"],
+    latitude:"",
+  longitude:"",
+    id:""
 
+};
 
-  constructor() { }
+  constructor(public geocodeAPI: GeoCodeService,public navCtrl:NavController) { }
 
-
-  // AfterViewInit() {
-  //   initMap();
-  // }
-
+  //create map
   initMap() {
     // Create a map after the view is ready and the native platform is ready.
-
-    mapOptions = {
+    this.mapOptions = {
       center: {lat: -25.75625115327836, lng: 28.235629260918344},
       zoom: 15,
     };
-    map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+    map = new google.maps.Map(this.mapElement.nativeElement, this.mapOptions);
 
     //Load the markers
     const markerIcon = {
@@ -42,32 +48,68 @@ export class GeocodeCreatePage implements AfterViewInit {
       anchor: new google.maps.Point(20,40) // lets offset the marker image
     };
 
-
-
-
-
-
     // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
     google.maps.event.addListener(map, 'click', function(event){
       placeMarker(event.latLng);
+
+    });
+    google.maps.event.addListener(map, 'click', ()=> {
+
+      this.updateLocation(this.mapOptions.center);
     });
 
   };
 
+  //create map
   ngAfterViewInit(): void {
     this.initMap();
   }
 
+  //update the description field for the request
+  updateRequest(e: any, field: ('description')){
+    this.request[field] = e.target.value;
+  }
+
+  //create the geocode and update the remaining fields
+  createGeoCode(){
+    this.request['latitude']=this.locations.lat;
+    this.request['longitude']=this.locations.lng;
+    this.request['hints']=this.hints;
+    this.request['difficulty'] = this.difficulty;
+    console.log(this.request);
+    this.geocodeAPI.createGeoCode(this.request)
+      .subscribe((response:CreateGeoCodeResponse) =>{
+        console.log(response);
+        this.navCtrl.navigateForward('/geocode');
+      });
+
+  }
+
+  //update location for the request
+  updateLocation(location){
+    this.locations=location;
+  }
+
+  //update difficulty field for request
+  updateDifficulty(event){
+    this.difficulty=event;
+  }
+
+  //update hints array with user input
+  updateHints(event){
+     this.hints.push(event.target.value);
+  }
 
 }
 
-
+//Place the marker in the users selected location and update that maps center
 function placeMarker(location){
   const marker = new google.maps.Marker({
     map,
     animation: google.maps.Animation.DROP,
     position: location
-  });
+  }
+  );
 
 
   const infoWindow = new google.maps.InfoWindow({
@@ -76,5 +118,8 @@ function placeMarker(location){
 
   map.setCenter(location);
 
-  console.log(location);
 }
+
+
+
+

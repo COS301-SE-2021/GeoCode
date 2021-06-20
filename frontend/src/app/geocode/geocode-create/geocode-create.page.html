@@ -7,24 +7,32 @@
 <ion-content>
 
 
-  <ion-item>
-    <ion-label>Name</ion-label>
-    <ion-input type="text"> </ion-input>
-  </ion-item>
 
   <ion-item>
     <ion-label>Description</ion-label>
-    <ion-input type="text"> </ion-input>
+    <ion-input type="text" (ionBlur)="updateRequest($event,'description')"> </ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label>Hint 1</ion-label>
-    <ion-input type="text"> </ion-input>
+    <ion-input type="text" (ionBlur)="updateHints($event)"> </ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label>Hint 2</ion-label>
-    <ion-input type="text"> </ion-input>
+    <ion-input type="text" (ionBlur)="updateHints($event)"> </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Difficulty</ion-label>
+    <ion-select  placeholder="Select One" #Diff (ionChange)="updateDifficulty(Diff.value)">
+      <ion-select-option value="EASY">Easy</ion-select-option>
+      <ion-select-option value="MEDIUM">Medium</ion-select-option>
+      <ion-select-option value="DIFFICULTY">Hard</ion-select-option>
+      <ion-select-option value="INSANE">Insane</ion-select-option>
+    </ion-select>
+
+
   </ion-item>
 
   <ion-item>
@@ -34,9 +42,7 @@
 
 
 
-  <div #mapElement class="map">
+  <div #mapElement class="map"></div>
 
-  </div>
-
-  <ion-button class="button" color="danger">Create GeoCode</ion-button>
+  <ion-button class="button" color="danger" (click)="createGeoCode()">Create GeoCode</ion-button>
 </ion-content>
