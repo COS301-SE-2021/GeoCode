@@ -9,19 +9,19 @@ const routes: Routes = [
     children: [
       {
         path: 'geocode',
-        loadChildren: () => import('../geocode/geocode.module').then(m => m.GeocodePageModule)
+        loadChildren: () => import('./geocode/geocode.module').then(m => m.GeocodePageModule)
       },
       {
         path: 'collectables',
-        loadChildren: () => import('../collectable/collectable.module').then(m => m.CollectablePageModule)
+        loadChildren: () => import('./collectable/collectable.module').then(m => m.CollectablePageModule)
       },
       {
         path: 'events',
-        loadChildren: () => import('../events/events.module').then(m => m.EventsPageModule)
+        loadChildren: () => import('./events/events.module').then(m => m.EventsPageModule)
       },
       {
         path: 'profile',
-        loadChildren: () => import('../user/user.module').then(m => m.UserPageModule)
+        loadChildren: () => import('./profile/profile.module').then(m => m.ProfilePageModule)
       },
       {
         path: '',

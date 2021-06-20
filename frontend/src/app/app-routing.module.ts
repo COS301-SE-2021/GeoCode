@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: 'geocode-create',
-    loadChildren: () => import('./geocode/geocode-create/geocode-create.module').then(m => m.GeocodeCreatePageModule)
+    loadChildren: () => import('./tabs/geocode/geocode-create/geocode-create.module').then(m => m.GeocodeCreatePageModule)
   }
 
 
