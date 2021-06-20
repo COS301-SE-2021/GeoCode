@@ -110,6 +110,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             CreateCollectableRequest collectableRequest = new CreateCollectableRequest();
             collectableRequest.setCollectableTypeId( UUID.fromString( "208e042a-530b-403e-bf3e-dafd95009b8f" ) );
 
+
             /* Get the response from the created request */
             CreateCollectableResponse collectableResponse = collectableService.createCollectable( collectableRequest );
 
