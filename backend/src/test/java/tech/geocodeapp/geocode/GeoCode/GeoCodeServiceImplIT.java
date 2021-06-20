@@ -60,9 +60,6 @@ public class GeoCodeServiceImplIT {
     @BeforeEach
     void setup() {
 
-        /* Clear all the data the could be left over in the repo */
-        repo.deleteAll();
-
         try {
 
             /* Create a new GeoCodeServiceImpl instance to access the different use cases */
