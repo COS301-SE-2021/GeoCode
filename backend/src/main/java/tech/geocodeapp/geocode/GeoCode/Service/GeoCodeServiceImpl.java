@@ -167,8 +167,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         for ( GeoCode geoCode : temp ) {
 
-            geoCode.setLatitude( null );
-            geoCode.setLongitude( null );
             geoCode.setHints( null );
             geoCode.setQrCode( null );
             geoCode.setCollectables( null );
@@ -255,8 +253,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 /*
                 * Ensure only the relevant data is shown
                 */
-                code.setLatitude( null );
-                code.setLongitude( null );
                 code.setHints( null );
                 code.setQrCode( null );
                 code.setCollectables( null );
