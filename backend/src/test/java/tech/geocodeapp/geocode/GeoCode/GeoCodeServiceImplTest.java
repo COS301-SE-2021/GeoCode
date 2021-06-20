@@ -1,8 +1,6 @@
 package tech.geocodeapp.geocode.GeoCode;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import jdk.jfr.Category;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -17,6 +15,7 @@ import tech.geocodeapp.geocode.GeoCode.Request.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@TestMethodOrder( MethodOrderer.OrderAnnotation.class )
 @ExtendWith( MockitoExtension.class )
 public class GeoCodeServiceImplTest {
 
