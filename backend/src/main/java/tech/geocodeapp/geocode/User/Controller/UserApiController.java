@@ -75,16 +75,6 @@ public class UserApiController implements UserApi {
         }
     }
 
-    public ResponseEntity<SwapCollectableResponse> swapCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap the held Collectable", required=true, schema=@Schema()) @Valid @RequestBody SwapCollectableRequest body) {
-        SwapCollectableResponse response = userService.swapCollectable(body);
-
-        if(response.isSuccess()){
-            return new ResponseEntity<SwapCollectableResponse>(response, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<SwapCollectableResponse>(response, HttpStatus.BAD_REQUEST);
-        }
-    }
-
     public ResponseEntity<UpdateLocationResponse> updateLocation(@Parameter(in = ParameterIn.DEFAULT, description = "Request to update the location of the user's trackable", required=true, schema=@Schema()) @Valid @RequestBody UpdateLocationRequest body) {
         UpdateLocationResponse response = userService.updateLocation(body);
 
