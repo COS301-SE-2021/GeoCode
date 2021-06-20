@@ -175,9 +175,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         List< GeoCode > temp = geoCodeRepo.findAll();
 
         for ( GeoCode geoCode : temp ) {
-
-            geoCode.setLatitude( null );
-            geoCode.setLongitude( null );
             geoCode.setHints( null );
             geoCode.setQrCode( null );
             geoCode.setCollectables( null );
