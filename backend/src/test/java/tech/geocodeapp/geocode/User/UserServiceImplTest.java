@@ -21,6 +21,8 @@ import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
 import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
 import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -234,7 +236,7 @@ public class UserServiceImplTest {
             Collectable trackableObject = response.getTrackable();
             Assertions.assertNotNull(trackableObject);
 
-            List<String> pastLocations = trackableObject.getPastLocations();
+            List<String> pastLocations = new ArrayList<>(trackableObject.getPastLocations());
             Assertions.assertEquals(location, pastLocations.get(pastLocations.size()-1));
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
