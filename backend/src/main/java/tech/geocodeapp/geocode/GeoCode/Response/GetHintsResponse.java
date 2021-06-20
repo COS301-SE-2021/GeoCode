@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.GeoCode.Response;
 
+import java.util.Collection;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,9 +20,9 @@ import java.util.List;
 public class GetHintsResponse   {
   @JsonProperty("hints")
   @Valid
-  private List<String> hints = null;
+  private Collection<String> hints = null;
 
-  public GetHintsResponse hints(List<String> hints) {
+  public GetHintsResponse hints(Collection<String> hints) {
     this.hints = hints;
     return this;
   }
@@ -40,11 +41,11 @@ public class GetHintsResponse   {
    **/
   @Schema(description = "")
   
-    public List<String> getHints() {
+    public Collection<String> getHints() {
     return hints;
   }
 
-  public void setHints(List<String> hints) {
+  public void setHints(Collection<String> hints) {
     this.hints = hints;
   }
 

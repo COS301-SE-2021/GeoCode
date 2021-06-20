@@ -60,6 +60,9 @@ public class GeoCodeServiceImplIT {
     @BeforeEach
     void setup() {
 
+        /* Clear the repo of any old data */
+        repo.deleteAll();
+
         try {
 
             /* Create a new GeoCodeServiceImpl instance to access the different use cases */
@@ -75,7 +78,6 @@ public class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 1 )
-    @Tag( "Tests" )
     public void RepositoryNullTest() {
 
         /* Null request check */
@@ -353,7 +355,7 @@ public class GeoCodeServiceImplIT {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals( response.getHints().get( 0 ), "Hint one for: 1" );
+            Assertions.assertEquals(  "Hint one for: 1", ( new ArrayList<>( response.getHints() ) ).get( 0 ) );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */

@@ -359,7 +359,7 @@ public class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertEquals( "Hint one for: 1", response.getHints().get( 0 ) );
+            Assertions.assertEquals( "Hint one for: 1", new ArrayList<>( response.getHints() ).get( 0 ) );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */

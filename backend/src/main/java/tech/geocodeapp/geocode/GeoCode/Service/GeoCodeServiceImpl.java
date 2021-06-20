@@ -11,10 +11,7 @@ import tech.geocodeapp.geocode.GeoCode.Request.*;
 import tech.geocodeapp.geocode.GeoCode.Response.GetCollectablesResponse;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -213,7 +210,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * and set the values
          */
         GetCollectablesResponse response = new GetCollectablesResponse();
-        response.setCollectables( hold.getCollectables() );
+        response.setCollectables( new ArrayList<Collectable>( hold.getCollectables() ) );
 
         return response;
     }
@@ -306,7 +303,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         GetHintsResponse response = new GetHintsResponse();
         if ( temp.isEmpty() ) {
 
-            List<String> hold = new ArrayList<>();
+            Collection<String> hold = new ArrayList<>();
             hold.add( "No hints available." );
             response.setHints( hold );
         } else {
