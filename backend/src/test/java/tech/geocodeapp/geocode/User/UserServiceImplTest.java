@@ -26,6 +26,7 @@ import java.util.UUID;
 @ExtendWith( MockitoExtension.class )
 public class UserServiceImplTest {
     private UserService userService;
+
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
     private final String invalidUserIdMessage = "Invalid user id";
