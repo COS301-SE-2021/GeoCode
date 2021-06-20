@@ -1,29 +1,24 @@
 package tech.geocodeapp.geocode.GeoCode.Service;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.Collectable.Model.*;
+import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
+import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.Collectable.Service.CollectableService;
+import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
 import tech.geocodeapp.geocode.GeoCode.Response.GetCollectablesResponse;
-import tech.geocodeapp.geocode.Trackable.Request.*;
-import tech.geocodeapp.geocode.Trackable.Response.*;
+import tech.geocodeapp.geocode.User.Service.UserService;
 
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -39,17 +34,30 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     private final GeoCodeRepository geoCodeRepo;
 
     /**
+     * The collectable service to access the use cases and
+     * collectable repository
+     */
+    private final CollectableService collectableService;
+
+    /**
+     * A handle to the user service
+     */
+    private final UserService userService;
+
+    /**
      * Constructor
      *
      * @param geoCodeRepo the repo the created response attributes should save to
      */
-    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo ) throws RepoException {
+    public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo, CollectableService collectableService, UserService userService ) throws RepoException {
+        this.userService = userService;
 
         /* Check if the given repo exists */
         if ( geoCodeRepo != null ) {
 
             /* The repo exists therefore it can be set for the class */
             this.geoCodeRepo = geoCodeRepo;
+            this.collectableService = collectableService;
         } else {
 
             /* The repo does not exist throw an error */
@@ -75,8 +83,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             throw new InvalidRequestException( true );
         } else if ( ( request.getLatitude() == null ) || ( request.getLongitude() == null ) ||
-                    ( request.getHints() == null ) || ( request.getDifficulty() == null ) ||
-                    ( request.getDescription() == null ) || ( request.isAvailable() == null ) ) {
+                ( request.getHints() == null ) || ( request.getDifficulty() == null ) ||
+                ( request.getDescription() == null ) || ( request.isAvailable() == null ) ) {
 
             throw new InvalidRequestException();
         }
@@ -95,11 +103,37 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         UUID id = UUID.randomUUID();
         newGeoCode.setId( id );
 
-        List <Collectable > collectable = new ArrayList<>();
+        /* Hold the crated Collectables */
+        List< Collectable > collectable = new ArrayList<>();
 
         for ( int x = 0; x < 5; x++ ) {
 
-            collectable.add( new Collectable( new CollectableType( "name", "imageURL", Rarity.COMMON, new CollectableSet( "setName", "description" ), null ) ) );
+            /* Create the response and give it a Collectable type */
+            CreateCollectableRequest collectableRequest = new CreateCollectableRequest();
+            collectableRequest.setCollectableTypeId( UUID.fromString( "f94d35a2-ca09-49fc-9fdd-ad0bac0b8dd0" ) );
+
+            /* Get the response from the created request */
+            CreateCollectableResponse collectableResponse = collectableService.createCollectable( collectableRequest );
+
+            /* Building a collectable from a collectable response */
+            Collectable temp = new Collectable();
+            temp.setId( collectableResponse.getCollectable().getId() );
+            CollectableTypeComponent type = collectableResponse.getCollectable().getType();
+
+            /* Building a collectable type from a collectable type component */
+            CollectableType tempType = new CollectableType();
+            tempType.setId( type.getId() );
+            tempType.setName( type.getName() );
+            tempType.setRarity( type.getRarity() );
+            tempType.setImage( "randomImage" );
+            tempType.setSet( type.getCollectableSet() );
+
+            temp.setType( tempType );
+
+            /* Adding the created Collectable to the list */
+            collectable.add( temp );
+
+            //collectable.add( new Collectable( new CollectableType( "name", "imageURL", Rarity.COMMON, new CollectableSet( "setName", "description" ), null ) ) );
         }
 
         newGeoCode.setCollectables( collectable );
@@ -175,6 +209,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         List< GeoCode > temp = geoCodeRepo.findAll();
 
         for ( GeoCode geoCode : temp ) {
+
             geoCode.setHints( null );
             geoCode.setQrCode( null );
             geoCode.setCollectables( null );
@@ -221,7 +256,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * and set the values
          */
         GetCollectablesResponse response = new GetCollectablesResponse();
-        response.setCollectables( hold.getCollectables() );
+        response.setCollectables( new ArrayList<Collectable>( hold.getCollectables() ) );
 
         return response;
     }
@@ -257,6 +292,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* Check if the current GeoCode has the Difficulty wanted */
             if ( code.getDifficulty().equals( request.getDifficulty() ) ) {
+
+                /*
+                * Ensure only the relevant data is shown
+                */
+                code.setHints( null );
+                code.setQrCode( null );
+                code.setCollectables( null );
 
                 /*
                 * The current GeoCode has the valid GeoCode
@@ -307,7 +349,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         GetHintsResponse response = new GetHintsResponse();
         if ( temp.isEmpty() ) {
 
-            List<String> hold = new ArrayList<>();
+            Collection<String> hold = new ArrayList<>();
             hold.add( "No hints available." );
             response.setHints( hold );
         } else {
@@ -413,38 +455,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     }
 
     /**
-     *  Gets the Trackables stored in the GeoCode
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly create response instance from the specified GetTrackablesRequest
-     */
-    @Override
-    public GetTrackablesResponse getTrackables(GetTrackablesRequest request ) throws InvalidRequestException, RepoException {
-
-        /* Validate the request */
-        if ( request == null ) {
-
-            throw new InvalidRequestException( true );
-        } else if ( ( request.getDifficulty() != null ) || ( request.getDescription() == null ) ) {
-
-            throw new InvalidRequestException();
-        }
-
-        /* Validate the repo */
-        checkRepo();
-
-        /*
-         * Create the new response
-         *
-         */
-        GetTrackablesResponse response = new GetTrackablesResponse();
-        response.setQrCode( "test" );
-
-        return response;
-    }
-
-    /**
      * Swaps a stored Collectable in a GeoCode with the Users GeoCode
      *
      * @param request the attributes the response should be created from
@@ -458,7 +468,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( ( request.getTargetCollectableID() == null ) || ( request.getTargetGeoCodeID() == null ) || ( request.getGeoCodeID() == null ) ) {
+        } else if ( ( request.getTargetCollectableID() == null ) || ( request.getTargetGeoCodeID() == null ) ) {
 
             throw new InvalidRequestException();
         }
@@ -466,18 +476,43 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Validate the repo */
         checkRepo();
 
-        /*
-         * Create the new response
-         */
-        SwapCollectablesResponse response = new SwapCollectablesResponse();
-        response.setIsSuccess( true );
+        /* Find the target geocode */
+        Optional<GeoCode> target = geoCodeRepo.findById(request.getTargetGeoCodeID());
+        if (target.isEmpty()) {
+            return new SwapCollectablesResponse().isSuccess(false);
+        }
+        GeoCode geocode = target.get();
 
-        return response;
+        /* Find the target collectable */
+        int replaceIndex = -1; //the index of the collectable we want to replace in the geocode
+        List<Collectable> storedCollectables = new ArrayList<>(geocode.getCollectables());
+        for (int i = 0; i < storedCollectables.size(); i++) {
+            if (storedCollectables.get(i).getId().equals(request.getTargetCollectableID())) {
+                replaceIndex = i;
+                break;
+            }
+        }
+        if (replaceIndex == -1) {
+            return new SwapCollectablesResponse().isSuccess(false);
+        }
+        Collectable geocodeToUser = storedCollectables.get(replaceIndex);
+
+        /* Perform the swap */
+        Collectable userToGeocode = userService.swapCollectable(geocodeToUser);
+        userToGeocode.changeLocation(geocode.getLatitude()+" "+geocode.getLongitude());
+        storedCollectables.set(replaceIndex, userToGeocode);
+        geocode.setCollectables(storedCollectables);
+        geoCodeRepo.save(geocode);
+
+        /*
+         * Create and return a 'success' response
+         */
+        return new SwapCollectablesResponse().isSuccess(true);
     }
 
     /**
      * Updates the availability of a GeoCode
-     *lombok
+     *
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified UpdateAvailabilityRequest
@@ -521,6 +556,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
     ////////////////Helper functions////////////////
 
+    /**
+     * Check if the repo is not null
+     *
+     * @throws RepoException throw an error due the repo not being valid
+     */
     private void checkRepo() throws RepoException {
 
         if ( geoCodeRepo == null ) {
@@ -528,30 +568,4 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new RepoException();
         }
     }
-
-    /**
-     * This helper function helps create the QR Code image and stores
-     * it in the QRImages folder.
-     *
-     * @param imageName the name to label the jpg image to
-     *
-     * @return the unique Identifier to indicate the GeoCode
-     *
-     * @throws IOException the file path or image name given was invalid
-     * @throws WriterException the image could not be created
-     */
-    public String createQR( String imageName ) throws IOException, WriterException {
-
-        /* The file path the image should be created in */
-        String path = "src/main/java/tech/geocodeapp/geocode/GeoCode/QRImages/"+ imageName + ".jpg";
-
-        /* Create the QR Code and link it to the specified website */
-        BitMatrix matrix = new MultiFormatWriter().encode( "https://www.example.com/", BarcodeFormat.QR_CODE, 400, 400 );
-
-        /* Create the image and store it in the given path */
-        MatrixToImageWriter.writeToPath( matrix, "jpg", Paths.get( path ) );
-
-        return "AAAA";
-    }
-
 }

@@ -28,19 +28,17 @@ public class CollectableServiceImplTest {
     @BeforeEach
     void setup() {
         collectableService = new CollectableServiceImpl(new CollectableMockRepository(), new CollectableSetMockRepository(), new CollectableTypeMockRepository());
-        {
             collectableService.deleteCollectableSets();
             collectableService.deleteCollectables();
             collectableService.deleteCollectableTypes();
-        }
     }
 
     @Test
     public void createCollectableSetTest(){
-        /**
-         *  Create a request object
-         * and assign values to it
-         * */
+        /*
+           Create a request object
+          and assign values to it
+          */
         CreateCollectableSetRequest request = new CreateCollectableSetRequest();
         request.setName("Christmas");
         request.setDescription("Christmas themed collectables");
@@ -50,11 +48,18 @@ public class CollectableServiceImplTest {
     }
 
     @Test
+    public void createCollectableSetNullRequestTest(){
+        CreateCollectableSetResponse response = collectableService.createCollectableSet(null);
+
+        Assertions.assertEquals("The CreateCollectableSetRequest object passed was NULL", response.getMessage());
+    }
+
+    @Test
     public void createCollectableTypeTestInvalid(){
-        /**
-         *  Create a request object
-         * and assign values to it
-         * */
+        /*
+           Create a request object
+          and assign values to it
+          */
         CreateCollectableTypeRequest request = new CreateCollectableTypeRequest();
         request.setName("Santa");
         request.setImage("dgergergnhtfhjhg");
@@ -67,10 +72,10 @@ public class CollectableServiceImplTest {
 
     @Test
     public void createCollectableTypeTestValid(){
-        /**
-         *  Create a request object
-         * and assign values to it
-         * */
+        /*
+           Create a request object
+          and assign values to it
+          */
         //create the set
         CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
         setRequest.setName("Easter");
@@ -90,16 +95,28 @@ public class CollectableServiceImplTest {
     }
 
     @Test
+    public void createCollectableTypeNullRequestTest(){
+        CreateCollectableTypeResponse response = collectableService.createCollectableType(null);
+        Assertions.assertEquals("The CreateCollectableTypeRequest object passed was NULL", response.getMessage());
+    }
+
+    @Test
     public void createCollectableTestInvalid(){
-        /**
-         *  Create a request object
-         * and assign values to it
-         * */
+        /*
+           Create a request object
+          and assign values to it
+          */
         CreateCollectableRequest request = new CreateCollectableRequest();
         request.setCollectableTypeId(UUID.fromString("de65c61f-c657-4c76-9e58-0830cc13dd0f"));
         CreateCollectableResponse response = collectableService.createCollectable(request);
 
         Assertions.assertFalse(response.isSuccess());
+    }
+
+    @Test
+    public void createCollectableNullRequestTest(){
+        CreateCollectableResponse response = collectableService.createCollectable(null);
+        Assertions.assertEquals("The CreateCollectableSetRequest object passed was NULL", response.getMessage());
     }
 
     @Test

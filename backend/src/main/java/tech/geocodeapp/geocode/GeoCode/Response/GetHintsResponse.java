@@ -1,14 +1,14 @@
 package tech.geocodeapp.geocode.GeoCode.Response;
 
+import java.util.Collection;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GetHintsResponse
@@ -20,9 +20,9 @@ import javax.validation.constraints.*;
 public class GetHintsResponse   {
   @JsonProperty("hints")
   @Valid
-  private List<String> hints = null;
+  private Collection<String> hints = null;
 
-  public GetHintsResponse hints(List<String> hints) {
+  public GetHintsResponse hints(Collection<String> hints) {
     this.hints = hints;
     return this;
   }
@@ -41,11 +41,11 @@ public class GetHintsResponse   {
    **/
   @Schema(description = "")
   
-    public List<String> getHints() {
+    public Collection<String> getHints() {
     return hints;
   }
 
-  public void setHints(List<String> hints) {
+  public void setHints(Collection<String> hints) {
     this.hints = hints;
   }
 
