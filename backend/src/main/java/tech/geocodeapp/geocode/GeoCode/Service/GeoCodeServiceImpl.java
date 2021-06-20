@@ -253,6 +253,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             if ( code.getDifficulty().equals( request.getDifficulty() ) ) {
 
                 /*
+                * Ensure only the relevant data is shown
+                */
+                code.setLatitude( null );
+                code.setLongitude( null );
+                code.setHints( null );
+                code.setQrCode( null );
+                code.setCollectables( null );
+
+                /*
                 * The current GeoCode has the valid GeoCode
                 * add it to the list
                 */
