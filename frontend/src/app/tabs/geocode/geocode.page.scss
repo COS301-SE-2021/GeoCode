@@ -23,8 +23,8 @@ ion-title{
 #geoCodeDetails{
   width: 100%;
   height: 50%;
-  background-color: white;
-  color:black;
+//  background-color: white;
+ // color:black;
   padding: 0px;
 }
 
@@ -43,7 +43,7 @@ ion-grid{
 }
 
 ion-content{
-  --ion-background-color:white;
+ // --ion-background-color:white;
 }
 
 ion-checkbox{
@@ -51,7 +51,7 @@ ion-checkbox{
   --background-checked:var(--ion-color-winered);
   --border-color:var(--ion-color-winered);
   --border-color-checked:var(--ion-color-winered);
-  --background: white;
+ // --background: white;
 }
 
 ion-fab-button{
