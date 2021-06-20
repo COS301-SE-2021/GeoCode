@@ -17,7 +17,6 @@ export class AddTypeComponent implements OnInit {
   mapOptions;
   map;
   mapMarker;
-  geocodes;
 
   request: CreateCollectableTypeRequest = {
     name: '',

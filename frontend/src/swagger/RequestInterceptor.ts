@@ -10,14 +10,12 @@ export class RequestInterceptor implements HttpInterceptor {
     const jwtToken = localStorage.getItem('accessToken');
 
     if (jwtToken && request.url.includes(environment.serverAddress)) {
-      console.log('Intercepting token and applying authorization header.');
       const newRequest = request.clone({
         headers: request.headers.set('Authorization', 'Bearer '+jwtToken),
       });
       return next.handle(newRequest);
 
     } else {
-      console.log('No token found. Not applying new headers.');
       return next.handle(request);
     }
 

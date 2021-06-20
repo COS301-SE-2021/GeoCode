@@ -9,6 +9,7 @@ import {
   GetCollectableSetsResponse,
   GetCollectableTypesResponse
 } from '../../swagger/client';
+import {UserInformationService} from '../../swagger/UserInformationService';
 
 @Component({
   selector: 'app-collectable',
@@ -24,14 +25,15 @@ export class CollectablePage implements OnInit {
 
   constructor(
     private modalController: ModalController,
-    private collectableService: CollectableService
+    private collectableService: CollectableService,
+    private userDetails: UserInformationService
   ) {
     this.collectableService.getCollectableSets().subscribe(async (response: GetCollectableSetsResponse) => {
       console.log(response);
       this.sets = [];
       this.types = {};
       for (const set of response.collectableSets) {
-        if (set.id === 'e3297aff-9c10-4a58-8e5f-a55e8f723066') {continue;}
+        if (set.id === 'ba429fcf-0023-45e8-a0c9-b0b0db7e0582') {continue;}
         this.collectableService.getCollectableTypeBySet({setId: set.id}).subscribe((response2: GetCollectableTypesResponse) => {
           console.log(response2);
           this.types[set.id] = response2.collectableTypes;
@@ -49,7 +51,7 @@ export class CollectablePage implements OnInit {
   }
 
   isAdmin() {
-    return true;
+    return this.userDetails.isAdmin();
   }
 
   async addType(selectedSetID) {
