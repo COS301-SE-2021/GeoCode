@@ -87,7 +87,7 @@ public class GeoCodeServiceImplTest {
         CollectableTypeMockRepository typeMockRepo = new CollectableTypeMockRepository();
 
         CollectableType type = new CollectableType();
-        type.setId( UUID.fromString( "f94d35a2-ca09-49fc-9fdd-ad0bac0b8dd0" ) );
+        type.setId( UUID.fromString( "208e042a-530b-403e-bf3e-dafd95009b8f" ) );
         type.setName( "name" );
         type.setImage( "Image" );
         type.setRarity( Rarity.RARE );
