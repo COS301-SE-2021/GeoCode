@@ -1,0 +1,37 @@
+.horizontalscroll {
+  position: relative;
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  height: auto;
+}
+
+.items {
+  width: auto;
+  white-space: nowrap;
+  position: relative;
+}
+
+.collectable {
+  width: 100px;
+  display: inline-block;
+  white-space: normal;
+  text-align: center;
+  margin: 5px;
+}
+
+.notfound {
+  opacity: 0.4;
+}
+
+.header {
+  display: flex;
+}
+
+.header .details {
+  flex-grow: 1;
+}
+
+.header ion-button {
+  margin-top: 0px
+}

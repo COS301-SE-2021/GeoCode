@@ -1,0 +1,74 @@
+ion-title{
+  font-size: xx-large;
+  text-align: center;
+  padding:0.5%;
+}
+
+ion-toolbar{
+  --background: var(--ion-color-teal);
+  color: white;
+}
+
+ion-content{
+  --ion-background-color:white;
+}
+
+
+.map{
+  width: 100%;
+  height: 60%;
+  border-width: 0px;
+  padding: 0px;
+  background-color: white;
+
+}
+
+.barcode{
+  background-color: white;
+  border-width: 2px;
+  --border-color: var(--ion-color-winered) ;
+  color:var(--ion-color-winered);
+  font-size: large;
+
+}
+
+.barcode-input{
+  background-color: whitesmoke;
+  color: black;
+  border-radius: 5px;
+  margin-left: 20px;
+  border-color: coral;
+  border-width: 2px;
+  width:60%;
+}
+
+.barcode-button{
+  color: maroon;
+  width:20%;
+}
+
+#Container{
+  display: block;
+}
+
+.horizontalscroll {
+  position: relative;
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  height: auto;
+}
+
+.items {
+  width: auto;
+  white-space: nowrap;
+  position: relative;
+}
+
+.collectable {
+  width: 100px;
+  display: inline-block;
+  white-space: normal;
+  text-align: center;
+  margin: 5px;
+}

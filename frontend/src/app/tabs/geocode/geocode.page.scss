@@ -1,0 +1,64 @@
+ion-toolbar{
+  --background: var(--ion-color-teal);
+  color: white;
+}
+
+ion-title{
+  font-size: xx-large;
+  text-align: center;
+  padding:0.5%;
+}
+
+.map{
+  width: 100%;
+  height: 50%;
+  border-width: 0px;
+  padding: 0px;
+  background-color: white;
+
+}
+
+
+
+#geoCodeDetails{
+  width: 100%;
+  height: 50%;
+  background-color: white;
+  color:black;
+  padding: 0px;
+}
+
+.row {
+
+  border-color:  var(--ion-color-purple);
+  border-width: .01em;
+  border-style:solid; margin-bottom : -1px;
+  height: max-content;
+
+}
+
+ion-grid{
+  border-color:  var(--ion-color-purple);
+  border-width: 1px;
+}
+
+ion-content{
+  --ion-background-color:white;
+}
+
+ion-checkbox{
+  --checkmark-color: white;
+  --background-checked:var(--ion-color-winered);
+  --border-color:var(--ion-color-winered);
+  --border-color-checked:var(--ion-color-winered);
+  --background: white;
+}
+
+ion-fab-button{
+  color: darkred;
+}
+
+
+
+
+
