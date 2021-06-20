@@ -10,7 +10,7 @@ ion-toolbar{
 }
 
 ion-content{
-  --ion-background-color:white;
+ // --ion-background-color:white;
 }
 
 .map{
@@ -24,8 +24,9 @@ ion-content{
 }
 
 ion-item{
-  --background:white;
-  color: purple;
+  //--background:white;
+  --ion-color-dark: #3dc2ff;
+  --ion-color-light: purple;
 }
 
 .button{
