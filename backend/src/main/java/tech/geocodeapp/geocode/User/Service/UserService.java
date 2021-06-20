@@ -6,11 +6,9 @@ import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.User.Model.User;
 import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
 import tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest;
-import tech.geocodeapp.geocode.User.Request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
 import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
 import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
-import tech.geocodeapp.geocode.User.Response.SwapCollectableResponse;
 import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
 
 import java.util.UUID;
