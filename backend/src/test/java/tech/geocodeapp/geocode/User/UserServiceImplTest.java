@@ -115,9 +115,9 @@ public class UserServiceImplTest {
 
     @Test
     public void updateLocationTestNullRequest(){
-        GetUserTrackableResponse response = userService.getUserTrackable(null);
+        UpdateLocationResponse response = userService.updateLocation(null);
         Assertions.assertFalse(response.isSuccess());
-        Assertions.assertEquals("The GetUserTrackableRequest object passed was NULL", response.getMessage());
+        Assertions.assertEquals("The UpdateLocationRequest object passed was NULL", response.getMessage());
         Assertions.assertNull(response.getTrackable());
     }
 
