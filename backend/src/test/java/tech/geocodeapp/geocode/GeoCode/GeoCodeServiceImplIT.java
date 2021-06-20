@@ -417,43 +417,6 @@ public class GeoCodeServiceImplIT {
     }
 
     /**
-     * Using valid data does the swapCollectables use case test
-     * complete successfully
-     */
-    @Test
-    @Order( 22 )
-    public void swapCollectablesTest() {
-
-        /* Create a GeoCode */
-        populate( 1 );
-        List< GeoCode > temp = repo.findAll();
-
-        try {
-
-            /* Create the Collectable we want to swap with */
-            Collectable collectable = new Collectable( new CollectableType( "name", "imageURL", Rarity.COMMON, new CollectableSet( "setName", "description" ), null ) );
-
-            /* Create the request with the ID of the GeoCode we want */
-            SwapCollectablesRequest request = new SwapCollectablesRequest();
-            request.setTargetCollectableID( collectable.getId() );
-            request.setTargetGeoCodeID( temp.get( 0 ).getId() );
-
-            /* Get the response by calling the swapCollectables use case */
-            SwapCollectablesResponse response = geoCodeService.swapCollectables( request );
-
-            /*
-             * Check if the GeoCode was created correctly
-             * through checking the returned hints from a known hint
-             */
-            Assertions.assertTrue( response.isIsSuccess() );
-        } catch ( InvalidRequestException | RepoException e ) {
-
-            /* An error occurred, print the stack to identify */
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Check how the use case handles the request being null
      */
     @Test
