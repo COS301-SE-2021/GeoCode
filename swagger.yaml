@@ -18,46 +18,11 @@ tags:
     description: "Everything about QR Codes known as GeoCodes"
   - name: "Collectable"
     description: "Everything about the collectables that users can trade"
-  - name: "Trackable"
-    description: "Everything about the trackables users can create and follow"
   - name: "Leaderboard"
     description: "Everything about the different scores and rankings of users"
   - name: "Notifications"
     description: "Everything about how users are notified"
-
 paths:
-  /User/swapCollectable:
-    post:
-      tags:
-        - "User"
-      summary: "Swaps the Collectable the user is currently holding with the given Collectable in the given GeoCode"
-      description: "Swap held Collectable"
-      operationId: "swapCollectable"
-      requestBody:
-        required: true
-        description: "Request to swap the held Collectable"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SwapCollectableRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/SwapCollectableRequest'
-      responses:
-        '200':
-          description: "The user's current Collectable was successfully swapped"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapCollectableResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/SwapCollectableResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-      security:
-        - bearerAuth: []
-        
   /User/getCurrentCollectable:
     post:
       tags:
@@ -121,7 +86,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
+        
   /User/updateLocation:
     post:
       tags:
@@ -153,7 +118,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
+        
   /User/getFoundCollectables:
     post:
       tags:
@@ -185,6 +150,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
+  
   /User/getFoundGeoCodes:
     post:
       tags:
@@ -244,70 +210,6 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/GetOwnedGeoCodesResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-      security:
-        - bearerAuth: []
-      
-  /User/setAdmin:
-    post:
-      tags:
-        - "User"
-      summary: "Sets the given user to be an administrator"
-      description: "Sets the given user to be an administrator"
-      operationId: "setAdmin"
-      requestBody:
-        required: true
-        description: "Request to set a user to be an administrator"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SetAdminRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/SetAdminRequest'
-      responses:
-        '200':
-          description: "Successfully set the user to be an administrator"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-      security:
-        - bearerAuth: []
-        
-  /User/blockUser:
-    post:
-      tags:
-        - "User"
-      summary: "Administrator blocks the given user"
-      description: "Block a user"
-      operationId: "blockUser"
-      requestBody:
-        required: true
-        description: "Request to block a user"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BlockUserRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/BlockUserRequest'
-      responses:
-        '200':
-          description: "Successfully blocked the user"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -376,7 +278,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
   /GeoCode/getCollectables:
     post:
       tags:
@@ -408,7 +309,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
   /GeoCode/getGeoCodesByDifficulty:
     post:
       tags:
@@ -440,7 +340,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
   /GeoCode/getGeoCodes:
     get:
       tags:
@@ -462,7 +361,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
   /GeoCode/getHints:
     post:
       tags:
@@ -494,7 +392,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
   /GeoCode/getGeoCodeByQRCode:
     post:
       tags:
@@ -526,7 +423,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
   /GeoCode/getGeoCodeByLocation:
     post:
       tags:
@@ -558,7 +454,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
   /GeoCode/getTrackables:
     post:
       tags:
@@ -590,7 +485,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
   /GeoCode/swapCollectables:
     post:
       tags:
@@ -622,7 +516,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
   /GeoCode/updateAvailability:
     post:
       tags:
@@ -654,39 +547,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
-  /User/getOwnedGeocodes:
-    post:
-      tags:
-        - "User"
-      summary: "Get all geocodes associated with a user"
-      description: "Get My Geocodes"
-      operationId: "getOwnedGeocodes"
-      requestBody:
-        required: true
-        description: "Request to get geocodes belonging to user"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GetOwnedGeoCodesRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/GetOwnedGeoCodesRequest'
-      responses:
-        '200':
-          description: "Successfully gotten geocodes"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetOwnedGeoCodesResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/GetOwnedGeoCodesResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-      security:
-        - bearerAuth: []
-
+  
   /Collectable/createCollectableType:
     post:
       tags:
@@ -727,7 +588,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
   /Collectable/createCollectable:
     post:
       tags:
@@ -768,7 +628,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-
   /Collectable/createCollectableSet:
     post:
       tags:
@@ -1038,7 +897,7 @@ components:
         - "MEDIUM"
         - "DIFFICULTY"
         - "INSANE"
-        -
+
     Rarity:
       type: string
       enum:
@@ -1047,7 +906,7 @@ components:
         - "RARE"
         - "EPIC"
         - "LEGENDARY"
-        -
+
     GeoCode:
       type: "object"
       required:
@@ -1056,8 +915,7 @@ components:
         - description
         - hints
         - qrCode
-        - longitude
-        - latitude
+        - location
         - available
       properties:
         id:
@@ -1077,22 +935,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Collectable'
+        trackables:
+          type: string
         qrCode:
           type: string
-        longitude:
-          type: string
-        latitude:
+        location:
           type: string
       xml:
         name: "GeoCode"
-
+        
     CreateGeoCodeRequest:
       type: "object"
       required:
         - id
         - description
-        - longitude
-        - latitude
+        - location
         - difficulty
         - hints
         - available
@@ -1102,9 +959,7 @@ components:
           format: uuid
         description:
           type: string
-        longitude:
-          type: string
-        latitude:
+        location:
           type: string
         hints:
           type: array
@@ -1116,27 +971,35 @@ components:
           type: boolean
       xml:
         name: "CreateGeoCodeRequest"
-
+        
     CreateGeoCodeResponse:
       type: "object"
-      required:
-        - isSuccess
       properties:
-        isSuccess:
-          type: boolean
+        geoCode:
+          $ref: '#/components/schemas/GeoCode'
       xml:
         name: "CreateGeoCodeResponse"
 
     GetGeoCodesByDifficultyRequest:
       type: "object"
       required:
+        - description
+        - location
         - difficulty
+        - hints
       properties:
+        description:
+          type: string
+        location:
+          type: string
+        hints:
+          type: array
+          items:
+            type: string
         difficulty:
           $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodesByDifficultyRequest"
-
     GetGeoCodesByDifficultyResponse:
       type: "object"
       properties:
@@ -1146,7 +1009,6 @@ components:
             $ref: '#/components/schemas/GeoCode'
       xml:
         name: "getGeoCodesByDifficultyResponse"
-
     GetGeoCodesResponse:
       type: "object"
       required:
@@ -1158,7 +1020,6 @@ components:
             $ref: '#/components/schemas/GeoCode'
       xml:
         name: "getGeoCodesByDifficultyResponse"
-
     GetHintsRequest:
       type: "object"
       required:
@@ -1169,7 +1030,6 @@ components:
           format: uuid
       xml:
         name: "getGeoCodesByDifficultyRequest"
-
     GetHintsResponse:
       type: "object"
       properties:
@@ -1179,82 +1039,66 @@ components:
             type: string
       xml:
         name: "getGeoCodesByDifficultyResponse"
-
     GetGeoCodeByQRCodeRequest:
       type: "object"
       required:
-        - QRCode
+        - description
+        - location
+        - difficulty
+        - hints
       properties:
-        QRCode:
+        description:
           type: string
+        location:
+          type: string
+        hints:
+          type: array
+          items:
+            type: string
+        difficulty:
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodeByQRCodeRequest"
-
     GetGeoCodeByQRCodeResponse:
       type: "object"
-      required:
-        - id
-        - available
-        - description
-        - difficulty
-        - longitude
-        - latitude
       properties:
         id:
           type: string
           format: uuid
-        available:
-          type: boolean
-        description:
+        qrCode:
           type: string
-        longitude:
-          type: string
-        latitude:
-          type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodeByQRCodeResponse"
-
     GetGeoCodeByLocationRequest:
       type: "object"
       required:
-        - longitude
-        - latitude
+        - description
+        - location
+        - difficulty
+        - hints
       properties:
-        longitude:
+        description:
           type: string
-        latitude:
+        location:
           type: string
+        hints:
+          type: array
+          items:
+            type: string
+        difficulty:
+          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodeByLocationRequest"
-
     GetGeoCodeByLocationResponse:
       type: "object"
-      required:
-        - id
-        - available
-        - description
-        - difficulty
-        - longitude
-        - latitude
       properties:
         id:
           type: string
           format: uuid
-        available:
-          type: boolean
-        description:
+        qrCode:
           type: string
-        longitude:
-          type: string
-        latitude:
-          type: string
-        difficulty:
-          $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodeByLocationResponse"
-
     GetTrackablesRequest:
       type: "object"
       required:
@@ -1275,7 +1119,6 @@ components:
           $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getTrackablesRequest"
-
     GetTrackablesResponse:
       type: "object"
       properties:
@@ -1286,54 +1129,44 @@ components:
           type: string
       xml:
         name: "getTrackablesResponse"
-
     SwapCollectablesRequest:
       type: "object"
       required:
         - targetGeoCodeID
         - targetCollectableID
-        - geoCodeID
       properties:
-        targetGeoCodeID:
-          $ref: '#/components/schemas/Collectable'
-        targetCollectableID:
-          $ref: '#/components/schemas/Collectable'
+        collectable:
+          type: string
+          format: uuid
         geoCodeID:
           type: string
           format: uuid
       xml:
         name: "swapCollectablesRequest"
-
     SwapCollectablesResponse:
       type: "object"
-      required:
-        - isSuccess
       properties:
-        isSuccess:
+        success:
           type: boolean
       xml:
         name: "swapCollectablesResponse"
-
     UpdateAvailabilityRequest:
       type: "object"
       required:
         - geoCodeID
-        - isAvailable
+        - available
       properties:
         geoCodeID:
           type: string
           format: uuid
-        isAvailable:
+        available:
           type: boolean
       xml:
         name: "updateAvailabilityRequest"
-
     UpdateAvailabilityResponse:
       type: "object"
-      required:
-        - isSuccess
       properties:
-        isSuccess:
+        success:
           type: boolean
       xml:
         name: "updateAvailabilityResponse"
@@ -1341,14 +1174,14 @@ components:
     GetCollectablesRequest:
       type: "object"
       required:
-        - geoCodeID
+        - id
       properties:
-        geoCodeID:
+        id:
           type: string
           format: uuid
       xml:
         name: "getCollectablesRequest"
-
+        
     CollectableType:
       type: "object"
       required:
@@ -1411,7 +1244,6 @@ components:
             type: string
       xml:
         name: "Collectable"
-
     CreateCollectableSetRequest:
       type: "object"
       required:
@@ -1424,7 +1256,6 @@ components:
           type: string
       xml:
         name: "CreateCollectableSetRequest"
-
     CreateCollectableTypeRequest:
       type: "object"
       required:
@@ -1468,7 +1299,7 @@ components:
         collectables:
           type: array
           items:
-            $ref: '#/components/schemas/Collectable'
+            $ref: '#/components/schemas/CollectableResponse'
       xml:
         name: "GetCollectablesResponse"
 
@@ -1483,7 +1314,7 @@ components:
             $ref: '#/components/schemas/CollectableTypeComponent'
       xml:
         name: "GetCollectableTypeResponse"
-
+    
     CollectableTypeComponent:
       type: "object"
       required:
@@ -1510,7 +1341,7 @@ components:
           type: boolean
       xml:
         name: "CollectableTypeComponent"
-
+        
     CreateCollectableTypeResponse:
       type: "object"
       required:
@@ -1526,7 +1357,7 @@ components:
           $ref: "#/components/schemas/CollectableTypeComponent"
       xml:
         name: "CreateCollectableTypeResponse"
-
+          
     CreateCollectableSetResponse:
       type: "object"
       required:
@@ -1542,7 +1373,7 @@ components:
           $ref: "#/components/schemas/CollectableSet"
       xml:
         name: "CreateCollectableSetResponse"
-
+          
     CollectableResponse:
       type: "object"
       required:
@@ -1559,9 +1390,10 @@ components:
           type: array
           items:
             type: string
+            
       xml:
         name: "CollectableResponse"
-
+          
     CreateCollectableResponse:
       type: "object"
       required:
@@ -1577,7 +1409,7 @@ components:
           $ref: "#/components/schemas/CollectableResponse"
       xml:
         name: "CreateCollectableResponse"
-
+      
     GetCollectableSetsResponse:
       type: "object"
       required:
@@ -1665,7 +1497,7 @@ components:
           format: uuid
       xml:
         name: "LeaderBoard"
-
+        
     User:
       type: "object"
       required:
@@ -1697,43 +1529,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GeoCode'
-
-    SwapCollectableRequest:
-      type: "object"
-      required:
-        - userID
-        - targetGeoCodeID
-        - targetCollectableID
-      properties:
-        userID:
-          type: string
-          format: uuid
-        targetGeoCodeID:
-          type: string
-          format: uuid
-        targetCollectableID:
-          type: string
-          format: uuid
-      xml:
-        name: "SwapCollectableRequest"
-
-    SwapCollectableResponse:
-      type: "object"
-      required:
-        - success
-        - message
-        - Collectable
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-          example: "The user's Collectable was successfully swapped with the Collectable in the GeoCode"
-        Collectable:
-          $ref: '#/components/schemas/Collectable'
-      xml:
-        name: "SwapCollectableResponse"
-
+        
     GetCurrentCollectableRequest:
       type: "object"
       required:
@@ -1743,8 +1539,8 @@ components:
           type: string
           format: uuid
       xml:
-        name: "GetCurrentCollectableRequest"
-
+        name: "GetCurrentCollectableRequest" 
+        
     GetCurrentCollectableResponse:
       type: "object"
       required:
@@ -1761,7 +1557,7 @@ components:
           $ref: '#/components/schemas/Collectable'
       xml:
         name: "GetCurrentCollectableResponse"
-
+        
     GetUserTrackableRequest:
       type: "object"
       required:
@@ -1772,7 +1568,7 @@ components:
           format: uuid
       xml:
         name: "GetUserTrackableRequest"
-
+    
     GetUserTrackableResponse:
       type: "object"
       required:
@@ -1789,7 +1585,7 @@ components:
           $ref: '#/components/schemas/Collectable' 
       xml:
         name: "GetUserTrackableResponse"
-
+        
     UpdateLocationRequest:
       type: "object"
       required:
@@ -1800,7 +1596,7 @@ components:
           format: uuid
       xml:
         name: "UpdateLocationRequest"
-
+        
     UpdateLocationResponse:
       type: "object"
       required:
@@ -1817,7 +1613,7 @@ components:
           $ref: '#/components/schemas/Collectable' 
       xml:
         name: "UpdateLocationResponse"
-
+        
     GetFoundCollectablesRequest:
       type: "object"
       required:
@@ -1828,7 +1624,7 @@ components:
           format: uuid
       xml:
         name: "GetFoundCollectablesRequest"
-
+        
     GetFoundCollectablesResponse:
       type: "object"
       properties:
@@ -1838,7 +1634,7 @@ components:
             $ref: '#/components/schemas/Collectable'
       xml:
         name: "GetFoundCollectablesResponse"
-
+        
     GetFoundGeoCodesRequest:
       type: "object"
       required:
@@ -1849,7 +1645,7 @@ components:
           format: uuid
       xml:
         name: "GetFoundGeocodesRequest"
-
+        
     GetFoundGeoCodesResponse:
       type: "object"
       properties:
@@ -1859,7 +1655,7 @@ components:
             $ref: '#/components/schemas/GeoCode'
       xml:
         name: "GetFoundGeoCodesResponse"
-
+            
     GetOwnedGeoCodesRequest:
       type: "object"
       required:
@@ -1870,7 +1666,6 @@ components:
           format: uuid
       xml:
         name: "GetOwnedGeocodesRequest"
-
     GetOwnedGeoCodesResponse:
       type: "object"
       properties:
@@ -1880,37 +1675,7 @@ components:
             $ref: '#/components/schemas/GeoCode'
       xml:
         name: "GetOwnedGeocodesResponse"
-
-    SetAdminRequest:
-      type: "object"
-      required:
-        - userID
-        - adminID
-      properties:
-        userID:
-          type: string
-          format: uuid
-        adminID:
-          type: string
-          format: uuid
-      xml:
-        name: "SetAdminRequest"
-
-    BlockUserRequest:
-      type: "object"
-      required:
-        - userID
-        - adminID
-      properties:
-        userID:
-          type: string
-          format: uuid
-        adminID:
-          type: string
-          format: uuid
-      xml:
-        name: "BlockUserRequest"
-
+        
     GetUsersRequest:
       type: "object"
       required:
@@ -1921,7 +1686,7 @@ components:
           format: uuid
       xml:
         name: "GetUsersRequest"
-
+        
     GetUsersResponse:
       type: "object"
       required:
@@ -1933,3 +1698,4 @@ components:
             $ref: '#/components/schemas/User'
       xml:
         name: "GetUsersResponse"
+      
