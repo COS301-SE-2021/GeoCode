@@ -22,7 +22,6 @@ tags:
     description: "Everything about the different scores and rankings of users"
   - name: "Notifications"
     description: "Everything about how users are notified"
-
 paths:
   /User/getCurrentCollectable:
     post:
