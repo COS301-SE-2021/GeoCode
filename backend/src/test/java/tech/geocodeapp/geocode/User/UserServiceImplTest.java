@@ -79,6 +79,14 @@ public class UserServiceImplTest {
     }
 
     @Test
+    public void getUserTrackableTestNullRequest(){
+        GetUserTrackableResponse response = userService.getUserTrackable(null);
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals("The GetUserTrackableRequest object passed was NULL", response.getMessage());
+        Assertions.assertNull(response.getTrackable());
+    }
+
+    @Test
     public void getUserTrackableTestInvalidUser(){
         /*
            Create a request object
@@ -106,7 +114,15 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void UpdateLocationTestInvalidUser(){
+    public void updateLocationTestNullRequest(){
+        GetUserTrackableResponse response = userService.getUserTrackable(null);
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals("The GetUserTrackableRequest object passed was NULL", response.getMessage());
+        Assertions.assertNull(response.getTrackable());
+    }
+
+    @Test
+    public void updateLocationTestInvalidUser(){
         /*
            Create a request object
           and assign values to it
@@ -120,7 +136,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void UpdateLocationTestValidUser(){
+    public void updateLocationTestValidUser(){
         /*
            Create a request object
           and assign values to it
