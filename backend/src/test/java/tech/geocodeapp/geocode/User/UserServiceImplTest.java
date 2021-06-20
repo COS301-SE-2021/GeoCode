@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.User;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,9 @@ public class UserServiceImplTest {
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
     private final String invalidUserIdMessage = "Invalid user id";
+    private GetCurrentCollectableResponse getCurrentCollectableResponse;
+    private GetUserTrackableResponse getUserTrackableResponse;
+    private UpdateLocationResponse updateLocationResponse;
 
     UserServiceImplTest() {
 
@@ -59,6 +63,16 @@ public class UserServiceImplTest {
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void getCurrentCollectableTestNullId(){
+           GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
+           request.setUserID(null);
+
+           //GetCurrentCollectableResponse response = userService.getCurrentCollectable(request);
+           assertThatThrownBy(() -> getCurrentCollectableResponse = userService.getCurrentCollectable(request))
+            .isInstanceOf(NullUserRequestParameterException.class);
     }
 
     @Test
@@ -112,6 +126,15 @@ public class UserServiceImplTest {
     }
 
     @Test
+    public void getUserTrackableTestNullId(){
+        GetUserTrackableRequest request = new GetUserTrackableRequest();
+        request.setUserID(null);
+
+        assertThatThrownBy(() -> getUserTrackableResponse = userService.getUserTrackable(request))
+                .isInstanceOf(NullUserRequestParameterException.class);
+    }
+
+    @Test
     public void getUserTrackableTestInvalidUser() {
         try{
             /*
@@ -162,6 +185,15 @@ public class UserServiceImplTest {
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void updateLocationTestNullId(){
+        UpdateLocationRequest request = new UpdateLocationRequest();
+        request.setUserID(null);
+
+        assertThatThrownBy(() -> updateLocationResponse = userService.updateLocation(request))
+                .isInstanceOf(NullUserRequestParameterException.class);
     }
 
     @Test
