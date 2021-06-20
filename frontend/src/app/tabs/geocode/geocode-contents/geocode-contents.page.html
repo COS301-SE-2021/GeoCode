@@ -31,16 +31,16 @@
       </ion-grid>
     </div>
 
-    <div>
+    <div [hidden]="!isHidden">
       <h2>Collectables</h2>
       <div class="horizontalscroll">
         <div class="items">
-          <div class="collectable" *ngFor="let type of collectables">
-            <div class="image">
+          <div class="collectable" *ngFor="let collectable of collectables">
+            <div class="image" (click)="swapCollectable(collectable)">
               <img src="https://via.placeholder.com/100">
             </div>
             <div class="name">
-              {{type.type.name}}
+              {{collectable.type.name}}
             </div>
           </div>
         </div>
