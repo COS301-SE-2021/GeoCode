@@ -488,6 +488,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
     ////////////////Helper functions////////////////
 
+    /**
+     * Check if the repo is not null
+     *
+     * @throws RepoException throw an error due the repo not being valid
+     */
     private void checkRepo() throws RepoException {
 
         if ( geoCodeRepo == null ) {
