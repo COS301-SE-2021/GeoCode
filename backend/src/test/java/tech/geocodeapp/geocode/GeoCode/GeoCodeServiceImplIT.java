@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.GeoCode;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
 import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeService;
 import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeServiceImpl;
 
@@ -17,7 +18,7 @@ public class GeoCodeServiceImplIT {
     }
 
     @BeforeEach
-    void setup() {
+    void setup() throws RepoException {
 
         geoCodeService = new GeoCodeServiceImpl( new GeoCodeMockRepository() );
     }
