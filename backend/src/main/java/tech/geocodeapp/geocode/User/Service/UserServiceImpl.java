@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.User.Model.User;
 import tech.geocodeapp.geocode.User.Repository.UserRepository;
 import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
@@ -46,9 +47,13 @@ public class UserServiceImpl implements UserService {
      * @param request The GetCurrentCollectableRequest object
      * @return A GetCurrentCollectableResponse object: (success, message, object)
      */
-    public GetCurrentCollectableResponse getCurrentCollectable(GetCurrentCollectableRequest request){
+    public GetCurrentCollectableResponse getCurrentCollectable(GetCurrentCollectableRequest request) throws NullUserRequestParameterException{
         if (request == null) {
             return new GetCurrentCollectableResponse(false, "The GetCurrentCollectableRequest object passed was NULL", null);
+        }
+
+        if(request.getUserID() == null){
+            throw new NullUserRequestParameterException();
         }
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
@@ -66,9 +71,13 @@ public class UserServiceImpl implements UserService {
      * @param request The GetUserTrackableRequest object
      * @return A GetUserTrackableResponse object: (success, message, object)
      */
-    public GetUserTrackableResponse getUserTrackable(GetUserTrackableRequest request){
+    public GetUserTrackableResponse getUserTrackable(GetUserTrackableRequest request) throws NullUserRequestParameterException{
         if (request == null) {
             return new GetUserTrackableResponse(false, "The GetUserTrackableRequest object passed was NULL", null);
+        }
+
+        if(request.getUserID() == null){
+            throw new NullUserRequestParameterException();
         }
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
@@ -86,9 +95,13 @@ public class UserServiceImpl implements UserService {
      * @param request The UpdateLocationRequest object
      * @return A UpdateLocationResponse object: (success, message, object)
      */
-    public UpdateLocationResponse updateLocation(UpdateLocationRequest request){
+    public UpdateLocationResponse updateLocation(UpdateLocationRequest request) throws NullUserRequestParameterException{
         if (request == null) {
             return new UpdateLocationResponse(false, "The UpdateLocationRequest object passed was NULL", null);
+        }
+
+        if(request.getUserID() == null){
+            throw new NullUserRequestParameterException();
         }
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
