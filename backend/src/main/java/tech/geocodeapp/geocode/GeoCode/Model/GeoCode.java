@@ -1,20 +1,16 @@
 package tech.geocodeapp.geocode.GeoCode.Model;
 
-import java.util.Objects;
+import java.util.*;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
-
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import tech.geocodeapp.geocode.Collectable.Model.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 
 /**
@@ -41,15 +37,16 @@ public class GeoCode   {
   private String description = null;
 
   @JsonProperty("hints")
-  @ElementCollection
+  @ElementCollection( fetch = FetchType.EAGER )
   @Valid
-  private List<String> hints = new ArrayList<String>();
+  private Collection<String> hints = new ArrayList<String>();
 
   @JsonProperty("collectables")
   @ManyToMany
+  @ElementCollection( fetch = FetchType.EAGER )
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   @Valid
-  private List<Collectable> collectables = null;
+  private Collection<Collectable> collectables = null;
 
   @JsonProperty("qrCode")
   private String qrCode = null;
@@ -142,7 +139,7 @@ public class GeoCode   {
     this.description = description;
   }
 
-  public GeoCode hints(List<String> hints) {
+  public GeoCode hints(Collection<String> hints) {
     this.hints = hints;
     return this;
   }
@@ -159,11 +156,11 @@ public class GeoCode   {
   @Schema(required = true, description = "")
   @NotNull
 
-  public List<String> getHints() {
+  public Collection<String> getHints() {
     return hints;
   }
 
-  public void setHints(List<String> hints) {
+  public void setHints(Collection<String> hints) {
     this.hints = hints;
   }
 
@@ -186,11 +183,11 @@ public class GeoCode   {
    **/
   @Schema(description = "")
   @Valid
-  public List<Collectable> getCollectables() {
+  public Collection<Collectable> getCollectables() {
     return collectables;
   }
 
-  public void setCollectables(List<Collectable> collectables) {
+  public void setCollectables(Collection<Collectable> collectables) {
     this.collectables = collectables;
   }
 
