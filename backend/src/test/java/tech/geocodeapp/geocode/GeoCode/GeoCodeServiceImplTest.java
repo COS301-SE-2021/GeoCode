@@ -26,6 +26,7 @@ import tech.geocodeapp.geocode.User.UserMockRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * This is the unit testing class for the GeoCode subsystem
@@ -89,23 +90,20 @@ public class GeoCodeServiceImplTest {
         repo = new GeoCodeMockRepository();
         repo.deleteAll();
 
+        CollectableTypeMockRepository typeMockRepo = new CollectableTypeMockRepository();
+
+        CollectableType type = new CollectableType();
+        type.setId( UUID.fromString( "f94d35a2-ca09-49fc-9fdd-ad0bac0b8dd0" ) );
+        type.setName( "name" );
+        type.setImage( "Image" );
+        type.setRarity( Rarity.RARE );
+        type.setSet( new CollectableSet() );
+
+        typeMockRepo.save( type );
+
         collectableService = new CollectableServiceImpl( new CollectableMockRepository(),
                                                          new CollectableSetMockRepository(),
-                                                         new CollectableTypeMockRepository() );
-
-        CreateCollectableSetRequest setRequest = new CreateCollectableSetRequest();
-        setRequest.setName( "Easter" );
-        setRequest.setDescription( "Themed collectables that can be collected over the Easter weekend" );
-
-        CreateCollectableSetResponse setResponse = collectableService.createCollectableSet( setRequest );
-
-        CreateCollectableTypeRequest request = new CreateCollectableTypeRequest();
-        request.setName( "Santa" );
-        request.setImage( "dgergergnhtfhjhg" );
-        request.setRarity( Rarity.RARE );
-        request.setId( setResponse.getCollectableSet().getId() );
-
-        CreateCollectableTypeResponse response = collectableService.createCollectableType( request );
+                                                         typeMockRepo );
 
         try {
 
