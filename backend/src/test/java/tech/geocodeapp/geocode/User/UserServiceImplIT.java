@@ -1,21 +1,15 @@
 package tech.geocodeapp.geocode.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.*;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
-import tech.geocodeapp.geocode.GeoCode.GeoCodeMockRepository;
-import tech.geocodeapp.geocode.GeocodeApplication;
 import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.User.Repository.UserRepository;
 import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
@@ -25,20 +19,10 @@ import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
 import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
 import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
 import tech.geocodeapp.geocode.User.Service.UserService;
-import tech.geocodeapp.geocode.User.Service.UserServiceImpl;
-
-import static net.bytebuddy.matcher.ElementMatchers.is;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @TestMethodOrder( MethodOrderer.OrderAnnotation.class )
 public class UserServiceImplIT {
-    /*@Autowired
-    private MockMvc mvc;*/
-
     @Autowired
     private UserService userService;
 
@@ -51,23 +35,6 @@ public class UserServiceImplIT {
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
     private final String invalidUserIdMessage = "Invalid user id";
-
-    @BeforeEach
-    void setup() {
-        /*//save the valid trackable CollectableType
-        CollectableType trackableCollectableType = new CollectableType();
-        trackableCollectableType.setName("User Trackable");
-        trackableCollectableType.setId(UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3"));
-        trackableCollectableType.setImage("jdbjeobjehiohirhgerugheruigherhvbdkjlnd");
-
-        HashMap<String, String> properties = new HashMap<>();
-        properties.put("trackable", "true");
-        trackableCollectableType.setProperties(properties);
-        collectableTypeRepo.save(trackableCollectableType);
-
-        //save the valid user to the MockRepo
-        userService.registerNewUser(validUserId, "john_smith");*/
-    }
 
     @Test
     public void getCurrentCollectableTestNullRequest() throws NullUserRequestParameterException {
@@ -102,11 +69,11 @@ public class UserServiceImplIT {
 
     @Test
     public void getCurrentCollectableTestValidUser() throws Exception {
-        /*try{
+        try{
             /*
             Create a request object
             and assign values to it
-            /
+            */
             GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
             request.setUserID(validUserId);
 
@@ -116,7 +83,7 @@ public class UserServiceImplIT {
             Assertions.assertNotNull(response.getCollectable());
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
-        }*/
+        }
     }
 
     @Test
