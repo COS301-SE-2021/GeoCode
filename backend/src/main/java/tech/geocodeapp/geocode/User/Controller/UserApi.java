@@ -157,19 +157,5 @@ public interface UserApi {
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
     ResponseEntity<User> setAdmin(@Parameter(in = ParameterIn.DEFAULT, description = "Request to set a user to be an administrator", required = true, schema = @Schema()) @Valid @RequestBody SetAdminRequest body);
-
-
-    @Operation(summary = "Swaps the Collectable the user is currently holding with the given Collectable in the given GeoCode", description = "Swap held Collectable", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "The user's current Collectable was successfully swapped", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SwapCollectableResponse.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
-    @RequestMapping(value = "/User/swapCollectable",
-        produces = { "application/json", "application/xml" }, 
-        consumes = { "application/json", "application/xml" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<SwapCollectableResponse> swapCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to swap the held Collectable", required = true, schema = @Schema()) @Valid @RequestBody SwapCollectableRequest body);
-
 }
 

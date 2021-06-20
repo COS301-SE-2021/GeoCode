@@ -1,56 +1,37 @@
 package tech.geocodeapp.geocode.User;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-import tech.geocodeapp.geocode.Collectable.CollectableMockRepository;
-import tech.geocodeapp.geocode.Collectable.CollectableTypeMockRepository;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
 import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
-import tech.geocodeapp.geocode.GeoCode.GeoCodeMockRepository;
 import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
-import tech.geocodeapp.geocode.User.Service.UserService;
-import tech.geocodeapp.geocode.User.Service.UserServiceImpl;
 import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
 import tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest;
 import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
 import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
 import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
 import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
+import tech.geocodeapp.geocode.User.Service.UserService;
 
-import java.util.List;
-import java.util.UUID;
-
-@ExtendWith( MockitoExtension.class )
-public class UserServiceImplTest {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class UserServiceImplIT {
+    @Autowired
     private UserService userService;
 
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
     private final String invalidUserIdMessage = "Invalid user id";
 
-    UserServiceImplTest() {
-
-    }
-
-    @BeforeEach
-    void setup() {
-        CollectableTypeMockRepository collectableTypeMockRepo = new CollectableTypeMockRepository();
-        userService = new UserServiceImpl( new UserMockRepository(), new CollectableMockRepository(), collectableTypeMockRepo, new GeoCodeMockRepository());
-
-        //save the valid trackable CollectableType
-        CollectableType trackableCollectableType = new CollectableType();
-        trackableCollectableType.setId(UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3"));
-        collectableTypeMockRepo.save(trackableCollectableType);
-
-        //save the valid user to the MockRepo
-        userService.registerNewUser(validUserId, "john_smith");
-    }
-
     @Test
-    public void getCurrentCollectableTestNullRequest() {
+    public void getCurrentCollectableTestNullRequest() throws NullUserRequestParameterException {
         try{
             GetCurrentCollectableResponse response = userService.getCurrentCollectable(null);
             Assertions.assertFalse(response.isSuccess());
@@ -62,7 +43,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getCurrentCollectableTestInvalidUser() {
+    public void getCurrentCollectableTestInvalidUser() throws NullUserRequestParameterException {
         try{
             /*
             Create a request object
@@ -81,7 +62,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getCurrentCollectableTestValidUser() {
+    public void getCurrentCollectableTestValidUser() throws NullUserRequestParameterException {
         try{
             /*
             Create a request object
@@ -100,7 +81,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserTrackableTestNullRequest() {
+    public void getUserTrackableTestNullRequest() throws NullUserRequestParameterException {
         try{
             GetUserTrackableResponse response = userService.getUserTrackable(null);
             Assertions.assertFalse(response.isSuccess());
@@ -112,7 +93,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserTrackableTestInvalidUser() {
+    public void getUserTrackableTestInvalidUser() throws NullUserRequestParameterException {
         try{
             /*
             Create a request object
@@ -131,7 +112,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserTrackableTestValidUser() {
+    public void getUserTrackableTestValidUser() throws NullUserRequestParameterException {
         try{
             /*
             Create a request object
@@ -153,7 +134,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void updateLocationTestNullRequest() {
+    public void updateLocationTestNullRequest() throws NullUserRequestParameterException {
         try{
             UpdateLocationResponse response = userService.updateLocation(null);
             Assertions.assertFalse(response.isSuccess());
@@ -165,7 +146,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void updateLocationTestInvalidUser() {
+    public void updateLocationTestInvalidUser() throws NullUserRequestParameterException {
         try{
             /*
             Create a request object
@@ -184,7 +165,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void updateLocationTestValidUser() {
+    public void updateLocationTestValidUser() throws NullUserRequestParameterException {
         try{
             /*
              Create a request object
