@@ -1,7 +1,5 @@
 package tech.geocodeapp.geocode.GeoCode.Service;
 
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectablesRequest;
-import tech.geocodeapp.geocode.Collectable.Response.GetCollectablesResponse;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
@@ -14,7 +12,7 @@ import tech.geocodeapp.geocode.Trackable.Response.GetTrackablesResponse;
  */
 public interface GeoCodeService {
 
-    CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, QRCodeException, RepoException;
+    CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, RepoException;
 
     GetGeoCodesResponse getAllGeoCodes( ) throws RepoException;
 

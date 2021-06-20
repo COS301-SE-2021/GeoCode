@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectablesRequest;
-import tech.geocodeapp.geocode.Collectable.Response.GetCollectablesResponse;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.QRCodeException;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;

@@ -1,42 +1,44 @@
-package tech.geocodeapp.geocode.GeoCode.Response;
+package tech.geocodeapp.geocode.GeoCode.Request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * SwapCollectablesResponse
+ * UpdateLocationRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T19:40:54.656Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
 
 
-public class SwapCollectablesResponse   {
-  @JsonProperty("isSuccess")
-  private Boolean isSuccess = null;
+public class UpdateLocationRequest   {
+  @JsonProperty("userID")
+  private UUID userID = null;
 
-  public SwapCollectablesResponse isSuccess(Boolean isSuccess) {
-    this.isSuccess = isSuccess;
+  public UpdateLocationRequest userID(UUID userID) {
+    this.userID = userID;
     return this;
   }
 
   /**
-   * Get isSuccess
-   * @return isSuccess
+   * Get userID
+   * @return userID
    **/
   @Schema(required = true, description = "")
       @NotNull
 
-    public Boolean isIsSuccess() {
-    return isSuccess;
+    @Valid
+    public UUID getUserID() {
+    return userID;
   }
 
-  public void setIsSuccess(Boolean isSuccess) {
-    this.isSuccess = isSuccess;
+  public void setUserID(UUID userID) {
+    this.userID = userID;
   }
 
 
@@ -48,21 +50,21 @@ public class SwapCollectablesResponse   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SwapCollectablesResponse swapCollectablesResponse = (SwapCollectablesResponse) o;
-    return Objects.equals(this.isSuccess, swapCollectablesResponse.isSuccess);
+    UpdateLocationRequest updateLocationRequest = (UpdateLocationRequest) o;
+    return Objects.equals(this.userID, updateLocationRequest.userID);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(isSuccess);
+    return Objects.hash(userID);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SwapCollectablesResponse {\n");
+    sb.append("class UpdateLocationRequest {\n");
     
-    sb.append("    isSuccess: ").append(toIndentedString(isSuccess)).append("\n");
+    sb.append("    userID: ").append(toIndentedString(userID)).append("\n");
     sb.append("}");
     return sb.toString();
   }
