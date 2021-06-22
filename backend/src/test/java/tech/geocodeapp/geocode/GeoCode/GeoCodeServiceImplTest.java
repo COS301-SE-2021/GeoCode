@@ -31,7 +31,7 @@ import java.util.UUID;
  */
 @TestMethodOrder( MethodOrderer.OrderAnnotation.class )
 @ExtendWith( MockitoExtension.class )
-public class GeoCodeServiceImplTest {
+class GeoCodeServiceImplTest {
 
     /**
      * The service for the GeoCode subsystem
@@ -116,7 +116,7 @@ public class GeoCodeServiceImplTest {
     @Order( 1 )
     @Tag( "Tests" )
     @DisplayName( "Test Null repository handling" )
-    public void RepositoryNullTest() {
+    void RepositoryNullTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService ) )
@@ -130,7 +130,7 @@ public class GeoCodeServiceImplTest {
     @Test
     @Order( 2 )
     @DisplayName( "Test createGeoCode Null repository handling" )
-    public void createGeoCodeNullRequestTest() {
+    void createGeoCodeNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.createGeoCode( null ) )
@@ -143,7 +143,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 10 )
-    public void createGeoCodeInvalidRequestTest() {
+    void createGeoCodeInvalidRequestTest() {
 
         /*
          *  Create a request object
@@ -169,7 +169,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 18 )
-    public void createGeoCodeTest() {
+    void createGeoCodeTest() {
 
         try {
 
@@ -212,7 +212,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 19 )
-    public void getAllGeoCodeTest() {
+    void getAllGeoCodeTest() {
 
         try {
 
@@ -261,7 +261,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 3 )
-    public void getGeoCodesByDifficultyNullRequestTest() {
+    void getGeoCodesByDifficultyNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.getGeoCodesByDifficulty( null ) )
@@ -274,7 +274,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 11 )
-    public void getGeoCodesByDifficultyInvalidRequestTest() {
+    void getGeoCodesByDifficultyInvalidRequestTest() {
 
         /*
          * Create a request object
@@ -295,7 +295,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 20 )
-    public void getGeoCodesByDifficultyTest() {
+    void getGeoCodesByDifficultyTest() {
 
         try {
 
@@ -341,7 +341,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 4 )
-    public void getHintsNullRequestTest() {
+    void getHintsNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.getHints( null ) )
@@ -354,7 +354,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 12 )
-    public void getHintsInvalidRequestTest() {
+     void getHintsInvalidRequestTest() {
 
         /*
          *  Create a request object
@@ -375,7 +375,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 21 )
-    public void getHintsTest() {
+     void getHintsTest() {
 
         try {
 
@@ -407,7 +407,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 5 )
-    public void swapCollectablesNullRequestTest() {
+     void swapCollectablesNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.swapCollectables( null ) )
@@ -420,7 +420,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 13 )
-    public void swapCollectablesInvalidRequestTest() {
+     void swapCollectablesInvalidRequestTest() {
 
         /*
          *  Create a request object
@@ -441,7 +441,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 6 )
-    public void updateAvailabilityNullRequestTest() {
+     void updateAvailabilityNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.updateAvailability( null ) )
@@ -454,7 +454,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 14 )
-    public void updateAvailabilityInvalidRequestTest() {
+     void updateAvailabilityInvalidRequestTest() {
 
         /*
          *  Create a request object
@@ -475,7 +475,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 23 )
-    public void updateAvailabilityTest() {
+     void updateAvailabilityTest() {
 
         /* Create a GeoCode */
         populate( 1 );
@@ -508,7 +508,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 7 )
-    public void getGeoCodesByLocationNullRequestTest() {
+     void getGeoCodesByLocationNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( null ) )
@@ -521,7 +521,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 15 )
-    public void getGeoCodesByLocationInvalidRequestTest() {
+     void getGeoCodesByLocationInvalidRequestTest() {
 
         /*
          *  Create a request object
@@ -543,7 +543,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 24 )
-    public void getGeoCodesByLocationTest() {
+     void getGeoCodesByLocationTest() {
 
         /* Create a GeoCode */
         populate( 1 );
@@ -577,7 +577,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 8 )
-    public void getGeoCodesByQRCodeNullRequestTest() {
+     void getGeoCodesByQRCodeNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.getGeocodeByQRCode( null ) )
@@ -590,7 +590,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 16 )
-    public void getGeoCodesByQRCodeInvalidRequestTest() {
+     void getGeoCodesByQRCodeInvalidRequestTest() {
 
         /*
          *  Create a request object
@@ -611,7 +611,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 25 )
-    public void getGeoCodesByQRCodeTest() {
+     void getGeoCodesByQRCodeTest() {
 
         /* Create a GeoCode */
         populate( 1 );
@@ -644,7 +644,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 8 )
-    public void getCollectablesNullRequestTest() {
+     void getCollectablesNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> geoCodeService.getCollectables( null ) )
@@ -657,7 +657,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 17 )
-    public void getCollectablesInvalidRequestTest() {
+     void getCollectablesInvalidRequestTest() {
 
         /*
          *  Create a request object
@@ -678,7 +678,7 @@ public class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 26 )
-    public void getCollectablesTest() {
+     void getCollectablesTest() {
 
         /* Create a GeoCode */
         populate( 1 );
