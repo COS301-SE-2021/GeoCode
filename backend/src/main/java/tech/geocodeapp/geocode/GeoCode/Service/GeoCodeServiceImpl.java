@@ -18,12 +18,10 @@ import tech.geocodeapp.geocode.User.Service.UserService;
 import java.security.SecureRandom;
 import java.util.*;
 
-
 /**
  * This class implements the UserService interface
  */
 @Service( "GeoCodeService" )
-//@RequiredArgsConstructor
 public class GeoCodeServiceImpl implements GeoCodeService {
 
     /**
@@ -48,14 +46,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @param geoCodeRepo the repo the created response attributes should save to
      */
     public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo, CollectableService collectableService, UserService userService ) throws RepoException {
-        this.userService = userService;
 
         /* Check if the given repo exists */
         if ( geoCodeRepo != null ) {
 
             /* The repo exists therefore it can be set for the class */
             this.geoCodeRepo = geoCodeRepo;
+
             this.collectableService = collectableService;
+            this.userService = userService;
         } else {
 
             /* The repo does not exist throw an error */
@@ -91,35 +90,34 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the GeoCode object
          * and set its attributes to the given attributes in the request
          */
-        GeoCode newGeoCode = new GeoCode();
+        var newGeoCode = new GeoCode();
         newGeoCode.setAvailable( request.isAvailable() );
         newGeoCode.setDescription( request.getDescription() );
         newGeoCode.setDifficulty( request.getDifficulty() );
         newGeoCode.setHints( request.getHints() );
         newGeoCode.setLatitude( request.getLatitude() );
         newGeoCode.setLongitude( request.getLongitude() );
-        UUID id = UUID.randomUUID();
-        newGeoCode.setId( id );
+        newGeoCode.setId( UUID.randomUUID() );
 
         /* Hold the crated Collectables */
         List< Collectable > collectable = new ArrayList<>();
 
-        for ( int x = 0; x < 5; x++ ) {
+        for ( var x = 0; x < 5; x++ ) {
 
             /* Create the response and give it a Collectable type */
-            CreateCollectableRequest collectableRequest = new CreateCollectableRequest();
+            var collectableRequest = new CreateCollectableRequest();
             collectableRequest.setCollectableTypeId( UUID.fromString( "f94d35a2-ca09-49fc-9fdd-ad0bac0b8dd0" ) );
 
             /* Get the response from the created request */
             CreateCollectableResponse collectableResponse = collectableService.createCollectable( collectableRequest );
 
             /* Building a collectable from a collectable response */
-            Collectable temp = new Collectable();
+            var temp = new Collectable();
             temp.setId( collectableResponse.getCollectable().getId() );
             CollectableTypeComponent type = collectableResponse.getCollectable().getType();
 
             /* Building a collectable type from a collectable type component */
-            CollectableType tempType = new CollectableType();
+            var tempType = new CollectableType();
             tempType.setId( type.getId() );
             tempType.setName( type.getName() );
             tempType.setRarity( type.getRarity() );
@@ -130,8 +128,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* Adding the created Collectable to the list */
             collectable.add( temp );
-
-            //collectable.add( new Collectable( new CollectableType( "name", "imageURL", Rarity.COMMON, new CollectableSet( "setName", "description" ), null ) ) );
         }
 
         newGeoCode.setCollectables( collectable );
@@ -139,23 +135,23 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Try and create the relevant image with the newly create GeoCode instance */
         try {
 
-            int size = 8;
-            String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            var size = 8;
+            var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 
             // create StringBuffer size of AlphaNumericString
-            StringBuilder QR = new StringBuilder( size );
+            var qr = new StringBuilder( size );
 
-            for ( int i = 0; i < size; i++ ) {
+            for ( var i = 0; i < size; i++ ) {
 
                 /* generate a random number between 0 to AlphaNumericString variable length */
                 int index = (  new SecureRandom() ).nextInt(chars.length() );
 
                 /* add Character one by one in end of sb */
-                QR.append( chars.charAt( index ) );
+                qr.append( chars.charAt( index ) );
             }
 
-            newGeoCode.setQrCode( QR.toString() );
+            newGeoCode.setQrCode( qr.toString() );
         } catch ( Exception e ) {
 
             e.printStackTrace();
@@ -177,7 +173,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and add the created GeoCode to it
          */
-        CreateGeoCodeResponse response = new CreateGeoCodeResponse();
+        var response = new CreateGeoCodeResponse();
 
         /*if ( ( geoCodeRepo.findById( id ).get().getId().equals( id ) ) ) {
 
@@ -213,7 +209,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             geoCode.setCollectables( null );
         }
 
-        GetGeoCodesResponse response = new GetGeoCodesResponse();
+        var response = new GetGeoCodesResponse();
         response.setGeocodes( temp );
 
         return response;
@@ -243,7 +239,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
 
-        GeoCode hold = new GeoCode();
+        var hold = new GeoCode();
         if ( temp.isPresent( ) ) {
 
             hold = temp.get();
@@ -253,7 +249,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and set the values
          */
-        GetCollectablesResponse response = new GetCollectablesResponse();
+        var response = new GetCollectablesResponse();
         response.setCollectables( new ArrayList<Collectable>( hold.getCollectables() ) );
 
         return response;
@@ -310,7 +306,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and add valid GeoCodes to it
          */
-        GetGeoCodesByDifficultyResponse response = new GetGeoCodesByDifficultyResponse();
+        var response = new GetGeoCodesByDifficultyResponse();
         response.setGeocodes( hold );
 
         return response;
@@ -344,7 +340,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and add the list of hints to it
          */
-        GetHintsResponse response = new GetHintsResponse();
+        var response = new GetHintsResponse();
         if ( temp.isEmpty() ) {
 
             Collection<String> hold = new ArrayList<>();
@@ -394,7 +390,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          *
          */
-        GetGeoCodeByQRCodeResponse response = new GetGeoCodeByQRCodeResponse();
+        var response = new GetGeoCodeByQRCodeResponse();
         response.setDescription( temp.get( x ).getDescription() );
         response.setDifficulty( temp.get( x ).getDifficulty() );
         response.setId( temp.get( x ).getId() );
@@ -441,7 +437,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          *
          */
-        GetGeoCodeByLocationResponse response = new GetGeoCodeByLocationResponse();
+        var response = new GetGeoCodeByLocationResponse();
             response.setDescription( temp.get( x ).getDescription() );
             response.setDifficulty( temp.get( x ).getDifficulty() );
             response.setId( temp.get( x ).getId() );
@@ -479,13 +475,16 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if (target.isEmpty()) {
             return new SwapCollectablesResponse().isSuccess(false);
         }
-        GeoCode geocode = target.get();
+
+        var geocode = target.get();
 
         /* Find the target collectable */
-        int replaceIndex = -1; //the index of the collectable we want to replace in the geocode
+        var replaceIndex = -1; //the index of the collectable we want to replace in the geocode
         List<Collectable> storedCollectables = new ArrayList<>(geocode.getCollectables());
-        for (int i = 0; i < storedCollectables.size(); i++) {
+        for ( int i = 0; i < storedCollectables.size(); i++ ) {
+
             if (storedCollectables.get(i).getId().equals(request.getTargetCollectableID())) {
+
                 replaceIndex = i;
                 break;
             }
@@ -493,10 +492,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if (replaceIndex == -1) {
             return new SwapCollectablesResponse().isSuccess(false);
         }
-        Collectable geocodeToUser = storedCollectables.get(replaceIndex);
+
+        var geocodeToUser = storedCollectables.get(replaceIndex);
 
         /* Perform the swap */
-        Collectable userToGeocode = userService.swapCollectable(geocodeToUser);
+        var userToGeocode = userService.swapCollectable(geocodeToUser);
         userToGeocode.changeLocation(geocode.getLatitude()+" "+geocode.getLongitude());
         storedCollectables.set(replaceIndex, userToGeocode);
         geocode.setCollectables(storedCollectables);
@@ -534,7 +534,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
         temp.ifPresent( geoCode -> geoCode.setAvailable( request.isIsAvailable() ) );
 
-        GeoCode hold = new GeoCode();
+        var hold = new GeoCode();
         if ( temp.isPresent( ) ) {
 
             hold = temp.get();
@@ -545,7 +545,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and set the success of the operation
          */
-        UpdateAvailabilityResponse response = new UpdateAvailabilityResponse();
+        var response = new UpdateAvailabilityResponse();
         response.setIsSuccess( true );
 
         return response;
