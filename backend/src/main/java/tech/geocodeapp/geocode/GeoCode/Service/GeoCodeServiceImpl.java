@@ -250,7 +250,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * and set the values
          */
         var response = new GetCollectablesResponse();
-        response.setCollectables( new ArrayList<Collectable>( hold.getCollectables() ) );
+        response.setCollectables( new ArrayList<>( hold.getCollectables() ) );
 
         return response;
     }
@@ -378,7 +378,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         List< GeoCode > temp = geoCodeRepo.findAll();
         int x = 0;
-        for ( x = 0; x < temp.size(); x++ ) {
+        for ( ; x < temp.size(); x++ ) {
 
             if ( temp.get( x ).getQrCode().equals( request.getQrCode() ) ) {
 
@@ -425,7 +425,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         List< GeoCode > temp = geoCodeRepo.findAll();
         int x = 0;
-        for ( x = 0; x < temp.size(); x++ ) {
+        for ( ; x < temp.size(); x++ ) {
 
             if ( ( temp.get( x ).getLatitude().equals( request.getLatitude() ) ) && ( temp.get( x ).getLongitude().equals( request.getLongitude() ) ) ) {
 
