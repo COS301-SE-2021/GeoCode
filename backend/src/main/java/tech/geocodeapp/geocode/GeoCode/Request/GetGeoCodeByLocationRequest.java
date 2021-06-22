@@ -2,102 +2,156 @@ package tech.geocodeapp.geocode.GeoCode.Request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.constraints.*;
 
 /**
- * GetGeoCodeByLocationRequest
+ * GetGeoCodeByLocationRequest used to specify the attributes needed to find a specific GeoCode
+ * by its longitude and latitude
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T20:06:36.916Z[GMT]")
+public class GetGeoCodeByLocationRequest {
 
+    /**
+     * The longitude of the location of the GeoCode in the real world
+     */
+    @JsonProperty( "longitude" )
+    private String longitude = null;
 
-public class GetGeoCodeByLocationRequest   {
-  @JsonProperty("longitude")
-  private String longitude = null;
+    /**
+     * The latitude of the location of the GeoCode in the real world
+     */
+    @JsonProperty( "latitude" )
+    private String latitude = null;
 
-  @JsonProperty("latitude")
-  private String latitude = null;
+    /**
+     * Sets the longitude attribute to the specified value
+     *
+     * @param longitude the value the attribute should be set to
+     *
+     * @return the request after the longitude has been changed
+     */
+    public GetGeoCodeByLocationRequest longitude( String longitude ) {
 
-  public GetGeoCodeByLocationRequest longitude(String longitude) {
-    this.longitude = longitude;
-    return this;
-  }
+        this.longitude = longitude;
+        return this;
+    }
 
-  /**
-   * Get longitude
-   * @return longitude
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+    /**
+     * Gets the saved longitude attribute
+     *
+     * @return the stored longitude attribute
+     */
     public String getLongitude() {
-    return longitude;
-  }
 
-  public void setLongitude(String longitude) {
-    this.longitude = longitude;
-  }
+        return longitude;
+    }
 
-  public GetGeoCodeByLocationRequest latitude(String latitude) {
-    this.latitude = latitude;
-    return this;
-  }
+    /**
+     * Sets the longitude attribute to the specified value
+     *
+     * @param longitude the value the longitude should be set to
+     */
+    public void setLongitude( String longitude ) {
 
-  /**
-   * Get latitude
-   * @return latitude
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+        this.longitude = longitude;
+    }
 
+    /**
+     * Sets the latitude attribute to the specified value
+     *
+     * @param latitude the value the attribute should be set to
+     *
+     * @return the request after the latitude has been changed
+     */
+    public GetGeoCodeByLocationRequest latitude( String latitude ) {
+
+        this.latitude = latitude;
+        return this;
+    }
+
+    /**
+     * Gets the saved latitude attribute
+     *
+     * @return the stored latitude attribute
+     */
     public String getLatitude() {
-    return latitude;
-  }
 
-  public void setLatitude(String latitude) {
-    this.latitude = latitude;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+        return latitude;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Sets the latitude attribute to the specified value
+     *
+     * @param latitude the value the attribute should be set to
+     */
+    public void setLatitude( String latitude ) {
+
+        this.latitude = latitude;
     }
-    GetGeoCodeByLocationRequest getGeoCodeByLocationRequest = (GetGeoCodeByLocationRequest) o;
-    return Objects.equals(this.longitude, getGeoCodeByLocationRequest.longitude) &&
-        Objects.equals(this.latitude, getGeoCodeByLocationRequest.latitude);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(longitude, latitude);
-  }
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
+    @Override
+    public boolean equals( java.lang.Object obj ) {
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class GetGeoCodeByLocationRequest {\n");
-    
-    sb.append("    longitude: ").append(toIndentedString(longitude)).append("\n");
-    sb.append("    latitude: ").append(toIndentedString(latitude)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
+        if ( this == obj ) {
 
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+            return true;
+        }
+        if ( obj == null || getClass() != obj.getClass() ) {
+
+            return false;
+        }
+
+        GetGeoCodeByLocationRequest getGeoCodeByLocationRequest = ( GetGeoCodeByLocationRequest ) obj;
+        return Objects.equals( this.longitude, getGeoCodeByLocationRequest.longitude ) &&
+                Objects.equals( this.latitude, getGeoCodeByLocationRequest.latitude );
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( longitude, latitude );
+    }
+
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( "class GetGeoCodeByLocationRequest {\n" );
+
+        sb.append( "    longitude: " ).append( toIndentedString( longitude ) ).append( "\n" );
+        sb.append( "    latitude: " ).append( toIndentedString( latitude ) ).append( "\n" );
+        sb.append( "}" );
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString( java.lang.Object o ) {
+
+        if ( o == null ) {
+
+            return "null";
+        }
+        return o.toString().replace( "\n", "\n    " );
+    }
+
 }

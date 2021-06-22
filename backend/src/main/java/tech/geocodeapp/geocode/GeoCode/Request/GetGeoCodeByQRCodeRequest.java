@@ -2,77 +2,111 @@ package tech.geocodeapp.geocode.GeoCode.Request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.constraints.*;
 
 /**
- * GetGeoCodeByQRCodeRequest
+ * GetGeoCodeByQRCodeRequest used to specify the attributes needed to locate a specific GeoCode
+ * in the database
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T20:06:36.916Z[GMT]")
+public class GetGeoCodeByQRCodeRequest {
 
+    /**
+     * The QRCode of a specific GeoCode used to locate it
+     */
+    @JsonProperty( "QRCode" )
+    private String qrCode = null;
 
-public class GetGeoCodeByQRCodeRequest   {
-  @JsonProperty("QRCode")
-  private String qrCode = null;
+    /**
+     * Sets the qrCode attribute to the specified value
+     *
+     * @param qrCode the value the attribute should be set to
+     *
+     * @return the request after the qrCode has been changed
+     */
+    public GetGeoCodeByQRCodeRequest qrCode( String qrCode ) {
 
-  public GetGeoCodeByQRCodeRequest qrCode(String qrCode) {
-    this.qrCode = qrCode;
-    return this;
-  }
+        this.qrCode = qrCode;
+        return this;
+    }
 
-  /**
-   * Get qrCode
-   * @return qrCode
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+    /**
+     * Gets the saved qrCode attribute
+     *
+     * @return the stored qrCode attribute
+     */
     public String getQrCode() {
-    return qrCode;
-  }
 
-  public void setQrCode(String qrCode) {
-    this.qrCode = qrCode;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+        return qrCode;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Sets the qrCode attribute to the specified value
+     *
+     * @param qrCode the value the attribute should be set to
+     */
+    public void setQrCode( String qrCode ) {
+
+        this.qrCode = qrCode;
     }
-    GetGeoCodeByQRCodeRequest getGeoCodeByQRCodeRequest = (GetGeoCodeByQRCodeRequest) o;
-    return Objects.equals(this.qrCode, getGeoCodeByQRCodeRequest.qrCode);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(qrCode);
-  }
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
+    @Override
+    public boolean equals( java.lang.Object obj ) {
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class GetGeoCodeByQRCodeRequest {\n");
-    
-    sb.append("    qrCode: ").append(toIndentedString(qrCode)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+        if ( this == obj ) {
+            return true;
+        }
+        if ( obj == null || getClass() != obj.getClass() ) {
+            return false;
+        }
+        GetGeoCodeByQRCodeRequest getGeoCodeByQRCodeRequest = ( GetGeoCodeByQRCodeRequest ) obj;
+        return Objects.equals( this.qrCode, getGeoCodeByQRCodeRequest.qrCode );
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( qrCode );
+    }
+
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( "class GetGeoCodeByQRCodeRequest {\n" );
+
+        sb.append( "    qrCode: " ).append( toIndentedString( qrCode ) ).append( "\n" );
+        sb.append( "}" );
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString( java.lang.Object o ) {
+
+        if ( o == null ) {
+            return "null";
+        }
+        return o.toString().replace( "\n", "\n    " );
+    }
+
 }
