@@ -2,77 +2,113 @@ package tech.geocodeapp.geocode.GeoCode.Response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.constraints.*;
 
 /**
- * UpdateAvailabilityResponse
+ * UpdateAvailabilityResponse used to access the attributes received to create the response
+ * to determine if changing the availability of the specified GeoCode was a success
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
+public class UpdateAvailabilityResponse {
 
+    /**
+     * Determines if the update of the GeoCode with the specified attributes
+     * in the request was a success or not
+     */
+    @JsonProperty( "isSuccess" )
+    private Boolean isSuccess = null;
 
-public class UpdateAvailabilityResponse   {
-  @JsonProperty("isSuccess")
-  private Boolean isSuccess = null;
+    /**
+     * Sets the isSuccess attribute to the specified value
+     *
+     * @param isSuccess the value the attribute should be set to
+     *
+     * @return the response after the isSuccess has been changed
+     */
+    public UpdateAvailabilityResponse isSuccess( Boolean isSuccess ) {
 
-  public UpdateAvailabilityResponse isSuccess(Boolean isSuccess) {
-    this.isSuccess = isSuccess;
-    return this;
-  }
+        this.isSuccess = isSuccess;
+        return this;
+    }
 
-  /**
-   * Get isSuccess
-   * @return isSuccess
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+    /**
+     * Gets the saved isSuccess attribute
+     *
+     * @return the stored isSuccess attribute
+     */
     public Boolean isIsSuccess() {
-    return isSuccess;
-  }
 
-  public void setIsSuccess(Boolean isSuccess) {
-    this.isSuccess = isSuccess;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+        return isSuccess;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Sets the isSuccess attribute to the specified value
+     *
+     * @param isSuccess the value the attribute should be set to
+     */
+    public void setIsSuccess( Boolean isSuccess ) {
+
+        this.isSuccess = isSuccess;
     }
-    UpdateAvailabilityResponse updateAvailabilityResponse = (UpdateAvailabilityResponse) o;
-    return Objects.equals(this.isSuccess, updateAvailabilityResponse.isSuccess);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(isSuccess);
-  }
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
+    @Override
+    public boolean equals( java.lang.Object obj ) {
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class UpdateAvailabilityResponse {\n");
-    
-    sb.append("    isSuccess: ").append(toIndentedString(isSuccess)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
+        if ( this == obj ) {
 
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+            return true;
+        }
+        if ( obj == null || getClass() != obj.getClass() ) {
+
+            return false;
+        }
+
+        return Objects.equals( this.isSuccess, ( ( UpdateAvailabilityResponse ) obj ).isSuccess );
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( isSuccess );
+    }
+
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
+    @Override
+    public String toString() {
+
+        return "class UpdateAvailabilityResponse {\n" +
+                "    isSuccess: " + toIndentedString( isSuccess ) + "\n" +
+                "}";
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString( java.lang.Object o ) {
+
+        if ( o == null ) {
+
+            return "null";
+        }
+
+        return o.toString().replace( "\n", "\n    " );
+    }
+
 }

@@ -1,89 +1,136 @@
 package tech.geocodeapp.geocode.GeoCode.Response;
 
-import java.util.Collection;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
 
 /**
- * GetHintsResponse
+ * GetHintsResponse used to access the attributes received to create the response
+ * that contains the hints for a specific GeoCode
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
+public class GetHintsResponse {
 
+    /**
+     * The hints from the specified GeoCode
+     */
+    @Valid
+    @JsonProperty( "hints" )
+    private Collection< String > hints = null;
 
-public class GetHintsResponse   {
-  @JsonProperty("hints")
-  @Valid
-  private Collection<String> hints = null;
+    /**
+     * Sets the hints attribute to the specified value
+     *
+     * @param hints the value the attribute should be set to
+     *
+     * @return the request after the hints has been changed
+     */
+    public GetHintsResponse hints( Collection< String > hints ) {
 
-  public GetHintsResponse hints(Collection<String> hints) {
-    this.hints = hints;
-    return this;
-  }
-
-  public GetHintsResponse addHintsItem(String hintsItem) {
-    if (this.hints == null) {
-      this.hints = new ArrayList<String>();
+        this.hints = hints;
+        return this;
     }
-    this.hints.add(hintsItem);
-    return this;
-  }
 
-  /**
-   * Get hints
-   * @return hints
-   **/
-  @Schema(description = "")
-  
-    public Collection<String> getHints() {
-    return hints;
-  }
+    /**
+     * Sets a single hint inside of the hints attribute to the specified value
+     *
+     * @param hintsItem the value the attribute should be set to
+     *
+     * @return the stored hints attribute
+     */
+    public GetHintsResponse addHintsItem( String hintsItem ) {
 
-  public void setHints(Collection<String> hints) {
-    this.hints = hints;
-  }
+        if ( this.hints == null ) {
 
+            this.hints = new ArrayList<>();
+        }
 
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+        this.hints.add( hintsItem );
+        return this;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Gets the saved hints attribute
+     *
+     * @return the stored hints attribute
+     */
+    public Collection< String > getHints() {
+
+        return hints;
     }
-    GetHintsResponse getHintsResponse = (GetHintsResponse) o;
-    return Objects.equals(this.hints, getHintsResponse.hints);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(hints);
-  }
+    /**
+     * Sets the hints attribute to the specified value
+     *
+     * @param hints the value the attribute should be set to
+     */
+    public void setHints( Collection< String > hints ) {
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class GetHintsResponse {\n");
-    
-    sb.append("    hints: ").append(toIndentedString(hints)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+        this.hints = hints;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
+    @Override
+    public boolean equals( java.lang.Object obj ) {
+
+        if ( this == obj ) {
+
+            return true;
+        }
+        if ( obj == null || getClass() != obj.getClass() ) {
+
+            return false;
+        }
+
+        return Objects.equals( this.hints, ( ( GetHintsResponse ) obj ).hints );
+    }
+
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( hints );
+    }
+
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
+    @Override
+    public String toString() {
+
+        return "class GetHintsResponse {\n" +
+                "    hints: " + toIndentedString( hints ) + "\n" +
+                "}";
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString( java.lang.Object o ) {
+
+        if ( o == null ) {
+
+            return "null";
+        }
+
+        return o.toString().replace( "\n", "\n    " );
+    }
+
 }

@@ -1,131 +1,115 @@
 package tech.geocodeapp.geocode.GeoCode.Response;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
+import java.util.Objects;
 
 /**
- * UpdateLocationResponse
+ * UpdateLocationResponse used to access the attributes received to create the response
+ * to determine if changing the location of the specified GeoCode was a success
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
+public class UpdateLocationResponse {
 
+    /**
+     * Determines if the update of the GeoCode with the specified attributes
+     * in the request was a success or not
+     */
+    @JsonProperty( "success" )
+    private Boolean success = null;
 
-public class UpdateLocationResponse   {
-  @JsonProperty("success")
-  private Boolean success = null;
+    /**
+     * Sets the isSuccess attribute to the specified value
+     *
+     * @param success the value the attribute should be set to
+     *
+     * @return the response after the isSuccess has been changed
+     */
+    public UpdateLocationResponse success( Boolean success ) {
 
-  @JsonProperty("message")
-  private String message = null;
+        this.success = success;
+        return this;
+    }
 
-  @JsonProperty("Trackable")
-  private Collectable trackable = null;
-
-  public UpdateLocationResponse success(Boolean success) {
-    this.success = success;
-    return this;
-  }
-
-  /**
-   * Get success
-   * @return success
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+    /**
+     * Gets the saved isSuccess attribute
+     *
+     * @return the stored isSuccess attribute
+     */
     public Boolean isSuccess() {
-    return success;
-  }
 
-  public void setSuccess(Boolean success) {
-    this.success = success;
-  }
-
-  public UpdateLocationResponse message(String message) {
-    this.message = message;
-    return this;
-  }
-
-  /**
-   * Get message
-   * @return message
-   **/
-  @Schema(example = "The trackable object's location was successfully updated", required = true, description = "")
-      @NotNull
-
-    public String getMessage() {
-    return message;
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
-  }
-
-  public UpdateLocationResponse trackable(Collectable trackable) {
-    this.trackable = trackable;
-    return this;
-  }
-
-  /**
-   * Get trackable
-   * @return trackable
-   **/
-  @Schema(description = "")
-  
-    @Valid
-    public Collectable getTrackable() {
-    return trackable;
-  }
-
-  public void setTrackable(Collectable trackable) {
-    this.trackable = trackable;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+        return success;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Sets the isSuccess attribute to the specified value
+     *
+     * @param success the value the attribute should be set to
+     */
+    public void setSuccess( Boolean success ) {
+
+        this.success = success;
     }
-    UpdateLocationResponse updateLocationResponse = (UpdateLocationResponse) o;
-    return Objects.equals(this.success, updateLocationResponse.success) &&
-        Objects.equals(this.message, updateLocationResponse.message) &&
-        Objects.equals(this.trackable, updateLocationResponse.trackable);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(success, message, trackable);
-  }
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
+    @Override
+    public boolean equals( java.lang.Object obj ) {
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class UpdateLocationResponse {\n");
-    
-    sb.append("    success: ").append(toIndentedString(success)).append("\n");
-    sb.append("    message: ").append(toIndentedString(message)).append("\n");
-    sb.append("    trackable: ").append(toIndentedString(trackable)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
+        if ( this == obj ) {
 
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+            return true;
+        }
+
+        if ( obj == null || getClass() != obj.getClass() ) {
+
+            return false;
+        }
+
+        return Objects.equals( this.success, ( ( UpdateLocationResponse ) obj ).success );
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( success );
+    }
+
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
+    @Override
+    public String toString() {
+
+        return "class UpdateLocationResponse {\n" +
+                "    success: " + toIndentedString( success ) + "}";
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString( java.lang.Object o ) {
+
+        if ( o == null ) {
+
+            return "null";
+        }
+
+        return o.toString().replace( "\n", "\n    " );
+    }
+
 }

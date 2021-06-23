@@ -1,90 +1,136 @@
 package tech.geocodeapp.geocode.GeoCode.Response;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 
+import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * GetGeoCodesByDifficultyResponse
+ * GetGeoCodesByDifficultyResponse used to access the attributes received to create the response
+ * to filter all the GeoCodes by a specified difficulty
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T15:57:07.487Z[GMT]")
+public class GetGeoCodesByDifficultyResponse {
 
+    /**
+     * The list of GeoCodes with the specified difficulty
+     */
+    @Valid
+    @JsonProperty( "geocodes" )
+    private List< GeoCode > geocodes = null;
 
-public class GetGeoCodesByDifficultyResponse   {
-  @JsonProperty("geocodes")
-  @Valid
-  private List< GeoCode > geocodes = null;
+    /**
+     * Sets the hints attribute to the specified value
+     *
+     * @param geocodes the value the attribute should be set to
+     *
+     * @return the request after the hints has been changed
+     */
+    public GetGeoCodesByDifficultyResponse geocodes( List< GeoCode > geocodes ) {
 
-  public GetGeoCodesByDifficultyResponse geocodes(List<GeoCode> geocodes) {
-    this.geocodes = geocodes;
-    return this;
-  }
-
-  public GetGeoCodesByDifficultyResponse addGeocodesItem(GeoCode geocodesItem) {
-    if (this.geocodes == null) {
-      this.geocodes = new ArrayList<GeoCode>();
+        this.geocodes = geocodes;
+        return this;
     }
-    this.geocodes.add(geocodesItem);
-    return this;
-  }
 
-  /**
-   * Get geocodes
-   * @return geocodes
-   **/
-  @Schema(description = "")
-      @Valid
-    public List<GeoCode> getGeocodes() {
-    return geocodes;
-  }
+    /**
+     * Sets a single hint inside of the hints attribute to the specified value
+     *
+     * @param geocodesItem the value the attribute should be set to
+     *
+     * @return the stored hints attribute
+     */
+    public GetGeoCodesByDifficultyResponse addGeocodesItem( GeoCode geocodesItem ) {
 
-  public void setGeocodes(List<GeoCode> geocodes) {
-    this.geocodes = geocodes;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+        if ( this.geocodes == null ) {
+            this.geocodes = new ArrayList<>();
+        }
+        this.geocodes.add( geocodesItem );
+        return this;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Gets the saved hints attribute
+     *
+     * @return the stored hints attribute
+     */
+    public List< GeoCode > getGeocodes() {
+
+        return geocodes;
     }
-    GetGeoCodesByDifficultyResponse getGeoCodesByDifficultyResponse = (GetGeoCodesByDifficultyResponse) o;
-    return Objects.equals(this.geocodes, getGeoCodesByDifficultyResponse.geocodes);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(geocodes);
-  }
+    /**
+     * Sets the hints attribute to the specified value
+     *
+     * @param geocodes the value the attribute should be set to
+     */
+    public void setGeocodes( List< GeoCode > geocodes ) {
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class GetGeoCodesByDifficultyResponse {\n");
-    
-    sb.append("    geocodes: ").append(toIndentedString(geocodes)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+        this.geocodes = geocodes;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
+    @Override
+    public boolean equals( java.lang.Object obj ) {
+
+        if ( this == obj ) {
+
+            return true;
+        }
+        if ( obj == null || getClass() != obj.getClass() ) {
+
+            return false;
+        }
+
+        return Objects.equals( this.geocodes, ( ( GetGeoCodesByDifficultyResponse ) obj ).geocodes );
+    }
+
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( geocodes );
+    }
+
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
+    @Override
+    public String toString() {
+
+        return "class GetGeoCodesByDifficultyResponse {\n" +
+                "    geocodes: " + toIndentedString( geocodes ) + "\n" +
+                "}";
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString( java.lang.Object o ) {
+
+        if ( o == null ) {
+
+            return "null";
+        }
+
+        return o.toString().replace( "\n", "\n    " );
+    }
+
 }

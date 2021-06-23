@@ -1,89 +1,134 @@
 package tech.geocodeapp.geocode.GeoCode.Response;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 import tech.geocodeapp.geocode.Collectable.Model.Collectable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 /**
- * GetCollectablesResponse
+ * GetCollectablesResponse used to access the attributes received from the response
+ * to get all the collectables in the specified GeoCode
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T20:43:37.106Z[GMT]")
+public class GetCollectablesResponse {
 
-
-public class GetCollectablesResponse   {
-  @JsonProperty("collectables")
-  @Valid
-  private List< Collectable > collectables = new ArrayList<Collectable>();
-
-  public GetCollectablesResponse collectables( List<Collectable> collectables ) {
-    this.collectables = collectables;
-    return this;
-  }
-
-  public GetCollectablesResponse addCollectablesItem(Collectable collectablesItem) {
-    this.collectables.add(collectablesItem);
-    return this;
-  }
-
-  /**
-   * Get collectables
-   * @return collectables
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+    /**
+     * The list of collectables inside of the stored GeoCode
+     */
     @Valid
-    public List<Collectable> getCollectables() {
-    return collectables;
-  }
+    @JsonProperty( "collectables" )
+    private List< Collectable > collectables = new ArrayList<>();
 
-  public void setCollectables(List<Collectable> collectables) {
-    this.collectables = collectables;
-  }
+    /**
+     * Sets the collectables attribute to the specified value
+     *
+     * @param collectables the value the attribute should be set to
+     *
+     * @return the request after the collectables has been changed
+     */
+    public GetCollectablesResponse collectables( List< Collectable > collectables ) {
 
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+        this.collectables = collectables;
+        return this;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Sets a single hint inside of the collectables attribute to the specified value
+     *
+     * @param collectablesItem the value the attribute should be set to
+     *
+     * @return the stored collectables attribute
+     */
+    public GetCollectablesResponse addCollectablesItem( Collectable collectablesItem ) {
+
+        this.collectables.add( collectablesItem );
+        return this;
     }
-    GetCollectablesResponse getCollectablesResponse = (GetCollectablesResponse) o;
-    return Objects.equals(this.collectables, getCollectablesResponse.collectables);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(collectables);
-  }
+    /**
+     * Gets the saved collectables attribute
+     *
+     * @return the stored collectables attribute
+     */
+    @Valid
+    public List< Collectable > getCollectables() {
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class GetCollectablesResponse {\n");
-    
-    sb.append("    collectables: ").append(toIndentedString(collectables)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+        return collectables;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    /**
+     * Sets the collectables attribute to the specified value
+     *
+     * @param collectables the value the attribute should be set to
+     */
+    public void setCollectables( List< Collectable > collectables ) {
+
+        this.collectables = collectables;
+    }
+
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
+    @Override
+    public boolean equals( java.lang.Object obj ) {
+
+        if ( this == obj ) {
+
+            return true;
+        }
+        if ( obj == null || getClass() != obj.getClass() ) {
+
+            return false;
+        }
+
+        return Objects.equals( this.collectables, ( ( GetCollectablesResponse ) obj ).collectables );
+    }
+
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( collectables );
+    }
+
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
+    @Override
+    public String toString() {
+
+        return "class GetCollectablesResponse {\n" +
+                "    collectables: " + toIndentedString( collectables ) + "\n" +
+                "}";
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString( java.lang.Object o ) {
+
+        if ( o == null ) {
+
+            return "null";
+        }
+
+        return o.toString().replace( "\n", "\n    " );
+    }
+
 }
