@@ -1517,10 +1517,10 @@ components:
             $ref: '#/components/schemas/Point'
         currentCollectable:
           $ref: '#/components/schemas/Collectable'
-        foundCollectables:
+        foundCollectableTypes:
           type: array
           items:
-            $ref: '#/components/schemas/Collectable'
+            $ref: '#/components/schemas/CollectableType'
         foundGeocodes:
           type: array
           items:

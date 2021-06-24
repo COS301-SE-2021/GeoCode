@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.User.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,14 +15,8 @@ import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.User.Model.User;
 import tech.geocodeapp.geocode.User.Repository.UserRepository;
-import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
-import tech.geocodeapp.geocode.User.Request.GetFoundCollectableTypesRequest;
-import tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest;
-import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
-import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
-import tech.geocodeapp.geocode.User.Response.GetFoundCollectableTypesResponse;
-import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
-import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
+import tech.geocodeapp.geocode.User.Request.*;
+import tech.geocodeapp.geocode.User.Response.*;
 
 /**
  * This class implements the UserService interface
@@ -122,8 +117,8 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Gets the IDs of the CollectableTypes that the User has found so far
-     * @param request The GetFoundCollectableTypesRequest request
-     * @return The IDs of the CollectableTypes
+     * @param request The GetFoundCollectableTypesRequest object
+     * @return A GetCollectableTypesResponse object: (success, message, object)
      * @throws NullUserRequestParameterException
      */
     public GetFoundCollectableTypesResponse getFoundCollectableTypes(GetFoundCollectableTypesRequest request) throws NullUserRequestParameterException{
@@ -135,14 +130,42 @@ public class UserServiceImpl implements UserService {
             throw new NullUserRequestParameterException();
         }
 
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+        var optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetFoundCollectableTypesResponse(false, invalidUserIdMessage, null);
         }
 
-        User currentUser = optionalUser.get();
-        var collectableTypes = currentUser.getFoundCollectables();
+        //get IDs for all of the found CollectableTypes for the current User
+        var currentUser = optionalUser.get();
+        var foundCollectableTypes = currentUser.getFoundCollectableTypes();
+        var foundCollectableTypeIDs = new ArrayList<UUID>();
+
+        for(var collectableType : foundCollectableTypes){
+            foundCollectableTypeIDs.add(collectableType.getId());
+        }
+
+        return new GetFoundCollectableTypesResponse(true, "The IDs of the User's found CollectableTypes was successfully returned", foundCollectableTypeIDs);
+    }
+
+    /**
+     * Gets the IDs of the GeoCodes that the User has found so far
+     * @param request The GetFoundGeoCodesRequest object
+     * @return A GetFoundGeoCodesResponse object: (success, message, object)
+     * @throws NullUserRequestParameterException
+     */
+    public GetFoundGeoCodesResponse getFoundGeoCodes(GetFoundGeoCodesRequest request) throws NullUserRequestParameterException {
+        return null;
+    }
+
+    /**
+     * Gets the IDs of the GeoCodes that the User owns
+     * @param request The GetOwnedGeoCodesRequest object
+     * @return A GetOwnedGeoCodesResponse object: (success, message, object)
+     * @throws NullUserRequestParameterException
+     */
+    public GetOwnedGeoCodesResponse getOwnedGeoCodes(GetOwnedGeoCodesRequest request) throws NullUserRequestParameterException {
+        return null;
     }
 
     /**
