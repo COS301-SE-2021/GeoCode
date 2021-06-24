@@ -1,4 +1,4 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.User.Request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
