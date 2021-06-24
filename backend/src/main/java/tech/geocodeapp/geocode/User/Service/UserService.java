@@ -4,12 +4,8 @@ import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.Collectable.Model.Collectable;
 import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.User.Model.User;
-import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
-import tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest;
-import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
-import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
-import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
-import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
+import tech.geocodeapp.geocode.User.Request.*;
+import tech.geocodeapp.geocode.User.Response.*;
 
 import java.util.UUID;
 
@@ -26,6 +22,15 @@ public interface UserService {
 
     //U1.3 updateLocation
     UpdateLocationResponse updateLocation(UpdateLocationRequest request) throws NullUserRequestParameterException;
+
+    //U1.4 getFoundCollectableTypes
+    GetFoundCollectableTypesResponse getFoundCollectableTypes(GetFoundCollectableTypesRequest request) throws NullUserRequestParameterException;
+
+    //U1.5 getFoundGeoCodes
+    GetFoundGeoCodesResponse getFoundGeoCodes(GetFoundGeoCodesRequest request) throws NullUserRequestParameterException;
+
+    //U1.6 getOwnedGeoCodes
+    GetOwnedGeoCodesResponse getOwnedGeoCodes(GetOwnedGeoCodesRequest request) throws NullUserRequestParameterException;
 
     //User helper functions
     User getUserById(UUID id);

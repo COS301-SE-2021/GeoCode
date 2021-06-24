@@ -15,9 +15,11 @@ import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.User.Model.User;
 import tech.geocodeapp.geocode.User.Repository.UserRepository;
 import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
+import tech.geocodeapp.geocode.User.Request.GetFoundCollectableTypesRequest;
 import tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest;
 import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
 import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
+import tech.geocodeapp.geocode.User.Response.GetFoundCollectableTypesResponse;
 import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
 import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
 
@@ -116,6 +118,31 @@ public class UserServiceImpl implements UserService {
         collectableRepo.save(trackableObject);
 
         return new UpdateLocationResponse(true, "The trackable object's location was successfully updated", trackableObject);
+    }
+
+    /**
+     * Gets the IDs of the CollectableTypes that the User has found so far
+     * @param request The GetFoundCollectableTypesRequest request
+     * @return The IDs of the CollectableTypes
+     * @throws NullUserRequestParameterException
+     */
+    public GetFoundCollectableTypesResponse getFoundCollectableTypes(GetFoundCollectableTypesRequest request) throws NullUserRequestParameterException{
+        if (request == null) {
+            return new GetFoundCollectableTypesResponse(false, "The GetFoundCollectableTypesResponseRequest object passed was NULL", null);
+        }
+
+        if(request.getUserID() == null){
+            throw new NullUserRequestParameterException();
+        }
+
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+
+        if(optionalUser.isEmpty()){
+            return new GetFoundCollectableTypesResponse(false, invalidUserIdMessage, null);
+        }
+
+        User currentUser = optionalUser.get();
+        var collectableTypes = currentUser.getFoundCollectables();
     }
 
     /**

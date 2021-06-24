@@ -29,6 +29,12 @@ public class GetFoundCollectableTypesResponse   {
   @Valid
   private List<UUID> collectableTypeIDs = new ArrayList<UUID>();
 
+  public GetFoundCollectableTypesResponse(boolean success, String message, List<UUID> collectableTypeIDs){
+    this.success = success;
+    this.message = message;
+    this.collectableTypeIDs = collectableTypeIDs;
+  }
+
   public GetFoundCollectableTypesResponse success(Boolean success) {
     this.success = success;
     return this;
