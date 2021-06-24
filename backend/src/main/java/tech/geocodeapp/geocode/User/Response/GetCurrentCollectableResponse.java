@@ -27,6 +27,13 @@ public class GetCurrentCollectableResponse   {
   @JsonProperty("Collectable")
   private Collectable collectable = null;
 
+  public GetCurrentCollectableResponse(boolean success, String message, Collectable collectable) {
+    this.success = success;
+    this.message = message;
+    this.collectable = collectable;
+  }
+
+
   public GetCurrentCollectableResponse success(Boolean success) {
     this.success = success;
     return this;

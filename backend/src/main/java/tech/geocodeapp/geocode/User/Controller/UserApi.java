@@ -68,6 +68,7 @@ public interface UserApi {
             method = RequestMethod.POST)
     ResponseEntity<GetFoundCollectableTypesResponse> getFoundCollectableTypes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the IDs of the user's found Collectable Types", required=true, schema=@Schema()) @Valid @RequestBody GetFoundCollectableTypesRequest body);
 
+
     @Operation(summary = "Gets the GeoCodes that the user has ever found", description = "Gets the user's found GeoCodes", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
     @ApiResponses(value = {
@@ -92,19 +93,6 @@ public interface UserApi {
             consumes = { "application/json", "application/xml" },
             method = RequestMethod.POST)
     ResponseEntity<GetOwnedGeoCodesResponse> getOwnedGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's owned GeoCodes", required=true, schema=@Schema()) @Valid @RequestBody GetOwnedGeoCodesRequest body);
-
-    @Operation(summary = "Get all geocodes associated with a user", description = "Get My Geocodes", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Successfully gotten geocodes", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetOwnedGeoCodesResponse.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
-    @RequestMapping(value = "/User/getOwnedGeocodes",
-        produces = { "application/json", "application/xml" }, 
-        consumes = { "application/json", "application/xml" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<GetOwnedGeoCodesResponse> getOwnedGeocodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get geocodes belonging to user", required = true, schema = @Schema()) @Valid @RequestBody GetOwnedGeoCodesRequest body);
-
 
     @Operation(summary = "Get all of the users in the system", description = "Get all of the users", security = {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })

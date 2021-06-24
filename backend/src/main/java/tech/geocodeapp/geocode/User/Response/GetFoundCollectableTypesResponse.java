@@ -15,13 +15,59 @@ import javax.validation.constraints.*;
  * GetFoundCollectableTypesResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-24T10:12:19.520Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-24T10:49:36.244Z[GMT]")
 
 
 public class GetFoundCollectableTypesResponse   {
+  @JsonProperty("success")
+  private Boolean success = null;
+
+  @JsonProperty("message")
+  private String message = null;
+
   @JsonProperty("collectableTypeIDs")
   @Valid
-  private List<UUID> collectableTypeIDs = null;
+  private List<UUID> collectableTypeIDs = new ArrayList<UUID>();
+
+  public GetFoundCollectableTypesResponse success(Boolean success) {
+    this.success = success;
+    return this;
+  }
+
+  /**
+   * Get success
+   * @return success
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    public Boolean isSuccess() {
+    return success;
+  }
+
+  public void setSuccess(Boolean success) {
+    this.success = success;
+  }
+
+  public GetFoundCollectableTypesResponse message(String message) {
+    this.message = message;
+    return this;
+  }
+
+  /**
+   * Get message
+   * @return message
+   **/
+  @Schema(example = "The IDs of the User's found CollectableTypes was successfully returned", required = true, description = "")
+      @NotNull
+
+    public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
   public GetFoundCollectableTypesResponse collectableTypeIDs(List<UUID> collectableTypeIDs) {
     this.collectableTypeIDs = collectableTypeIDs;
@@ -29,9 +75,6 @@ public class GetFoundCollectableTypesResponse   {
   }
 
   public GetFoundCollectableTypesResponse addCollectableTypeIDsItem(UUID collectableTypeIDsItem) {
-    if (this.collectableTypeIDs == null) {
-      this.collectableTypeIDs = new ArrayList<UUID>();
-    }
     this.collectableTypeIDs.add(collectableTypeIDsItem);
     return this;
   }
@@ -40,8 +83,9 @@ public class GetFoundCollectableTypesResponse   {
    * Get collectableTypeIDs
    * @return collectableTypeIDs
    **/
-  @Schema(description = "")
-      @Valid
+  @Schema(required = true, description = "")
+      @NotNull
+    @Valid
     public List<UUID> getCollectableTypeIDs() {
     return collectableTypeIDs;
   }
@@ -60,12 +104,14 @@ public class GetFoundCollectableTypesResponse   {
       return false;
     }
     GetFoundCollectableTypesResponse getFoundCollectableTypesResponse = (GetFoundCollectableTypesResponse) o;
-    return Objects.equals(this.collectableTypeIDs, getFoundCollectableTypesResponse.collectableTypeIDs);
+    return Objects.equals(this.success, getFoundCollectableTypesResponse.success) &&
+        Objects.equals(this.message, getFoundCollectableTypesResponse.message) &&
+        Objects.equals(this.collectableTypeIDs, getFoundCollectableTypesResponse.collectableTypeIDs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(collectableTypeIDs);
+    return Objects.hash(success, message, collectableTypeIDs);
   }
 
   @Override
@@ -73,6 +119,8 @@ public class GetFoundCollectableTypesResponse   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetFoundCollectableTypesResponse {\n");
     
+    sb.append("    success: ").append(toIndentedString(success)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("    collectableTypeIDs: ").append(toIndentedString(collectableTypeIDs)).append("\n");
     sb.append("}");
     return sb.toString();
