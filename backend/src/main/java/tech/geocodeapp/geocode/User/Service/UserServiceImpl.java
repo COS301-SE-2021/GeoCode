@@ -1,14 +1,12 @@
 package tech.geocodeapp.geocode.User.Service;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
 import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
 import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
@@ -136,11 +134,9 @@ public class UserServiceImpl implements UserService {
         //get IDs for all of the found CollectableTypes for the current User
         var currentUser = optionalUser.get();
         var foundCollectableTypes = currentUser.getFoundCollectableTypes();
-        var foundCollectableTypeIDs = new ArrayList<UUID>();
 
-        for(var collectableType : foundCollectableTypes){
-            foundCollectableTypeIDs.add(collectableType.getId());
-        }
+        var foundCollectableTypeIDs = new ArrayList<UUID>();
+        foundCollectableTypes.forEach(collectableType -> foundCollectableTypeIDs.add(collectableType.getId()));
 
         return new GetFoundCollectableTypesResponse(true, "The IDs of the User's found CollectableTypes was successfully returned", foundCollectableTypeIDs);
     }
@@ -169,11 +165,9 @@ public class UserServiceImpl implements UserService {
         //get IDs for all of the found GeoCodes for the current User
         var currentUser = optionalUser.get();
         var foundGeoCodes = currentUser.getFoundGeocodes();
-        var foundGeoCodeIDs = new ArrayList<UUID>();
 
-        for(var foundGeoCode : foundGeoCodes){
-            foundGeoCodeIDs.add(foundGeoCode.getId());
-        }
+        var foundGeoCodeIDs = new ArrayList<UUID>();
+        foundGeoCodes.forEach(foundGeoCode -> foundGeoCodeIDs.add(foundGeoCode.getId()));
 
         return new GetFoundGeoCodesResponse(true, "The IDs of the User's found GeoCodes was successfully returned", foundGeoCodeIDs);
     }
@@ -202,11 +196,9 @@ public class UserServiceImpl implements UserService {
         //get IDs for all of the GeoCodes owned by the current User
         var currentUser = optionalUser.get();
         var ownedGeocodes = currentUser.getOwnedGeocodes();
-        var ownedGeoCodeIDs = new ArrayList<UUID>();
 
-        for(var ownedGeoCode : ownedGeocodes){
-            ownedGeoCodeIDs.add(ownedGeoCode.getId());
-        }
+        var ownedGeoCodeIDs = new ArrayList<UUID>();
+        ownedGeocodes.forEach(ownedGeocode -> ownedGeoCodeIDs.add(ownedGeocode.getId()));
 
         return new GetOwnedGeoCodesResponse(true, "The IDs of the User's owned GeoCodes was successfully returned", ownedGeoCodeIDs);
     }
