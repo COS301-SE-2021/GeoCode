@@ -44,7 +44,7 @@ public class UserServiceImplTest {
     @BeforeEach
     void setup() {
         CollectableTypeMockRepository collectableTypeMockRepo = new CollectableTypeMockRepository();
-        userService = new UserServiceImpl( new UserMockRepository(), new CollectableMockRepository(), collectableTypeMockRepo, new GeoCodeMockRepository());
+        userService = new UserServiceImpl( new UserMockRepository(), new CollectableMockRepository(), collectableTypeMockRepo);
 
         //save the valid trackable CollectableType
         CollectableType trackableCollectableType = new CollectableType();
@@ -72,7 +72,6 @@ public class UserServiceImplTest {
            GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
            request.setUserID(null);
 
-           //GetCurrentCollectableResponse response = userService.getCurrentCollectable(request);
            assertThatThrownBy(() -> getCurrentCollectableResponse = userService.getCurrentCollectable(request))
                 .isInstanceOf(NullUserRequestParameterException.class);
     }
