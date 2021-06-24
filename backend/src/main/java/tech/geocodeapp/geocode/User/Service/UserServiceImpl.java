@@ -188,7 +188,30 @@ public class UserServiceImpl implements UserService {
      * @throws NullUserRequestParameterException
      */
     public GetOwnedGeoCodesResponse getOwnedGeoCodes(GetOwnedGeoCodesRequest request) throws NullUserRequestParameterException {
-        return null;
+        if (request == null) {
+            return new GetOwnedGeoCodesResponse(false, "The GetOwnedGeoCodesResponseRequest object passed was NULL", null);
+        }
+
+        if(request.getUserID() == null){
+            throw new NullUserRequestParameterException();
+        }
+
+        var optionalUser = userRepo.findById(request.getUserID());
+
+        if(optionalUser.isEmpty()){
+            return new GetOwnedGeoCodesResponse(false, invalidUserIdMessage, null);
+        }
+
+        //get IDs for all of the GeoCodes owned by the current User
+        var currentUser = optionalUser.get();
+        var ownedGeocodes = currentUser.getOwnedGeocodes();
+        var ownedGeoCodeIDs = new ArrayList<UUID>();
+
+        for(var ownedGeoCode : ownedGeocodes){
+            ownedGeoCodeIDs.add(ownedGeoCode.getId());
+        }
+
+        return new GetOwnedGeoCodesResponse(true, "The IDs of the User's owned GeoCodes was successfully returned", ownedGeoCodeIDs);
     }
 
     /**

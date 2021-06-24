@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.Collectable.Model.Collectable;
+
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -28,6 +30,12 @@ public class GetOwnedGeoCodesResponse   {
   @JsonProperty("geocodeIDs")
   @Valid
   private List<UUID> geocodeIDs = new ArrayList<UUID>();
+
+  public GetOwnedGeoCodesResponse(boolean success, String message, List<UUID> geocodeIDs) {
+    this.success = success;
+    this.message = message;
+    this.geocodeIDs = geocodeIDs;
+  }
 
   public GetOwnedGeoCodesResponse success(Boolean success) {
     this.success = success;
