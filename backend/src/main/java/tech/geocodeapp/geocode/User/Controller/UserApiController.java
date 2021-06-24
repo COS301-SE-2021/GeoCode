@@ -19,9 +19,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
-import tech.geocodeapp.geocode.User.Response.GetFoundCollectablesResponse;
 import tech.geocodeapp.geocode.User.Response.GetFoundGeoCodesResponse;
-import tech.geocodeapp.geocode.User.Model.User;
 import tech.geocodeapp.geocode.User.Request.*;
 import tech.geocodeapp.geocode.User.Response.*;
 import tech.geocodeapp.geocode.User.Service.UserServiceImpl;
@@ -90,18 +88,46 @@ public class UserApiController implements UserApi {
         }
     }
 
-    public ResponseEntity<GetFoundCollectablesResponse> getFoundCollectables(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's found Collectables", required=true, schema=@Schema()) @Valid @RequestBody GetFoundCollectablesRequest body) {
+    public ResponseEntity<GetFoundCollectableTypesResponse> getFoundCollectableTypes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the IDs of the user's found Collectable Types", required=true, schema=@Schema()) @Valid @RequestBody GetFoundCollectableTypesRequest body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<GetFoundCollectablesResponse>(objectMapper.readValue("{\n  \"collectables\" : [ {\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"type\" : {\n      \"image\" : \"image\",\n      \"set\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      },\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"rarity\" : \"COMMON\"\n    }\n  }, {\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"type\" : {\n      \"image\" : \"image\",\n      \"set\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      },\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"rarity\" : \"COMMON\"\n    }\n  } ]\n}", GetFoundCollectablesResponse.class), HttpStatus.NOT_IMPLEMENTED);
+                return new ResponseEntity<GetFoundCollectableTypesResponse>(objectMapper.readValue("{\n  \"collectableTypeIDs\" : [ \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" ]\n}", GetFoundCollectableTypesResponse.class), HttpStatus.NOT_IMPLEMENTED);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<GetFoundCollectablesResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<GetFoundCollectableTypesResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
-        return new ResponseEntity<GetFoundCollectablesResponse>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<GetFoundCollectableTypesResponse>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    public ResponseEntity<GetFoundGeoCodesResponse> getFoundGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's found GeoCodes", required=true, schema=@Schema()) @Valid @RequestBody GetFoundGeoCodesRequest body) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            try {
+                return new ResponseEntity<GetFoundGeoCodesResponse>(objectMapper.readValue("{\n  \"geocodeIDs\" : [ \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" ]\n}", GetFoundGeoCodesResponse.class), HttpStatus.NOT_IMPLEMENTED);
+            } catch (IOException e) {
+                log.error("Couldn't serialize response for content type application/json", e);
+                return new ResponseEntity<GetFoundGeoCodesResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return new ResponseEntity<GetFoundGeoCodesResponse>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    public ResponseEntity<GetOwnedGeoCodesResponse> getOwnedGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's owned GeoCodes", required=true, schema=@Schema()) @Valid @RequestBody GetOwnedGeoCodesRequest body) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            try {
+                return new ResponseEntity<GetOwnedGeoCodesResponse>(objectMapper.readValue("{\n  \"geocodeIDs\" : [ \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" ]\n}", GetOwnedGeoCodesResponse.class), HttpStatus.NOT_IMPLEMENTED);
+            } catch (IOException e) {
+                log.error("Couldn't serialize response for content type application/json", e);
+                return new ResponseEntity<GetOwnedGeoCodesResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return new ResponseEntity<GetOwnedGeoCodesResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<GetFoundGeoCodesResponse> getFoundGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's found GeoCodes", required=true, schema=@Schema()) @Valid @RequestBody GetFoundGeoCodesRequest body) {

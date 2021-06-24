@@ -2,50 +2,52 @@ package tech.geocodeapp.geocode.User.Response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
  * GetFoundGeoCodesResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-24T10:12:19.520Z[GMT]")
 
 
 public class GetFoundGeoCodesResponse   {
-  @JsonProperty("geocodes")
+  @JsonProperty("geocodeIDs")
   @Valid
-  private List<GeoCode> geocodes = null;
+  private List<UUID> geocodeIDs = null;
 
-  public GetFoundGeoCodesResponse geocodes(List<GeoCode> geocodes) {
-    this.geocodes = geocodes;
+  public GetFoundGeoCodesResponse geocodeIDs(List<UUID> geocodeIDs) {
+    this.geocodeIDs = geocodeIDs;
     return this;
   }
 
-  public GetFoundGeoCodesResponse addGeocodesItem(GeoCode geocodesItem) {
-    if (this.geocodes == null) {
-      this.geocodes = new ArrayList<GeoCode>();
+  public GetFoundGeoCodesResponse addGeocodeIDsItem(UUID geocodeIDsItem) {
+    if (this.geocodeIDs == null) {
+      this.geocodeIDs = new ArrayList<UUID>();
     }
-    this.geocodes.add(geocodesItem);
+    this.geocodeIDs.add(geocodeIDsItem);
     return this;
   }
 
   /**
-   * Get geocodes
-   * @return geocodes
+   * Get geocodeIDs
+   * @return geocodeIDs
    **/
   @Schema(description = "")
       @Valid
-    public List<GeoCode> getGeocodes() {
-    return geocodes;
+    public List<UUID> getGeocodeIDs() {
+    return geocodeIDs;
   }
 
-  public void setGeocodes(List<GeoCode> geocodes) {
-    this.geocodes = geocodes;
+  public void setGeocodeIDs(List<UUID> geocodeIDs) {
+    this.geocodeIDs = geocodeIDs;
   }
 
 
@@ -58,12 +60,12 @@ public class GetFoundGeoCodesResponse   {
       return false;
     }
     GetFoundGeoCodesResponse getFoundGeoCodesResponse = (GetFoundGeoCodesResponse) o;
-    return Objects.equals(this.geocodes, getFoundGeoCodesResponse.geocodes);
+    return Objects.equals(this.geocodeIDs, getFoundGeoCodesResponse.geocodeIDs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(geocodes);
+    return Objects.hash(geocodeIDs);
   }
 
   @Override
@@ -71,7 +73,7 @@ public class GetFoundGeoCodesResponse   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetFoundGeoCodesResponse {\n");
     
-    sb.append("    geocodes: ").append(toIndentedString(geocodes)).append("\n");
+    sb.append("    geocodeIDs: ").append(toIndentedString(geocodeIDs)).append("\n");
     sb.append("}");
     return sb.toString();
   }
