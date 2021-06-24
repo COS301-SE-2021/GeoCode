@@ -155,7 +155,30 @@ public class UserServiceImpl implements UserService {
      * @throws NullUserRequestParameterException
      */
     public GetFoundGeoCodesResponse getFoundGeoCodes(GetFoundGeoCodesRequest request) throws NullUserRequestParameterException {
-        return null;
+        if (request == null) {
+            return new GetFoundGeoCodesResponse(false, "The GetFoundGeoCodesResponseRequest object passed was NULL", null);
+        }
+
+        if(request.getUserID() == null){
+            throw new NullUserRequestParameterException();
+        }
+
+        var optionalUser = userRepo.findById(request.getUserID());
+
+        if(optionalUser.isEmpty()){
+            return new GetFoundGeoCodesResponse(false, invalidUserIdMessage, null);
+        }
+
+        //get IDs for all of the found GeoCodes for the current User
+        var currentUser = optionalUser.get();
+        var foundGeoCodes = currentUser.getFoundGeocodes();
+        var foundGeoCodeIDs = new ArrayList<UUID>();
+
+        for(var foundGeoCode : foundGeoCodes){
+            foundGeoCodeIDs.add(foundGeoCode.getId());
+        }
+
+        return new GetFoundGeoCodesResponse(true, "The IDs of the User's found GeoCodes was successfully returned", foundGeoCodeIDs);
     }
 
     /**
