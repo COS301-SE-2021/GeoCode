@@ -1,307 +1,494 @@
 package tech.geocodeapp.geocode.GeoCode.Model;
 
-import java.util.*;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 import tech.geocodeapp.geocode.Collectable.Model.*;
 
+import java.util.*;
+
 /**
- * GeoCode
+ * The GeoCode model that will be stored as a table in the db
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T19:40:54.656Z[GMT]")
+//@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T19:40:54.656Z[GMT]")
 
 @Entity
-@Table(name = "geocode")
-public class GeoCode   {
+@Table( name = "geocode" )
+public class GeoCode {
 
-  @JsonProperty("id")
-  @Id
-  private UUID id = null;
+    /**
+     * The unique identifer for the GeoCode
+     */
+    @Id
+    @JsonProperty( "id" )
+    private UUID id = null;
 
-  @JsonProperty("difficulty")
-  private Difficulty difficulty = null;
+    /**
+     * The description of where the GeoCode is and what it involves
+     */
+    @JsonProperty( "difficulty" )
+    private Difficulty difficulty = null;
 
-  @JsonProperty("available")
-  private Boolean available = null;
+    /**
+     * If the GeoCode is active in the system
+     */
+    @JsonProperty( "available" )
+    private Boolean available = null;
 
-  @JsonProperty("description")
-  private String description = null;
+    /**
+     * The description of where the GeoCode is and what it involves
+     */
+    @JsonProperty( "description" )
+    private String description = null;
 
-  @JsonProperty("hints")
-  @ElementCollection( fetch = FetchType.EAGER )
-  @Valid
-  private Collection<String> hints = new ArrayList<String>();
+    /**
+     * The list of hints provided by the user who created the GeoCode
+     * to help a user searching for the GeoCode find it
+     */
+    @Valid
+    @JsonProperty( "hints" )
+    @ElementCollection( fetch = FetchType.EAGER )
+    private Collection< String > hints = new ArrayList<>();
 
-  @JsonProperty("collectables")
-  @ManyToMany
-  @ElementCollection( fetch = FetchType.EAGER )
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  @Valid
-  private Collection<Collectable> collectables = null;
+    /**
+     * The list of collectables stored inside of the GeoCode
+     */
+    @Valid
+    @ManyToMany
+    @JsonProperty( "collectables" )
+    //@ElementCollection( fetch = FetchType.EAGER )
+    @Cascade( org.hibernate.annotations.CascadeType.ALL )
+    private Collection< Collectable > collectables = null;
 
-  @JsonProperty("qrCode")
-  private String qrCode = null;
+    /**
+     * A short unique identifier to find the GeoCode in the system
+     * by the user from the real world
+     */
+    @JsonProperty( "qrCode" )
+    private String qrCode = null;
 
-  @JsonProperty("longitude")
-  private String longitude = null;
+    /**
+     * The longitude of the location of the GeoCode in the real world
+     */
+    @JsonProperty( "longitude" )
+    private String longitude = null;
 
-  @JsonProperty("latitude")
-  private String latitude = null;
+    /**
+     * The latitude of the location of the GeoCode in the real world
+     */
+    @JsonProperty( "latitude" )
+    private String latitude = null;
 
-  public GeoCode id(UUID id) {
-    this.id = id;
-    return this;
-  }
+    /**
+     * Sets the id attribute to the specified value
+     *
+     * @param id the unique id to set the GeoCode to
+     *
+     * @return the model after changing the id
+     */
+    public GeoCode id( UUID id ) {
 
-  /**
-   * Get id
-   * @return id
-   **/
-  @Schema(required = true, description = "")
-  @NotNull
-
-  @Valid
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public GeoCode difficulty(Difficulty difficulty) {
-    this.difficulty = difficulty;
-    return this;
-  }
-
-  /**
-   * Get difficulty
-   * @return difficulty
-   **/
-  @Schema(required = true, description = "")
-  @NotNull
-
-  @Valid
-  public Difficulty getDifficulty() {
-    return difficulty;
-  }
-
-  public void setDifficulty(Difficulty difficulty) {
-    this.difficulty = difficulty;
-  }
-
-  public GeoCode available(Boolean available) {
-    this.available = available;
-    return this;
-  }
-
-  /**
-   * Get available
-   * @return available
-   **/
-  @Schema(required = true, description = "")
-  @NotNull
-
-  public Boolean isAvailable() {
-    return available;
-  }
-
-  public void setAvailable(Boolean available) {
-    this.available = available;
-  }
-
-  public GeoCode description(String description) {
-    this.description = description;
-    return this;
-  }
-
-  /**
-   * Get description
-   * @return description
-   **/
-  @Schema(required = true, description = "")
-  @NotNull
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public GeoCode hints(Collection<String> hints) {
-    this.hints = hints;
-    return this;
-  }
-
-  public GeoCode addHintsItem(String hintsItem) {
-    this.hints.add(hintsItem);
-    return this;
-  }
-
-  /**
-   * Get hints
-   * @return hints
-   **/
-  @Schema(required = true, description = "")
-  @NotNull
-
-  public Collection<String> getHints() {
-    return hints;
-  }
-
-  public void setHints(Collection<String> hints) {
-    this.hints = hints;
-  }
-
-  public GeoCode collectables(List<Collectable> collectables) {
-    this.collectables = collectables;
-    return this;
-  }
-
-  public GeoCode addCollectablesItem(Collectable collectablesItem) {
-    if (this.collectables == null) {
-      this.collectables = new ArrayList<Collectable>();
+        this.id = id;
+        return this;
     }
-    this.collectables.add(collectablesItem);
-    return this;
-  }
 
-  /**
-   * Get collectables
-   * @return collectables
-   **/
-  @Schema(description = "")
-  @Valid
-  public Collection<Collectable> getCollectables() {
-    return collectables;
-  }
+    /**
+     * Gets the saved id attribute
+     *
+     * @return the stored id attribute
+     */
+    @Valid
+    public UUID getId() {
 
-  public void setCollectables(Collection<Collectable> collectables) {
-    this.collectables = collectables;
-  }
-
-  public GeoCode qrCode(String qrCode) {
-    this.qrCode = qrCode;
-    return this;
-  }
-
-  /**
-   * Get qrCode
-   * @return qrCode
-   **/
-  @Schema(required = true, description = "")
-  @NotNull
-
-  public String getQrCode() {
-    return qrCode;
-  }
-
-  public void setQrCode(String qrCode) {
-    this.qrCode = qrCode;
-  }
-
-  public GeoCode longitude(String longitude) {
-    this.longitude = longitude;
-    return this;
-  }
-
-  /**
-   * Get longitude
-   * @return longitude
-   **/
-  @Schema(required = true, description = "")
-  @NotNull
-
-  public String getLongitude() {
-    return longitude;
-  }
-
-  public void setLongitude(String longitude) {
-    this.longitude = longitude;
-  }
-
-  public GeoCode latitude(String latitude) {
-    this.latitude = latitude;
-    return this;
-  }
-
-  /**
-   * Get latitude
-   * @return latitude
-   **/
-  @Schema(required = true, description = "")
-  @NotNull
-
-  public String getLatitude() {
-    return latitude;
-  }
-
-  public void setLatitude(String latitude) {
-    this.latitude = latitude;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+        return id;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Sets the id attribute to the specified value
+     *
+     * @param id the value the id should be set to
+     */
+    public void setId( UUID id ) {
+
+        this.id = id;
     }
-    GeoCode geoCode = (GeoCode) o;
-    return Objects.equals(this.id, geoCode.id) &&
-            Objects.equals(this.difficulty, geoCode.difficulty) &&
-            Objects.equals(this.available, geoCode.available) &&
-            Objects.equals(this.description, geoCode.description) &&
-            Objects.equals(this.hints, geoCode.hints) &&
-            Objects.equals(this.collectables, geoCode.collectables) &&
-            Objects.equals(this.qrCode, geoCode.qrCode) &&
-            Objects.equals(this.longitude, geoCode.longitude) &&
-            Objects.equals(this.latitude, geoCode.latitude);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, difficulty, available, description, hints, collectables, qrCode, longitude, latitude);
-  }
+    /**
+     * Sets the difficulty attribute to the specified value
+     *
+     * @param difficulty the value the attribute should be set to
+     *
+     * @return the model after the difficulty has been changed
+     */
+    public GeoCode difficulty( Difficulty difficulty ) {
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class GeoCode {\n");
-
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
-    sb.append("    available: ").append(toIndentedString(available)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    hints: ").append(toIndentedString(hints)).append("\n");
-    sb.append("    collectables: ").append(toIndentedString(collectables)).append("\n");
-    sb.append("    qrCode: ").append(toIndentedString(qrCode)).append("\n");
-    sb.append("    longitude: ").append(toIndentedString(longitude)).append("\n");
-    sb.append("    latitude: ").append(toIndentedString(latitude)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+        this.difficulty = difficulty;
+        return this;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    /**
+     * Gets the saved difficulty attribute
+     *
+     * @return the stored difficulty attribute
+     */
+    @Valid
+    public Difficulty getDifficulty() {
+
+        return difficulty;
+    }
+
+    /**
+     * Sets the difficulty attribute to the specified value
+     *
+     * @param difficulty the value the attribute should be set to
+     */
+    public void setDifficulty( Difficulty difficulty ) {
+
+        this.difficulty = difficulty;
+    }
+
+    /**
+     * Sets the available attribute to the specified value
+     *
+     * @param available the value the attribute should be set to
+     *
+     * @return the model after the available has been changed
+     */
+    public GeoCode available( Boolean available ) {
+
+        this.available = available;
+        return this;
+    }
+
+    /**
+     * Gets the saved available attribute
+     *
+     * @return the stored available attribute
+     */
+    public Boolean isAvailable() {
+
+        return available;
+    }
+
+    /**
+     * Sets the available attribute to the specified value
+     *
+     * @param available the value the attribute should be set to
+     */
+    public void setAvailable( Boolean available ) {
+
+        this.available = available;
+    }
+
+    /**
+     * Sets the description attribute to the specified value
+     *
+     * @param description the value the attribute should be set to
+     *
+     * @return the model after the description has been changed
+     */
+    public GeoCode description( String description ) {
+
+        this.description = description;
+        return this;
+    }
+
+    /**
+     * Gets the saved description attribute
+     *
+     * @return the stored description attribute
+     */
+    public String getDescription() {
+
+        return description;
+    }
+
+    /**
+     * Sets the description attribute to the specified value
+     *
+     * @param description the value the attribute should be set to
+     */
+    public void setDescription( String description ) {
+
+        this.description = description;
+    }
+
+    /**
+     * Sets the hints attribute to the specified value
+     *
+     * @param hints the value the attribute should be set to
+     *
+     * @return the model after the hints has been changed
+     */
+    public GeoCode hints( Collection< String > hints ) {
+
+        this.hints = hints;
+        return this;
+    }
+
+    /**
+     * Sets a single hint inside of the hints attribute to the specified value
+     *
+     * @param hintsItem the value the attribute should be set to
+     *
+     * @return the stored hints attribute
+     */
+    public GeoCode addHintsItem( String hintsItem ) {
+
+        this.hints.add( hintsItem );
+        return this;
+    }
+
+    /**
+     * Gets the saved hints attribute
+     *
+     * @return the stored hints attribute
+     */
+    public Collection< String > getHints() {
+
+        return hints;
+    }
+
+    /**
+     * Sets the hints attribute to the specified value
+     *
+     * @param hints the value the attribute should be set to
+     */
+    public void setHints( Collection< String > hints ) {
+
+        this.hints = hints;
+    }
+
+    /**
+     * Sets the collectables attribute to the specified value
+     *
+     * @param collectables the value the attribute should be set to
+     *
+     * @return the model after the collectables has been changed
+     */
+    public GeoCode collectables( List< Collectable > collectables ) {
+
+        this.collectables = collectables;
+        return this;
+    }
+
+    /**
+     * Sets a single hint inside of the collectables attribute to the specified value
+     *
+     * @param collectablesItem the value the attribute should be set to
+     *
+     * @return the stored collectables attribute
+     */
+    public GeoCode addCollectablesItem( Collectable collectablesItem ) {
+
+        if ( this.collectables == null ) {
+
+            this.collectables = new ArrayList<>();
+        }
+
+        this.collectables.add( collectablesItem );
+        return this;
+    }
+
+    /**
+     * Gets the saved collectables attribute
+     *
+     * @return the stored collectables attribute
+     */
+    @Valid
+    public Collection< Collectable > getCollectables() {
+
+        return collectables;
+    }
+
+    /**
+     * Sets the collectables attribute to the specified value
+     *
+     * @param collectables the value the attribute should be set to
+     */
+    public void setCollectables( Collection< Collectable > collectables ) {
+
+        this.collectables = collectables;
+    }
+
+    /**
+     * Sets the qrCode attribute to the specified value
+     *
+     * @param qrCode the value the attribute should be set to
+     *
+     * @return the model after the qrCode has been changed
+     */
+    public GeoCode qrCode( String qrCode ) {
+
+        this.qrCode = qrCode;
+        return this;
+    }
+
+    /**
+     * Gets the saved qrCode attribute
+     *
+     * @return the stored qrCode attribute
+     */
+    public String getQrCode() {
+
+        return qrCode;
+    }
+
+    /**
+     * Sets the qrCode attribute to the specified value
+     *
+     * @param qrCode the value the qrCode should be set to
+     */
+    public void setQrCode( String qrCode ) {
+
+        this.qrCode = qrCode;
+    }
+
+    /**
+     * Sets the longitude attribute to the specified value
+     *
+     * @param longitude the value the attribute should be set to
+     *
+     * @return the model after the longitude has been changed
+     */
+    public GeoCode longitude( String longitude ) {
+
+        this.longitude = longitude;
+        return this;
+    }
+
+    /**
+     * Gets the saved longitude attribute
+     *
+     * @return the stored longitude attribute
+     */
+    public String getLongitude() {
+
+        return longitude;
+    }
+
+    /**
+     * Sets the longitude attribute to the specified value
+     *
+     * @param longitude the value the longitude should be set to
+     */
+    public void setLongitude( String longitude ) {
+
+        this.longitude = longitude;
+    }
+
+    /**
+     * Sets the latitude attribute to the specified value
+     *
+     * @param latitude the value the attribute should be set to
+     *
+     * @return the model after the latitude has been changed
+     */
+    public GeoCode latitude( String latitude ) {
+
+        this.latitude = latitude;
+        return this;
+    }
+
+    /**
+     * Gets the saved latitude attribute
+     *
+     * @return the stored latitude attribute
+     */
+    public String getLatitude() {
+
+        return latitude;
+    }
+
+    /**
+     * Sets the latitude attribute to the specified value
+     *
+     * @param latitude the value the attribute should be set to
+     */
+    public void setLatitude( String latitude ) {
+
+        this.latitude = latitude;
+    }
+
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
+    @Override
+    public boolean equals( java.lang.Object obj ) {
+
+        if ( this == obj ) {
+
+            return true;
+        }
+        if ( obj == null || getClass() != obj.getClass() ) {
+
+            return false;
+        }
+
+        GeoCode geoCode = ( GeoCode ) obj;
+        return Objects.equals( this.id, geoCode.id ) &&
+                Objects.equals( this.difficulty, geoCode.difficulty ) &&
+                Objects.equals( this.available, geoCode.available ) &&
+                Objects.equals( this.description, geoCode.description ) &&
+                Objects.equals( this.hints, geoCode.hints ) &&
+                Objects.equals( this.collectables, geoCode.collectables ) &&
+                Objects.equals( this.qrCode, geoCode.qrCode ) &&
+                Objects.equals( this.longitude, geoCode.longitude ) &&
+                Objects.equals( this.latitude, geoCode.latitude );
+    }
+
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( id, difficulty, available, description, hints, collectables, qrCode, longitude, latitude );
+    }
+
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
+    @Override
+    public String toString() {
+
+        return "class GeoCode {\n" +
+                "    id: " + toIndentedString( id ) + "\n" +
+                "    difficulty: " + toIndentedString( difficulty ) + "\n" +
+                "    available: " + toIndentedString( available ) + "\n" +
+                "    description: " + toIndentedString( description ) + "\n" +
+                "    hints: " + toIndentedString( hints ) + "\n" +
+                "    collectables: " + toIndentedString( collectables ) + "\n" +
+                "    qrCode: " + toIndentedString( qrCode ) + "\n" +
+                "    longitude: " + toIndentedString( longitude ) + "\n" +
+                "    latitude: " + toIndentedString( latitude ) + "\n" +
+                "}";
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString( java.lang.Object o ) {
+
+        if ( o == null ) {
+
+            return "null";
+        }
+
+        return o.toString().replace( "\n", "\n    " );
+    }
+
 }
