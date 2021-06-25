@@ -25,6 +25,23 @@ public class GetGeoCodesByDifficultyResponse {
     private List< GeoCode > geocodes = null;
 
     /**
+     * Default constructor
+     */
+    public GetGeoCodesByDifficultyResponse() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param geocodes The list of GeoCodes with the specified difficulty
+     */
+    public GetGeoCodesByDifficultyResponse( List< GeoCode > geocodes ) {
+
+        this.geocodes = geocodes;
+    }
+
+    /**
      * Sets the hints attribute to the specified value
      *
      * @param geocodes the value the attribute should be set to

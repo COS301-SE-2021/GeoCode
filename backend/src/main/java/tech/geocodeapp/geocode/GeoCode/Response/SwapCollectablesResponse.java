@@ -1,8 +1,9 @@
 package tech.geocodeapp.geocode.GeoCode.Response;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.Objects;
 
 /**
  * SwapCollectablesResponse used to access the attributes received to create the response
@@ -17,6 +18,23 @@ public class SwapCollectablesResponse {
      */
     @JsonProperty( "isSuccess" )
     private Boolean isSuccess = null;
+
+    /**
+     * Default constructor
+     */
+    public SwapCollectablesResponse() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param isSuccess Determines if the creation of a GeoCode with the specified attributes in the request was a success or not
+     */
+    public SwapCollectablesResponse( Boolean isSuccess ) {
+
+        this.isSuccess = isSuccess;
+    }
 
     /**
      * Sets the isSuccess attribute to the specified value
@@ -62,9 +80,11 @@ public class SwapCollectablesResponse {
     public boolean equals( java.lang.Object obj ) {
 
         if ( this == obj ) {
+
             return true;
         }
         if ( obj == null || getClass() != obj.getClass() ) {
+
             return false;
         }
 
@@ -102,8 +122,10 @@ public class SwapCollectablesResponse {
     private String toIndentedString( java.lang.Object o ) {
 
         if ( o == null ) {
+
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 

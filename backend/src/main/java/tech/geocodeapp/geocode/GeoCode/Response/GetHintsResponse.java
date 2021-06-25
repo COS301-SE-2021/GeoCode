@@ -23,6 +23,23 @@ public class GetHintsResponse {
     private Collection< String > hints = null;
 
     /**
+     * Default constructor
+     */
+    public GetHintsResponse() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param hints The hints from the specified GeoCode
+     */
+    public GetHintsResponse( Collection< String > hints ) {
+
+        this.hints = hints;
+    }
+
+    /**
      * Sets the hints attribute to the specified value
      *
      * @param hints the value the attribute should be set to

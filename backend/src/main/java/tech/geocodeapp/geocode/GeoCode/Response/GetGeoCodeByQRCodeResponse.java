@@ -53,6 +53,33 @@ public class GetGeoCodeByQRCodeResponse {
     private Difficulty difficulty = null;
 
     /**
+     * Default constructor
+     */
+    public GetGeoCodeByQRCodeResponse() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param id The unique ID of the found GeoCode with the specified QR Code
+     * @param available If the the found GeoCode is available to be found
+     * @param description The description of the found GeoCode
+     * @param longitude The longitude of the found GeoCode
+     * @param latitude The latitude of the found GeoCode
+     * @param difficulty The difficulty of the found GeoCode
+     */
+    public GetGeoCodeByQRCodeResponse( UUID id, Boolean available, String description, String longitude, String latitude, Difficulty difficulty ) {
+
+        this.id = id;
+        this.available = available;
+        this.description = description;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.difficulty = difficulty;
+    }
+
+    /**
      * Sets the id attribute to the specified value
      *
      * @param id the value the attribute should be set to

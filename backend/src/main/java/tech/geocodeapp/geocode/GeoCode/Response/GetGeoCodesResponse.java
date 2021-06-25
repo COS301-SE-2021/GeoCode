@@ -25,6 +25,23 @@ public class GetGeoCodesResponse {
     private List< GeoCode > geocodes = new ArrayList<>();
 
     /**
+     * Default constructor
+     */
+    public GetGeoCodesResponse() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param geocodes A list of all the GeoCodes
+     */
+    public GetGeoCodesResponse( List< GeoCode > geocodes ) {
+
+        this.geocodes = geocodes;
+    }
+
+    /**
      * Sets the geocodes attribute to the specified value
      *
      * @param geocodes the value the attribute should be set to

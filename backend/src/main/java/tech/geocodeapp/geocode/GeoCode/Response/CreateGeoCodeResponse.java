@@ -20,6 +20,23 @@ public class CreateGeoCodeResponse {
     private Boolean isSuccess = null;
 
     /**
+     * Default constructor
+     */
+    public CreateGeoCodeResponse() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param isSuccess Determines if the creation of a GeoCode with the specified attributes in the request was a success or not
+     */
+    public CreateGeoCodeResponse( Boolean isSuccess ) {
+
+        this.isSuccess = isSuccess;
+    }
+
+    /**
      * Sets the isSuccess attribute to the specified value
      *
      * @param isSuccess the value the attribute should be set to

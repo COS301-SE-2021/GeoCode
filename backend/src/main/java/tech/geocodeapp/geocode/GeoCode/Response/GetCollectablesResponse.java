@@ -25,6 +25,23 @@ public class GetCollectablesResponse {
     private List< Collectable > collectables = new ArrayList<>();
 
     /**
+     * Default constructor
+     */
+    public GetCollectablesResponse() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param collectables The list of collectables inside of the stored GeoCode
+     */
+    public GetCollectablesResponse( List< Collectable > collectables ) {
+
+        this.collectables = collectables;
+    }
+
+    /**
      * Sets the collectables attribute to the specified value
      *
      * @param collectables the value the attribute should be set to

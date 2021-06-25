@@ -20,6 +20,23 @@ public class UpdateLocationResponse {
     private Boolean success = null;
 
     /**
+     * Default constructor
+     */
+    public UpdateLocationResponse() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param success Determines if the update of the GeoCode with the specified attributes in the request was a success or not
+     */
+    public UpdateLocationResponse( Boolean success ) {
+
+        this.success = success;
+    }
+
+    /**
      * Sets the isSuccess attribute to the specified value
      *
      * @param success the value the attribute should be set to

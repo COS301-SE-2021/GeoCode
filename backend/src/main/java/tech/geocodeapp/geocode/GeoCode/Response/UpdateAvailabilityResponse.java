@@ -1,8 +1,9 @@
 package tech.geocodeapp.geocode.GeoCode.Response;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.Objects;
 
 /**
  * UpdateAvailabilityResponse used to access the attributes received to create the response
@@ -17,6 +18,23 @@ public class UpdateAvailabilityResponse {
      */
     @JsonProperty( "isSuccess" )
     private Boolean isSuccess = null;
+
+    /**
+     * Default constructor
+     */
+    public UpdateAvailabilityResponse() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param isSuccess Determines if the update of the GeoCode with the specified attributes in the request was a success or not
+     */
+    public UpdateAvailabilityResponse( Boolean isSuccess ) {
+
+        this.isSuccess = isSuccess;
+    }
 
     /**
      * Sets the isSuccess attribute to the specified value
