@@ -6,14 +6,13 @@ import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.Collectable.Model.*;
 import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
-import tech.geocodeapp.geocode.Collectable.Service.CollectableService;
+import tech.geocodeapp.geocode.Collectable.Service.*;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
-import tech.geocodeapp.geocode.GeoCode.Response.GetCollectablesResponse;
-import tech.geocodeapp.geocode.User.Service.UserService;
+import tech.geocodeapp.geocode.User.Service.*;
 
 import java.security.SecureRandom;
 import java.util.*;
@@ -86,19 +85,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new InvalidRequestException();
         }
 
-        /*
-         * Create the GeoCode object
-         * and set its attributes to the given attributes in the request
-         */
-        var newGeoCode = new GeoCode();
-        newGeoCode.setAvailable( request.isAvailable() );
-        newGeoCode.setDescription( request.getDescription() );
-        newGeoCode.setDifficulty( request.getDifficulty() );
-        newGeoCode.setHints( request.getHints() );
-        newGeoCode.setLatitude( request.getLatitude() );
-        newGeoCode.setLongitude( request.getLongitude() );
-        newGeoCode.setId( UUID.randomUUID() );
-
         /* Hold the crated Collectables */
         List< Collectable > collectable = new ArrayList<>();
 
@@ -130,32 +116,31 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             collectable.add( temp );
         }
 
-        newGeoCode.setCollectables( collectable );
-
         /* Try and create the relevant image with the newly create GeoCode instance */
-        try {
-
-            var size = 8;
-            var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        var size = 8;
+        var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 
-            // create StringBuffer size of AlphaNumericString
-            var qr = new StringBuilder( size );
+        // create StringBuffer size of AlphaNumericString
+        var qr = new StringBuilder( size );
 
-            for ( var i = 0; i < size; i++ ) {
+        for ( var i = 0; i < size; i++ ) {
 
-                /* generate a random number between 0 to AlphaNumericString variable length */
-                int index = (  new SecureRandom() ).nextInt(chars.length() );
+            /* generate a random number between 0 to AlphaNumericString variable length */
+            int index = (  new SecureRandom() ).nextInt(chars.length() );
 
-                /* add Character one by one in end of sb */
-                qr.append( chars.charAt( index ) );
-            }
-
-            newGeoCode.setQrCode( qr.toString() );
-        } catch ( Exception e ) {
-
-            e.printStackTrace();
+            /* add Character one by one in end of sb */
+            qr.append( chars.charAt( index ) );
         }
+
+        /*
+         * Create the GeoCode object
+         * and set its attributes to the given attributes in the request
+         */
+        var newGeoCode = new GeoCode( UUID.randomUUID(), request.getDifficulty(), request.isAvailable(),
+                                      request.getDescription(), request.getHints(), collectable,
+                                      qr.toString(), request.getLongitude(), request.getLatitude() );
+
 
         /*
          * Check the repo exists before trying to access it
@@ -249,10 +234,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and set the values
          */
-        var response = new GetCollectablesResponse();
-        response.setCollectables( new ArrayList<>( hold.getCollectables() ) );
-
-        return response;
+        return new GetCollectablesResponse( new ArrayList<>( hold.getCollectables() ) );
     }
 
     /**
@@ -306,10 +288,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and add valid GeoCodes to it
          */
-        var response = new GetGeoCodesByDifficultyResponse();
-        response.setGeocodes( hold );
-
-        return response;
+        return new GetGeoCodesByDifficultyResponse( hold );
     }
 
     /**
@@ -388,17 +367,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /*
          * Create the new response
-         *
+         * and set values to it
          */
-        var response = new GetGeoCodeByQRCodeResponse();
-        response.setDescription( temp.get( x ).getDescription() );
-        response.setDifficulty( temp.get( x ).getDifficulty() );
-        response.setId( temp.get( x ).getId() );
-        response.setLatitude( temp.get( x ).getLatitude() );
-        response.setLongitude( temp.get( x ).getLongitude() );
-        response.setAvailable( temp.get( x ).isAvailable() );
-
-        return response;
+        return new GetGeoCodeByQRCodeResponse( temp.get( x ).getId(), temp.get( x ).isAvailable(),
+                                               temp.get( x ).getDescription(), temp.get( x ).getLongitude(),
+                                               temp.get( x ).getLatitude(), temp.get( x ).getDifficulty() );
     }
 
     /**
@@ -435,17 +408,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /*
          * Create the new response
-         *
+         * and set its values
          */
-        var response = new GetGeoCodeByLocationResponse();
-            response.setDescription( temp.get( x ).getDescription() );
-            response.setDifficulty( temp.get( x ).getDifficulty() );
-            response.setId( temp.get( x ).getId() );
-            response.setLatitude( temp.get( x ).getLatitude() );
-            response.setLongitude( temp.get( x ).getLongitude() );
-            response.setAvailable( temp.get( x ).isAvailable() );
-
-        return response;
+        return new GetGeoCodeByLocationResponse( temp.get( x ).getId(), temp.get( x ).isAvailable(),
+                                                 temp.get( x ).getDescription(), temp.get( x ).getLongitude(),
+                                                 temp.get( x ).getLatitude(), temp.get( x ).getDifficulty() );
     }
 
     /**
@@ -505,7 +472,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /*
          * Create and return a 'success' response
          */
-        return new SwapCollectablesResponse().isSuccess(true);
+        return new SwapCollectablesResponse( true );
     }
 
     /**
@@ -545,10 +512,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and set the success of the operation
          */
-        var response = new UpdateAvailabilityResponse();
-        response.setIsSuccess( true );
-
-        return response;
+        return new UpdateAvailabilityResponse( true );
     }
 
 
