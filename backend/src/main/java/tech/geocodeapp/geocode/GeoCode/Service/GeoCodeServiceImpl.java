@@ -40,6 +40,16 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     private final UserService userService;
 
     /**
+     * The number of collectables to make when creating a new GeoCode
+     */
+    private final int numCollectables = 5;
+
+    /**
+     * The length of the qr code for a new GeoCode
+     */
+    private final int QRSize = 8;
+
+    /**
      * Constructor
      *
      * @param geoCodeRepo the repo the created response attributes should save to
@@ -88,7 +98,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Hold the crated Collectables */
         List< Collectable > collectable = new ArrayList<>();
 
-        for ( var x = 0; x < 5; x++ ) {
+        for ( var x = 0; x < numCollectables; x++ ) {
 
             /* Create the response and give it a Collectable type */
             var collectableRequest = new CreateCollectableRequest();
@@ -117,14 +127,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Try and create the relevant image with the newly create GeoCode instance */
-        var size = 8;
         var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 
         // create StringBuffer size of AlphaNumericString
-        var qr = new StringBuilder( size );
+        var qr = new StringBuilder( QRSize );
 
-        for ( var i = 0; i < size; i++ ) {
+        for ( var i = 0; i < QRSize; i++ ) {
 
             /* generate a random number between 0 to AlphaNumericString variable length */
             int index = (  new SecureRandom() ).nextInt(chars.length() );
@@ -194,10 +203,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             geoCode.setCollectables( null );
         }
 
-        var response = new GetGeoCodesResponse();
-        response.setGeocodes( temp );
-
-        return response;
+        return new GetGeoCodesResponse( temp );
     }
 
     /**
@@ -438,36 +444,36 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         checkRepo();
 
         /* Find the target geocode */
-        Optional<GeoCode> target = geoCodeRepo.findById(request.getTargetGeoCodeID());
-        if (target.isEmpty()) {
-            return new SwapCollectablesResponse().isSuccess(false);
+        Optional< GeoCode > target = geoCodeRepo.findById( request.getTargetGeoCodeID() );
+        if ( target.isEmpty() ) {
+            return new SwapCollectablesResponse().isSuccess( false );
         }
 
         var geocode = target.get();
 
         /* Find the target collectable */
         var replaceIndex = -1; //the index of the collectable we want to replace in the geocode
-        List<Collectable> storedCollectables = new ArrayList<>(geocode.getCollectables());
+        List< Collectable > storedCollectables = new ArrayList<>( geocode.getCollectables() );
         for ( int i = 0; i < storedCollectables.size(); i++ ) {
 
-            if (storedCollectables.get(i).getId().equals(request.getTargetCollectableID())) {
+            if ( storedCollectables.get( i ).getId().equals( request.getTargetCollectableID() ) ) {
 
                 replaceIndex = i;
                 break;
             }
         }
-        if (replaceIndex == -1) {
-            return new SwapCollectablesResponse().isSuccess(false);
+        if ( replaceIndex == -1 ) {
+            return new SwapCollectablesResponse().isSuccess( false );
         }
 
-        var geocodeToUser = storedCollectables.get(replaceIndex);
+        var geocodeToUser = storedCollectables.get( replaceIndex );
 
         /* Perform the swap */
-        var userToGeocode = userService.swapCollectable(geocodeToUser);
-        userToGeocode.changeLocation(geocode.getLatitude()+" "+geocode.getLongitude());
-        storedCollectables.set(replaceIndex, userToGeocode);
-        geocode.setCollectables(storedCollectables);
-        geoCodeRepo.save(geocode);
+        var userToGeocode = userService.swapCollectable( geocodeToUser );
+        userToGeocode.changeLocation( geocode.getLatitude() + " " + geocode.getLongitude() );
+        storedCollectables.set( replaceIndex, userToGeocode );
+        geocode.setCollectables( storedCollectables );
+        geoCodeRepo.save( geocode );
 
         /*
          * Create and return a 'success' response
