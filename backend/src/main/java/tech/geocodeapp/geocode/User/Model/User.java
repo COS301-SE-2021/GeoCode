@@ -1,17 +1,18 @@
 package tech.geocodeapp.geocode.User.Model;
 
-import java.util.Objects;
+import java.util.*;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.Collectable.Model.Collectable;
 import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.Leaderboard.Model.Point;
 
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -21,8 +22,10 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-24T11:24:11.186Z[GMT]")
 
-
+@Entity
+@Table(name="user_table")
 public class User   {
+  @Id
   @JsonProperty("id")
   private UUID id = null;
 
@@ -30,26 +33,38 @@ public class User   {
   private String username = null;
 
   @JsonProperty("trackableObject")
+  @ManyToOne
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Collectable trackableObject = null;
 
   @JsonProperty("points")
   @Valid
-  private List<Point> points = null;
+  @ManyToMany
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private Set<Point> points = null;
 
   @JsonProperty("currentCollectable")
+  @ManyToOne
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Collectable currentCollectable = null;
 
   @JsonProperty("foundCollectableTypes")
   @Valid
-  private List<CollectableType> foundCollectableTypes = null;
+  @ManyToMany
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private Set<CollectableType> foundCollectableTypes = null;
 
   @JsonProperty("foundGeocodes")
   @Valid
-  private List<GeoCode> foundGeocodes = null;
+  @ManyToMany
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private Set<GeoCode> foundGeocodes = null;
 
   @JsonProperty("ownedGeocodes")
   @Valid
-  private List<GeoCode> ownedGeocodes = null;
+  @ManyToMany
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private Set<GeoCode> ownedGeocodes = null;
 
   public User id(UUID id) {
     this.id = id;
@@ -112,14 +127,14 @@ public class User   {
     this.trackableObject = trackableObject;
   }
 
-  public User points(List<Point> points) {
+  public User points(Set<Point> points) {
     this.points = points;
     return this;
   }
 
   public User addPointsItem(Point pointsItem) {
     if (this.points == null) {
-      this.points = new ArrayList<Point>();
+      this.points = new HashSet<Point>();
     }
     this.points.add(pointsItem);
     return this;
@@ -131,11 +146,11 @@ public class User   {
    **/
   @Schema(description = "")
       @Valid
-    public List<Point> getPoints() {
+    public Set<Point> getPoints() {
     return points;
   }
 
-  public void setPoints(List<Point> points) {
+  public void setPoints(Set<Point> points) {
     this.points = points;
   }
 
@@ -159,14 +174,14 @@ public class User   {
     this.currentCollectable = currentCollectable;
   }
 
-  public User foundCollectableTypes(List<CollectableType> foundCollectableTypes) {
+  public User foundCollectableTypes(Set<CollectableType> foundCollectableTypes) {
     this.foundCollectableTypes = foundCollectableTypes;
     return this;
   }
 
   public User addFoundCollectableTypesItem(CollectableType foundCollectableTypesItem) {
     if (this.foundCollectableTypes == null) {
-      this.foundCollectableTypes = new ArrayList<CollectableType>();
+      this.foundCollectableTypes = new HashSet<CollectableType>();
     }
     this.foundCollectableTypes.add(foundCollectableTypesItem);
     return this;
@@ -178,22 +193,22 @@ public class User   {
    **/
   @Schema(description = "")
       @Valid
-    public List<CollectableType> getFoundCollectableTypes() {
+    public Set<CollectableType> getFoundCollectableTypes() {
     return foundCollectableTypes;
   }
 
-  public void setFoundCollectableTypes(List<CollectableType> foundCollectableTypes) {
+  public void setFoundCollectableTypes(Set<CollectableType> foundCollectableTypes) {
     this.foundCollectableTypes = foundCollectableTypes;
   }
 
-  public User foundGeocodes(List<GeoCode> foundGeocodes) {
+  public User foundGeocodes(Set<GeoCode> foundGeocodes) {
     this.foundGeocodes = foundGeocodes;
     return this;
   }
 
   public User addFoundGeocodesItem(GeoCode foundGeocodesItem) {
     if (this.foundGeocodes == null) {
-      this.foundGeocodes = new ArrayList<GeoCode>();
+      this.foundGeocodes = new HashSet<GeoCode>();
     }
     this.foundGeocodes.add(foundGeocodesItem);
     return this;
@@ -205,22 +220,22 @@ public class User   {
    **/
   @Schema(description = "")
       @Valid
-    public List<GeoCode> getFoundGeocodes() {
+    public Set<GeoCode> getFoundGeocodes() {
     return foundGeocodes;
   }
 
-  public void setFoundGeocodes(List<GeoCode> foundGeocodes) {
+  public void setFoundGeocodes(Set<GeoCode> foundGeocodes) {
     this.foundGeocodes = foundGeocodes;
   }
 
-  public User ownedGeocodes(List<GeoCode> ownedGeocodes) {
+  public User ownedGeocodes(Set<GeoCode> ownedGeocodes) {
     this.ownedGeocodes = ownedGeocodes;
     return this;
   }
 
   public User addOwnedGeocodesItem(GeoCode ownedGeocodesItem) {
     if (this.ownedGeocodes == null) {
-      this.ownedGeocodes = new ArrayList<GeoCode>();
+      this.ownedGeocodes = new HashSet<GeoCode>();
     }
     this.ownedGeocodes.add(ownedGeocodesItem);
     return this;
@@ -232,11 +247,11 @@ public class User   {
    **/
   @Schema(description = "")
       @Valid
-    public List<GeoCode> getOwnedGeocodes() {
+    public Set<GeoCode> getOwnedGeocodes() {
     return ownedGeocodes;
   }
 
-  public void setOwnedGeocodes(List<GeoCode> ownedGeocodes) {
+  public void setOwnedGeocodes(Set<GeoCode> ownedGeocodes) {
     this.ownedGeocodes = ownedGeocodes;
   }
 
