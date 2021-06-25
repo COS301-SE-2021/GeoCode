@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
      */
     public GetFoundCollectableTypesResponse getFoundCollectableTypes(GetFoundCollectableTypesRequest request) throws NullUserRequestParameterException{
         if (request == null) {
-            return new GetFoundCollectableTypesResponse(false, "The GetFoundCollectableTypesResponseRequest object passed was NULL", null);
+            return new GetFoundCollectableTypesResponse(false, "The GetFoundCollectableTypesRequest object passed was NULL", null);
         }
 
         if(request.getUserID() == null){
@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
      */
     public GetFoundGeoCodesResponse getFoundGeoCodes(GetFoundGeoCodesRequest request) throws NullUserRequestParameterException {
         if (request == null) {
-            return new GetFoundGeoCodesResponse(false, "The GetFoundGeoCodesResponseRequest object passed was NULL", null);
+            return new GetFoundGeoCodesResponse(false, "The GetFoundGeoCodesRequest object passed was NULL", null);
         }
 
         if(request.getUserID() == null){
@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService {
      */
     public GetOwnedGeoCodesResponse getOwnedGeoCodes(GetOwnedGeoCodesRequest request) throws NullUserRequestParameterException {
         if (request == null) {
-            return new GetOwnedGeoCodesResponse(false, "The GetOwnedGeoCodesResponseRequest object passed was NULL", null);
+            return new GetOwnedGeoCodesResponse(false, "The GetOwnedGeoCodesRequest object passed was NULL", null);
         }
 
         if(request.getUserID() == null){
