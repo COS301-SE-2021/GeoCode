@@ -1,9 +1,9 @@
 package tech.geocodeapp.geocode.GeoCode.Request;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.Objects;
 import java.util.UUID;
 import javax.validation.Valid;
 
@@ -25,6 +25,25 @@ public class SwapCollectablesRequest {
      */
     @JsonProperty( "targetCollectableID" )
     private UUID targetCollectableID = null;
+
+    /**
+     * Default constructor
+     */
+    public SwapCollectablesRequest() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param targetGeoCodeID The unique ID of a Collectable contained in the GeoCode
+     * @param targetCollectableID The unique ID of a Collectable the user has
+     */
+    public SwapCollectablesRequest( UUID targetGeoCodeID, UUID targetCollectableID ) {
+
+        this.targetGeoCodeID = targetGeoCodeID;
+        this.targetCollectableID = targetCollectableID;
+    }
 
     /**
      * Sets the targetGeoCodeID attribute to the specified value
@@ -105,11 +124,14 @@ public class SwapCollectablesRequest {
     public boolean equals( java.lang.Object obj ) {
 
         if ( this == obj ) {
+
             return true;
         }
         if ( obj == null || getClass() != obj.getClass() ) {
+
             return false;
         }
+
         SwapCollectablesRequest swapCollectablesRequest = ( SwapCollectablesRequest ) obj;
         return Objects.equals( this.targetGeoCodeID, swapCollectablesRequest.targetGeoCodeID ) &&
                 Objects.equals( this.targetCollectableID, swapCollectablesRequest.targetCollectableID );
@@ -134,13 +156,10 @@ public class SwapCollectablesRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class SwapCollectablesRequest {\n" );
-
-        sb.append( "    targetGeoCodeID: " ).append( toIndentedString( targetGeoCodeID ) ).append( "\n" );
-        sb.append( "    targetCollectableID: " ).append( toIndentedString( targetCollectableID ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class SwapCollectablesRequest {\n" +
+                "    targetGeoCodeID: " + toIndentedString( targetGeoCodeID ) + "\n" +
+                "    targetCollectableID: " + toIndentedString( targetCollectableID ) + "\n" +
+                "}";
     }
 
     /**
@@ -150,6 +169,7 @@ public class SwapCollectablesRequest {
     private String toIndentedString( java.lang.Object o ) {
 
         if ( o == null ) {
+
             return "null";
         }
         return o.toString().replace( "\n", "\n    " );

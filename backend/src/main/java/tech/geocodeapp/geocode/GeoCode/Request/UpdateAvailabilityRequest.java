@@ -1,10 +1,11 @@
 package tech.geocodeapp.geocode.GeoCode.Request;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
+
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * UpdateAvailabilityRequest used to specify the attributes needed to change the availability
@@ -24,6 +25,25 @@ public class UpdateAvailabilityRequest {
      */
     @JsonProperty( "isAvailable" )
     private Boolean isAvailable = null;
+
+    /**
+     * Default constructor
+     */
+    public UpdateAvailabilityRequest() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param geoCodeID The unique identifier of a specific GeoCode
+     * @param isAvailable If the GeoCode is active in the system
+     */
+    public UpdateAvailabilityRequest( UUID geoCodeID, Boolean isAvailable ) {
+
+        this.geoCodeID = geoCodeID;
+        this.isAvailable = isAvailable;
+    }
 
     /**
      * Sets the geoCodeID attribute to the specified value
@@ -103,11 +123,14 @@ public class UpdateAvailabilityRequest {
     public boolean equals( java.lang.Object obj ) {
 
         if ( this == obj ) {
+
             return true;
         }
         if ( obj == null || getClass() != obj.getClass() ) {
+
             return false;
         }
+
         UpdateAvailabilityRequest updateAvailabilityRequest = ( UpdateAvailabilityRequest ) obj;
         return Objects.equals( this.geoCodeID, updateAvailabilityRequest.geoCodeID ) &&
                 Objects.equals( this.isAvailable, updateAvailabilityRequest.isAvailable );
@@ -132,13 +155,10 @@ public class UpdateAvailabilityRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class UpdateAvailabilityRequest {\n" );
-
-        sb.append( "    geoCodeID: " ).append( toIndentedString( geoCodeID ) ).append( "\n" );
-        sb.append( "    isAvailable: " ).append( toIndentedString( isAvailable ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class UpdateAvailabilityRequest {\n" +
+                "    geoCodeID: " + toIndentedString( geoCodeID ) + "\n" +
+                "    isAvailable: " + toIndentedString( isAvailable ) + "\n" +
+                "}";
     }
 
     /**
@@ -148,6 +168,7 @@ public class UpdateAvailabilityRequest {
     private String toIndentedString( java.lang.Object o ) {
 
         if ( o == null ) {
+
             return "null";
         }
         return o.toString().replace( "\n", "\n    " );

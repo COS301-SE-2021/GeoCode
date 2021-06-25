@@ -1,10 +1,11 @@
 package tech.geocodeapp.geocode.GeoCode.Request;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
+
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * UpdateLocationRequest used to specify the attributes needed to
@@ -17,6 +18,23 @@ public class UpdateLocationRequest {
      */
     @JsonProperty( "userID" )
     private UUID userID = null;
+
+    /**
+     * Default constructor
+     */
+    public UpdateLocationRequest() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param userID The unique identifier to update the users location
+     */
+    public UpdateLocationRequest( UUID userID ) {
+
+        this.userID = userID;
+    }
 
     /**
      * Sets the userID attribute to the specified value
@@ -63,13 +81,15 @@ public class UpdateLocationRequest {
     public boolean equals( java.lang.Object obj ) {
 
         if ( this == obj ) {
+
             return true;
         }
         if ( obj == null || getClass() != obj.getClass() ) {
+
             return false;
         }
-        UpdateLocationRequest updateLocationRequest = ( UpdateLocationRequest ) obj;
-        return Objects.equals( this.userID, updateLocationRequest.userID );
+
+        return Objects.equals( this.userID, ( ( UpdateLocationRequest ) obj ).userID );
     }
 
     /**
@@ -91,12 +111,9 @@ public class UpdateLocationRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class UpdateLocationRequest {\n" );
-
-        sb.append( "    userID: " ).append( toIndentedString( userID ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class UpdateLocationRequest {\n" +
+                "    userID: " + toIndentedString( userID ) + "\n" +
+                "}";
     }
 
     /**
@@ -106,6 +123,7 @@ public class UpdateLocationRequest {
     private String toIndentedString( java.lang.Object o ) {
 
         if ( o == null ) {
+
             return "null";
         }
         return o.toString().replace( "\n", "\n    " );

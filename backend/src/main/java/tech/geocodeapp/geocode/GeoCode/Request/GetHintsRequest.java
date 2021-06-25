@@ -1,10 +1,11 @@
 package tech.geocodeapp.geocode.GeoCode.Request;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
+
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * GetHintsRequest used to specify the attributes needed to find all the hints
@@ -18,6 +19,23 @@ public class GetHintsRequest {
      */
     @JsonProperty( "geoCodeID" )
     private UUID geoCodeID = null;
+
+    /**
+     * Default constructor
+     */
+    public GetHintsRequest() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param geoCodeID The unique ID of a GeoCode in the database
+     */
+    public GetHintsRequest( UUID geoCodeID ) {
+
+        this.geoCodeID = geoCodeID;
+    }
 
     /**
      * Sets the geoCodeID attribute to the specified value
@@ -64,13 +82,15 @@ public class GetHintsRequest {
     public boolean equals( java.lang.Object obj ) {
 
         if ( this == obj ) {
+
             return true;
         }
         if ( obj == null || getClass() != obj.getClass() ) {
+
             return false;
         }
-        GetHintsRequest getHintsRequest = ( GetHintsRequest ) obj;
-        return Objects.equals( this.geoCodeID, getHintsRequest.geoCodeID );
+
+        return Objects.equals( this.geoCodeID, ( ( GetHintsRequest ) obj ).geoCodeID );
     }
 
     /**
@@ -92,12 +112,9 @@ public class GetHintsRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetHintsRequest {\n" );
-
-        sb.append( "    geoCodeID: " ).append( toIndentedString( geoCodeID ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetHintsRequest {\n" +
+                "    geoCodeID: " + toIndentedString( geoCodeID ) + "\n" +
+                "}";
     }
 
     /**
@@ -107,6 +124,7 @@ public class GetHintsRequest {
     private String toIndentedString( java.lang.Object o ) {
 
         if ( o == null ) {
+
             return "null";
         }
         return o.toString().replace( "\n", "\n    " );

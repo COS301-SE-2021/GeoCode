@@ -1,8 +1,9 @@
 package tech.geocodeapp.geocode.GeoCode.Request;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.Objects;
 
 /**
  * GetGeoCodeByQRCodeRequest used to specify the attributes needed to locate a specific GeoCode
@@ -16,6 +17,23 @@ public class GetGeoCodeByQRCodeRequest {
      */
     @JsonProperty( "QRCode" )
     private String qrCode = null;
+
+    /**
+     * Default constructor
+     */
+    public GetGeoCodeByQRCodeRequest() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param qrCode The QRCode of a specific GeoCode used to locate it
+     */
+    public GetGeoCodeByQRCodeRequest( String qrCode ) {
+
+        this.qrCode = qrCode;
+    }
 
     /**
      * Sets the qrCode attribute to the specified value
@@ -61,13 +79,15 @@ public class GetGeoCodeByQRCodeRequest {
     public boolean equals( java.lang.Object obj ) {
 
         if ( this == obj ) {
+
             return true;
         }
         if ( obj == null || getClass() != obj.getClass() ) {
+
             return false;
         }
-        GetGeoCodeByQRCodeRequest getGeoCodeByQRCodeRequest = ( GetGeoCodeByQRCodeRequest ) obj;
-        return Objects.equals( this.qrCode, getGeoCodeByQRCodeRequest.qrCode );
+
+        return Objects.equals( this.qrCode, ( ( GetGeoCodeByQRCodeRequest ) obj ).qrCode );
     }
 
     /**
@@ -89,12 +109,9 @@ public class GetGeoCodeByQRCodeRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetGeoCodeByQRCodeRequest {\n" );
-
-        sb.append( "    qrCode: " ).append( toIndentedString( qrCode ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetGeoCodeByQRCodeRequest {\n" +
+                "    qrCode: " + toIndentedString( qrCode ) + "\n" +
+                "}";
     }
 
     /**
@@ -104,6 +121,7 @@ public class GetGeoCodeByQRCodeRequest {
     private String toIndentedString( java.lang.Object o ) {
 
         if ( o == null ) {
+
             return "null";
         }
         return o.toString().replace( "\n", "\n    " );

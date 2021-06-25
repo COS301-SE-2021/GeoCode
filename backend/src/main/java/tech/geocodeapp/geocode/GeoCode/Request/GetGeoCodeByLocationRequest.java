@@ -1,8 +1,9 @@
 package tech.geocodeapp.geocode.GeoCode.Request;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.Objects;
 
 /**
  * GetGeoCodeByLocationRequest used to specify the attributes needed to find a specific GeoCode
@@ -22,6 +23,25 @@ public class GetGeoCodeByLocationRequest {
      */
     @JsonProperty( "latitude" )
     private String latitude = null;
+
+    /**
+     * Default constructor
+     */
+    public GetGeoCodeByLocationRequest() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param longitude The longitude of the location of the GeoCode in the real world
+     * @param latitude The latitude of the location of the GeoCode in the real world
+     */
+    public GetGeoCodeByLocationRequest( String longitude, String latitude ) {
+
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
 
     /**
      * Sets the longitude attribute to the specified value
@@ -132,13 +152,10 @@ public class GetGeoCodeByLocationRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetGeoCodeByLocationRequest {\n" );
-
-        sb.append( "    longitude: " ).append( toIndentedString( longitude ) ).append( "\n" );
-        sb.append( "    latitude: " ).append( toIndentedString( latitude ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetGeoCodeByLocationRequest {\n" +
+                "    longitude: " + toIndentedString( longitude ) + "\n" +
+                "    latitude: " + toIndentedString( latitude ) + "\n" +
+                "}";
     }
 
     /**

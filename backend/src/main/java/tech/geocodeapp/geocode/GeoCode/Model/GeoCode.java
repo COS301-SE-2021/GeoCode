@@ -21,7 +21,7 @@ import java.util.*;
 public class GeoCode {
 
     /**
-     * The unique identifer for the GeoCode
+     * The unique identifier for the GeoCode
      */
     @Id
     @JsonProperty( "id" )

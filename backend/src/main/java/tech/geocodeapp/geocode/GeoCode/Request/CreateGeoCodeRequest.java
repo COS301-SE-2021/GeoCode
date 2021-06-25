@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
+import tech.geocodeapp.geocode.Collectable.Model.Difficulty;
+
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.List;
-
-import tech.geocodeapp.geocode.Collectable.Model.Difficulty;
 
 /**
  * CreateGeoCodeRequest used to specify the attributes needed to create a new GeoCode object
@@ -53,6 +53,33 @@ public class CreateGeoCodeRequest {
      */
     @JsonProperty( "available" )
     private Boolean available = null;
+
+    /**
+     * Default constructor
+     */
+    public CreateGeoCodeRequest() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param description  The description of where the GeoCode is and what it involves
+     * @param longitude The longitude of the location of the GeoCode in the real world
+     * @param latitude The latitude of the location of the GeoCode in the real world
+     * @param hints The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
+     * @param difficulty The level of difficulty to find a GeoCode in the real world
+     * @param available If the GeoCode is active in the system
+     */
+    public CreateGeoCodeRequest( String description, String longitude, String latitude, List< String > hints, Difficulty difficulty, Boolean available ) {
+
+        this.description = description;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.hints = hints;
+        this.difficulty = difficulty;
+        this.available = available;
+    }
 
     /**
      * Sets the description attribute to the specified value
@@ -313,17 +340,14 @@ public class CreateGeoCodeRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateGeoCodeRequest {\n" );
-
-        sb.append( "    description: " ).append( toIndentedString( description ) ).append( "\n" );
-        sb.append( "    longitude: " ).append( toIndentedString( longitude ) ).append( "\n" );
-        sb.append( "    latitude: " ).append( toIndentedString( latitude ) ).append( "\n" );
-        sb.append( "    hints: " ).append( toIndentedString( hints ) ).append( "\n" );
-        sb.append( "    difficulty: " ).append( toIndentedString( difficulty ) ).append( "\n" );
-        sb.append( "    available: " ).append( toIndentedString( available ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class CreateGeoCodeRequest {\n" +
+                "    description: " + toIndentedString( description ) + "\n" +
+                "    longitude: " + toIndentedString( longitude ) + "\n" +
+                "    latitude: " + toIndentedString( latitude ) + "\n" +
+                "    hints: " + toIndentedString( hints ) + "\n" +
+                "    difficulty: " + toIndentedString( difficulty ) + "\n" +
+                "    available: " + toIndentedString( available ) + "\n" +
+                "}";
     }
 
     /**
@@ -333,6 +357,7 @@ public class CreateGeoCodeRequest {
     private String toIndentedString( java.lang.Object o ) {
 
         if ( o == null ) {
+
             return "null";
         }
         return o.toString().replace( "\n", "\n    " );

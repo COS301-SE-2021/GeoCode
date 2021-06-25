@@ -21,6 +21,23 @@ public class GetCollectablesRequest {
     private UUID geoCodeID = null;
 
     /**
+     * Default constructor
+     */
+    public GetCollectablesRequest() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param geoCodeID The unique identifier of a specific GeoCode
+     */
+    public GetCollectablesRequest( UUID geoCodeID ) {
+
+        this.geoCodeID = geoCodeID;
+    }
+
+    /**
      * Sets the geoCodeID attribute to the specified value
      *
      * @param geoCodeID the value the attribute should be set to
@@ -65,13 +82,15 @@ public class GetCollectablesRequest {
     public boolean equals( java.lang.Object obj ) {
 
         if ( this == obj ) {
+
             return true;
         }
         if ( obj == null || getClass() != obj.getClass() ) {
+
             return false;
         }
-        GetCollectablesRequest getCollectablesRequest = ( GetCollectablesRequest ) obj;
-        return Objects.equals( this.geoCodeID, getCollectablesRequest.geoCodeID );
+
+        return Objects.equals( this.geoCodeID, ( ( GetCollectablesRequest ) obj ).geoCodeID );
     }
 
     /**
@@ -93,12 +112,9 @@ public class GetCollectablesRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetCollectablesRequest {\n" );
-
-        sb.append( "    geoCodeID: " ).append( toIndentedString( geoCodeID ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetCollectablesRequest {\n" +
+                "    geoCodeID: " + toIndentedString( geoCodeID ) + "\n" +
+                "}";
     }
 
     /**

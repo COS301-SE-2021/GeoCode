@@ -1,13 +1,12 @@
 package tech.geocodeapp.geocode.GeoCode.Request;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
 import tech.geocodeapp.geocode.Collectable.Model.Difficulty;
 
-
+import java.util.Objects;
 
 /**
  * GetGeoCodesByDifficultyRequest used to specify the attributes needed to find all the GeoCodes
@@ -21,6 +20,23 @@ public class GetGeoCodesByDifficultyRequest {
      */
     @JsonProperty( "difficulty" )
     private Difficulty difficulty = null;
+
+    /**
+     * Default constructor
+     */
+    public GetGeoCodesByDifficultyRequest() {
+
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param difficulty The level of difficulty to find a GeoCode in the real world
+     */
+    public GetGeoCodesByDifficultyRequest( Difficulty difficulty ) {
+
+        this.difficulty = difficulty;
+    }
 
     /**
      * Sets the difficulty attribute to the specified value
@@ -67,13 +83,15 @@ public class GetGeoCodesByDifficultyRequest {
     public boolean equals( java.lang.Object obj ) {
 
         if ( this == obj ) {
+
             return true;
         }
         if ( obj == null || getClass() != obj.getClass() ) {
+
             return false;
         }
-        GetGeoCodesByDifficultyRequest getGeoCodesByDifficultyRequest = ( GetGeoCodesByDifficultyRequest ) obj;
-        return Objects.equals( this.difficulty, getGeoCodesByDifficultyRequest.difficulty );
+
+        return Objects.equals( this.difficulty, ( ( GetGeoCodesByDifficultyRequest ) obj ).difficulty );
     }
 
     /**
@@ -95,12 +113,9 @@ public class GetGeoCodesByDifficultyRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetGeoCodesByDifficultyRequest {\n" );
-
-        sb.append( "    difficulty: " ).append( toIndentedString( difficulty ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetGeoCodesByDifficultyRequest {\n" +
+                "    difficulty: " + toIndentedString( difficulty ) + "\n" +
+                "}";
     }
 
     /**
@@ -110,6 +125,7 @@ public class GetGeoCodesByDifficultyRequest {
     private String toIndentedString( java.lang.Object o ) {
 
         if ( o == null ) {
+
             return "null";
         }
         return o.toString().replace( "\n", "\n    " );
