@@ -74,7 +74,7 @@ public class UserServiceImplTest {
 
            //GetCurrentCollectableResponse response = userService.getCurrentCollectable(request);
            assertThatThrownBy(() -> getCurrentCollectableResponse = userService.getCurrentCollectable(request))
-            .isInstanceOf(NullUserRequestParameterException.class);
+                .isInstanceOf(NullUserRequestParameterException.class);
     }
 
     @Test
