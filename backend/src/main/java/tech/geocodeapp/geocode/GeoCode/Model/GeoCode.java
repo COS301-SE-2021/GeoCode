@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.GeoCode.Model;
+package tech.geocodeapp.geocode.geocode.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Cascade;

@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Leaderboard.Request;
+package tech.geocodeapp.geocode.leaderboard.request;
 
 
 public class CreateLeaderboardRequest {

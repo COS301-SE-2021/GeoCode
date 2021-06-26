@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
-import tech.geocodeapp.geocode.collectable.Request.*;
-import tech.geocodeapp.geocode.collectable.Response.*;
-import tech.geocodeapp.geocode.collectable.Service.*;
+import tech.geocodeapp.geocode.collectable.request.*;
+import tech.geocodeapp.geocode.collectable.response.*;
+import tech.geocodeapp.geocode.collectable.service.*;
 
 import java.util.UUID;
 

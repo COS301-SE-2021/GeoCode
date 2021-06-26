@@ -1,6 +1,6 @@
 package tech.geocodeapp.geocode.collectable;
 
-import tech.geocodeapp.geocode.collectable.Model.*;
+import tech.geocodeapp.geocode.collectable.model.*;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

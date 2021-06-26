@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Leaderboard.Model;
+package tech.geocodeapp.geocode.leaderboard.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.GeoCode.Exceptions;
+package tech.geocodeapp.geocode.geocode.exceptions;
 
 public class RepoException extends java.lang.Exception {
 

@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.User;
+package tech.geocodeapp.geocode.user;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,17 +8,13 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
-import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
-import tech.geocodeapp.geocode.User.Repository.UserRepository;
-import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
-import tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest;
-import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
-import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
-import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
-import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
-import tech.geocodeapp.geocode.User.Service.UserService;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.collectable.repository.CollectableTypeRepository;
+import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
+import tech.geocodeapp.geocode.user.repository.UserRepository;
+import tech.geocodeapp.geocode.user.service.*;
+import tech.geocodeapp.geocode.user.request.*;
+import tech.geocodeapp.geocode.user.response.*;
 
 @SpringBootTest
 @TestMethodOrder( MethodOrderer.OrderAnnotation.class )

@@ -1,25 +1,26 @@
-package tech.geocodeapp.geocode.GeoCode;
+package tech.geocodeapp.geocode.geocode;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import tech.geocodeapp.geocode.Collectable.Model.*;
-import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
-import tech.geocodeapp.geocode.User.Service.UserService;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
-import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
-import tech.geocodeapp.geocode.GeoCode.Request.*;
-import tech.geocodeapp.geocode.GeoCode.Response.*;
-import tech.geocodeapp.geocode.GeoCode.Service.*;
-import tech.geocodeapp.geocode.GeocodeApplication;
+import tech.geocodeapp.geocode.GeoCodeApplication;
+import tech.geocodeapp.geocode.collectable.*;
+import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.user.service.*;
+import tech.geocodeapp.geocode.geocode.exceptions.*;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.service.*;
+import tech.geocodeapp.geocode.geocode.response.*;
+import tech.geocodeapp.geocode.geocode.request.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest( classes = GeocodeApplication.class,
+@SpringBootTest( classes = GeoCodeApplication.class,
                  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT )
 @TestMethodOrder( MethodOrderer.OrderAnnotation.class )
 class GeoCodeServiceImplIT {

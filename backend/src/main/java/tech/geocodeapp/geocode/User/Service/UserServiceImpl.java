@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.User.Service;
+package tech.geocodeapp.geocode.user.service;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -6,20 +6,14 @@ import java.util.UUID;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
-import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
-import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
-import tech.geocodeapp.geocode.User.Model.User;
-import tech.geocodeapp.geocode.User.Repository.UserRepository;
-import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
-import tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest;
-import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
-import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
-import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
-import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
+import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.repository.*;
+import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
+import tech.geocodeapp.geocode.user.model.User;
+import tech.geocodeapp.geocode.user.repository.UserRepository;
+import tech.geocodeapp.geocode.user.request.*;
+import tech.geocodeapp.geocode.user.response.*;
 
 /**
  * This class implements the UserService interface
@@ -147,7 +141,7 @@ public class UserServiceImpl implements UserService {
         newUser.setUsername(username);
 
         //get the CollectableType object for trackables
-        Optional<CollectableType> optionalCollectableType = collectableTypeRepo.findById(UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3"));
+        Optional< CollectableType > optionalCollectableType = collectableTypeRepo.findById( UUID.fromString( "0855b7da-bdad-44b7-9c22-18fe266ceaf3" ) );
         CollectableType trackableCollectableType = optionalCollectableType.get();
 
         Collectable trackableObject = new Collectable(trackableCollectableType);

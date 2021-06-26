@@ -1,10 +1,10 @@
-package tech.geocodeapp.geocode.GeoCode.Response;
+package tech.geocodeapp.geocode.geocode.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
 
 import java.util.ArrayList;
 import java.util.List;

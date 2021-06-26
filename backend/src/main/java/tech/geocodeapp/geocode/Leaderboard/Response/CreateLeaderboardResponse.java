@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Leaderboard.Response;
+package tech.geocodeapp.geocode.leaderboard.response;
 
 
 public class CreateLeaderboardResponse {

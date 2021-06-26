@@ -1,12 +1,12 @@
-package tech.geocodeapp.geocode.GeoCode;
+package tech.geocodeapp.geocode.geocode;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
-import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 
 import java.util.*;
 

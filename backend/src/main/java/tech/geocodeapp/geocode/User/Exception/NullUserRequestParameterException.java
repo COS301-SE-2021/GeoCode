@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.User.Exception;
+package tech.geocodeapp.geocode.user.exception;
 
 public class NullUserRequestParameterException extends java.lang.Exception{
     /**

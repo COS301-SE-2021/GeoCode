@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.User.Controller;
+package tech.geocodeapp.geocode.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,13 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 
-import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
-import tech.geocodeapp.geocode.User.Response.GetFoundCollectablesResponse;
-import tech.geocodeapp.geocode.User.Response.GetFoundGeoCodesResponse;
-import tech.geocodeapp.geocode.User.Model.User;
-import tech.geocodeapp.geocode.User.Request.*;
-import tech.geocodeapp.geocode.User.Response.*;
-import tech.geocodeapp.geocode.User.Service.UserServiceImpl;
+import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
+import tech.geocodeapp.geocode.user.model.User;
+import tech.geocodeapp.geocode.user.request.*;
+import tech.geocodeapp.geocode.user.response.*;
+import tech.geocodeapp.geocode.user.service.UserServiceImpl;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 @RestController

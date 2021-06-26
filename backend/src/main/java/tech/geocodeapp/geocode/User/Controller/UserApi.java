@@ -3,7 +3,7 @@
  * https://github.com/swagger-api/swagger-codegen
  * Do not edit the class manually.
  */
-package tech.geocodeapp.geocode.User.Controller;
+package tech.geocodeapp.geocode.user.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,11 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import tech.geocodeapp.geocode.User.Response.GetFoundCollectablesResponse;
-import tech.geocodeapp.geocode.User.Response.GetFoundGeoCodesResponse;
-import tech.geocodeapp.geocode.User.Model.User;
-import tech.geocodeapp.geocode.User.Request.*;
-import tech.geocodeapp.geocode.User.Response.*;
+import tech.geocodeapp.geocode.user.model.User;
+import tech.geocodeapp.geocode.user.request.*;
+import tech.geocodeapp.geocode.user.response.*;
 
 import javax.validation.Valid;
 
@@ -56,7 +54,7 @@ public interface UserApi {
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" },
             method = RequestMethod.POST)
-    ResponseEntity<GetUserTrackableResponse> getUserTrackable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's trackable", required=true, schema=@Schema()) @RequestBody tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest body);
+    ResponseEntity<GetUserTrackableResponse> getUserTrackable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's trackable", required=true, schema=@Schema()) @RequestBody GetUserTrackableRequest body);
 
     @Operation(summary = "Update the location of the user's trackable", description = "Update the location of the user's trackable when they place it", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })

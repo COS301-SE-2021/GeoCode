@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.User;
+package tech.geocodeapp.geocode.user;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Assertions;
@@ -11,20 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import tech.geocodeapp.geocode.Collectable.CollectableMockRepository;
-import tech.geocodeapp.geocode.Collectable.CollectableTypeMockRepository;
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
-import tech.geocodeapp.geocode.GeoCode.GeoCodeMockRepository;
-import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
-import tech.geocodeapp.geocode.User.Service.UserService;
-import tech.geocodeapp.geocode.User.Service.UserServiceImpl;
-import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
-import tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest;
-import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
-import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
-import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
-import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
+import tech.geocodeapp.geocode.collectable.CollectableMockRepository;
+import tech.geocodeapp.geocode.collectable.CollectableTypeMockRepository;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.collectable.model.CollectableType;
+import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
+import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
+import tech.geocodeapp.geocode.user.service.*;
+import tech.geocodeapp.geocode.user.request.*;
+import tech.geocodeapp.geocode.user.response.*;
+
 
 @ExtendWith( MockitoExtension.class )
 public class UserServiceImplTest {

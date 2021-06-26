@@ -3,10 +3,10 @@ package tech.geocodeapp.geocode.collectable;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import tech.geocodeapp.geocode.collectable.Model.Rarity;
-import tech.geocodeapp.geocode.collectable.Request.*;
-import tech.geocodeapp.geocode.collectable.Response.*;
-import tech.geocodeapp.geocode.collectable.Service.CollectableServiceImpl;
+import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.collectable.request.*;
+import tech.geocodeapp.geocode.collectable.response.*;
+import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 
 
 import java.util.UUID;

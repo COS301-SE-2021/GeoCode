@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Leaderboard.Model;
+package tech.geocodeapp.geocode.leaderboard.model;
 
 import javax.persistence.*;
 

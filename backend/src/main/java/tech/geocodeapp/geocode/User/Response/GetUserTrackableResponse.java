@@ -1,7 +1,7 @@
-package tech.geocodeapp.geocode.User.Response;
+package tech.geocodeapp.geocode.user.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 

@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.GeoCode.Exceptions;
+package tech.geocodeapp.geocode.geocode.exceptions;
 
 public class InvalidRequestException extends java.lang.Exception {
 

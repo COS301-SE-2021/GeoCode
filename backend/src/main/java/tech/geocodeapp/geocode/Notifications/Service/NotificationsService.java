@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Notifications.Service;
+package tech.geocodeapp.geocode.notifications.service;
 
 import org.springframework.stereotype.Service;
 

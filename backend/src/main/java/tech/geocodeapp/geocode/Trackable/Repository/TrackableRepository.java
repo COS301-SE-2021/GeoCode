@@ -1,8 +1,8 @@
-package tech.geocodeapp.geocode.Trackable.Repository;
+package tech.geocodeapp.geocode.trackable.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import tech.geocodeapp.geocode.Trackable.Model.Trackable;
+import tech.geocodeapp.geocode.trackable.model.Trackable;
 
 
 import java.util.UUID;

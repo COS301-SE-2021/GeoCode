@@ -1,8 +1,8 @@
-package tech.geocodeapp.geocode.Trackable.Request;
+package tech.geocodeapp.geocode.trackable.request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.Collectable.Model.Difficulty;
+import tech.geocodeapp.geocode.collectable.model.Difficulty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;

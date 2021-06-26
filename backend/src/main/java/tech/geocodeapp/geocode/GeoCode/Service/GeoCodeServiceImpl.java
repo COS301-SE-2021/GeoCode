@@ -1,18 +1,18 @@
-package tech.geocodeapp.geocode.GeoCode.Service;
+package tech.geocodeapp.geocode.geocode.service;
 
 import org.springframework.stereotype.Service;
 
-import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
-import tech.geocodeapp.geocode.Collectable.Model.*;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
-import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
-import tech.geocodeapp.geocode.Collectable.Service.*;
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
-import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
-import tech.geocodeapp.geocode.GeoCode.Response.*;
-import tech.geocodeapp.geocode.GeoCode.Request.*;
-import tech.geocodeapp.geocode.User.Service.*;
+import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
+import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
+import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.geocode.exceptions.*;
+import tech.geocodeapp.geocode.geocode.response.*;
+import tech.geocodeapp.geocode.geocode.request.*;
+import tech.geocodeapp.geocode.user.service.*;
 
 import java.security.SecureRandom;
 import java.util.*;

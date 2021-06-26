@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Notifications.Repository;
+package tech.geocodeapp.geocode.notifications.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

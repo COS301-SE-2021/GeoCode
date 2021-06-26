@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.GeoCode.Exceptions;
+package tech.geocodeapp.geocode.geocode.exceptions;
 
 public class NotFoundException extends java.lang.Exception {
 

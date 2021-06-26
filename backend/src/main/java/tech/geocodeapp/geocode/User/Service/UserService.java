@@ -1,15 +1,11 @@
-package tech.geocodeapp.geocode.User.Service;
+package tech.geocodeapp.geocode.user.service;
 
 import org.springframework.stereotype.Service;
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
-import tech.geocodeapp.geocode.User.Model.User;
-import tech.geocodeapp.geocode.User.Request.GetCurrentCollectableRequest;
-import tech.geocodeapp.geocode.User.Request.GetUserTrackableRequest;
-import tech.geocodeapp.geocode.User.Request.UpdateLocationRequest;
-import tech.geocodeapp.geocode.User.Response.GetCurrentCollectableResponse;
-import tech.geocodeapp.geocode.User.Response.GetUserTrackableResponse;
-import tech.geocodeapp.geocode.User.Response.UpdateLocationResponse;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
+import tech.geocodeapp.geocode.user.model.User;
+import tech.geocodeapp.geocode.user.request.*;
+import tech.geocodeapp.geocode.user.response.*;
 
 import java.util.UUID;
 
@@ -19,10 +15,10 @@ import java.util.UUID;
 @Service
 public interface UserService {
     //U1.1 getCurrentCollectable
-    GetCurrentCollectableResponse getCurrentCollectable(GetCurrentCollectableRequest request) throws NullUserRequestParameterException;
+    GetCurrentCollectableResponse getCurrentCollectable( GetCurrentCollectableRequest request ) throws NullUserRequestParameterException;
 
     //U1.2 getUserTrackable
-    GetUserTrackableResponse getUserTrackable(GetUserTrackableRequest request) throws NullUserRequestParameterException;
+    GetUserTrackableResponse getUserTrackable( GetUserTrackableRequest request ) throws NullUserRequestParameterException;
 
     //U1.3 updateLocation
     UpdateLocationResponse updateLocation(UpdateLocationRequest request) throws NullUserRequestParameterException;

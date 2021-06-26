@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.GeoCode.Controller;
+package tech.geocodeapp.geocode.geocode.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,11 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMethod;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
+import tech.geocodeapp.geocode.geocode.exceptions.*;
 import javax.validation.Valid;
 
-import tech.geocodeapp.geocode.GeoCode.Response.*;
-import tech.geocodeapp.geocode.GeoCode.Request.*;
+import tech.geocodeapp.geocode.geocode.response.*;
+import tech.geocodeapp.geocode.geocode.request.*;
 
 
 @Validated

@@ -1,10 +1,9 @@
-package tech.geocodeapp.geocode.Leaderboard.Service;
+package tech.geocodeapp.geocode.leaderboard.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import tech.geocodeapp.geocode.Leaderboard.Repository.LeaderboardRepository;
+import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 
 
 /**

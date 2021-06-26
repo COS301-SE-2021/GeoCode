@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Trackable.Response;
+package tech.geocodeapp.geocode.trackable.response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;

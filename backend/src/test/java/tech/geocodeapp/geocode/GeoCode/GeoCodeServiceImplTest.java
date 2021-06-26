@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.GeoCode;
+package tech.geocodeapp.geocode.geocode;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.mockito.Mock;
@@ -6,15 +6,15 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import tech.geocodeapp.geocode.Collectable.*;
-import tech.geocodeapp.geocode.Collectable.Model.*;
-import tech.geocodeapp.geocode.Collectable.Service.*;
-import tech.geocodeapp.geocode.User.Service.*;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
-import tech.geocodeapp.geocode.GeoCode.Service.*;
-import tech.geocodeapp.geocode.GeoCode.Response.*;
-import tech.geocodeapp.geocode.GeoCode.Request.*;
+import tech.geocodeapp.geocode.collectable.*;
+import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.user.service.*;
+import tech.geocodeapp.geocode.geocode.exceptions.*;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.service.*;
+import tech.geocodeapp.geocode.geocode.response.*;
+import tech.geocodeapp.geocode.geocode.request.*;
 
 import java.util.ArrayList;
 import java.util.List;

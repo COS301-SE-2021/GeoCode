@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Trackable.Response;
+package tech.geocodeapp.geocode.trackable.response;
 
 
 public class CreateTrackableResponse {

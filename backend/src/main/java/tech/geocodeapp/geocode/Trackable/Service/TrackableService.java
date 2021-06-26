@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Trackable.Service;
+package tech.geocodeapp.geocode.trackable.service;
 
 import org.springframework.stereotype.Service;
 

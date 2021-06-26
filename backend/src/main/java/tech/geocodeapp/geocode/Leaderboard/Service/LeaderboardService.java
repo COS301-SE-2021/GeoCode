@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Leaderboard.Service;
+package tech.geocodeapp.geocode.leaderboard.service;
 
 import org.springframework.stereotype.Service;
 

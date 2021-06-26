@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.GeoCode.Controller;
+package tech.geocodeapp.geocode.geocode.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 
-import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
-import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeService;
-import tech.geocodeapp.geocode.GeoCode.Response.*;
-import tech.geocodeapp.geocode.GeoCode.Request.*;
+import tech.geocodeapp.geocode.geocode.exceptions.*;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
+import tech.geocodeapp.geocode.geocode.response.*;
+import tech.geocodeapp.geocode.geocode.request.*;
 
 @RestController
 public class GeoCodeApiController implements GeoCodeApi {

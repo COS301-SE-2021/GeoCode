@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.User;
+package tech.geocodeapp.geocode.user;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import tech.geocodeapp.geocode.User.Model.User;
-import tech.geocodeapp.geocode.User.Repository.UserRepository;
+import tech.geocodeapp.geocode.user.model.User;
+import tech.geocodeapp.geocode.user.repository.UserRepository;
 
 public class UserMockRepository implements UserRepository {
     private static HashMap<UUID, User> map = new HashMap<UUID, User>();

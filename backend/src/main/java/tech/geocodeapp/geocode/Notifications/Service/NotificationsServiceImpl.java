@@ -1,10 +1,10 @@
-package tech.geocodeapp.geocode.Notifications.Service;
+package tech.geocodeapp.geocode.notifications.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import tech.geocodeapp.geocode.Notifications.Repository.NotificationsRepository;
+import tech.geocodeapp.geocode.notifications.repository.NotificationsRepository;
 
 
 /**

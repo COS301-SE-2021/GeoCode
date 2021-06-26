@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Trackable.Model;
+package tech.geocodeapp.geocode.trackable.model;
 
 import javax.persistence.*;
 

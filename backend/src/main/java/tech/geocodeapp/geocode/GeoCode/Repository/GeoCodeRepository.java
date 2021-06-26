@@ -1,9 +1,9 @@
-package tech.geocodeapp.geocode.GeoCode.Repository;
+package tech.geocodeapp.geocode.geocode.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 
 import java.util.UUID;
 

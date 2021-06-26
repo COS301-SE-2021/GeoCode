@@ -1,8 +1,8 @@
-package tech.geocodeapp.geocode.GeoCode.Service;
+package tech.geocodeapp.geocode.geocode.service;
 
-import tech.geocodeapp.geocode.GeoCode.Response.*;
-import tech.geocodeapp.geocode.GeoCode.Request.*;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
+import tech.geocodeapp.geocode.geocode.exceptions.*;
+import tech.geocodeapp.geocode.geocode.response.*;
+import tech.geocodeapp.geocode.geocode.request.*;
 
 /**
  * This is the main interface is for the GeoCode subsystem,

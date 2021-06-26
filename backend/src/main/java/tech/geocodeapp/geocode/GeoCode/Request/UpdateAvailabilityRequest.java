@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.GeoCode.Request;
+package tech.geocodeapp.geocode.geocode.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
