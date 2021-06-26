@@ -6,8 +6,9 @@ import {
   GetHintsResponse,
   GetGeoCodeByQRCodeRequest,
   GetCollectablesRequest,
-  GetGeoCodeByQRCodeResponse, GetCollectablesResponse
-} from "../../../services/geocode-api";
+  GetGeoCodeByQRCodeResponse, GetCollectablesResponse, SwapCollectablesRequest, SwapCollectablesResponse
+} from '../../../services/geocode-api';
+import {AlertController, NavController} from '@ionic/angular';
 declare let google;
 @Component({
   selector: 'app-geocode-contents',
@@ -25,7 +26,7 @@ export class GeocodeContentsPage implements AfterViewInit {
   collectables =[];
 
 
-  constructor(private route: ActivatedRoute,public geocodeApi: GeoCodeService) {
+  constructor(private route: ActivatedRoute,public geocodeApi: GeoCodeService, public navCtrl: NavController, private alertCtrl: AlertController) {
     //Get passed in param from routing
     this.route.queryParams.subscribe(params => {
           //Set the geocode to the passed in geocode
@@ -97,5 +98,40 @@ export class GeocodeContentsPage implements AfterViewInit {
     });
 
   }
+
+  async swapCollectable(collectable){
+
+
+    const alert = await this.alertCtrl.create({
+      header: 'Swap',
+
+      message: ' <strong>Your about to swap your collectable for '+collectable.type.name+ '</strong>',
+          buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            // console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Swap',
+          handler: data => {
+            const request: SwapCollectablesRequest={
+              targetCollectableID:collectable.id,
+              targetGeoCodeID:this.geocode.id
+            };
+            console.log(request);
+            this.geocodeApi.swapCollectables(request).subscribe((response: SwapCollectablesResponse) =>{
+              console.log(response);
+            });
+            this.navCtrl.navigateBack('/geocode');
+
+          }
+        }
+      ]
+    });
+    alert.present();
+    }
 
 }
