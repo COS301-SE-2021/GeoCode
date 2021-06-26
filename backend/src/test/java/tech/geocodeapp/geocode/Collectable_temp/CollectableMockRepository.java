@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.collectable;
+package tech.geocodeapp.geocode.Collectable_temp;
 
 import tech.geocodeapp.geocode.collectable.model.*;
 import org.springframework.data.domain.Example;

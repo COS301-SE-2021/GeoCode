@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.geocode;
+package tech.geocodeapp.geocode.GeoCode_temp;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.geocode;
+package tech.geocodeapp.geocode.GeoCode_temp;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

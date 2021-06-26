@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.collectable;
+package tech.geocodeapp.geocode.Collectable_temp;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
