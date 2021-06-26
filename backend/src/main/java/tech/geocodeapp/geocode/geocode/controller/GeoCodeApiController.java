@@ -28,7 +28,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         CreateGeoCodeResponse response = geoCodeService.createGeoCode( body );
 
-        if ( ( response.isIsSuccess() != null ) && ( response.isIsSuccess() ) ) {
+        if ( ( response.isIsSuccess() != null ) && ( Boolean.TRUE.equals( response.isIsSuccess() ) ) ) {
 
             return new ResponseEntity<>( response, HttpStatus.OK );
         } else {
@@ -132,7 +132,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         UpdateAvailabilityResponse response = geoCodeService.updateAvailability( body );
 
-        if ( ( response.isIsSuccess() != null ) && ( response.isIsSuccess() ) ) {
+        if ( ( response.isIsSuccess() != null ) && ( Boolean.TRUE.equals( response.isIsSuccess() ) ) ) {
 
             return new ResponseEntity<>( response, HttpStatus.OK );
         } else {
