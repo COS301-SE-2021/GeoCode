@@ -8,23 +8,55 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x, 15.x]
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
         with:
-          node-version: ${{ matrix.node-version }}
-      - run: |
-            cd frontend
-            npm cache clean --force
-            npm install
-            npm ci
-            npm run build --if-present
-            npm test
+          node-version: 14.17.0
+          
+      - name: install @angular/cli
+        run: npm install -i -D -E @angular/cli
+        
+      - name: install ionic
+        run: npm install -g @ionic/cli
+
+      - name: install npm dependencies
+        working-directory: ./mobile
+        run: npm install
+
+      - name: Build App
+        working-directory: ./mobile
+        run: ionic build
+
+  frontend-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: [ 14.x, 15.x ]
+
+      - name: install @angular/cli
+        run: npm install -i -D -E @angular/cli
+
+      - name: install ionic
+        run: npm install -g @ionic/cli
+
+      - name: install npm dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: link angular
+        working-directory: ./frontend
+        run: npm link @angular/cli
+
+      - name: run tests
+        working-directory: ./frontend
+        run: npm run test:prod
