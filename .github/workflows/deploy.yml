@@ -1,0 +1,35 @@
+# Clones the application to the GeoCode server on push.
+
+name: Remote SSH Commands
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    name: Automatic Deployment
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy Ionic and Spring Boot applications
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{secrets.SSH_ADDRESS}}
+        username: ${{secrets.SSH_USERNAME}}
+        key: ${{secrets.SSH_PRIVATE_KEY}}
+        port: ${{secrets.SSH_PORT}}
+        script: |
+          rm -rf GeoCode
+          git clone git@github.com:COS301-SE-2021/GeoCode.git
+          cd GeoCode/frontend
+          npm install
+          cp ../../index.withsecrets.html src
+          cp ../../environment.ts src/environments
+          ionic build
+          cp www/src/index.html www
+          cd ../backend
+          mvn spring-boot:build-image -Dspring-boot.build-image.imageName=geocode/backend
+          cd ..
+          docker stop spring
+          docker-compose --env-file ../.env up -d
+          echo "Deployment completed successfully"
