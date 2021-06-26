@@ -113,6 +113,7 @@ This will be announced after the first stable release of the GeoCode project.
 The following documentation was done in LaTeX and is to document the process followed when designing <br/> and structure of the GeoCode project.
 
 * <a href="https://www.overleaf.com/read/ysgpfdqtrrkw"> GeoCode - SRS Version One </a>
+* <a href="https://www.overleaf.com/read/xtrkrnzbmbny"> GeoCode - SRS Version Three </a>
 * <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> GeoCode - SRS Version Two </a>
 
 </div>
@@ -154,7 +155,7 @@ The following links are the live demo videos held on blackboard collaborate to p
 phases of the project to the stakeholders of the GeoCode project.
 
 * <a href="https://drive.google.com/file/d/1OqOuoMHSyd4rTUqWW5j_ME1EZcIJHre4/view?usp=sharing"> Demo 1 </a> - :calendar: 2021-06-14
-* <a href="https://michael-stroh.github.io/capstone/"> Demo 2  </a> - :calendar: 2021-06-21 
+* <a href="https://drive.google.com/file/d/1iSdTMS9bjVXQGxdfrJ-6nl46fX0j3h7n/view?usp=sharing"> Demo 2  </a> - :calendar: 2021-06-21 
 * <a href="https://michael-stroh.github.io/capstone/"> Demo 3  </a> - :calendar: 2021-08-20 
 * <a href="https://michael-stroh.github.io/capstone/"> Demo 4  </a> - :calendar: 2021-09-24 
 
