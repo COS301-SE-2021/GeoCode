@@ -2,7 +2,7 @@ package tech.geocodeapp.geocode.notifications.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import tech.geocodeapp.geocode.notifications.Model.Notifications;
+import tech.geocodeapp.geocode.notifications.model.Notifications;
 
 /**
  * This class implements the repository for the Notifications Subsystem

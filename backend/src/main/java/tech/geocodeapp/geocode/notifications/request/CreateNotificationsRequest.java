@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.notifications.Request;
+package tech.geocodeapp.geocode.notifications.request;
 
 
 public class CreateNotificationsRequest {

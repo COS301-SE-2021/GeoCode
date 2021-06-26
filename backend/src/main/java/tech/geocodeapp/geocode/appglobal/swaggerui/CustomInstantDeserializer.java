@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.appglobal.SwaggerUI;
+package tech.geocodeapp.geocode.appglobal.swaggerui;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonTokenId;

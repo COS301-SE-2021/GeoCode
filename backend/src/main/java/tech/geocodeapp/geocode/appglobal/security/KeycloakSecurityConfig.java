@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan(basePackages = { "tech.geocodeapp.geocode.appglobal.Security" })
+@ComponentScan(basePackages = { "tech.geocodeapp.geocode.appglobal.security" })
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 

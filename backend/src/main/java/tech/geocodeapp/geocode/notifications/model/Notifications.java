@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.notifications.Model;
+package tech.geocodeapp.geocode.notifications.model;
 
 import javax.persistence.*;
 

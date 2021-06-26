@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.appglobal.SwaggerUI;
+package tech.geocodeapp.geocode.appglobal.swaggerui;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
