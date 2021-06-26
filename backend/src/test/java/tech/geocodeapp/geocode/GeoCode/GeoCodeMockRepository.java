@@ -1,17 +1,18 @@
 package tech.geocodeapp.geocode.GeoCode;
 
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 
 import java.util.*;
 
 public class GeoCodeMockRepository implements GeoCodeRepository {
 
-    private HashMap< UUID, GeoCode > map = new HashMap< UUID, GeoCode >();
+    private HashMap< UUID, GeoCode > map = new HashMap<>();
 
     @Override
     public List< GeoCode > findAll() {
@@ -89,7 +90,6 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
                 hold = Optional.ofNullable( map.get( uuid ) );
             }
         }
-
 
         return hold;
     }

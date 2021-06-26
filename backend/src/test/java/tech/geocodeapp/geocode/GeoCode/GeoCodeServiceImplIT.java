@@ -3,23 +3,21 @@ package tech.geocodeapp.geocode.GeoCode;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import tech.geocodeapp.geocode.Collectable.Model.*;
 import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.GeoCode.Exceptions.RepoException;
+import tech.geocodeapp.geocode.User.Service.UserService;
+import tech.geocodeapp.geocode.GeoCode.Exceptions.*;
 import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
 import tech.geocodeapp.geocode.GeoCode.Repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCode.Request.*;
 import tech.geocodeapp.geocode.GeoCode.Response.*;
-import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeService;
-import tech.geocodeapp.geocode.GeoCode.Service.GeoCodeServiceImpl;
+import tech.geocodeapp.geocode.GeoCode.Service.*;
 import tech.geocodeapp.geocode.GeocodeApplication;
-import tech.geocodeapp.geocode.User.Service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest( classes = GeocodeApplication.class,
                  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT )
