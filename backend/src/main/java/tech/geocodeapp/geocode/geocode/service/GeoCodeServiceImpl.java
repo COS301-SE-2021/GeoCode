@@ -42,12 +42,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     /**
      * The number of collectables to make when creating a new GeoCode
      */
-    private final int numCollectables = 5;
+    private final static int numCollectables = 5;
 
     /**
      * The length of the qr code for a new GeoCode
      */
-    private final int QRSize = 8;
+    private final static int qrSize = 8;
 
     /**
      * Constructor
@@ -131,15 +131,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
 
         // create StringBuffer size of AlphaNumericString
-        var qr = new StringBuilder( QRSize );
+        var qr = new StringBuilder( qrSize );
 
-        for ( var i = 0; i < QRSize; i++ ) {
+        for ( var i = 0; i < qrSize; i++ ) {
 
-            /* generate a random number between 0 to AlphaNumericString variable length */
-            int index = (  new SecureRandom() ).nextInt(chars.length() );
-
-            /* add Character one by one in end of sb */
-            qr.append( chars.charAt( index ) );
+            /* generate a random number between 0 to AlphaNumericString variable length
+             * add Character one by one in end of sb */
+            qr.append( chars.charAt( (  new SecureRandom() ).nextInt(chars.length() ) ) );
         }
 
         /*
@@ -362,7 +360,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         checkRepo();
 
         List< GeoCode > temp = geoCodeRepo.findAll();
-        int x = 0;
+        var x = 0;
         for ( ; x < temp.size(); x++ ) {
 
             if ( temp.get( x ).getQrCode().equals( request.getQrCode() ) ) {
@@ -403,7 +401,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         checkRepo();
 
         List< GeoCode > temp = geoCodeRepo.findAll();
-        int x = 0;
+        var x = 0;
         for ( ; x < temp.size(); x++ ) {
 
             if ( ( temp.get( x ).getLatitude().equals( request.getLatitude() ) ) && ( temp.get( x ).getLongitude().equals( request.getLongitude() ) ) ) {
@@ -454,7 +452,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Find the target collectable */
         var replaceIndex = -1; //the index of the collectable we want to replace in the geocode
         List< Collectable > storedCollectables = new ArrayList<>( geocode.getCollectables() );
-        for ( int i = 0; i < storedCollectables.size(); i++ ) {
+        for ( var i = 0; i < storedCollectables.size(); i++ ) {
 
             if ( storedCollectables.get( i ).getId().equals( request.getTargetCollectableID() ) ) {
 
@@ -463,6 +461,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             }
         }
         if ( replaceIndex == -1 ) {
+
             return new SwapCollectablesResponse().isSuccess( false );
         }
 
