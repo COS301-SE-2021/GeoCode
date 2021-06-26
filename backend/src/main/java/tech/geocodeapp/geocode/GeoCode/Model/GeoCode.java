@@ -14,7 +14,7 @@ import java.util.*;
  * The GeoCode model that will be stored as a table in the db
  */
 @Validated
-//@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-19T19:40:54.656Z[GMT]")
+@javax.annotation.Generated( value = "io.swagger.codegen.v3.generators.java.SpringCodegen" )
 
 @Entity
 @Table( name = "geocode" )
@@ -60,7 +60,7 @@ public class GeoCode {
     @Valid
     @ManyToMany
     @JsonProperty( "collectables" )
-    //@ElementCollection( fetch = FetchType.EAGER )
+    @ElementCollection( fetch = FetchType.EAGER )
     @Cascade( org.hibernate.annotations.CascadeType.ALL )
     private Collection< Collectable > collectables = null;
 

@@ -93,7 +93,7 @@ class GeoCodeServiceImplIT {
     @Test
     @Order( 1 )
     @Tag( "Tests" )
-    @DisplayName( "Test null repository handling" )
+    @DisplayName( "Null repository handling - GeoCodeServiceImpl" )
     void RepositoryNullTest() {
 
         /* Null request check */
@@ -107,7 +107,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 2 )
-    @DisplayName( "Test createGeoCode null repository handling" )
+    @DisplayName( "Null repository handling - createGeoCode" )
     void createGeoCodeNullRequestTest() {
 
         /* Null request check */
@@ -121,7 +121,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 10 )
-    @DisplayName( "Test createGeoCode invalid repository attribute handling" )
+    @DisplayName( "Invalid repository attribute handling - createGeoCode" )
     void createGeoCodeInvalidRequestTest() {
 
         /*
@@ -148,7 +148,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 18 )
-    @DisplayName( "Test valid createGeoCode request" )
+    @DisplayName( "Valid request - createGeoCode" )
     void createGeoCodeTest() {
 
         try {
@@ -192,7 +192,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 19 )
-    @DisplayName( "Test valid getAllGeoCode request" )
+    @DisplayName( "Valid request - getAllGeoCode" )
     void getAllGeoCodeTest() {
 
         try {
@@ -242,7 +242,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 3 )
-    @DisplayName( "Test getGeoCodesByDifficulty null repository handling" )
+    @DisplayName( "Null repository handling - getGeoCodesByDifficulty" )
     void getGeoCodesByDifficultyNullRequestTest() {
 
         /* Null request check */
@@ -256,7 +256,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 11 )
-    @DisplayName( "Test getGeoCodesByDifficulty invalid repository attribute handling" )
+    @DisplayName( "Invalid repository attribute handling - getGeoCodesByDifficulty" )
     void getGeoCodesByDifficultyInvalidRequestTest() {
 
         /*
@@ -278,7 +278,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 20 )
-    @DisplayName( "Test valid getGeoCodesByDifficulty request" )
+    @DisplayName( "Valid request - getGeoCodesByDifficulty" )
     void getGeoCodesByDifficultyTest() {
 
         try {
@@ -325,7 +325,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 4 )
-    @DisplayName( "Test getHints null repository handling" )
+    @DisplayName( "Null repository handling - getHints" )
     void getHintsNullRequestTest() {
 
         /* Null request check */
@@ -339,7 +339,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 12 )
-    @DisplayName( "Test getHints invalid repository attribute handling" )
+    @DisplayName( "Invalid repository attribute handling - getHints" )
     void getHintsInvalidRequestTest() {
 
         /*
@@ -361,7 +361,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 21 )
-    @DisplayName( "Test valid getHints request" )
+    @DisplayName( "Valid request - getHints" )
     void getHintsTest() {
 
         try {
@@ -394,7 +394,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 5 )
-    @DisplayName( "Test swapCollectables null repository handling" )
+    @DisplayName( "Null repository handling - swapCollectables" )
     void swapCollectablesNullRequestTest() {
 
         /* Null request check */
@@ -408,7 +408,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 13 )
-    @DisplayName( "Test swapCollectables invalid repository attribute handling" )
+    @DisplayName( "Invalid repository attribute handling - swapCollectables" )
     void swapCollectablesInvalidRequestTest() {
 
         /*
@@ -430,7 +430,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 6 )
-    @DisplayName( "Test updateAvailability null repository handling" )
+    @DisplayName( "Null repository handling - updateAvailability" )
     void updateAvailabilityNullRequestTest() {
 
         /* Null request check */
@@ -444,7 +444,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 14 )
-    @DisplayName( "Test updateAvailability invalid repository attribute handling" )
+    @DisplayName( "Invalid repository attribute handling - updateAvailability" )
     void updateAvailabilityInvalidRequestTest() {
 
         /*
@@ -466,7 +466,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 23 )
-    @DisplayName( "Test valid updateAvailability request" )
+    @DisplayName( "Valid request - updateAvailability" )
     void updateAvailabilityTest() {
 
         /* Create a GeoCode */
@@ -500,7 +500,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 7 )
-    @DisplayName( "Test getGeoCodesByLocation null repository handling" )
+    @DisplayName( "Null repository handling - getGeoCodesByLocation" )
     void getGeoCodesByLocationNullRequestTest() {
 
         /* Null request check */
@@ -514,7 +514,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 15 )
-    @DisplayName( "Test getGeoCodesByLocation invalid repository attribute handling" )
+    @DisplayName( "Invalid repository attribute handling - getGeoCodesByLocation" )
     void getGeoCodesByLocationInvalidRequestTest() {
 
         /*
@@ -537,7 +537,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 24 )
-    @DisplayName( "Test valid getGeoCodesByLocation request" )
+    @DisplayName( "Valid request getGeoCodesByLocation" )
     void getGeoCodesByLocationTest() {
 
         /* Create a GeoCode */
@@ -572,7 +572,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 8 )
-    @DisplayName( "Test getGeoCodesByQRCode null repository handling" )
+    @DisplayName( "Null repository handling - getGeoCodesByQRCode" )
     void getGeoCodesByQRCodeNullRequestTest() {
 
         /* Null request check */
@@ -586,7 +586,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 16 )
-    @DisplayName( "Test getGeoCodesByQRCode invalid repository attribute handling" )
+    @DisplayName( "Invalid repository attribute handling - getGeoCodesByQRCode" )
     void getGeoCodesByQRCodeInvalidRequestTest() {
 
         /*
@@ -608,7 +608,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 25 )
-    @DisplayName( "Test valid getGeoCodesByQRCode request" )
+    @DisplayName( "Valid request - getGeoCodesByQRCode" )
     void getGeoCodesByQRCodeTest() {
 
         /* Create a GeoCode */
@@ -642,7 +642,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 8 )
-    @DisplayName( "Test getCollectables null repository handling" )
+    @DisplayName( "Null repository handling - getCollectables" )
     void getCollectablesNullRequestTest() {
 
         /* Null request check */
@@ -656,7 +656,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 17 )
-    @DisplayName( "Test getCollectables invalid repository attribute handling" )
+    @DisplayName( "Invalid repository attribute handling - getCollectables" )
     void getCollectablesInvalidRequestTest() {
 
         /*
@@ -678,7 +678,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 26 )
-    @DisplayName( "Test valid getCollectables request" )
+    @DisplayName( "Valid request - getCollectables" )
     void getCollectablesTest() {
 
         /* Create a GeoCode */
