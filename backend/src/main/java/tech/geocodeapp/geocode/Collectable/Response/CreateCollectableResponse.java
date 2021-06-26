@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Collectable.Response;
+package tech.geocodeapp.geocode.collectable.response;
 
 
 /**

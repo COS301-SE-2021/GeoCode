@@ -1,7 +1,6 @@
-package tech.geocodeapp.geocode.Collectable.Factory;
+package tech.geocodeapp.geocode.collectable.factory;
 
-import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
-import tech.geocodeapp.geocode.Collectable.Decorator.TrackableCollectableTypeDecorator;
+import tech.geocodeapp.geocode.collectable.decorator.*;
 
 public class TrackableCollectableTypeFactory extends AbstractCollectableTypeFactory {
 

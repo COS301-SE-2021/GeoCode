@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.AppGlobal.Security;
+package tech.geocodeapp.geocode.appglobal.security;
 
 import org.keycloak.KeycloakSecurityContext;
 import org.springframework.stereotype.Component;

@@ -1,9 +1,9 @@
-package tech.geocodeapp.geocode.Collectable.Request;
+package tech.geocodeapp.geocode.collectable.request;
 
 import java.util.HashMap;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.Collectable.Model.Rarity;
+import tech.geocodeapp.geocode.collectable.model.Rarity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;

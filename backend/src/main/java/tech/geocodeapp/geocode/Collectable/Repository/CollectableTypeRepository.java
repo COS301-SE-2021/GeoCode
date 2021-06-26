@@ -1,8 +1,6 @@
-package tech.geocodeapp.geocode.Collectable.Repository;
+package tech.geocodeapp.geocode.collectable.repository;
 
-import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
-import tech.geocodeapp.geocode.Collectable.Model.Rarity;
+import tech.geocodeapp.geocode.collectable.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

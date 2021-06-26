@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Collectable.Response;
+package tech.geocodeapp.geocode.collectable.response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.validation.annotation.Validated;
-import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
+import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;

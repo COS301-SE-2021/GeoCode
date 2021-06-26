@@ -1,6 +1,6 @@
-package tech.geocodeapp.geocode.Collectable.Response;
+package tech.geocodeapp.geocode.collectable.response;
 
-import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
+import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 
 /**
  * A class to write a response to for a createCollectableSetRequest

@@ -1,11 +1,8 @@
-package tech.geocodeapp.geocode.Collectable.Service;
+package tech.geocodeapp.geocode.collectable.service;
 
 import org.springframework.stereotype.Service;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableSetRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableTypeRequest;
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectableTypesBySetRequest;
-import tech.geocodeapp.geocode.Collectable.Response.*;
+import tech.geocodeapp.geocode.collectable.request.*;
+import tech.geocodeapp.geocode.collectable.response.*;
 
 /**
  * This interface is for the User subsystem

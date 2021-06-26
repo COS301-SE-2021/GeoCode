@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Collectable.Controller;
+package tech.geocodeapp.geocode.collectable.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,9 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
-import tech.geocodeapp.geocode.Collectable.Request.*;
-import tech.geocodeapp.geocode.Collectable.Response.*;
-import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
+import tech.geocodeapp.geocode.collectable.request.*;
+import tech.geocodeapp.geocode.collectable.response.*;
+import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;

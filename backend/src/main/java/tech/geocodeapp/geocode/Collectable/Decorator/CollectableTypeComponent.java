@@ -1,7 +1,6 @@
-package tech.geocodeapp.geocode.Collectable.Decorator;
+package tech.geocodeapp.geocode.collectable.decorator;
 
-import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
-import tech.geocodeapp.geocode.Collectable.Model.Rarity;
+import tech.geocodeapp.geocode.collectable.model.*;
 
 import java.util.GregorianCalendar;
 import java.util.UUID;

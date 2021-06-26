@@ -1,7 +1,6 @@
-package tech.geocodeapp.geocode.Collectable.Strategy;
+package tech.geocodeapp.geocode.collectable.strategy;
 
-
-import tech.geocodeapp.geocode.Collectable.Factory.AbstractCollectableTypeFactory;
+import tech.geocodeapp.geocode.collectable.factory.*;
 
 public interface CollectableTypeStrategy {
     /**

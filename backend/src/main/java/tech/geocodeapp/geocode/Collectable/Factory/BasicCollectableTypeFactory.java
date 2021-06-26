@@ -1,8 +1,7 @@
-package tech.geocodeapp.geocode.Collectable.Factory;
+package tech.geocodeapp.geocode.collectable.factory;
 
-import tech.geocodeapp.geocode.Collectable.Model.Rarity;
-import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
-import tech.geocodeapp.geocode.Collectable.Decorator.ConcreteCollectableType;
+import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.collectable.decorator.*;
 
 import java.util.UUID;
 

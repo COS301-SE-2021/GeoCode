@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.Collectable.Request;
+package tech.geocodeapp.geocode.collectable.request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;

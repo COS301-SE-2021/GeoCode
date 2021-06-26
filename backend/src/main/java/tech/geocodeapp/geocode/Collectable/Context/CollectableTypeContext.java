@@ -1,7 +1,7 @@
-package tech.geocodeapp.geocode.Collectable.Context;
+package tech.geocodeapp.geocode.collectable.context;
 
-import tech.geocodeapp.geocode.Collectable.Factory.AbstractCollectableTypeFactory;
-import tech.geocodeapp.geocode.Collectable.Strategy.*;
+import tech.geocodeapp.geocode.collectable.factory.AbstractCollectableTypeFactory;
+import tech.geocodeapp.geocode.collectable.strategy.*;
 
 public class CollectableTypeContext {
     private CollectableTypeStrategy strategy;

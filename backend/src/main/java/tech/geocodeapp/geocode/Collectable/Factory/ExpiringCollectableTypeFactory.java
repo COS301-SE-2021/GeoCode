@@ -1,7 +1,6 @@
-package tech.geocodeapp.geocode.Collectable.Factory;
+package tech.geocodeapp.geocode.collectable.factory;
 
-import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
-import tech.geocodeapp.geocode.Collectable.Decorator.ExpiringCollectableTypeDecorator;
+import tech.geocodeapp.geocode.collectable.decorator.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

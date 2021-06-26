@@ -1,10 +1,10 @@
-package tech.geocodeapp.geocode.Collectable.Manager;
+package tech.geocodeapp.geocode.collectable.manager;
 
-import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
-import tech.geocodeapp.geocode.Collectable.Context.CollectableTypeContext;
-import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
-import tech.geocodeapp.geocode.Collectable.Factory.AbstractCollectableTypeFactory;
-import tech.geocodeapp.geocode.Collectable.Strategy.BasicCollectableTypeStrategy;
+import tech.geocodeapp.geocode.collectable.model.CollectableType;
+import tech.geocodeapp.geocode.collectable.context.CollectableTypeContext;
+import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
+import tech.geocodeapp.geocode.collectable.factory.AbstractCollectableTypeFactory;
+import tech.geocodeapp.geocode.collectable.strategy.BasicCollectableTypeStrategy;
 
 public class CollectableTypeManager {
 

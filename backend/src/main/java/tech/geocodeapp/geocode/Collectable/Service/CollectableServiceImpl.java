@@ -1,19 +1,12 @@
-package tech.geocodeapp.geocode.Collectable.Service;
+package tech.geocodeapp.geocode.collectable.service;
 
 import org.springframework.stereotype.Service;
-import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
-import tech.geocodeapp.geocode.Collectable.Manager.CollectableTypeManager;
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableRepository;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableSetRepository;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableTypeRepository;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableSetRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableTypeRequest;
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectableTypesBySetRequest;
-import tech.geocodeapp.geocode.Collectable.Response.*;
+import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
+import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
+import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.repository.*;
+import tech.geocodeapp.geocode.collectable.request.*;
+import tech.geocodeapp.geocode.collectable.response.*;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;

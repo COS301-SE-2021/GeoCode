@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.AppGlobal.Security;
+package tech.geocodeapp.geocode.appglobal.security;
 
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;

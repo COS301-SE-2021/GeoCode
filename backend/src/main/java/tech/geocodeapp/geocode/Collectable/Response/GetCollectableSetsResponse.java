@@ -1,8 +1,8 @@
-package tech.geocodeapp.geocode.Collectable.Response;
+package tech.geocodeapp.geocode.collectable.response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
+import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;

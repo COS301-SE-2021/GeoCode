@@ -6,7 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.persistence.*;
 import javax.validation.Valid;
 
-import tech.geocodeapp.geocode.Collectable.Model.*;
+import tech.geocodeapp.geocode.collectable.model.*;
 
 import java.util.*;
 

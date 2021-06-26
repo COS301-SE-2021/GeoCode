@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.AppGlobal.API;
+package tech.geocodeapp.geocode.appglobal.api;
 
 import java.io.IOException;
 

@@ -1,18 +1,14 @@
-package tech.geocodeapp.geocode.Collectable;
+package tech.geocodeapp.geocode.collectable;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import tech.geocodeapp.geocode.Collectable.Model.Rarity;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableSetRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableTypeRequest;
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectableTypesBySetRequest;
-import tech.geocodeapp.geocode.Collectable.Response.*;
-import tech.geocodeapp.geocode.Collectable.Service.CollectableService;
-import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
+import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.collectable.Request.*;
+import tech.geocodeapp.geocode.collectable.Response.*;
+import tech.geocodeapp.geocode.collectable.Service.*;
 
 import java.util.UUID;
 

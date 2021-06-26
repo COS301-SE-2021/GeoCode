@@ -1,15 +1,12 @@
-package tech.geocodeapp.geocode.Collectable;
+package tech.geocodeapp.geocode.collectable;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import tech.geocodeapp.geocode.Collectable.Model.Rarity;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableSetRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableTypeRequest;
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectableTypesBySetRequest;
-import tech.geocodeapp.geocode.Collectable.Response.*;
-import tech.geocodeapp.geocode.Collectable.Service.CollectableServiceImpl;
+import tech.geocodeapp.geocode.collectable.Model.Rarity;
+import tech.geocodeapp.geocode.collectable.Request.*;
+import tech.geocodeapp.geocode.collectable.Response.*;
+import tech.geocodeapp.geocode.collectable.Service.CollectableServiceImpl;
 
 
 import java.util.UUID;

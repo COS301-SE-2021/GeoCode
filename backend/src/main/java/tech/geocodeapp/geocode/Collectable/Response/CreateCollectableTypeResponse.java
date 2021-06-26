@@ -1,6 +1,6 @@
-package tech.geocodeapp.geocode.Collectable.Response;
+package tech.geocodeapp.geocode.collectable.response;
 
-import tech.geocodeapp.geocode.Collectable.Decorator.CollectableTypeComponent;
+import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 
 /**
  * A class to write a response to for a createCollectableTypeRequest

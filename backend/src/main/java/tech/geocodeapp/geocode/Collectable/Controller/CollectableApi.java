@@ -3,21 +3,11 @@
  * https://github.com/swagger-api/swagger-codegen
  * Do not edit the class manually.
  */
-package tech.geocodeapp.geocode.Collectable.Controller;
+package tech.geocodeapp.geocode.collectable.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
-import tech.geocodeapp.geocode.Collectable.Model.CollectableType;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableSetRequest;
-import tech.geocodeapp.geocode.Collectable.Request.CreateCollectableTypeRequest;
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectableByTypeRequest;
-import tech.geocodeapp.geocode.Collectable.Response.GetCollectableSetsResponse;
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectableTypeByRarityRequest;
-import tech.geocodeapp.geocode.Collectable.Request.GetCollectableTypesBySetRequest;
-import tech.geocodeapp.geocode.Collectable.Response.GetCollectableTypesResponse;
-import tech.geocodeapp.geocode.Collectable.Response.GetCollectablesResponse;
+import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.request.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -31,9 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableResponse;
-import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableSetResponse;
-import tech.geocodeapp.geocode.Collectable.Response.CreateCollectableTypeResponse;
+import tech.geocodeapp.geocode.collectable.response.*;
 
 import javax.validation.Valid;
 

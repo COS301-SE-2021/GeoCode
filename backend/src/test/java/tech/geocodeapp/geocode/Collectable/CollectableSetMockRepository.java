@@ -1,11 +1,11 @@
-package tech.geocodeapp.geocode.Collectable;
+package tech.geocodeapp.geocode.collectable;
 
-import tech.geocodeapp.geocode.Collectable.Model.CollectableSet;
+import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import tech.geocodeapp.geocode.Collectable.Repository.CollectableSetRepository;
+import tech.geocodeapp.geocode.collectable.repository.CollectableSetRepository;
 
 import java.util.*;
 
