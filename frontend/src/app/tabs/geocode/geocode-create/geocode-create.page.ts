@@ -88,6 +88,7 @@ request: CreateGeoCodeRequest= {
      this.hints.push(event.target.value);
   }
 
+  //Place map marker based on user click listener
   placeMarker(location){
     this.marker = new google.maps.Marker({
         map,
