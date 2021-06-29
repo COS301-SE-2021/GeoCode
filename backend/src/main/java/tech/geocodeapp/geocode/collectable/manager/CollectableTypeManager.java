@@ -90,6 +90,9 @@ public class CollectableTypeManager {
         if(type.getArea()!=null){
             properties.put("geofenced", type.getArea());
         }
+        if(!properties.isEmpty()){
+            convertedType.setProperties(properties);
+        }
         return convertedType;
     }
 }
