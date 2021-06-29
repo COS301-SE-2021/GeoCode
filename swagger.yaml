@@ -1627,16 +1627,7 @@ components:
         
     GetFoundCollectableTypesResponse:
       type: "object"
-      required:
-        - success
-        - message
-        - collectableTypeIDs
       properties:
-        success:
-          type: boolean
-        message:
-          type: string
-          example: "The IDs of the User's found CollectableTypes was successfully returned"
         collectableTypeIDs:
           type: array
           items:
@@ -1658,16 +1649,7 @@ components:
         
     GetFoundGeoCodesResponse:
       type: "object"
-      required:
-        - success
-        - message
-        - geocodeIDs
       properties:
-        success:
-          type: boolean
-        message:
-          type: string
-          example: "The IDs of the User's found GeoCodes was successfully returned"
         geocodeIDs:
           type: array
           items:
@@ -1689,16 +1671,7 @@ components:
         
     GetOwnedGeoCodesResponse:
       type: "object"
-      required:
-        - success
-        - message
-        - geocodeIDs
       properties:
-        success:
-          type: boolean
-        message:
-          type: string
-          example: "The IDs of the User's owned GeoCodes was successfully returned"
         geocodeIDs:
           type: array
           items:
