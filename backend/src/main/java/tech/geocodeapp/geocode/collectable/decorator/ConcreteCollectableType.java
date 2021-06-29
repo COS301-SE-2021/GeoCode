@@ -12,6 +12,7 @@ public class ConcreteCollectableType implements CollectableTypeComponent {
     private Rarity rarity;
     private UUID id;
     private CollectableSet set;
+    private String image;
 
     public ConcreteCollectableType() {
 
@@ -45,6 +46,16 @@ public class ConcreteCollectableType implements CollectableTypeComponent {
     @Override
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    @Override
+    public String getImage() {
+        return image;
+    }
+
+    @Override
+    public void setImage(String image) {
+        this.image=image;
     }
 
     @Override
