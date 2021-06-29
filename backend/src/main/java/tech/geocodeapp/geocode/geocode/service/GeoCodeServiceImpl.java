@@ -2,18 +2,19 @@ package tech.geocodeapp.geocode.geocode.service;
 
 import org.springframework.stereotype.Service;
 
-import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
-import tech.geocodeapp.geocode.collectable.model.*;
-import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
-import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
-import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
+import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
+import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
+import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.user.service.*;
 
+import javax.validation.constraints.NotNull;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -26,17 +27,20 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     /**
      * The repository the GeoCode class interacts with
      */
+    @NotNull( message = "GeoCode repository may not be null" )
     private final GeoCodeRepository geoCodeRepo;
 
     /**
      * The collectable service to access the use cases and
      * collectable repository
      */
+    @NotNull( message = "Collectable Service Implementation may not be null" )
     private final CollectableService collectableService;
 
     /**
      * A handle to the user service
      */
+    @NotNull( message = "User Service Implementation may not be null" )
     private final UserService userService;
 
     /**
@@ -62,6 +66,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             /* The repo exists therefore it can be set for the class */
             this.geoCodeRepo = geoCodeRepo;
 
+            /* The subsystems service implementations  */
             this.collectableService = collectableService;
             this.userService = userService;
         } else {
@@ -79,10 +84,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified CreateGeoCodeRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     * @throws RepoException an error occurred when trying to access the repo
      */
     @Override
-    public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, RepoException {
+    public CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -129,7 +133,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Try and create the relevant image with the newly create GeoCode instance */
         var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-
         // create StringBuffer size of AlphaNumericString
         var qr = new StringBuilder( qrSize );
 
@@ -144,22 +147,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the GeoCode object
          * and set its attributes to the given attributes in the request
          */
-        var newGeoCode = new GeoCode( UUID.randomUUID(), request.getDifficulty(), request.isAvailable(),
+        var id = UUID.randomUUID();
+        var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
                                       qr.toString(), request.getLongitude(), request.getLatitude() );
 
-
-        /*
-         * Check the repo exists before trying to access it
-         */
-        if ( geoCodeRepo != null ) {
-
-            /* Save the created GeoCode to the repository */
-            geoCodeRepo.save( newGeoCode );
-        } else {
-
-            throw new RepoException( "Could not save to the repository." );
-        }
+        /* Save the created GeoCode to the repository */
+        geoCodeRepo.save( newGeoCode );
 
         /*
          * Create the new response
@@ -167,14 +161,18 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         var response = new CreateGeoCodeResponse();
 
-        /*if ( ( geoCodeRepo.findById( id ).get().getId().equals( id ) ) ) {
+        /*
+         * Check if the object is present in the repo
+         * if it does exist set it to null
+         * else check if the id is inserted
+         */
+        if ( geoCodeRepo.findById( id ).isPresent() ) {
 
-            response.setIsSuccess( true );
+            response.setIsSuccess( geoCodeRepo.findById( id ).get().getId().equals( id ) );
         } else {
 
             response.setIsSuccess( false );
-        }*/
-        response.setIsSuccess( true );
+        }
 
         return response;
     }
@@ -183,14 +181,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * Get all the stored GeoCodes in the Repo
      *
      * @return the newly create response instance from the specified GetAllGeoCodesRequest
-     *
-     * @throws RepoException there was an issue accessing the repository
      */
     @Override
-    public GetGeoCodesResponse getAllGeoCodes() throws RepoException {
-
-        /* Validate the repo */
-        checkRepo();
+    public GetGeoCodesResponse getAllGeoCodes() {
 
         List< GeoCode > temp = geoCodeRepo.findAll();
 
@@ -223,9 +216,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new InvalidRequestException();
         }
 
-        /* Validate the repo */
-        checkRepo();
-
         Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
 
         var hold = new GeoCode();
@@ -249,7 +239,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetGeoCodesByDifficultyRequest
      */
     @Override
-    public GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException, RepoException {
+    public GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -259,9 +249,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             throw new InvalidRequestException();
         }
-
-        /* Validate the repo */
-        checkRepo();
 
         /*
          * Sort through the stored GeoCodes and
@@ -314,9 +301,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new InvalidRequestException();
         }
 
-        /* Validate the repo */
-        checkRepo();
-
         Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
 
         /*
@@ -345,7 +329,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetGeoCodeByQRCodeRequest
      */
     @Override
-    public GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException, RepoException {
+    public GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -355,9 +339,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             throw new InvalidRequestException();
         }
-
-        /* Validate the repo */
-        checkRepo();
 
         List< GeoCode > temp = geoCodeRepo.findAll();
         var x = 0;
@@ -386,7 +367,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified GetGeoCodeByLocationRequest
      */
     @Override
-    public GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException, RepoException {
+    public GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -396,9 +377,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             throw new InvalidRequestException();
         }
-
-        /* Validate the repo */
-        checkRepo();
 
         List< GeoCode > temp = geoCodeRepo.findAll();
         var x = 0;
@@ -427,7 +405,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified SwapCollectablesRequest
      */
     @Override
-    public SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException, RepoException {
+    public SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -437,9 +415,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             throw new InvalidRequestException();
         }
-
-        /* Validate the repo */
-        checkRepo();
 
         /* Find the target geocode */
         Optional< GeoCode > target = geoCodeRepo.findById( request.getTargetGeoCodeID() );
@@ -488,7 +463,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @return the newly create response instance from the specified UpdateAvailabilityRequest
      */
     @Override
-    public UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws RepoException, InvalidRequestException {
+    public UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -498,9 +473,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             throw new InvalidRequestException();
         }
-
-        /* Validate the repo */
-        checkRepo();
 
         /* Find and set the GeoCode to the new Availability */
         Optional< GeoCode > temp = geoCodeRepo.findById( request.getGeoCodeID() );
@@ -520,19 +492,4 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         return new UpdateAvailabilityResponse( true );
     }
 
-
-    ////////////////Helper functions////////////////
-
-    /**
-     * Check if the repo is not null
-     *
-     * @throws RepoException throw an error due the repo not being valid
-     */
-    private void checkRepo() throws RepoException {
-
-        if ( geoCodeRepo == null ) {
-
-            throw new RepoException();
-        }
-    }
 }
