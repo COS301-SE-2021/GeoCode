@@ -947,16 +947,12 @@ components:
     CreateGeoCodeRequest:
       type: "object"
       required:
-        - id
         - description
         - location
         - difficulty
         - hints
         - available
       properties:
-        id:
-          type: string
-          format: uuid
         description:
           type: string
         location:

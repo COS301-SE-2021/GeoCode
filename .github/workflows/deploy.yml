@@ -8,9 +8,10 @@ on:
 
 jobs:
   deploy:
+    name: Automatic Deployment
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy Spring Boot app
+    - name: Deploy Ionic and Spring Boot applications
       uses: appleboy/ssh-action@master
       with:
         host: ${{secrets.SSH_ADDRESS}}
@@ -20,9 +21,15 @@ jobs:
         script: |
           rm -rf GeoCode
           git clone git@github.com:COS301-SE-2021/GeoCode.git
-          cd GeoCode/backend
+          cd GeoCode/frontend
+          npm install
+          cp ../../index.withsecrets.html src
+          cp ../../environment.ts src/environments
+          ionic build
+          cp www/src/index.html www
+          cd ../backend
           mvn spring-boot:build-image -Dspring-boot.build-image.imageName=geocode/backend
-          docker stop spring
           cd ..
+          docker stop spring
           docker-compose --env-file ../.env up -d
           echo "Deployment completed successfully"

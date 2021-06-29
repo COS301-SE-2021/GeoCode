@@ -79,6 +79,7 @@ export class CollectablePage implements OnInit {
     const { data } = await modal.onDidDismiss();
     if (data != null) {
       this.sets.push(data);
+      this.types[data.id] = [];
     }
   }
 
