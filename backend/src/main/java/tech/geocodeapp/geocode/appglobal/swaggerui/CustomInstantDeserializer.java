@@ -115,7 +115,7 @@ public class CustomInstantDeserializer<T extends Temporal>
             case JsonTokenId.ID_NUMBER_FLOAT: {
 
                 BigDecimal value = parser.getDecimalValue();
-                long seconds = value.longValue();
+                var seconds = value.longValue();
                 int nanoseconds = DecimalUtils.extractNanosecondDecimal( value, seconds );
 
                 return fromNanoseconds.apply( new FromDecimalArguments(
@@ -125,7 +125,7 @@ public class CustomInstantDeserializer<T extends Temporal>
 
             case JsonTokenId.ID_NUMBER_INT: {
 
-                long timestamp = parser.getLongValue();
+                var timestamp = parser.getLongValue();
                 if ( context.isEnabled( DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS ) ) {
 
                     return this.fromNanoseconds.apply( new FromDecimalArguments(
@@ -139,7 +139,7 @@ public class CustomInstantDeserializer<T extends Temporal>
 
             case JsonTokenId.ID_STRING: {
 
-                String string = parser.getText().trim();
+                var string = parser.getText().trim();
                 if ( string.length() == 0 ) {
 
                     return null;
