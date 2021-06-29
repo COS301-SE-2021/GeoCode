@@ -9,7 +9,7 @@ public class BasicCollectableTypeFactory extends AbstractCollectableTypeFactory 
 
     /**
      * Creates the a new {@link ConcreteCollectableType} and sets its variables to the values obtained from parsing properties
-     * @param property A String containing the values of name, rarity and id in that order separated by a #
+     * @param property A String containing the values of name, rarity, id and image in that order separated by a #
      * @param collectableTypeComponent Null as it is created here and decorated by the other factories if required
      * @return the created {@link ConcreteCollectableType} returned as a {@link CollectableTypeComponent} interface object
      */
@@ -21,11 +21,13 @@ public class BasicCollectableTypeFactory extends AbstractCollectableTypeFactory 
         String name = split[0];
         Rarity rarity = Rarity.valueOf(split[1]);
         UUID id = UUID.fromString(split[2]);
+        String image = split[3];
 
         CollectableTypeComponent toReturn = new ConcreteCollectableType();
         toReturn.setName(name);
         toReturn.setRarity(rarity);
         toReturn.setId(id);
+        toReturn.setImage(image);
 
         return toReturn;
    }
