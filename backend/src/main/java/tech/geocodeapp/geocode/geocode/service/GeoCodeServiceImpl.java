@@ -1,6 +1,8 @@
 package tech.geocodeapp.geocode.geocode.service;
 
 import org.springframework.stereotype.Service;
+import javax.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
 
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
@@ -14,7 +16,6 @@ import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.user.service.*;
 
-import javax.validation.constraints.NotNull;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -22,25 +23,26 @@ import java.util.*;
  * This class implements the UserService interface
  */
 @Service( "GeoCodeService" )
+@Validated
 public class GeoCodeServiceImpl implements GeoCodeService {
 
     /**
      * The repository the GeoCode class interacts with
      */
-    @NotNull( message = "GeoCode repository may not be null" )
+    @NotNull( message = "GeoCode repository may not be null." )
     private final GeoCodeRepository geoCodeRepo;
 
     /**
      * The collectable service to access the use cases and
      * collectable repository
      */
-    @NotNull( message = "Collectable Service Implementation may not be null" )
+    @NotNull( message = "Collectable Service Implementation may not be null." )
     private final CollectableService collectableService;
 
     /**
      * A handle to the user service
      */
-    @NotNull( message = "User Service Implementation may not be null" )
+    @NotNull( message = "User Service Implementation may not be null." )
     private final UserService userService;
 
     /**
@@ -60,6 +62,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      */
     public GeoCodeServiceImpl( GeoCodeRepository geoCodeRepo, CollectableService collectableService, UserService userService ) throws RepoException {
 
+
         /* Check if the given repo exists */
         if ( geoCodeRepo != null ) {
 
@@ -67,8 +70,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             this.geoCodeRepo = geoCodeRepo;
 
             /* The subsystems service implementations  */
-            this.collectableService = collectableService;
-            this.userService = userService;
+            this.collectableService = Objects.requireNonNull( collectableService, "Collectable service must not be null." );
+            this.userService = Objects.requireNonNull( userService, "User service must not be null." );
         } else {
 
             /* The repo does not exist throw an error */
@@ -203,9 +206,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified GetCollectablesRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public GetCollectablesResponse getCollectables( GetCollectablesRequest request ) throws InvalidRequestException, RepoException {
+    public GetCollectablesResponse getCollectables( GetCollectablesRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -237,6 +242,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified GetGeoCodesByDifficultyRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException {
@@ -288,9 +295,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified GetHintsRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public GetHintsResponse getHints( GetHintsRequest request ) throws InvalidRequestException, RepoException {
+    public GetHintsResponse getHints( GetHintsRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -327,6 +336,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified GetGeoCodeByQRCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException {
@@ -365,6 +376,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified GetGeoCodeByLocationRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException {
@@ -403,6 +416,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified SwapCollectablesRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException {
@@ -435,6 +450,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 break;
             }
         }
+
         if ( replaceIndex == -1 ) {
 
             return new SwapCollectablesResponse().isSuccess( false );
@@ -461,6 +477,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified UpdateAvailabilityRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws InvalidRequestException {

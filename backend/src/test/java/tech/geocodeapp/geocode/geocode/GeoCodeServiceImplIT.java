@@ -5,16 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import tech.geocodeapp.geocode.GeoCodeApplication;
-import tech.geocodeapp.geocode.collectable.model.*;
-import tech.geocodeapp.geocode.collectable.service.*;
-import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
-import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.service.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
+import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.GeoCodeApplication;
+import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.user.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -179,7 +179,7 @@ class GeoCodeServiceImplIT {
              */
             Assertions.assertTrue( response.isIsSuccess() );
 
-        } catch ( InvalidRequestException | RepoException e ) {
+        } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
@@ -780,7 +780,7 @@ class GeoCodeServiceImplIT {
                 geoCodeService.createGeoCode( request );
             }
 
-        } catch ( InvalidRequestException | RepoException e ) {
+        } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
