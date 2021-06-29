@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add Collectable Set</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="proceed()">
+        <ng-template [ngIf]="!loading" [ngIfElse]="isLoading">
+          <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+        </ng-template>
+        <ng-template #isLoading>
+          <ion-spinner></ion-spinner>
+        </ng-template>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating">Name</ion-label>
+      <ion-input (ionBlur)="updateRequest($event, 'name')"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Description</ion-label>
+      <ion-textarea (ionBlur)="updateRequest($event, 'description')"></ion-textarea>
+    </ion-item>
+  </ion-list>
+</ion-content>

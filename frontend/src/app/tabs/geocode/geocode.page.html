@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar >
+    <ion-title>Geocode</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-button color="Dark" (click)="getAllMap()">Get all GeoCodes</ion-button>
+
+  <div #mapElement class="map"></div>
+    <ion-list>
+      <ion-label>Get GeoCodes by Difficulty</ion-label>
+      <ion-button color="success" (click)="easyMap()">Easy</ion-button>
+      <ion-button color="secondary" (click)="mediumMap()">Medium </ion-button>
+      <ion-button color="warning" (click)="difficultMap()">Difficult</ion-button>
+      <ion-button color="danger" (click)="insaneMap()">Insane</ion-button>
+    </ion-list>
+  <div  id ="geoCodeDetails">
+
+  <ion-grid class="ion-margin" *ngFor="let geocode of selected">
+
+  <ion-row>GeoCode Information</ion-row>
+    <ion-row class="row">
+      <ion-col>Description</ion-col>
+      <ion-col>{{geocode.description}}</ion-col>
+    </ion-row>
+    <ion-row class="row">
+      <ion-col>Available</ion-col>
+      <ion-col><ion-checkbox disabled="false"  (ionBlur)="updateAvailability(geocode)" [(ngModel)]="geocode.available"></ion-checkbox></ion-col>
+    </ion-row>
+    <ion-row class="row">
+      <ion-col>Difficulty</ion-col>
+      <ion-col>{{geocode.difficulty}}</ion-col>
+    </ion-row>
+    <ion-row class="row">
+      <ion-col>Latitude</ion-col>
+      <ion-col>{{geocode.latitude}} </ion-col>
+    </ion-row>
+    <ion-row class="row" >
+      <ion-col>Longitude</ion-col>
+      <ion-col>{{geocode.longitude}} </ion-col>
+    </ion-row>
+    <ion-button (click)="findGeoCode(geocode)" >Find GeoCode</ion-button>
+
+  </ion-grid>
+</div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="danger">
+      <ion-icon  name="add-outline"(click)="createGeoCode()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
