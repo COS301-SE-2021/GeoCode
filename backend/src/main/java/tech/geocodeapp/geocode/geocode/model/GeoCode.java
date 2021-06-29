@@ -114,6 +114,7 @@ public class GeoCode {
      * @param longitude The longitude of the location of the GeoCode in the real world
      * @param latitude The latitude of the location of the GeoCode in the real world
      */
+    @Valid
     public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints,
                     Collection< Collectable > collectables, String qrCode, String longitude, String latitude ) {
 
@@ -135,6 +136,7 @@ public class GeoCode {
      *
      * @return the model after changing the id
      */
+    @Valid
     public GeoCode id( UUID id ) {
 
         this.id = id;
@@ -157,6 +159,7 @@ public class GeoCode {
      *
      * @param id the value the id should be set to
      */
+    @Valid
     public void setId( UUID id ) {
 
         this.id = id;
@@ -169,6 +172,7 @@ public class GeoCode {
      *
      * @return the model after the difficulty has been changed
      */
+    @Valid
     public GeoCode difficulty( Difficulty difficulty ) {
 
         this.difficulty = difficulty;
@@ -191,6 +195,7 @@ public class GeoCode {
      *
      * @param difficulty the value the attribute should be set to
      */
+    @Valid
     public void setDifficulty( Difficulty difficulty ) {
 
         this.difficulty = difficulty;
@@ -203,6 +208,7 @@ public class GeoCode {
      *
      * @return the model after the available has been changed
      */
+    @Valid
     public GeoCode available( Boolean available ) {
 
         this.available = available;
@@ -224,6 +230,7 @@ public class GeoCode {
      *
      * @param available the value the attribute should be set to
      */
+    @Valid
     public void setAvailable( Boolean available ) {
 
         this.available = available;
@@ -236,6 +243,7 @@ public class GeoCode {
      *
      * @return the model after the description has been changed
      */
+    @Valid
     public GeoCode description( String description ) {
 
         this.description = description;
@@ -257,6 +265,7 @@ public class GeoCode {
      *
      * @param description the value the attribute should be set to
      */
+    @Valid
     public void setDescription( String description ) {
 
         this.description = description;
@@ -269,6 +278,7 @@ public class GeoCode {
      *
      * @return the model after the hints has been changed
      */
+    @Valid
     public GeoCode hints( Collection< String > hints ) {
 
         this.hints = hints;
@@ -282,6 +292,7 @@ public class GeoCode {
      *
      * @return the stored hints attribute
      */
+    @Valid
     public GeoCode addHintsItem( String hintsItem ) {
 
         this.hints.add( hintsItem );
@@ -303,6 +314,7 @@ public class GeoCode {
      *
      * @param hints the value the attribute should be set to
      */
+    @Valid
     public void setHints( Collection< String > hints ) {
 
         this.hints = hints;
@@ -315,6 +327,7 @@ public class GeoCode {
      *
      * @return the model after the collectables has been changed
      */
+    @Valid
     public GeoCode collectables( List< Collectable > collectables ) {
 
         this.collectables = collectables;
@@ -328,6 +341,7 @@ public class GeoCode {
      *
      * @return the stored collectables attribute
      */
+    @Valid
     public GeoCode addCollectablesItem( Collectable collectablesItem ) {
 
         if ( this.collectables == null ) {
@@ -355,6 +369,7 @@ public class GeoCode {
      *
      * @param collectables the value the attribute should be set to
      */
+    @Valid
     public void setCollectables( Collection< Collectable > collectables ) {
 
         this.collectables = collectables;
@@ -367,6 +382,7 @@ public class GeoCode {
      *
      * @return the model after the qrCode has been changed
      */
+    @Valid
     public GeoCode qrCode( String qrCode ) {
 
         this.qrCode = qrCode;
@@ -388,6 +404,7 @@ public class GeoCode {
      *
      * @param qrCode the value the qrCode should be set to
      */
+    @Valid
     public void setQrCode( String qrCode ) {
 
         this.qrCode = qrCode;
@@ -400,6 +417,7 @@ public class GeoCode {
      *
      * @return the model after the longitude has been changed
      */
+    @Valid
     public GeoCode longitude( String longitude ) {
 
         this.longitude = longitude;
@@ -421,6 +439,7 @@ public class GeoCode {
      *
      * @param longitude the value the longitude should be set to
      */
+    @Valid
     public void setLongitude( String longitude ) {
 
         this.longitude = longitude;
@@ -433,6 +452,7 @@ public class GeoCode {
      *
      * @return the model after the latitude has been changed
      */
+    @Valid
     public GeoCode latitude( String latitude ) {
 
         this.latitude = latitude;
@@ -454,6 +474,7 @@ public class GeoCode {
      *
      * @param latitude the value the attribute should be set to
      */
+    @Valid
     public void setLatitude( String latitude ) {
 
         this.latitude = latitude;
