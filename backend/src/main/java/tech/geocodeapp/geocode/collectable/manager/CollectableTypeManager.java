@@ -18,13 +18,15 @@ public class CollectableTypeManager {
         CollectableTypeContext context = new CollectableTypeContext(new BasicCollectableTypeStrategy());
         AbstractCollectableTypeFactory factory = context.executeStrategy();
 
-        //create a String to store name, rarity and id in that order separated by a #
+        //create a String to store name, rarity, id and image in that order separated by a #
         String property;
         property = type.getName();
         property += "#";
         property += type.getRarity().toString();
         property += "#";
         property += type.getId().toString();
+        property += "#";
+        property += type.getImage();
 
         //use property String to build a ConcreteCollectableType using the BasicCollectableTypeFactory
         builtType = factory.decorateCollectableType(property, null);
