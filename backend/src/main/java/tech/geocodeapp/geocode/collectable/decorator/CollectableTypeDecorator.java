@@ -63,6 +63,21 @@ public abstract class CollectableTypeDecorator implements CollectableTypeCompone
     }
 
     /**
+     * @return the image of the decoratedType
+     */
+    public String getImage(){
+        return decoratedType.getImage();
+    }
+
+    /**
+     * Sets the decoratedType's image
+     * @param image the location string of the CollectableType's image
+     */
+    public void setImage(String image){
+        decoratedType.setImage(image);
+    }
+
+    /**
      * @return the CollectableSet of the decoratedType
      */
     public CollectableSet getCollectableSet() {
