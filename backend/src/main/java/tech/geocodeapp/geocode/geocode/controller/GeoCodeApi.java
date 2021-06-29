@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMethod;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import javax.validation.Valid;
 
