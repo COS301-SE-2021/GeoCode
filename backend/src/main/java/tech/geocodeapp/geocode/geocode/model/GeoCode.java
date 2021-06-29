@@ -5,6 +5,8 @@ import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import tech.geocodeapp.geocode.collectable.model.*;
 
@@ -25,25 +27,29 @@ public class GeoCode {
      */
     @Id
     @JsonProperty( "id" )
-    private UUID id = null;
+    @NotNull( message = "GeoCode's id cannot be null." )
+    private UUID id;
 
     /**
      * The description of where the GeoCode is and what it involves
      */
     @JsonProperty( "difficulty" )
-    private Difficulty difficulty = null;
+    @NotNull( message = "GeoCode's difficulty cannot be null." )
+    private Difficulty difficulty;
 
     /**
      * If the GeoCode is active in the system
      */
     @JsonProperty( "available" )
-    private Boolean available = null;
+    @NotNull( message = "GeoCode's available cannot be null." )
+    private Boolean available;
 
     /**
      * The description of where the GeoCode is and what it involves
      */
     @JsonProperty( "description" )
-    private String description = null;
+    @NotEmpty( message = "GeoCode's description cannot be empty." )
+    private String description;
 
     /**
      * The list of hints provided by the user who created the GeoCode
@@ -52,6 +58,7 @@ public class GeoCode {
     @Valid
     @JsonProperty( "hints" )
     @ElementCollection( fetch = FetchType.EAGER )
+    @NotNull( message = "GeoCode's hints cannot be null." )
     private Collection< String > hints = new ArrayList<>();
 
     /**
@@ -62,26 +69,30 @@ public class GeoCode {
     @JsonProperty( "collectables" )
     @ElementCollection( fetch = FetchType.EAGER )
     @Cascade( org.hibernate.annotations.CascadeType.ALL )
-    private Collection< Collectable > collectables = null;
+    @NotNull( message = "GeoCode's collectables cannot be null." )
+    private Collection< Collectable > collectables;
 
     /**
      * A short unique identifier to find the GeoCode in the system
      * by the user from the real world
      */
     @JsonProperty( "qrCode" )
-    private String qrCode = null;
+    @NotEmpty( message = "GeoCode's qrCode cannot be null." )
+    private String qrCode;
 
     /**
      * The longitude of the location of the GeoCode in the real world
      */
     @JsonProperty( "longitude" )
-    private String longitude = null;
+    @NotEmpty( message = "GeoCode's longitude cannot be null." )
+    private String longitude;
 
     /**
      * The latitude of the location of the GeoCode in the real world
      */
     @JsonProperty( "latitude" )
-    private String latitude = null;
+    @NotEmpty( message = "GeoCode's latitude cannot be null." )
+    private String latitude;
 
     /**
      * Default constructor
@@ -103,7 +114,8 @@ public class GeoCode {
      * @param longitude The longitude of the location of the GeoCode in the real world
      * @param latitude The latitude of the location of the GeoCode in the real world
      */
-    public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints, Collection< Collectable > collectables, String qrCode, String longitude, String latitude ) {
+    public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints,
+                    Collection< Collectable > collectables, String qrCode, String longitude, String latitude ) {
 
         this.id = id;
         this.difficulty = difficulty;
