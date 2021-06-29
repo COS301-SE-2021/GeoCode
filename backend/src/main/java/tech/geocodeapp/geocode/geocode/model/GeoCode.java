@@ -65,12 +65,11 @@ public class GeoCode {
      * The list of collectables stored inside of the GeoCode
      */
     @Valid
-    @ManyToMany
     @JsonProperty( "collectables" )
     @ElementCollection( fetch = FetchType.EAGER )
     @Cascade( org.hibernate.annotations.CascadeType.ALL )
     @NotNull( message = "GeoCode's collectables cannot be null." )
-    private Collection< Collectable > collectables;
+    private Collection< UUID > collectables;
 
     /**
      * A short unique identifier to find the GeoCode in the system
@@ -116,7 +115,7 @@ public class GeoCode {
      */
     @Valid
     public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints,
-                    Collection< Collectable > collectables, String qrCode, String longitude, String latitude ) {
+                    Collection< UUID > collectables, String qrCode, String longitude, String latitude ) {
 
         this.id = id;
         this.difficulty = difficulty;
@@ -148,7 +147,6 @@ public class GeoCode {
      *
      * @return the stored id attribute
      */
-    @Valid
     public UUID getId() {
 
         return id;
@@ -328,7 +326,7 @@ public class GeoCode {
      * @return the model after the collectables has been changed
      */
     @Valid
-    public GeoCode collectables( List< Collectable > collectables ) {
+    public GeoCode collectables( List< UUID > collectables ) {
 
         this.collectables = collectables;
         return this;
@@ -342,7 +340,7 @@ public class GeoCode {
      * @return the stored collectables attribute
      */
     @Valid
-    public GeoCode addCollectablesItem( Collectable collectablesItem ) {
+    public GeoCode addCollectablesItem( UUID collectablesItem ) {
 
         if ( this.collectables == null ) {
 
@@ -358,8 +356,7 @@ public class GeoCode {
      *
      * @return the stored collectables attribute
      */
-    @Valid
-    public Collection< Collectable > getCollectables() {
+    public Collection< UUID > getCollectables() {
 
         return collectables;
     }
@@ -370,7 +367,7 @@ public class GeoCode {
      * @param collectables the value the attribute should be set to
      */
     @Valid
-    public void setCollectables( Collection< Collectable > collectables ) {
+    public void setCollectables( Collection< UUID > collectables ) {
 
         this.collectables = collectables;
     }
