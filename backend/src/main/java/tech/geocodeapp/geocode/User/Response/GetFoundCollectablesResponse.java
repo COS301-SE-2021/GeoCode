@@ -2,7 +2,7 @@ package tech.geocodeapp.geocode.User.Response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.GeoCode.Model.GeoCode;
+import tech.geocodeapp.geocode.Collectable.Model.Collectable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,42 +10,42 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
 /**
- * GetOwnedGeoCodesResponse
+ * GetFoundCollectablesResponse
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
 
 
-public class GetOwnedGeoCodesResponse   {
-  @JsonProperty("geocodes")
+public class GetFoundCollectablesResponse   {
+  @JsonProperty("collectables")
   @Valid
-  private List<GeoCode> geocodes = null;
+  private List<Collectable> collectables = null;
 
-  public GetOwnedGeoCodesResponse geocodes(List<GeoCode> geocodes) {
-    this.geocodes = geocodes;
+  public GetFoundCollectablesResponse collectables(List<Collectable> collectables) {
+    this.collectables = collectables;
     return this;
   }
 
-  public GetOwnedGeoCodesResponse addGeocodesItem(GeoCode geocodesItem) {
-    if (this.geocodes == null) {
-      this.geocodes = new ArrayList<GeoCode>();
+  public GetFoundCollectablesResponse addCollectablesItem(Collectable collectablesItem) {
+    if (this.collectables == null) {
+      this.collectables = new ArrayList<Collectable>();
     }
-    this.geocodes.add(geocodesItem);
+    this.collectables.add(collectablesItem);
     return this;
   }
 
   /**
-   * Get geocodes
-   * @return geocodes
+   * Get collectables
+   * @return collectables
    **/
   @Schema(description = "")
       @Valid
-    public List<GeoCode> getGeocodes() {
-    return geocodes;
+    public List<Collectable> getCollectables() {
+    return collectables;
   }
 
-  public void setGeocodes(List<GeoCode> geocodes) {
-    this.geocodes = geocodes;
+  public void setCollectables(List<Collectable> collectables) {
+    this.collectables = collectables;
   }
 
 
@@ -57,21 +57,21 @@ public class GetOwnedGeoCodesResponse   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetOwnedGeoCodesResponse getOwnedGeoCodesResponse = (GetOwnedGeoCodesResponse) o;
-    return Objects.equals(this.geocodes, getOwnedGeoCodesResponse.geocodes);
+    GetFoundCollectablesResponse getFoundCollectablesResponse = (GetFoundCollectablesResponse) o;
+    return Objects.equals(this.collectables, getFoundCollectablesResponse.collectables);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(geocodes);
+    return Objects.hash(collectables);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetOwnedGeoCodesResponse {\n");
+    sb.append("class GetFoundCollectablesResponse {\n");
     
-    sb.append("    geocodes: ").append(toIndentedString(geocodes)).append("\n");
+    sb.append("    collectables: ").append(toIndentedString(collectables)).append("\n");
     sb.append("}");
     return sb.toString();
   }

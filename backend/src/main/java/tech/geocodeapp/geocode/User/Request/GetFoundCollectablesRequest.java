@@ -1,8 +1,7 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.User.Request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
@@ -10,17 +9,17 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * GetFoundCollectableTypesRequest
+ * GetFoundCollectablesRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-24T10:12:19.520Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
 
 
-public class GetFoundCollectableTypesRequest   {
+public class GetFoundCollectablesRequest   {
   @JsonProperty("userID")
   private UUID userID = null;
 
-  public GetFoundCollectableTypesRequest userID(UUID userID) {
+  public GetFoundCollectablesRequest userID(UUID userID) {
     this.userID = userID;
     return this;
   }
@@ -50,8 +49,8 @@ public class GetFoundCollectableTypesRequest   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetFoundCollectableTypesRequest getFoundCollectableTypesRequest = (GetFoundCollectableTypesRequest) o;
-    return Objects.equals(this.userID, getFoundCollectableTypesRequest.userID);
+    GetFoundCollectablesRequest getFoundCollectablesRequest = (GetFoundCollectablesRequest) o;
+    return Objects.equals(this.userID, getFoundCollectablesRequest.userID);
   }
 
   @Override
@@ -62,7 +61,7 @@ public class GetFoundCollectableTypesRequest   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetFoundCollectableTypesRequest {\n");
+    sb.append("class GetFoundCollectablesRequest {\n");
     
     sb.append("    userID: ").append(toIndentedString(userID)).append("\n");
     sb.append("}");
