@@ -9,10 +9,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  */
 public enum Rarity {
   COMMON("COMMON"),
-    UNCOMMON("UNCOMMON"),
-    RARE("RARE"),
-    EPIC("EPIC"),
-    LEGENDARY("LEGENDARY");
+  UNCOMMON("UNCOMMON"),
+  RARE("RARE"),
+  EPIC("EPIC"),
+  LEGENDARY("LEGENDARY"),
+  UNIQUE("UNIQUE");
 
   private String value;
 
