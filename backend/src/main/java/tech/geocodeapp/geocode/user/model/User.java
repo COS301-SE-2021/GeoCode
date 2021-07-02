@@ -3,8 +3,11 @@ package tech.geocodeapp.geocode.user.model;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import org.hibernate.annotations.Cascade;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,7 +21,7 @@ import javax.validation.constraints.*;
  * User
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T14:53:26.496Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-24T11:24:11.186Z[GMT]")
 
 @Entity
 @Table(name="user_table")
@@ -46,11 +49,11 @@ public class User   {
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Collectable currentCollectable = null;
 
-  @JsonProperty("foundCollectables")
+  @JsonProperty("foundCollectableTypes")
   @Valid
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<Collectable> foundCollectables = null;
+  private Set<CollectableType> foundCollectableTypes = null;
 
   @JsonProperty("foundGeocodes")
   @Valid
@@ -74,10 +77,10 @@ public class User   {
    * @return id
    **/
   @Schema(required = true, description = "")
-  @NotNull
+      @NotNull
 
-  @Valid
-  public UUID getId() {
+    @Valid
+    public UUID getId() {
     return id;
   }
 
@@ -95,9 +98,9 @@ public class User   {
    * @return username
    **/
   @Schema(required = true, description = "")
-  @NotNull
+      @NotNull
 
-  public String getUsername() {
+    public String getUsername() {
     return username;
   }
 
@@ -115,9 +118,9 @@ public class User   {
    * @return trackableObject
    **/
   @Schema(description = "")
-
-  @Valid
-  public Collectable getTrackableObject() {
+  
+    @Valid
+    public Collectable getTrackableObject() {
     return trackableObject;
   }
 
@@ -143,8 +146,8 @@ public class User   {
    * @return points
    **/
   @Schema(description = "")
-  @Valid
-  public Set<Point> getPoints() {
+      @Valid
+    public Set<Point> getPoints() {
     return points;
   }
 
@@ -162,9 +165,9 @@ public class User   {
    * @return currentCollectable
    **/
   @Schema(description = "")
-
-  @Valid
-  public Collectable getCurrentCollectable() {
+  
+    @Valid
+    public Collectable getCurrentCollectable() {
     return currentCollectable;
   }
 
@@ -172,31 +175,31 @@ public class User   {
     this.currentCollectable = currentCollectable;
   }
 
-  public User foundCollectables(Set<Collectable> foundCollectables) {
-    this.foundCollectables = foundCollectables;
+  public User foundCollectableTypes(Set<CollectableType> foundCollectableTypes) {
+    this.foundCollectableTypes = foundCollectableTypes;
     return this;
   }
 
-  public User addFoundCollectablesItem(Collectable foundCollectablesItem) {
-    if (this.foundCollectables == null) {
-      this.foundCollectables = new HashSet<Collectable>();
+  public User addFoundCollectableTypesItem(CollectableType foundCollectableTypesItem) {
+    if (this.foundCollectableTypes == null) {
+      this.foundCollectableTypes = new HashSet<CollectableType>();
     }
-    this.foundCollectables.add(foundCollectablesItem);
+    this.foundCollectableTypes.add(foundCollectableTypesItem);
     return this;
   }
 
   /**
-   * Get foundCollectables
-   * @return foundCollectables
+   * Get foundCollectableTypes
+   * @return foundCollectableTypes
    **/
   @Schema(description = "")
-  @Valid
-  public Set<Collectable> getFoundCollectables() {
-    return foundCollectables;
+      @Valid
+    public Set<CollectableType> getFoundCollectableTypes() {
+    return foundCollectableTypes;
   }
 
-  public void setFoundCollectables(Set<Collectable> foundCollectables) {
-    this.foundCollectables = foundCollectables;
+  public void setFoundCollectableTypes(Set<CollectableType> foundCollectableTypes) {
+    this.foundCollectableTypes = foundCollectableTypes;
   }
 
   public User foundGeocodes(Set<GeoCode> foundGeocodes) {
@@ -217,8 +220,8 @@ public class User   {
    * @return foundGeocodes
    **/
   @Schema(description = "")
-  @Valid
-  public Set<GeoCode> getFoundGeocodes() {
+      @Valid
+    public Set<GeoCode> getFoundGeocodes() {
     return foundGeocodes;
   }
 
@@ -244,8 +247,8 @@ public class User   {
    * @return ownedGeocodes
    **/
   @Schema(description = "")
-  @Valid
-  public Set<GeoCode> getOwnedGeocodes() {
+      @Valid
+    public Set<GeoCode> getOwnedGeocodes() {
     return ownedGeocodes;
   }
 
@@ -264,31 +267,31 @@ public class User   {
     }
     User user = (User) o;
     return Objects.equals(this.id, user.id) &&
-            Objects.equals(this.username, user.username) &&
-            Objects.equals(this.trackableObject, user.trackableObject) &&
-            Objects.equals(this.points, user.points) &&
-            Objects.equals(this.currentCollectable, user.currentCollectable) &&
-            Objects.equals(this.foundCollectables, user.foundCollectables) &&
-            Objects.equals(this.foundGeocodes, user.foundGeocodes) &&
-            Objects.equals(this.ownedGeocodes, user.ownedGeocodes);
+        Objects.equals(this.username, user.username) &&
+        Objects.equals(this.trackableObject, user.trackableObject) &&
+        Objects.equals(this.points, user.points) &&
+        Objects.equals(this.currentCollectable, user.currentCollectable) &&
+        Objects.equals(this.foundCollectableTypes, user.foundCollectableTypes) &&
+        Objects.equals(this.foundGeocodes, user.foundGeocodes) &&
+        Objects.equals(this.ownedGeocodes, user.ownedGeocodes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, username, trackableObject, points, currentCollectable, foundCollectables, foundGeocodes, ownedGeocodes);
+    return Objects.hash(id, username, trackableObject, points, currentCollectable, foundCollectableTypes, foundGeocodes, ownedGeocodes);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class User {\n");
-
+    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    trackableObject: ").append(toIndentedString(trackableObject)).append("\n");
     sb.append("    points: ").append(toIndentedString(points)).append("\n");
     sb.append("    currentCollectable: ").append(toIndentedString(currentCollectable)).append("\n");
-    sb.append("    foundCollectables: ").append(toIndentedString(foundCollectables)).append("\n");
+    sb.append("    foundCollectableTypes: ").append(toIndentedString(foundCollectableTypes)).append("\n");
     sb.append("    foundGeocodes: ").append(toIndentedString(foundGeocodes)).append("\n");
     sb.append("    ownedGeocodes: ").append(toIndentedString(ownedGeocodes)).append("\n");
     sb.append("}");

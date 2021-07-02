@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.user.request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
@@ -9,17 +10,17 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * GetFoundCollectablesRequest
+ * GetFoundCollectableTypesRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-24T10:49:36.244Z[GMT]")
 
 
-public class GetFoundCollectablesRequest   {
+public class GetFoundCollectableTypesRequest   {
   @JsonProperty("userID")
   private UUID userID = null;
 
-  public GetFoundCollectablesRequest userID(UUID userID) {
+  public GetFoundCollectableTypesRequest userID(UUID userID) {
     this.userID = userID;
     return this;
   }
@@ -49,8 +50,8 @@ public class GetFoundCollectablesRequest   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetFoundCollectablesRequest getFoundCollectablesRequest = (GetFoundCollectablesRequest) o;
-    return Objects.equals(this.userID, getFoundCollectablesRequest.userID);
+    GetFoundCollectableTypesRequest getFoundCollectableTypesRequest = (GetFoundCollectableTypesRequest) o;
+    return Objects.equals(this.userID, getFoundCollectableTypesRequest.userID);
   }
 
   @Override
@@ -61,7 +62,7 @@ public class GetFoundCollectablesRequest   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetFoundCollectablesRequest {\n");
+    sb.append("class GetFoundCollectableTypesRequest {\n");
     
     sb.append("    userID: ").append(toIndentedString(userID)).append("\n");
     sb.append("}");
