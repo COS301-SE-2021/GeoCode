@@ -38,5 +38,5 @@ public interface UserService {
     void registerNewUser(UUID id, String username);
 
     //GeoCode helper functions
-    Collectable swapCollectable(Collectable collectable);
+    Collectable swapCollectable(UUID newCollectableID);
 }

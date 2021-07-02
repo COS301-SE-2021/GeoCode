@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final CollectableRepository collectableRepo;
     private final CollectableTypeRepository collectableTypeRepo;
+    private final CollectableService collectableService;
 
     private final String invalidUserIdMessage = "Invalid user id";
 
@@ -245,15 +246,16 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Swaps the currentCollectable of the current user with the given Collectable
-     * @param newCurrentCollectable The given Collectable to swap in
+     * @param newCollectableID The UUID identifiying the Collectable to swap with the currentCollectable
      * @return The original currentCollectable
      */
-    public Collectable swapCollectable(Collectable newCurrentCollectable){
+    public Collectable swapCollectable(UUID newCollectableID){
         //currentCollectable to swap out
         var currentUser = getCurrentUser();
         var oldCurrentCollectable = currentUser.getCurrentCollectable();
 
         //swap in newCurrentCollectable
+        var newCurrentCollectable = collectableService.getCollectableByID();
         currentUser.setCurrentCollectable(newCurrentCollectable);
         userRepo.save(currentUser);
 
