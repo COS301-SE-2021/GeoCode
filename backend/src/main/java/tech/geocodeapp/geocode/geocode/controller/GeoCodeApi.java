@@ -76,7 +76,7 @@ public interface GeoCodeApi {
             @ApiResponse( responseCode = "200", description = "Returned all the GeoCodes successfully", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetGeoCodesResponse.class ) ) ),
 
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ) } )
-    @PostMapping( value = "/GeoCode/getGeoCodes",
+    @GetMapping( value = "/GeoCode/getGeoCodes",
             produces = { "application/json", "application/xml" } )
     ResponseEntity< GetGeoCodesResponse > getGeoCodes() throws RepoException;
 
