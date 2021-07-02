@@ -57,7 +57,7 @@ public class GeoCode {
      */
     @Valid
     @JsonProperty( "hints" )
-    @ElementCollection( fetch = FetchType.EAGER )
+    @ElementCollection( fetch = FetchType.LAZY )
     @NotNull( message = "GeoCode's hints cannot be null." )
     private Collection< String > hints = new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class GeoCode {
      */
     @Valid
     @JsonProperty( "collectables" )
-    @ElementCollection( fetch = FetchType.EAGER )
+    @ElementCollection( fetch = FetchType.LAZY )
     @Cascade( org.hibernate.annotations.CascadeType.ALL )
     @NotNull( message = "GeoCode's collectables cannot be null." )
     private Collection< UUID > collectables;
