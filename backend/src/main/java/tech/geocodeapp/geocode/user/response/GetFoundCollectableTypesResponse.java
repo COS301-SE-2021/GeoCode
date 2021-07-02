@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.User.Response;
+package tech.geocodeapp.geocode.user.response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;

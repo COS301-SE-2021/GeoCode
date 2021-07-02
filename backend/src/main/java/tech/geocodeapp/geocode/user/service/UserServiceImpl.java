@@ -1,14 +1,16 @@
 package tech.geocodeapp.geocode.user.service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.collectable.model.*;
-import tech.geocodeapp.geocode.collectable.repository.*;
-import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
+import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
@@ -21,16 +23,17 @@ import tech.geocodeapp.geocode.user.response.*;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
+
     private final CollectableRepository collectableRepo;
-    private final CollectableTypeRepository collectableTypeRepo;
-    private final CollectableService collectableService;
+
+    @Autowired
+    private CollectableService collectableService;
 
     private final String invalidUserIdMessage = "Invalid user id";
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, CollectableTypeRepository collectableTypeRepo) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
-        this.collectableTypeRepo = collectableTypeRepo;
     }
 
     /**

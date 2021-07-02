@@ -14,8 +14,9 @@ import tech.geocodeapp.geocode.collectable.CollectableMockRepository;
 import tech.geocodeapp.geocode.collectable.CollectableTypeMockRepository;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
-import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
+import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
@@ -40,7 +41,7 @@ public class UserServiceImplTest {
     void setup() {
         CollectableTypeMockRepository collectableTypeMockRepo = new CollectableTypeMockRepository();
         UserMockRepository userMockRepo = new UserMockRepository();
-        userService = new UserServiceImpl( userMockRepo, new CollectableMockRepository(), collectableTypeMockRepo);
+        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository());
 
         //save the valid trackable CollectableType
         CollectableType trackableCollectableType = new CollectableType();

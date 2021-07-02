@@ -1,11 +1,11 @@
-package tech.geocodeapp.geocode.User.Service;
+package tech.geocodeapp.geocode.user.service;
 
 import org.springframework.stereotype.Service;
-import tech.geocodeapp.geocode.Collectable.Model.Collectable;
-import tech.geocodeapp.geocode.User.Exception.NullUserRequestParameterException;
-import tech.geocodeapp.geocode.User.Model.User;
-import tech.geocodeapp.geocode.User.Request.*;
-import tech.geocodeapp.geocode.User.Response.*;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
+import tech.geocodeapp.geocode.user.model.User;
+import tech.geocodeapp.geocode.user.request.*;
+import tech.geocodeapp.geocode.user.response.*;
 
 import java.util.UUID;
 
