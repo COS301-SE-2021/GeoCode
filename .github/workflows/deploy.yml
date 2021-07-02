@@ -23,11 +23,12 @@ jobs:
           git clone git@github.com:COS301-SE-2021/GeoCode.git
           cd GeoCode/frontend
           npm install
-          cp ../../index.withsecrets.html src
+          cp ../../index.html src
           cp ../../environment.ts src/environments
           ionic build
           cp www/src/index.html www
           cd ../backend
+          cp ../../keystore.p12 src/main/resources
           mvn spring-boot:build-image -Dspring-boot.build-image.imageName=geocode/backend
           cd ..
           docker stop spring
