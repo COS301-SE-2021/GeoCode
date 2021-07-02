@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 
+import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
@@ -120,15 +121,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             temp.setId( collectableResponse.getCollectable().getId() );
             CollectableTypeComponent type = collectableResponse.getCollectable().getType();
 
-            /* Building a collectable type from a collectable type component */
-            var tempType = new CollectableType();
-            tempType.setId( type.getId() );
-            tempType.setName( type.getName() );
-            tempType.setRarity( type.getRarity() );
-            tempType.setImage( "randomImage" );
-            tempType.setSet( type.getCollectableSet() );
+            CollectableTypeManager manager = new CollectableTypeManager();
 
-            temp.setType( tempType );
+            temp.setType( manager.convertToCollectableType( type ) );
 
             /* Adding the created Collectable to the list */
             collectable.add( temp.getId() );
