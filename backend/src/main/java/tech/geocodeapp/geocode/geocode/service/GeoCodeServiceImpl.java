@@ -454,15 +454,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         var geocodeToUser = storedCollectables.get( replaceIndex );
         var temp = collectableService.getCollectables().getCollectables();
-        Collectable hold = null;
+        UUID hold = null;
         for ( CollectableResponse collectableResponse : temp ) {
 
-            if ( collectableResponse.getId().equals( geocodeToUser ) ) {
+            var collectableID = collectableResponse.getId();
+            if ( collectableID.equals( geocodeToUser ) ) {
 
-                hold = new Collectable();
-                hold.setId( collectableResponse.getId() );
-                //hold.setType( collectableResponse.getType() );
-                //hold.setPastLocations( collectableResponse.getPastLocations() );
+                hold = collectableID;
             }
         }
 
