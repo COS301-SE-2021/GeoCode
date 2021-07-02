@@ -66,7 +66,7 @@ public class GeoCode {
      */
     @Valid
     @JsonProperty( "collectables" )
-    @ElementCollection( fetch = FetchType.LAZY )
+    @ElementCollection( fetch = FetchType.EAGER )
     @Cascade( org.hibernate.annotations.CascadeType.ALL )
     @NotNull( message = "GeoCode's collectables cannot be null." )
     private Collection< UUID > collectables;

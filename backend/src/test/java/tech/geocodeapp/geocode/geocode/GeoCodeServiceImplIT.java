@@ -16,6 +16,7 @@ import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.user.service.*;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -679,6 +680,7 @@ class GeoCodeServiceImplIT {
     @Test
     @Order( 26 )
     @DisplayName( "Valid request - getCollectables" )
+    @Transactional
     void getCollectablesTest() {
 
         /* Create a GeoCode */
