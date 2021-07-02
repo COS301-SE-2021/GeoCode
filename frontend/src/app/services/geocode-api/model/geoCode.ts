@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Collectable } from './collectable';
 import { Difficulty } from './difficulty';
 
 export interface GeoCode { 
@@ -18,8 +17,7 @@ export interface GeoCode {
     available: boolean;
     description: string;
     hints: Array<string>;
-    collectables?: Array<Collectable>;
-    trackables?: string;
+    collectables?: Array<string>;
     qrCode: string;
     location: string;
 }
