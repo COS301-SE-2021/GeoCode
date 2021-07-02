@@ -165,9 +165,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * if it does exist set it to null
          * else check if the id is inserted
          */
-        if ( geoCodeRepo.findById( id ).isPresent() ) {
+        var temp = geoCodeRepo.findById( id );
+        if ( temp.isPresent() ) {
 
-            response.setIsSuccess( geoCodeRepo.findById( id ).get().getId().equals( id ) );
+            response.setIsSuccess( temp.get().getId().equals( id ) );
         } else {
 
             response.setIsSuccess( false );
