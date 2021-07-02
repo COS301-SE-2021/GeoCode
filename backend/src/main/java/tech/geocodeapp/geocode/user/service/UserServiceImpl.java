@@ -23,7 +23,6 @@ import tech.geocodeapp.geocode.user.response.*;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
-
     private final CollectableRepository collectableRepo;
 
     @Autowired
@@ -236,7 +235,7 @@ public class UserServiceImpl implements UserService {
         newUser.setUsername(username);
 
         //get the CollectableType object for trackables
-        Optional< CollectableType > optionalCollectableType = collectableTypeRepo.findById( UUID.fromString( "0855b7da-bdad-44b7-9c22-18fe266ceaf3" ) );
+        Optional< CollectableType > optionalCollectableType = collectableService.getCollectableTypeByID( UUID.fromString( "0855b7da-bdad-44b7-9c22-18fe266ceaf3" ) );
         CollectableType trackableCollectableType = optionalCollectableType.get();
 
         var trackableObject = new Collectable(trackableCollectableType);
