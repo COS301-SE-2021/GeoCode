@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 
+import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
@@ -103,7 +104,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Hold the crated Collectables */
-        List< Collectable > collectable = new ArrayList<>();
+        List< UUID > collectable = new ArrayList<>();
 
         for ( var x = 0; x < numCollectables; x++ ) {
 
@@ -130,7 +131,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             temp.setType( tempType );
 
             /* Adding the created Collectable to the list */
-            collectable.add( temp );
+            collectable.add( temp.getId() );
         }
 
         /* Try and create the relevant image with the newly create GeoCode instance */
@@ -441,10 +442,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /* Find the target collectable */
         var replaceIndex = -1; //the index of the collectable we want to replace in the geocode
-        List< Collectable > storedCollectables = new ArrayList<>( geocode.getCollectables() );
+        List< UUID > storedCollectables = new ArrayList<>( geocode.getCollectables() );
         for ( var i = 0; i < storedCollectables.size(); i++ ) {
 
-            if ( storedCollectables.get( i ).getId().equals( request.getTargetCollectableID() ) ) {
+            if ( storedCollectables.get( i ).equals( request.getTargetCollectableID() ) ) {
 
                 replaceIndex = i;
                 break;
@@ -457,12 +458,31 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         var geocodeToUser = storedCollectables.get( replaceIndex );
+        var temp = collectableService.getCollectables().getCollectables();
+        Collectable hold = null;
+        for ( CollectableResponse collectableResponse : temp ) {
+
+            if ( collectableResponse.getId().equals( geocodeToUser ) ) {
+
+                hold = new Collectable();
+                hold.setId( collectableResponse.getId() );
+                //hold.setType( collectableResponse.getType() );
+                //hold.setPastLocations( collectableResponse.getPastLocations() );
+            }
+        }
+
+        if ( hold == null ) {
+
+            return new SwapCollectablesResponse().isSuccess( false );
+        }
 
         /* Perform the swap */
-        var userToGeocode = userService.swapCollectable( geocodeToUser );
+        var userToGeocode = userService.swapCollectable( hold );
         userToGeocode.changeLocation( geocode.getLatitude() + " " + geocode.getLongitude() );
-        storedCollectables.set( replaceIndex, userToGeocode );
+        storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );
+
+        /* Update the table to contain the updated collectable */
         geoCodeRepo.save( geocode );
 
         /*
