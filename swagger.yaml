@@ -934,9 +934,8 @@ components:
         collectables:
           type: array
           items:
-            $ref: '#/components/schemas/Collectable'
-        trackables:
-          type: string
+            type: string
+            format: uuid
         qrCode:
           type: string
         location:
@@ -1000,6 +999,7 @@ components:
           $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodesByDifficultyRequest"
+
     GetGeoCodesByDifficultyResponse:
       type: "object"
       properties:
@@ -1009,6 +1009,7 @@ components:
             $ref: '#/components/schemas/GeoCode'
       xml:
         name: "getGeoCodesByDifficultyResponse"
+
     GetGeoCodesResponse:
       type: "object"
       required:
@@ -1020,6 +1021,7 @@ components:
             $ref: '#/components/schemas/GeoCode'
       xml:
         name: "getGeoCodesByDifficultyResponse"
+
     GetHintsRequest:
       type: "object"
       required:
@@ -1030,6 +1032,7 @@ components:
           format: uuid
       xml:
         name: "getGeoCodesByDifficultyRequest"
+
     GetHintsResponse:
       type: "object"
       properties:
@@ -1039,6 +1042,7 @@ components:
             type: string
       xml:
         name: "getGeoCodesByDifficultyResponse"
+
     GetGeoCodeByQRCodeRequest:
       type: "object"
       required:
@@ -1059,6 +1063,7 @@ components:
           $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodeByQRCodeRequest"
+
     GetGeoCodeByQRCodeResponse:
       type: "object"
       properties:
@@ -1069,6 +1074,7 @@ components:
           type: string
       xml:
         name: "getGeoCodeByQRCodeResponse"
+
     GetGeoCodeByLocationRequest:
       type: "object"
       required:
@@ -1089,6 +1095,7 @@ components:
           $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodeByLocationRequest"
+
     GetGeoCodeByLocationResponse:
       type: "object"
       properties:
@@ -1099,6 +1106,7 @@ components:
           type: string
       xml:
         name: "getGeoCodeByLocationResponse"
+
     GetTrackablesRequest:
       type: "object"
       required:
@@ -1119,6 +1127,7 @@ components:
           $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getTrackablesRequest"
+
     GetTrackablesResponse:
       type: "object"
       properties:
@@ -1129,6 +1138,7 @@ components:
           type: string
       xml:
         name: "getTrackablesResponse"
+
     SwapCollectablesRequest:
       type: "object"
       required:
@@ -1143,6 +1153,7 @@ components:
           format: uuid
       xml:
         name: "swapCollectablesRequest"
+
     SwapCollectablesResponse:
       type: "object"
       properties:
@@ -1150,6 +1161,7 @@ components:
           type: boolean
       xml:
         name: "swapCollectablesResponse"
+
     UpdateAvailabilityRequest:
       type: "object"
       required:
@@ -1163,6 +1175,7 @@ components:
           type: boolean
       xml:
         name: "updateAvailabilityRequest"
+
     UpdateAvailabilityResponse:
       type: "object"
       properties:
