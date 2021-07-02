@@ -1,8 +1,6 @@
 package tech.geocodeapp.geocode.user.service;
 
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,11 +9,14 @@ import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
+
+import javax.validation.Valid;
 
 /**
  * This class implements the UserService interface
@@ -49,13 +50,13 @@ public class UserServiceImpl implements UserService {
             throw new NullUserRequestParameterException();
         }
 
-        var optionalUser = userRepo.findById(request.getUserID());
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetCurrentCollectableResponse(false, invalidUserIdMessage, null);
         }
 
-        var currentUserCollectable = optionalUser.get().getCurrentCollectable();
+        Collectable currentUserCollectable = optionalUser.get().getCurrentCollectable();
         return new GetCurrentCollectableResponse(true, "The user's Collectable was successfully returned", currentUserCollectable);
     }
 
@@ -73,13 +74,13 @@ public class UserServiceImpl implements UserService {
             throw new NullUserRequestParameterException();
         }
 
-        var optionalUser = userRepo.findById(request.getUserID());
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetUserTrackableResponse(false, invalidUserIdMessage, null);
         }
 
-        var userTrackable = optionalUser.get().getTrackableObject();
+        Collectable userTrackable = optionalUser.get().getTrackableObject();
         return new GetUserTrackableResponse(true, "The user's Trackable was successfully returned", userTrackable);
     }
 
@@ -97,14 +98,14 @@ public class UserServiceImpl implements UserService {
             throw new NullUserRequestParameterException();
         }
 
-        var optionalUser = userRepo.findById(request.getUserID());
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new UpdateLocationResponse(false, invalidUserIdMessage, null);
         }
 
-        var currentUser = optionalUser.get();
-        var trackableObject = currentUser.getTrackableObject();
+        User currentUser = optionalUser.get();
+        Collectable trackableObject = currentUser.getTrackableObject();
 
         //update the trackable's location
         trackableObject.changeLocation(request.getLocation());
@@ -128,17 +129,17 @@ public class UserServiceImpl implements UserService {
             throw new NullUserRequestParameterException();
         }
 
-        var optionalUser = userRepo.findById(request.getUserID());
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetFoundCollectableTypesResponse(false, invalidUserIdMessage, null);
         }
 
         //get IDs for all of the found CollectableTypes for the current User
-        var currentUser = optionalUser.get();
-        var foundCollectableTypes = currentUser.getFoundCollectableTypes();
+        User currentUser = optionalUser.get();
+        Set<CollectableType> foundCollectableTypes = currentUser.getFoundCollectableTypes();
 
-        var foundCollectableTypeIDs = new ArrayList<UUID>();
+        List<UUID> foundCollectableTypeIDs = new ArrayList<UUID>();
         foundCollectableTypes.forEach(collectableType -> foundCollectableTypeIDs.add(collectableType.getId()));
 
         return new GetFoundCollectableTypesResponse(true, "The IDs of the User's found CollectableTypes was successfully returned", foundCollectableTypeIDs);
@@ -159,17 +160,17 @@ public class UserServiceImpl implements UserService {
             throw new NullUserRequestParameterException();
         }
 
-        var optionalUser = userRepo.findById(request.getUserID());
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetFoundGeoCodesResponse(false, invalidUserIdMessage, null);
         }
 
         //get IDs for all of the found GeoCodes for the current User
-        var currentUser = optionalUser.get();
-        var foundGeoCodes = currentUser.getFoundGeocodes();
+        User currentUser = optionalUser.get();
+        Set<GeoCode> foundGeoCodes = currentUser.getFoundGeocodes();
 
-        var foundGeoCodeIDs = new ArrayList<UUID>();
+        List<UUID> foundGeoCodeIDs = new ArrayList<UUID>();
         foundGeoCodes.forEach(foundGeoCode -> foundGeoCodeIDs.add(foundGeoCode.getId()));
 
         return new GetFoundGeoCodesResponse(true, "The IDs of the User's found GeoCodes was successfully returned", foundGeoCodeIDs);
@@ -190,17 +191,17 @@ public class UserServiceImpl implements UserService {
             throw new NullUserRequestParameterException();
         }
 
-        var optionalUser = userRepo.findById(request.getUserID());
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetOwnedGeoCodesResponse(false, invalidUserIdMessage, null);
         }
 
         //get IDs for all of the GeoCodes owned by the current User
-        var currentUser = optionalUser.get();
-        var ownedGeocodes = currentUser.getOwnedGeocodes();
+        User currentUser = optionalUser.get();
+        Set<GeoCode> ownedGeocodes = currentUser.getOwnedGeocodes();
 
-        var ownedGeoCodeIDs = new ArrayList<UUID>();
+        List<UUID> ownedGeoCodeIDs = new ArrayList<UUID>();
         ownedGeocodes.forEach(ownedGeocode -> ownedGeoCodeIDs.add(ownedGeocode.getId()));
 
         return new GetOwnedGeoCodesResponse(true, "The IDs of the User's owned GeoCodes was successfully returned", ownedGeoCodeIDs);
@@ -212,7 +213,7 @@ public class UserServiceImpl implements UserService {
      * @return The User if they exist, else NULL
      */
     public User getUserById(UUID id){
-        var optionalUser = userRepo.findById(id);
+        Optional<User> optionalUser = userRepo.findById(id);
         return optionalUser.orElse(null);
     }
 
@@ -221,7 +222,7 @@ public class UserServiceImpl implements UserService {
      * @return The current User
      */
     public User getCurrentUser(){
-        var uuid = SecurityContextHolder.getContext().getAuthentication().getName();
+        String uuid = SecurityContextHolder.getContext().getAuthentication().getName();
         return getUserById(UUID.fromString(uuid));
     }
 
@@ -230,7 +231,7 @@ public class UserServiceImpl implements UserService {
      * @param id The id for the User
      */
     public void registerNewUser(UUID id, String username){
-        var newUser = new User();
+        User newUser = new User();
         newUser.setId(id);
         newUser.setUsername(username);
 
@@ -238,7 +239,7 @@ public class UserServiceImpl implements UserService {
         Optional< CollectableType > optionalCollectableType = collectableService.getCollectableTypeByID( UUID.fromString( "0855b7da-bdad-44b7-9c22-18fe266ceaf3" ) );
         CollectableType trackableCollectableType = optionalCollectableType.get();
 
-        var trackableObject = new Collectable(trackableCollectableType);
+        Collectable trackableObject = new Collectable(trackableCollectableType);
         newUser.setTrackableObject(trackableObject);
         newUser.setCurrentCollectable(trackableObject);
         userRepo.save(newUser);
@@ -253,11 +254,11 @@ public class UserServiceImpl implements UserService {
      */
     public Collectable swapCollectable(UUID newCollectableID){
         //currentCollectable to swap out
-        var currentUser = getCurrentUser();
-        var oldCurrentCollectable = currentUser.getCurrentCollectable();
+        User currentUser = getCurrentUser();
+        Collectable oldCurrentCollectable = currentUser.getCurrentCollectable();
 
         //swap in newCurrentCollectable
-        var newCurrentCollectable = collectableService.getCollectableByID();
+        Collectable newCurrentCollectable = collectableService.getCollectableByID();//TODO: check null
         currentUser.setCurrentCollectable(newCurrentCollectable);
         userRepo.save(currentUser);
 
