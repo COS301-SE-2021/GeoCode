@@ -246,6 +246,38 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
+        
+  /User/getMyLeaderboards:
+    post:
+      tags:
+        - "User"
+      summary: "Gets the User's Leaderboard rankings"
+      description: "Gets all the points and ranking for the Leaderboards that the given User is on"
+      operationId: "getMyLeaderboards"
+      requestBody:
+        required: true
+        description: "Request to get the name, points and ranking for all of the Leaderboards that a User is on"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetMyLeaderboardsRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetMyLeaderboardsRequest'
+      responses:
+        '200':
+          description: "getMyLeaderboards Response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMyLeaderboardsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetMyLeaderboardsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
   
   /GeoCode/createGeoCode:
     post:
@@ -878,6 +910,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
+        
+  /Leaderboard/
 
 components:
   responses:
@@ -1476,13 +1510,12 @@ components:
       xml:
         name: "Point"
 
-    LeaderBoard:
+    Leaderboard:
       type: "object"
       required:
         - id
         - name
         - eventId
-        - pointId
       properties:
         id:
           type: string
@@ -1492,11 +1525,8 @@ components:
         eventId:
           type: string
           format: uuid
-        pointId:
-          type: string
-          format: uuid
       xml:
-        name: "LeaderBoard"
+        name: "Leaderboard"
         
     User:
       type: "object"
@@ -1729,4 +1759,39 @@ components:
             $ref: '#/components/schemas/User'
       xml:
         name: "GetUsersResponse"
+        
+    GetMyLeaderboardsRequest:
+      type: "object"
+      required:
+        - userID
+      properties:
+        userID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetMyLeaderboardsRequest"
+        
+    GetMyLeaderboardsResponse:
+      type: "object"
+      required:
+        - success
+        - message
+        - leaderboards
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: "The details for the User's Leaderboards were successfully returned"
+        leaderboards:
+          type: array
+          items:
+            name:
+              type: string
+            point:
+              type: number
+            rank:
+              type: number
+      xml:
+        name: "GetMyLeaderboardsResponse"
       
