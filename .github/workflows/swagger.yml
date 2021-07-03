@@ -1,0 +1,35 @@
+name: Swagger
+
+on:
+  push:
+    branches: [ dev/Swagger ]
+
+jobs:
+  generate:
+    name: Generate Swagger Client
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Remove old Swagger client
+        run: rm -r frontend/src/app/services/geocode-api
+        
+      - name: Generate new Swagger client
+        uses: ducksify/swagger-codegen-action@v3.0
+        with:
+          args: generate -i swagger.yaml -l typescript-angular -o frontend/src/app/services/geocode-api
+          
+      - name: Fix error in generated api.module.ts
+        run: "sudo sed -i 's/: ModuleWithProviders {/: ModuleWithProviders<ApiModule> {/g' frontend/src/app/services/geocode-api/api.module.ts"
+          
+      - name: Commit changes
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add *
+          git commit -m "Regenerate API client after commit ${{github.sha}}"
+          
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: dev/Swagger
