@@ -1,4 +1,4 @@
-name: Type Script CI
+name: TypeScript CI
 
 on:
   push:
@@ -8,10 +8,17 @@ on:
 
 jobs:
   build:
+    name: TypeScript Build
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Set up files that usually contain environment variables
+        run: |
+                  cd frontend/src
+                  cp index-nomapskey.html index.html
+                  cp environments/environment.prod.ts environments/environment.ts
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.5
@@ -33,10 +40,17 @@ jobs:
         run: ionic build
 
   frontend-tests:
+    name: TypeScript Tests
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Set up files that usually contain environment variables
+        run: |
+                  cd frontend/src
+                  cp index-nomapskey.html index.html
+                  cp environments/environment.prod.ts environments/environment.ts
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.5
