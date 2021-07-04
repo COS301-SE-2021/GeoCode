@@ -15,10 +15,8 @@ import java.util.*;
 /**
  * The GeoCode model that will be stored as a table in the db
  */
-@Validated
-//@javax.annotation.Generated( value = "io.swagger.codegen.v3.generators.java.SpringCodegen" )
-
 @Entity
+@Validated
 @Table( name = "geocode" )
 public class GeoCode {
 

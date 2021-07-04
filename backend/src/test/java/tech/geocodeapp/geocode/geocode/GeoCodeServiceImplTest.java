@@ -599,7 +599,7 @@ class GeoCodeServiceImplTest {
     void getGeoCodesByQRCodeNullRequestTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> geoCodeService.getGeocodeByQRCode( null ) )
+        assertThatThrownBy( () -> geoCodeService.getGeoCodeByQRCode( null ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqEmptyError );
     }
@@ -620,7 +620,7 @@ class GeoCodeServiceImplTest {
         request.setQrCode( null );
 
         /* Null parameter request check */
-        assertThatThrownBy( () -> geoCodeService.getGeocodeByQRCode( request ) )
+        assertThatThrownBy( () -> geoCodeService.getGeoCodeByQRCode( request ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqParamError );
     }
@@ -645,7 +645,7 @@ class GeoCodeServiceImplTest {
             request.setQrCode( temp.get( 0 ).getQrCode() );
 
             /* Get the response by calling the updateAvailability use case */
-            GetGeoCodeByQRCodeResponse response = geoCodeService.getGeocodeByQRCode( request );
+            GetGeoCodeByQRCodeResponse response = geoCodeService.getGeoCodeByQRCode( request );
 
             /*
              * Check if the GeoCode was created correctly
