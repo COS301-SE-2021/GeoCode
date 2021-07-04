@@ -3,3 +3,13 @@ ion-title{
   text-align: center;
   padding:0.5%;
 }
+ion-col{
+  border-color:  var(--ion-color-purple);
+  border-width: .01em;
+  border-style:solid; margin-bottom : -1px;
+  height: max-content;
+  text-align: center;
+}
+#buttons{
+  text-align: center;
+}

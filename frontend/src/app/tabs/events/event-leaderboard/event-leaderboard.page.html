@@ -12,11 +12,14 @@
     <ion-col>Points</ion-col>
   </ion-row>
   <ion-row *ngFor="let point of points">
-    <ion-col>{{point.pos}}</ion-col>
+    <ion-col id="pos">{{point.pos}}</ion-col>
     <ion-col>{{point.username}}</ion-col>
     <ion-col>{{point.points}}</ion-col>
   </ion-row>
 </ion-grid>
-  <ion-button><ion-icon name="arrow-back-outline"></ion-icon>Prev</ion-button>
-  <ion-button>Next<ion-icon name="arrow-forward-outline"></ion-icon></ion-button>
+  <div id="buttons">
+    <ion-button><ion-icon name="arrow-back-outline"></ion-icon>Prev</ion-button>
+    <ion-button>Next<ion-icon name="arrow-forward-outline"></ion-icon></ion-button>
+  </div>
+
 </ion-content>
