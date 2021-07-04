@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./event-leaderboard.page.scss'],
 })
 export class EventLeaderboardPage implements OnInit {
-
+points = [{username:'a',pos:1,points:100},{username:'a',pos:1,points:100},{username:'a',pos:1,points:100},{username:'a',pos:1,points:100},{username:'a',pos:1,points:100},
+  {username:'a',pos:1,points:100},{username:'a',pos:1,points:100},{username:'a',pos:1,points:100},{username:'a',pos:1,points:100},{username:'a',pos:1,points:100}];
   constructor() { }
 
   ngOnInit() {
