@@ -6,6 +6,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.service.*;
@@ -14,6 +15,8 @@ import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.collectable.*;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.user.UserMockRepository;
+import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
 
 import java.util.ArrayList;
@@ -95,10 +98,35 @@ class GeoCodeServiceImplTest {
 
             typeMockRepo.save( type );
 
-        /*  */
+        /* Create a new Collectable Service implementation with the relevant repositories */
         collectableService = new CollectableServiceImpl( new CollectableMockRepository(),
                                                          new CollectableSetMockRepository(),
                                                          typeMockRepo );
+
+        /* Create the mock user repo and insert a new user into it */
+        var userRepo =  new UserMockRepository();
+        /*var user = new User();
+        user.setId( UUID.randomUUID() );
+        user.setUsername( "myNewUser" );
+        userRepo.save( user );
+
+        System.out.println( userRepo.findAll() );*/
+
+        var newUser = new User();
+        newUser.setId( UUID.randomUUID() );
+        newUser.setUsername( "myNewUser" );
+
+        //get the CollectableType object for trackables
+        GetCollectableTypeByIDRequest request = new GetCollectableTypeByIDRequest( UUID.fromString( "0855b7da-bdad-44b7-9c22-18fe266ceaf3" ) );
+        CollectableType optionalCollectableType = collectableService.getCollectableTypeByID( request ).getCollectableType();
+
+        var trackableObject = new Collectable( optionalCollectableType );
+        newUser.setTrackableObject(trackableObject);
+        newUser.setCurrentCollectable(trackableObject);
+        userRepo.save(newUser);
+
+        /* Instantiate the User Service Implementation */
+        userService = new UserServiceImpl( userRepo, new CollectableMockRepository() );
 
         try {
 

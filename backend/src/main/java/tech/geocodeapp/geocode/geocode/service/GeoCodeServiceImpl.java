@@ -16,6 +16,8 @@ import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.user.model.User;
+import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.user.service.*;
 
 import java.security.SecureRandom;
@@ -144,7 +146,16 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Get the user who is creating the GeoCode */
-        UUID createdBy = userService.getCurrentUser().getId();
+        User createdByUser = userService.getCurrentUser();
+
+        /* Validate the user */
+        if ( createdByUser == null ) {
+
+            return new CreateGeoCodeResponse( false );
+        }
+
+        /* Get the Id of the current user */
+        UUID createdBy = createdByUser.getId();
 
         /* Validate the user is valid and the user id exists */
         if ( createdBy == null ) {
@@ -496,7 +507,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Perform the swap */
-        var userToGeocode = userService.swapCollectable( hold );
+        var userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
         userToGeocode.changeLocation( geocode.getLatitude() + " " + geocode.getLongitude() );
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );
