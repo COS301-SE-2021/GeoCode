@@ -10,6 +10,9 @@ export class EventTimetrialPage implements AfterViewInit {
   @ViewChild('mapElement',{static:false}) mapElement;
   mapOptions;
   map;
+  geocodes=[{stage:1,description:'code',difficulty:'Easy',found:true},
+    {stage:2,description:'code',difficulty:'Easy',found:false},{stage:3,description:'code',difficulty:'Easy',found:false},
+    {stage:4,description:'code',difficulty:'Medium',found:false},{stage:5,description:'code',difficulty:'Insane',found:false}];
   constructor() { }
 
 

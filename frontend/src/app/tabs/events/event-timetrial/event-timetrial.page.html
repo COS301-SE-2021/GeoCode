@@ -18,7 +18,7 @@
     <ion-row *ngFor="let code of geocodes">
       <ion-col id="pos">{{code.stage}}</ion-col>
       <ion-col>{{code.description}}</ion-col>
-      <ion-col>{{code.DIFFICULTY}}</ion-col>
+      <ion-col>{{code.difficulty}}</ion-col>
       <ion-col><ion-checkbox disabled="false"  [(ngModel)]="code.found"></ion-checkbox></ion-col>
     </ion-row>
   </ion-grid>
