@@ -23,6 +23,10 @@ public interface CollectableTypeComponent {
 
     void setId(UUID id);
 
+    String getImage();
+
+    void setImage(String image);
+
     CollectableSet getCollectableSet();
 
     void setCollectableSet(CollectableSet set);

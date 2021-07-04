@@ -5,6 +5,8 @@ import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import tech.geocodeapp.geocode.collectable.model.*;
 
@@ -14,7 +16,7 @@ import java.util.*;
  * The GeoCode model that will be stored as a table in the db
  */
 @Validated
-@javax.annotation.Generated( value = "io.swagger.codegen.v3.generators.java.SpringCodegen" )
+//@javax.annotation.Generated( value = "io.swagger.codegen.v3.generators.java.SpringCodegen" )
 
 @Entity
 @Table( name = "geocode" )
@@ -25,25 +27,29 @@ public class GeoCode {
      */
     @Id
     @JsonProperty( "id" )
-    private UUID id = null;
+    @NotNull( message = "GeoCode's id cannot be null." )
+    private UUID id;
 
     /**
      * The description of where the GeoCode is and what it involves
      */
     @JsonProperty( "difficulty" )
-    private Difficulty difficulty = null;
+    @NotNull( message = "GeoCode's difficulty cannot be null." )
+    private Difficulty difficulty;
 
     /**
      * If the GeoCode is active in the system
      */
     @JsonProperty( "available" )
-    private Boolean available = null;
+    @NotNull( message = "GeoCode's available cannot be null." )
+    private Boolean available;
 
     /**
      * The description of where the GeoCode is and what it involves
      */
     @JsonProperty( "description" )
-    private String description = null;
+    @NotEmpty( message = "GeoCode's description cannot be empty." )
+    private String description;
 
     /**
      * The list of hints provided by the user who created the GeoCode
@@ -51,37 +57,41 @@ public class GeoCode {
      */
     @Valid
     @JsonProperty( "hints" )
-    @ElementCollection( fetch = FetchType.EAGER )
+    @ElementCollection( fetch = FetchType.LAZY )
+    @NotNull( message = "GeoCode's hints cannot be null." )
     private Collection< String > hints = new ArrayList<>();
 
     /**
      * The list of collectables stored inside of the GeoCode
      */
     @Valid
-    @ManyToMany
     @JsonProperty( "collectables" )
     @ElementCollection( fetch = FetchType.EAGER )
     @Cascade( org.hibernate.annotations.CascadeType.ALL )
-    private Collection< Collectable > collectables = null;
+    @NotNull( message = "GeoCode's collectables cannot be null." )
+    private Collection< UUID > collectables;
 
     /**
      * A short unique identifier to find the GeoCode in the system
      * by the user from the real world
      */
     @JsonProperty( "qrCode" )
-    private String qrCode = null;
+    @NotEmpty( message = "GeoCode's qrCode cannot be null." )
+    private String qrCode;
 
     /**
      * The longitude of the location of the GeoCode in the real world
      */
     @JsonProperty( "longitude" )
-    private String longitude = null;
+    @NotEmpty( message = "GeoCode's longitude cannot be null." )
+    private String longitude;
 
     /**
      * The latitude of the location of the GeoCode in the real world
      */
     @JsonProperty( "latitude" )
-    private String latitude = null;
+    @NotEmpty( message = "GeoCode's latitude cannot be null." )
+    private String latitude;
 
     /**
      * Default constructor
@@ -103,7 +113,9 @@ public class GeoCode {
      * @param longitude The longitude of the location of the GeoCode in the real world
      * @param latitude The latitude of the location of the GeoCode in the real world
      */
-    public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints, Collection< Collectable > collectables, String qrCode, String longitude, String latitude ) {
+    @Valid
+    public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints,
+                    Collection< UUID > collectables, String qrCode, String longitude, String latitude ) {
 
         this.id = id;
         this.difficulty = difficulty;
@@ -123,6 +135,7 @@ public class GeoCode {
      *
      * @return the model after changing the id
      */
+    @Valid
     public GeoCode id( UUID id ) {
 
         this.id = id;
@@ -134,7 +147,6 @@ public class GeoCode {
      *
      * @return the stored id attribute
      */
-    @Valid
     public UUID getId() {
 
         return id;
@@ -145,6 +157,7 @@ public class GeoCode {
      *
      * @param id the value the id should be set to
      */
+    @Valid
     public void setId( UUID id ) {
 
         this.id = id;
@@ -157,6 +170,7 @@ public class GeoCode {
      *
      * @return the model after the difficulty has been changed
      */
+    @Valid
     public GeoCode difficulty( Difficulty difficulty ) {
 
         this.difficulty = difficulty;
@@ -179,6 +193,7 @@ public class GeoCode {
      *
      * @param difficulty the value the attribute should be set to
      */
+    @Valid
     public void setDifficulty( Difficulty difficulty ) {
 
         this.difficulty = difficulty;
@@ -191,6 +206,7 @@ public class GeoCode {
      *
      * @return the model after the available has been changed
      */
+    @Valid
     public GeoCode available( Boolean available ) {
 
         this.available = available;
@@ -212,6 +228,7 @@ public class GeoCode {
      *
      * @param available the value the attribute should be set to
      */
+    @Valid
     public void setAvailable( Boolean available ) {
 
         this.available = available;
@@ -224,6 +241,7 @@ public class GeoCode {
      *
      * @return the model after the description has been changed
      */
+    @Valid
     public GeoCode description( String description ) {
 
         this.description = description;
@@ -245,6 +263,7 @@ public class GeoCode {
      *
      * @param description the value the attribute should be set to
      */
+    @Valid
     public void setDescription( String description ) {
 
         this.description = description;
@@ -257,6 +276,7 @@ public class GeoCode {
      *
      * @return the model after the hints has been changed
      */
+    @Valid
     public GeoCode hints( Collection< String > hints ) {
 
         this.hints = hints;
@@ -270,6 +290,7 @@ public class GeoCode {
      *
      * @return the stored hints attribute
      */
+    @Valid
     public GeoCode addHintsItem( String hintsItem ) {
 
         this.hints.add( hintsItem );
@@ -291,6 +312,7 @@ public class GeoCode {
      *
      * @param hints the value the attribute should be set to
      */
+    @Valid
     public void setHints( Collection< String > hints ) {
 
         this.hints = hints;
@@ -303,7 +325,8 @@ public class GeoCode {
      *
      * @return the model after the collectables has been changed
      */
-    public GeoCode collectables( List< Collectable > collectables ) {
+    @Valid
+    public GeoCode collectables( List< UUID > collectables ) {
 
         this.collectables = collectables;
         return this;
@@ -316,7 +339,8 @@ public class GeoCode {
      *
      * @return the stored collectables attribute
      */
-    public GeoCode addCollectablesItem( Collectable collectablesItem ) {
+    @Valid
+    public GeoCode addCollectablesItem( UUID collectablesItem ) {
 
         if ( this.collectables == null ) {
 
@@ -332,8 +356,7 @@ public class GeoCode {
      *
      * @return the stored collectables attribute
      */
-    @Valid
-    public Collection< Collectable > getCollectables() {
+    public Collection< UUID > getCollectables() {
 
         return collectables;
     }
@@ -343,7 +366,8 @@ public class GeoCode {
      *
      * @param collectables the value the attribute should be set to
      */
-    public void setCollectables( Collection< Collectable > collectables ) {
+    @Valid
+    public void setCollectables( Collection< UUID > collectables ) {
 
         this.collectables = collectables;
     }
@@ -355,6 +379,7 @@ public class GeoCode {
      *
      * @return the model after the qrCode has been changed
      */
+    @Valid
     public GeoCode qrCode( String qrCode ) {
 
         this.qrCode = qrCode;
@@ -376,6 +401,7 @@ public class GeoCode {
      *
      * @param qrCode the value the qrCode should be set to
      */
+    @Valid
     public void setQrCode( String qrCode ) {
 
         this.qrCode = qrCode;
@@ -388,6 +414,7 @@ public class GeoCode {
      *
      * @return the model after the longitude has been changed
      */
+    @Valid
     public GeoCode longitude( String longitude ) {
 
         this.longitude = longitude;
@@ -409,6 +436,7 @@ public class GeoCode {
      *
      * @param longitude the value the longitude should be set to
      */
+    @Valid
     public void setLongitude( String longitude ) {
 
         this.longitude = longitude;
@@ -421,6 +449,7 @@ public class GeoCode {
      *
      * @return the model after the latitude has been changed
      */
+    @Valid
     public GeoCode latitude( String latitude ) {
 
         this.latitude = latitude;
@@ -442,6 +471,7 @@ public class GeoCode {
      *
      * @param latitude the value the attribute should be set to
      */
+    @Valid
     public void setLatitude( String latitude ) {
 
         this.latitude = latitude;
