@@ -6,4 +6,20 @@
 
 <ion-content>
   <div #mapElement class="map"></div>
+  <ion-button>Leader Board</ion-button>
+  <ion-button>Find Next GeoCode</ion-button>
+  <ion-grid>
+    <ion-row>
+      <ion-col>Stage</ion-col>
+      <ion-col>Description</ion-col>
+      <ion-col>Difficulty</ion-col>
+      <ion-col>Found</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let code of geocodes">
+      <ion-col id="pos">{{code.stage}}</ion-col>
+      <ion-col>{{code.description}}</ion-col>
+      <ion-col>{{code.DIFFICULTY}}</ion-col>
+      <ion-col><ion-checkbox disabled="false"  [(ngModel)]="code.found"></ion-checkbox></ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
