@@ -19,6 +19,8 @@ public interface CollectableService {
     GetCollectableTypesResponse getCollectableTypes();
     GetCollectableSetsResponse getCollectableSets();
     GetCollectableTypesResponse getCollectableTypesBySet(GetCollectableTypesBySetRequest request);
+    GetCollectableByIDResponse getCollectableByID( GetCollectableByIDRequest request );
+    GetCollectableTypeByIDResponse getCollectableTypeByID( GetCollectableTypeByIDRequest request );
 
     //Deletes
     void deleteCollectables();

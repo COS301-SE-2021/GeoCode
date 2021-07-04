@@ -1,7 +1,6 @@
 package tech.geocodeapp.geocode.user.service;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
+import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
+import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
@@ -235,10 +236,10 @@ public class UserServiceImpl implements UserService {
         newUser.setUsername(username);
 
         //get the CollectableType object for trackables
-        Optional< CollectableType > optionalCollectableType = collectableService.getCollectableTypeByID( UUID.fromString( "0855b7da-bdad-44b7-9c22-18fe266ceaf3" ) );
-        CollectableType trackableCollectableType = optionalCollectableType.get();
+        GetCollectableTypeByIDRequest request = new GetCollectableTypeByIDRequest( UUID.fromString( "0855b7da-bdad-44b7-9c22-18fe266ceaf3" ) );
+        CollectableType optionalCollectableType = collectableService.getCollectableTypeByID( request ).getCollectableType();
 
-        var trackableObject = new Collectable(trackableCollectableType);
+        var trackableObject = new Collectable( optionalCollectableType );
         newUser.setTrackableObject(trackableObject);
         newUser.setCurrentCollectable(trackableObject);
         userRepo.save(newUser);
@@ -248,19 +249,21 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Swaps the currentCollectable of the current user with the given Collectable
-     * @param newCollectableID The UUID identifiying the Collectable to swap with the currentCollectable
+     * @param request The UUID identifying the Collectable to swap with the currentCollectable
      * @return The original currentCollectable
      */
-    public Collectable swapCollectable(UUID newCollectableID){
+    public SwapCollectableResponse swapCollectable( SwapCollectableRequest request ) {
+
         //currentCollectable to swap out
         var currentUser = getCurrentUser();
         var oldCurrentCollectable = currentUser.getCurrentCollectable();
 
         //swap in newCurrentCollectable
-        var newCurrentCollectable = collectableService.getCollectableByID();
-        currentUser.setCurrentCollectable(newCurrentCollectable);
+        var req = new GetCollectableByIDRequest( request.getCollectableID() );
+        var newCurrentCollectable = collectableService.getCollectableByID( req );
+        currentUser.setCurrentCollectable( newCurrentCollectable.getCollectable() );
         userRepo.save(currentUser);
 
-        return oldCurrentCollectable;
+        return new SwapCollectableResponse( oldCurrentCollectable );
     }
 }
