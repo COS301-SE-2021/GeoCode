@@ -5,15 +5,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.UUID;
 
 import tech.geocodeapp.geocode.collectable.CollectableMockRepository;
+import tech.geocodeapp.geocode.collectable.CollectableSetMockRepository;
 import tech.geocodeapp.geocode.collectable.CollectableTypeMockRepository;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
+import tech.geocodeapp.geocode.collectable.service.CollectableService;
+import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
@@ -31,7 +35,12 @@ public class UserServiceImplTest {
     private final UUID firstGeoCodeID = UUID.fromString("0998cf20-8256-4529-b144-d3c8aa4f0fb1");
     private final UUID secondGeoCodeID = UUID.fromString("8c3e3a65-118b-47ca-8cca-097134cd00d9");
     private final UUID thirdGeoCodeID = UUID.fromString("7b32fce8-44e4-422b-a80d-521d490e9ee3");
+    private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
+
     private final String invalidUserIdMessage = "Invalid user id";
+
+    @Mock( name = "collectableServiceImpl" )
+    CollectableService collectableService;
 
     UserServiceImplTest() {
 
@@ -40,12 +49,16 @@ public class UserServiceImplTest {
     @BeforeEach
     void setup() {
         CollectableTypeMockRepository collectableTypeMockRepo = new CollectableTypeMockRepository();
+        CollectableMockRepository collectableMockRepo = new CollectableMockRepository();
+        CollectableSetMockRepository collectableSetMockRepo = new CollectableSetMockRepository();
+
         UserMockRepository userMockRepo = new UserMockRepository();
-        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository());
+        CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo);
+        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), collectableService);
 
         //save the valid trackable CollectableType
         CollectableType trackableCollectableType = new CollectableType();
-        trackableCollectableType.setId(UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3"));
+        trackableCollectableType.setId(trackableUUID);
         collectableTypeMockRepo.save(trackableCollectableType);
 
         //save the valid user to the MockRepo
@@ -206,7 +219,7 @@ public class UserServiceImplTest {
 
             Collectable trackableObject = response.getTrackable();
             Assertions.assertNotNull(trackableObject);
-            Assertions.assertEquals(UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3"), trackableObject.getType().getId());
+            Assertions.assertEquals(trackableUUID, trackableObject.getType().getId());
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
