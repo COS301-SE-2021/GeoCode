@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { Difficulty } from './difficulty';
+import { GeoPoint } from './geoPoint';
 
 export interface GeoCode { 
     id: string;
@@ -19,5 +20,5 @@ export interface GeoCode {
     hints: Array<string>;
     collectables?: Array<string>;
     qrCode: string;
-    location: string;
+    location: GeoPoint;
 }
