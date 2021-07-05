@@ -9,12 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GeoPoint } from './geoPoint';
 import { Leaderboard } from './leaderboard';
-import { User } from './user';
 
-export interface Point { 
+export interface Event { 
     id: string;
-    amount: number;
-    user: User;
-    leaderBoard?: Leaderboard;
+    name: string;
+    description: string;
+    location: GeoPoint;
+    leaderboard: Leaderboard;
 }

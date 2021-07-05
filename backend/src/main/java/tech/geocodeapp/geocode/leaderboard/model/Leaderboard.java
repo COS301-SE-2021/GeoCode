@@ -2,12 +2,16 @@ package tech.geocodeapp.geocode.leaderboard.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
+
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.event.model.Event;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -16,19 +20,22 @@ import javax.validation.constraints.*;
  * Leaderboard
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T09:14:58.803Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T13:14:20.256Z[GMT]")
 
 @Entity
 @Table(name = "leaderboard")
 public class Leaderboard   {
+  @Id
   @JsonProperty("id")
   private UUID id = null;
 
   @JsonProperty("name")
   private String name = null;
 
-  @JsonProperty("eventID")
-  private UUID eventID = null;
+  @JsonProperty("event")
+  @OneToOne
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private Event event = null;
 
   public Leaderboard id(UUID id) {
     this.id = id;
@@ -71,25 +78,25 @@ public class Leaderboard   {
     this.name = name;
   }
 
-  public Leaderboard eventID(UUID eventID) {
-    this.eventID = eventID;
+  public Leaderboard event(Event event) {
+    this.event = event;
     return this;
   }
 
   /**
-   * Get eventID
-   * @return eventID
+   * Get event
+   * @return event
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public UUID getEventID() {
-    return eventID;
+    public Event getEvent() {
+    return event;
   }
 
-  public void setEventID(UUID eventID) {
-    this.eventID = eventID;
+  public void setEvent(Event event) {
+    this.event = event;
   }
 
 
@@ -104,12 +111,12 @@ public class Leaderboard   {
     Leaderboard leaderboard = (Leaderboard) o;
     return Objects.equals(this.id, leaderboard.id) &&
         Objects.equals(this.name, leaderboard.name) &&
-        Objects.equals(this.eventID, leaderboard.eventID);
+        Objects.equals(this.event, leaderboard.event);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, eventID);
+    return Objects.hash(id, name, event);
   }
 
   @Override
@@ -119,7 +126,7 @@ public class Leaderboard   {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    eventID: ").append(toIndentedString(eventID)).append("\n");
+    sb.append("    event: ").append(toIndentedString(event)).append("\n");
     sb.append("}");
     return sb.toString();
   }

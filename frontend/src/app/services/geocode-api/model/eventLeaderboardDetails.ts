@@ -9,12 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Leaderboard } from './leaderboard';
-import { User } from './user';
 
-export interface Point { 
-    id: string;
-    amount: number;
-    user: User;
-    leaderBoard?: Leaderboard;
+export interface EventLeaderboardDetails { 
+    username: string;
+    points: number;
+    rank: number;
 }

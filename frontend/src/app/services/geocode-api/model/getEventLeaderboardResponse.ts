@@ -9,12 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Leaderboard } from './leaderboard';
-import { User } from './user';
+import { EventLeaderboardDetails } from './eventLeaderboardDetails';
 
-export interface Point { 
-    id: string;
-    amount: number;
-    user: User;
-    leaderBoard?: Leaderboard;
+export interface GetEventLeaderboardResponse { 
+    success: boolean;
+    message: string;
+    leaderboard: Array<EventLeaderboardDetails>;
 }
