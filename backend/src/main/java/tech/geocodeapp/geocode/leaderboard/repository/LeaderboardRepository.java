@@ -11,7 +11,7 @@ import java.util.UUID;
  * This class implements the repository for the Leaderboard Subsystem
  */
 @Repository
-public interface LeaderboardRepository extends JpaRepository< Leaderboard, Long> {
+public interface LeaderboardRepository extends JpaRepository< Leaderboard, UUID> {
 
     //SELECT
 
