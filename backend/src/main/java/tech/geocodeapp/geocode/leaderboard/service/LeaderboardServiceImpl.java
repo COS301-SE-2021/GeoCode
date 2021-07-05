@@ -8,7 +8,9 @@ import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.leaderboard.exception.NullLeaderboardRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.model.EventLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
+import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.request.GetEventLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetLeaderboardByIDRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetPointsByLeaderboardRequest;
@@ -16,6 +18,7 @@ import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.GetLeaderboardByIDResponse;
 import tech.geocodeapp.geocode.leaderboard.response.GetPointsByLeaderboardResponse;
 
+import java.util.List;
 import java.util.Optional;
 
 import java.util.ArrayList;
@@ -28,12 +31,14 @@ import java.util.List;
 @Service
 public class LeaderboardServiceImpl implements LeaderboardService {
     private final LeaderboardRepository leaderboardRepo;
+    private final PointRepository pointRepo;
 
     @NotNull(message = "Event Service Implementation may not be null.")
     private final EventService eventService;
 
-    public LeaderboardServiceImpl(LeaderboardRepository leaderboardRepo, EventService eventService) {
+    public LeaderboardServiceImpl(LeaderboardRepository leaderboardRepo, PointRepository pointRepo, EventService eventService) {
         this.leaderboardRepo = leaderboardRepo;
+        this.pointRepo = pointRepo;
         this.eventService = eventService;
     }
 
@@ -112,6 +117,9 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         if(request.getLeaderboard() == null){
             throw new NullLeaderboardRequestParameterException();
         }
+
+        List<Point> points = pointRepo.findAllByLeaderboard(request.getLeaderboard());
+        return new GetPointsByLeaderboardResponse(points);
     }
 
 }
