@@ -1,9 +1,26 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>events</ion-title>
+    <ion-title>Events Near Me</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="addEvent()">
+        <ion-icon name="add-outline"></ion-icon>
+        <ion-label>New Event</ion-label>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-card *ngFor="let i of [1,2,3]">
+    <ion-card-content>
+      <div class="header">
+        <ion-card-title>
+          Event Name
+        </ion-card-title>
+        <ion-card-subtitle>
+          Event Description<br>more todo
+        </ion-card-subtitle>
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

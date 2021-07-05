@@ -12,4 +12,7 @@ export class EventsPage implements OnInit {
   ngOnInit() {
   }
 
+  async addEvent() {}
+
+
 }
