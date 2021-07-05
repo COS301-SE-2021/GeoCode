@@ -29,6 +29,12 @@ public class GetEventLeaderboardResponse   {
   @Valid
   private List<EventLeaderboardDetails> leaderboard = new ArrayList<EventLeaderboardDetails>();
 
+  public GetEventLeaderboardResponse(boolean success, String message, List<EventLeaderboardDetails> leaderboard){
+    this.success = success;
+    this.message = message;
+    this.leaderboard = leaderboard;
+  }
+
   public GetEventLeaderboardResponse success(Boolean success) {
     this.success = success;
     return this;
