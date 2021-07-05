@@ -3,7 +3,6 @@ package tech.geocodeapp.geocode.user.service;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +10,16 @@ import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
+import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
+import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * This class implements the UserService interface
@@ -26,14 +29,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final CollectableRepository collectableRepo;
 
-    @Autowired
-    private CollectableService collectableService;
+    @NotNull( message = "Collectable Service Implementation may not be null." )
+    private final CollectableService collectableService;
 
     private final String invalidUserIdMessage = "Invalid user id";
+    private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, CollectableService collectableService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
+        this.collectableService = collectableService;
     }
 
     /**
@@ -236,8 +241,9 @@ public class UserServiceImpl implements UserService {
         newUser.setUsername(username);
 
         //get the CollectableType object for trackables
-        GetCollectableTypeByIDRequest request = new GetCollectableTypeByIDRequest( UUID.fromString( "0855b7da-bdad-44b7-9c22-18fe266ceaf3" ) );
-        CollectableType optionalCollectableType = collectableService.getCollectableTypeByID( request ).getCollectableType();
+        GetCollectableTypeByIDRequest request = new GetCollectableTypeByIDRequest(trackableUUID);
+        GetCollectableTypeByIDResponse response = collectableService.getCollectableTypeByID( request );
+        CollectableType optionalCollectableType = response.getCollectableType();
 
         var trackableObject = new Collectable( optionalCollectableType );
         newUser.setTrackableObject(trackableObject);

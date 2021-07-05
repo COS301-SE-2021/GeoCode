@@ -126,7 +126,7 @@ class GeoCodeServiceImplTest {
         userRepo.save(newUser);
 
         /* Instantiate the User Service Implementation */
-        userService = new UserServiceImpl( userRepo, new CollectableMockRepository() );
+        userService = new UserServiceImpl( userRepo, new CollectableMockRepository(), collectableService);
 
         try {
 
