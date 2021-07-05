@@ -507,7 +507,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Perform the swap */
+
         var userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
+        //var userToGeocode = userService.swapCollectable( geocodeToUser.getId() );
+
         userToGeocode.changeLocation( geocode.getLatitude() + " " + geocode.getLongitude() );
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );
