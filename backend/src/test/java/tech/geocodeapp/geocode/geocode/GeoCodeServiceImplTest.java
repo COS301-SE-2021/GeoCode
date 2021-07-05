@@ -100,11 +100,6 @@ class GeoCodeServiceImplTest {
                                                          new CollectableSetMockRepository(),
                                                          typeMockRepo );
 
-        /* Create the mock user repo and insert a new user into it */
-        // var userMockRepo = new UserMockRepository();
-        // userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), collectableService);
-
-
         try {
 
             /* Create a new GeoCodeServiceImpl instance to access the different use cases */
