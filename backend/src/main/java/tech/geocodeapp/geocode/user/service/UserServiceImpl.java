@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.user.service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -226,6 +227,16 @@ public class UserServiceImpl implements UserService {
         if(request.getUserID() == null){
             throw new NullUserRequestParameterException();
         }
+
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+
+        if(optionalUser.isEmpty()){
+            return new GetMyLeaderboardsResponse(false, invalidUserIdMessage, null);
+        }
+
+        User currentUser = optionalUser.get();
+
+
     }
 
     /**
