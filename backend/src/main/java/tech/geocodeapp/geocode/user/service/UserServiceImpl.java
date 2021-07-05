@@ -13,10 +13,13 @@ import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.leaderboard.exception.NullLeaderboardRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
+import tech.geocodeapp.geocode.leaderboard.request.GetPointsByLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.response.GetLeaderboardByIDResponse;
+import tech.geocodeapp.geocode.leaderboard.response.GetPointsByLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
@@ -254,12 +257,26 @@ public class UserServiceImpl implements UserService {
             if(leaderboard != null){
                 MyLeaderboardDetails leaderboardDetails = new MyLeaderboardDetails();
                 leaderboardDetails.setName(leaderboard.getName());
-                leaderboardDetails.setPoints(point.getAmount());
+
+                int pointAmount = point.getAmount();
+                leaderboardDetails.setPoints(pointAmount);
 
                 //get the rank
+                GetPointsByLeaderboardRequest getPointsByLeaderboardRequest = new GetPointsByLeaderboardRequest(leaderboard);
 
-                int rank;
-                leaderboardDetails.setRank(rank);
+                try{
+                    GetPointsByLeaderboardResponse getPointsByLeaderboardResponse= leaderboardService.getPointsByLeaderboard(getPointsByLeaderboardRequest);
+
+                    List<Point> leaderboardPoints = getPointsByLeaderboardResponse.getPoints();
+
+                    //order by the point amount
+                    leaderboardPoints.sort(Comparator.comparing(Point::getAmount));
+
+                    int rank = leaderboardPoints.indexOf(point)+1;
+                    leaderboardDetails.setRank(rank);
+                }catch(NullLeaderboardRequestParameterException e){
+                    return new GetMyLeaderboardsResponse(false, e.getMessage(), null);
+                }
 
                 leaderboardDetailsList.add(leaderboardDetails);
             }
