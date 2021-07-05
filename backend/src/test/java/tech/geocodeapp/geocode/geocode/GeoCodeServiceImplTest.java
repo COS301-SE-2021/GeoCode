@@ -730,7 +730,9 @@ class GeoCodeServiceImplTest {
              * through checking the returned hints from a known hint
              */
 
-            //Assertions.assertEquals( "name", response.getCollectables().get( 0 ).getType().getName() );
+            var typeID = response.getCollectables().get( 0 );
+            var name = collectableService.getCollectableTypeByID( new GetCollectableTypeByIDRequest( typeID ) );
+            //Assertions.assertEquals( "name", name.getCollectableType().getName() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */

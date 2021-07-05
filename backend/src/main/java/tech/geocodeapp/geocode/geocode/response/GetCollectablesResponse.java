@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
-import tech.geocodeapp.geocode.collectable.model.Collectable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
