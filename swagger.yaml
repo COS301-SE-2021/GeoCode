@@ -246,6 +246,38 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
+        
+  /User/getMyLeaderboards:
+    post:
+      tags:
+        - "User"
+      summary: "Gets the User's Leaderboard rankings"
+      description: "Gets all the points and ranking for the Leaderboards that the given User is on"
+      operationId: "getMyLeaderboards"
+      requestBody:
+        required: true
+        description: "Request to get the name, points and ranking for all of the Leaderboards that a User is on"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetMyLeaderboardsRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetMyLeaderboardsRequest'
+      responses:
+        '200':
+          description: "getMyLeaderboards Response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMyLeaderboardsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetMyLeaderboardsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
   
   /GeoCode/createGeoCode:
     post:
@@ -673,6 +705,7 @@ paths:
     get:
       tags:
         - "Collectable"
+      summary: "Get all of the Collectables"
       description: "Returns all Collectables"
       operationId: "getCollectables"
       responses:
@@ -703,6 +736,7 @@ paths:
     get:
       tags:
         - "Collectable"
+      summary: "Get all of the Collectable Types"
       description: "Returns all Collectable Types"
       operationId: "getCollectableTypes"
       responses:
@@ -733,6 +767,7 @@ paths:
     get:
       tags:
         - "Collectable"
+      summary: "Get all of the Collectable Sets"
       description: "Returns all Collectable Sets"
       operationId: "getCollectableSets"
       responses:
@@ -763,6 +798,7 @@ paths:
     post:
       tags:
         - "Collectable"
+      summary: "Get all of the Collectables of a certain type"
       description: "Returns all Collectables of the specified type"
       operationId: "getCollectableByType"
       requestBody:
@@ -803,6 +839,7 @@ paths:
     post:
       tags:
         - "Collectable"
+      summary: "Get all of the Collectables of a certain rarity"
       description: "Returns all Collectable Types of the specified rarity"
       operationId: "getCollectableTypeByRarity"
       requestBody:
@@ -843,6 +880,7 @@ paths:
     post:
       tags:
         - "Collectable"
+      summary: "Get all of the Collectables of a certain set"
       description: "Returns all Collectable Types of the specified set"
       operationId: "getCollectableTypeBySet"
       requestBody:
@@ -874,6 +912,47 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/GetCollectableTypesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+        
+  /Leaderboard/getEventLeaderboard:
+    post:
+      tags:
+        - "Leaderboard"
+      summary: "Get an Event's Leaderboard details"
+      description: "Returns the Event's Leaderboard details from a specific rank down for a specified number of users"
+      operationId: "getEventLeaderboard"
+      requestBody:
+        required: true
+        description: "Request to get a subset of the Event's Leaderboard details"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetEventLeaderboardRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetEventLeaderboardRequest'
+      responses:
+        '200':
+          description: "Successfully returned the Event's Leaderboard details"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEventLeaderboardResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetEventLeaderboardResponse'
+        '404':
+          description: "Unable to find CollectableTypes of given set"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEventLeaderboardResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetEventLeaderboardResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -934,9 +1013,8 @@ components:
         collectables:
           type: array
           items:
-            $ref: '#/components/schemas/Collectable'
-        trackables:
-          type: string
+            type: string
+            format: uuid
         qrCode:
           type: string
         location:
@@ -947,12 +1025,16 @@ components:
     CreateGeoCodeRequest:
       type: "object"
       required:
+        - id
         - description
         - location
         - difficulty
         - hints
         - available
       properties:
+        id:
+          type: string
+          format: uuid
         description:
           type: string
         location:
@@ -996,6 +1078,7 @@ components:
           $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodesByDifficultyRequest"
+
     GetGeoCodesByDifficultyResponse:
       type: "object"
       properties:
@@ -1005,6 +1088,7 @@ components:
             $ref: '#/components/schemas/GeoCode'
       xml:
         name: "getGeoCodesByDifficultyResponse"
+
     GetGeoCodesResponse:
       type: "object"
       required:
@@ -1016,6 +1100,7 @@ components:
             $ref: '#/components/schemas/GeoCode'
       xml:
         name: "getGeoCodesByDifficultyResponse"
+
     GetHintsRequest:
       type: "object"
       required:
@@ -1026,6 +1111,7 @@ components:
           format: uuid
       xml:
         name: "getGeoCodesByDifficultyRequest"
+
     GetHintsResponse:
       type: "object"
       properties:
@@ -1035,6 +1121,7 @@ components:
             type: string
       xml:
         name: "getGeoCodesByDifficultyResponse"
+
     GetGeoCodeByQRCodeRequest:
       type: "object"
       required:
@@ -1055,6 +1142,7 @@ components:
           $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodeByQRCodeRequest"
+
     GetGeoCodeByQRCodeResponse:
       type: "object"
       properties:
@@ -1065,6 +1153,7 @@ components:
           type: string
       xml:
         name: "getGeoCodeByQRCodeResponse"
+
     GetGeoCodeByLocationRequest:
       type: "object"
       required:
@@ -1085,6 +1174,7 @@ components:
           $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getGeoCodeByLocationRequest"
+
     GetGeoCodeByLocationResponse:
       type: "object"
       properties:
@@ -1095,6 +1185,7 @@ components:
           type: string
       xml:
         name: "getGeoCodeByLocationResponse"
+
     GetTrackablesRequest:
       type: "object"
       required:
@@ -1115,6 +1206,7 @@ components:
           $ref: '#/components/schemas/Difficulty'
       xml:
         name: "getTrackablesRequest"
+
     GetTrackablesResponse:
       type: "object"
       properties:
@@ -1125,6 +1217,7 @@ components:
           type: string
       xml:
         name: "getTrackablesResponse"
+
     SwapCollectablesRequest:
       type: "object"
       required:
@@ -1139,6 +1232,7 @@ components:
           format: uuid
       xml:
         name: "swapCollectablesRequest"
+
     SwapCollectablesResponse:
       type: "object"
       properties:
@@ -1146,6 +1240,7 @@ components:
           type: boolean
       xml:
         name: "swapCollectablesResponse"
+
     UpdateAvailabilityRequest:
       type: "object"
       required:
@@ -1159,6 +1254,7 @@ components:
           type: boolean
       xml:
         name: "updateAvailabilityRequest"
+
     UpdateAvailabilityResponse:
       type: "object"
       properties:
@@ -1472,27 +1568,61 @@ components:
       xml:
         name: "Point"
 
-    LeaderBoard:
+    Leaderboard:
       type: "object"
       required:
         - id
         - name
-        - eventId
-        - pointId
+        - eventID
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
-        eventId:
-          type: string
-          format: uuid
-        pointId:
+        eventID:
           type: string
           format: uuid
       xml:
-        name: "LeaderBoard"
+        name: "Leaderboard"
+        
+    MyLeaderboardDetails:
+      type: "object"
+      required:
+        - name
+        - points
+        - rank
+      properties:
+        name:
+          type: string
+          example: "Pretoria"
+        points:
+          type: number
+          example: 15
+        rank:
+          type: number
+          example: 5
+      xml:
+        name: "MyLeaderboardDetails"
+        
+    EventLeaderboardDetails:
+      type: "object"
+      required:
+        - username
+        - points
+        - rank
+      properties:
+        username:
+          type: string
+          example: "john_smith"
+        points:
+          type: number
+          example: 15
+        rank:
+          type: number
+          example: 5
+      xml:
+        name: "EventLeaderboardDetails"
         
     User:
       type: "object"
@@ -1725,4 +1855,71 @@ components:
             $ref: '#/components/schemas/User'
       xml:
         name: "GetUsersResponse"
+        
+    GetMyLeaderboardsRequest:
+      type: "object"
+      required:
+        - userID
+      properties:
+        userID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetMyLeaderboardsRequest"
+        
+    GetMyLeaderboardsResponse:
+      type: "object"
+      required:
+        - success
+        - message
+        - leaderboards
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: "The details for the User's Leaderboards were successfully returned"
+        leaderboards:
+          type: array
+          items:
+            $ref: '#/components/schemas/MyLeaderboardDetails'
+      xml:
+        name: "GetMyLeaderboardsResponse"
+        
+    GetEventLeaderboardRequest:
+      type: "object"
+      required:
+        - eventID
+        - starting
+        - count
+      properties:
+        eventID:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        starting:
+          type: number
+          example: 5
+        count:
+          type: number
+          example: 10
+          
+    GetEventLeaderboardResponse:
+      type: "object"
+      required:
+        - success
+        - message
+        - leaderboard
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: "The details for the Event's Leaderboard were successfully returned"
+        leaderboard:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventLeaderboardDetails'
+      xml:
+        name: "GetMyLeaderboardsResponse"
       

@@ -1,13 +1,11 @@
-package tech.geocodeapp.geocode.leaderboard.model;
+package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -15,11 +13,10 @@ import javax.validation.constraints.*;
  * Point
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T09:14:58.803Z[GMT]")
 
-@Entity
+
 public class Point   {
-  @Id
   @JsonProperty("id")
   private UUID id = null;
 

@@ -9,11 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Difficulty } from './difficulty';
 
-export interface GetGeoCodeByQRCodeRequest { 
-    description: string;
-    location: string;
-    hints: Array<string>;
-    difficulty: Difficulty;
+export interface GetFoundCollectableTypesResponse { 
+    success: boolean;
+    message: string;
+    collectableTypeIDs: Array<string>;
 }

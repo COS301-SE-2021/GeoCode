@@ -99,5 +99,19 @@ public interface UserApi {
         consumes = { "application/json", "application/xml" }, 
         method = RequestMethod.POST)
     ResponseEntity<GetUsersResponse> getUsers(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all users in the system", required = true, schema = @Schema()) @Valid @RequestBody GetUsersRequest body);
+
+    @Operation(summary = "Gets the User's Leaderboard rankings", description = "Gets all the points and ranking for the Leaderboards that the given User is on", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "getMyLeaderboards Response", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetMyLeaderboardsResponse.class))),
+
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/getMyLeaderboards",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" },
+            method = RequestMethod.POST)
+    ResponseEntity<GetMyLeaderboardsResponse> getMyLeaderboards(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the name, points and ranking for all of the Leaderboards that a User is on", required=true, schema=@Schema()) @Valid @RequestBody GetMyLeaderboardsRequest body);
+
+
 }
 
