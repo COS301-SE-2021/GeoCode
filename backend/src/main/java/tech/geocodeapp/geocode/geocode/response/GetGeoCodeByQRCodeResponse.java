@@ -298,7 +298,7 @@ public class GetGeoCodeByQRCodeResponse {
             return false;
         }
 
-        GetGeoCodeByQRCodeResponse getGeoCodeByQRCodeResponse = ( GetGeoCodeByQRCodeResponse ) obj;
+        var getGeoCodeByQRCodeResponse = ( GetGeoCodeByQRCodeResponse ) obj;
         return Objects.equals( this.id, getGeoCodeByQRCodeResponse.id ) &&
                 Objects.equals( this.available, getGeoCodeByQRCodeResponse.available ) &&
                 Objects.equals( this.description, getGeoCodeByQRCodeResponse.description ) &&

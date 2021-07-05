@@ -297,7 +297,7 @@ public class GetGeoCodeByLocationResponse {
 
             return false;
         }
-        GetGeoCodeByLocationResponse getGeoCodeByLocationResponse = ( GetGeoCodeByLocationResponse ) obj;
+        var getGeoCodeByLocationResponse = ( GetGeoCodeByLocationResponse ) obj;
         return Objects.equals( this.id, getGeoCodeByLocationResponse.id ) &&
                 Objects.equals( this.available, getGeoCodeByLocationResponse.available ) &&
                 Objects.equals( this.description, getGeoCodeByLocationResponse.description ) &&

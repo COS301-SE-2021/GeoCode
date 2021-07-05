@@ -132,7 +132,7 @@ public class SwapCollectablesRequest {
             return false;
         }
 
-        SwapCollectablesRequest swapCollectablesRequest = ( SwapCollectablesRequest ) obj;
+        var swapCollectablesRequest = ( SwapCollectablesRequest ) obj;
         return Objects.equals( this.targetGeoCodeID, swapCollectablesRequest.targetGeoCodeID ) &&
                 Objects.equals( this.targetCollectableID, swapCollectablesRequest.targetCollectableID );
     }

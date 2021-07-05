@@ -312,7 +312,7 @@ public class CreateGeoCodeRequest {
 
             return false;
         }
-        CreateGeoCodeRequest createGeoCodeRequest = ( CreateGeoCodeRequest ) obj;
+        var createGeoCodeRequest = ( CreateGeoCodeRequest ) obj;
         return  Objects.equals( this.description, createGeoCodeRequest.description ) &&
                 Objects.equals( this.longitude, createGeoCodeRequest.longitude ) &&
                 Objects.equals( this.latitude, createGeoCodeRequest.latitude ) &&

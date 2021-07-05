@@ -128,7 +128,7 @@ public class GetGeoCodeByLocationRequest {
             return false;
         }
 
-        GetGeoCodeByLocationRequest getGeoCodeByLocationRequest = ( GetGeoCodeByLocationRequest ) obj;
+        var getGeoCodeByLocationRequest = ( GetGeoCodeByLocationRequest ) obj;
         return Objects.equals( this.longitude, getGeoCodeByLocationRequest.longitude ) &&
                 Objects.equals( this.latitude, getGeoCodeByLocationRequest.latitude );
     }
