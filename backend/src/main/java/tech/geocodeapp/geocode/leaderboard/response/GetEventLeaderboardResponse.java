@@ -1,13 +1,13 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.leaderboard.response;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.EventLeaderboardDetails;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.leaderboard.model.EventLeaderboardDetails;
+
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
