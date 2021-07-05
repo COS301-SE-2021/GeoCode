@@ -469,7 +469,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         var geocodeToUser = storedCollectables.get( replaceIndex );
 
         /* Perform the swap */
-        var userToGeocode = userService.swapCollectable( geocodeToUser );
+        var userToGeocode = userService.swapCollectable( geocodeToUser.getId() );
         userToGeocode.changeLocation( geocode.getLatitude() + " " + geocode.getLongitude() );
         storedCollectables.set( replaceIndex, userToGeocode );
         geocode.setCollectables( storedCollectables );
