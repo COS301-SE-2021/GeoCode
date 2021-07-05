@@ -2,7 +2,6 @@ package tech.geocodeapp.geocode.user.response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;

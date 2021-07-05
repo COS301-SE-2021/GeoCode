@@ -1,7 +1,6 @@
 package tech.geocodeapp.geocode.user.service;
 
 import org.springframework.stereotype.Service;
-import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.*;

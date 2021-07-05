@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.UserService;
-import tech.geocodeapp.geocode.user.service.UserService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
