@@ -3,7 +3,6 @@ package tech.geocodeapp.geocode.leaderboard.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -20,10 +19,10 @@ public class EventLeaderboardDetails   {
   private String username = null;
 
   @JsonProperty("points")
-  private BigDecimal points = null;
+  private Integer points = null;
 
   @JsonProperty("rank")
-  private BigDecimal rank = null;
+  private Integer rank = null;
 
   public EventLeaderboardDetails username(String username) {
     this.username = username;
@@ -45,7 +44,7 @@ public class EventLeaderboardDetails   {
     this.username = username;
   }
 
-  public EventLeaderboardDetails points(BigDecimal points) {
+  public EventLeaderboardDetails points(Integer points) {
     this.points = points;
     return this;
   }
@@ -55,18 +54,16 @@ public class EventLeaderboardDetails   {
    * @return points
    **/
   @Schema(example = "15", required = true, description = "")
-      @NotNull
 
-    @Valid
-    public BigDecimal getPoints() {
+  public Integer getPoints() {
     return points;
   }
 
-  public void setPoints(BigDecimal points) {
+  public void setPoints(Integer points) {
     this.points = points;
   }
 
-  public EventLeaderboardDetails rank(BigDecimal rank) {
+  public EventLeaderboardDetails rank(Integer rank) {
     this.rank = rank;
     return this;
   }
@@ -76,14 +73,12 @@ public class EventLeaderboardDetails   {
    * @return rank
    **/
   @Schema(example = "5", required = true, description = "")
-      @NotNull
 
-    @Valid
-    public BigDecimal getRank() {
+  public Integer getRank() {
     return rank;
   }
 
-  public void setRank(BigDecimal rank) {
+  public void setRank(Integer rank) {
     this.rank = rank;
   }
 
