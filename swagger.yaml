@@ -119,33 +119,33 @@ paths:
       security:
         - bearerAuth: []
         
-  /User/getFoundCollectables:
+  /User/getFoundCollectableTypes:
     post:
       tags:
         - "User"
-      summary: "Gets the Collectables that the user has ever found"
-      description: "Get a user's found Collectables"
-      operationId: "getFoundCollectables"
+      summary: "Gets the Collectable Types that the user has ever found"
+      description: "Get a user's found Collectable Types"
+      operationId: "getFoundCollectableTypes"
       requestBody:
         required: true
-        description: "Request to get the user's found Collectables"
+        description: "Request to get the IDs of the user's found Collectable Types"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetFoundCollectablesRequest'
+              $ref: '#/components/schemas/GetFoundCollectableTypesRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetFoundCollectablesRequest'
+              $ref: '#/components/schemas/GetFoundCollectableTypesRequest'
       responses:
         '200':
           description: "Successfully returned the user's found collectables"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetFoundCollectablesResponse'
+                $ref: '#/components/schemas/GetFoundCollectableTypesResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetFoundCollectablesResponse'
+                $ref: '#/components/schemas/GetFoundCollectableTypesResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -947,16 +947,12 @@ components:
     CreateGeoCodeRequest:
       type: "object"
       required:
-        - id
         - description
         - location
         - difficulty
         - hints
         - available
       properties:
-        id:
-          type: string
-          format: uuid
         description:
           type: string
         location:
@@ -1517,10 +1513,10 @@ components:
             $ref: '#/components/schemas/Point'
         currentCollectable:
           $ref: '#/components/schemas/Collectable'
-        foundCollectables:
+        foundCollectableTypes:
           type: array
           items:
-            $ref: '#/components/schemas/Collectable'
+            $ref: '#/components/schemas/CollectableType'
         foundGeocodes:
           type: array
           items:
@@ -1614,7 +1610,7 @@ components:
       xml:
         name: "UpdateLocationResponse"
         
-    GetFoundCollectablesRequest:
+    GetFoundCollectableTypesRequest:
       type: "object"
       required:
         - userID
@@ -1625,13 +1621,23 @@ components:
       xml:
         name: "GetFoundCollectablesRequest"
         
-    GetFoundCollectablesResponse:
+    GetFoundCollectableTypesResponse:
       type: "object"
+      required:
+        - success
+        - message
+        - collectableTypeIDs
       properties:
-        collectables:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: "The IDs of the User's found CollectableTypes was successfully returned"
+        collectableTypeIDs:
           type: array
           items:
-            $ref: '#/components/schemas/Collectable'
+            type: string
+            format: uuid
       xml:
         name: "GetFoundCollectablesResponse"
         
@@ -1648,11 +1654,21 @@ components:
         
     GetFoundGeoCodesResponse:
       type: "object"
+      required:
+        - success
+        - message
+        - geocodeIDs
       properties:
-        geocodes:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: "The IDs of the User's found GeoCodes was successfully returned"
+        geocodeIDs:
           type: array
           items:
-            $ref: '#/components/schemas/GeoCode'
+            type: string
+            format: uuid
       xml:
         name: "GetFoundGeoCodesResponse"
             
@@ -1666,13 +1682,24 @@ components:
           format: uuid
       xml:
         name: "GetOwnedGeocodesRequest"
+        
     GetOwnedGeoCodesResponse:
       type: "object"
+      required:
+        - success
+        - message
+        - geocodeIDs
       properties:
-        geocodes:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: "The IDs of the User's owned GeoCodes was successfully returned"
+        geocodeIDs:
           type: array
           items:
-            $ref: '#/components/schemas/GeoCode'
+            type: string
+            format: uuid
       xml:
         name: "GetOwnedGeocodesResponse"
         
