@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final CollectableRepository collectableRepo;
 
-    @NotNull( message = "Collectable Service Implementation may not be null." )
+    @NotNull(message = "Collectable Service Implementation may not be null.")
     private final CollectableService collectableService;
 
     private final String invalidUserIdMessage = "Invalid user id";
