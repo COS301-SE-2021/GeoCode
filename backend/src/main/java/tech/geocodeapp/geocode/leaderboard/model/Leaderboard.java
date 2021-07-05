@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Type;
 import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.event.model.Event;
 
@@ -27,6 +28,7 @@ import javax.validation.constraints.*;
 public class Leaderboard   {
   @Id
   @JsonProperty("id")
+  @Type(type="org.hibernate.type.UUIDCharType")
   private UUID id = null;
 
   @JsonProperty("name")
