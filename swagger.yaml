@@ -705,6 +705,7 @@ paths:
     get:
       tags:
         - "Collectable"
+      summary: "Get all of the Collectables"
       description: "Returns all Collectables"
       operationId: "getCollectables"
       responses:
@@ -735,6 +736,7 @@ paths:
     get:
       tags:
         - "Collectable"
+      summary: "Get all of the Collectable Types"
       description: "Returns all Collectable Types"
       operationId: "getCollectableTypes"
       responses:
@@ -765,6 +767,7 @@ paths:
     get:
       tags:
         - "Collectable"
+      summary: "Get all of the Collectable Sets"
       description: "Returns all Collectable Sets"
       operationId: "getCollectableSets"
       responses:
@@ -795,6 +798,7 @@ paths:
     post:
       tags:
         - "Collectable"
+      summary: "Get all of the Collectables of a certain type"
       description: "Returns all Collectables of the specified type"
       operationId: "getCollectableByType"
       requestBody:
@@ -835,6 +839,7 @@ paths:
     post:
       tags:
         - "Collectable"
+      summary: "Get all of the Collectables of a certain rarity"
       description: "Returns all Collectable Types of the specified rarity"
       operationId: "getCollectableTypeByRarity"
       requestBody:
@@ -875,6 +880,7 @@ paths:
     post:
       tags:
         - "Collectable"
+      summary: "Get all of the Collectables of a certain set"
       description: "Returns all Collectable Types of the specified set"
       operationId: "getCollectableTypeBySet"
       requestBody:
@@ -911,7 +917,46 @@ paths:
       security:
         - bearerAuth: []
         
-  /Leaderboard/
+  /Leaderboard/getEventLeaderboard:
+    post:
+      tags:
+        - "Leaderboard"
+      summary: "Get an Event's Leaderboard details"
+      description: "Returns the Event's Leaderboard details from a specific rank down for a specified number of users"
+      operationId: "getEventLeaderboard"
+      requestBody:
+        required: true
+        description: "Request to get a subset of the Event's Leaderboard details"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetEventLeaderboardRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetEventLeaderboardRequest'
+      responses:
+        '200':
+          description: "Successfully returned the Event's Leaderboard details"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEventLeaderboardResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetEventLeaderboardResponse'
+        '404':
+          description: "Unable to find CollectableTypes of given set"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEventLeaderboardResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetEventLeaderboardResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
 
 components:
   responses:
@@ -1528,18 +1573,56 @@ components:
       required:
         - id
         - name
-        - eventId
+        - eventID
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
-        eventId:
+        eventID:
           type: string
           format: uuid
       xml:
         name: "Leaderboard"
+        
+    MyLeaderboardDetails:
+      type: "object"
+      required:
+        - name
+        - points
+        - rank
+      properties:
+        name:
+          type: string
+          example: "Pretoria"
+        points:
+          type: number
+          example: 15
+        rank:
+          type: number
+          example: 5
+      xml:
+        name: "MyLeaderboardDetails"
+        
+    EventLeaderboardDetails:
+      type: "object"
+      required:
+        - username
+        - points
+        - rank
+      properties:
+        username:
+          type: string
+          example: "john_smith"
+        points:
+          type: number
+          example: 15
+        rank:
+          type: number
+          example: 5
+      xml:
+        name: "EventLeaderboardDetails"
         
     User:
       type: "object"
@@ -1799,12 +1882,44 @@ components:
         leaderboards:
           type: array
           items:
-            name:
-              type: string
-            point:
-              type: number
-            rank:
-              type: number
+            $ref: '#/components/schemas/MyLeaderboardDetails'
+      xml:
+        name: "GetMyLeaderboardsResponse"
+        
+    GetEventLeaderboardRequest:
+      type: "object"
+      required:
+        - eventID
+        - starting
+        - count
+      properties:
+        eventID:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        starting:
+          type: number
+          example: 5
+        count:
+          type: number
+          example: 10
+          
+    GetEventLeaderboardResponse:
+      type: "object"
+      required:
+        - success
+        - message
+        - leaderboard
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: "The details for the Event's Leaderboard were successfully returned"
+        leaderboard:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventLeaderboardDetails'
       xml:
         name: "GetMyLeaderboardsResponse"
       
