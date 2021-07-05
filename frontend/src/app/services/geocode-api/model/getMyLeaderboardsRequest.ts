@@ -10,9 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface LeaderBoard { 
-    id: string;
-    name: string;
-    eventId: string;
-    pointId: string;
+export interface GetMyLeaderboardsRequest { 
+    userID: string;
 }
