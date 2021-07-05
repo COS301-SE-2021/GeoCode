@@ -159,17 +159,6 @@ public class UserApiController implements UserApi {
     }
 
     public ResponseEntity<GetMyLeaderboardsResponse> getMyLeaderboards(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the name, points and ranking for all of the Leaderboards that a User is on", required=true, schema=@Schema()) @Valid @RequestBody GetMyLeaderboardsRequest body) {
-        try{
-            GetMyLeaderboardsResponse response = userService.
 
-            if(response.isSuccess()){
-                return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.OK);
-            }else{
-                return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.BAD_REQUEST);
-            }
-        }catch (NullUserRequestParameterException e){
-            GetCurrentCollectableResponse response = new GetCurrentCollectableResponse(false, e.getMessage(), null);
-            return new ResponseEntity<GetCurrentCollectableResponse>(response, HttpStatus.BAD_REQUEST);
-        }
     }
 }

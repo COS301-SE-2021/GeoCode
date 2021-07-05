@@ -4,9 +4,15 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
+
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.user.model.User;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -16,8 +22,10 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T13:14:20.256Z[GMT]")
 
-
+@Entity
+@Table(name = "point")
 public class Point   {
+  @Id
   @JsonProperty("id")
   private UUID id = null;
 
@@ -25,10 +33,14 @@ public class Point   {
   private Integer amount = null;
 
   @JsonProperty("user")
+  @OneToOne
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private User user = null;
 
-  @JsonProperty("leaderBoard")
-  private Leaderboard leaderoard = null;
+  @JsonProperty("leaderboard")
+  @OneToOne
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private Leaderboard leaderboard = null;
 
   public Point id(UUID id) {
     this.id = id;
@@ -93,24 +105,24 @@ public class Point   {
     this.user = user;
   }
 
-  public Point leaderBoard(Leaderboard leaderBoard) {
-    this.leaderBoard = leaderBoard;
+  public Point leaderboard(Leaderboard leaderboard) {
+    this.leaderboard = leaderboard;
     return this;
   }
 
   /**
-   * Get leaderBoard
-   * @return leaderBoard
+   * Get leaderboard
+   * @return leaderboard
    **/
   @Schema(description = "")
   
     @Valid
     public Leaderboard getLeaderBoard() {
-    return leaderBoard;
+    return leaderboard;
   }
 
-  public void setLeaderBoard(Leaderboard leaderBoard) {
-    this.leaderBoard = leaderBoard;
+  public void setLeaderBoard(Leaderboard leaderboard) {
+    this.leaderboard = leaderboard;
   }
 
 
@@ -126,12 +138,12 @@ public class Point   {
     return Objects.equals(this.id, point.id) &&
         Objects.equals(this.amount, point.amount) &&
         Objects.equals(this.user, point.user) &&
-        Objects.equals(this.leaderBoard, point.leaderBoard);
+        Objects.equals(this.leaderboard, point.leaderboard);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, amount, user, leaderBoard);
+    return Objects.hash(id, amount, user, leaderboard);
   }
 
   @Override
@@ -142,7 +154,7 @@ public class Point   {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("    user: ").append(toIndentedString(user)).append("\n");
-    sb.append("    leaderBoard: ").append(toIndentedString(leaderBoard)).append("\n");
+    sb.append("    leaderboard: ").append(toIndentedString(leaderboard)).append("\n");
     sb.append("}");
     return sb.toString();
   }

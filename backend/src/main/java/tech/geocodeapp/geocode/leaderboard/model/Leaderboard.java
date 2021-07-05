@@ -4,9 +4,14 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
+
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.event.model.Event;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -20,6 +25,7 @@ import javax.validation.constraints.*;
 @Entity
 @Table(name = "leaderboard")
 public class Leaderboard   {
+  @Id
   @JsonProperty("id")
   private UUID id = null;
 
@@ -27,6 +33,8 @@ public class Leaderboard   {
   private String name = null;
 
   @JsonProperty("event")
+  @OneToOne
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Event event = null;
 
   public Leaderboard id(UUID id) {
