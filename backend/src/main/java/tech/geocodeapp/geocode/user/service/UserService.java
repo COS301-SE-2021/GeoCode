@@ -32,6 +32,9 @@ public interface UserService {
     //U1.6 getOwnedGeoCodes
     GetOwnedGeoCodesResponse getOwnedGeoCodes(GetOwnedGeoCodesRequest request) throws NullUserRequestParameterException;
 
+    //U1.7 getMyLeaderboards
+    GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullUserRequestParameterException;
+
     //User helper functions
     User getUserById(UUID id);
     User getCurrentUser();

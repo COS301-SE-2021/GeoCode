@@ -213,6 +213,22 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Gets the Leaderboard details for all Leaderboards that a given User is on
+     * @param request The GetMyLeaderboardsRequest object
+     * @return A GetMyLeaderboardsResponse object: (success, message, object)
+     * @throws NullUserRequestParameterException
+     */
+    public GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullUserRequestParameterException{
+        if (request == null) {
+            return new GetMyLeaderboardsResponse(false, "The GetMyLeaderboardsRequest object passed was NULL", null);
+        }
+
+        if(request.getUserID() == null){
+            throw new NullUserRequestParameterException();
+        }
+    }
+
+    /**
      * Gets the User for the given id if they exist
      * @param id The id for the User
      * @return The User if they exist, else NULL
@@ -259,7 +275,6 @@ public class UserServiceImpl implements UserService {
      * @return The original currentCollectable
      */
     public SwapCollectableResponse swapCollectable( SwapCollectableRequest request ) {
-
         //currentCollectable to swap out
         var currentUser = getCurrentUser();
         var oldCurrentCollectable = currentUser.getCurrentCollectable();
