@@ -145,24 +145,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             qr.append( chars.charAt( (  new SecureRandom() ).nextInt(chars.length() ) ) );
         }
 
-        /* Get the user who is creating the GeoCode */
-        User createdByUser = userService.getCurrentUser();
-
-        /* Validate the user */
-        if ( createdByUser == null ) {
-
-            return new CreateGeoCodeResponse( false );
-        }
-
-        /* Get the Id of the current user */
-        UUID createdBy = createdByUser.getId();
-
-        /* Validate the user is valid and the user id exists */
-        if ( createdBy == null ) {
-
-            return new CreateGeoCodeResponse( false );
-        }
-
         /*
          * Create the GeoCode object
          * and set its attributes to the given attributes in the request
@@ -171,7 +153,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
                                       qr.toString(), request.getLongitude(), request.getLatitude(),
-                                      createdBy );
+                                      UUID.randomUUID() );
 
         /* Save the created GeoCode to the repository */
         geoCodeRepo.save( newGeoCode );
