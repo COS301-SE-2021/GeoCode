@@ -218,7 +218,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     *  Gets the current User using the Keycloak details
+     *  Gets the current User using the Keycloak security context
      * @return The current User
      */
     public User getCurrentUser(){
