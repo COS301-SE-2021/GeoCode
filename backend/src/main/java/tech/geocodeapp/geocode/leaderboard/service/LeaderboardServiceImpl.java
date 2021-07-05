@@ -78,8 +78,6 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         if(request.getLeaderboard() == null){
             throw new NullLeaderboardRequestParameterException();
         }
-
-
     }
 
 }
