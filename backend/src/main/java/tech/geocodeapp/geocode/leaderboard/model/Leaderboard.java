@@ -1,8 +1,7 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.leaderboard.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
@@ -13,7 +12,7 @@ import javax.validation.constraints.*;
  * Leaderboard
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T09:14:58.803Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T13:14:20.256Z[GMT]")
 
 
 public class Leaderboard   {
@@ -23,8 +22,8 @@ public class Leaderboard   {
   @JsonProperty("name")
   private String name = null;
 
-  @JsonProperty("eventID")
-  private UUID eventID = null;
+  @JsonProperty("event")
+  private Event event = null;
 
   public Leaderboard id(UUID id) {
     this.id = id;
@@ -67,25 +66,25 @@ public class Leaderboard   {
     this.name = name;
   }
 
-  public Leaderboard eventID(UUID eventID) {
-    this.eventID = eventID;
+  public Leaderboard event(Event event) {
+    this.event = event;
     return this;
   }
 
   /**
-   * Get eventID
-   * @return eventID
+   * Get event
+   * @return event
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public UUID getEventID() {
-    return eventID;
+    public Event getEvent() {
+    return event;
   }
 
-  public void setEventID(UUID eventID) {
-    this.eventID = eventID;
+  public void setEvent(Event event) {
+    this.event = event;
   }
 
 
@@ -100,12 +99,12 @@ public class Leaderboard   {
     Leaderboard leaderboard = (Leaderboard) o;
     return Objects.equals(this.id, leaderboard.id) &&
         Objects.equals(this.name, leaderboard.name) &&
-        Objects.equals(this.eventID, leaderboard.eventID);
+        Objects.equals(this.event, leaderboard.event);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, eventID);
+    return Objects.hash(id, name, event);
   }
 
   @Override
@@ -115,7 +114,7 @@ public class Leaderboard   {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    eventID: ").append(toIndentedString(eventID)).append("\n");
+    sb.append("    event: ").append(toIndentedString(event)).append("\n");
     sb.append("}");
     return sb.toString();
   }
