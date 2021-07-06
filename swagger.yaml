@@ -958,6 +958,437 @@ paths:
             security:
                 - bearerAuth: []
 
+    /Event/changeAvailability:
+        post:
+            tags:
+                - "Event"
+            summary: "Changes an Event's availability"
+            description: "Changes the specified Event's availability to the given availability"
+            operationId: "changeAvailability"
+            requestBody:
+                required: true
+                description: "Request to update the availability of an Event"
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ChangeAvailabilityRequest'
+                    application/xml:
+                        schema:
+                            $ref: '#/components/schemas/ChangeAvailabilityRequest'
+            responses:
+                '200':
+                    description: "Successfully returned the Event's Leaderboard details"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ChangeAvailabilityResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/ChangeAvailabilityResponse'
+                '404':
+                    description: "Unable to find an Event with the given id"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ChangeAvailabilityResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/ChangeAvailabilityResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+            security:
+                - bearerAuth: []
+
+    /Event/getAllEvents:
+        post:
+            tags:
+                - "Event"
+            summary: "Returns all the Events"
+            description: "Returns all the Events in the system"
+            operationId: "getAllEvents"
+            responses:
+                '200':
+                    description: "Successfully returned the Event's Leaderboard details"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetAllEventsResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/GetAllEventsResponse'
+                '404':
+                    description: "Unable to find any Events"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetAllEventsResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/GetAllEventsResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+            security:
+                - bearerAuth: []
+
+    /Event/createEvent:
+        post:
+            tags:
+                - "Event"
+            summary: "Create a new Event"
+            description: "Create a new Event in the system with the specified attributes"
+            operationId: "createEvent"
+            requestBody:
+                required: true
+                description: "Request to create an Event"
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateEventRequest'
+                    application/xml:
+                        schema:
+                            $ref: '#/components/schemas/CreateEventRequest'
+            responses:
+                '200':
+                    description: "Return the new Event was successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateEventResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/CreateEventResponse'
+                '404':
+                    description: "Return the new Event was not successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateEventResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/CreateEventResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+            security:
+                - bearerAuth: []
+
+    /Event/getEventsByLocation:
+        post:
+            tags:
+                - "Event"
+            summary: "Create a new Event"
+            description: "Create a new Event in the system with the specified attributes"
+            operationId: "getEventsByLocation"
+            requestBody:
+                required: true
+                description: "Request to create an Event"
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetEventsByLocationRequest'
+                    application/xml:
+                        schema:
+                            $ref: '#/components/schemas/GetEventsByLocationRequest'
+            responses:
+                '200':
+                    description: "Return the new Event was successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetEventsByLocationResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/GetEventsByLocationResponse'
+                '404':
+                    description: "Return the new Event was not successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetEventsByLocationResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/GetEventsByLocationResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+            security:
+                - bearerAuth: []
+
+    /Event/createPoint:
+        post:
+            tags:
+                - "Event"
+            summary: "Create a new Event"
+            description: "Create a new Event in the system with the specified attributes"
+            operationId: "createPoint"
+            requestBody:
+                required: true
+                description: "Request to create an Event"
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreatePointRequest'
+                    application/xml:
+                        schema:
+                            $ref: '#/components/schemas/CreatePointRequest'
+            responses:
+                '200':
+                    description: "Return the new Event was successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreatePointResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/CreatePointResponse'
+                '404':
+                    description: "Return the new Event was not successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreatePointResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/CreatePointResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+            security:
+                - bearerAuth: []
+
+    /Event/createTimeTrial:
+        post:
+            tags:
+                - "Event"
+            summary: "Create a new Event"
+            description: "Create a new Event in the system with the specified attributes"
+            operationId: "createTimeTrial"
+            requestBody:
+                required: true
+                description: "Request to create an Event"
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateTimeTrialRequest'
+                    application/xml:
+                        schema:
+                            $ref: '#/components/schemas/CreateTimeTrialRequest'
+            responses:
+                '200':
+                    description: "Return the new Event was successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateTimeTrialResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/CreateTimeTrialResponse'
+                '404':
+                    description: "Return the new Event was not successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateTimeTrialResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/CreateTimeTrialResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+            security:
+                - bearerAuth: []
+
+    /Event/getPointsByUser:
+        post:
+            tags:
+                - "Event"
+            summary: "Create a new Event"
+            description: "Create a new Event in the system with the specified attributes"
+            operationId: "getPointsByUser"
+            requestBody:
+                required: true
+                description: "Request to create an Event"
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetPointsByUserRequest'
+                    application/xml:
+                        schema:
+                            $ref: '#/components/schemas/GetPointsByUserRequest'
+            responses:
+                '200':
+                    description: "Return the new Event was successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetPointsByUserResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/GetPointsByUserResponse'
+                '404':
+                    description: "Return the new Event was not successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetPointsByUserResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/GetPointsByUserResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+            security:
+                - bearerAuth: []
+
+    /Event/getPointsByLeaderBoard:
+        post:
+            tags:
+                - "Event"
+            summary: "Create a new Event"
+            description: "Create a new Event in the system with the specified attributes"
+            operationId: "getPointsByLeaderBoard"
+            requestBody:
+                required: true
+                description: "Request to create an Event"
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetPointsByLeaderBoardRequest'
+                    application/xml:
+                        schema:
+                            $ref: '#/components/schemas/GetPointsByLeaderBoardRequest'
+            responses:
+                '200':
+                    description: "Return the new Event was successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
+                '404':
+                    description: "Return the new Event was not successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+            security:
+                - bearerAuth: []
+
+    /Event/getPoints:
+        post:
+            tags:
+                - "Event"
+            summary: "Create a new Event"
+            description: "Create a new Event in the system with the specified attributes"
+            operationId: "getPoints"
+            responses:
+                '200':
+                    description: "Return the new Event was successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetPointsResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/GetPointsResponse'
+                '404':
+                    description: "Return the new Event was not successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetPointsResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/GetPointsResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+            security:
+                - bearerAuth: []
+
+    /Event/getLeaderBoardByTimeTrial:
+        post:
+            tags:
+                - "Event"
+            summary: "Create a new Event"
+            description: "Create a new Event in the system with the specified attributes"
+            operationId: "getLeaderBoardByTimeTrial"
+            requestBody:
+                required: true
+                description: "Request to create an Event"
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetLeaderBoardByTimeTrialRequest'
+                    application/xml:
+                        schema:
+                            $ref: '#/components/schemas/GetLeaderBoardByTimeTrialRequest'
+            responses:
+                '200':
+                    description: "Return the new Event was successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
+                '404':
+                    description: "Return the new Event was not successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+            security:
+                - bearerAuth: []
+
+    /Event/createLeaderBoard:
+        post:
+            tags:
+                - "Event"
+            summary: "Create a new Event"
+            description: "Create a new Event in the system with the specified attributes"
+            operationId: "createLeaderBoard"
+            requestBody:
+                required: true
+                description: "Request to create an Event"
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateLeaderboardRequest'
+                    application/xml:
+                        schema:
+                            $ref: '#/components/schemas/CreateLeaderboardRequest'
+            responses:
+                '200':
+                    description: "Return the new Event was successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateLeaderboardResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/CreateLeaderboardResponse'
+                '404':
+                    description: "Return the new Event was not successfully created"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateLeaderboardResponse'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/CreateLeaderboardResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+            security:
+                - bearerAuth: []
+
 components:
     responses:
         UnauthorizedError:
@@ -2071,6 +2502,16 @@ components:
             xml:
                 name: "GetEventsByLocationResponse"
 
+        CreatePointRequest:
+            type: "object"
+            required:
+                - amount
+            properties:
+                amount:
+                    type: number
+            xml:
+                name: "CreatePointRequest"
+
         CreatePointResponse:
             type: "object"
             required:
@@ -2182,7 +2623,7 @@ components:
                 leaderboard:
                     type: array
                     items:
-                        $ref: '#/components/schemas/LeaderBoard'
+                        $ref: '#/components/schemas/Leaderboard'
             xml:
                 name: "GetLeaderBoardByTimeTrialResponse"
 
