@@ -1,25 +1,30 @@
 package tech.geocodeapp.geocode.user.response;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
  * GetCurrentCollectableResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-24T10:12:19.520Z[GMT]")
 
 
 public class GetCurrentCollectableResponse   {
+  @JsonProperty("success")
+  private Boolean success = null;
+
+  @JsonProperty("message")
+  private String message = null;
+
   @JsonProperty("collectable")
-  private Collectable collectable;
-  private boolean success;
-  private String message;
+  private Collectable collectable = null;
 
   public GetCurrentCollectableResponse(boolean success, String message, Collectable collectable) {
     this.success = success;
@@ -27,15 +32,40 @@ public class GetCurrentCollectableResponse   {
     this.collectable = collectable;
   }
 
-  public boolean isSuccess() {
+
+  public GetCurrentCollectableResponse success(Boolean success) {
+    this.success = success;
+    return this;
+  }
+
+  /**
+   * Get success
+   * @return success
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    public Boolean isSuccess() {
     return success;
   }
 
-  public void setSuccess(boolean success) {
+  public void setSuccess(Boolean success) {
     this.success = success;
   }
 
-  public String getMessage() {
+  public GetCurrentCollectableResponse message(String message) {
+    this.message = message;
+    return this;
+  }
+
+  /**
+   * Get message
+   * @return message
+   **/
+  @Schema(example = "The user's Collectable was successfully returned", required = true, description = "")
+      @NotNull
+
+    public String getMessage() {
     return message;
   }
 
@@ -52,8 +82,9 @@ public class GetCurrentCollectableResponse   {
    * Get collectable
    * @return collectable
    **/
-  @Schema(description = "")
-  
+  @Schema(required = true, description = "")
+      @NotNull
+
     @Valid
     public Collectable getCollectable() {
     return collectable;
@@ -65,7 +96,7 @@ public class GetCurrentCollectableResponse   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -73,12 +104,14 @@ public class GetCurrentCollectableResponse   {
       return false;
     }
     GetCurrentCollectableResponse getCurrentCollectableResponse = (GetCurrentCollectableResponse) o;
-    return Objects.equals(this.collectable, getCurrentCollectableResponse.collectable);
+    return Objects.equals(this.success, getCurrentCollectableResponse.success) &&
+        Objects.equals(this.message, getCurrentCollectableResponse.message) &&
+        Objects.equals(this.collectable, getCurrentCollectableResponse.collectable);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(collectable);
+    return Objects.hash(success, message, collectable);
   }
 
   @Override
@@ -86,6 +119,8 @@ public class GetCurrentCollectableResponse   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetCurrentCollectableResponse {\n");
     
+    sb.append("    success: ").append(toIndentedString(success)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("    collectable: ").append(toIndentedString(collectable)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -95,7 +130,7 @@ public class GetCurrentCollectableResponse   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

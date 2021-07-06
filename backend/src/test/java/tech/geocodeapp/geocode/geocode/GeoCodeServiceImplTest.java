@@ -6,6 +6,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.service.*;
@@ -14,6 +15,8 @@ import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.collectable.*;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.user.UserMockRepository;
+import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
 
 import java.util.ArrayList;
@@ -95,10 +98,15 @@ class GeoCodeServiceImplTest {
 
             typeMockRepo.save( type );
 
-        /*  */
+        /* Create a new Collectable Service implementation with the relevant repositories */
         collectableService = new CollectableServiceImpl( new CollectableMockRepository(),
                                                          new CollectableSetMockRepository(),
                                                          typeMockRepo );
+
+        /* Create the mock user repo and insert a new user into it */
+        // var userMockRepo = new UserMockRepository();
+        // userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), collectableService);
+
 
         try {
 
@@ -599,7 +607,7 @@ class GeoCodeServiceImplTest {
     void getGeoCodesByQRCodeNullRequestTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> geoCodeService.getGeocodeByQRCode( null ) )
+        assertThatThrownBy( () -> geoCodeService.getGeoCodeByQRCode( null ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqEmptyError );
     }
@@ -620,7 +628,7 @@ class GeoCodeServiceImplTest {
         request.setQrCode( null );
 
         /* Null parameter request check */
-        assertThatThrownBy( () -> geoCodeService.getGeocodeByQRCode( request ) )
+        assertThatThrownBy( () -> geoCodeService.getGeoCodeByQRCode( request ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqParamError );
     }
@@ -645,7 +653,7 @@ class GeoCodeServiceImplTest {
             request.setQrCode( temp.get( 0 ).getQrCode() );
 
             /* Get the response by calling the updateAvailability use case */
-            GetGeoCodeByQRCodeResponse response = geoCodeService.getGeocodeByQRCode( request );
+            GetGeoCodeByQRCodeResponse response = geoCodeService.getGeoCodeByQRCode( request );
 
             /*
              * Check if the GeoCode was created correctly
@@ -722,7 +730,9 @@ class GeoCodeServiceImplTest {
              * through checking the returned hints from a known hint
              */
 
-            //Assertions.assertEquals( "name", response.getCollectables().get( 0 ).getType().getName() );
+            var typeID = response.getCollectables().get( 0 );
+            var name = collectableService.getCollectableTypeByID( new GetCollectableTypeByIDRequest( typeID ) );
+            //Assertions.assertEquals( "name", name.getCollectableType().getName() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */

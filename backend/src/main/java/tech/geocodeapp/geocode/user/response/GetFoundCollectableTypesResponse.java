@@ -7,35 +7,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
-
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * GetFoundGeoCodesResponse
+ * GetFoundCollectableTypesResponse
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-24T10:49:36.244Z[GMT]")
 
 
-public class GetFoundGeoCodesResponse   {
+public class GetFoundCollectableTypesResponse   {
   @JsonProperty("success")
   private Boolean success = null;
 
   @JsonProperty("message")
   private String message = null;
 
-  @JsonProperty("geocodeIDs")
+  @JsonProperty("collectableTypeIDs")
   @Valid
-  private List<UUID> geocodeIDs = new ArrayList<UUID>();
+  private List<UUID> collectableTypeIDs = new ArrayList<UUID>();
 
-  public GetFoundGeoCodesResponse(boolean success, String message, List<UUID> geocodeIDs) {
+  public GetFoundCollectableTypesResponse(boolean success, String message, List<UUID> collectableTypeIDs){
     this.success = success;
     this.message = message;
-    this.geocodeIDs = geocodeIDs;
+    this.collectableTypeIDs = collectableTypeIDs;
   }
 
-  public GetFoundGeoCodesResponse success(Boolean success) {
+  public GetFoundCollectableTypesResponse success(Boolean success) {
     this.success = success;
     return this;
   }
@@ -55,7 +54,7 @@ public class GetFoundGeoCodesResponse   {
     this.success = success;
   }
 
-  public GetFoundGeoCodesResponse message(String message) {
+  public GetFoundCollectableTypesResponse message(String message) {
     this.message = message;
     return this;
   }
@@ -64,7 +63,7 @@ public class GetFoundGeoCodesResponse   {
    * Get message
    * @return message
    **/
-  @Schema(example = "The IDs of the User's found GeoCodes was successfully returned", required = true, description = "")
+  @Schema(example = "The IDs of the User's found CollectableTypes was successfully returned", required = true, description = "")
       @NotNull
 
     public String getMessage() {
@@ -75,29 +74,29 @@ public class GetFoundGeoCodesResponse   {
     this.message = message;
   }
 
-  public GetFoundGeoCodesResponse geocodeIDs(List<UUID> geocodeIDs) {
-    this.geocodeIDs = geocodeIDs;
+  public GetFoundCollectableTypesResponse collectableTypeIDs(List<UUID> collectableTypeIDs) {
+    this.collectableTypeIDs = collectableTypeIDs;
     return this;
   }
 
-  public GetFoundGeoCodesResponse addGeocodeIDsItem(UUID geocodeIDsItem) {
-    this.geocodeIDs.add(geocodeIDsItem);
+  public GetFoundCollectableTypesResponse addCollectableTypeIDsItem(UUID collectableTypeIDsItem) {
+    this.collectableTypeIDs.add(collectableTypeIDsItem);
     return this;
   }
 
   /**
-   * Get geocodeIDs
-   * @return geocodeIDs
+   * Get collectableTypeIDs
+   * @return collectableTypeIDs
    **/
   @Schema(required = true, description = "")
       @NotNull
     @Valid
-    public List<UUID> getGeocodeIDs() {
-    return geocodeIDs;
+    public List<UUID> getCollectableTypeIDs() {
+    return collectableTypeIDs;
   }
 
-  public void setGeocodeIDs(List<UUID> geocodeIDs) {
-    this.geocodeIDs = geocodeIDs;
+  public void setCollectableTypeIDs(List<UUID> collectableTypeIDs) {
+    this.collectableTypeIDs = collectableTypeIDs;
   }
 
 
@@ -109,25 +108,25 @@ public class GetFoundGeoCodesResponse   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetFoundGeoCodesResponse getFoundGeoCodesResponse = (GetFoundGeoCodesResponse) o;
-    return Objects.equals(this.success, getFoundGeoCodesResponse.success) &&
-        Objects.equals(this.message, getFoundGeoCodesResponse.message) &&
-        Objects.equals(this.geocodeIDs, getFoundGeoCodesResponse.geocodeIDs);
+    GetFoundCollectableTypesResponse getFoundCollectableTypesResponse = (GetFoundCollectableTypesResponse) o;
+    return Objects.equals(this.success, getFoundCollectableTypesResponse.success) &&
+        Objects.equals(this.message, getFoundCollectableTypesResponse.message) &&
+        Objects.equals(this.collectableTypeIDs, getFoundCollectableTypesResponse.collectableTypeIDs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(success, message, geocodeIDs);
+    return Objects.hash(success, message, collectableTypeIDs);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetFoundGeoCodesResponse {\n");
+    sb.append("class GetFoundCollectableTypesResponse {\n");
     
     sb.append("    success: ").append(toIndentedString(success)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
-    sb.append("    geocodeIDs: ").append(toIndentedString(geocodeIDs)).append("\n");
+    sb.append("    collectableTypeIDs: ").append(toIndentedString(collectableTypeIDs)).append("\n");
     sb.append("}");
     return sb.toString();
   }
