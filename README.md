@@ -4,16 +4,23 @@
 <h1 align="center" style="color:green; font-size: 300%;" > GeoCode – Virtual Global Treasure Hunt </h1>
 
 <br>
+<div align="center">
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=bugs)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=code_smells)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=ncloc)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=alert_status)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
+
+</div>
+<div align="center">
+
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=security_rating)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=sqale_index)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
+
+</div>
 
 <!---
 
@@ -58,9 +65,13 @@ With the use of GeoCodes as QR codes it also means if someone stumbles upon the 
 
 # GitHub Management
 
+<div align="center">
+
 [![Build Status](https://img.shields.io/github/issues/COS301-SE-2021/GeoCode.svg)](https://github.com/COS301-SE-2021/GeoCode/issues)
 [![Build Status](https://img.shields.io/github/issues-closed/COS301-SE-2021/GeoCode)](https://img.shields.io/github/issues-closed/COS301-SE-2021/GeoCode)
 [![Build Status](https://img.shields.io/github/milestones/open/COS301-SE-2021/GeoCode)](https://img.shields.io/github/milestones/open/COS301-SE-2021/GeoCode)
+
+</div>
 
 <div style="margin-left: 4%">
 
@@ -85,15 +96,15 @@ The following type of branches will be used in the repository:
 
     ExampleSubsystem
 
-    |------ Controller
+    |------ controller
                |------ ExampleSubsystemApi
                |------ ExampleSubsystemApiController
-    |------ Exception
-    |------ Model
-    |------ Repository
-    |------ Request
-    |------ Response
-    |------ Service
+    |------ exception
+    |------ model
+    |------ repository
+    |------ request
+    |------ response
+    |------ service
                |------ ExampleSubsystemService
                |------ ExampleSubsystemServiceImpl
 </div>
@@ -113,8 +124,8 @@ This will be announced after the first stable release of the GeoCode project.
 The following documentation was done in LaTeX and is to document the process followed when designing <br/> and structure of the GeoCode project.
 
 * <a href="https://www.overleaf.com/read/ysgpfdqtrrkw"> GeoCode - SRS Version One </a>
-* <a href="https://www.overleaf.com/read/xtrkrnzbmbny"> GeoCode - SRS Version Three </a>
-* <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> GeoCode - SRS Version Two </a>
+* <a href="https://www.overleaf.com/read/xtrkrnzbmbny"> GeoCode - SRS Version Two </a>
+* <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> GeoCode - SRS Version Three </a>
 
 </div>
 
@@ -169,14 +180,14 @@ The team Peak Performers had the following mentor from <a href="https://5dt.com/
 
 Industry Mentor:
   <pre>
-    <p style="font-size: 150%;" > Kyle Pretorius </p>
+    <p style="font-size: 170%;" > Kyle Pretorius </p>
     - kyle.pretorius@5dt.com
     - <a href="https://www.linkedin.com/in/kyle-pretorius-1880a8160/">LinkedIn Account </a>
   </pre>
 
 University Mentor:
   <pre>
-    <p style="font-size: 150%;" > Andrew Broekman  </p>
+    <p style="font-size: 170%;" > Andrew Broekman  </p>
     - andrew.broekman@up.ac.za
     - <a href="https://www.linkedin.com/in/andrewbroekman/">LinkedIn Account</a>
   </pre>
