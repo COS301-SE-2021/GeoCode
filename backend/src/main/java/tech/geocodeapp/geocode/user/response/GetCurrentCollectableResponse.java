@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import tech.geocodeapp.geocode.collectable.model.Collectable;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -24,7 +23,7 @@ public class GetCurrentCollectableResponse   {
   @JsonProperty("message")
   private String message = null;
 
-  @JsonProperty("Collectable")
+  @JsonProperty("collectable")
   private Collectable collectable = null;
 
   public GetCurrentCollectableResponse(boolean success, String message, Collectable collectable) {
