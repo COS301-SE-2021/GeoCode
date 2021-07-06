@@ -23,7 +23,7 @@ public class GetCurrentCollectableResponse   {
   @JsonProperty("message")
   private String message = null;
 
-  @JsonProperty("Collectable")
+  @JsonProperty("collectable")
   private Collectable collectable = null;
 
   public GetCurrentCollectableResponse(boolean success, String message, Collectable collectable) {

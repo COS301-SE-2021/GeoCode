@@ -51,12 +51,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     /**
      * The number of collectables to make when creating a new GeoCode
      */
-    private final static int numCollectables = 5;
+    private static final int NUM_COLLECTABLES = 5;
 
     /**
      * The length of the qr code for a new GeoCode
      */
-    private final static int qrSize = 8;
+    private static final int QR_SIZE = 8;
 
     /**
      * Constructor
@@ -108,7 +108,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Hold the crated Collectables */
         List< UUID > collectable = new ArrayList<>();
 
-        for ( var x = 0; x < numCollectables; x++ ) {
+        for ( var x = 0; x < NUM_COLLECTABLES; x++ ) {
 
             /* Create the response and give it a Collectable type */
             var collectableRequest = new CreateCollectableRequest();
@@ -134,10 +134,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
         // create StringBuffer size of AlphaNumericString
-        var qr = new StringBuilder( qrSize );
+        var qr = new StringBuilder( QR_SIZE );
 
         /* Generate a random char for the specified size */
-        for ( var i = 0; i < qrSize; i++ ) {
+        for ( var i = 0; i < QR_SIZE; i++ ) {
 
             /* generate a random number between 0 to AlphaNumericString variable length
              * add Character one by one in end of sb */
