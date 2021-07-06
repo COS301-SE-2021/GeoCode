@@ -15,10 +15,8 @@ import java.util.*;
 /**
  * The GeoCode model that will be stored as a table in the db
  */
-@Validated
-//@javax.annotation.Generated( value = "io.swagger.codegen.v3.generators.java.SpringCodegen" )
-
 @Entity
+@Validated
 @Table( name = "geocode" )
 public class GeoCode {
 
@@ -94,6 +92,13 @@ public class GeoCode {
     private String latitude;
 
     /**
+     * The ID of the user whom created the GeoCode
+     */
+    @JsonProperty( "createdBy" )
+    @NotEmpty( message = "GeoCode's createdBy cannot be null." )
+    private UUID createdBy;
+
+    /**
      * Default constructor
      */
     public GeoCode() {
@@ -112,10 +117,11 @@ public class GeoCode {
      * @param qrCode A short unique identifier to find the GeoCode in the system by the user from the real world
      * @param longitude The longitude of the location of the GeoCode in the real world
      * @param latitude The latitude of the location of the GeoCode in the real world
+     * @param createdBy The user's ID who created the GeoCode
      */
     @Valid
     public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints,
-                    Collection< UUID > collectables, String qrCode, String longitude, String latitude ) {
+                    Collection< UUID > collectables, String qrCode, String longitude, String latitude, UUID createdBy ) {
 
         this.id = id;
         this.difficulty = difficulty;
@@ -126,6 +132,7 @@ public class GeoCode {
         this.qrCode = qrCode;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.createdBy = createdBy;
     }
 
     /**
@@ -478,6 +485,41 @@ public class GeoCode {
     }
 
     /**
+     * Sets the createdBy attribute to the specified value
+     *
+     * @param createdBy the unique createdBy to set the GeoCode to
+     *
+     * @return the model after changing the createdBy
+     */
+    @Valid
+    public GeoCode createdBy( UUID createdBy ) {
+
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    /**
+     * Gets the saved id attribute
+     *
+     * @return the stored createdBy attribute
+     */
+    public UUID getCreatedBy() {
+
+        return createdBy;
+    }
+
+    /**
+     * Sets the id attribute to the specified value
+     *
+     * @param createdBy the value the id should be set to
+     */
+    @Valid
+    public void setCreatedBy( UUID createdBy ) {
+
+        this.createdBy = createdBy;
+    }
+
+    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -505,7 +547,8 @@ public class GeoCode {
                 Objects.equals( this.collectables, geoCode.collectables ) &&
                 Objects.equals( this.qrCode, geoCode.qrCode ) &&
                 Objects.equals( this.longitude, geoCode.longitude ) &&
-                Objects.equals( this.latitude, geoCode.latitude );
+                Objects.equals( this.latitude, geoCode.latitude ) &&
+                Objects.equals( this.createdBy, geoCode.createdBy );
     }
 
     /**
@@ -516,7 +559,7 @@ public class GeoCode {
     @Override
     public int hashCode() {
 
-        return Objects.hash( id, difficulty, available, description, hints, collectables, qrCode, longitude, latitude );
+        return Objects.hash( id, difficulty, available, description, hints, collectables, qrCode, longitude, latitude, createdBy );
     }
 
     /**
@@ -537,6 +580,7 @@ public class GeoCode {
                 "    qrCode: " + toIndentedString( qrCode ) + "\n" +
                 "    longitude: " + toIndentedString( longitude ) + "\n" +
                 "    latitude: " + toIndentedString( latitude ) + "\n" +
+                "    createdBy: " + toIndentedString( createdBy ) + "\n" +
                 "}";
     }
 

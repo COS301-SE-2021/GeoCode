@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
  * GetFoundGeoCodesRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-24T10:49:36.244Z[GMT]")
 
 
 public class GetFoundGeoCodesRequest   {

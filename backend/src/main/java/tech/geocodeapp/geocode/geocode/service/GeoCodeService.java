@@ -39,7 +39,7 @@ public interface GeoCodeService {
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    GetCollectablesResponse getCollectables(GetCollectablesRequest request ) throws InvalidRequestException;
+    GetCollectablesResponse getCollectables( GetCollectablesRequest request ) throws InvalidRequestException;
 
     /**
      * Get all the GeoCodes with a certain level of difficulty
@@ -72,7 +72,7 @@ public interface GeoCodeService {
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException;
+    GetGeoCodeByQRCodeResponse getGeoCodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException;
 
     /**
      * Finds the stored GeoCode associated at the given Location

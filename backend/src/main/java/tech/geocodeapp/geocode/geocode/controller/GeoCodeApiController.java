@@ -54,7 +54,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
     public ResponseEntity< GetGeoCodeByQRCodeResponse > getGeoCodeByQRCode( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's associated with the given QR Code", required = true, schema = @Schema() ) @Valid @RequestBody GetGeoCodeByQRCodeRequest body ) throws InvalidRequestException {
 
-        GetGeoCodeByQRCodeResponse response = geoCodeService.getGeocodeByQRCode( body );
+        GetGeoCodeByQRCodeResponse response = geoCodeService.getGeoCodeByQRCode( body );
 
         if ( response.getId() != null ) {
 
