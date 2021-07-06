@@ -142,7 +142,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>tech.geocodeapp.geocode.GeocodeApplication</mainClass>
+					<mainClass>tech.geocodeapp.geocode.GeoCodeApplication</mainClass>
 				</configuration>
 			</plugin>
 			<plugin>

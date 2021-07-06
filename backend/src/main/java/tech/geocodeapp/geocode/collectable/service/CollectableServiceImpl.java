@@ -159,6 +159,46 @@ public class CollectableServiceImpl implements CollectableService {
     }
 
     @Transactional
+    public GetCollectableByIDResponse getCollectableByID( GetCollectableByIDRequest request ) {
+
+        /* Find all the collectables stored in the system */
+        List< Collectable > collectables = collectableRepo.findAll();
+
+        /* Search for collectable with the specified ID */
+        Collectable hold = null;
+        for ( Collectable collectable : collectables ) {
+
+            /* Determine if the current collectable is the correct one */
+            if ( collectable.getId().equals( request.getCollectableID() ) ) {
+
+                hold = collectable;
+            }
+        }
+
+        return new GetCollectableByIDResponse( hold );
+    }
+
+    @Transactional
+    public GetCollectableTypeByIDResponse getCollectableTypeByID( GetCollectableTypeByIDRequest request ) {
+
+        /* Find all the collectableTypes stored in the system */
+        List<CollectableType> collectableTypes = new ArrayList<>(collectableTypeRepo.findAll());
+
+        /* Search for collectable with the specified ID */
+        CollectableType hold = null;
+        for ( CollectableType type : collectableTypes ) {
+
+            /* Determine if the current collectable is the correct one */
+            if ( type.getId().equals( request.getCollectableTypeID() ) ) {
+
+                hold = type;
+            }
+        }
+
+        return new GetCollectableTypeByIDResponse( hold );
+    }
+
+    @Transactional
     public void deleteCollectables() {
         collectableRepo.deleteAll();
     }
