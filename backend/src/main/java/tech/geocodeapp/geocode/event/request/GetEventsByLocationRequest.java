@@ -13,9 +13,6 @@ import javax.validation.constraints.*;
  * GetEventsByLocationRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class GetEventsByLocationRequest {
 
     @JsonProperty( "location" )
@@ -71,12 +68,9 @@ public class GetEventsByLocationRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetEventsByLocationRequest {\n" );
-
-        sb.append( "    location: " ).append( toIndentedString( location ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetEventsByLocationRequest {\n" +
+                "    location: " + toIndentedString( location ) + "\n" +
+                "}";
     }
 
     /**

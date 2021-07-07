@@ -12,9 +12,6 @@ import javax.validation.constraints.*;
  * CreatePointRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class CreatePointRequest {
 
     @JsonProperty( "amount" )
@@ -70,12 +67,9 @@ public class CreatePointRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class CreatePointRequest {\n" );
-
-        sb.append( "    amount: " ).append( toIndentedString( amount ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class CreatePointRequest {\n" +
+                "    amount: " + toIndentedString( amount ) + "\n" +
+                "}";
     }
 
     /**

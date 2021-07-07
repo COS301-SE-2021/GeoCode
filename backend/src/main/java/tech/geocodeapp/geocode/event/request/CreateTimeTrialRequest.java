@@ -12,9 +12,6 @@ import javax.validation.constraints.*;
  * CreateTimeTrialRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class CreateTimeTrialRequest {
 
     @JsonProperty( "timeLimit" )
@@ -70,12 +67,9 @@ public class CreateTimeTrialRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateTimeTrialRequest {\n" );
-
-        sb.append( "    timeLimit: " ).append( toIndentedString( timeLimit ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class CreateTimeTrialRequest {\n" +
+                "    timeLimit: " + toIndentedString( timeLimit ) + "\n" +
+                "}";
     }
 
     /**

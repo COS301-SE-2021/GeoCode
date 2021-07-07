@@ -12,9 +12,6 @@ import javax.validation.constraints.*;
  * GetPointsByLeaderBoardRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class GetPointsByLeaderBoardRequest {
 
     @JsonProperty( "leaderboardID" )
@@ -70,12 +67,9 @@ public class GetPointsByLeaderBoardRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetPointsByLeaderBoardRequest {\n" );
-
-        sb.append( "    leaderboardID: " ).append( toIndentedString( leaderboardID ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetPointsByLeaderBoardRequest {\n" +
+                "    leaderboardID: " + toIndentedString( leaderboardID ) + "\n" +
+                "}";
     }
 
     /**

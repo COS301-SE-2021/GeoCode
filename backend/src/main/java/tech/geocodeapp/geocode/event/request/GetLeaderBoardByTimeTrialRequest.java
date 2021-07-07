@@ -12,9 +12,6 @@ import javax.validation.constraints.*;
  * GetLeaderBoardByTimeTrialRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class GetLeaderBoardByTimeTrialRequest {
 
     @JsonProperty( "timeTrialID" )
@@ -70,12 +67,9 @@ public class GetLeaderBoardByTimeTrialRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetLeaderBoardByTimeTrialRequest {\n" );
-
-        sb.append( "    timeTrialID: " ).append( toIndentedString( timeTrialID ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetLeaderBoardByTimeTrialRequest {\n" +
+                "    timeTrialID: " + toIndentedString( timeTrialID ) + "\n" +
+                "}";
     }
 
     /**

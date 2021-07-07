@@ -15,9 +15,6 @@ import javax.validation.constraints.*;
  * CreateEventRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class CreateEventRequest {
 
     @JsonProperty( "id" )
@@ -187,16 +184,13 @@ public class CreateEventRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateEventRequest {\n" );
-
-        sb.append( "    id: " ).append( toIndentedString( id ) ).append( "\n" );
-        sb.append( "    name: " ).append( toIndentedString( name ) ).append( "\n" );
-        sb.append( "    description: " ).append( toIndentedString( description ) ).append( "\n" );
-        sb.append( "    location: " ).append( toIndentedString( location ) ).append( "\n" );
-        sb.append( "    leaderboard: " ).append( toIndentedString( leaderboard ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class CreateEventRequest {\n" +
+                "    id: " + toIndentedString( id ) + "\n" +
+                "    name: " + toIndentedString( name ) + "\n" +
+                "    description: " + toIndentedString( description ) + "\n" +
+                "    location: " + toIndentedString( location ) + "\n" +
+                "    leaderboard: " + toIndentedString( leaderboard ) + "\n" +
+                "}";
     }
 
     /**

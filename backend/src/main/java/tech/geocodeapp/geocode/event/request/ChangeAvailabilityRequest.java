@@ -12,9 +12,6 @@ import javax.validation.constraints.*;
  * ChangeAvailabilityRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class ChangeAvailabilityRequest {
 
     @JsonProperty( "eventID" )
@@ -98,13 +95,10 @@ public class ChangeAvailabilityRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class ChangeAvailabilityRequest {\n" );
-
-        sb.append( "    eventID: " ).append( toIndentedString( eventID ) ).append( "\n" );
-        sb.append( "    availability: " ).append( toIndentedString( availability ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class ChangeAvailabilityRequest {\n" +
+                "    eventID: " + toIndentedString( eventID ) + "\n" +
+                "    availability: " + toIndentedString( availability ) + "\n" +
+                "}";
     }
 
     /**

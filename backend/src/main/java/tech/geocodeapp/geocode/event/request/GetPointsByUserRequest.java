@@ -12,9 +12,6 @@ import javax.validation.constraints.*;
  * GetPointsByUserRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class GetPointsByUserRequest {
 
     @JsonProperty( "userID" )
@@ -70,12 +67,9 @@ public class GetPointsByUserRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetPointsByUserRequest {\n" );
-
-        sb.append( "    userID: " ).append( toIndentedString( userID ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetPointsByUserRequest {\n" +
+                "    userID: " + toIndentedString( userID ) + "\n" +
+                "}";
     }
 
     /**

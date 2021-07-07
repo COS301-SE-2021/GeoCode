@@ -10,9 +10,6 @@ import javax.validation.constraints.*;
  * CreateLeaderboardRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class CreateLeaderboardRequest {
 
     @JsonProperty( "name" )
@@ -67,12 +64,9 @@ public class CreateLeaderboardRequest {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateLeaderboardRequest {\n" );
-
-        sb.append( "    name: " ).append( toIndentedString( name ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class CreateLeaderboardRequest {\n" +
+                "    name: " + toIndentedString( name ) + "\n" +
+                "}";
     }
 
     /**
