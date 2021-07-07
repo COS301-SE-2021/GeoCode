@@ -977,7 +977,7 @@ paths:
                             $ref: '#/components/schemas/ChangeAvailabilityRequest'
             responses:
                 '200':
-                    description: "Successfully returned the Event's Leaderboard details"
+                    description: "Returns the update of the availability is successfully"
                     content:
                         application/json:
                             schema:
@@ -1008,7 +1008,7 @@ paths:
             operationId: "getAllEvents"
             responses:
                 '200':
-                    description: "Successfully returned the Event's Leaderboard details"
+                    description: "Successfully returned all the Event's"
                     content:
                         application/json:
                             schema:
@@ -1075,12 +1075,12 @@ paths:
         post:
             tags:
                 - "Event"
-            summary: "Create a new Event"
-            description: "Create a new Event in the system with the specified attributes"
+            summary: "Get an Event by its location"
+            description: "Get an Event by its location from the given co-ordinates"
             operationId: "getEventsByLocation"
             requestBody:
                 required: true
-                description: "Request to create an Event"
+                description: "Request to get an Event by its location"
                 content:
                     application/json:
                         schema:
@@ -1090,7 +1090,7 @@ paths:
                             $ref: '#/components/schemas/GetEventsByLocationRequest'
             responses:
                 '200':
-                    description: "Return the new Event was successfully created"
+                    description: "Return the found Event"
                     content:
                         application/json:
                             schema:
@@ -1099,7 +1099,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/GetEventsByLocationResponse'
                 '404':
-                    description: "Return the new Event was not successfully created"
+                    description: "Return the new Event was not found"
                     content:
                         application/json:
                             schema:
@@ -1116,12 +1116,12 @@ paths:
         post:
             tags:
                 - "Event"
-            summary: "Create a new Event"
-            description: "Create a new Event in the system with the specified attributes"
+            summary: "Create a new Point for an Event"
+            description: "Create a new Point with specific values for an Event"
             operationId: "createPoint"
             requestBody:
                 required: true
-                description: "Request to create an Event"
+                description: "Request to create a new Point for an Event"
                 content:
                     application/json:
                         schema:
@@ -1131,7 +1131,7 @@ paths:
                             $ref: '#/components/schemas/CreatePointRequest'
             responses:
                 '200':
-                    description: "Return the new Event was successfully created"
+                    description: "Return the new new Point for the Event was successfully created"
                     content:
                         application/json:
                             schema:
@@ -1140,7 +1140,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/CreatePointResponse'
                 '404':
-                    description: "Return the new Event was not successfully created"
+                    description: "Return the new new Point for the Event was not successfully created"
                     content:
                         application/json:
                             schema:
@@ -1157,12 +1157,12 @@ paths:
         post:
             tags:
                 - "Event"
-            summary: "Create a new Event"
-            description: "Create a new Event in the system with the specified attributes"
+            summary: "Create a new Time Trial for an Event"
+            description: "Create a new Time Trial with a specific timeframe for an Event"
             operationId: "createTimeTrial"
             requestBody:
                 required: true
-                description: "Request to create an Event"
+                description: "Request to create a new Time Trial for an Event"
                 content:
                     application/json:
                         schema:
@@ -1172,7 +1172,7 @@ paths:
                             $ref: '#/components/schemas/CreateTimeTrialRequest'
             responses:
                 '200':
-                    description: "Return the new Event was successfully created"
+                    description: "Return the Time Trial for the Event was successfully created"
                     content:
                         application/json:
                             schema:
@@ -1181,7 +1181,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/CreateTimeTrialResponse'
                 '404':
-                    description: "Return the new Event was not successfully created"
+                    description: "Return the Time Trial for the Event was not successfully created"
                     content:
                         application/json:
                             schema:
@@ -1198,12 +1198,12 @@ paths:
         post:
             tags:
                 - "Event"
-            summary: "Create a new Event"
-            description: "Create a new Event in the system with the specified attributes"
+            summary: "Get the points for the specified Event"
+            description: "Get the points for the specified Event"
             operationId: "getPointsByUser"
             requestBody:
                 required: true
-                description: "Request to create an Event"
+                description: "Request to get the Points for an Event"
                 content:
                     application/json:
                         schema:
@@ -1213,7 +1213,7 @@ paths:
                             $ref: '#/components/schemas/GetPointsByUserRequest'
             responses:
                 '200':
-                    description: "Return the new Event was successfully created"
+                    description: "Return the Points for an Event successfully"
                     content:
                         application/json:
                             schema:
@@ -1222,7 +1222,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/GetPointsByUserResponse'
                 '404':
-                    description: "Return the new Event was not successfully created"
+                    description: "Return the Points for an Event could not be returned"
                     content:
                         application/json:
                             schema:
@@ -1239,12 +1239,12 @@ paths:
         post:
             tags:
                 - "Event"
-            summary: "Create a new Event"
-            description: "Create a new Event in the system with the specified attributes"
+            summary: "Get Points for a Leaderboard for an Event"
+            description: "Get Points for a Leaderboard for an Event"
             operationId: "getPointsByLeaderBoard"
             requestBody:
                 required: true
-                description: "Request to create an Event"
+                description: "Request to get Points for a Leaderboard of the specified Event"
                 content:
                     application/json:
                         schema:
@@ -1254,7 +1254,7 @@ paths:
                             $ref: '#/components/schemas/GetPointsByLeaderBoardRequest'
             responses:
                 '200':
-                    description: "Return the new Event was successfully created"
+                    description: "Return the Points of a Leaderboard within an Event successfully"
                     content:
                         application/json:
                             schema:
@@ -1263,7 +1263,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
                 '404':
-                    description: "Return the new Event was not successfully created"
+                    description: "Return the Points for a Leaderboard in an Event was not successfully found"
                     content:
                         application/json:
                             schema:
@@ -1280,12 +1280,12 @@ paths:
         post:
             tags:
                 - "Event"
-            summary: "Create a new Event"
-            description: "Create a new Event in the system with the specified attributes"
+            summary: "Get the Points for an Event"
+            description: "Get the Points for an Event"
             operationId: "getPoints"
             responses:
                 '200':
-                    description: "Return the new Event was successfully created"
+                    description: "Return the Points for an Event"
                     content:
                         application/json:
                             schema:
@@ -1294,7 +1294,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/GetPointsResponse'
                 '404':
-                    description: "Return the new Event was not successfully created"
+                    description: "Return that the Points for an Event could not be found"
                     content:
                         application/json:
                             schema:
@@ -1311,12 +1311,12 @@ paths:
         post:
             tags:
                 - "Event"
-            summary: "Create a new Event"
-            description: "Create a new Event in the system with the specified attributes"
+            summary: "Get the Leaderboard for a TimeTrial"
+            description: "Get the Leaderboard for a TimeTrial"
             operationId: "getLeaderBoardByTimeTrial"
             requestBody:
                 required: true
-                description: "Request to create an Event"
+                description: "Request to get the Leaderboard for a TimeTrial"
                 content:
                     application/json:
                         schema:
@@ -1326,7 +1326,7 @@ paths:
                             $ref: '#/components/schemas/GetLeaderBoardByTimeTrialRequest'
             responses:
                 '200':
-                    description: "Return the new Event was successfully created"
+                    description: "Successfully return the Leaderboard"
                     content:
                         application/json:
                             schema:
@@ -1335,7 +1335,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
                 '404':
-                    description: "Return the new Event was not successfully created"
+                    description: "Return the Leaderboard was not successfully found"
                     content:
                         application/json:
                             schema:
@@ -1352,12 +1352,12 @@ paths:
         post:
             tags:
                 - "Event"
-            summary: "Create a new Event"
-            description: "Create a new Event in the system with the specified attributes"
+            summary: "Create a new Leaderboard for an Event"
+            description: "Create a new Leaderboard for an Event"
             operationId: "createLeaderBoard"
             requestBody:
                 required: true
-                description: "Request to create an Event"
+                description: "Request to create a new Leaderboard for an Event"
                 content:
                     application/json:
                         schema:
@@ -1367,7 +1367,7 @@ paths:
                             $ref: '#/components/schemas/CreateLeaderboardRequest'
             responses:
                 '200':
-                    description: "Return the new Event was successfully created"
+                    description: "Return the Leaderboard was successfully created"
                     content:
                         application/json:
                             schema:
@@ -1376,7 +1376,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/CreateLeaderboardResponse'
                 '404':
-                    description: "Return the new Event was not successfully created"
+                    description: "Return the Leaderboard was not successfully created"
                     content:
                         application/json:
                             schema:
