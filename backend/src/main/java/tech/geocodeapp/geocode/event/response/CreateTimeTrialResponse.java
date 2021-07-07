@@ -3,43 +3,55 @@ package tech.geocodeapp.geocode.event.response;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.event.model.TimeTrial;
+
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateEventResponse
+ * CreateTimeTrialResponse
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 
 
-public class CreateEventResponse {
+public class CreateTimeTrialResponse {
 
-    @JsonProperty( "success" )
-    private Boolean success = null;
+    @JsonProperty( "timeTrial" )
+    @Valid
+    private List< TimeTrial > timeTrial = new ArrayList< TimeTrial >();
 
-    public CreateEventResponse success( Boolean success ) {
+    public CreateTimeTrialResponse timeTrial( List< TimeTrial > timeTrial ) {
 
-        this.success = success;
+        this.timeTrial = timeTrial;
+        return this;
+    }
+
+    public CreateTimeTrialResponse addTimeTrialItem( TimeTrial timeTrialItem ) {
+
+        this.timeTrial.add( timeTrialItem );
         return this;
     }
 
     /**
-     * Get success
+     * Get timeTrial
      *
-     * @return success
+     * @return timeTrial
      **/
     @Schema( required = true, description = "" )
     @NotNull
+    @Valid
+    public List< TimeTrial > getTimeTrial() {
 
-    public Boolean isSuccess() {
-
-        return success;
+        return timeTrial;
     }
 
-    public void setSuccess( Boolean success ) {
+    public void setTimeTrial( List< TimeTrial > timeTrial ) {
 
-        this.success = success;
+        this.timeTrial = timeTrial;
     }
 
 
@@ -54,23 +66,23 @@ public class CreateEventResponse {
 
             return false;
         }
-        CreateEventResponse createEventResponse = ( CreateEventResponse ) o;
-        return Objects.equals( this.success, createEventResponse.success );
+        CreateTimeTrialResponse createTimeTrialResponse = ( CreateTimeTrialResponse ) o;
+        return Objects.equals( this.timeTrial, createTimeTrialResponse.timeTrial );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( timeTrial );
     }
 
     @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateEventResponse {\n" );
+        sb.append( "class CreateTimeTrialResponse {\n" );
 
-        sb.append( "    success: " ).append( toIndentedString( success ) ).append( "\n" );
+        sb.append( "    timeTrial: " ).append( toIndentedString( timeTrial ) ).append( "\n" );
         sb.append( "}" );
         return sb.toString();
     }

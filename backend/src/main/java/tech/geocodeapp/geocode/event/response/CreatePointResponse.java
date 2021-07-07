@@ -3,43 +3,55 @@ package tech.geocodeapp.geocode.event.response;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
+
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateEventResponse
+ * CreatePointResponse
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 
 
-public class CreateEventResponse {
+public class CreatePointResponse {
 
-    @JsonProperty( "success" )
-    private Boolean success = null;
+    @JsonProperty( "points" )
+    @Valid
+    private List< Point > points = new ArrayList< Point >();
 
-    public CreateEventResponse success( Boolean success ) {
+    public CreatePointResponse points( List< Point > points ) {
 
-        this.success = success;
+        this.points = points;
+        return this;
+    }
+
+    public CreatePointResponse addPointsItem( Point pointsItem ) {
+
+        this.points.add( pointsItem );
         return this;
     }
 
     /**
-     * Get success
+     * Get points
      *
-     * @return success
+     * @return points
      **/
     @Schema( required = true, description = "" )
     @NotNull
+    @Valid
+    public List< Point > getPoints() {
 
-    public Boolean isSuccess() {
-
-        return success;
+        return points;
     }
 
-    public void setSuccess( Boolean success ) {
+    public void setPoints( List< Point > points ) {
 
-        this.success = success;
+        this.points = points;
     }
 
 
@@ -54,23 +66,23 @@ public class CreateEventResponse {
 
             return false;
         }
-        CreateEventResponse createEventResponse = ( CreateEventResponse ) o;
-        return Objects.equals( this.success, createEventResponse.success );
+        CreatePointResponse createPointResponse = ( CreatePointResponse ) o;
+        return Objects.equals( this.points, createPointResponse.points );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( points );
     }
 
     @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateEventResponse {\n" );
+        sb.append( "class CreatePointResponse {\n" );
 
-        sb.append( "    success: " ).append( toIndentedString( success ) ).append( "\n" );
+        sb.append( "    points: " ).append( toIndentedString( points ) ).append( "\n" );
         sb.append( "}" );
         return sb.toString();
     }

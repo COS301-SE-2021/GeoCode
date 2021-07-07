@@ -1,45 +1,48 @@
-package tech.geocodeapp.geocode.event.response;
+package tech.geocodeapp.geocode.event.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateEventResponse
+ * TimeTrial
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 
 
-public class CreateEventResponse {
+public class TimeTrial {
 
-    @JsonProperty( "success" )
-    private Boolean success = null;
+    @JsonProperty( "timeLimit" )
+    private BigDecimal timeLimit = null;
 
-    public CreateEventResponse success( Boolean success ) {
+    public TimeTrial timeLimit( BigDecimal timeLimit ) {
 
-        this.success = success;
+        this.timeLimit = timeLimit;
         return this;
     }
 
     /**
-     * Get success
+     * Get timeLimit
      *
-     * @return success
+     * @return timeLimit
      **/
     @Schema( required = true, description = "" )
     @NotNull
 
-    public Boolean isSuccess() {
+    @Valid
+    public BigDecimal getTimeLimit() {
 
-        return success;
+        return timeLimit;
     }
 
-    public void setSuccess( Boolean success ) {
+    public void setTimeLimit( BigDecimal timeLimit ) {
 
-        this.success = success;
+        this.timeLimit = timeLimit;
     }
 
 
@@ -54,23 +57,23 @@ public class CreateEventResponse {
 
             return false;
         }
-        CreateEventResponse createEventResponse = ( CreateEventResponse ) o;
-        return Objects.equals( this.success, createEventResponse.success );
+        TimeTrial timeTrial = ( TimeTrial ) o;
+        return Objects.equals( this.timeLimit, timeTrial.timeLimit );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( timeLimit );
     }
 
     @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateEventResponse {\n" );
+        sb.append( "class TimeTrial {\n" );
 
-        sb.append( "    success: " ).append( toIndentedString( success ) ).append( "\n" );
+        sb.append( "    timeLimit: " ).append( toIndentedString( timeLimit ) ).append( "\n" );
         sb.append( "}" );
         return sb.toString();
     }

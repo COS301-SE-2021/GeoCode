@@ -7,18 +7,18 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.*;
 
 /**
- * CreateEventResponse
+ * CreateLeaderboardResponse
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 
 
-public class CreateEventResponse {
+public class CreateLeaderboardResponse {
 
     @JsonProperty( "success" )
     private Boolean success = null;
 
-    public CreateEventResponse success( Boolean success ) {
+    public CreateLeaderboardResponse success( Boolean success ) {
 
         this.success = success;
         return this;
@@ -54,8 +54,8 @@ public class CreateEventResponse {
 
             return false;
         }
-        CreateEventResponse createEventResponse = ( CreateEventResponse ) o;
-        return Objects.equals( this.success, createEventResponse.success );
+        CreateLeaderboardResponse createLeaderboardResponse = ( CreateLeaderboardResponse ) o;
+        return Objects.equals( this.success, createLeaderboardResponse.success );
     }
 
     @Override
@@ -68,7 +68,7 @@ public class CreateEventResponse {
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateEventResponse {\n" );
+        sb.append( "class CreateLeaderboardResponse {\n" );
 
         sb.append( "    success: " ).append( toIndentedString( success ) ).append( "\n" );
         sb.append( "}" );

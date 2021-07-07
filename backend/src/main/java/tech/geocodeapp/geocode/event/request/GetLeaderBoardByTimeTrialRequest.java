@@ -1,45 +1,48 @@
-package tech.geocodeapp.geocode.event.response;
+package tech.geocodeapp.geocode.event.request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateEventResponse
+ * GetLeaderBoardByTimeTrialRequest
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 
 
-public class CreateEventResponse {
+public class GetLeaderBoardByTimeTrialRequest {
 
-    @JsonProperty( "success" )
-    private Boolean success = null;
+    @JsonProperty( "timeTrialID" )
+    private UUID timeTrialID = null;
 
-    public CreateEventResponse success( Boolean success ) {
+    public GetLeaderBoardByTimeTrialRequest timeTrialID( UUID timeTrialID ) {
 
-        this.success = success;
+        this.timeTrialID = timeTrialID;
         return this;
     }
 
     /**
-     * Get success
+     * Get timeTrialID
      *
-     * @return success
+     * @return timeTrialID
      **/
     @Schema( required = true, description = "" )
     @NotNull
 
-    public Boolean isSuccess() {
+    @Valid
+    public UUID getTimeTrialID() {
 
-        return success;
+        return timeTrialID;
     }
 
-    public void setSuccess( Boolean success ) {
+    public void setTimeTrialID( UUID timeTrialID ) {
 
-        this.success = success;
+        this.timeTrialID = timeTrialID;
     }
 
 
@@ -54,23 +57,23 @@ public class CreateEventResponse {
 
             return false;
         }
-        CreateEventResponse createEventResponse = ( CreateEventResponse ) o;
-        return Objects.equals( this.success, createEventResponse.success );
+        GetLeaderBoardByTimeTrialRequest getLeaderBoardByTimeTrialRequest = ( GetLeaderBoardByTimeTrialRequest ) o;
+        return Objects.equals( this.timeTrialID, getLeaderBoardByTimeTrialRequest.timeTrialID );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( timeTrialID );
     }
 
     @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateEventResponse {\n" );
+        sb.append( "class GetLeaderBoardByTimeTrialRequest {\n" );
 
-        sb.append( "    success: " ).append( toIndentedString( success ) ).append( "\n" );
+        sb.append( "    timeTrialID: " ).append( toIndentedString( timeTrialID ) ).append( "\n" );
         sb.append( "}" );
         return sb.toString();
     }

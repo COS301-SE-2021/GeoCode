@@ -1,45 +1,49 @@
-package tech.geocodeapp.geocode.event.response;
+package tech.geocodeapp.geocode.event.request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateEventResponse
+ * GetEventsByLocationRequest
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 
 
-public class CreateEventResponse {
+public class GetEventsByLocationRequest {
 
-    @JsonProperty( "success" )
-    private Boolean success = null;
+    @JsonProperty( "location" )
+    private GeoPoint location = null;
 
-    public CreateEventResponse success( Boolean success ) {
+    public GetEventsByLocationRequest location( GeoPoint location ) {
 
-        this.success = success;
+        this.location = location;
         return this;
     }
 
     /**
-     * Get success
+     * Get location
      *
-     * @return success
+     * @return location
      **/
     @Schema( required = true, description = "" )
     @NotNull
 
-    public Boolean isSuccess() {
+    @Valid
+    public GeoPoint getLocation() {
 
-        return success;
+        return location;
     }
 
-    public void setSuccess( Boolean success ) {
+    public void setLocation( GeoPoint location ) {
 
-        this.success = success;
+        this.location = location;
     }
 
 
@@ -54,23 +58,23 @@ public class CreateEventResponse {
 
             return false;
         }
-        CreateEventResponse createEventResponse = ( CreateEventResponse ) o;
-        return Objects.equals( this.success, createEventResponse.success );
+        GetEventsByLocationRequest getEventsByLocationRequest = ( GetEventsByLocationRequest ) o;
+        return Objects.equals( this.location, getEventsByLocationRequest.location );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( location );
     }
 
     @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateEventResponse {\n" );
+        sb.append( "class GetEventsByLocationRequest {\n" );
 
-        sb.append( "    success: " ).append( toIndentedString( success ) ).append( "\n" );
+        sb.append( "    location: " ).append( toIndentedString( location ) ).append( "\n" );
         sb.append( "}" );
         return sb.toString();
     }

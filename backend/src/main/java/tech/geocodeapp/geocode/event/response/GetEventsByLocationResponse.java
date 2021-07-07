@@ -3,43 +3,55 @@ package tech.geocodeapp.geocode.event.response;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.event.model.Event;
+
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateEventResponse
+ * GetEventsByLocationResponse
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 
 
-public class CreateEventResponse {
+public class GetEventsByLocationResponse {
 
-    @JsonProperty( "success" )
-    private Boolean success = null;
+    @JsonProperty( "events" )
+    @Valid
+    private List< Event > events = new ArrayList< Event >();
 
-    public CreateEventResponse success( Boolean success ) {
+    public GetEventsByLocationResponse events( List< Event > events ) {
 
-        this.success = success;
+        this.events = events;
+        return this;
+    }
+
+    public GetEventsByLocationResponse addEventsItem( Event eventsItem ) {
+
+        this.events.add( eventsItem );
         return this;
     }
 
     /**
-     * Get success
+     * Get events
      *
-     * @return success
+     * @return events
      **/
     @Schema( required = true, description = "" )
     @NotNull
+    @Valid
+    public List< Event > getEvents() {
 
-    public Boolean isSuccess() {
-
-        return success;
+        return events;
     }
 
-    public void setSuccess( Boolean success ) {
+    public void setEvents( List< Event > events ) {
 
-        this.success = success;
+        this.events = events;
     }
 
 
@@ -54,23 +66,23 @@ public class CreateEventResponse {
 
             return false;
         }
-        CreateEventResponse createEventResponse = ( CreateEventResponse ) o;
-        return Objects.equals( this.success, createEventResponse.success );
+        GetEventsByLocationResponse getEventsByLocationResponse = ( GetEventsByLocationResponse ) o;
+        return Objects.equals( this.events, getEventsByLocationResponse.events );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( events );
     }
 
     @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateEventResponse {\n" );
+        sb.append( "class GetEventsByLocationResponse {\n" );
 
-        sb.append( "    success: " ).append( toIndentedString( success ) ).append( "\n" );
+        sb.append( "    events: " ).append( toIndentedString( events ) ).append( "\n" );
         sb.append( "}" );
         return sb.toString();
     }

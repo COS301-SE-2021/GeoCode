@@ -1,45 +1,48 @@
-package tech.geocodeapp.geocode.event.response;
+package tech.geocodeapp.geocode.event.request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateEventResponse
+ * GetPointsByUserRequest
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 
 
-public class CreateEventResponse {
+public class GetPointsByUserRequest {
 
-    @JsonProperty( "success" )
-    private Boolean success = null;
+    @JsonProperty( "userID" )
+    private UUID userID = null;
 
-    public CreateEventResponse success( Boolean success ) {
+    public GetPointsByUserRequest userID( UUID userID ) {
 
-        this.success = success;
+        this.userID = userID;
         return this;
     }
 
     /**
-     * Get success
+     * Get userID
      *
-     * @return success
+     * @return userID
      **/
     @Schema( required = true, description = "" )
     @NotNull
 
-    public Boolean isSuccess() {
+    @Valid
+    public UUID getUserID() {
 
-        return success;
+        return userID;
     }
 
-    public void setSuccess( Boolean success ) {
+    public void setUserID( UUID userID ) {
 
-        this.success = success;
+        this.userID = userID;
     }
 
 
@@ -54,23 +57,23 @@ public class CreateEventResponse {
 
             return false;
         }
-        CreateEventResponse createEventResponse = ( CreateEventResponse ) o;
-        return Objects.equals( this.success, createEventResponse.success );
+        GetPointsByUserRequest getPointsByUserRequest = ( GetPointsByUserRequest ) o;
+        return Objects.equals( this.userID, getPointsByUserRequest.userID );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( userID );
     }
 
     @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateEventResponse {\n" );
+        sb.append( "class GetPointsByUserRequest {\n" );
 
-        sb.append( "    success: " ).append( toIndentedString( success ) ).append( "\n" );
+        sb.append( "    userID: " ).append( toIndentedString( userID ) ).append( "\n" );
         sb.append( "}" );
         return sb.toString();
     }

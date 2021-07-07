@@ -1,45 +1,48 @@
-package tech.geocodeapp.geocode.event.response;
+package tech.geocodeapp.geocode.event.request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateEventResponse
+ * CreatePointRequest
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 
 
-public class CreateEventResponse {
+public class CreatePointRequest {
 
-    @JsonProperty( "success" )
-    private Boolean success = null;
+    @JsonProperty( "amount" )
+    private BigDecimal amount = null;
 
-    public CreateEventResponse success( Boolean success ) {
+    public CreatePointRequest amount( BigDecimal amount ) {
 
-        this.success = success;
+        this.amount = amount;
         return this;
     }
 
     /**
-     * Get success
+     * Get amount
      *
-     * @return success
+     * @return amount
      **/
     @Schema( required = true, description = "" )
     @NotNull
 
-    public Boolean isSuccess() {
+    @Valid
+    public BigDecimal getAmount() {
 
-        return success;
+        return amount;
     }
 
-    public void setSuccess( Boolean success ) {
+    public void setAmount( BigDecimal amount ) {
 
-        this.success = success;
+        this.amount = amount;
     }
 
 
@@ -54,23 +57,23 @@ public class CreateEventResponse {
 
             return false;
         }
-        CreateEventResponse createEventResponse = ( CreateEventResponse ) o;
-        return Objects.equals( this.success, createEventResponse.success );
+        CreatePointRequest createPointRequest = ( CreatePointRequest ) o;
+        return Objects.equals( this.amount, createPointRequest.amount );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( amount );
     }
 
     @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateEventResponse {\n" );
+        sb.append( "class CreatePointRequest {\n" );
 
-        sb.append( "    success: " ).append( toIndentedString( success ) ).append( "\n" );
+        sb.append( "    amount: " ).append( toIndentedString( amount ) ).append( "\n" );
         sb.append( "}" );
         return sb.toString();
     }

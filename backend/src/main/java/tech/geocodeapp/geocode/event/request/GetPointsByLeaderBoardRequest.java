@@ -1,45 +1,48 @@
-package tech.geocodeapp.geocode.event.response;
+package tech.geocodeapp.geocode.event.request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateEventResponse
+ * GetPointsByLeaderBoardRequest
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 
 
-public class CreateEventResponse {
+public class GetPointsByLeaderBoardRequest {
 
-    @JsonProperty( "success" )
-    private Boolean success = null;
+    @JsonProperty( "leaderboardID" )
+    private UUID leaderboardID = null;
 
-    public CreateEventResponse success( Boolean success ) {
+    public GetPointsByLeaderBoardRequest leaderboardID( UUID leaderboardID ) {
 
-        this.success = success;
+        this.leaderboardID = leaderboardID;
         return this;
     }
 
     /**
-     * Get success
+     * Get leaderboardID
      *
-     * @return success
+     * @return leaderboardID
      **/
     @Schema( required = true, description = "" )
     @NotNull
 
-    public Boolean isSuccess() {
+    @Valid
+    public UUID getLeaderboardID() {
 
-        return success;
+        return leaderboardID;
     }
 
-    public void setSuccess( Boolean success ) {
+    public void setLeaderboardID( UUID leaderboardID ) {
 
-        this.success = success;
+        this.leaderboardID = leaderboardID;
     }
 
 
@@ -54,23 +57,23 @@ public class CreateEventResponse {
 
             return false;
         }
-        CreateEventResponse createEventResponse = ( CreateEventResponse ) o;
-        return Objects.equals( this.success, createEventResponse.success );
+        GetPointsByLeaderBoardRequest getPointsByLeaderBoardRequest = ( GetPointsByLeaderBoardRequest ) o;
+        return Objects.equals( this.leaderboardID, getPointsByLeaderBoardRequest.leaderboardID );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( leaderboardID );
     }
 
     @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateEventResponse {\n" );
+        sb.append( "class GetPointsByLeaderBoardRequest {\n" );
 
-        sb.append( "    success: " ).append( toIndentedString( success ) ).append( "\n" );
+        sb.append( "    leaderboardID: " ).append( toIndentedString( leaderboardID ) ).append( "\n" );
         sb.append( "}" );
         return sb.toString();
     }

@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.event.response;
+package tech.geocodeapp.geocode.event.request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,39 +7,39 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.*;
 
 /**
- * CreateEventResponse
+ * CreateLeaderboardRequest
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 
 
-public class CreateEventResponse {
+public class CreateLeaderboardRequest {
 
-    @JsonProperty( "success" )
-    private Boolean success = null;
+    @JsonProperty( "name" )
+    private String name = null;
 
-    public CreateEventResponse success( Boolean success ) {
+    public CreateLeaderboardRequest name( String name ) {
 
-        this.success = success;
+        this.name = name;
         return this;
     }
 
     /**
-     * Get success
+     * Get name
      *
-     * @return success
+     * @return name
      **/
     @Schema( required = true, description = "" )
     @NotNull
 
-    public Boolean isSuccess() {
+    public String getName() {
 
-        return success;
+        return name;
     }
 
-    public void setSuccess( Boolean success ) {
+    public void setName( String name ) {
 
-        this.success = success;
+        this.name = name;
     }
 
 
@@ -54,23 +54,23 @@ public class CreateEventResponse {
 
             return false;
         }
-        CreateEventResponse createEventResponse = ( CreateEventResponse ) o;
-        return Objects.equals( this.success, createEventResponse.success );
+        CreateLeaderboardRequest createLeaderboardRequest = ( CreateLeaderboardRequest ) o;
+        return Objects.equals( this.name, createLeaderboardRequest.name );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( name );
     }
 
     @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateEventResponse {\n" );
+        sb.append( "class CreateLeaderboardRequest {\n" );
 
-        sb.append( "    success: " ).append( toIndentedString( success ) ).append( "\n" );
+        sb.append( "    name: " ).append( toIndentedString( name ) ).append( "\n" );
         sb.append( "}" );
         return sb.toString();
     }
