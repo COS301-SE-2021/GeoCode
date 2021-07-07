@@ -15,14 +15,11 @@ import javax.validation.constraints.*;
  * GetLeaderBoardByTimeTrialResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class GetLeaderBoardByTimeTrialResponse {
 
     @JsonProperty( "leaderboard" )
     @Valid
-    private List< Leaderboard > leaderboard = new ArrayList< Leaderboard >();
+    private List< Leaderboard > leaderboard = new ArrayList<>();
 
     public GetLeaderBoardByTimeTrialResponse leaderboard( List< Leaderboard > leaderboard ) {
 
@@ -79,12 +76,9 @@ public class GetLeaderBoardByTimeTrialResponse {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetLeaderBoardByTimeTrialResponse {\n" );
-
-        sb.append( "    leaderboard: " ).append( toIndentedString( leaderboard ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetLeaderBoardByTimeTrialResponse {\n" +
+                "    leaderboard: " + toIndentedString( leaderboard ) + "\n" +
+                "}";
     }
 
     /**

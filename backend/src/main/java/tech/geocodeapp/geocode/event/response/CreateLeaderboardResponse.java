@@ -10,9 +10,6 @@ import javax.validation.constraints.*;
  * CreateLeaderboardResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class CreateLeaderboardResponse {
 
     @JsonProperty( "success" )
@@ -67,12 +64,9 @@ public class CreateLeaderboardResponse {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateLeaderboardResponse {\n" );
-
-        sb.append( "    success: " ).append( toIndentedString( success ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class CreateLeaderboardResponse {\n" +
+                "    success: " + toIndentedString( success ) + "\n" +
+                "}";
     }
 
     /**

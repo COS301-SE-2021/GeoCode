@@ -15,14 +15,11 @@ import javax.validation.constraints.*;
  * CreateTimeTrialResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class CreateTimeTrialResponse {
 
     @JsonProperty( "timeTrial" )
     @Valid
-    private List< TimeTrial > timeTrial = new ArrayList< TimeTrial >();
+    private List< TimeTrial > timeTrial = new ArrayList<>();
 
     public CreateTimeTrialResponse timeTrial( List< TimeTrial > timeTrial ) {
 
@@ -79,12 +76,9 @@ public class CreateTimeTrialResponse {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class CreateTimeTrialResponse {\n" );
-
-        sb.append( "    timeTrial: " ).append( toIndentedString( timeTrial ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class CreateTimeTrialResponse {\n" +
+                "    timeTrial: " + toIndentedString( timeTrial ) + "\n" +
+                "}";
     }
 
     /**

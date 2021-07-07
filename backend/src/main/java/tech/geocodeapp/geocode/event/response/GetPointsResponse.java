@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 
-
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -16,9 +15,6 @@ import javax.validation.constraints.*;
  * GetPointsResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class GetPointsResponse {
 
     @JsonProperty( "points" )
@@ -80,12 +76,9 @@ public class GetPointsResponse {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetPointsResponse {\n" );
-
-        sb.append( "    points: " ).append( toIndentedString( points ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetPointsResponse {\n" +
+                "    points: " + toIndentedString( points ) + "\n" +
+                "}";
     }
 
     /**

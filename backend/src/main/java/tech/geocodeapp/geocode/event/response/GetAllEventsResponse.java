@@ -15,14 +15,11 @@ import javax.validation.constraints.*;
  * GetAllEventsResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class GetAllEventsResponse {
 
     @JsonProperty( "events" )
     @Valid
-    private List< Event > events = new ArrayList< Event >();
+    private List< Event > events = new ArrayList<>();
 
     public GetAllEventsResponse events( List< Event > events ) {
 
@@ -79,12 +76,9 @@ public class GetAllEventsResponse {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetAllEventsResponse {\n" );
-
-        sb.append( "    events: " ).append( toIndentedString( events ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetAllEventsResponse {\n" +
+                "    events: " + toIndentedString( events ) + "\n" +
+                "}";
     }
 
     /**

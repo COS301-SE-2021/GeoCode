@@ -15,14 +15,11 @@ import javax.validation.constraints.*;
  * GetPointsByLeaderBoardResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
-
-
 public class GetPointsByLeaderBoardResponse {
 
     @JsonProperty( "points" )
     @Valid
-    private List< Point > points = new ArrayList< Point >();
+    private List< Point > points = new ArrayList<>();
 
     public GetPointsByLeaderBoardResponse points( List< Point > points ) {
 
@@ -79,12 +76,9 @@ public class GetPointsByLeaderBoardResponse {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "class GetPointsByLeaderBoardResponse {\n" );
-
-        sb.append( "    points: " ).append( toIndentedString( points ) ).append( "\n" );
-        sb.append( "}" );
-        return sb.toString();
+        return "class GetPointsByLeaderBoardResponse {\n" +
+                "    points: " + toIndentedString( points ) + "\n" +
+                "}";
     }
 
     /**
