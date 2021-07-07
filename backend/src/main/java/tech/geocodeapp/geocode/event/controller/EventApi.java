@@ -10,16 +10,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.request.*;
 
 import javax.validation.Valid;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 @Validated
 public interface EventApi {
 
@@ -31,10 +30,9 @@ public interface EventApi {
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
             @ApiResponse( responseCode = "404", description = "Unable to find an Event with the given id", content = @Content( mediaType = "application/json", schema = @Schema( implementation = ChangeAvailabilityResponse.class ) ) ) } )
-    @RequestMapping( value = "/Event/changeAvailability",
+    @PostMapping( value = "/Event/changeAvailability",
             produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST )
+            consumes = { "application/json", "application/xml" } )
     ResponseEntity< ChangeAvailabilityResponse > changeAvailability( @Parameter( in = ParameterIn.DEFAULT, description = "Request to update the availability of an Event", required = true, schema = @Schema() ) @Valid @RequestBody ChangeAvailabilityRequest body );
 
 
@@ -46,10 +44,9 @@ public interface EventApi {
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
             @ApiResponse( responseCode = "404", description = "Return the new Event was not successfully created", content = @Content( mediaType = "application/json", schema = @Schema( implementation = CreateEventResponse.class ) ) ) } )
-    @RequestMapping( value = "/Event/createEvent",
+    @PostMapping( value = "/Event/createEvent",
             produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST )
+            consumes = { "application/json", "application/xml" } )
     ResponseEntity< CreateEventResponse > createEvent( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateEventRequest body );
 
 
@@ -61,10 +58,9 @@ public interface EventApi {
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
             @ApiResponse( responseCode = "404", description = "Return the Leaderboard was not successfully created", content = @Content( mediaType = "application/json", schema = @Schema( implementation = CreateLeaderboardResponse.class ) ) ) } )
-    @RequestMapping( value = "/Event/createLeaderBoard",
+    @PostMapping( value = "/Event/createLeaderBoard",
             produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST )
+            consumes = { "application/json", "application/xml" } )
     ResponseEntity< CreateLeaderboardResponse > createLeaderBoard( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Leaderboard for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateLeaderboardRequest body );
 
 
@@ -76,10 +72,9 @@ public interface EventApi {
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
             @ApiResponse( responseCode = "404", description = "Return the new new Point for the Event was not successfully created", content = @Content( mediaType = "application/json", schema = @Schema( implementation = CreatePointResponse.class ) ) ) } )
-    @RequestMapping( value = "/Event/createPoint",
+    @PostMapping( value = "/Event/createPoint",
             produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST )
+            consumes = { "application/json", "application/xml" } )
     ResponseEntity< CreatePointResponse > createPoint( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Point for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreatePointRequest body );
 
 
@@ -91,10 +86,9 @@ public interface EventApi {
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
             @ApiResponse( responseCode = "404", description = "Return the Time Trial for the Event was not successfully created", content = @Content( mediaType = "application/json", schema = @Schema( implementation = CreateTimeTrialResponse.class ) ) ) } )
-    @RequestMapping( value = "/Event/createTimeTrial",
+    @PostMapping( value = "/Event/createTimeTrial",
             produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST )
+            consumes = { "application/json", "application/xml" } )
     ResponseEntity< CreateTimeTrialResponse > createTimeTrial( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Time Trial for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateTimeTrialRequest body );
 
 
@@ -106,9 +100,8 @@ public interface EventApi {
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
             @ApiResponse( responseCode = "404", description = "Unable to find any Events", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetAllEventsResponse.class ) ) ) } )
-    @RequestMapping( value = "/Event/getAllEvents",
-            produces = { "application/json", "application/xml" },
-            method = RequestMethod.POST )
+    @GetMapping( value = "/Event/getAllEvents",
+            produces = { "application/json", "application/xml" } )
     ResponseEntity< GetAllEventsResponse > getAllEvents();
 
 
@@ -120,10 +113,9 @@ public interface EventApi {
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
             @ApiResponse( responseCode = "404", description = "Return the new Event was not found", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetEventsByLocationResponse.class ) ) ) } )
-    @RequestMapping( value = "/Event/getEventsByLocation",
+    @PostMapping( value = "/Event/getEventsByLocation",
             produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST )
+            consumes = { "application/json", "application/xml" } )
     ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body );
 
 
@@ -135,10 +127,9 @@ public interface EventApi {
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
             @ApiResponse( responseCode = "404", description = "Return the Leaderboard was not successfully found", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetLeaderBoardByTimeTrialResponse.class ) ) ) } )
-    @RequestMapping( value = "/Event/getLeaderBoardByTimeTrial",
+    @PostMapping( value = "/Event/getLeaderBoardByTimeTrial",
             produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST )
+            consumes = { "application/json", "application/xml" } )
     ResponseEntity< GetLeaderBoardByTimeTrialResponse > getLeaderBoardByTimeTrial( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get the Leaderboard for a TimeTrial", required = true, schema = @Schema() ) @Valid @RequestBody GetLeaderBoardByTimeTrialRequest body );
 
 
@@ -150,9 +141,8 @@ public interface EventApi {
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
             @ApiResponse( responseCode = "404", description = "Return that the Points for an Event could not be found", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetPointsResponse.class ) ) ) } )
-    @RequestMapping( value = "/Event/getPoints",
-            produces = { "application/json", "application/xml" },
-            method = RequestMethod.POST )
+    @GetMapping( value = "/Event/getPoints",
+            produces = { "application/json", "application/xml" } )
     ResponseEntity< GetPointsResponse > getPoints();
 
 
@@ -164,10 +154,9 @@ public interface EventApi {
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
             @ApiResponse( responseCode = "404", description = "Return the Points for a Leaderboard in an Event was not successfully found", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetPointsByLeaderBoardResponse.class ) ) ) } )
-    @RequestMapping( value = "/Event/getPointsByLeaderBoard",
+    @PostMapping( value = "/Event/getPointsByLeaderBoard",
             produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST )
+            consumes = { "application/json", "application/xml" } )
     ResponseEntity< GetPointsByLeaderBoardResponse > getPointsByLeaderBoard( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get Points for a Leaderboard of the specified Event", required = true, schema = @Schema() ) @Valid @RequestBody GetPointsByLeaderBoardRequest body );
 
 
@@ -179,10 +168,9 @@ public interface EventApi {
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
             @ApiResponse( responseCode = "404", description = "Return the Points for an Event could not be returned", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetPointsByUserResponse.class ) ) ) } )
-    @RequestMapping( value = "/Event/getPointsByUser",
+    @PostMapping( value = "/Event/getPointsByUser",
             produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" },
-            method = RequestMethod.POST )
+            consumes = { "application/json", "application/xml" } )
     ResponseEntity< GetPointsByUserResponse > getPointsByUser( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get the Points for an Event", required = true, schema = @Schema() ) @Valid @RequestBody GetPointsByUserRequest body );
 
 }
