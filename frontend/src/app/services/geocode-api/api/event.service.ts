@@ -187,9 +187,9 @@ export class EventService {
     }
 
     /**
-     * Create a new Event
-     * Create a new Event in the system with the specified attributes
-     * @param body Request to create an Event
+     * Create a new Leaderboard for an Event
+     * Create a new Leaderboard for an Event
+     * @param body Request to create a new Leaderboard for an Event
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -243,9 +243,9 @@ export class EventService {
     }
 
     /**
-     * Create a new Event
-     * Create a new Event in the system with the specified attributes
-     * @param body Request to create an Event
+     * Create a new Point for an Event
+     * Create a new Point with specific values for an Event
+     * @param body Request to create a new Point for an Event
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -299,9 +299,9 @@ export class EventService {
     }
 
     /**
-     * Create a new Event
-     * Create a new Event in the system with the specified attributes
-     * @param body Request to create an Event
+     * Create a new Time Trial for an Event
+     * Create a new Time Trial with a specific timeframe for an Event
+     * @param body Request to create a new Time Trial for an Event
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -399,9 +399,9 @@ export class EventService {
     }
 
     /**
-     * Create a new Event
-     * Create a new Event in the system with the specified attributes
-     * @param body Request to create an Event
+     * Get an Event by its location
+     * Get an Event by its location from the given co-ordinates
+     * @param body Request to get an Event by its location
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -455,9 +455,9 @@ export class EventService {
     }
 
     /**
-     * Create a new Event
-     * Create a new Event in the system with the specified attributes
-     * @param body Request to create an Event
+     * Get the Leaderboard for a TimeTrial
+     * Get the Leaderboard for a TimeTrial
+     * @param body Request to get the Leaderboard for a TimeTrial
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -511,8 +511,8 @@ export class EventService {
     }
 
     /**
-     * Create a new Event
-     * Create a new Event in the system with the specified attributes
+     * Get the Points for an Event
+     * Get the Points for an Event
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -555,9 +555,9 @@ export class EventService {
     }
 
     /**
-     * Create a new Event
-     * Create a new Event in the system with the specified attributes
-     * @param body Request to create an Event
+     * Get Points for a Leaderboard for an Event
+     * Get Points for a Leaderboard for an Event
+     * @param body Request to get Points for a Leaderboard of the specified Event
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -611,9 +611,9 @@ export class EventService {
     }
 
     /**
-     * Create a new Event
-     * Create a new Event in the system with the specified attributes
-     * @param body Request to create an Event
+     * Get the points for the specified Event
+     * Get the points for the specified Event
+     * @param body Request to get the Points for an Event
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
