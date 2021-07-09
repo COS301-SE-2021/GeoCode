@@ -1,15 +1,18 @@
 package tech.geocodeapp.geocode.event.service;
 
-import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.stereotype.Service;
+import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
 
+import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
 
-import javax.validation.constraints.NotNull;
 
+import java.util.List;
 
 /**
  * This class implements the EventService interface
@@ -29,7 +32,7 @@ public class EventServiceImpl implements EventService {
      *
      * @param eventRepo the repo the created response attributes should save to
      */
-    public EventServiceImpl( EventRepository eventRepo ) {
+    public EventServiceImpl( @Valid EventRepository eventRepo ) {
 
         this.eventRepo = eventRepo;
     }
@@ -52,7 +55,7 @@ public class EventServiceImpl implements EventService {
 
             throw new InvalidRequestException( true );
         } else if ( ( request.getDescription() == null ) || ( request.getLocation() == null ) ||
-                ( request.getName() == null ) ) {
+                    ( request.getName() == null ) ) {
 
             throw new InvalidRequestException();
         }
@@ -68,7 +71,9 @@ public class EventServiceImpl implements EventService {
     @Override
     public GetAllEventsResponse getAllEvents() {
 
-        return null;
+        List< Event > temp = eventRepo.findAll();
+
+        return new GetAllEventsResponse( temp );
     }
 
     /**
