@@ -1,62 +1,62 @@
 package tech.geocodeapp.geocode.event.request;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
-import tech.geocodeapp.geocode.geocode.model.GeoPoint;
-import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+
+import java.util.Objects;
 
 /**
- * CreateEventRequest
+ * CreateEventRequest object that is used to specify the attributes for a new Event
  */
 @Validated
 public class CreateEventRequest {
 
-    @JsonProperty( "id" )
-    private UUID id = null;
-
+    /**
+     * The name of the Event to be created
+     */
+    @NotNull( message = "CreateEventRequest name attribute cannot be null." )
     @JsonProperty( "name" )
-    private String name = null;
+    private String name;
 
+    /**
+     * The description of what the Event to be created is
+     */
     @JsonProperty( "description" )
-    private String description = null;
+    @NotNull( message = "CreateEventRequest description attribute cannot be null." )
+    private String description;
 
+    /**
+     * The location where the Event will be held at in the real world
+     */
     @JsonProperty( "location" )
-    private GeoPoint location = null;
+    @NotNull( message = "CreateEventRequest location attribute cannot be null." )
+    private GeoPoint location;
 
-    @JsonProperty( "leaderboard" )
-    private Leaderboard leaderboard = null;
+    /**
+     * Overloaded Constructor
+     *
+     * @param name what the new Event should be called
+     * @param description what the Event to be created is going to be about
+     * @param location the Event will be held at in the real world's location
+     */
+    public CreateEventRequest( String name, String description, GeoPoint location ) {
 
-    public CreateEventRequest id( UUID id ) {
-
-        this.id = id;
-        return this;
+        this.name = name;
+        this.description = description;
+        this.location = location;
     }
 
     /**
-     * Get id
+     * Sets the difficulty attribute to the specified value
      *
-     * @return id
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
-
-    @Valid
-    public UUID getId() {
-
-        return id;
-    }
-
-    public void setId( UUID id ) {
-
-        this.id = id;
-    }
-
+     * @param name the value the attribute should be set to
+     *
+     * @return the request after the difficulty has been changed
+     */
     public CreateEventRequest name( String name ) {
 
         this.name = name;
@@ -64,23 +64,33 @@ public class CreateEventRequest {
     }
 
     /**
-     * Get name
+     * Gets the saved difficulty attribute
      *
-     * @return name
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
-
+     * @return the stored difficulty attribute
+     */
+    @Valid
     public String getName() {
 
         return name;
     }
 
+    /**
+     * Sets the hints attribute to the specified value
+     *
+     * @param name the value the attribute should be set to
+     */
     public void setName( String name ) {
 
         this.name = name;
     }
 
+    /**
+     * Sets the difficulty attribute to the specified value
+     *
+     * @param description the value the attribute should be set to
+     *
+     * @return the request after the difficulty has been changed
+     */
     public CreateEventRequest description( String description ) {
 
         this.description = description;
@@ -88,108 +98,108 @@ public class CreateEventRequest {
     }
 
     /**
-     * Get description
+     * Gets the saved difficulty attribute
      *
-     * @return description
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
-
+     * @return the stored difficulty attribute
+     */
+    @Valid
     public String getDescription() {
 
         return description;
     }
 
+    /**
+     * Sets the difficulty attribute to the specified value
+     *
+     * @param description the value the attribute should be set to
+     */
     public void setDescription( String description ) {
 
         this.description = description;
     }
 
+    /**
+     * Sets the available attribute to the specified value
+     *
+     * @param location the value the attribute should be set to
+     *
+     * @return the request after the available has been changed
+     */
     public CreateEventRequest location( GeoPoint location ) {
 
         this.location = location;
         return this;
     }
 
-    /**
-     * Get location
-     *
-     * @return location
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
 
+    /**
+     * Gets the saved available attribute
+     *
+     * @return the stored available attribute
+     */
     @Valid
     public GeoPoint getLocation() {
 
         return location;
     }
 
+    /**
+     * Sets the available attribute to the specified value
+     *
+     * @param location the value the attribute should be set to
+     */
     public void setLocation( GeoPoint location ) {
 
         this.location = location;
     }
 
-    public CreateEventRequest leaderboard( Leaderboard leaderboard ) {
-
-        this.leaderboard = leaderboard;
-        return this;
-    }
-
     /**
-     * Get leaderboard
+     * Determines if the specified object is the same as the current object
      *
-     * @return leaderboard
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
-
-    @Valid
-    public Leaderboard getLeaderboard() {
-
-        return leaderboard;
-    }
-
-    public void setLeaderboard( Leaderboard leaderboard ) {
-
-        this.leaderboard = leaderboard;
-    }
-
-
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
     @Override
-    public boolean equals( java.lang.Object o ) {
+    public boolean equals( java.lang.Object obj ) {
 
-        if ( this == o ) {
+        if ( this == obj ) {
 
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if ( obj == null || getClass() != obj.getClass() ) {
 
             return false;
         }
-        CreateEventRequest createEventRequest = ( CreateEventRequest ) o;
-        return Objects.equals( this.id, createEventRequest.id ) &&
-                Objects.equals( this.name, createEventRequest.name ) &&
+        CreateEventRequest createEventRequest = ( CreateEventRequest ) obj;
+        return  Objects.equals( this.name, createEventRequest.name ) &&
                 Objects.equals( this.description, createEventRequest.description ) &&
-                Objects.equals( this.location, createEventRequest.location ) &&
-                Objects.equals( this.leaderboard, createEventRequest.leaderboard );
+                Objects.equals( this.location, createEventRequest.location );
     }
 
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
     @Override
     public int hashCode() {
 
-        return Objects.hash( id, name, description, location, leaderboard );
+        return Objects.hash( name, description, location );
     }
 
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
     @Override
     public String toString() {
 
         return "class CreateEventRequest {\n" +
-                "    id: " + toIndentedString( id ) + "\n" +
                 "    name: " + toIndentedString( name ) + "\n" +
                 "    description: " + toIndentedString( description ) + "\n" +
                 "    location: " + toIndentedString( location ) + "\n" +
-                "    leaderboard: " + toIndentedString( leaderboard ) + "\n" +
                 "}";
     }
 
