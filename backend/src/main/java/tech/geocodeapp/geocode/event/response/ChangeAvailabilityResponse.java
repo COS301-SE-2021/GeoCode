@@ -1,66 +1,107 @@
 package tech.geocodeapp.geocode.event.response;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
+
+import java.util.Objects;
 
 /**
- * ChangeAvailabilityResponse
+ * ChangeAvailabilityResponse object to determine if the specified Event was updated or not
  */
 @Validated
 public class ChangeAvailabilityResponse {
 
+    /**
+     * If the Event was successfully updated or not
+     */
     @JsonProperty( "success" )
-    private Boolean success = null;
+    @NotNull( message = "ChangeAvailabilityResponse success attribute cannot be null." )
+    private Boolean success;
 
-    public ChangeAvailabilityResponse success( Boolean success ) {
+    /**
+     * Overloaded Constructor
+     *
+     * @param success if the Event was updated or not
+     */
+    public ChangeAvailabilityResponse( @Valid Boolean success ) {
+
+        this.success = success;
+    }
+
+    /**
+     * Sets the success attribute to the specified value
+     *
+     * @param success the value the attribute should be set to
+     *
+     * @return the request after the success has been changed
+     */
+    public ChangeAvailabilityResponse success( @Valid Boolean success ) {
 
         this.success = success;
         return this;
     }
 
     /**
-     * Get success
+     * Gets the saved success attribute
      *
-     * @return success
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
-
+     * @return the stored success attribute
+     */
+    @Valid
     public Boolean isSuccess() {
 
         return success;
     }
 
-    public void setSuccess( Boolean success ) {
+    /**
+     * Sets the success attribute to the specified value
+     *
+     * @param success the value the attribute should be set to
+     */
+    public void setSuccess( @Valid Boolean success ) {
 
         this.success = success;
     }
 
-
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
     @Override
-    public boolean equals( java.lang.Object o ) {
+    public boolean equals( java.lang.Object obj ) {
 
-        if ( this == o ) {
+        if ( this == obj ) {
 
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if ( obj == null || getClass() != obj.getClass() ) {
 
             return false;
         }
-        ChangeAvailabilityResponse changeAvailabilityResponse = ( ChangeAvailabilityResponse ) o;
-        return Objects.equals( this.success, changeAvailabilityResponse.success );
+
+        return Objects.equals( this.success, ( ( ChangeAvailabilityResponse ) obj ).success );
     }
 
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
     @Override
     public int hashCode() {
 
         return Objects.hash( success );
     }
 
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
     @Override
     public String toString() {
 

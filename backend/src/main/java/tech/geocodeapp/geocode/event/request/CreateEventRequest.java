@@ -18,8 +18,8 @@ public class CreateEventRequest {
     /**
      * The name of the Event to be created
      */
-    @NotNull( message = "CreateEventRequest name attribute cannot be null." )
     @JsonProperty( "name" )
+    @NotNull( message = "CreateEventRequest name attribute cannot be null." )
     private String name;
 
     /**
@@ -130,7 +130,6 @@ public class CreateEventRequest {
         this.location = location;
         return this;
     }
-
 
     /**
      * Gets the saved available attribute

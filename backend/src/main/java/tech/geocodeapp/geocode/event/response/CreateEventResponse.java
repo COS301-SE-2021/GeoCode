@@ -64,7 +64,6 @@ public class CreateEventResponse {
         this.success = success;
     }
 
-
     /**
      * Determines if the specified object is the same as the current object
      *
