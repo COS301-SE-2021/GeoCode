@@ -3,16 +3,36 @@ package tech.geocodeapp.geocode.event.service;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
+import tech.geocodeapp.geocode.event.exceptions.*;
+
+import javax.validation.constraints.NotNull;
 
 
 /**
  * This class implements the EventService interface
  */
-@Service( "EventService" )
 @Validated
+@Service( "EventService" )
 public class EventServiceImpl implements EventService {
+
+    /**
+     * The repository the GeoCode class interacts with
+     */
+    @NotNull( message = "Events repository may not be null." )
+    private final EventRepository eventRepo;
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param eventRepo the repo the created response attributes should save to
+     */
+    public EventServiceImpl( EventRepository eventRepo ) {
+
+        this.eventRepo = eventRepo;
+    }
 
     /**
      * Create a new Event object with the given attributes and store it
@@ -21,9 +41,21 @@ public class EventServiceImpl implements EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateEventRequest
+     *
+     * @throws InvalidRequestException  the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public CreateEventResponse createEvent( CreateEventRequest request ) {
+    public CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( ( request.getDescription() == null ) || ( request.getLocation() == null ) ||
+                ( request.getName() == null ) ) {
+
+            throw new InvalidRequestException();
+        }
 
         return null;
     }
@@ -47,7 +79,16 @@ public class EventServiceImpl implements EventService {
      * @return the newly created response instance from the specified ChangeAvailabilityRequest
      */
     @Override
-    public ChangeAvailabilityResponse changeAvailability( ChangeAvailabilityRequest request ) {
+    public ChangeAvailabilityResponse changeAvailability( ChangeAvailabilityRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getEventID() == null ) {
+
+            throw new InvalidRequestException();
+        }
 
         return null;
     }
@@ -60,7 +101,16 @@ public class EventServiceImpl implements EventService {
      * @return the newly created response instance from the specified CreateGeoCodeRequest
      */
     @Override
-    public GetEventsByLocationResponse getEventsByLocation( GetEventsByLocationRequest request ) {
+    public GetEventsByLocationResponse getEventsByLocation( GetEventsByLocationRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getLocation() == null ) {
+
+            throw new InvalidRequestException();
+        }
 
         return null;
     }
@@ -73,7 +123,16 @@ public class EventServiceImpl implements EventService {
      * @return the newly created response instance from the specified CreateGeoCodeRequest
      */
     @Override
-    public CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) {
+    public CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getName() == null ) {
+
+            throw new InvalidRequestException();
+        }
 
         return null;
     }
@@ -86,7 +145,16 @@ public class EventServiceImpl implements EventService {
      * @return the newly created response instance from the specified CreateGeoCodeRequest
      */
     @Override
-    public CreatePointResponse createPoint( CreatePointRequest request ) {
+    public CreatePointResponse createPoint( CreatePointRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getAmount() == null ) {
+
+            throw new InvalidRequestException();
+        }
 
         return null;
     }
@@ -113,7 +181,16 @@ public class EventServiceImpl implements EventService {
      * @return the newly created response instance from the specified CreateGeoCodeRequest
      */
     @Override
-    public GetPointsByUserResponse getPointsByUser( GetPointsByUserRequest request ) {
+    public GetPointsByUserResponse getPointsByUser( GetPointsByUserRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getUserID() == null ) {
+
+            throw new InvalidRequestException();
+        }
 
         return null;
     }
@@ -126,7 +203,16 @@ public class EventServiceImpl implements EventService {
      * @return the newly created response instance from the specified CreateGeoCodeRequest
      */
     @Override
-    public GetPointsByLeaderBoardResponse getPointsByLeaderboard( GetPointsByLeaderBoardRequest request ) {
+    public GetPointsByLeaderBoardResponse getPointsByLeaderboard( GetPointsByLeaderBoardRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getLeaderboardID() == null ) {
+
+            throw new InvalidRequestException();
+        }
 
         return null;
     }
@@ -150,7 +236,16 @@ public class EventServiceImpl implements EventService {
      * @return the newly created response instance from the specified CreateGeoCodeRequest
      */
     @Override
-    public GetLeaderBoardByTimeTrialResponse getLeaderBoardByTimeTrial( GetLeaderBoardByTimeTrialRequest request ) {
+    public GetLeaderBoardByTimeTrialResponse getLeaderBoardByTimeTrial( GetLeaderBoardByTimeTrialRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getTimeTrialID() == null ) {
+
+            throw new InvalidRequestException();
+        }
 
         return null;
     }

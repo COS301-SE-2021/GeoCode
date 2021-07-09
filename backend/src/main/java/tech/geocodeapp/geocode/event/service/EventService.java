@@ -1,8 +1,8 @@
 package tech.geocodeapp.geocode.event.service;
 
-
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
+import tech.geocodeapp.geocode.event.exceptions.*;
 
 /**
  * This is the main interface is for the Event subsystem,
@@ -18,7 +18,7 @@ public interface EventService {
      *
      * @return the newly created response instance from the specified CreateEventRequest
      */
-    CreateEventResponse createEvent( CreateEventRequest request );
+    CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException;
 
     /**
      * Get all the stored Events in the repository
@@ -34,7 +34,7 @@ public interface EventService {
      *
      * @return the newly created response instance from the specified ChangeAvailabilityRequest
      */
-    ChangeAvailabilityResponse changeAvailability( ChangeAvailabilityRequest request );
+    ChangeAvailabilityResponse changeAvailability( ChangeAvailabilityRequest request ) throws InvalidRequestException;
 
     /**
      * Get all the Events at a certain location
@@ -43,7 +43,7 @@ public interface EventService {
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
      */
-    GetEventsByLocationResponse getEventsByLocation( GetEventsByLocationRequest request );
+    GetEventsByLocationResponse getEventsByLocation( GetEventsByLocationRequest request ) throws InvalidRequestException;
 
     /**
      * Create a new point for a leaderboard
@@ -52,7 +52,7 @@ public interface EventService {
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
      */
-    CreatePointResponse createPoint( CreatePointRequest request );
+    CreatePointResponse createPoint( CreatePointRequest request ) throws InvalidRequestException;
 
     /**
      * Create a new Leaderboard for an Event
@@ -61,7 +61,7 @@ public interface EventService {
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
      */
-    CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request );
+    CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) throws InvalidRequestException;
 
     /**
      * Create a new TimeTrial for an event, that will be active for a pre-determined
@@ -80,7 +80,7 @@ public interface EventService {
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
      */
-    GetPointsByUserResponse getPointsByUser( GetPointsByUserRequest request );
+    GetPointsByUserResponse getPointsByUser( GetPointsByUserRequest request ) throws InvalidRequestException;
 
     /**
      * Get the points for a specific leaderboard
@@ -89,7 +89,7 @@ public interface EventService {
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
      */
-    GetPointsByLeaderBoardResponse getPointsByLeaderboard( GetPointsByLeaderBoardRequest request );
+    GetPointsByLeaderBoardResponse getPointsByLeaderboard( GetPointsByLeaderBoardRequest request ) throws InvalidRequestException;
 
     /**
      * Get the points of a specific Event
@@ -105,6 +105,6 @@ public interface EventService {
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
      */
-    GetLeaderBoardByTimeTrialResponse getLeaderBoardByTimeTrial( GetLeaderBoardByTimeTrialRequest request );
+    GetLeaderBoardByTimeTrialResponse getLeaderBoardByTimeTrial( GetLeaderBoardByTimeTrialRequest request ) throws InvalidRequestException;
 
 }
