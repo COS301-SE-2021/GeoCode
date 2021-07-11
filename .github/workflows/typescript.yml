@@ -33,7 +33,7 @@ jobs:
 
       - name: install npm dependencies
         working-directory: ./frontend
-        run: npm install
+        run: npm ci
 
       - name: Build App
         working-directory: ./frontend
@@ -68,7 +68,7 @@ jobs:
 
       - name: install npm dependencies
         working-directory: ./frontend
-        run: npm install
+        run: npm ci
 
       - name: link angular
         working-directory: ./frontend
