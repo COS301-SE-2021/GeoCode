@@ -43,14 +43,14 @@ ion-toolbar{
 ion-checkbox{
   --checkmark-color: white;
   --background-checked:var(--ion-color-purple);
-  --border-color:var(--ion-color-purple);
-  --border-color-checked:var(--ion-color-purple);
+  --border-color:white;
+  --border-color-checked:white;
 }
 
 
 
 ion-card{
-  background-color:var(--ion-color-teal) ;
+  background-color:var(--ion-color-purple) ;
   color: white;
   border-color:  var(--ion-color-purple);
   border-width: 1px;
