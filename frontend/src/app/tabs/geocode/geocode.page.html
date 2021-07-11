@@ -18,14 +18,14 @@
 
 
 
-  <div #mapElement class="map"></div>
+  <div #mapElement [style.height]="height" class="map"></div>
 
 
 
-  <div  id ="geoCodeDetails">
+  <div  id ="geoCodeDetails" [hidden]="isHidden">
 
     <ion-card *ngFor="let geocode of selected">
-      <div  id="close-button"><ion-button id="close" color="white">X</ion-button></div>
+      <div  id="close-button"><ion-button id="close" color="white" (click)="close()">X</ion-button></div>
       <ion-header>
         <ion-title id="card-title">
           {{geocode.description}}

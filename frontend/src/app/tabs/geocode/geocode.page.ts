@@ -23,11 +23,17 @@ export class GeocodePage implements AfterViewInit  {
   map;
   mapMarker;
   markers= [];
-  geocodes;
+  geocodes = [];
   selected=[];
+  isHidden=true;
+  height='90%';
 
 
-  constructor(public navCtrl: NavController,public geocodeApi: GeoCodeService) {}
+
+  constructor(public navCtrl: NavController,public geocodeApi: GeoCodeService) {
+    this.geocodes = [{id:'123456789',latitude:-25.75625115327836,longitude:28.235629260918344,difficulty:'EASY',description:'TEST'}];
+    this.selected= this.geocodes;
+  }
 
   //Create map and add mapmarkers of geocodes
   loadMap(){
@@ -49,6 +55,8 @@ export class GeocodePage implements AfterViewInit  {
   addToSelected(geocode){
     this.selected= [];
     this.selected.push(geocode);
+    this.isHidden=false;
+    this.height='60%';
   }
 
   //Navigate to findGeoCode page
@@ -185,6 +193,11 @@ export class GeocodePage implements AfterViewInit  {
       marker.setMap(null);
     }
     this.markers=[];
+  }
+
+  close(){
+    this.isHidden=true;
+    this.height='90%';
   }
 
 }
