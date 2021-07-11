@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {GeoCodeService, CreateGeoCodeRequest, CreateGeoCodeResponse} from '../../../services/geocode-api';
 import {NavController} from '@ionic/angular';
 
@@ -10,8 +10,6 @@ let map;
   styleUrls: ['./geocode-create.page.scss'],
 })
 
-
-
 export class GeocodeCreatePage implements AfterViewInit {
 @ViewChild('mapElement',{static:false}) mapElement;
 locations;
@@ -19,18 +17,19 @@ mapOptions;
 hints = [];
 difficulty;
 marker;
+
+//Request object to be updated as fields change
 request: CreateGeoCodeRequest= {
-  description: 'Testing insert',
+    description: 'Testing insert',
     available: true,
     difficulty:'EASY',
     hints:['Hint1','Hint2'],
     latitude:'',
-  longitude:'',
+    longitude:'',
     id:''
-
 };
 
-  constructor(public geocodeAPI: GeoCodeService,public navCtrl:NavController) { }
+  constructor(public geocodeAPI: GeoCodeService,public navCtrl: NavController) {}
 
   //create map
   initMap() {
@@ -39,20 +38,12 @@ request: CreateGeoCodeRequest= {
       center: {lat: -25.75625115327836, lng: 28.235629260918344},
       zoom: 15,
     };
+
     map = new google.maps.Map(this.mapElement.nativeElement, this.mapOptions);
 
-    //Load the markers
-    const markerIcon = {
-
-      scaledSize: new google.maps.Size(60, 60),
-      origin: new google.maps.Point(0, 0), // used if icon is a part of sprite, indicates image position in sprite
-      anchor: new google.maps.Point(20,40) // lets offset the marker image
-    };
-
-    // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+    //Add event listeners to map
     google.maps.event.addListener(map, 'click', (event)=>{
       this.placeMarker(event.latLng);
-
     });
 
 
@@ -75,22 +66,16 @@ request: CreateGeoCodeRequest= {
     this.request.longitude=this.locations.lng();
     this.request.hints=this.hints;
     this.request.difficulty = this.difficulty;
-    console.log(this.request);
+
+    //Call geocode api to send request to controller
     this.geocodeAPI.createGeoCode(this.request)
       .subscribe((response: CreateGeoCodeResponse) =>{
-        console.log(response);
         this.hints=[];
         this.locations=[];
         this.difficulty=[];
-
         this.navCtrl.navigateBack('/geocode');
       });
 
-  }
-
-  //update location for the request
-  updateLocation(location){
-    this.locations=location;
   }
 
   //update difficulty field for request
@@ -103,24 +88,19 @@ request: CreateGeoCodeRequest= {
      this.hints.push(event.target.value);
   }
 
-    placeMarker(location){
-   this.marker = new google.maps.Marker({
+  //Place map marker based on user click listener
+  placeMarker(location){
+    this.marker = new google.maps.Marker({
         map,
         animation: google.maps.Animation.DROP,
         position: location
       }
     );
-    const infoWindow = new google.maps.InfoWindow({
-      content: 'Help Me!'
-    });
     map.setCenter(location);
-
   }
 
 }
 
-//Place the marker in the users selected location and update that maps center
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 
 
 

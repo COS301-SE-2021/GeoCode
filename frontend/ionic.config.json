@@ -1,5 +1,7 @@
 {
   "name": "GeoCode",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

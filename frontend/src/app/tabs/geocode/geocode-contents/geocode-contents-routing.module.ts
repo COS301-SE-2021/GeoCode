@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 import { GeocodeContentsPage } from './geocode-contents.page';
 
 const routes: Routes = [
