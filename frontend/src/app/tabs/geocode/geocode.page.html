@@ -6,44 +6,26 @@
 
 <ion-content>
 
-  <ion-button color="Dark" (click)="getAllMap()">Get all GeoCodes</ion-button>
 
-  <div #mapElement class="map"></div>
 
-    <ion-list>
-      <ion-label>Get GeoCodes by Difficulty</ion-label>
-      <ion-button color="success" (click)="easyMap()">Easy</ion-button>
-      <ion-button color="secondary" (click)="mediumMap()">Medium </ion-button>
-      <ion-button color="warning" (click)="difficultMap()">Difficult</ion-button>
-      <ion-button color="danger" (click)="insaneMap()">Insane</ion-button>
-    </ion-list>
+  <ion-row>
+    <ion-col id="button-col"><ion-button id="button"  color="purple" (click)="easyMap()">Easy</ion-button></ion-col>
+    <ion-col id="button-col"><ion-button id="button" color="danger" (click)="mediumMap()">Medium </ion-button></ion-col>
+    <ion-col id="button-col"><ion-button id="button"  color="purple" (click)="difficultMap()">Difficult</ion-button></ion-col>
+    <ion-col id="button-col"><ion-button id="button" color="danger" (click)="insaneMap()">Insane</ion-button></ion-col>
+    <ion-col id="button-col"><ion-button id="button" color="purple" (click)="getAllMap()">Get all GeoCodes</ion-button></ion-col>
+  </ion-row>
 
-  <div  id ="geoCodeDetails">
-<!--  <ion-grid class="ion-margin" *ngFor="let geocode of selected">-->
-<!--    <ion-row>GeoCode Information</ion-row>-->
-<!--      <ion-row class="row">-->
-<!--        <ion-col>Description</ion-col>-->
-<!--        <ion-col>{{geocode.description}}</ion-col>-->
-<!--      </ion-row>-->
-<!--      <ion-row class="row">-->
-<!--        <ion-col>Available</ion-col>-->
-<!--        <ion-col><ion-checkbox disabled="false"  (ionBlur)="updateAvailability(geocode)" [(ngModel)]="geocode.available"></ion-checkbox></ion-col>-->
-<!--      </ion-row>-->
-<!--      <ion-row class="row">-->
-<!--        <ion-col>Difficulty</ion-col>-->
-<!--        <ion-col>{{geocode.difficulty}}</ion-col>-->
-<!--      </ion-row>-->
-<!--      <ion-row class="row">-->
-<!--        <ion-col>Latitude</ion-col>-->
-<!--        <ion-col>{{geocode.latitude}} </ion-col>-->
-<!--      </ion-row>-->
-<!--      <ion-row class="row" >-->
-<!--        <ion-col>Longitude</ion-col>-->
-<!--        <ion-col>{{geocode.longitude}} </ion-col>-->
-<!--      </ion-row>-->
-<!--      <ion-button (click)="findGeoCode(geocode)" >Find GeoCode</ion-button>-->
-<!--  </ion-grid>-->
+
+
+  <div #mapElement [style.height]="height" class="map"></div>
+
+
+
+  <div  id ="geoCodeDetails" [hidden]="isHidden">
+
     <ion-card *ngFor="let geocode of selected">
+      <div  id="close-button"><ion-button id="close" color="white" (click)="close()">X</ion-button></div>
       <ion-header>
         <ion-title id="card-title">
           {{geocode.description}}
