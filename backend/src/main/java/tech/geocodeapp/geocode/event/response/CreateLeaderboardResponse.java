@@ -1,66 +1,105 @@
 package tech.geocodeapp.geocode.event.response;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
+
+import java.util.Objects;
 
 /**
- * CreateLeaderboardResponse
+ * CreateLeaderboardResponse object is to determine if the specified Leaderboard was created
+ * successfully or not
  */
 @Validated
 public class CreateLeaderboardResponse {
 
     @JsonProperty( "success" )
-    private Boolean success = null;
+    @NotNull( message = "CreateLeaderboardResponse success attribute cannot be null." )
+    private Boolean success;
 
-    public CreateLeaderboardResponse success( Boolean success ) {
+    /**
+     * Overloaded Constructor
+     *
+     * @param success the status of the Leaderboard created
+     */
+    public CreateLeaderboardResponse( @Valid Boolean success ) {
+
+        this.success = success;
+    }
+
+    /**
+     * Sets the success attribute to the specified value
+     *
+     * @param success the value the attribute should be set to
+     *
+     * @return the request after the success has been changed
+     */
+    public CreateLeaderboardResponse success( @Valid Boolean success ) {
 
         this.success = success;
         return this;
     }
 
     /**
-     * Get success
+     * Gets the saved success attribute
      *
-     * @return success
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
-
+     * @return the stored success attribute
+     */
+    @Valid
     public Boolean isSuccess() {
 
         return success;
     }
 
-    public void setSuccess( Boolean success ) {
+    /**
+     * Sets the success attribute to the specified value
+     *
+     * @param success the value the attribute should be set to
+     */
+    public void setSuccess( @Valid Boolean success ) {
 
         this.success = success;
     }
 
-
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
     @Override
-    public boolean equals( java.lang.Object o ) {
+    public boolean equals( java.lang.Object obj ) {
 
-        if ( this == o ) {
+        if ( this == obj ) {
 
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if ( obj == null || getClass() != obj.getClass() ) {
 
             return false;
         }
-        CreateLeaderboardResponse createLeaderboardResponse = ( CreateLeaderboardResponse ) o;
-        return Objects.equals( this.success, createLeaderboardResponse.success );
+
+        return Objects.equals( this.success, ( ( CreateLeaderboardResponse ) obj ).success );
     }
 
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
     @Override
     public int hashCode() {
 
         return Objects.hash( success );
     }
 
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
     @Override
     public String toString() {
 

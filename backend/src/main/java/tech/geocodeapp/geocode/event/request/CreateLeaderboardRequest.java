@@ -1,66 +1,104 @@
 package tech.geocodeapp.geocode.event.request;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
+
+import java.util.Objects;
 
 /**
- * CreateLeaderboardRequest
+ * CreateLeaderboardRequest object to specify what Leaderboard to be created
  */
 @Validated
 public class CreateLeaderboardRequest {
 
     @JsonProperty( "name" )
-    private String name = null;
+    @NotEmpty( message = "CreateLeaderboardRequest name attribute cannot be empty." )
+    private String name;
 
-    public CreateLeaderboardRequest name( String name ) {
+    /**
+     * Overloaded Constructor
+     *
+     * @param name the name of the Leaderboard to create
+     */
+    public CreateLeaderboardRequest( @Valid String name ) {
+
+        this.name = name;
+    }
+
+    /**
+     * Sets the name attribute to the specified value
+     *
+     * @param name the value the attribute should be set to
+     *
+     * @return the request after the name has been changed
+     */
+    public CreateLeaderboardRequest name( @Valid String name ) {
 
         this.name = name;
         return this;
     }
 
     /**
-     * Get name
+     * Gets the saved name attribute
      *
-     * @return name
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
-
+     * @return the stored name attribute
+     */
+    @Valid
     public String getName() {
 
         return name;
     }
 
-    public void setName( String name ) {
+    /**
+     * Sets the name attribute to the specified value
+     *
+     * @param name the value the attribute should be set to
+     */
+    public void setName( @Valid String name ) {
 
         this.name = name;
     }
 
-
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
     @Override
-    public boolean equals( java.lang.Object o ) {
+    public boolean equals( java.lang.Object obj ) {
 
-        if ( this == o ) {
+        if ( this == obj ) {
 
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if ( obj == null || getClass() != obj.getClass() ) {
 
             return false;
         }
-        CreateLeaderboardRequest createLeaderboardRequest = ( CreateLeaderboardRequest ) o;
-        return Objects.equals( this.name, createLeaderboardRequest.name );
+
+        return Objects.equals( this.name, ( ( CreateLeaderboardRequest ) obj ).name );
     }
 
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
     @Override
     public int hashCode() {
 
         return Objects.hash( name );
     }
 
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
     @Override
     public String toString() {
 
