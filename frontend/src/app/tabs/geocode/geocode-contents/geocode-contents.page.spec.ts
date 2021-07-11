@@ -28,10 +28,6 @@ describe('GeocodeContentsPage', () => {
     queryParams: of({ geocode })
   };
 
-  beforeAll(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-  });
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodeContentsPage ],

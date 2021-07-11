@@ -9,9 +9,6 @@ import {RouterTestingModule} from '@angular/router/testing';
 describe('GeocodePage', () => {
   let component: GeocodePage;
   let fixture: ComponentFixture<GeocodePage>;
-  beforeAll(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-  });
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
