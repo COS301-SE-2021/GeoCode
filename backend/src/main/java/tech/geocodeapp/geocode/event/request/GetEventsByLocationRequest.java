@@ -1,70 +1,106 @@
 package tech.geocodeapp.geocode.event.request;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
+
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
 
 /**
- * GetEventsByLocationRequest
+ * GetEventsByLocationRequest object to specify what location to search for Events
  */
 @Validated
 public class GetEventsByLocationRequest {
 
     @JsonProperty( "location" )
-    private GeoPoint location = null;
+    @NotNull( message = "GetEventsByLocationRequest location attribute cannot be null." )
+    private GeoPoint location;
 
-    public GetEventsByLocationRequest location( GeoPoint location ) {
+    /**
+     * Overloaded Constructor
+     *
+     * @param location the location to look for Events
+     */
+    public GetEventsByLocationRequest( @Valid GeoPoint location ) {
+
+        this.location = location;
+    }
+
+    /**
+     * Sets the location attribute to the specified value
+     *
+     * @param location the value the attribute should be set to
+     *
+     * @return the request after the location has been changed
+     */
+    public GetEventsByLocationRequest location( @Valid GeoPoint location ) {
 
         this.location = location;
         return this;
     }
 
     /**
-     * Get location
+     * Gets the saved location attribute
      *
-     * @return location
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
-
+     * @return the stored location attribute
+     */
     @Valid
     public GeoPoint getLocation() {
 
         return location;
     }
 
-    public void setLocation( GeoPoint location ) {
+    /**
+     * Sets the location attribute to the specified value
+     *
+     * @param location the value the attribute should be set to
+     */
+    public void setLocation( @Valid GeoPoint location ) {
 
         this.location = location;
     }
 
-
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
     @Override
-    public boolean equals( java.lang.Object o ) {
+    public boolean equals( java.lang.Object obj ) {
 
-        if ( this == o ) {
+        if ( this == obj ) {
 
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if ( obj == null || getClass() != obj.getClass() ) {
 
             return false;
         }
-        GetEventsByLocationRequest getEventsByLocationRequest = ( GetEventsByLocationRequest ) o;
-        return Objects.equals( this.location, getEventsByLocationRequest.location );
+
+        return Objects.equals( this.location, ( ( GetEventsByLocationRequest ) obj ).location );
     }
 
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
     @Override
     public int hashCode() {
 
         return Objects.hash( location );
     }
 
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
     @Override
     public String toString() {
 

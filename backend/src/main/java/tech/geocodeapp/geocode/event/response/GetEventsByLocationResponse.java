@@ -1,32 +1,53 @@
 package tech.geocodeapp.geocode.event.response;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.Valid;
+
 import tech.geocodeapp.geocode.event.model.Event;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
+import java.util.List;
 
 /**
- * GetEventsByLocationResponse
+ * GetEventsByLocationResponse object returns all the Events at the given location
  */
 @Validated
 public class GetEventsByLocationResponse {
 
     @JsonProperty( "events" )
-    @Valid
-    private List< Event > events = new ArrayList<>();
+    private List< Event > events;
 
+    /**
+     * Overloaded Constructor
+     *
+     * @param events the list of Events at the specified location
+     */
+    public GetEventsByLocationResponse( List< Event > events ) {
+
+        this.events = events;
+    }
+
+    /**
+     * Sets the events attribute to the specified value
+     *
+     * @param events the value the attribute should be set to
+     *
+     * @return the request after the events has been changed
+     */
     public GetEventsByLocationResponse events( List< Event > events ) {
 
         this.events = events;
         return this;
     }
 
+    /**
+     * Sets a single event inside of the events attribute to the specified value
+     *
+     * @param eventsItem the value the attribute should be set to
+     *
+     * @return the stored events attribute
+     */
     public GetEventsByLocationResponse addEventsItem( Event eventsItem ) {
 
         this.events.add( eventsItem );
@@ -34,45 +55,64 @@ public class GetEventsByLocationResponse {
     }
 
     /**
-     * Get events
+     * Gets the saved events attribute
      *
-     * @return events
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
+     * @return the stored geocodes attribute
+     */
     @Valid
     public List< Event > getEvents() {
 
         return events;
     }
 
+    /**
+     * Sets the events attribute to the specified value
+     *
+     * @param events the value the attribute should be set to
+     */
     public void setEvents( List< Event > events ) {
 
         this.events = events;
     }
 
-
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
     @Override
-    public boolean equals( java.lang.Object o ) {
+    public boolean equals( java.lang.Object obj ) {
 
-        if ( this == o ) {
+        if ( this == obj ) {
 
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if ( obj == null || getClass() != obj.getClass() ) {
 
             return false;
         }
-        GetEventsByLocationResponse getEventsByLocationResponse = ( GetEventsByLocationResponse ) o;
-        return Objects.equals( this.events, getEventsByLocationResponse.events );
+
+        return Objects.equals( this.events, ( ( GetEventsByLocationResponse ) obj ).events );
     }
 
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
     @Override
     public int hashCode() {
 
         return Objects.hash( events );
     }
 
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
     @Override
     public String toString() {
 
