@@ -1,78 +1,123 @@
 package tech.geocodeapp.geocode.event.response;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
+
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
+import java.util.List;
 
 /**
- * CreatePointResponse
+ * CreatePointResponse object of the created Points object with the specified values
  */
 @Validated
 public class CreatePointResponse {
 
+    /**
+     * The created Points with the specified values
+     */
     @JsonProperty( "points" )
-    @Valid
-    private List< Point > points = new ArrayList<>();
+    @NotNull( message = "CreatePointResponse points attribute cannot be null." )
+    private List< Point > points;
 
-    public CreatePointResponse points( List< Point > points ) {
+    /**
+     * Overloaded Constructor
+     *
+     * @param points the points created for a certain Event
+     */
+    public CreatePointResponse( @Valid List< Point > points ) {
+
+        this.points = points;
+    }
+
+    /**
+     * Sets the points attribute to the specified value
+     *
+     * @param points the value the attribute should be set to
+     *
+     * @return the request after the points has been changed
+     */
+    public CreatePointResponse points( @Valid List< Point > points ) {
 
         this.points = points;
         return this;
     }
 
-    public CreatePointResponse addPointsItem( Point pointsItem ) {
+    /**
+     * Sets a single point inside of the points attribute to the specified value
+     *
+     * @param pointsItem the value the attribute should be set to
+     *
+     * @return the stored points attribute
+     */
+    public CreatePointResponse addPointsItem( @Valid Point pointsItem ) {
 
         this.points.add( pointsItem );
         return this;
     }
 
     /**
-     * Get points
+     * Gets the saved points attribute
      *
-     * @return points
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
+     * @return the stored points attribute
+     */
     @Valid
     public List< Point > getPoints() {
 
         return points;
     }
 
-    public void setPoints( List< Point > points ) {
+    /**
+     * Sets the points attribute to the specified value
+     *
+     * @param points the value the attribute should be set to
+     */
+    public void setPoints( @Valid List< Point > points ) {
 
         this.points = points;
     }
 
-
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
     @Override
-    public boolean equals( java.lang.Object o ) {
+    public boolean equals( java.lang.Object obj ) {
 
-        if ( this == o ) {
+        if ( this == obj ) {
 
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if ( obj == null || getClass() != obj.getClass() ) {
 
             return false;
         }
-        CreatePointResponse createPointResponse = ( CreatePointResponse ) o;
-        return Objects.equals( this.points, createPointResponse.points );
+
+        return Objects.equals( this.points, ( ( CreatePointResponse ) obj ).points );
     }
 
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
     @Override
     public int hashCode() {
 
         return Objects.hash( points );
     }
 
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
     @Override
     public String toString() {
 

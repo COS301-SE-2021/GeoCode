@@ -62,7 +62,7 @@ public class GetAllEventsResponse {
     /**
      * Gets the saved events attribute
      *
-     * @return the stored geocodes attribute
+     * @return the stored events attribute
      */
     @Valid
     public List< Event > getEvents() {
