@@ -4,12 +4,17 @@ ion-title{
   padding:0.5%;
 }
 ion-col{
-  border-color:  var(--ion-color-purple);
-  border-width: .01em;
-  border-style:solid; margin-bottom : -1px;
+  border-bottom-color:  var(--ion-color-purple);
+  border-bottom-width: 1px;
+  border-bottom-style:solid; margin-bottom : -1px;
   height: max-content;
   text-align: center;
+  font-size: large;
 }
 #buttons{
   text-align: center;
+}
+
+#headings{
+  font-size: x-large;
 }
