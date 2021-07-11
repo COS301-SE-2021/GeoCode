@@ -14,13 +14,19 @@ ion-title{
 }
 
 ion-col{
-  border-color:  var(--ion-color-purple);
-  border-width: .01em;
-  border-style:solid; margin-bottom : -1px;
-  height: max-content;
+  border-bottom-color:  var(--ion-color-purple);
+  border-bottom-width: .01em;
+  border-bottom-style:solid; margin-bottom : -1px;
+  height: 40px;
+  padding: 5px;
+
   text-align: center;
 }
 
 #buttons{
   text-align: center;
+}
+
+#time-name{
+  font-size: larger;
 }
