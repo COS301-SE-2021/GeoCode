@@ -2,7 +2,7 @@ name: TypeScript CI
 
 on:
   push:
-    branches: [ master, development ]
+    branches: [ master, development, dev/App ]
   pull_request:
     branches: [ master, development ]
 
@@ -49,6 +49,7 @@ jobs:
       - name: Set up files that usually contain environment variables
         run: |
             cd frontend/src
+            curl "https://maps.googleapis.com/maps/api/js?key=${{secrets.GOOGLE_MAPS_KEY}}" --output app/mocks/google-maps-api.js
             cp index-nomapskey.html index.html
             sudo sed -i 's/\"https:\/\/maps.googleapis.com\/maps\/api\/js?key=\"/\"https:\/\/maps.googleapis.com\/maps\/api\/js?key=${{secrets.GOOGLE_MAPS_KEY}}\"/g' index.html
             cp environments/environment.prod.ts environments/environment.ts
