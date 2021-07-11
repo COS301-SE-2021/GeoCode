@@ -18,9 +18,6 @@
 
 
 
-
-
-
   <div #mapElement class="map"></div>
 
 
@@ -28,6 +25,7 @@
   <div  id ="geoCodeDetails">
 
     <ion-card *ngFor="let geocode of selected">
+      <div  id="close-button"><ion-button id="close" color="white">X</ion-button></div>
       <ion-header>
         <ion-title id="card-title">
           {{geocode.description}}
