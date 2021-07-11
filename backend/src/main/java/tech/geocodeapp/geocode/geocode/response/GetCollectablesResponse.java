@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
-import tech.geocodeapp.geocode.collectable.model.Collectable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * GetCollectablesResponse used to access the attributes received from the response
@@ -22,7 +21,7 @@ public class GetCollectablesResponse {
      */
     @Valid
     @JsonProperty( "collectables" )
-    private List< Collectable > collectables = new ArrayList<>();
+    private List< UUID > collectables = new ArrayList<>();
 
     /**
      * Default constructor
@@ -36,7 +35,7 @@ public class GetCollectablesResponse {
      *
      * @param collectables The list of collectables inside of the stored GeoCode
      */
-    public GetCollectablesResponse( List< Collectable > collectables ) {
+    public GetCollectablesResponse( List< UUID > collectables ) {
 
         this.collectables = collectables;
     }
@@ -48,7 +47,7 @@ public class GetCollectablesResponse {
      *
      * @return the request after the collectables has been changed
      */
-    public GetCollectablesResponse collectables( List< Collectable > collectables ) {
+    public GetCollectablesResponse collectables( List< UUID > collectables ) {
 
         this.collectables = collectables;
         return this;
@@ -61,7 +60,7 @@ public class GetCollectablesResponse {
      *
      * @return the stored collectables attribute
      */
-    public GetCollectablesResponse addCollectablesItem( Collectable collectablesItem ) {
+    public GetCollectablesResponse addCollectablesItem( UUID collectablesItem ) {
 
         this.collectables.add( collectablesItem );
         return this;
@@ -73,7 +72,7 @@ public class GetCollectablesResponse {
      * @return the stored collectables attribute
      */
     @Valid
-    public List< Collectable > getCollectables() {
+    public List< UUID > getCollectables() {
 
         return collectables;
     }
@@ -83,7 +82,7 @@ public class GetCollectablesResponse {
      *
      * @param collectables the value the attribute should be set to
      */
-    public void setCollectables( List< Collectable > collectables ) {
+    public void setCollectables( List< UUID > collectables ) {
 
         this.collectables = collectables;
     }

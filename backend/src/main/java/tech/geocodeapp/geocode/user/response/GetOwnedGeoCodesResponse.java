@@ -2,50 +2,102 @@ package tech.geocodeapp.geocode.user.response;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+
 import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
  * GetOwnedGeoCodesResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-24T10:49:36.244Z[GMT]")
 
 
 public class GetOwnedGeoCodesResponse   {
-  @JsonProperty("geocodes")
-  @Valid
-  private List<GeoCode> geocodes = null;
+  @JsonProperty("success")
+  private Boolean success = null;
 
-  public GetOwnedGeoCodesResponse geocodes(List<GeoCode> geocodes) {
-    this.geocodes = geocodes;
-    return this;
+  @JsonProperty("message")
+  private String message = null;
+
+  @JsonProperty("geocodeIDs")
+  @Valid
+  private List<UUID> geocodeIDs = new ArrayList<UUID>();
+
+  public GetOwnedGeoCodesResponse(boolean success, String message, List<UUID> geocodeIDs) {
+    this.success = success;
+    this.message = message;
+    this.geocodeIDs = geocodeIDs;
   }
 
-  public GetOwnedGeoCodesResponse addGeocodesItem(GeoCode geocodesItem) {
-    if (this.geocodes == null) {
-      this.geocodes = new ArrayList<GeoCode>();
-    }
-    this.geocodes.add(geocodesItem);
+  public GetOwnedGeoCodesResponse success(Boolean success) {
+    this.success = success;
     return this;
   }
 
   /**
-   * Get geocodes
-   * @return geocodes
+   * Get success
+   * @return success
    **/
-  @Schema(description = "")
-      @Valid
-    public List<GeoCode> getGeocodes() {
-    return geocodes;
+  @Schema(required = true, description = "")
+      @NotNull
+
+    public Boolean isSuccess() {
+    return success;
   }
 
-  public void setGeocodes(List<GeoCode> geocodes) {
-    this.geocodes = geocodes;
+  public void setSuccess(Boolean success) {
+    this.success = success;
+  }
+
+  public GetOwnedGeoCodesResponse message(String message) {
+    this.message = message;
+    return this;
+  }
+
+  /**
+   * Get message
+   * @return message
+   **/
+  @Schema(example = "The IDs of the User's owned GeoCodes was successfully returned", required = true, description = "")
+      @NotNull
+
+    public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public GetOwnedGeoCodesResponse geocodeIDs(List<UUID> geocodeIDs) {
+    this.geocodeIDs = geocodeIDs;
+    return this;
+  }
+
+  public GetOwnedGeoCodesResponse addGeocodeIDsItem(UUID geocodeIDsItem) {
+    this.geocodeIDs.add(geocodeIDsItem);
+    return this;
+  }
+
+  /**
+   * Get geocodeIDs
+   * @return geocodeIDs
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+    @Valid
+    public List<UUID> getGeocodeIDs() {
+    return geocodeIDs;
+  }
+
+  public void setGeocodeIDs(List<UUID> geocodeIDs) {
+    this.geocodeIDs = geocodeIDs;
   }
 
 
@@ -58,12 +110,14 @@ public class GetOwnedGeoCodesResponse   {
       return false;
     }
     GetOwnedGeoCodesResponse getOwnedGeoCodesResponse = (GetOwnedGeoCodesResponse) o;
-    return Objects.equals(this.geocodes, getOwnedGeoCodesResponse.geocodes);
+    return Objects.equals(this.success, getOwnedGeoCodesResponse.success) &&
+        Objects.equals(this.message, getOwnedGeoCodesResponse.message) &&
+        Objects.equals(this.geocodeIDs, getOwnedGeoCodesResponse.geocodeIDs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(geocodes);
+    return Objects.hash(success, message, geocodeIDs);
   }
 
   @Override
@@ -71,7 +125,9 @@ public class GetOwnedGeoCodesResponse   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetOwnedGeoCodesResponse {\n");
     
-    sb.append("    geocodes: ").append(toIndentedString(geocodes)).append("\n");
+    sb.append("    success: ").append(toIndentedString(success)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
+    sb.append("    geocodeIDs: ").append(toIndentedString(geocodeIDs)).append("\n");
     sb.append("}");
     return sb.toString();
   }

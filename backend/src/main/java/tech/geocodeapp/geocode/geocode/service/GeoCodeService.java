@@ -18,9 +18,8 @@ public interface GeoCodeService {
      * @return the newly create response instance from the specified CreateGeoCodeRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     * @throws RepoException an error occurred when trying to access the repo
      */
-    CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException, RepoException;
+    CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException;
 
     /**
      * Get all the stored GeoCodes in the Repo
@@ -37,8 +36,10 @@ public interface GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified GetCollectablesRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    GetCollectablesResponse getCollectables(GetCollectablesRequest request ) throws InvalidRequestException, RepoException;
+    GetCollectablesResponse getCollectables( GetCollectablesRequest request ) throws InvalidRequestException;
 
     /**
      * Get all the GeoCodes with a certain level of difficulty
@@ -46,8 +47,10 @@ public interface GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified GetGeoCodesByDifficultyRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException, RepoException;
+    GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException;
 
     /**
      * Get the Hints of how to locate a GeoCode in the real world
@@ -55,8 +58,10 @@ public interface GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified GetHintsRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    GetHintsResponse getHints( GetHintsRequest request ) throws InvalidRequestException, RepoException;
+    GetHintsResponse getHints( GetHintsRequest request ) throws InvalidRequestException;
 
     /**
      * Finds the stored GeoCode associated with the generated QR Code
@@ -64,8 +69,10 @@ public interface GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified GetGeoCodeByQRCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    GetGeoCodeByQRCodeResponse getGeocodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException, RepoException;
+    GetGeoCodeByQRCodeResponse getGeoCodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException;
 
     /**
      * Finds the stored GeoCode associated at the given Location
@@ -74,7 +81,7 @@ public interface GeoCodeService {
      *
      * @return the newly create response instance from the specified GetGeoCodeByLocationRequest
      */
-    GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException, RepoException;
+    GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException;
 
     /**
      * Swaps a stored Collectable in a GeoCode with the Users GeoCode
@@ -82,8 +89,10 @@ public interface GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified SwapCollectablesRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException, RepoException;
+    SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException;
 
     /**
      * Updates the availability of a GeoCode
@@ -91,6 +100,8 @@ public interface GeoCodeService {
      * @param request the attributes the response should be created from
      *
      * @return the newly create response instance from the specified UpdateAvailabilityRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws RepoException, InvalidRequestException;
+    UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws InvalidRequestException;
 }

@@ -28,31 +28,36 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     private NewUserInterceptor interceptor;
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
+    protected void configure( HttpSecurity http ) throws Exception {
+
+        super.configure( http );
         http.cors().and().csrf().disable();
-        http.addFilterBefore(interceptor, BasicAuthenticationFilter.class);
+        http.addFilterBefore( interceptor, BasicAuthenticationFilter.class );
         http.authorizeRequests()
                 .anyRequest()
-                .hasRole("User");
+                .hasRole( "User" );
     }
 
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobal( AuthenticationManagerBuilder auth ) {
+
         KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
-        keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
-        auth.authenticationProvider(keycloakAuthenticationProvider);
+        keycloakAuthenticationProvider.setGrantedAuthoritiesMapper( new SimpleAuthorityMapper() );
+        auth.authenticationProvider( keycloakAuthenticationProvider );
     }
 
     @Bean
     @Override
     protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
+
+        return new RegisterSessionAuthenticationStrategy( new SessionRegistryImpl() );
     }
 
     @Bean
-    public KeycloakConfigResolver KeycloakConfigResolver() {
+    public KeycloakConfigResolver keycloakConfigResolver() {
+
         return new KeycloakSpringBootConfigResolver();
     }
+
 }
