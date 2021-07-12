@@ -41,7 +41,7 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     usePolling: true,
-    browsers: ['ChromeHeadless'],
+    browsers: ['Chrome'], // automated tests will run ChromeHeadless - this is defined in the workflow
     singleRun: false,
     restartOnFileChange: true
   });
