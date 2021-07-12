@@ -9,8 +9,8 @@ import {
   UpdateAvailabilityResponse,
   GetGeoCodesByDifficultyRequest
 } from '../../services/geocode-api';
+import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
 
-declare let google;
 @Component({
   selector: 'app-geocode',
   templateUrl: './geocode.page.html',
@@ -19,6 +19,7 @@ declare let google;
 
 export class GeocodePage implements AfterViewInit  {
   @ViewChild('mapElement',{static:false}) mapElement;
+  googleMaps;
   mapOptions;
   map;
   mapMarker;
@@ -30,7 +31,11 @@ export class GeocodePage implements AfterViewInit  {
 
 
 
-  constructor(public navCtrl: NavController,public geocodeApi: GeoCodeService) {
+  constructor(
+    private navCtrl: NavController,
+    private geocodeApi: GeoCodeService,
+    private mapsLoader: GoogleMapsLoader
+  ) {
     this.geocodes = [{id:'123456789',latitude:-25.75625115327836,longitude:28.235629260918344,difficulty:'EASY',description:'TEST'}];
     this.selected= this.geocodes;
   }
@@ -42,12 +47,15 @@ export class GeocodePage implements AfterViewInit  {
       center: {lat: -25.75625115327836, lng: 28.235629260918344},
       zoom: 15,
     };
-    this.map = new google.maps.Map(this.mapElement.nativeElement,this.mapOptions);
+    this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
 
   }
 
   ngAfterViewInit(): void {
-     this.loadMap();
+    this.mapsLoader.load().then(handle => {
+      this.googleMaps = handle;
+      this.loadMap();
+    }).catch();
   }
 
 
@@ -97,7 +105,7 @@ export class GeocodePage implements AfterViewInit  {
 
       //Add markers to map
       for(const code of this.geocodes){
-        const marker=new google.maps.Marker({
+        const marker=new this.googleMaps.Marker({
           position: {lat: parseFloat(code.latitude), lng:parseFloat( code.longitude)},
           map: this.map,
           title: '',
@@ -160,7 +168,7 @@ export class GeocodePage implements AfterViewInit  {
       zoom: 15,
     };
 
-    this.map = new google.maps.Map(this.mapElement.nativeElement,this.mapOptions);
+    this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
     this.geocodeApi.getGeoCodesByDifficulty(request).subscribe((response: GetGeoCodesByDifficultyResponse)=>{
 
       this.geocodes=response.geocodes;
@@ -168,7 +176,7 @@ export class GeocodePage implements AfterViewInit  {
 
       //Add all geocodes locations to map
       for(const code of this.geocodes){
-        const marker=new google.maps.Marker({
+        const marker=new this.googleMaps.Marker({
           position: {lat: parseFloat(code.latitude), lng:parseFloat( code.longitude)},
           map: this.map,
           title: '',

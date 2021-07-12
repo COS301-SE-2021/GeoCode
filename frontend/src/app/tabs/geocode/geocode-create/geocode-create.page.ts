@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {GeoCodeService, CreateGeoCodeRequest, CreateGeoCodeResponse} from '../../../services/geocode-api';
 import {NavController} from '@ionic/angular';
+import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 
-declare let google;
 let map;
 @Component({
   selector: 'app-geocode-create',
@@ -12,6 +12,7 @@ let map;
 
 export class GeocodeCreatePage implements AfterViewInit {
 @ViewChild('mapElement',{static:false}) mapElement;
+googleMaps;
 locations;
 mapOptions;
 hints = [];
@@ -29,7 +30,7 @@ request: CreateGeoCodeRequest= {
     id:''
 };
 
-  constructor(public geocodeAPI: GeoCodeService,public navCtrl: NavController) {}
+  constructor(public geocodeAPI: GeoCodeService,public navCtrl: NavController, private mapsLoader: GoogleMapsLoader) {}
 
   //create map
   initMap() {
@@ -39,10 +40,10 @@ request: CreateGeoCodeRequest= {
       zoom: 15,
     };
 
-    map = new google.maps.Map(this.mapElement.nativeElement, this.mapOptions);
+    map = new this.googleMaps.Map(this.mapElement.nativeElement, this.mapOptions);
 
     //Add event listeners to map
-    google.maps.event.addListener(map, 'click', (event)=>{
+    this.googleMaps.event.addListener(map, 'click', (event)=>{
       this.placeMarker(event.latLng);
     });
 
@@ -51,7 +52,10 @@ request: CreateGeoCodeRequest= {
 
   //create map
   ngAfterViewInit(): void {
-    this.initMap();
+    this.mapsLoader.load().then(handle => {
+      this.googleMaps = handle;
+      this.initMap();
+    }).catch();
   }
 
   //update the description field for the request
@@ -90,9 +94,9 @@ request: CreateGeoCodeRequest= {
 
   //Place map marker based on user click listener
   placeMarker(location){
-    this.marker = new google.maps.Marker({
+    this.marker = new this.googleMaps.Marker({
         map,
-        animation: google.maps.Animation.DROP,
+        animation: this.googleMaps.Animation.DROP,
         position: location
       }
     );

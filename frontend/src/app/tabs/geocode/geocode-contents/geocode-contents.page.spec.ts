@@ -7,6 +7,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ActivatedRoute, convertToParamMap} from '@angular/router';
 import {of} from 'rxjs';
+import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 
 describe('GeocodeContentsPage', () => {
   let component: GeocodeContentsPage;
@@ -31,7 +32,7 @@ describe('GeocodeContentsPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodeContentsPage ],
-      providers: [{provide: ActivatedRoute, useValue: mockActivatedRoute}, GeoCodeService],
+      providers: [{provide: ActivatedRoute, useValue: mockActivatedRoute}, GeoCodeService, GoogleMapsLoader],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
     }).compileComponents();
 
