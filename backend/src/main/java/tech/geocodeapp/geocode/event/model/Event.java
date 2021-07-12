@@ -1,36 +1,45 @@
 package tech.geocodeapp.geocode.event.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.UUID;
+import java.util.Objects;
 
 /**
  * Event
  */
+@Entity
 @Validated
+@Table( name = "event" )
 public class Event {
 
+    @Id
     @JsonProperty( "id" )
-    private UUID id = null;
+    private UUID id;
 
     @JsonProperty( "name" )
-    private String name = null;
+    private String name;
 
     @JsonProperty( "description" )
-    private String description = null;
+    private String description;
 
-    @JsonProperty( "location" )
-    private GeoPoint location = null;
+    //@OneToOne
+    @Embedded
+    //@JsonProperty( "location" )
+    //@ElementCollection( fetch = FetchType.LAZY )
+    private GeoPoint location;
 
+    @ManyToOne
     @JsonProperty( "leaderboard" )
-    private Leaderboard leaderboard = null;
+    private Leaderboard leaderboard;
 
     public Event id( UUID id ) {
 
@@ -39,12 +48,29 @@ public class Event {
     }
 
     /**
-     * Get id
+     * Default constructor
+     */
+    public Event() {
+
+    }
+
+    /**
      *
-     * @return id
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
+     *
+     * @param id
+     * @param name
+     * @param description
+     * @param location
+     * @param leaderboard
+     */
+    public Event( UUID id, String name, String description, GeoPoint location, Leaderboard leaderboard ) {
+
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.location = location;
+        this.leaderboard = leaderboard;
+    }
 
     @Valid
     public UUID getId() {
@@ -63,13 +89,6 @@ public class Event {
         return this;
     }
 
-    /**
-     * Get name
-     *
-     * @return name
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
 
     public String getName() {
 
@@ -87,13 +106,6 @@ public class Event {
         return this;
     }
 
-    /**
-     * Get description
-     *
-     * @return description
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
 
     public String getDescription() {
 
@@ -111,13 +123,6 @@ public class Event {
         return this;
     }
 
-    /**
-     * Get location
-     *
-     * @return location
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
 
     @Valid
     public GeoPoint getLocation() {
@@ -135,14 +140,6 @@ public class Event {
         this.leaderboard = leaderboard;
         return this;
     }
-
-    /**
-     * Get leaderboard
-     *
-     * @return leaderboard
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
 
     @Valid
     public Leaderboard getLeaderboard() {

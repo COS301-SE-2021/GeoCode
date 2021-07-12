@@ -4,6 +4,9 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.Embeddable;
+import javax.persistence.Table;
 import javax.validation.constraints.*;
 
 /**
@@ -12,7 +15,8 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-07T10:35:03.795Z[GMT]")
 
-
+@Embeddable
+@Table( name = "geopoint" )
 public class GeoPoint   {
     @JsonProperty("latitude")
     private Float latitude = null;
