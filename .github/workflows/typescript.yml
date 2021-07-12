@@ -17,7 +17,6 @@ jobs:
       - name: Set up files that usually contain environment variables
         run: |
             cd frontend/src
-            cp index-nomapskey.html index.html
             cp environments/environment.prod.ts environments/environment.ts
 
       - name: Setup Node.js environment
@@ -49,10 +48,8 @@ jobs:
       - name: Set up files that usually contain environment variables
         run: |
             cd frontend/src
-            curl "https://maps.googleapis.com/maps/api/js?key=${{secrets.GOOGLE_MAPS_KEY}}" --output app/mocks/google-maps-api.js
-            cp index-nomapskey.html index.html
-            sudo sed -i 's/\"https:\/\/maps.googleapis.com\/maps\/api\/js?key=\"/\"https:\/\/maps.googleapis.com\/maps\/api\/js?key=${{secrets.GOOGLE_MAPS_KEY}}\"/g' index.html
             cp environments/environment.prod.ts environments/environment.ts
+            sudo sed -i "s/googleMapsKey: ''/googleMapsKey: '${{secrets.GOOGLE_MAPS_KEY}}'/g" environments/environment.ts
             sudo sed -i "s/hardcodedKeycloakToken: ''/hardcodedKeycloakToken: '${{secrets.EXAMPLE_KEYCLOAK_TOKEN}}'/g" environments/environment.ts
 
       - name: Setup Node.js environment
