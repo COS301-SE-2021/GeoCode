@@ -261,11 +261,11 @@ public class UserServiceImpl implements UserService {
                 int pointAmount = point.getAmount();
                 leaderboardDetails.setPoints(pointAmount);
 
-                //get the rank
+                /*//get the rank
                 GetPointsByLeaderboardRequest getPointsByLeaderboardRequest = new GetPointsByLeaderboardRequest(leaderboard);
 
                 try{
-                    GetPointsByLeaderboardResponse getPointsByLeaderboardResponse= leaderboardService.getPointsByLeaderboard(getPointsByLeaderboardRequest);
+                    GetPointsByLeaderboardResponse getPointsByLeaderboardResponse = leaderboardService.getPointsByLeaderboard(getPointsByLeaderboardRequest);
 
                     List<Point> leaderboardPoints = getPointsByLeaderboardResponse.getPoints();
 
@@ -276,7 +276,10 @@ public class UserServiceImpl implements UserService {
                     leaderboardDetails.setRank(rank);
                 }catch(NullLeaderboardRequestParameterException e){
                     return new GetMyLeaderboardsResponse(false, e.getMessage(), null);
-                }
+                }*/
+
+                //get the rank: using ranking function in SQL
+                int rank = get
 
                 leaderboardDetailsList.add(leaderboardDetails);
             }
