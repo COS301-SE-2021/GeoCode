@@ -4,10 +4,14 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
-import org.springframework.validation.annotation.Validated;
 
+import org.hibernate.annotations.Cascade;
+import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.user.model.User;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -15,9 +19,10 @@ import javax.validation.constraints.*;
  * Point
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T13:14:20.256Z[GMT]")
 
 @Entity
+@Table(name = "point")
 public class Point   {
   @Id
   @JsonProperty("id")
@@ -26,11 +31,15 @@ public class Point   {
   @JsonProperty("amount")
   private Integer amount = null;
 
-  @JsonProperty("userId")
-  private UUID userId = null;
+  @JsonProperty("user")
+  @OneToOne
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private User user = null;
 
-  @JsonProperty("leaderBoardId")
-  private UUID leaderBoardId = null;
+  @JsonProperty("leaderboard")
+  @OneToOne
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private Leaderboard leaderboard = null;
 
   public Point id(UUID id) {
     this.id = id;
@@ -60,12 +69,13 @@ public class Point   {
 
   /**
    * Get amount
+   * minimum: 0
    * @return amount
    **/
   @Schema(required = true, description = "")
       @NotNull
 
-    public Integer getAmount() {
+  @Min(0)  public Integer getAmount() {
     return amount;
   }
 
@@ -73,46 +83,45 @@ public class Point   {
     this.amount = amount;
   }
 
-  public Point userId(UUID userId) {
-    this.userId = userId;
+  public Point user(User user) {
+    this.user = user;
     return this;
   }
 
   /**
-   * Get userId
-   * @return userId
+   * Get user
+   * @return user
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public UUID getUserId() {
-    return userId;
+    public User getUser() {
+    return user;
   }
 
-  public void setUserId(UUID userId) {
-    this.userId = userId;
+  public void setUser(User user) {
+    this.user = user;
   }
 
-  public Point leaderBoardId(UUID leaderBoardId) {
-    this.leaderBoardId = leaderBoardId;
+  public Point leaderboard(Leaderboard leaderboard) {
+    this.leaderboard = leaderboard;
     return this;
   }
 
   /**
-   * Get leaderBoardId
-   * @return leaderBoardId
+   * Get leaderboard
+   * @return leaderboard
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     @Valid
-    public UUID getLeaderBoardId() {
-    return leaderBoardId;
+    public Leaderboard getLeaderBoard() {
+    return leaderboard;
   }
 
-  public void setLeaderBoardId(UUID leaderBoardId) {
-    this.leaderBoardId = leaderBoardId;
+  public void setLeaderBoard(Leaderboard leaderboard) {
+    this.leaderboard = leaderboard;
   }
 
 
@@ -127,13 +136,13 @@ public class Point   {
     Point point = (Point) o;
     return Objects.equals(this.id, point.id) &&
         Objects.equals(this.amount, point.amount) &&
-        Objects.equals(this.userId, point.userId) &&
-        Objects.equals(this.leaderBoardId, point.leaderBoardId);
+        Objects.equals(this.user, point.user) &&
+        Objects.equals(this.leaderboard, point.leaderboard);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, amount, userId, leaderBoardId);
+    return Objects.hash(id, amount, user, leaderboard);
   }
 
   @Override
@@ -143,8 +152,8 @@ public class Point   {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
-    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
-    sb.append("    leaderBoardId: ").append(toIndentedString(leaderBoardId)).append("\n");
+    sb.append("    user: ").append(toIndentedString(user)).append("\n");
+    sb.append("    leaderboard: ").append(toIndentedString(leaderboard)).append("\n");
     sb.append("}");
     return sb.toString();
   }
