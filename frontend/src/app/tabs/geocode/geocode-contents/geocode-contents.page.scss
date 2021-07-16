@@ -9,18 +9,11 @@ ion-toolbar{
   color: white;
 }
 
-ion-content{
- //--ion-background-color:white;
-}
-
-
 .map{
   width: 100%;
   height: 60%;
   border-width: 0px;
   padding: 0px;
-  background-color: white;
-
 }
 
 .barcode{
@@ -29,7 +22,6 @@ ion-content{
   --border-color: var(--ion-color-winered) ;
   color:var(--ion-color-winered);
   font-size: large;
-
 }
 
 .barcode-input{
