@@ -4,7 +4,6 @@ on:
     branches: [ master, development, dev/Configuration ]
   pull_request:
       types: [opened, synchronize, reopened]
-name: SonarCloud Frontend Build & Test
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
