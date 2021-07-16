@@ -19,7 +19,6 @@ jobs:
       with:
         projectBaseDir: frontend
         args: >
-          -Dsonar.login=$SONARCLOUD_TOKEN
-          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
           -Dsonar.organization=cos301-se-2021
           -Dsonar.projectKey=cos301-se-2021_geoCode_frontend
