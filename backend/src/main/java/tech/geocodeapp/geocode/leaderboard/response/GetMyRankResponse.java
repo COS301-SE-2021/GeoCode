@@ -4,7 +4,7 @@ public class GetMyRankResponse {
     /**
      * The found rank
      */
-    private int rank;
+    private Integer rank;
 
     /**
      * Default constructor
@@ -18,7 +18,7 @@ public class GetMyRankResponse {
      *
      * @param rank The rank from the specified leaderboard
      */
-    public GetMyRankResponse(int rank ) {
+    public GetMyRankResponse(Integer rank ) {
 
         this.rank = rank;
     }
@@ -28,7 +28,7 @@ public class GetMyRankResponse {
      *
      * @return the stored rank attribute
      */
-    public int getRank() {
+    public Integer getRank() {
         return rank;
     }
 
@@ -37,7 +37,7 @@ public class GetMyRankResponse {
      *
      * @param rank the value the attribute should be set to
      */
-    public void setRank(int rank) {
+    public void setRank(Integer rank) {
 
         this.rank = rank;
     }
