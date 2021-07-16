@@ -11,7 +11,7 @@ public class GetMyRankRequest {
     /**
      * The point amount to search for
      */
-    private int amount;
+    private Integer amount;
 
     /**
      * Default constructor
@@ -26,7 +26,7 @@ public class GetMyRankRequest {
      * @param leaderboard The leaderboard to be searched for
      * @param amount The amount to searched for
      */
-    public GetMyRankRequest(Leaderboard leaderboard, int amount) {
+    public GetMyRankRequest(Leaderboard leaderboard, Integer amount) {
         this.leaderboard = leaderboard;
         this.amount = amount;
     }
@@ -51,11 +51,11 @@ public class GetMyRankRequest {
         this.leaderboard = leaderboard;
     }
 
-    public int getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 }
