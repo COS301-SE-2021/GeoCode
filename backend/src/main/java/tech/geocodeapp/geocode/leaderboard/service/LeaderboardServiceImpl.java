@@ -15,7 +15,7 @@ import tech.geocodeapp.geocode.leaderboard.request.GetEventLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetLeaderboardByIDRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetMyRankRequest;
 import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
-import tech.geocodeapp.geocode.leaderboard.response.GetLeaderboardByIDResponse;
+import tech.geocodeapp.geocode.leaderboard.response.GetMyRankResponse;
 import tech.geocodeapp.geocode.leaderboard.response.GetPointsByLeaderboardResponse;
 
 import java.util.List;
@@ -86,12 +86,12 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @return A GetLeaderboardByIDResponse object containing the Leaderboard object
      * @throws NullLeaderboardRequestParameterException
      */
-    public GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullLeaderboardRequestParameterException{
+    public GetMyRankResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullLeaderboardRequestParameterException{
         /* Find all of the Leader
          */
 
         if(request == null){
-            return new GetLeaderboardByIDResponse(null);
+            return new GetMyRankResponse(null);
         }
 
         if(request.getLeaderboardID() == null){
@@ -99,7 +99,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }
 
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboardID());
-        return new GetLeaderboardByIDResponse(optionalLeaderboard.get());
+        return new GetMyRankResponse(optionalLeaderboard.get());
     }
 
     /**
