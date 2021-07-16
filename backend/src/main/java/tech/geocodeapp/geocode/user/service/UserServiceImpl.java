@@ -279,7 +279,7 @@ public class UserServiceImpl implements UserService {
                 }*/
 
                 //get the rank: using ranking function in SQL
-                int rank = get
+                int rank =  getMyRank(leaderboard.getId(), pointAmount);
 
                 leaderboardDetailsList.add(leaderboardDetails);
             }
