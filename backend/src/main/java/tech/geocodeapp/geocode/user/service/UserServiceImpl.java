@@ -13,9 +13,12 @@ import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.leaderboard.exception.NullLeaderboardRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
+import tech.geocodeapp.geocode.leaderboard.request.GetMyRankRequest;
+import tech.geocodeapp.geocode.leaderboard.response.GetMyRankResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
@@ -275,7 +278,16 @@ public class UserServiceImpl implements UserService {
                 }*/
 
                 //get the rank: using ranking function in SQL
-                int rank =  getMyRank(leaderboard.getId(), pointAmount);
+                GetMyRankRequest getMyRankRequest = new GetMyRankRequest(leaderboard, pointAmount);
+
+                try{
+                    GetMyRankResponse getMyRankResponse = leaderboardService.getMyRank(getMyRankRequest);
+
+                    int rank = getMyRankResponse.getRank();
+                    leaderboardDetails.setRank(rank);
+                }catch(NullLeaderboardRequestParameterException e){
+                    return new GetMyLeaderboardsResponse(false, e.getMessage(), null);
+                }
 
                 leaderboardDetailsList.add(leaderboardDetails);
             }
