@@ -13,12 +13,11 @@ jobs:
         fetch-depth: 0
     - name: SonarCloud Frontend Scan
       uses: sonarsource/sonarcloud-github-action@master
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
         projectBaseDir: frontend
         args: >
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
           -Dsonar.organization=cos301-se-2021
           -Dsonar.projectKey=cos301-se-2021_geoCode_frontend
+          -Dsonar.language=typescript
+          -Dsonar.tests=src/test.ts

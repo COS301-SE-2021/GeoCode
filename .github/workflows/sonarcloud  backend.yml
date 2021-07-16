@@ -34,4 +34,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           cd backend
-          mvn --batch-mode --update-snapshots verify -B verify sonar:sonar -Dsonar.projectKey=cos301-se-2021_geoCode_backend -Dsonar.organization=cos301-se-2021 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN 
+          mvn --batch-mode --update-snapshots verify -B verify sonar:sonar -Dsonar.projectKey=cos301-se-2021_geoCode_backend -Dsonar.organization=cos301-se-2021 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN -Dsonar.tests=src/test/java/tech/geocodeapp/geocode
