@@ -2,16 +2,21 @@ package tech.geocodeapp.geocode.leaderboard.request;
 
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
-public class GetPointsByLeaderboardRequest {
+public class GetMyRankRequest {
     /**
      * The id of the leaderboard to be searched for
      */
     private Leaderboard leaderboard;
 
     /**
+     * The point amount to search for
+     */
+    private int amount;
+
+    /**
      * Default constructor
      */
-    public GetPointsByLeaderboardRequest() {
+    public GetMyRankRequest() {
 
     }
 
@@ -19,10 +24,11 @@ public class GetPointsByLeaderboardRequest {
      * Overloaded Constructor
      *
      * @param leaderboard The leaderboard to be searched for
+     * @param amount The amount to searched for
      */
-    public GetPointsByLeaderboardRequest( Leaderboard leaderboard ) {
-
+    public GetMyRankRequest(Leaderboard leaderboard, int amount) {
         this.leaderboard = leaderboard;
+        this.amount = amount;
     }
 
     /**
@@ -43,5 +49,13 @@ public class GetPointsByLeaderboardRequest {
     public void setLeaderboard( Leaderboard leaderboard ) {
 
         this.leaderboard = leaderboard;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }

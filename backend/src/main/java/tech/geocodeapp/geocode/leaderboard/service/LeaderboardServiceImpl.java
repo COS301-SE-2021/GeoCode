@@ -13,7 +13,7 @@ import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.request.GetEventLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetLeaderboardByIDRequest;
-import tech.geocodeapp.geocode.leaderboard.request.GetPointsByLeaderboardRequest;
+import tech.geocodeapp.geocode.leaderboard.request.GetMyRankRequest;
 import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.GetLeaderboardByIDResponse;
 import tech.geocodeapp.geocode.leaderboard.response.GetPointsByLeaderboardResponse;
@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -109,7 +108,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @return A GetPointsByLeaderboardResponse object
      * @throws NullLeaderboardRequestParameterException
      */
-    public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetPointsByLeaderboardRequest request) throws NullLeaderboardRequestParameterException{
+    public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullLeaderboardRequestParameterException{
         if(request == null){
             return new GetPointsByLeaderboardResponse(null);
         }
