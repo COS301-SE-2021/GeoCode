@@ -1,38 +1,19 @@
-name: SonarCloud
+name: SonarCloud Frontend
 on:
   push:
-    branches: [ master, development ]
+    branches: [ master, development, dev/Configuration ]
   pull_request:
-    types: [opened, synchronize, reopened]
+      types: [opened, synchronize, reopened]
+name: Main Workflow
 jobs:
-  build:
-    name: SonarCloud Frontend Build & Test
+  sonarcloud:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Set up files that usually contain environment variables
-        run: |
-            cd frontend/src
-            cp index-nomapskey.html index.html
-            cp environments/environment.prod.ts environments/environment.ts
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2.1.5
-        with:
-          node-version: 12.21
-          
-      - name: install @angular/cli
-        run: npm install -i -D -E @angular/cli
-        
-      - name: install ionic
-        run: npm install -g @ionic/cli
-
-      - name: install npm dependencies
-        working-directory: ./frontend
-        run: npm install
-      - name: Build and analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

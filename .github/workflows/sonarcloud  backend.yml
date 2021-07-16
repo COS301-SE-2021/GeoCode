@@ -1,7 +1,7 @@
-name: SonarCloud
+name: SonarCloud Backend
 on:
   push:
-    branches: [ master, development, dev/Configuration ]
+    branches: [ master, development ]
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -28,7 +28,7 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Build and analyze
+      - name: Build and analyze SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
