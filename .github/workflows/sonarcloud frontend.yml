@@ -1,41 +1,10 @@
 name: SonarCloud Frontend
 on:
   push:
-    branches: [ master, development, dev/Configuration ]
+    branches: [ master, development ]
   pull_request:
       types: [opened, synchronize, reopened]
 jobs:
-  build:
-    name: TypeScript Build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      
-      - name: Set up files that usually contain environment variables
-        run: |
-            cd frontend/src
-            cp index-nomapskey.html index.html
-            cp environments/environment.prod.ts environments/environment.ts
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2.1.5
-        with:
-          node-version: 12.21
-          
-      - name: install @angular/cli
-        run: npm install -i -D -E @angular/cli
-        
-      - name: install ionic
-        run: npm install -g @ionic/cli
-
-      - name: install npm dependencies
-        working-directory: ./frontend
-        run: npm install
-
-      - name: Build App
-        working-directory: ./frontend
-        run: ionic build
   sonarcloud:
     runs-on: ubuntu-latest
     steps:
