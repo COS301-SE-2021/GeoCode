@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
         User currentUser = optionalUser.get();
         Set<CollectableType> foundCollectableTypes = currentUser.getFoundCollectableTypes();
 
-        List<UUID> foundCollectableTypeIDs = new ArrayList<UUID>();
+        List<UUID> foundCollectableTypeIDs = new ArrayList<>();
         foundCollectableTypes.forEach(collectableType -> foundCollectableTypeIDs.add(collectableType.getId()));
 
         return new GetFoundCollectableTypesResponse(true, "The IDs of the User's found CollectableTypes was successfully returned", foundCollectableTypeIDs);
@@ -186,7 +186,7 @@ public class UserServiceImpl implements UserService {
         User currentUser = optionalUser.get();
         Set<GeoCode> foundGeoCodes = currentUser.getFoundGeocodes();
 
-        List<UUID> foundGeoCodeIDs = new ArrayList<UUID>();
+        List<UUID> foundGeoCodeIDs = new ArrayList<>();
         foundGeoCodes.forEach(foundGeoCode -> foundGeoCodeIDs.add(foundGeoCode.getId()));
 
         return new GetFoundGeoCodesResponse(true, "The IDs of the User's found GeoCodes was successfully returned", foundGeoCodeIDs);
@@ -217,7 +217,7 @@ public class UserServiceImpl implements UserService {
         User currentUser = optionalUser.get();
         Set<GeoCode> ownedGeocodes = currentUser.getOwnedGeocodes();
 
-        List<UUID> ownedGeoCodeIDs = new ArrayList<UUID>();
+        List<UUID> ownedGeoCodeIDs = new ArrayList<>();
         ownedGeocodes.forEach(ownedGeocode -> ownedGeoCodeIDs.add(ownedGeocode.getId()));
 
         return new GetOwnedGeoCodesResponse(true, "The IDs of the User's owned GeoCodes was successfully returned", ownedGeoCodeIDs);
@@ -227,7 +227,7 @@ public class UserServiceImpl implements UserService {
      * Gets the Leaderboard details for all Leaderboards that a given User is on
      * @param request The GetMyLeaderboardsRequest object
      * @return A GetMyLeaderboardsResponse object: (success, message, object)
-     * @throws NullUserRequestParameterException
+     * @throws NullUserRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
     public GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullUserRequestParameterException{
         if (request == null) {
