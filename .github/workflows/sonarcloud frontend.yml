@@ -4,7 +4,7 @@ on:
     branches: [ master, development, dev/Configuration ]
   pull_request:
       types: [opened, synchronize, reopened]
-name: Main Workflow
+name: SonarCloud Frontend Build & Test
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - name: SonarCloud Scan
+    - name: SonarCloud Frontend Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
