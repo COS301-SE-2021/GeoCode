@@ -16,6 +16,7 @@ import tech.geocodeapp.geocode.leaderboard.request.GetLeaderboardByIDRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetMyRankRequest;
 import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.GetLeaderboardByIDResponse;
+import tech.geocodeapp.geocode.leaderboard.response.GetMyRankResponse;
 import tech.geocodeapp.geocode.leaderboard.response.GetPointsByLeaderboardResponse;
 
 import java.util.List;
@@ -121,4 +122,22 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         return new GetPointsByLeaderboardResponse(points);
     }
 
+    /**
+     * Gets the rank for the given point amount on the given leaderboard
+     * @param request The GetMyRankRequest object
+     * @return A GetMyRankResponse object
+     * @throws NullLeaderboardRequestParameterException
+     */
+    public GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullLeaderboardRequestParameterException{
+        if(request == null){
+            return new GetMyRankResponse(null);
+        }
+
+        if(request.getLeaderboard() == null || request.getAmount() == null){
+            throw new NullLeaderboardRequestParameterException();
+        }
+
+        int rank = pointRepo.getMyRank(request.getLeaderboard().getId(), request.getAmount());
+        return new GetMyRankResponse(rank);
+    }
 }
