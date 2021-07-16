@@ -14,5 +14,11 @@ jobs:
     - name: SonarCloud Frontend Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        projectBaseDir: my-custom-directory
+        args: >
+          -Dsonar.organization=cos301-se-2021
+          -Dsonar.projectKey=cos301-se-2021_geoCode_frontend
+          -Dsonar.login=$SONARCLOUD_TOKEN
