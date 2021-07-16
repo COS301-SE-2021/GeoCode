@@ -4,7 +4,6 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
 /**
  * This is the unit testing class for the GeoCode subsystem
  *
@@ -12,8 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * and the repository are working in valid order
  * and what exceptions are thrown if not.
  */
-@TestMethodOrder( MethodOrderer.OrderAnnotation.class )
 @ExtendWith( MockitoExtension.class )
+@TestMethodOrder( MethodOrderer.OrderAnnotation.class )
 class EventServiceImplTest {
 
 
