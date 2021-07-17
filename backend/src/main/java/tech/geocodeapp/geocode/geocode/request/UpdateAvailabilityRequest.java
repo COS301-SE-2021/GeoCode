@@ -131,7 +131,7 @@ public class UpdateAvailabilityRequest {
             return false;
         }
 
-        UpdateAvailabilityRequest updateAvailabilityRequest = ( UpdateAvailabilityRequest ) obj;
+        var updateAvailabilityRequest = ( UpdateAvailabilityRequest ) obj;
         return Objects.equals( this.geoCodeID, updateAvailabilityRequest.geoCodeID ) &&
                 Objects.equals( this.isAvailable, updateAvailabilityRequest.isAvailable );
     }
