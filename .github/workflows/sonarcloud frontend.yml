@@ -38,6 +38,7 @@ jobs:
             run: ./mvnw --batch-mode -Pcoverage clean verify
           - name: Analyse with SonarCloud
             run: >
+              cd backend
               ./mvnw --batch-mode
               -Pcoverage
               sonar:sonar
