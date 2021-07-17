@@ -24,6 +24,12 @@ public class EventLeaderboardDetails   {
   @JsonProperty("rank")
   private Integer rank = null;
 
+  public EventLeaderboardDetails(String username, Integer points, Integer rank) {
+    this.username = username;
+    this.points = points;
+    this.rank = rank;
+  }
+
   public EventLeaderboardDetails username(String username) {
     this.username = username;
     return this;
