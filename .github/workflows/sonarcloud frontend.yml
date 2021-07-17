@@ -6,7 +6,7 @@ on:
       types: [opened, synchronize, reopened]
 jobs:
     build:
-        name: build and analyse
+        name: SonarCloud build and analyse
         runs-on: ubuntu-latest
         steps:
           - name: Checkout repository
