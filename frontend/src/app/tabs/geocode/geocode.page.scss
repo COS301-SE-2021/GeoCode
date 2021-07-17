@@ -11,6 +11,20 @@
   color: var(--ion-color-accent);
 }
 
+.horizontalscroll {
+  position: relative;
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  height: auto;
+}
+
+.items {
+  width: auto;
+  white-space: nowrap;
+  position: relative;
+}
+
 .map{
   width: 100%;
   height: 50%;
@@ -47,7 +61,7 @@ ion-checkbox{
 }
 
 #button{
-  width: 100%;
+  width: auto;
 }
 
 #close-button{

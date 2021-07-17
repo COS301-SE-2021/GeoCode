@@ -6,14 +6,19 @@
 
 <ion-content>
 
+  <div class="horizontalscroll">
+    <div class="items">
+      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="getAllMap()">Get all GeoCodes</ion-button></ion-col>
+      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="easyMap()">Easy</ion-button></ion-col>
+      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="mediumMap()">Medium </ion-button></ion-col>
+      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="difficultMap()">Difficult</ion-button></ion-col>
+      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="insaneMap()">Insane</ion-button></ion-col>
+    </div>
+  </div>
 
 
   <ion-row>
-    <ion-col id="button-col"><ion-button id="button"  color="button" (click)="easyMap()">Easy</ion-button></ion-col>
-    <ion-col id="button-col"><ion-button id="button"  color="button" (click)="mediumMap()">Medium </ion-button></ion-col>
-    <ion-col id="button-col"><ion-button id="button"  color="button" (click)="difficultMap()">Difficult</ion-button></ion-col>
-    <ion-col id="button-col"><ion-button id="button"  color="button" (click)="insaneMap()">Insane</ion-button></ion-col>
-    <ion-col id="button-col"><ion-button id="button"  color="button" (click)="getAllMap()">Get all GeoCodes</ion-button></ion-col>
+
   </ion-row>
 
 
