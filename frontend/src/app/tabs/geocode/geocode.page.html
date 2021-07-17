@@ -9,11 +9,11 @@
 
 
   <ion-row>
-    <ion-col id="button-col"><ion-button id="button"  color="purple" (click)="easyMap()">Easy</ion-button></ion-col>
-    <ion-col id="button-col"><ion-button id="button" color="danger" (click)="mediumMap()">Medium </ion-button></ion-col>
-    <ion-col id="button-col"><ion-button id="button"  color="purple" (click)="difficultMap()">Difficult</ion-button></ion-col>
-    <ion-col id="button-col"><ion-button id="button" color="danger" (click)="insaneMap()">Insane</ion-button></ion-col>
-    <ion-col id="button-col"><ion-button id="button" color="purple" (click)="getAllMap()">Get all GeoCodes</ion-button></ion-col>
+    <ion-col id="button-col"><ion-button id="button"  color="button" (click)="easyMap()">Easy</ion-button></ion-col>
+    <ion-col id="button-col"><ion-button id="button"  color="button" (click)="mediumMap()">Medium </ion-button></ion-col>
+    <ion-col id="button-col"><ion-button id="button"  color="button" (click)="difficultMap()">Difficult</ion-button></ion-col>
+    <ion-col id="button-col"><ion-button id="button"  color="button" (click)="insaneMap()">Insane</ion-button></ion-col>
+    <ion-col id="button-col"><ion-button id="button"  color="button" (click)="getAllMap()">Get all GeoCodes</ion-button></ion-col>
   </ion-row>
 
 
@@ -49,14 +49,14 @@
             <ion-col>Longitude</ion-col>
             <ion-col>{{geocode.longitude}} </ion-col>
           </ion-row>
-          <ion-button (click)="findGeoCode(geocode)" color="danger" >Find GeoCode</ion-button>
+          <ion-button (click)="findGeoCode(geocode)" color="button" >Find GeoCode</ion-button>
 
       </ion-card-content>
     </ion-card>
 </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="danger">
+    <ion-fab-button color="button">
       <ion-icon  name="add-outline"(click)="createGeoCode()"></ion-icon>
     </ion-fab-button>
   </ion-fab>
