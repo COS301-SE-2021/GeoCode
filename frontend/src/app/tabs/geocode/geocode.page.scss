@@ -62,13 +62,17 @@ ion-checkbox{
 
 #button{
   width: auto;
-  background: var(--ion-color-button);
+ // background: var(--ion-color-button);
   //color: var(--ion-color-button-contrast);
 
 }
 
 #close-button{
   text-align: left;
+}
+
+#close{
+  color: var(--ion-color-button);
 
 }
 
