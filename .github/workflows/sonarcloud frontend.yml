@@ -35,7 +35,9 @@ jobs:
               restore-keys: |
                 ${{ runner.os }}-maven-
           - name: Build
-            run: ./mvnw --batch-mode -Pcoverage clean verify
+            run: |
+                cd backend 
+                ./mvnw --batch-mode -Pcoverage clean verify
           - name: Analyse with SonarCloud
             run: >
               cd backend
