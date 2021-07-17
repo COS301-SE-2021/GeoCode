@@ -18,5 +18,5 @@ public interface PointRepository extends JpaRepository<Point, UUID> {
     @Query(value = "SELECT DENSE_RANK() OVER(ORDER BY amount) AS rank FROM point WHERE leaderboard_id = ?1 AND amount = ?2 ORDER BY rank")
     int getMyRank(UUID leaderboardID, int amount);
 
-    int countByLeaderBoard(Leaderboard leaderboard);
+    int countByLeaderboard(Leaderboard leaderboard);
 }
