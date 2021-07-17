@@ -19,4 +19,7 @@ public interface PointRepository extends JpaRepository<Point, UUID> {
     int getMyRank(UUID leaderboardID, int amount);
 
     int countByLeaderboard(Leaderboard leaderboard);
+
+    @Query(value = "SELECT * FROM Point WHERE leaderboard_id = ?1 ORDER BY amount OFFSET ?2 ROWS FETCH NEXT ?3 ROWS ONLY ", nativeQuery = true)
+    List<Point> findPointsByLeaderboardBetween(UUID leaderboardId, int offset, int next);
 }
