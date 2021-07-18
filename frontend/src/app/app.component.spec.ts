@@ -16,7 +16,6 @@ describe('AppComponent', () => {
   };
 
   beforeEach(waitForAsync(() => {
-    localStorage.setItem('accessToken', environment.hardcodedKeycloakToken);
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       providers: [
