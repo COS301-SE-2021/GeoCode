@@ -21,14 +21,14 @@ public class GeoPoint {
      */
     @JsonProperty( "latitude" )
     @NotNull( message = "GeoPoint's longitude cannot be null." )
-    private Float latitude;
+    private double latitude;
 
     /**
      * The longitude co-ordinate of an object in the real world
      */
     @JsonProperty( "longitude" )
     @NotNull( message = "GeoPoint's longitude cannot be null." )
-    private Float longitude;
+    private double longitude;
 
     /**
      * Default constructor
@@ -43,7 +43,7 @@ public class GeoPoint {
      * @param latitude latitude co-ordinate of an object in the real world
      * @param longitude longitude co-ordinate of an object in the real world
      */
-    public GeoPoint( Float latitude, Float longitude ) {
+    public GeoPoint( double latitude, double longitude ) {
 
         this.latitude = latitude;
         this.longitude = longitude;
@@ -56,7 +56,7 @@ public class GeoPoint {
      *
      * @return the model after changing the latitude
      */
-    public GeoPoint latitude( Float latitude ) {
+    public GeoPoint latitude( double latitude ) {
 
         this.latitude = latitude;
         return this;
@@ -67,7 +67,7 @@ public class GeoPoint {
      *
      * @return the stored latitude attribute
      */
-    public Float getLatitude() {
+    public double getLatitude() {
 
         return latitude;
     }
@@ -77,7 +77,7 @@ public class GeoPoint {
      *
      * @param latitude the value the latitude should be set to
      */
-    public void setLatitude( Float latitude ) {
+    public void setLatitude( double latitude ) {
 
         this.latitude = latitude;
     }
@@ -89,7 +89,7 @@ public class GeoPoint {
      *
      * @return the model after changing the longitude
      */
-    public GeoPoint longitude( Float longitude ) {
+    public GeoPoint longitude( double longitude ) {
 
         this.longitude = longitude;
         return this;
@@ -100,7 +100,7 @@ public class GeoPoint {
      *
      * @return the stored longitude attribute
      */
-    public Float getLongitude() {
+    public double getLongitude() {
 
         return longitude;
     }
@@ -110,7 +110,7 @@ public class GeoPoint {
      *
      * @param longitude the value the longitude should be set to
      */
-    public void setLongitude( Float longitude ) {
+    public void setLongitude( double longitude ) {
 
         this.longitude = longitude;
     }

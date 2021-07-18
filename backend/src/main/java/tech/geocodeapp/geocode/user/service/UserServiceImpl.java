@@ -211,6 +211,12 @@ public class UserServiceImpl implements UserService {
         return new GetOwnedGeoCodesResponse(true, "The IDs of the User's owned GeoCodes was successfully returned", ownedGeoCodeIDs);
     }
 
+    @Override
+    public GetMyLeaderboardsResponse getMyLeaderboards( GetMyLeaderboardsRequest request ) throws NullUserRequestParameterException {
+
+        return null;
+    }
+
     /**
      * Gets the User for the given id if they exist
      * @param id The id for the User
