@@ -31,12 +31,12 @@ public interface GeoCodeRepository extends JpaRepository< GeoCode, UUID> {
     /**
      * Find the GeoCode with the given qrCode characters
      *
-     * @param qrCode the unique characters allocated to a certain GeoCode
+     * @param code the unique characters allocated to a certain GeoCode
      *
      * @return the GeoCode with the specified qrCode
      */
-    @Query( value = "SELECT r FROM GeoCode r WHERE r.qrCode = :qrCode" )
-    GeoCode findGeoCodeWithQRCode( @Param( "code" ) String qrCode );
+    @Query( value = "SELECT r FROM GeoCode r WHERE r.qrCode = :code" )
+    GeoCode findGeoCodeWithQRCode( @Param( "code" ) String code );
 
     /**
      * Find the GeoCode with the given location (longitude and latitude co-ordinates)
