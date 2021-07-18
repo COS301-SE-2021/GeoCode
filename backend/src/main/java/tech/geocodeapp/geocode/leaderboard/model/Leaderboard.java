@@ -28,7 +28,8 @@ import javax.validation.constraints.*;
 public class Leaderboard   {
   @Id
   @JsonProperty("id")
-  @Type(type="org.hibernate.type.UUIDCharType")
+  //@Type(type="org.hibernate.type.UUIDCharType")
+  //@Type(type="org.hibernate.dialect.MySQL8InnoDBDialect")
   private UUID id = null;
 
   @JsonProperty("name")
