@@ -9,7 +9,11 @@ const routes: Routes = [
   {
     path: 'geocode-create',
     loadChildren: () => import('./tabs/geocode/geocode-create/geocode-create.module').then(m => m.GeocodeCreatePageModule)
+  },  {
+    path: 'welcome',
+    loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule)
   }
+
 
 
 
