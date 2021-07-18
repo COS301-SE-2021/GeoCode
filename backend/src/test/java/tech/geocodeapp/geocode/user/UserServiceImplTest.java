@@ -19,6 +19,8 @@ import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
@@ -41,6 +43,9 @@ public class UserServiceImplTest {
 
     @Mock( name = "collectableServiceImpl" )
     CollectableService collectableService;
+
+    @Mock( name = "leaderboardServiceImpl" )
+    LeaderboardService leaderboardService;
 
     UserServiceImplTest() {
 

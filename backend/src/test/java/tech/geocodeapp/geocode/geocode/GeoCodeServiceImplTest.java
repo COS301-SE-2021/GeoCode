@@ -16,6 +16,7 @@ import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.collectable.*;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
@@ -55,6 +56,11 @@ class GeoCodeServiceImplTest {
     @Mock( name = "collectableServiceImpl" )
     CollectableService collectableService;
 
+    /**
+     * The LeaderBoard service accessor
+     */
+    @Mock( name = "leaderboardServiceImpl" )
+    LeaderboardService leaderboardService;
     /**
      * A mock service for the User subsystem
      *
