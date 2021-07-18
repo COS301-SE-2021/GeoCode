@@ -7,7 +7,15 @@ const routes: Routes = [
   {
     path: '',
     component: EventsPage
+  },  {
+    path: 'event-leaderboard',
+    loadChildren: () => import('./event-leaderboard/event-leaderboard.module').then( m => m.EventLeaderboardPageModule)
+  },
+  {
+    path: 'event-timetrial',
+    loadChildren: () => import('./event-timetrial/event-timetrial.module').then( m => m.EventTimetrialPageModule)
   }
+
 ];
 
 @NgModule({
