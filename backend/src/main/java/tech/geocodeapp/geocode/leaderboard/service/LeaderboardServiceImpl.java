@@ -61,9 +61,9 @@ public class LeaderboardServiceImpl implements LeaderboardService {
                Optional<Event> event=Optional.empty(); //ToDo change to find by provided eventID
 
                if(request.getStarting()<1) {
-                   message = "starting is lower than the minimum value allowed";
+                   message = "Starting is lower than the minimum value allowed";
                }else if(request.getCount()<1) {
-                   message = "count is lower than the minimum value allowed";
+                   message = "Count is lower than the minimum value allowed";
                }else if(event.isEmpty()){
                    message = "No event with the provided eventID exists";
                }else{
@@ -71,7 +71,17 @@ public class LeaderboardServiceImpl implements LeaderboardService {
                    if(leaderboard.isEmpty()){
                        message = "No leaderboard exists for the provided event";
                    }else{
-                       //ToDo finish method
+                       if(pointRepo.countByLeaderboard(leaderboard.get())<request.getStarting()) {
+                           message = "Starting is greater than the number of points in the leaderboard";
+                       }else{
+                            List<Point> points = pointRepo.findPointsByLeaderboardBetween(leaderboard.get().getId(), request.getStarting()-1, request.getCount());
+                            for(int i = 0; i<points.size(); i++) {
+                                EventLeaderboardDetails details = new EventLeaderboardDetails(points.get(i).getUser().getUsername(), points.get(i).getAmount(), request.getStarting()+i);
+                                leaderboardDetails.add(details);
+                           }
+                            success = true;
+                            message = "Successfully found points for event";
+                       }
                    }
                }
                return new GetEventLeaderboardResponse(success, message, leaderboardDetails);
