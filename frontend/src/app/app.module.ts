@@ -12,21 +12,18 @@ import {environment} from '../environments/environment';
 import {RequestInterceptor} from './services/RequestInterceptor';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
 
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
-function initializeKeycloak(keycloak: KeycloakService) {
-  return () =>
-    keycloak.init({
-      config: {
-        url: 'https://geocodeapp.tech:8100/auth',
-        realm: 'GeoCode',
-        clientId: environment.keycloakClientID,
-      },
-      initOptions: {
-        onLoad: 'check-sso',
-        silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
-      },
-    });
-}
+const initializeKeycloak = (keycloak: KeycloakService) => () =>
+  keycloak.init({
+    config: {
+      url: 'https://geocodeapp.tech:8100/auth',
+      realm: 'GeoCode',
+      clientId: environment.keycloakClientID,
+    },
+    initOptions: {
+      onLoad: 'check-sso',
+      silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+    },
+  });
 
 
 @NgModule({
