@@ -4,7 +4,6 @@ export const environment = {
   keycloakClientID: 'geocode-live',
   keycloakRedirectURI: 'https://geocodeapp.tech/geocode',
   googleMapsKey: '',
-  hardcodedKeycloakToken: ''
 };
 
 // Do not add secrets to this file!

@@ -21,7 +21,6 @@ export class GoogleMapsLoader {
   load() {
     return new Promise((resolve, reject) => {
       if (window.google) { // Maps API has been loaded and is available
-        console.log("already loaded google maps");
         // Return a handle to the API
         resolve(window.google.maps);
 
@@ -31,7 +30,6 @@ export class GoogleMapsLoader {
 
         // If this promise is the only one in the queue, start loading
         if (GoogleMapsLoader.loadingQueue.length == 1) {
-          console.log("google maps not loaded - started loading");
           const script = document.createElement('script');
           script.src = 'https://maps.googleapis.com/maps/api/js?key='+environment.googleMapsKey;
           script.type = 'text/javascript';
@@ -51,7 +49,6 @@ export class GoogleMapsLoader {
         } else {
           // If this promise is not the only one in the queue, do nothing.
           // It will be resolved or rejected by the first promise in the queue.
-          console.log("google maps not loaded - added to queue for ongoing load")
         }
       }
     })
