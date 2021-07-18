@@ -98,9 +98,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( ( request.getLatitude() == null ) || ( request.getLongitude() == null ) ||
-                ( request.getHints() == null ) || ( request.getDifficulty() == null ) ||
-                ( request.getDescription() == null ) || ( request.isAvailable() == null ) ) {
+        } else if ( ( request.getLocation() == null ) || ( request.getHints() == null ) ||
+                ( request.getDifficulty() == null ) || ( request.getDescription() == null ) ||
+                ( request.isAvailable() == null ) ) {
 
             throw new InvalidRequestException();
         }
@@ -151,8 +151,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         var id = UUID.randomUUID();
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
-                                      qr.toString(), request.getLongitude(), request.getLatitude(),
-                                      UUID.randomUUID() );
+                                      qr.toString(), request.getLocation(), UUID.randomUUID() );
 
         /* Save the created GeoCode to the repository */
         geoCodeRepo.save( newGeoCode );
@@ -366,8 +365,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * and set values to it
          */
         return new GetGeoCodeByQRCodeResponse( temp.get( x ).getId(), temp.get( x ).isAvailable(),
-                                               temp.get( x ).getDescription(), temp.get( x ).getLongitude(),
-                                               temp.get( x ).getLatitude(), temp.get( x ).getDifficulty() );
+                                               temp.get( x ).getDescription(), temp.get( x ).getlocation(),
+                                               temp.get( x ).getDifficulty() );
     }
 
     /**
@@ -386,7 +385,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( ( request.getLatitude() == null ) || ( request.getLongitude() == null ) ) {
+        } else if ( request.getLocation() == null ) {
 
             throw new InvalidRequestException();
         }
@@ -395,7 +394,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         var x = 0;
         for ( ; x < temp.size(); x++ ) {
 
-            if ( ( temp.get( x ).getLatitude().equals( request.getLatitude() ) ) && ( temp.get( x ).getLongitude().equals( request.getLongitude() ) ) ) {
+            if ( temp.get( x ).getlocation().equals( request.getLocation() ) ) {
 
                 break;
             }
@@ -406,8 +405,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * and set its values
          */
         return new GetGeoCodeByLocationResponse( temp.get( x ).getId(), temp.get( x ).isAvailable(),
-                                                 temp.get( x ).getDescription(), temp.get( x ).getLongitude(),
-                                                 temp.get( x ).getLatitude(), temp.get( x ).getDifficulty() );
+                                                 temp.get( x ).getDescription(), temp.get( x ).getlocation(),
+                                                 temp.get( x ).getDifficulty() );
     }
 
     /**
@@ -489,7 +488,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /* Perform the swap */
         var userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
-        userToGeocode.changeLocation( geocode.getLatitude() + " " + geocode.getLongitude() );
+        userToGeocode.changeLocation( geocode.getlocation().getLatitude() + " " + geocode.getlocation().getLongitude() );
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );
 

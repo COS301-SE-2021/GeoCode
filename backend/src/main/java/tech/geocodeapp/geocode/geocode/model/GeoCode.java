@@ -1,12 +1,12 @@
 package tech.geocodeapp.geocode.geocode.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
-import javax.persistence.*;
-import javax.validation.Valid;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.Cascade;
+import javax.validation.Valid;
+import javax.persistence.*;
 
 import tech.geocodeapp.geocode.collectable.model.*;
 
@@ -74,28 +74,21 @@ public class GeoCode {
      * by the user from the real world
      */
     @JsonProperty( "qrCode" )
-    @NotEmpty( message = "GeoCode's qrCode cannot be null." )
+    @NotEmpty( message = "GeoCode's qrCode cannot be empty." )
     private String qrCode;
 
     /**
-     * The longitude of the location of the GeoCode in the real world
+     * The longitude and latitude of the GeoCode in the real world
      */
-    @JsonProperty( "longitude" )
-    @NotEmpty( message = "GeoCode's longitude cannot be null." )
-    private String longitude;
-
-    /**
-     * The latitude of the location of the GeoCode in the real world
-     */
-    @JsonProperty( "latitude" )
-    @NotEmpty( message = "GeoCode's latitude cannot be null." )
-    private String latitude;
+    @JsonProperty( "location" )
+    @NotNull( message = "GeoCode's location cannot be empty." )
+    private GeoPoint location;
 
     /**
      * The ID of the user whom created the GeoCode
      */
     @JsonProperty( "createdBy" )
-    @NotEmpty( message = "GeoCode's createdBy cannot be null." )
+    @NotNull( message = "GeoCode's createdBy cannot be null." )
     private UUID createdBy;
 
     /**
@@ -115,13 +108,12 @@ public class GeoCode {
      * @param hints The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
      * @param collectables The list of collectables stored inside of the GeoCode
      * @param qrCode A short unique identifier to find the GeoCode in the system by the user from the real world
-     * @param longitude The longitude of the location of the GeoCode in the real world
-     * @param latitude The latitude of the location of the GeoCode in the real world
+     * @param location The longitude and latitude of the GeoCode in the real world
      * @param createdBy The user's ID who created the GeoCode
      */
     @Valid
     public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints,
-                    Collection< UUID > collectables, String qrCode, String longitude, String latitude, UUID createdBy ) {
+                    Collection< UUID > collectables, String qrCode, GeoPoint location, UUID createdBy ) {
 
         this.id = id;
         this.difficulty = difficulty;
@@ -130,8 +122,7 @@ public class GeoCode {
         this.hints = hints;
         this.collectables = collectables;
         this.qrCode = qrCode;
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.location = location;
         this.createdBy = createdBy;
     }
 
@@ -415,16 +406,16 @@ public class GeoCode {
     }
 
     /**
-     * Sets the longitude attribute to the specified value
+     * Sets the location attribute to the specified value
      *
-     * @param longitude the value the attribute should be set to
+     * @param location the value the attribute should be set to
      *
-     * @return the model after the longitude has been changed
+     * @return the model after the location has been changed
      */
     @Valid
-    public GeoCode longitude( String longitude ) {
+    public GeoCode location( GeoPoint location ) {
 
-        this.longitude = longitude;
+        this.location = location;
         return this;
     }
 
@@ -433,55 +424,20 @@ public class GeoCode {
      *
      * @return the stored longitude attribute
      */
-    public String getLongitude() {
+    public GeoPoint getlocation() {
 
-        return longitude;
+        return location;
     }
 
     /**
-     * Sets the longitude attribute to the specified value
+     * Sets the location attribute to the specified value
      *
-     * @param longitude the value the longitude should be set to
+     * @param location the value the location should be set to
      */
     @Valid
-    public void setLongitude( String longitude ) {
+    public void setlocation( GeoPoint location ) {
 
-        this.longitude = longitude;
-    }
-
-    /**
-     * Sets the latitude attribute to the specified value
-     *
-     * @param latitude the value the attribute should be set to
-     *
-     * @return the model after the latitude has been changed
-     */
-    @Valid
-    public GeoCode latitude( String latitude ) {
-
-        this.latitude = latitude;
-        return this;
-    }
-
-    /**
-     * Gets the saved latitude attribute
-     *
-     * @return the stored latitude attribute
-     */
-    public String getLatitude() {
-
-        return latitude;
-    }
-
-    /**
-     * Sets the latitude attribute to the specified value
-     *
-     * @param latitude the value the attribute should be set to
-     */
-    @Valid
-    public void setLatitude( String latitude ) {
-
-        this.latitude = latitude;
+        this.location = location;
     }
 
     /**
@@ -546,8 +502,7 @@ public class GeoCode {
                 Objects.equals( this.hints, geoCode.hints ) &&
                 Objects.equals( this.collectables, geoCode.collectables ) &&
                 Objects.equals( this.qrCode, geoCode.qrCode ) &&
-                Objects.equals( this.longitude, geoCode.longitude ) &&
-                Objects.equals( this.latitude, geoCode.latitude ) &&
+                Objects.equals( this.location, geoCode.location ) &&
                 Objects.equals( this.createdBy, geoCode.createdBy );
     }
 
@@ -559,7 +514,7 @@ public class GeoCode {
     @Override
     public int hashCode() {
 
-        return Objects.hash( id, difficulty, available, description, hints, collectables, qrCode, longitude, latitude, createdBy );
+        return Objects.hash( id, difficulty, available, description, hints, collectables, qrCode, location, createdBy );
     }
 
     /**
@@ -578,8 +533,7 @@ public class GeoCode {
                 "    hints: " + toIndentedString( hints ) + "\n" +
                 "    collectables: " + toIndentedString( collectables ) + "\n" +
                 "    qrCode: " + toIndentedString( qrCode ) + "\n" +
-                "    longitude: " + toIndentedString( longitude ) + "\n" +
-                "    latitude: " + toIndentedString( latitude ) + "\n" +
+                "    location: " + toIndentedString( location ) + "\n" +
                 "    createdBy: " + toIndentedString( createdBy ) + "\n" +
                 "}";
     }

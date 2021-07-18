@@ -1,6 +1,5 @@
 cd frontend
 npm install
-cp ../../index.html src
 cp ../../environment.ts src/environments
 ionic build
 cd ../backend
