@@ -15,11 +15,11 @@ import java.util.UUID;
 public interface PointRepository extends JpaRepository<Point, UUID> {
     List<Point> findAllByLeaderboard(Leaderboard leaderboard);
 
-    @Query(value = "SELECT DENSE_RANK() OVER(ORDER BY amount) AS rank FROM point WHERE leaderboard_id = ?1 AND amount = ?2 ORDER BY rank")
+    //@Query(value = "SELECT DENSE_RANK() OVER(ORDER BY amount) AS rank FROM point WHERE leaderboard_id = ?1 AND amount = ?2 ORDER BY rank")
     int getMyRank(UUID leaderboardID, int amount);
 
     int countByLeaderboard(Leaderboard leaderboard);
 
-    @Query(value = "SELECT * FROM Point WHERE leaderboard_id = ?1 ORDER BY amount OFFSET ?2 ROWS FETCH NEXT ?3 ROWS ONLY ", nativeQuery = true)
+    //@Query(value = "SELECT * FROM Point WHERE leaderboard_id = ?1 ORDER BY amount OFFSET ?2 ROWS FETCH NEXT ?3 ROWS ONLY ", nativeQuery = true)
     List<Point> findPointsByLeaderboardBetween(UUID leaderboardId, int offset, int next);
 }

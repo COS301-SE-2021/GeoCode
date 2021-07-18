@@ -12,6 +12,7 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
+import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
@@ -31,13 +32,17 @@ public class UserServiceImpl implements UserService {
     @NotNull( message = "Collectable Service Implementation may not be null." )
     private final CollectableService collectableService;
 
+    @NotNull(message = "Leaderboard Service Implementation may not be null.")
+    private final LeaderboardService leaderboardService;
+
     private final String invalidUserIdMessage = "Invalid user id";
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, CollectableService collectableService) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, CollectableService collectableService, LeaderboardService leaderboardService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
         this.collectableService = collectableService;
+        this.leaderboardService = leaderboardService;
     }
 
     /**
