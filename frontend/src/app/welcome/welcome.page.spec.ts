@@ -10,6 +10,12 @@ describe('WelcomePage', () => {
   let component: WelcomePage;
   let fixture: ComponentFixture<WelcomePage>;
 
+  const mockKeycloak = {
+    getKeycloakInstance: () => ({
+      authenticated: true
+    })
+  };
+
   const mockRouter = {
     navigate: (args) => new Promise((resolve, reject) => {
       resolve(null);
@@ -20,7 +26,7 @@ describe('WelcomePage', () => {
     TestBed.configureTestingModule({
       declarations: [ WelcomePage ],
       providers: [
-        KeycloakService,
+        { provide: KeycloakService, useValue: mockKeycloak },
         { provide: Router, useValue: mockRouter }
       ],
       imports: [IonicModule.forRoot(), RouterTestingModule]

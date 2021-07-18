@@ -9,6 +9,12 @@ import {RouterTestingModule} from '@angular/router/testing';
 
 describe('AppComponent', () => {
 
+  const mockKeycloak = {
+    getKeycloakInstance: () => ({
+      authenticated: true
+    })
+  };
+
   const mockRouter = {
     navigate: (args) => new Promise((resolve, reject) => {
       resolve(null);
@@ -19,8 +25,8 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       providers: [
-        { provide: Router, useValue: mockRouter },
-        KeycloakService
+        { provide: KeycloakService, useValue: mockKeycloak },
+        { provide: Router, useValue: mockRouter }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [RouterTestingModule]

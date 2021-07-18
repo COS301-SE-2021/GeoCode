@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {KeycloakService} from 'keycloak-angular';
 import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
@@ -8,16 +8,14 @@ import {environment} from '../../environments/environment';
   templateUrl: './welcome.page.html',
   styleUrls: ['./welcome.page.scss'],
 })
-export class WelcomePage implements OnInit {
+export class WelcomePage {
 
   constructor(
     private keycloak: KeycloakService,
     private router: Router
-  ) {}
-
-  async ngOnInit() {
-    if (await this.keycloak.isLoggedIn()) {
-      await this.router.navigate(['']);
+  ) {
+    if (this.keycloak.getKeycloakInstance().authenticated) {
+      this.router.navigate(['geocode']).then().catch();
     }
   }
 

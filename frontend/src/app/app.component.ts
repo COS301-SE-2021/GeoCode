@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {KeycloakService} from 'keycloak-angular';
 
@@ -7,15 +7,13 @@ import {KeycloakService} from 'keycloak-angular';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   constructor(
-    private router: Router,
-    private keycloak: KeycloakService
-  ) {}
-
-  async ngOnInit() {
-    if (!(await this.keycloak.isLoggedIn())) {
-      await this.router.navigate(['welcome']);
+    private keycloak: KeycloakService,
+    private router: Router
+  ) {
+    if (!this.keycloak.getKeycloakInstance().authenticated) {
+      this.router.navigate(['welcome']).then().catch();
     }
   }
 }
