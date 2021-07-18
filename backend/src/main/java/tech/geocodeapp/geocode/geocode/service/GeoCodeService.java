@@ -75,6 +75,17 @@ public interface GeoCodeService {
     GetGeoCodeByQRCodeResponse getGeoCodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException;
 
     /**
+     * Finds the stored GeoCode associated with the generated QR Code
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetGeoCodeByQRCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetGeoCodeByQRCodeResponse getCollectablesInGeoCodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException;
+
+    /**
      * Finds the stored GeoCode associated at the given Location
      *
      * @param request the attributes the response should be created from
@@ -82,6 +93,15 @@ public interface GeoCodeService {
      * @return the newly create response instance from the specified GetGeoCodeByLocationRequest
      */
     GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException;
+
+    /**
+     * Finds the stored GeoCode associated at the given Location
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetGeoCodeByLocationRequest
+     */
+    GetGeoCodeByLocationResponse getCollectablesInGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException;
 
     /**
      * Swaps a stored Collectable in a GeoCode with the Users GeoCode

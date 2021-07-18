@@ -1,8 +1,8 @@
 package tech.geocodeapp.geocode.geocode.service;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
-import org.springframework.validation.annotation.Validated;
 
 import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
@@ -23,16 +23,16 @@ import java.security.SecureRandom;
 import java.util.*;
 
 /**
- * This class implements the UserService interface
+ * This class implements the GeoCodeService interface
  */
-@Service( "GeoCodeService" )
 @Validated
+@Service( "GeoCodeService" )
 public class GeoCodeServiceImpl implements GeoCodeService {
 
     /**
      * The repository the GeoCode class interacts with
      */
-    @NotNull( message = "GeoCode repository may not be null." )
+    @NotNull( message = "GeoCode Repository may not be null." )
     private final GeoCodeRepository geoCodeRepo;
 
     /**
@@ -43,7 +43,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     private final CollectableService collectableService;
 
     /**
-     * A handle to the user service
+     * The user service to access the use cases and
+     * user repository
      */
     @NotNull( message = "User Service Implementation may not be null." )
     private final UserService userService;
@@ -105,7 +106,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new InvalidRequestException();
         }
 
-        /* Hold the crated Collectables */
+        /* Hold the created Collectables */
         List< UUID > collectable = new ArrayList<>();
 
         for ( var x = 0; x < NUM_COLLECTABLES; x++ ) {
@@ -200,7 +201,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     }
 
     /**
-     * Get tje stored Collectables inside of a GeoCode
+     * Get the stored Collectables inside of a GeoCode
      *
      * @param request the attributes the response should be created from
      *
@@ -369,6 +370,47 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                                                temp.get( x ).getDifficulty() );
     }
 
+
+    /**
+     * Finds the stored GeoCode associated with the generated QR Code
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetGeoCodeByQRCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetGeoCodeByQRCodeResponse getCollectablesInGeoCodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getQrCode() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        List< GeoCode > temp = geoCodeRepo.findAll();
+        var x = 0;
+        for ( ; x < temp.size(); x++ ) {
+
+            if ( temp.get( x ).getQrCode().equals( request.getQrCode() ) ) {
+
+                break;
+            }
+        }
+
+        /*
+         * Create the new response
+         * and set values to it
+         */
+        return new GetGeoCodeByQRCodeResponse( temp.get( x ).getId(), temp.get( x ).isAvailable(),
+                                               temp.get( x ).getDescription(), temp.get( x ).getlocation(),
+                                               temp.get( x ).getDifficulty() );
+    }
+
     /**
      * Finds the stored GeoCode associated at the given Location
      *
@@ -380,6 +422,46 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      */
     @Override
     public GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getLocation() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        List< GeoCode > temp = geoCodeRepo.findAll();
+        var x = 0;
+        for ( ; x < temp.size(); x++ ) {
+
+            if ( temp.get( x ).getlocation().equals( request.getLocation() ) ) {
+
+                break;
+            }
+        }
+
+        /*
+         * Create the new response
+         * and set its values
+         */
+        return new GetGeoCodeByLocationResponse( temp.get( x ).getId(), temp.get( x ).isAvailable(),
+                                                 temp.get( x ).getDescription(), temp.get( x ).getlocation(),
+                                                 temp.get( x ).getDifficulty() );
+    }
+
+    /**
+     * Finds the stored GeoCode associated at the given Location
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly create response instance from the specified GetGeoCodeByLocationRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetGeoCodeByLocationResponse getCollectablesInGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -533,6 +615,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         geoCodeRepo.save( hold );
+
         /*
          * Create the new response
          * and set the success of the operation
