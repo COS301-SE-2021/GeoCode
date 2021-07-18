@@ -43,10 +43,10 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     }
 
     /**
-     *
-     * @param request
-     * @return
-     * @throws NullLeaderboardRequestParameterException
+     * A method to retrieve a set number of points from a leaderboard for a provided event starting at a specified rank.
+     * @param request - Contains the event to get a leaderboard form, the position to start for points and the number of points to get.
+     * @return A list of the details of the requested points
+     * @throws NullLeaderboardRequestParameterException - an exception for when no leaderboard exists for the given event
      */
     public GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullLeaderboardRequestParameterException{
        if(request!=null) {
