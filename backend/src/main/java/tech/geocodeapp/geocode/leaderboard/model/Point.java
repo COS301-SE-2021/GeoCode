@@ -8,10 +8,8 @@ import java.util.UUID;
 import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.user.model.User;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -37,7 +35,7 @@ public class Point   {
   private User user = null;
 
   @JsonProperty("leaderboard")
-  @OneToOne
+  @ManyToOne
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Leaderboard leaderboard = null;
 
