@@ -30,7 +30,7 @@ public class Point   {
   private Integer amount = null;
 
   @JsonProperty("user")
-  @OneToOne
+  @ManyToOne
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private User user = null;
 
