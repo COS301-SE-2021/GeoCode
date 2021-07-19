@@ -29,21 +29,21 @@ public class GeoCode {
     private UUID id;
 
     /**
-     * The description of where the GeoCode is and what it involves
+     * The description of how difficult it is to locate the GeoCode in the real world
      */
     @JsonProperty( "difficulty" )
     @NotNull( message = "GeoCode's difficulty cannot be null." )
     private Difficulty difficulty;
 
     /**
-     * If the GeoCode is active in the system
+     * If the GeoCode is active in the system for a user to locate
      */
     @JsonProperty( "available" )
     @NotNull( message = "GeoCode's available cannot be null." )
     private Boolean available;
 
     /**
-     * The description of where the GeoCode is and what it involves
+     * The description of where the GeoCode is and what is involved in finding it
      */
     @JsonProperty( "description" )
     @NotEmpty( message = "GeoCode's description cannot be empty." )
@@ -102,7 +102,7 @@ public class GeoCode {
      * Overloaded Constructor
      *
      * @param id The unique identifier for the GeoCode
-     * @param difficulty The description of where the GeoCode is and what it involves
+     * @param difficulty The description of how difficult it is to locate the GeoCode in the real world
      * @param available If the GeoCode is active in the system
      * @param description The description of where the GeoCode is and what it involves
      * @param hints The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
@@ -111,7 +111,6 @@ public class GeoCode {
      * @param location The longitude and latitude of the GeoCode in the real world
      * @param createdBy The user's ID who created the GeoCode
      */
-    @Valid
     public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints,
                     Collection< UUID > collectables, String qrCode, GeoPoint location, UUID createdBy ) {
 
@@ -155,7 +154,6 @@ public class GeoCode {
      *
      * @param id the value the id should be set to
      */
-    @Valid
     public void setId( UUID id ) {
 
         this.id = id;
@@ -191,7 +189,6 @@ public class GeoCode {
      *
      * @param difficulty the value the attribute should be set to
      */
-    @Valid
     public void setDifficulty( Difficulty difficulty ) {
 
         this.difficulty = difficulty;
@@ -226,7 +223,6 @@ public class GeoCode {
      *
      * @param available the value the attribute should be set to
      */
-    @Valid
     public void setAvailable( Boolean available ) {
 
         this.available = available;
@@ -261,7 +257,6 @@ public class GeoCode {
      *
      * @param description the value the attribute should be set to
      */
-    @Valid
     public void setDescription( String description ) {
 
         this.description = description;
@@ -300,6 +295,7 @@ public class GeoCode {
      *
      * @return the stored hints attribute
      */
+    @Valid
     public Collection< String > getHints() {
 
         return hints;
@@ -310,7 +306,6 @@ public class GeoCode {
      *
      * @param hints the value the attribute should be set to
      */
-    @Valid
     public void setHints( Collection< String > hints ) {
 
         this.hints = hints;
@@ -354,6 +349,7 @@ public class GeoCode {
      *
      * @return the stored collectables attribute
      */
+    @Valid
     public Collection< UUID > getCollectables() {
 
         return collectables;
@@ -364,7 +360,6 @@ public class GeoCode {
      *
      * @param collectables the value the attribute should be set to
      */
-    @Valid
     public void setCollectables( Collection< UUID > collectables ) {
 
         this.collectables = collectables;
@@ -399,7 +394,6 @@ public class GeoCode {
      *
      * @param qrCode the value the qrCode should be set to
      */
-    @Valid
     public void setQrCode( String qrCode ) {
 
         this.qrCode = qrCode;
@@ -424,7 +418,8 @@ public class GeoCode {
      *
      * @return the stored longitude attribute
      */
-    public GeoPoint getlocation() {
+    @Valid
+    public GeoPoint getLocation() {
 
         return location;
     }
@@ -434,8 +429,7 @@ public class GeoCode {
      *
      * @param location the value the location should be set to
      */
-    @Valid
-    public void setlocation( GeoPoint location ) {
+    public void setLocation( GeoPoint location ) {
 
         this.location = location;
     }
@@ -455,7 +449,7 @@ public class GeoCode {
     }
 
     /**
-     * Gets the saved id attribute
+     * Gets the saved createdBy attribute
      *
      * @return the stored createdBy attribute
      */
@@ -465,11 +459,10 @@ public class GeoCode {
     }
 
     /**
-     * Sets the id attribute to the specified value
+     * Sets the createdBy attribute to the specified value
      *
-     * @param createdBy the value the id should be set to
+     * @param createdBy the value the createdBy should be set to
      */
-    @Valid
     public void setCreatedBy( UUID createdBy ) {
 
         this.createdBy = createdBy;
