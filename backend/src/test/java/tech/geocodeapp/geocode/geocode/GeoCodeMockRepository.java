@@ -222,7 +222,7 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
         for ( Map.Entry< UUID, GeoCode > entry : map.entrySet() ) {
 
             GeoCode found = entry.getValue();
-            if ( found.getlocation().equals( location ) ) {
+            if ( found.getLocation().equals( location ) ) {
 
                 return found;
             }
