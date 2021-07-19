@@ -3,8 +3,12 @@ package tech.geocodeapp.geocode.collectable.service;
 import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
-import tech.geocodeapp.geocode.collectable.model.*;
-import tech.geocodeapp.geocode.collectable.repository.*;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.collectable.model.CollectableSet;
+import tech.geocodeapp.geocode.collectable.model.CollectableType;
+import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
+import tech.geocodeapp.geocode.collectable.repository.CollectableSetRepository;
+import tech.geocodeapp.geocode.collectable.repository.CollectableTypeRepository;
 import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
 
@@ -17,7 +21,7 @@ import java.util.UUID;
 /**
  * This class implements the CollectableService interface
  */
-@Service
+@Service( "CollectableService" )
 public class CollectableServiceImpl implements CollectableService {
     private final CollectableRepository collectableRepo;
 

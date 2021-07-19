@@ -1,12 +1,9 @@
 package tech.geocodeapp.geocode.user.service;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
@@ -20,11 +17,13 @@ import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * This class implements the UserService interface
  */
-@Service
+@Service( "UserService" )
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final CollectableRepository collectableRepo;
