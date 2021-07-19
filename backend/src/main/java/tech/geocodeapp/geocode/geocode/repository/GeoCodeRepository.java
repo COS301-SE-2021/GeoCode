@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import tech.geocodeapp.geocode.collectable.model.Difficulty;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 

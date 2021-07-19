@@ -8,8 +8,6 @@ import org.hibernate.annotations.Cascade;
 import javax.validation.Valid;
 import javax.persistence.*;
 
-import tech.geocodeapp.geocode.collectable.model.*;
-
 import java.util.*;
 
 /**

@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import tech.geocodeapp.geocode.collectable.model.Difficulty;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
