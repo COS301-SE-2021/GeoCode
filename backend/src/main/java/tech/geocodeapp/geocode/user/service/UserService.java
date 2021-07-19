@@ -11,7 +11,6 @@ import java.util.UUID;
 /**
  * This interface is for the service for the User subsystem
  */
-@Service
 public interface UserService {
     //U1.1 getCurrentCollectable
     GetCurrentCollectableResponse getCurrentCollectable(GetCurrentCollectableRequest request) throws NullUserRequestParameterException;
