@@ -1,28 +1,27 @@
 package tech.geocodeapp.geocode.geocode.service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.stereotype.Service;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Min;
-
-import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.geocode.exceptions.*;
-import tech.geocodeapp.geocode.geocode.response.*;
-import tech.geocodeapp.geocode.geocode.request.*;
-
-import tech.geocodeapp.geocode.collectable.model.*;
+import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
-import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
-import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
+import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
-import tech.geocodeapp.geocode.collectable.service.*;
-
+import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.collectable.service.CollectableService;
+import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.geocode.exceptions.RepoException;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.geocode.request.*;
+import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
-import tech.geocodeapp.geocode.user.service.*;
+import tech.geocodeapp.geocode.user.service.UserService;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -393,7 +392,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      */
     @Override
     public GetCollectablesInGeoCodeByQRCodeResponse getCollectablesInGeoCodeByQRCode( GetCollectablesInGeoCodeByQRCodeRequest request ) throws InvalidRequestException {
-        //ToDo: finish implementing
+
         /* Validate the request */
         if ( request == null ) {
 
@@ -413,13 +412,14 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             }
         }
 
+        /* Get the collectables from the found GeoCode */
+        ArrayList< Collectable > storedCollectable = getCollectable( temp.get( x ) );
+
         /*
          * Create the new response
          * and set values to it
          */
-        return new GetCollectablesInGeoCodeByQRCodeResponse( temp.get( x ).getId(), temp.get( x ).isAvailable(),
-                                               temp.get( x ).getDescription(), temp.get( x ).getLocation(),
-                                               temp.get( x ).getDifficulty() );
+        return new GetCollectablesInGeoCodeByQRCodeResponse( storedCollectable );
     }
 
     /**
@@ -473,7 +473,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      */
     @Override
     public GetCollectablesInGeoCodesByLocationResponse getCollectablesInGeoCodesByLocation( GetCollectablesInGeoCodesByLocationRequest request ) throws InvalidRequestException {
-        //ToDo: finish implementing
+
         /* Validate the request */
         if ( request == null ) {
 
@@ -493,13 +493,14 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             }
         }
 
+        /* Get the collectables from the found GeoCode */
+        ArrayList< Collectable > storedCollectable = getCollectable( temp.get( x ) );
+
         /*
          * Create the new response
          * and set its values
          */
-        return new GetCollectablesInGeoCodesByLocationResponse( temp.get( x ).getId(), temp.get( x ).isAvailable(),
-                                                 temp.get( x ).getDescription(), temp.get( x ).getLocation(),
-                                                 temp.get( x ).getDifficulty() );
+        return new GetCollectablesInGeoCodesByLocationResponse( storedCollectable );
     }
 
     /**
@@ -632,6 +633,34 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * and set the success of the operation
          */
         return new UpdateAvailabilityResponse( true );
+    }
+
+    /**
+     * Helper function that gets the collectables from a specified GeoCode
+     *
+     * @param temp the GeoCode object to get the collectable's from
+     *
+     * @return the collectables associated with the specified GeoCode
+     */
+    private ArrayList< Collectable > getCollectable( GeoCode temp ) {
+
+        /* A list to store all the found collectables */
+        ArrayList< Collectable > storedCollectable = new ArrayList<>();
+
+        /* Get the id's of the collectables to find */
+        List< UUID > collectableID = new ArrayList<>( temp.getCollectables() );
+        for ( UUID uuid : collectableID ) {
+
+            /* Create a request to the User service */
+            GetCollectableByIDRequest req = new GetCollectableByIDRequest();
+            req.setCollectableID( uuid );
+
+            /* Find the collectable specified in the request and add it to the list */
+            storedCollectable.add( collectableService.getCollectableByID( req ).getCollectable() );
+        }
+
+        /* return all the found collectables */
+        return storedCollectable;
     }
 
 }
