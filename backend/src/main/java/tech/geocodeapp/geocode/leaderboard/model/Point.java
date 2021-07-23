@@ -39,6 +39,18 @@ public class Point   {
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Leaderboard leaderboard = null;
 
+  public Point() {
+    id = UUID.randomUUID();
+  }
+
+  //constructor to use when creating a point when values are already known
+  public Point(Integer amount, User user, Leaderboard leaderboard) {
+    id = UUID.randomUUID();
+    this.amount = amount;
+    this.user = user;
+    this.leaderboard = leaderboard;
+  }
+
   public Point id(UUID id) {
     this.id = id;
     return this;
