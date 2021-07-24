@@ -54,4 +54,8 @@ export class ProfilePage implements OnInit {
     await this.keycloak.logout(environment.baseRedirectURI+'/welcome');
   }
 
+  async manage() {
+    await this.keycloak.getKeycloakInstance().accountManagement();
+  }
+
 }

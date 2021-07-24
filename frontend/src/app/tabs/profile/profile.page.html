@@ -1,6 +1,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Profile</ion-title>
+    <ion-buttons slot="secondary">
+        <ion-button (click)="manage()">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <ion-label>Manage</ion-label>
+      </ion-button>
+    </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="logout()">
         <ion-icon name="log-out-outline"></ion-icon>
