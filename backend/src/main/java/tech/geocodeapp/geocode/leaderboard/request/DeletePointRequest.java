@@ -12,4 +12,12 @@ public class DeletePointRequest {
     public DeletePointRequest(UUID pointId) {
         this.pointId = pointId;
     }
+
+    public UUID getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(UUID pointId) {
+        this.pointId = pointId;
+    }
 }
