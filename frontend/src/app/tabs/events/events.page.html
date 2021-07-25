@@ -28,7 +28,7 @@
   </div>
   <div #mapElement [style.height]="height" class="map"></div>
 
-  <div  id ="geoCodeDetails" [hidden]="isHidden">
+  <div  id ="eventDetails" [hidden]="isHidden">
 
     <ion-card *ngFor="let event of selected">
       <div  id="close-button"><ion-button id="close" color="white" (click)="close()">X</ion-button></div>
