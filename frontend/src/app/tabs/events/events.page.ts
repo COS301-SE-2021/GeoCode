@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
 
 @Component({
@@ -13,9 +13,15 @@ export class EventsPage implements AfterViewInit {
   map;
   mapMarker;
   markers= [];
+  selected=[];
+  events=[];
   isHidden=false;
-  height='92%';
-  constructor(private mapsLoader: GoogleMapsLoader) { }
+  height='60%';
+  constructor(private mapsLoader: GoogleMapsLoader) {
+    this.events = [{id:'123456789',latitude:-25.75625115327836,longitude:28.235629260918344,name:'Event name',
+      description:'This is an event that is happening at a place and you can do stuff',leaderBoardID: '1245766'}];
+    this.selected= this.events;
+  }
 
   //Create map and add mapmarkers of geocodes
   loadMap(){
@@ -33,6 +39,19 @@ export class EventsPage implements AfterViewInit {
       this.googleMaps = handle;
       this.loadMap();
     }).catch();
+  }
+
+  close(){
+    this.isHidden=true;
+    this.height='93%';
+  }
+
+  goToEvent(event){
+
+  }
+
+  goToLeaderBoard(event){
+
   }
 
 }
