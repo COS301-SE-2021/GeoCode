@@ -27,4 +27,35 @@
     </div>
   </div>
   <div #mapElement [style.height]="height" class="map"></div>
+
+  <div  id ="geoCodeDetails" [hidden]="isHidden">
+
+    <ion-card *ngFor="let event of selected">
+      <div  id="close-button"><ion-button id="close" color="white" (click)="close()">X</ion-button></div>
+      <ion-header>
+        <ion-title id="card-title">
+          {{event.name}}
+        </ion-title>
+      </ion-header>
+      <ion-card-content>
+        <ion-row class="row"  class="heading">
+         Description
+        </ion-row>
+        <ion-row class="row">
+        {{event.description}}
+        </ion-row>
+        <ion-row class="row">
+          <ion-col class="heading">Latitude</ion-col>
+          <ion-col>{{event.latitude}} </ion-col>
+        </ion-row>
+        <ion-row class="row" >
+          <ion-col class="heading">Longitude</ion-col>
+          <ion-col>{{event.longitude}} </ion-col>
+        </ion-row>
+        <ion-button id="button" color="button" (click)="goToEvent(event)">Go to Event</ion-button>
+        <ion-button id="button" color="button" (click)="goToLeaderBoard(event)">LeaderBoard</ion-button>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
