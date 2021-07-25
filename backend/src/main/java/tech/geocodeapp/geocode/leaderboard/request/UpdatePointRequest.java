@@ -19,4 +19,35 @@ public class UpdatePointRequest {
         this.leaderboardId = leaderboardId;
     }
 
+    public UUID getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(UUID pointId) {
+        this.pointId = pointId;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public UUID getLeaderboardId() {
+        return leaderboardId;
+    }
+
+    public void setLeaderboardId(UUID leaderboardId) {
+        this.leaderboardId = leaderboardId;
+    }
 }
