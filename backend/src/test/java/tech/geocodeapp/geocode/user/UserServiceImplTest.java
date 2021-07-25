@@ -82,8 +82,18 @@ public class UserServiceImplTest {
         bunny.setId(UUID.fromString("0998cf20-8256-4529-b144-d3c8aa4f0fb1"));
         collectableTypeMockRepo.save(bunny);
 
+        User validUser;
+
         //add to the User's found CollectableTypes
-        User validUser = userService.getUserById(validUserId);
+        try{
+            GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(validUserId);
+            GetUserByIdResponse getUserByIdResponse = userService.getUserById(getUserByIdRequest);
+            validUser = getUserByIdResponse.getUser();
+        }catch(NullUserRequestParameterException e){
+            e.printStackTrace();
+            return;
+        }
+
         validUser.addFoundCollectableTypesItem(egg);
         validUser.addFoundCollectableTypesItem(chocolateBar);
         validUser.addFoundCollectableTypesItem(bunny);
