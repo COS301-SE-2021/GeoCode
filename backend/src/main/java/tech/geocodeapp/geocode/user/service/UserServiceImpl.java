@@ -301,9 +301,9 @@ public class UserServiceImpl implements UserService {
      * @param request The GetUserByIdRequest object
      * @return The User if they exist, else NULL contained in a GetUserByIdResponse object
      */
-    public User getUserById(GetUserByIdRequest request) throws NullUserRequestParameterException {
+    public GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullUserRequestParameterException {
         if(request == null){
-            return null;
+            return new GetUserByIdResponse();
         }
 
         if(request.getUserID() == null){
@@ -312,7 +312,7 @@ public class UserServiceImpl implements UserService {
 
         UUID id = request.getUserID();
         Optional<User> optionalUser = userRepo.findById(id);
-        return optionalUser.orElse(null);
+        return new GetUserByIdResponse(optionalUser.orElse(null));
     }
 
     /**

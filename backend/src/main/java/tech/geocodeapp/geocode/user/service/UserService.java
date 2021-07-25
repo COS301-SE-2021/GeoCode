@@ -36,7 +36,7 @@ public interface UserService {
     GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullUserRequestParameterException;
 
     //User helper functions
-    User getUserById(GetUserByIdRequest request) throws NullUserRequestParameterException;
+    GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullUserRequestParameterException;
     User getCurrentUser();
     void registerNewUser(UUID id, String username);
 

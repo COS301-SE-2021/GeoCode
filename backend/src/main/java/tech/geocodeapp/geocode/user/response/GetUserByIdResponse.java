@@ -19,6 +19,10 @@ public class GetUserByIdResponse   {
     @Valid
     private User user = null;
 
+    public GetUserByIdResponse(User user){
+        this.user = user;
+    }
+
     public GetUserByIdResponse user(User user) {
         this.user = user;
         return this;
