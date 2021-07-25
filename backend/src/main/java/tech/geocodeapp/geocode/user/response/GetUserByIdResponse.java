@@ -3,9 +3,6 @@ package tech.geocodeapp.geocode.user.response;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.util.List;
-import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.user.model.User;
 
 import javax.validation.Valid;
@@ -15,11 +12,19 @@ import javax.validation.constraints.*;
  * GetUserByIdResponse
  */
 public class GetUserByIdResponse   {
+    @JsonProperty("success")
+    private Boolean success = null;
+
+    @JsonProperty("message")
+    private String message = null;
+
     @JsonProperty("user")
     @Valid
     private User user = null;
 
-    public GetUserByIdResponse(User user){
+    public GetUserByIdResponse(boolean success, String message, User user){
+        this.success = success;
+        this.message = message;
         this.user = user;
     }
 
@@ -80,5 +85,21 @@ public class GetUserByIdResponse   {
             return "null";
         }
         return o.toString().replace("\n", "\n    ");
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
     }
 }
