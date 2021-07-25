@@ -303,7 +303,7 @@ public class UserServiceImpl implements UserService {
      */
     public GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullUserRequestParameterException {
         if(request == null){
-            return new GetUserByIdResponse();
+            return new GetUserByIdResponse(false, "The GetUserByIdRequest object passed was NULL", null);
         }
 
         if(request.getUserID() == null){
@@ -312,7 +312,9 @@ public class UserServiceImpl implements UserService {
 
         UUID id = request.getUserID();
         Optional<User> optionalUser = userRepo.findById(id);
-        return new GetUserByIdResponse(optionalUser.orElse(null));
+
+        return optionalUser.map(user -> new GetUserByIdResponse(true, "The User was found", user)).orElseGet(
+                () -> new GetUserByIdResponse(false, "The User was not found", null));
     }
 
     /**
