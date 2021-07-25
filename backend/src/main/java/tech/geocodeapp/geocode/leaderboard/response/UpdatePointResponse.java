@@ -8,4 +8,12 @@ public class UpdatePointResponse {
     private String message;
     private boolean success;
 
+    public UpdatePointResponse() {
+    }
+
+    public UpdatePointResponse(Point point, String message, boolean success) {
+        this.point = point;
+        this.message = message;
+        this.success = success;
+    }
 }
