@@ -337,9 +337,9 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Registers a new user
-     * @param id The id for the User
+     * @param request The id for the User
      */
-    public void registerNewUser(UUID id, String username){
+    public void registerNewUser(RegisterNewUserRequest request){
         User newUser = new User();
         newUser.setId(id);
         newUser.setUsername(username);
