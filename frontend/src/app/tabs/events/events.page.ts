@@ -58,7 +58,12 @@ export class EventsPage implements AfterViewInit {
   }
 
   goToLeaderBoard(event){
-
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        event
+      }
+    };
+    this.navCtrl.navigateForward('/events/event-leaderboard',navigationExtras);
   }
 
 }
