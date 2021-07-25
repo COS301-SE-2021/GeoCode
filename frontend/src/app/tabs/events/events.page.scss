@@ -1,0 +1,16 @@
+#button-col{
+  text-align: center;
+}
+.horizontalscroll {
+  position: relative;
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  height: auto;
+}
+
+.items {
+  width: auto;
+  white-space: nowrap;
+  position: relative;
+}
