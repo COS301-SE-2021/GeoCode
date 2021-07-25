@@ -323,7 +323,16 @@ public class UserServiceImpl implements UserService {
      */
     public User getCurrentUser(){
         String uuid = SecurityContextHolder.getContext().getAuthentication().getName();
-        return getUserById(UUID.fromString(uuid));
+
+        /* make request to get the current User*/
+        GetUserByIdRequest request = new GetUserByIdRequest(UUID.fromString(uuid));
+
+        try{
+            return getUserById(request).getUser();
+        }catch(NullUserRequestParameterException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
