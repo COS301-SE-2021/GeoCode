@@ -339,20 +339,30 @@ public class UserServiceImpl implements UserService {
      * Registers a new user
      * @param request The id for the User
      */
-    public void registerNewUser(RegisterNewUserRequest request){
+    public RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullUserRequestParameterException{
+        if(request == null){
+            return new RegisterNewUserResponse(false, "The RegisterNewUserRequest object passed was NULL");
+        }
+
+        if(request.getUserID() == null || request.getUsername() == null){
+            throw new NullUserRequestParameterException();
+        }
+
         User newUser = new User();
-        newUser.setId(id);
-        newUser.setUsername(username);
+        newUser.setId(request.getUserID());
+        newUser.setUsername(request.getUsername());
 
         //get the CollectableType object for trackables
-        GetCollectableTypeByIDRequest request = new GetCollectableTypeByIDRequest(trackableUUID);
-        GetCollectableTypeByIDResponse response = collectableService.getCollectableTypeByID( request );
-        CollectableType optionalCollectableType = response.getCollectableType();
+        GetCollectableTypeByIDRequest getCollectableTypeByIDRequest = new GetCollectableTypeByIDRequest(trackableUUID);
+        GetCollectableTypeByIDResponse getCollectableTypeByIDResponse = collectableService.getCollectableTypeByID( getCollectableTypeByIDRequest );
+        CollectableType optionalCollectableType = getCollectableTypeByIDResponse.getCollectableType();
 
         Collectable trackableObject = new Collectable( optionalCollectableType );
         newUser.setTrackableObject(trackableObject);
         newUser.setCurrentCollectable(trackableObject);
         userRepo.save(newUser);
+
+        return new RegisterNewUserResponse(true, "New User registered");
     }
 
     //GeoCode helper functions

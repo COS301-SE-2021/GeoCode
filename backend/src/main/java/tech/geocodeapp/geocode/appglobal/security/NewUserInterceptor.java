@@ -4,10 +4,9 @@ import org.keycloak.KeycloakSecurityContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
-import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
+import tech.geocodeapp.geocode.user.request.RegisterNewUserRequest;
 import tech.geocodeapp.geocode.user.response.GetUserByIdResponse;
-import tech.geocodeapp.geocode.user.service.UserService;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import javax.servlet.FilterChain;
@@ -35,17 +34,17 @@ public class NewUserInterceptor extends GenericFilterBean {
         if (ctx != null) {
             UUID uuid = UUID.fromString(ctx.getToken().getSubject());
             String username = ctx.getToken().getPreferredUsername();
-            GetUserByIdResponse getUserByIdResponse;
 
             try{
-                getUserByIdResponse = userService.getUserById(new GetUserByIdRequest(uuid));
+                GetUserByIdResponse getUserByIdResponse = userService.getUserById(new GetUserByIdRequest(uuid));
+
+                if (getUserByIdResponse.getUser() == null) {
+                    RegisterNewUserRequest registerNewUserRequest = new RegisterNewUserRequest(uuid, username);
+                    userService.registerNewUser(registerNewUserRequest);
+                }
             }catch(NullUserRequestParameterException e){
                 e.printStackTrace();
                 return;
-            }
-
-            if (getUserByIdResponse.getUser() == null) {
-                userService.registerNewUser(uuid, username);
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);

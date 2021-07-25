@@ -19,7 +19,6 @@ import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
@@ -67,7 +66,14 @@ public class UserServiceImplTest {
         collectableTypeMockRepo.save(trackableCollectableType);
 
         //save the valid user to the MockRepo
-        userService.registerNewUser(validUserId, "john_smith");
+        RegisterNewUserRequest registerNewUserRequest = new RegisterNewUserRequest(validUserId, "john_smith");
+
+        try {
+            RegisterNewUserResponse registerNewUserResponse = userService.registerNewUser(registerNewUserRequest);
+        } catch (NullUserRequestParameterException e) {
+            e.printStackTrace();
+            return;
+        }
 
         //make 3 CollectableTypes for Easter
         CollectableType egg = new CollectableType();

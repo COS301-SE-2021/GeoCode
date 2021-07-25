@@ -39,7 +39,7 @@ public interface UserService {
 
     User getCurrentUser();
 
-    void registerNewUser(RegisterNewUserRequest request);
+    RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullUserRequestParameterException;
 
     //GeoCode helper functions
     SwapCollectableResponse swapCollectable(SwapCollectableRequest request);
