@@ -134,8 +134,15 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             throw new NullLeaderboardRequestParameterException();
         }
 
+        /* check if leaderboard is invalid */
+        Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboard().getId());
+
+        if(optionalLeaderboard.isEmpty()){
+            return new GetPointsByLeaderboardResponse(false, "Invalid leaderboard ID", null);
+        }
+
         List<Point> points = pointRepo.findAllByLeaderboard(request.getLeaderboard());
-        return new GetPointsByLeaderboardResponse(points);
+        return new GetPointsByLeaderboardResponse(true, "Leaderboard points returned", points);
     }
 
     /**
@@ -154,7 +161,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             throw new NullLeaderboardRequestParameterException();
         }
 
-        /* check if leaderboard is valid */
+        /* check if leaderboard is invalid */
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboard().getId());
 
         if(optionalLeaderboard.isEmpty()){
@@ -162,6 +169,6 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }
 
         int rank = pointRepo.getMyRank(request.getLeaderboard().getId(), request.getAmount());
-        return new GetMyRankResponse(rank);
+        return new GetMyRankResponse(true, "Point rank returned", rank);
     }
 }
