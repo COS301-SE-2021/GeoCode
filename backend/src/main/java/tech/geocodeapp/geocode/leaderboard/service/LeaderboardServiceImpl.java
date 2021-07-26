@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.leaderboard.service;
 
+import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @return A list of the details of the requested points
      * @throws NullLeaderboardRequestParameterException - an exception for when no leaderboard exists for the given event
      */
+    @Transactional
     public GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullLeaderboardRequestParameterException{
        if(request!=null) {
            if(request.getEventID()==null || request.getStarting()==null || request.getCount()==null) {
@@ -97,6 +99,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @return A GetLeaderboardByIDResponse object containing the Leaderboard object
      * @throws NullLeaderboardRequestParameterException
      */
+    @Transactional
     public GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullLeaderboardRequestParameterException{
         /* Find all of the Leader
          */
@@ -119,6 +122,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @return A GetPointsByLeaderboardResponse object
      * @throws NullLeaderboardRequestParameterException
      */
+    @Transactional
     public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullLeaderboardRequestParameterException{
         if(request == null){
             return new GetPointsByLeaderboardResponse(null);
@@ -138,6 +142,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @return A GetMyRankResponse object
      * @throws NullLeaderboardRequestParameterException
      */
+    @Transactional
     public GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullLeaderboardRequestParameterException{
         if(request == null){
             return new GetMyRankResponse(null);
