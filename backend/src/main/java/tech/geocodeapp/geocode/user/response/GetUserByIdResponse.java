@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.user.response;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import tech.geocodeapp.geocode.general.Response;
 import tech.geocodeapp.geocode.user.model.User;
 
 import javax.validation.Valid;
@@ -11,20 +12,13 @@ import javax.validation.constraints.*;
 /**
  * GetUserByIdResponse
  */
-public class GetUserByIdResponse   {
-    @JsonProperty("success")
-    private Boolean success = null;
-
-    @JsonProperty("message")
-    private String message = null;
-
+public class GetUserByIdResponse extends Response {
     @JsonProperty("user")
     @Valid
-    private User user = null;
+    private User user;
 
     public GetUserByIdResponse(boolean success, String message, User user){
-        this.success = success;
-        this.message = message;
+        super(success, message);
         this.user = user;
     }
 
@@ -37,7 +31,7 @@ public class GetUserByIdResponse   {
      * Get user
      * @return user
      **/
-    @Schema(required = true, description = "")
+    @Schema(required = true)
     @NotNull
     @Valid
     public User getUser() {
@@ -85,21 +79,5 @@ public class GetUserByIdResponse   {
             return "null";
         }
         return o.toString().replace("\n", "\n    ");
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Boolean getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
     }
 }
