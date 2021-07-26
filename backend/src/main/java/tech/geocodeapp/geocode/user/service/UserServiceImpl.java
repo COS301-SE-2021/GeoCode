@@ -26,6 +26,7 @@ import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 
+import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -57,6 +58,7 @@ public class UserServiceImpl implements UserService {
      * @param request The GetCurrentCollectableRequest object
      * @return A GetCurrentCollectableResponse object: (success, message, object)
      */
+    @Transactional
     public GetCurrentCollectableResponse getCurrentCollectable(GetCurrentCollectableRequest request) throws NullUserRequestParameterException{
         if (request == null) {
             return new GetCurrentCollectableResponse(false, "The GetCurrentCollectableRequest object passed was NULL", null);
@@ -81,6 +83,7 @@ public class UserServiceImpl implements UserService {
      * @param request The GetUserTrackableRequest object
      * @return A GetUserTrackableResponse object: (success, message, object)
      */
+    @Transactional
     public GetUserTrackableResponse getUserTrackable(GetUserTrackableRequest request) throws NullUserRequestParameterException{
         if (request == null) {
             return new GetUserTrackableResponse(false, "The GetUserTrackableRequest object passed was NULL", null);
@@ -105,6 +108,7 @@ public class UserServiceImpl implements UserService {
      * @param request The UpdateLocationRequest object
      * @return A UpdateLocationResponse object: (success, message, object)
      */
+    @Transactional
     public UpdateLocationResponse updateLocation(UpdateLocationRequest request) throws NullUserRequestParameterException{
         if (request == null) {
             return new UpdateLocationResponse(false, "The UpdateLocationRequest object passed was NULL", null);
@@ -136,6 +140,7 @@ public class UserServiceImpl implements UserService {
      * @return A GetCollectableTypesResponse object: (success, message, object)
      * @throws NullUserRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
+    @Transactional
     public GetFoundCollectableTypesResponse getFoundCollectableTypes(GetFoundCollectableTypesRequest request) throws NullUserRequestParameterException{
         if (request == null) {
             return new GetFoundCollectableTypesResponse(false, "The GetFoundCollectableTypesRequest object passed was NULL", null);
@@ -167,6 +172,7 @@ public class UserServiceImpl implements UserService {
      * @return A GetFoundGeoCodesResponse object: (success, message, object)
      * @throws NullUserRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
+    @Transactional
     public GetFoundGeoCodesResponse getFoundGeoCodes(GetFoundGeoCodesRequest request) throws NullUserRequestParameterException {
         if (request == null) {
             return new GetFoundGeoCodesResponse(false, "The GetFoundGeoCodesRequest object passed was NULL", null);
@@ -198,6 +204,7 @@ public class UserServiceImpl implements UserService {
      * @return A GetOwnedGeoCodesResponse object: (success, message, object)
      * @throws NullUserRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
+    @Transactional
     public GetOwnedGeoCodesResponse getOwnedGeoCodes(GetOwnedGeoCodesRequest request) throws NullUserRequestParameterException {
         if (request == null) {
             return new GetOwnedGeoCodesResponse(false, "The GetOwnedGeoCodesRequest object passed was NULL", null);
@@ -229,6 +236,7 @@ public class UserServiceImpl implements UserService {
      * @return A GetMyLeaderboardsResponse object: (success, message, object)
      * @throws NullUserRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
+    @Transactional
     public GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullUserRequestParameterException{
         if (request == null) {
             return new GetMyLeaderboardsResponse(false, "The GetMyLeaderboardsRequest object passed was NULL", null);
@@ -301,6 +309,7 @@ public class UserServiceImpl implements UserService {
      * @param request The GetUserByIdRequest object
      * @return The User if they exist, else NULL contained in a GetUserByIdResponse object
      */
+    @Transactional
     public GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullUserRequestParameterException {
         if(request == null){
             return new GetUserByIdResponse(false, "The GetUserByIdRequest object passed was NULL", null);
@@ -321,6 +330,7 @@ public class UserServiceImpl implements UserService {
      *  Gets the current User using the Keycloak details
      * @return The current User
      */
+    @Transactional
     public User getCurrentUser(){
         String uuid = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -339,6 +349,7 @@ public class UserServiceImpl implements UserService {
      * Registers a new user
      * @param request The id for the User
      */
+    @Transactional
     public RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullUserRequestParameterException{
         if(request == null){
             return new RegisterNewUserResponse(false, "The RegisterNewUserRequest object passed was NULL");
@@ -372,6 +383,7 @@ public class UserServiceImpl implements UserService {
      * @param request The UUID identifying the Collectable to swap with the currentCollectable
      * @return The original currentCollectable
      */
+    @Transactional
     public SwapCollectableResponse swapCollectable( SwapCollectableRequest request ) throws NullUserRequestParameterException {
         if(request == null){
             return new SwapCollectableResponse(false, "The SwapCollectableRequest object passed was NULL", null);
