@@ -16,6 +16,7 @@ import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.user.service.*;
@@ -439,7 +440,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException {
+    public SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException, NullUserRequestParameterException {
 
         /* Validate the request */
         if ( request == null ) {
