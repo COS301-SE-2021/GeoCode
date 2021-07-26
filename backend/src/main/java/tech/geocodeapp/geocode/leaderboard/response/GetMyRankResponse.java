@@ -1,6 +1,8 @@
 package tech.geocodeapp.geocode.leaderboard.response;
 
-public class GetMyRankResponse {
+import tech.geocodeapp.geocode.general.Response;
+
+public class GetMyRankResponse extends Response {
     /**
      * The found rank
      */
@@ -18,8 +20,8 @@ public class GetMyRankResponse {
      *
      * @param rank The rank from the specified leaderboard
      */
-    public GetMyRankResponse(Integer rank ) {
-
+    public GetMyRankResponse(boolean success, String message, Integer rank ) {
+        super(success, message);
         this.rank = rank;
     }
 

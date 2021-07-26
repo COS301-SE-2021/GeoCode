@@ -105,7 +105,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
          */
 
         if(request == null){
-            return new GetLeaderboardByIDResponse(null);
+            return new GetLeaderboardByIDResponse(false, "The GetLeaderboardByIDRequest object passed was NULL", null);
         }
 
         if(request.getLeaderboardID() == null){
@@ -113,7 +113,9 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }
 
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboardID());
-        return new GetLeaderboardByIDResponse(optionalLeaderboard.get());
+
+        return optionalLeaderboard.map(leaderboard -> new GetLeaderboardByIDResponse(true, "Leaderboard found", leaderboard)).orElseGet(
+                () -> new GetLeaderboardByIDResponse(false, "Leaderboard not found", null));
     }
 
     /**
@@ -125,7 +127,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     @Transactional
     public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullLeaderboardRequestParameterException{
         if(request == null){
-            return new GetPointsByLeaderboardResponse(null);
+            return new GetPointsByLeaderboardResponse(false, "The GetMyRankRequest passed was NULL", null);
         }
 
         if(request.getLeaderboard() == null){
@@ -145,7 +147,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     @Transactional
     public GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullLeaderboardRequestParameterException{
         if(request == null){
-            return new GetMyRankResponse(null);
+            return new GetMyRankResponse(false, "The GetMyRankRequest passed was NULL", null);
         }
 
         if(request.getLeaderboard() == null || request.getAmount() == null){
