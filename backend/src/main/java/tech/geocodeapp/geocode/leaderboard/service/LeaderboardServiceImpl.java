@@ -12,13 +12,8 @@ import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
-import tech.geocodeapp.geocode.leaderboard.request.GetEventLeaderboardRequest;
-import tech.geocodeapp.geocode.leaderboard.request.GetLeaderboardByIDRequest;
-import tech.geocodeapp.geocode.leaderboard.request.GetMyRankRequest;
-import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
-import tech.geocodeapp.geocode.leaderboard.response.GetLeaderboardByIDResponse;
-import tech.geocodeapp.geocode.leaderboard.response.GetMyRankResponse;
-import tech.geocodeapp.geocode.leaderboard.response.GetPointsByLeaderboardResponse;
+import tech.geocodeapp.geocode.leaderboard.request.*;
+import tech.geocodeapp.geocode.leaderboard.response.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -170,5 +165,20 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         int rank = pointRepo.getMyRank(request.getLeaderboard().getId(), request.getAmount());
         return new GetMyRankResponse(true, "Point rank returned", rank);
+    }
+
+    @Override
+    public CreatePointResponse createPoint(CreatePointRequest request) {
+        return null;
+    }
+
+    @Override
+    public DeletePointResponse deletePoint(DeletePointRequest request) {
+        return null;
+    }
+
+    @Override
+    public UpdatePointResponse updatePoint(UpdatePointRequest request) {
+        return null;
     }
 }

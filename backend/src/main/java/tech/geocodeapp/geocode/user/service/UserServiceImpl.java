@@ -246,6 +246,7 @@ public class UserServiceImpl implements UserService {
             throw new NullUserRequestParameterException();
         }
 
+        /* check if user ID is invalid */
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
@@ -260,32 +261,16 @@ public class UserServiceImpl implements UserService {
             //get the Leaderboard that the Point is for
             Leaderboard leaderboard = point.getLeaderBoard();
 
-            /* check if point has been assigned to a Leaderboard*/
+            /* check if point has been assigned to a Leaderboard */
             if(leaderboard != null){
+                /* add details for current leaderboard ranking */
                 MyLeaderboardDetails leaderboardDetails = new MyLeaderboardDetails();
                 leaderboardDetails.setName(leaderboard.getName());
 
                 int pointAmount = point.getAmount();
                 leaderboardDetails.setPoints(pointAmount);
 
-                /*//get the rank
-                GetPointsByLeaderboardRequest getPointsByLeaderboardRequest = new GetPointsByLeaderboardRequest(leaderboard);
-
-                try{
-                    GetPointsByLeaderboardResponse getPointsByLeaderboardResponse = leaderboardService.getPointsByLeaderboard(getPointsByLeaderboardRequest);
-
-                    List<Point> leaderboardPoints = getPointsByLeaderboardResponse.getPoints();
-
-                    //order by the point amount
-                    leaderboardPoints.sort(Comparator.comparing(Point::getAmount));
-
-                    int rank = leaderboardPoints.indexOf(point)+1;
-                    leaderboardDetails.setRank(rank);
-                }catch(NullLeaderboardRequestParameterException e){
-                    return new GetMyLeaderboardsResponse(false, e.getMessage(), null);
-                }*/
-
-                //get the rank: using ranking function in SQL
+                //get the rank
                 GetMyRankRequest getMyRankRequest = new GetMyRankRequest(leaderboard, pointAmount);
 
                 try{
@@ -297,6 +282,7 @@ public class UserServiceImpl implements UserService {
                     return new GetMyLeaderboardsResponse(false, e.getMessage(), null);
                 }
 
+                /* add the leaderboard rank details */
                 leaderboardDetailsList.add(leaderboardDetails);
             }
         }
