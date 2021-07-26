@@ -42,5 +42,5 @@ public interface UserService {
     RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullUserRequestParameterException;
 
     //GeoCode helper functions
-    SwapCollectableResponse swapCollectable(SwapCollectableRequest request);
+    SwapCollectableResponse swapCollectable(SwapCollectableRequest request) throws NullUserRequestParameterException;
 }

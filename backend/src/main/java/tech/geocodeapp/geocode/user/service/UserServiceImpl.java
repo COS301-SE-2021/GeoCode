@@ -372,7 +372,15 @@ public class UserServiceImpl implements UserService {
      * @param request The UUID identifying the Collectable to swap with the currentCollectable
      * @return The original currentCollectable
      */
-    public SwapCollectableResponse swapCollectable( SwapCollectableRequest request ) {
+    public SwapCollectableResponse swapCollectable( SwapCollectableRequest request ) throws NullUserRequestParameterException {
+        if(request == null){
+            return new SwapCollectableResponse(false, "The SwapCollectableRequest object passed was NULL", null);
+        }
+
+        if(request.getCollectableID() == null){
+            throw new NullUserRequestParameterException();
+        }
+
         //currentCollectable to swap out
         User currentUser = getCurrentUser();
         Collectable oldCurrentCollectable = currentUser.getCurrentCollectable();
@@ -383,6 +391,6 @@ public class UserServiceImpl implements UserService {
         currentUser.setCurrentCollectable( newCurrentCollectable.getCollectable() );
         userRepo.save(currentUser);
 
-        return new SwapCollectableResponse( oldCurrentCollectable );
+        return new SwapCollectableResponse(true, "The User's Collectable was swapped with the Collectable in the GeoCode", oldCurrentCollectable );
     }
 }
