@@ -154,6 +154,13 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             throw new NullLeaderboardRequestParameterException();
         }
 
+        /* check if leaderboard is valid */
+        Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboard().getId());
+
+        if(optionalLeaderboard.isEmpty()){
+            return new GetMyRankResponse(false, "Invalid leaderboard ID", null);
+        }
+
         int rank = pointRepo.getMyRank(request.getLeaderboard().getId(), request.getAmount());
         return new GetMyRankResponse(rank);
     }
