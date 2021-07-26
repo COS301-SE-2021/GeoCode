@@ -440,7 +440,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException, NullUserRequestParameterException {
+    public SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -508,7 +508,16 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Perform the swap */
-        var userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
+        Collectable userToGeocode;
+
+        try {
+            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
+        } catch (NullUserRequestParameterException e) {
+            e.printStackTrace();
+            return new SwapCollectablesResponse(false);
+        }
+
+        /* change the location */
         userToGeocode.changeLocation( geocode.getLatitude() + " " + geocode.getLongitude() );
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );

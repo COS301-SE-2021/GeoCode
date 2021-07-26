@@ -93,7 +93,7 @@ public interface GeoCodeService {
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException, NullUserRequestParameterException;
+    SwapCollectablesResponse swapCollectables( SwapCollectablesRequest request ) throws InvalidRequestException;
 
     /**
      * Updates the availability of a GeoCode

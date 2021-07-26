@@ -24,7 +24,7 @@ public class Response {
         this.message = message;
     }
 
-    public Boolean getSuccess() {
+    public Boolean isSuccess() {
         return success;
     }
 

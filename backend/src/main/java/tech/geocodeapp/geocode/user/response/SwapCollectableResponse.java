@@ -7,7 +7,7 @@ import tech.geocodeapp.geocode.general.Response;
 public class SwapCollectableResponse extends Response {
 
     /**
-     * The found collectable with the given collectableID
+     * The returned Collectable that was in the GeoCode
      */
     @JsonProperty("collectable")
     private Collectable collectable;
