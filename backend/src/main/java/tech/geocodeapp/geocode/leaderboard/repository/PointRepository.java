@@ -14,12 +14,8 @@ import java.util.UUID;
 public interface PointRepository extends JpaRepository<Point, UUID> {
     List<Point> findAllByLeaderboard(Leaderboard leaderboard);
 
-    //@Query(value = "SELECT DENSE_RANK() OVER(ORDER BY amount) AS rank FROM point WHERE leaderboard_id = ?1 AND amount = ?2 ORDER BY rank")
-    //@Query(value = "SELECT amount FROM point WHERE leaderboard_id = ?1 AND amount = ?2 ORDER BY amount")
-    //@Query(value = "SELECT 1 FROM point")
-    default int getMyRank(UUID leaderboardID, int amount) {
-        return 0;
-    }
+    @Query(value = "SELECT DENSE_RANK() OVER (ORDER BY amount) AS rank FROM point WHERE leader_board_id = ?1 AND amount = ?2 ORDER BY rank", nativeQuery = true)
+    int getMyRank(UUID leaderboardID, int amount);
 
     int countByLeaderboard(Leaderboard leaderboard);
 
