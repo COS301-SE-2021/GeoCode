@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.service.*;
@@ -14,7 +15,6 @@ import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCodeApplication;
-import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.user.service.*;
 
@@ -546,7 +546,7 @@ class GeoCodeServiceImplIT {
 
             /* Create the request with the ID of the GeoCode we want */
             GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
-            request.setLocation( temp.get( 0 ).getlocation() );
+            request.setLocation( temp.get( 0 ).getLocation() );
 
 
             /* Get the response by calling the updateAvailability use case */

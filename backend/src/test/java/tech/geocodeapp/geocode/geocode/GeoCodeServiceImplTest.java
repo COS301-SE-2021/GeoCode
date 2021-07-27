@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.service.*;
@@ -582,7 +583,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the ID of the GeoCode we want */
             GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
-            request.setLocation( temp.get( 0 ).getlocation() );
+            request.setLocation( temp.get( 0 ).getLocation() );
 
 
             /* Get the response by calling the updateAvailability use case */
