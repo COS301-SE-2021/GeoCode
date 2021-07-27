@@ -14,6 +14,11 @@ import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.request.*;
 import tech.geocodeapp.geocode.leaderboard.response.*;
+import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
+import tech.geocodeapp.geocode.user.model.User;
+import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
+import tech.geocodeapp.geocode.user.response.GetUserByIdResponse;
+import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,10 +37,13 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     @NotNull(message = "Event Service Implementation may not be null.")
     private final EventService eventService;
 
-    public LeaderboardServiceImpl(LeaderboardRepository leaderboardRepo, PointRepository pointRepo, EventService eventService) {
+    private final UserService userService;
+
+    public LeaderboardServiceImpl(LeaderboardRepository leaderboardRepo, PointRepository pointRepo, EventService eventService, UserService userService) {
         this.leaderboardRepo = leaderboardRepo;
         this.pointRepo = pointRepo;
         this.eventService = eventService;
+        this.userService = userService;
     }
 
     /**
@@ -170,6 +178,38 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     @Override
     public PointResponse createPoint(CreatePointRequest request) throws NullLeaderboardRequestParameterException{
 
+        User foundUser = null;
+
+        if(request == null){
+            return new PointResponse(false, "The CreatePointRequest passed was NULL", null);
+        }
+
+        if(request.getAmount() == null || request.getLeaderboardId() == null || request.getUserId() == null){
+            throw new NullLeaderboardRequestParameterException();
+        }
+
+        // check if leaderboard is invalid
+        Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
+
+        if(leaderboard.isEmpty()){
+            return new PointResponse(false, "Invalid leaderboard Id provided",null);
+        }
+
+        //check if user is invalid
+        GetUserByIdRequest userRequest = new GetUserByIdRequest(request.getUserId());
+        try {
+            GetUserByIdResponse userResponse = userService.getUserById(userRequest);
+            if(!userResponse.isSuccess()){
+                return new PointResponse(false, "Invalid user Id provided",null);
+            }else{
+               foundUser = userResponse.getUser();
+            }
+        } catch (NullUserRequestParameterException e) {
+            e.printStackTrace();
+        }
+        Point point= new Point(request.getAmount(), foundUser, leaderboard.get());
+        pointRepo.save(point);
+        return new PointResponse(true, "The Point was successfully created.", point);
     }
 
     @Override
