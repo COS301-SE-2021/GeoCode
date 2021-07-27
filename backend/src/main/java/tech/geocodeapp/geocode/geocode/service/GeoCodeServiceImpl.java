@@ -16,6 +16,7 @@ import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.user.service.*;
 
@@ -488,7 +489,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Perform the swap */
-        var userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
+        Collectable userToGeocode;
+
+        try {
+            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
+        } catch (NullUserRequestParameterException e) {
+            e.printStackTrace();
+            return new SwapCollectablesResponse(false);
+        }
+
         userToGeocode.changeLocation( geocode.getLatitude() + " " + geocode.getLongitude() );
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );
