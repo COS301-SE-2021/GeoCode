@@ -168,17 +168,17 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     }
 
     @Override
-    public CreatePointResponse createPoint(CreatePointRequest request) {
+    public PointResponse createPoint(CreatePointRequest request) throws NullLeaderboardRequestParameterException{
+
+    }
+
+    @Override
+    public DeletePointResponse deletePoint(DeletePointRequest request) throws NullLeaderboardRequestParameterException {
         return null;
     }
 
     @Override
-    public DeletePointResponse deletePoint(DeletePointRequest request) {
-        return null;
-    }
-
-    @Override
-    public UpdatePointResponse updatePoint(UpdatePointRequest request) {
+    public PointResponse updatePoint(UpdatePointRequest request) throws NullLeaderboardRequestParameterException {
         return null;
     }
 }
