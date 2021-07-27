@@ -214,7 +214,22 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
     @Override
     public DeletePointResponse deletePoint(DeletePointRequest request) throws NullLeaderboardRequestParameterException {
-        return null;
+        if(request == null){
+            return new DeletePointResponse(false, "The DeletePointRequest passed was NULL");
+        }
+
+        if(request.getPointId() == null){
+            throw new NullLeaderboardRequestParameterException();
+        }
+
+        //check if the point to delete exists
+        Optional<Point> point = pointRepo.findById(request.getPointId());
+        if(point.isEmpty()){
+            return new DeletePointResponse(false,"No Point with the given Id exists");
+        }
+
+        pointRepo.delete(point.get());
+        return new DeletePointResponse(true, "Successfully deleted the provided point");
     }
 
     @Override
