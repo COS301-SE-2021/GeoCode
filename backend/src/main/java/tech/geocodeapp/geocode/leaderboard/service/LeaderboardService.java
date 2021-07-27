@@ -21,7 +21,7 @@ public interface LeaderboardService {
 
     public GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullLeaderboardRequestParameterException;
 
-    public CreatePointResponse createPoint(CreatePointRequest request);
+    public PointResponse createPoint(CreatePointRequest request);
 
     public DeletePointResponse deletePoint(DeletePointRequest request);
 

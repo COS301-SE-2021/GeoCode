@@ -168,7 +168,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     }
 
     @Override
-    public CreatePointResponse createPoint(CreatePointRequest request) {
+    public PointResponse createPoint(CreatePointRequest request) {
         return null;
     }
 
