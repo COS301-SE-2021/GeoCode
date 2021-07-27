@@ -175,6 +175,12 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         return new GetMyRankResponse(true, "Point rank returned", rank);
     }
 
+    /**
+     * A method to create a new Point for a user in a leaderboard
+     * @param request Contains the amount, leaderboardId and userId to use for creating the Point
+     * @return A responses informing of success or failure and containing the created Point.
+     * @throws NullLeaderboardRequestParameterException an exception for when a null value is provided for a parameter of the request
+     */
     @Override
     public PointResponse createPoint(CreatePointRequest request) throws NullLeaderboardRequestParameterException{
         User foundUser = null;
