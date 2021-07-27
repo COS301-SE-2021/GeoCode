@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
-import tech.geocodeapp.geocode.collectable.model.Difficulty;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -37,14 +38,8 @@ public class GetGeoCodeByLocationResponse {
     /**
      * The longitude of the found GeoCode
      */
-    @JsonProperty( "longitude" )
-    private String longitude = null;
-
-    /**
-     * The latitude of the found GeoCode
-     */
-    @JsonProperty( "latitude" )
-    private String latitude = null;
+    @JsonProperty( "location" )
+    private GeoPoint location = null;
 
     /**
      * The difficulty of the found GeoCode
@@ -65,17 +60,15 @@ public class GetGeoCodeByLocationResponse {
      * @param id The unique ID of the found GeoCode with the specified QR Code
      * @param available If the the found GeoCode is available to be found
      * @param description The description of the found GeoCode
-     * @param longitude The longitude of the found GeoCode
-     * @param latitude The latitude of the found GeoCode
+     * @param location The longitude and latitude of the found GeoCode
      * @param difficulty The difficulty of the found GeoCode
      */
-    public GetGeoCodeByLocationResponse( UUID id, Boolean available, String description, String longitude, String latitude, Difficulty difficulty ) {
+    public GetGeoCodeByLocationResponse( UUID id, Boolean available, String description, GeoPoint location, Difficulty difficulty ) {
 
         this.id = id;
         this.available = available;
         this.description = description;
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.location = location;
         this.difficulty = difficulty;
     }
 
@@ -180,69 +173,36 @@ public class GetGeoCodeByLocationResponse {
     }
 
     /**
-     * Sets the longitude attribute to the specified value
+     * Sets the location attribute to the specified value
      *
-     * @param longitude the value the attribute should be set to
+     * @param location the value the attribute should be set to
      *
-     * @return the response after the longitude has been changed
+     * @return the response after the location has been changed
      */
-    public GetGeoCodeByLocationResponse longitude( String longitude ) {
+    public GetGeoCodeByLocationResponse longitude( GeoPoint location ) {
 
-        this.longitude = longitude;
+        this.location = location;
         return this;
     }
 
     /**
-     * Gets the saved longitude attribute
+     * Gets the saved location attribute
      *
-     * @return the stored longitude attribute
+     * @return the stored location attribute
      */
-    public String getLongitude() {
+    public GeoPoint getLongitude() {
 
-        return longitude;
+        return location;
     }
 
     /**
-     * Sets the longitude attribute to the specified value
+     * Sets the location attribute to the specified value
      *
-     * @param longitude the value the attribute should be set to
+     * @param location the value the attribute should be set to
      */
-    public void setLongitude( String longitude ) {
+    public void setLongitude( GeoPoint location ) {
 
-        this.longitude = longitude;
-    }
-
-    /**
-     * Sets the latitude attribute to the specified value
-     *
-     * @param latitude the value the attribute should be set to
-     *
-     * @return the response after the latitude has been changed
-     */
-    public GetGeoCodeByLocationResponse latitude( String latitude ) {
-
-        this.latitude = latitude;
-        return this;
-    }
-
-    /**
-     * Gets the saved latitude attribute
-     *
-     * @return the stored latitude attribute
-     */
-    public String getLatitude() {
-
-        return latitude;
-    }
-
-    /**
-     * Sets the latitude attribute to the specified value
-     *
-     * @param latitude the value the attribute should be set to
-     */
-    public void setLatitude( String latitude ) {
-
-        this.latitude = latitude;
+        this.location = location;
     }
 
     /**
@@ -301,8 +261,7 @@ public class GetGeoCodeByLocationResponse {
         return Objects.equals( this.id, getGeoCodeByLocationResponse.id ) &&
                 Objects.equals( this.available, getGeoCodeByLocationResponse.available ) &&
                 Objects.equals( this.description, getGeoCodeByLocationResponse.description ) &&
-                Objects.equals( this.longitude, getGeoCodeByLocationResponse.longitude ) &&
-                Objects.equals( this.latitude, getGeoCodeByLocationResponse.latitude ) &&
+                Objects.equals( this.location, getGeoCodeByLocationResponse.location ) &&
                 Objects.equals( this.difficulty, getGeoCodeByLocationResponse.difficulty );
     }
 
@@ -314,7 +273,7 @@ public class GetGeoCodeByLocationResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( id, available, description, longitude, latitude, difficulty );
+        return Objects.hash( id, available, description, location, difficulty );
     }
 
     /**
@@ -329,8 +288,7 @@ public class GetGeoCodeByLocationResponse {
                 "    id: " + toIndentedString( id ) + "\n" +
                 "    available: " + toIndentedString( available ) + "\n" +
                 "    description: " + toIndentedString( description ) + "\n" +
-                "    longitude: " + toIndentedString( longitude ) + "\n" +
-                "    latitude: " + toIndentedString( latitude ) + "\n" +
+                "    longitude: " + toIndentedString( location ) + "\n" +
                 "    difficulty: " + toIndentedString( difficulty ) + "\n" +
                 "}";
     }

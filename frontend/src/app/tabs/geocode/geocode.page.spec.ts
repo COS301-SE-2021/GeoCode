@@ -5,19 +5,18 @@ import { GeocodePage } from './geocode.page';
 import {GeoCodeService} from '../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
+import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
+import {FormsModule} from '@angular/forms';
 
 describe('GeocodePage', () => {
   let component: GeocodePage;
   let fixture: ComponentFixture<GeocodePage>;
-  beforeAll(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-  });
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodePage ],
-      providers: [AlertController, NavController, GeoCodeService],
-      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
+      providers: [AlertController, NavController, GeoCodeService, GoogleMapsLoader],
+      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, FormsModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(GeocodePage);

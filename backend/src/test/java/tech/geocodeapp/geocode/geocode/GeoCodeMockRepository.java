@@ -5,7 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 
 import java.util.*;
@@ -161,6 +163,72 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
     public < S extends GeoCode > boolean exists( Example< S > example ) {
 
         return false;
+    }
+
+    /**
+     * Finds all of the GeoCode's with a certain level of difficulty
+     *
+     * @param difficulty the level of difficulty assigned to a GeoCode
+     *
+     * @return all the GeoCode's with the specified difficulty
+     */
+    @Override
+    public Collection< GeoCode > findGeoCodeWithDifficulty( Difficulty difficulty ) {
+
+        Collection< GeoCode > found = new ArrayList<>();
+        map.forEach( ( key, value ) -> {
+
+            if ( value.getDifficulty().equals( difficulty ) ) {
+
+                found.add( value );
+            }
+        } );
+
+        return found;
+    }
+
+    /**
+     * Find the GeoCode with the given qrCode characters
+     *
+     * @param qrCode the unique characters allocated to a certain GeoCode
+     *
+     * @return the GeoCode with the specified qrCode
+     */
+    @Override
+    public GeoCode findGeoCodeWithQRCode( String qrCode ) {
+
+        for ( Map.Entry< UUID, GeoCode > entry : map.entrySet() ) {
+
+            GeoCode found = entry.getValue();
+            if ( found.getQrCode().equals( qrCode ) ) {
+
+                return found;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Find the GeoCode with the given location (longitude and latitude co-ordinates)
+     *
+     * @param location the longitude and Latitude to look for the GeoCode
+     *
+     * @return the GeoCode at the given location
+     */
+    @Override
+    public GeoCode findGeoCodeAtLocation( GeoPoint location ) {
+
+        for ( Map.Entry< UUID, GeoCode > entry : map.entrySet() ) {
+
+            GeoCode found = entry.getValue();
+            if ( found.getLocation().equals( location ) ) {
+
+                return found;
+            }
+        }
+
+        return null;
     }
 
 }

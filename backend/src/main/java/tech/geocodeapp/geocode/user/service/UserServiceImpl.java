@@ -1,17 +1,15 @@
 package tech.geocodeapp.geocode.user.service;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
+import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
@@ -19,11 +17,13 @@ import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * This class implements the UserService interface
  */
-@Service
+@Service( "UserService" )
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final CollectableRepository collectableRepo;
@@ -31,13 +31,17 @@ public class UserServiceImpl implements UserService {
     @NotNull( message = "Collectable Service Implementation may not be null." )
     private final CollectableService collectableService;
 
+    @NotNull(message = "Leaderboard Service Implementation may not be null.")
+    private final LeaderboardService leaderboardService;
+
     private final String invalidUserIdMessage = "Invalid user id";
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, CollectableService collectableService) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, CollectableService collectableService, LeaderboardService leaderboardService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
         this.collectableService = collectableService;
+        this.leaderboardService = leaderboardService;
     }
 
     /**
@@ -209,6 +213,12 @@ public class UserServiceImpl implements UserService {
         ownedGeocodes.forEach(ownedGeocode -> ownedGeoCodeIDs.add(ownedGeocode.getId()));
 
         return new GetOwnedGeoCodesResponse(true, "The IDs of the User's owned GeoCodes was successfully returned", ownedGeoCodeIDs);
+    }
+
+    @Override
+    public GetMyLeaderboardsResponse getMyLeaderboards( GetMyLeaderboardsRequest request ) throws NullUserRequestParameterException {
+
+        return null;
     }
 
     /**
