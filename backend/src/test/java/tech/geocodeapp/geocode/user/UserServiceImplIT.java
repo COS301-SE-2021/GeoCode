@@ -33,7 +33,7 @@ public class UserServiceImplIT {
     private final String invalidUserIdMessage = "Invalid user id";
 
     @Test
-    public void getCurrentCollectableTestNullRequest() throws NullUserRequestParameterException {
+    public void getCurrentCollectableTestNullRequest() {
         try{
             GetCurrentCollectableResponse response = userService.getCurrentCollectable(null);
             Assertions.assertFalse(response.isSuccess());
@@ -45,7 +45,7 @@ public class UserServiceImplIT {
     }//
 
     @Test
-    public void getCurrentCollectableTestInvalidUser() throws NullUserRequestParameterException {
+    public void getCurrentCollectableTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -83,7 +83,7 @@ public class UserServiceImplIT {
     }
 
     @Test
-    public void getUserTrackableTestNullRequest() throws NullUserRequestParameterException {
+    public void getUserTrackableTestNullRequest() {
         try{
             GetUserTrackableResponse response = userService.getUserTrackable(null);
             Assertions.assertFalse(response.isSuccess());
@@ -95,7 +95,7 @@ public class UserServiceImplIT {
     }
 
     @Test
-    public void getUserTrackableTestInvalidUser() throws NullUserRequestParameterException {
+    public void getUserTrackableTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -114,7 +114,7 @@ public class UserServiceImplIT {
     }
 
     @Test
-    public void getUserTrackableTestValidUser() throws NullUserRequestParameterException {
+    public void getUserTrackableTestValidUser() {
         try{
             /*
             Create a request object
@@ -136,7 +136,7 @@ public class UserServiceImplIT {
     }
 
     @Test
-    public void updateLocationTestNullRequest() throws NullUserRequestParameterException {
+    public void updateLocationTestNullRequest() {
         try{
             UpdateLocationResponse response = userService.updateLocation(null);
             Assertions.assertFalse(response.isSuccess());
@@ -148,7 +148,7 @@ public class UserServiceImplIT {
     }
 
     @Test
-    public void updateLocationTestInvalidUser() throws NullUserRequestParameterException {
+    public void updateLocationTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -167,7 +167,7 @@ public class UserServiceImplIT {
     }
 
     @Test
-    public void updateLocationTestValidUser() throws NullUserRequestParameterException {
+    public void updateLocationTestValidUser() {
         try{
             /*
              Create a request object
@@ -187,6 +187,18 @@ public class UserServiceImplIT {
 
             List<String> pastLocations = new ArrayList<>(trackableObject.getPastLocations());
             Assertions.assertEquals(location, pastLocations.get(pastLocations.size()-1));
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void getFoundCollectableTypesTestNullRequest(){
+        try{
+            GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The GetFoundCollectableTypesRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getCollectableTypeIDs());
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
