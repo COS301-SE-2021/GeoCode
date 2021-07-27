@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { GeocodesPageRoutingModule } from './geocodes-routing.module';
+import { UserGeocodesPageRoutingModule } from './geocodes-routing.module';
 
-import { GeocodesPage } from './geocodes.page';
+import { UserGeocodesPage } from './geocodes.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    GeocodesPageRoutingModule
+    UserGeocodesPageRoutingModule
   ],
-  declarations: [GeocodesPage]
+  declarations: [UserGeocodesPage]
 })
 export class GeocodesPageModule {}

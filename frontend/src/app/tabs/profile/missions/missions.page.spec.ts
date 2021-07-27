@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { MissionsPage } from './missions.page';
+import { UserMissionsPage } from './missions.page';
 import {UrlSerializer} from '@angular/router';
 
 describe('MissionsPage', () => {
-  let component: MissionsPage;
-  let fixture: ComponentFixture<MissionsPage>;
+  let component: UserMissionsPage;
+  let fixture: ComponentFixture<UserMissionsPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MissionsPage ],
+      declarations: [ UserMissionsPage ],
       providers: [ UrlSerializer ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MissionsPage);
+    fixture = TestBed.createComponent(UserMissionsPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

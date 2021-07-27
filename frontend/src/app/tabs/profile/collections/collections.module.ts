@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { CollectionsPageRoutingModule } from './collections-routing.module';
+import { UserCollectionsPageRoutingModule } from './collections-routing.module';
 
-import { CollectionsPage } from './collections.page';
+import { UserCollectionsPage } from './collections.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    CollectionsPageRoutingModule
+    UserCollectionsPageRoutingModule
   ],
-  declarations: [CollectionsPage]
+  declarations: [UserCollectionsPage]
 })
 export class CollectionsPageModule {}
