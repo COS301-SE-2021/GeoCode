@@ -1,12 +1,15 @@
 package tech.geocodeapp.geocode.user.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.general.Response;
 
-public class SwapCollectableResponse {
+public class SwapCollectableResponse extends Response {
 
     /**
-     * The found collectable with the given collectableID
+     * The returned Collectable that was in the GeoCode
      */
+    @JsonProperty("collectable")
     private Collectable collectable;
 
     /**
@@ -19,10 +22,10 @@ public class SwapCollectableResponse {
     /**
      * Overloaded Constructor
      *
-     * @param collectable The collectable from the specified collectable
+     * @param collectable The collectable that is swapped out of the GeoCode
      */
-    public SwapCollectableResponse( Collectable collectable ) {
-
+    public SwapCollectableResponse( boolean success, String message, Collectable collectable ) {
+        super(success, message);
         this.collectable = collectable;
     }
 
@@ -45,5 +48,4 @@ public class SwapCollectableResponse {
 
         this.collectable = collectable;
     }
-
 }

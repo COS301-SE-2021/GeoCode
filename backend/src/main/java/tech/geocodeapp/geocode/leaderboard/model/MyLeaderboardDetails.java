@@ -4,7 +4,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -21,10 +20,10 @@ public class MyLeaderboardDetails   {
   private String name = null;
 
   @JsonProperty("points")
-  private BigDecimal points = null;
+  private Integer points = null;
 
   @JsonProperty("rank")
-  private BigDecimal rank = null;
+  private Integer rank = null;
 
   public MyLeaderboardDetails name(String name) {
     this.name = name;
@@ -46,7 +45,7 @@ public class MyLeaderboardDetails   {
     this.name = name;
   }
 
-  public MyLeaderboardDetails points(BigDecimal points) {
+  public MyLeaderboardDetails points(int points) {
     this.points = points;
     return this;
   }
@@ -59,15 +58,15 @@ public class MyLeaderboardDetails   {
       @NotNull
 
     @Valid
-    public BigDecimal getPoints() {
+    public int getPoints() {
     return points;
   }
 
-  public void setPoints(BigDecimal points) {
+  public void setPoints(int points) {
     this.points = points;
   }
 
-  public MyLeaderboardDetails rank(BigDecimal rank) {
+  public MyLeaderboardDetails rank(int rank) {
     this.rank = rank;
     return this;
   }
@@ -80,11 +79,11 @@ public class MyLeaderboardDetails   {
       @NotNull
 
     @Valid
-    public BigDecimal getRank() {
+    public int getRank() {
     return rank;
   }
 
-  public void setRank(BigDecimal rank) {
+  public void setRank(int rank) {
     this.rank = rank;
   }
 

@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.user;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,14 +12,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.UUID;
 
-import tech.geocodeapp.geocode.collectable.CollectableMockRepository;
-import tech.geocodeapp.geocode.collectable.CollectableSetMockRepository;
-import tech.geocodeapp.geocode.collectable.CollectableTypeMockRepository;
-import tech.geocodeapp.geocode.collectable.model.Collectable;
-import tech.geocodeapp.geocode.collectable.model.CollectableType;
-import tech.geocodeapp.geocode.collectable.service.CollectableService;
-import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.collectable.*;
+import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.event.request.*;
+import tech.geocodeapp.geocode.event.response.*;
+import tech.geocodeapp.geocode.event.service.EventService;
+import tech.geocodeapp.geocode.geocode.model.*;
+import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
+import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
@@ -32,6 +36,8 @@ public class UserServiceImplTest {
 
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
+    private final UUID userWithPoints1 = UUID.fromString("f1f1cc86-47f0-4cdd-b313-e9275b9e8925");
+    private final UUID userWithPoints2 = UUID.fromString("38437809-528e-464e-a81f-140ad9f50cda");
     private final UUID firstGeoCodeID = UUID.fromString("0998cf20-8256-4529-b144-d3c8aa4f0fb1");
     private final UUID secondGeoCodeID = UUID.fromString("8c3e3a65-118b-47ca-8cca-097134cd00d9");
     private final UUID thirdGeoCodeID = UUID.fromString("7b32fce8-44e4-422b-a80d-521d490e9ee3");
@@ -39,8 +45,20 @@ public class UserServiceImplTest {
 
     private final String invalidUserIdMessage = "Invalid user id";
 
+    private final String hatfieldEaster = "Hatfield Easter Hunt 2021";
+    private final String easterEventDescription = "Easter egg hunt in Hatfield";
+
+    private final String menloParkChristmas = "Christmas 2021 market";
+    private final String christmasEventDescription = "Christmas market in Menlo Park";
+
     @Mock( name = "collectableServiceImpl" )
     CollectableService collectableService;
+
+    @Mock( name = "leaderboardServiceImpl" )
+    LeaderboardService leaderboardService;
+
+    @Mock( name = "eventService" )
+    EventService eventService;
 
     UserServiceImplTest() {
 
@@ -54,7 +72,7 @@ public class UserServiceImplTest {
 
         UserMockRepository userMockRepo = new UserMockRepository();
         CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo);
-        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), collectableService);
+        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), collectableService, leaderboardService);
 
         //save the valid trackable CollectableType
         CollectableType trackableCollectableType = new CollectableType();
@@ -62,7 +80,14 @@ public class UserServiceImplTest {
         collectableTypeMockRepo.save(trackableCollectableType);
 
         //save the valid user to the MockRepo
-        userService.registerNewUser(validUserId, "john_smith");
+        RegisterNewUserRequest registerNewUserRequest = new RegisterNewUserRequest(validUserId, "john_smith");
+
+        try {
+            userService.registerNewUser(registerNewUserRequest);
+        } catch (NullUserRequestParameterException e) {
+            e.printStackTrace();
+            return;
+        }
 
         //make 3 CollectableTypes for Easter
         CollectableType egg = new CollectableType();
@@ -77,8 +102,19 @@ public class UserServiceImplTest {
         bunny.setId(UUID.fromString("0998cf20-8256-4529-b144-d3c8aa4f0fb1"));
         collectableTypeMockRepo.save(bunny);
 
+        User validUser;
+
         //add to the User's found CollectableTypes
-        User validUser = userService.getUserById(validUserId);
+        try{
+            GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(validUserId);
+            GetUserByIdResponse getUserByIdResponse = userService.getUserById(getUserByIdRequest);
+            validUser = getUserByIdResponse.getUser();
+            System.out.println("validUser");
+        }catch(NullUserRequestParameterException e){
+            e.printStackTrace();
+            return;
+        }
+
         validUser.addFoundCollectableTypesItem(egg);
         validUser.addFoundCollectableTypesItem(chocolateBar);
         validUser.addFoundCollectableTypesItem(bunny);
@@ -102,10 +138,47 @@ public class UserServiceImplTest {
 
         //update the User's details
         userMockRepo.save(validUser);
+
+        /* add two Users that will have points */
+        RegisterNewUserRequest registerNewUserRequest1 = new RegisterNewUserRequest(userWithPoints1, "alice");
+        RegisterNewUserRequest registerNewUserRequest2 = new RegisterNewUserRequest(userWithPoints2, "bob");
+
+        try {
+            userService.registerNewUser(registerNewUserRequest1);
+            userService.registerNewUser(registerNewUserRequest2);
+        } catch (NullUserRequestParameterException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        /* (1) Create Events (which will each have their own Leaderboard) */
+        CreateEventRequest createEasterEventRequest = new CreateEventRequest(hatfieldEaster, easterEventDescription, new GeoPoint(10.0f, 10.0f));
+        CreateEventRequest createChristmasEventRequest = new CreateEventRequest(menloParkChristmas, christmasEventDescription, new GeoPoint(20.0f, 20.0f));
+
+        CreateEventResponse createEasterEventResponse;
+        CreateEventResponse createChristmasEventResponse;
+
+        try {
+            createEasterEventResponse = eventService.createEvent(createEasterEventRequest);
+            createChristmasEventResponse = eventService.createEvent(createChristmasEventRequest);
+        } catch (InvalidRequestException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        /* get the Leaderboards for the Events */
+        Leaderboard easterLeaderboard = createEasterEventResponse.getEvent().getLeaderboard();
+        Leaderboard christmasLeaderboard = createChristmasEventResponse.getEvent().getLeaderboard();
+
+        /* (2) Assign points to the Users that should have Points */
+        CreatePointRequest createPoint1Request = new CreatePointRequest(5, userWithPoints1, easterLeaderboard.getId());
+        CreatePointRequest createPoint2Request = new CreatePointRequest(5, userWithPoints2, easterLeaderboard.getId());
+        CreatePointRequest createPoint3Request = new CreatePointRequest(10, userWithPoints1, christmasLeaderboard.getId());
+        CreatePointRequest createPoint4Request = new CreatePointRequest(5, userWithPoints2, christmasLeaderboard.getId());
     }
 
     @Test
-    public void getCurrentCollectableTestNullRequest() {
+    void getCurrentCollectableTestNullRequest() {
         try{
             GetCurrentCollectableResponse response = userService.getCurrentCollectable(null);
             Assertions.assertFalse(response.isSuccess());
@@ -117,7 +190,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getCurrentCollectableTestNullId(){
+    void getCurrentCollectableTestNullId(){
            GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
            request.setUserID(null);
 
@@ -126,7 +199,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getCurrentCollectableTestInvalidUser() {
+    void getCurrentCollectableTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -145,7 +218,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getCurrentCollectableTestValidUser() {
+    void getCurrentCollectableTestValidUser() {
         try{
             /*
             Create a request object
@@ -164,7 +237,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserTrackableTestNullRequest() {
+    void getUserTrackableTestNullRequest() {
         try{
             GetUserTrackableResponse response = userService.getUserTrackable(null);
             Assertions.assertFalse(response.isSuccess());
@@ -176,7 +249,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserTrackableTestNullId(){
+    void getUserTrackableTestNullId(){
         GetUserTrackableRequest request = new GetUserTrackableRequest();
         request.setUserID(null);
 
@@ -185,7 +258,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserTrackableTestInvalidUser() {
+    void getUserTrackableTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -204,7 +277,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserTrackableTestValidUser() {
+    void getUserTrackableTestValidUser() {
         try{
             /*
             Create a request object
@@ -226,7 +299,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundCollectableTypesTestNullRequest() {
+    void getFoundCollectableTypesTestNullRequest() {
         try{
             GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(null);
             Assertions.assertFalse(response.isSuccess());
@@ -238,7 +311,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundCollectableTypesTestNullId(){
+    void getFoundCollectableTypesTestNullId(){
         GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
         request.setUserID(null);
 
@@ -247,7 +320,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundCollectableTypesTestInvalidUser() {
+    void getFoundCollectableTypesTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -266,7 +339,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundCollectableTypesTestValidUser() {
+    void getFoundCollectableTypesTestValidUser() {
         try{
             /*
              Create a request object
@@ -288,7 +361,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundGeoCodesTestNullRequest() {
+    void getFoundGeoCodesTestNullRequest() {
         try{
             GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(null);
             Assertions.assertFalse(response.isSuccess());
@@ -300,7 +373,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundGeoCodesTestNullId(){
+    void getFoundGeoCodesTestNullId(){
         GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
         request.setUserID(null);
 
@@ -309,7 +382,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundGeoCodesTestInvalidUser() {
+    void getFoundGeoCodesTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -328,7 +401,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundGeoCodesTestValidUser() {
+    void getFoundGeoCodesTestValidUser() {
         try{
             /*
              Create a request object
@@ -354,7 +427,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getOwnedGeoCodesTestNullRequest() {
+    void getOwnedGeoCodesTestNullRequest() {
         try{
             GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(null);
             Assertions.assertFalse(response.isSuccess());
@@ -366,7 +439,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getOwnedGeoCodesTestNullId(){
+    void getOwnedGeoCodesTestNullId(){
         GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
         request.setUserID(null);
 
@@ -375,7 +448,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getOwnedGeoCodesTestInvalidUser() {
+    void getOwnedGeoCodesTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -394,7 +467,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getOwnedGeoCodesTestValidUser() {
+    void getOwnedGeoCodesTestValidUser() {
         try{
             /*
              Create a request object
@@ -412,6 +485,76 @@ public class UserServiceImplTest {
             Assertions.assertEquals(1, ownedGeoCodeIDs.size());
             Assertions.assertEquals(thirdGeoCodeID, ownedGeoCodeIDs.get(0));
         }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestNullRequest(){
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(null);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The GetMyLeaderboardsRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getLeaderboards());
+        } catch (NullUserRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestNullUserID(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(null);
+
+        assertThatThrownBy(() -> userService.getMyLeaderboards(request))
+                    .isInstanceOf(NullUserRequestParameterException.class);
+    }
+
+    @Test
+    void getMyLeaderboardsTestInvalidUserID(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(invalidUserId);
+
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertNull(response.getLeaderboards());
+        } catch (NullUserRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestUserWithNoPoints(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(validUserId);
+
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
+            Assertions.assertTrue(response.getLeaderboards().isEmpty());
+        } catch (NullUserRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestUserWithPoints(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(userWithPoints1);
+
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
+            Assertions.assertFalse(response.getLeaderboards().isEmpty());
+        } catch (NullUserRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
     }

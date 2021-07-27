@@ -2,10 +2,14 @@ package tech.geocodeapp.geocode.leaderboard.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
+
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.user.model.User;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -13,21 +17,39 @@ import javax.validation.constraints.*;
  * Point
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T09:14:58.803Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T13:14:20.256Z[GMT]")
 
-
+@Entity
+@Table(name = "point")
 public class Point   {
+  @Id
   @JsonProperty("id")
   private UUID id = null;
 
   @JsonProperty("amount")
   private Integer amount = null;
 
-  @JsonProperty("userId")
-  private UUID userId = null;
+  @JsonProperty("user")
+  @ManyToOne
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private User user = null;
 
-  @JsonProperty("leaderBoardId")
-  private UUID leaderBoardId = null;
+  @JsonProperty("leaderboard")
+  @ManyToOne
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private Leaderboard leaderboard = null;
+
+  public Point() {
+    id = UUID.randomUUID();
+  }
+
+  //constructor to use when creating a point when values are already known
+  public Point(Integer amount, User user, Leaderboard leaderboard) {
+    id = UUID.randomUUID();
+    this.amount = amount;
+    this.user = user;
+    this.leaderboard = leaderboard;
+  }
 
   public Point id(UUID id) {
     this.id = id;
@@ -57,12 +79,13 @@ public class Point   {
 
   /**
    * Get amount
+   * minimum: 0
    * @return amount
    **/
   @Schema(required = true, description = "")
       @NotNull
 
-    public Integer getAmount() {
+  @Min(0)  public Integer getAmount() {
     return amount;
   }
 
@@ -70,46 +93,45 @@ public class Point   {
     this.amount = amount;
   }
 
-  public Point userId(UUID userId) {
-    this.userId = userId;
+  public Point user(User user) {
+    this.user = user;
     return this;
   }
 
   /**
-   * Get userId
-   * @return userId
+   * Get user
+   * @return user
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public UUID getUserId() {
-    return userId;
+    public User getUser() {
+    return user;
   }
 
-  public void setUserId(UUID userId) {
-    this.userId = userId;
+  public void setUser(User user) {
+    this.user = user;
   }
 
-  public Point leaderBoardId(UUID leaderBoardId) {
-    this.leaderBoardId = leaderBoardId;
+  public Point leaderboard(Leaderboard leaderboard) {
+    this.leaderboard = leaderboard;
     return this;
   }
 
   /**
-   * Get leaderBoardId
-   * @return leaderBoardId
+   * Get leaderboard
+   * @return leaderboard
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     @Valid
-    public UUID getLeaderBoardId() {
-    return leaderBoardId;
+    public Leaderboard getLeaderBoard() {
+    return leaderboard;
   }
 
-  public void setLeaderBoardId(UUID leaderBoardId) {
-    this.leaderBoardId = leaderBoardId;
+  public void setLeaderBoard(Leaderboard leaderboard) {
+    this.leaderboard = leaderboard;
   }
 
 
@@ -124,13 +146,13 @@ public class Point   {
     Point point = (Point) o;
     return Objects.equals(this.id, point.id) &&
         Objects.equals(this.amount, point.amount) &&
-        Objects.equals(this.userId, point.userId) &&
-        Objects.equals(this.leaderBoardId, point.leaderBoardId);
+        Objects.equals(this.user, point.user) &&
+        Objects.equals(this.leaderboard, point.leaderboard);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, amount, userId, leaderBoardId);
+    return Objects.hash(id, amount, user, leaderboard);
   }
 
   @Override
@@ -140,8 +162,8 @@ public class Point   {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
-    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
-    sb.append("    leaderBoardId: ").append(toIndentedString(leaderBoardId)).append("\n");
+    sb.append("    user: ").append(toIndentedString(user)).append("\n");
+    sb.append("    leaderboard: ").append(toIndentedString(leaderboard)).append("\n");
     sb.append("}");
     return sb.toString();
   }

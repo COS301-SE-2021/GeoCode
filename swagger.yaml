@@ -1018,7 +1018,7 @@ components:
         qrCode:
           type: string
         location:
-          type: string
+          $ref: '#/components/schemas/GeoPoint'
       xml:
         name: "GeoCode"
         
@@ -1551,20 +1551,19 @@ components:
       required: 
         - id
         - amount
-        - userId
-        - leaderBoardId
+        - user
+        - leaderboard
       properties:
         id:
           type: string
           format: uuid
         amount:
           type: integer
-        userId:
-          type: string
-          format: uuid
-        leaderBoardId:
-          type: string
-          format: uuid
+          minimum: 0
+        user:
+          $ref: "#/components/schemas/User"
+        leaderBoard:
+          $ref: "#/components/schemas/Leaderboard"
       xml:
         name: "Point"
 
@@ -1573,18 +1572,57 @@ components:
       required:
         - id
         - name
-        - eventID
+        - event
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
-        eventID:
-          type: string
-          format: uuid
+        event:
+            $ref: "#/components/schemas/Event"
       xml:
         name: "Leaderboard"
+        
+    Event:
+      type: "object"
+      required:
+        - id
+        - name
+        - description
+        - location
+        - leaderboard
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+        leaderboard:
+          $ref: "#/components/schemas/Leaderboard"
+      xml:
+        name: "Event"
+          
+    GeoPoint:
+      type: "object"
+      required:
+        - latitude
+        - longitude
+      properties:
+        latitude:
+          type: number
+          format: float
+          example: 25.7545
+        longitude:
+          type: number
+          format: float
+          example: 28.2314
+      xml:
+        name: "GeoPoint"
         
     MyLeaderboardDetails:
       type: "object"
@@ -1597,10 +1635,12 @@ components:
           type: string
           example: "Pretoria"
         points:
-          type: number
+          type: integer
+          minimum: 0
           example: 15
         rank:
-          type: number
+          type: integer
+          minimum: 1
           example: 5
       xml:
         name: "MyLeaderboardDetails"
@@ -1616,10 +1656,12 @@ components:
           type: string
           example: "john_smith"
         points:
-          type: number
+          type: integer
+          minimum: 0
           example: 15
         rank:
-          type: number
+          type: integer
+          minimum: 1
           example: 5
       xml:
         name: "EventLeaderboardDetails"
@@ -1898,10 +1940,12 @@ components:
           format: UUID
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         starting:
-          type: number
+          type: integer
+          minimum: 1
           example: 5
         count:
-          type: number
+          type: integer
+          minimum: 1
           example: 10
           
     GetEventLeaderboardResponse:

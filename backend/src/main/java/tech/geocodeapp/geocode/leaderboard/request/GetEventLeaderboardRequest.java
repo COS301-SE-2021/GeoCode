@@ -1,10 +1,9 @@
-package io.swagger.model;
+package tech.geocodeapp.geocode.leaderboard.request;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -21,10 +20,10 @@ public class GetEventLeaderboardRequest   {
   private String eventID = null;
 
   @JsonProperty("starting")
-  private BigDecimal starting = null;
+  private Integer starting = null;
 
   @JsonProperty("count")
-  private BigDecimal count = null;
+  private Integer count = null;
 
   public GetEventLeaderboardRequest eventID(String eventID) {
     this.eventID = eventID;
@@ -46,7 +45,7 @@ public class GetEventLeaderboardRequest   {
     this.eventID = eventID;
   }
 
-  public GetEventLeaderboardRequest starting(BigDecimal starting) {
+  public GetEventLeaderboardRequest starting(Integer starting) {
     this.starting = starting;
     return this;
   }
@@ -56,18 +55,16 @@ public class GetEventLeaderboardRequest   {
    * @return starting
    **/
   @Schema(example = "5", required = true, description = "")
-      @NotNull
 
-    @Valid
-    public BigDecimal getStarting() {
+  public Integer getStarting() {
     return starting;
   }
 
-  public void setStarting(BigDecimal starting) {
+  public void setStarting(Integer starting) {
     this.starting = starting;
   }
 
-  public GetEventLeaderboardRequest count(BigDecimal count) {
+  public GetEventLeaderboardRequest count(Integer count) {
     this.count = count;
     return this;
   }
@@ -77,14 +74,12 @@ public class GetEventLeaderboardRequest   {
    * @return count
    **/
   @Schema(example = "10", required = true, description = "")
-      @NotNull
 
-    @Valid
-    public BigDecimal getCount() {
+  public Integer getCount() {
     return count;
   }
 
-  public void setCount(BigDecimal count) {
+  public void setCount(Integer count) {
     this.count = count;
   }
 

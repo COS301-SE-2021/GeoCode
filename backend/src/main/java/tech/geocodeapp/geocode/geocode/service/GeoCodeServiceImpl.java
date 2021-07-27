@@ -16,7 +16,7 @@ import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.*;
-import tech.geocodeapp.geocode.user.model.User;
+import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.user.service.*;
 
@@ -52,12 +52,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     /**
      * The number of collectables to make when creating a new GeoCode
      */
-    private final static int numCollectables = 5;
+    private static final int NUM_COLLECTABLES = 5;
 
     /**
      * The length of the qr code for a new GeoCode
      */
-    private final static int qrSize = 8;
+    private static final int QR_SIZE = 8;
 
     /**
      * Constructor
@@ -109,7 +109,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Hold the crated Collectables */
         List< UUID > collectable = new ArrayList<>();
 
-        for ( var x = 0; x < numCollectables; x++ ) {
+        for ( var x = 0; x < NUM_COLLECTABLES; x++ ) {
 
             /* Create the response and give it a Collectable type */
             var collectableRequest = new CreateCollectableRequest();
@@ -135,32 +135,14 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
         // create StringBuffer size of AlphaNumericString
-        var qr = new StringBuilder( qrSize );
+        var qr = new StringBuilder( QR_SIZE );
 
         /* Generate a random char for the specified size */
-        for ( var i = 0; i < qrSize; i++ ) {
+        for ( var i = 0; i < QR_SIZE; i++ ) {
 
             /* generate a random number between 0 to AlphaNumericString variable length
              * add Character one by one in end of sb */
             qr.append( chars.charAt( (  new SecureRandom() ).nextInt(chars.length() ) ) );
-        }
-
-        /* Get the user who is creating the GeoCode */
-        User createdByUser = userService.getCurrentUser();
-
-        /* Validate the user */
-        if ( createdByUser == null ) {
-
-            return new CreateGeoCodeResponse( false );
-        }
-
-        /* Get the Id of the current user */
-        UUID createdBy = createdByUser.getId();
-
-        /* Validate the user is valid and the user id exists */
-        if ( createdBy == null ) {
-
-            return new CreateGeoCodeResponse( false );
         }
 
         /*
@@ -171,7 +153,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
                                       qr.toString(), request.getLongitude(), request.getLatitude(),
-                                      createdBy );
+                                      UUID.randomUUID() );
 
         /* Save the created GeoCode to the repository */
         geoCodeRepo.save( newGeoCode );
@@ -507,7 +489,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Perform the swap */
-        var userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
+        Collectable userToGeocode;
+
+        try {
+            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
+        } catch (NullUserRequestParameterException e) {
+            e.printStackTrace();
+            return new SwapCollectablesResponse(false);
+        }
+
         userToGeocode.changeLocation( geocode.getLatitude() + " " + geocode.getLongitude() );
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );

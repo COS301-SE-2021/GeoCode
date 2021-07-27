@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { CollectableService } from './api/collectable.service';
 import { GeoCodeService } from './api/geoCode.service';
+import { LeaderboardService } from './api/leaderboard.service';
 import { UserService } from './api/user.service';
 
 @NgModule({
@@ -14,6 +15,7 @@ import { UserService } from './api/user.service';
   providers: [
     CollectableService,
     GeoCodeService,
+    LeaderboardService,
     UserService ]
 })
 export class ApiModule {

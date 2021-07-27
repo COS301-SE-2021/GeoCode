@@ -23,6 +23,8 @@ import { GetFoundCollectableTypesRequest } from '../model/getFoundCollectableTyp
 import { GetFoundCollectableTypesResponse } from '../model/getFoundCollectableTypesResponse';
 import { GetFoundGeoCodesRequest } from '../model/getFoundGeoCodesRequest';
 import { GetFoundGeoCodesResponse } from '../model/getFoundGeoCodesResponse';
+import { GetMyLeaderboardsRequest } from '../model/getMyLeaderboardsRequest';
+import { GetMyLeaderboardsResponse } from '../model/getMyLeaderboardsResponse';
 import { GetOwnedGeoCodesRequest } from '../model/getOwnedGeoCodesRequest';
 import { GetOwnedGeoCodesResponse } from '../model/getOwnedGeoCodesResponse';
 import { GetUserTrackableRequest } from '../model/getUserTrackableRequest';
@@ -226,6 +228,62 @@ export class UserService {
         }
 
         return this.httpClient.request<GetFoundGeoCodesResponse>('post',`${this.basePath}/User/getFoundGeoCodes`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Gets the User&#x27;s Leaderboard rankings
+     * Gets all the points and ranking for the Leaderboards that the given User is on
+     * @param body Request to get the name, points and ranking for all of the Leaderboards that a User is on
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getMyLeaderboards(body: GetMyLeaderboardsRequest, observe?: 'body', reportProgress?: boolean): Observable<GetMyLeaderboardsResponse>;
+    public getMyLeaderboards(body: GetMyLeaderboardsRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetMyLeaderboardsResponse>>;
+    public getMyLeaderboards(body: GetMyLeaderboardsRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetMyLeaderboardsResponse>>;
+    public getMyLeaderboards(body: GetMyLeaderboardsRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getMyLeaderboards.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetMyLeaderboardsResponse>('post',`${this.basePath}/User/getMyLeaderboards`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

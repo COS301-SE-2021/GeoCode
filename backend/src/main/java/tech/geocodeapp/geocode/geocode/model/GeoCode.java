@@ -1,12 +1,12 @@
 package tech.geocodeapp.geocode.geocode.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
-import javax.persistence.*;
-import javax.validation.Valid;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.Cascade;
+import javax.validation.Valid;
+import javax.persistence.*;
 
 import tech.geocodeapp.geocode.collectable.model.*;
 
@@ -74,28 +74,28 @@ public class GeoCode {
      * by the user from the real world
      */
     @JsonProperty( "qrCode" )
-    @NotEmpty( message = "GeoCode's qrCode cannot be null." )
+    @NotEmpty( message = "GeoCode's qrCode cannot be empty." )
     private String qrCode;
 
     /**
      * The longitude of the location of the GeoCode in the real world
      */
     @JsonProperty( "longitude" )
-    @NotEmpty( message = "GeoCode's longitude cannot be null." )
+    @NotEmpty( message = "GeoCode's longitude cannot be empty." )
     private String longitude;
 
     /**
      * The latitude of the location of the GeoCode in the real world
      */
     @JsonProperty( "latitude" )
-    @NotEmpty( message = "GeoCode's latitude cannot be null." )
+    @NotEmpty( message = "GeoCode's latitude cannot be empty." )
     private String latitude;
 
     /**
      * The ID of the user whom created the GeoCode
      */
     @JsonProperty( "createdBy" )
-    @NotEmpty( message = "GeoCode's createdBy cannot be null." )
+    @NotNull( message = "GeoCode's createdBy cannot be null." )
     private UUID createdBy;
 
     /**

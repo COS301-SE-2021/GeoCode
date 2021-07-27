@@ -15,6 +15,7 @@ import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.collectable.*;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
@@ -54,6 +55,11 @@ class GeoCodeServiceImplTest {
     @Mock( name = "collectableServiceImpl" )
     CollectableService collectableService;
 
+    /**
+     * The LeaderBoard service accessor
+     */
+    @Mock( name = "leaderboardServiceImpl" )
+    LeaderboardService leaderboardService;
     /**
      * A mock service for the User subsystem
      *
@@ -104,29 +110,9 @@ class GeoCodeServiceImplTest {
                                                          typeMockRepo );
 
         /* Create the mock user repo and insert a new user into it */
-        var userRepo =  new UserMockRepository();
-        /*var user = new User();
-        user.setId( UUID.randomUUID() );
-        user.setUsername( "myNewUser" );
-        userRepo.save( user );
+        // var userMockRepo = new UserMockRepository();
+        // userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), collectableService);
 
-        System.out.println( userRepo.findAll() );*/
-
-        var newUser = new User();
-        newUser.setId( UUID.randomUUID() );
-        newUser.setUsername( "myNewUser" );
-
-        //get the CollectableType object for trackables
-        GetCollectableTypeByIDRequest request = new GetCollectableTypeByIDRequest( UUID.fromString( "0855b7da-bdad-44b7-9c22-18fe266ceaf3" ) );
-        CollectableType optionalCollectableType = collectableService.getCollectableTypeByID( request ).getCollectableType();
-
-        var trackableObject = new Collectable( optionalCollectableType );
-        newUser.setTrackableObject(trackableObject);
-        newUser.setCurrentCollectable(trackableObject);
-        userRepo.save(newUser);
-
-        /* Instantiate the User Service Implementation */
-        userService = new UserServiceImpl( userRepo, new CollectableMockRepository(), collectableService);
 
         try {
 
@@ -750,7 +736,9 @@ class GeoCodeServiceImplTest {
              * through checking the returned hints from a known hint
              */
 
-            //Assertions.assertEquals( "name", response.getCollectables().get( 0 ).getType().getName() );
+            var typeID = response.getCollectables().get( 0 );
+            var name = collectableService.getCollectableTypeByID( new GetCollectableTypeByIDRequest( typeID ) );
+            //Assertions.assertEquals( "name", name.getCollectableType().getName() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */

@@ -10,7 +10,6 @@ import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
@@ -42,7 +41,7 @@ public class User   {
   @Valid
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<Point> points = null;
+  private Set<Point> points = new HashSet<Point>();
 
   @JsonProperty("currentCollectable")
   @ManyToOne
@@ -134,9 +133,6 @@ public class User   {
   }
 
   public User addPointsItem(Point pointsItem) {
-    if (this.points == null) {
-      this.points = new HashSet<Point>();
-    }
     this.points.add(pointsItem);
     return this;
   }
@@ -147,7 +143,7 @@ public class User   {
    **/
   @Schema(description = "")
       @Valid
-    public Set<Point> getPoints() {
+    public Collection<Point> getPoints() {
     return points;
   }
 

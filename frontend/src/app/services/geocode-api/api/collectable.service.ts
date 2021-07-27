@@ -235,7 +235,7 @@ export class CollectableService {
     }
 
     /**
-     * 
+     * Get all of the Collectables of a certain type
      * Returns all Collectables of the specified type
      * @param body Request Collectables by type
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -291,7 +291,7 @@ export class CollectableService {
     }
 
     /**
-     * 
+     * Get all of the Collectable Sets
      * Returns all Collectable Sets
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -335,7 +335,7 @@ export class CollectableService {
     }
 
     /**
-     * 
+     * Get all of the Collectables of a certain rarity
      * Returns all Collectable Types of the specified rarity
      * @param body Request Collectable Types by rarity
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -391,7 +391,7 @@ export class CollectableService {
     }
 
     /**
-     * 
+     * Get all of the Collectables of a certain set
      * Returns all Collectable Types of the specified set
      * @param body Request Collectable Types by set
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -447,7 +447,7 @@ export class CollectableService {
     }
 
     /**
-     * 
+     * Get all of the Collectable Types
      * Returns all Collectable Types
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -491,7 +491,7 @@ export class CollectableService {
     }
 
     /**
-     * 
+     * Get all of the Collectables
      * Returns all Collectables
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
