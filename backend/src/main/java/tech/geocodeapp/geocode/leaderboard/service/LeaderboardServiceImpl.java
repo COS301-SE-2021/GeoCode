@@ -2,6 +2,9 @@ package tech.geocodeapp.geocode.leaderboard.service;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.event.model.Event;
@@ -39,7 +42,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
     private final UserService userService;
 
-    public LeaderboardServiceImpl(LeaderboardRepository leaderboardRepo, PointRepository pointRepo, EventService eventService, UserService userService) {
+    public LeaderboardServiceImpl(LeaderboardRepository leaderboardRepo, PointRepository pointRepo, EventService eventService, @Lazy UserService userService) {
         this.leaderboardRepo = leaderboardRepo;
         this.pointRepo = pointRepo;
         this.eventService = eventService;

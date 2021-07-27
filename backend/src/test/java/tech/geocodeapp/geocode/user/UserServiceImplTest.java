@@ -167,14 +167,14 @@ public class UserServiceImplTest {
         }
 
         /* get the Leaderboards for the Events */
-        Leaderboard easterLeaderboard = createEasterEventResponse.getEvent().getLeaderboard();
+        /*Leaderboard easterLeaderboard = createEasterEventResponse.getEvent().getLeaderboard();
         Leaderboard christmasLeaderboard = createChristmasEventResponse.getEvent().getLeaderboard();
 
-        /* (2) Assign points to the Users that should have Points */
+        /* (2) Assign points to the Users that should have Points /
         CreatePointRequest createPoint1Request = new CreatePointRequest(5, userWithPoints1, easterLeaderboard.getId());
         CreatePointRequest createPoint2Request = new CreatePointRequest(5, userWithPoints2, easterLeaderboard.getId());
         CreatePointRequest createPoint3Request = new CreatePointRequest(10, userWithPoints1, christmasLeaderboard.getId());
-        CreatePointRequest createPoint4Request = new CreatePointRequest(5, userWithPoints2, christmasLeaderboard.getId());
+        CreatePointRequest createPoint4Request = new CreatePointRequest(5, userWithPoints2, christmasLeaderboard.getId());*/
     }
 
     @Test
