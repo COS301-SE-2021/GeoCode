@@ -243,6 +243,12 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         return new DeletePointResponse(true, "Successfully deleted the provided point");
     }
 
+    /**
+     * updates a point with the given id if it exists
+     * @param request contains the id of the point to update and the new values for the fields that should be updated
+     * @return A response object informing of success or failure and the reason as well as the updated Point object
+     * @throws NullLeaderboardRequestParameterException an exception for when the provided parameters are all null or pointId is null.
+     */
     @Override
     public PointResponse updatePoint(UpdatePointRequest request) throws NullLeaderboardRequestParameterException {
         if(request == null){
