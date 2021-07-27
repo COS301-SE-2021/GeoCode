@@ -10,7 +10,8 @@ import {
 } from '../../../services/geocode-api';
 import {AlertController, NavController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
-declare let google;
+import {QRScanner} from '../../../services/QRScanner';
+
 @Component({
   selector: 'app-geocode-contents',
   templateUrl: './geocode-contents.page.html',
@@ -33,7 +34,8 @@ export class GeocodeContentsPage implements AfterViewInit {
     public geocodeApi: GeoCodeService,
     public navCtrl: NavController,
     private alertCtrl: AlertController,
-    private mapsLoader: GoogleMapsLoader
+    private mapsLoader: GoogleMapsLoader,
+    private qrScanner: QRScanner
   ) {
     //Get passed in param from routing
     this.route.queryParams.subscribe(params => {
@@ -145,4 +147,9 @@ export class GeocodeContentsPage implements AfterViewInit {
     alert.present();
     }
 
+
+    async scan() {
+      const data = await this.qrScanner.scan();
+      console.log(data);
+    }
 }

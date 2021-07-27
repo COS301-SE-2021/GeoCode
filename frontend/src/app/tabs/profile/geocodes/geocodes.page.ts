@@ -7,7 +7,7 @@ import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
   templateUrl: './geocodes.page.html',
   styleUrls: ['./geocodes.page.scss'],
 })
-export class GeocodesPage implements OnInit {
+export class UserGeocodesPage implements OnInit {
 
   @ViewChild('mapElement',{static:false}) mapElement;
   googleMaps;

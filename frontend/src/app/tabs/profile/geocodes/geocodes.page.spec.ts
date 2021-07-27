@@ -1,22 +1,22 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { GeocodesPage } from './geocodes.page';
-import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
+import { UserGeocodesPage } from './geocodes.page';
+import {MockGoogleMapsLoader} from '../../../mocks/MockGoogleMapsLoader';
 import {UrlSerializer} from '@angular/router';
 
-describe('GeocodesPage', () => {
-  let component: GeocodesPage;
-  let fixture: ComponentFixture<GeocodesPage>;
+describe('UserGeocodesPage', () => {
+  let component: UserGeocodesPage;
+  let fixture: ComponentFixture<UserGeocodesPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ GeocodesPage ],
-      providers: [ UrlSerializer, GoogleMapsLoader ],
+      declarations: [ UserGeocodesPage ],
+      providers: [ UrlSerializer, MockGoogleMapsLoader.provider() ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(GeocodesPage);
+    fixture = TestBed.createComponent(UserGeocodesPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

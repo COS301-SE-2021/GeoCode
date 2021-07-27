@@ -6,7 +6,7 @@ import {CollectableSet, CollectableTypeComponent} from '../../../services/geocod
   templateUrl: './collections.page.html',
   styleUrls: ['./collections.page.scss'],
 })
-export class CollectionsPage implements OnInit {
+export class UserCollectionsPage implements OnInit {
 
   sets: CollectableSet[];
   types: {

@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { MissionsPageRoutingModule } from './missions-routing.module';
+import { UserMissionsPageRoutingModule } from './missions-routing.module';
 
-import { MissionsPage } from './missions.page';
+import { UserMissionsPage } from './missions.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MissionsPageRoutingModule
+    UserMissionsPageRoutingModule
   ],
-  declarations: [MissionsPage]
+  declarations: [UserMissionsPage]
 })
 export class MissionsPageModule {}

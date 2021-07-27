@@ -7,7 +7,7 @@ import {KeycloakService} from 'keycloak-angular';
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
 })
-export class SettingsPage implements OnInit {
+export class UserSettingsPage implements OnInit {
 
   constructor(
     private keycloak: KeycloakService
