@@ -50,8 +50,4 @@ export class ProfilePage implements OnInit {
     await modal.present();
   }
 
-  async logout() {
-    await this.keycloak.logout(environment.baseRedirectURI+'/welcome');
-  }
-
 }
