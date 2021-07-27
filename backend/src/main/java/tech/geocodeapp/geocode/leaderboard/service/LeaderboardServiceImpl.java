@@ -177,7 +177,6 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
     @Override
     public PointResponse createPoint(CreatePointRequest request) throws NullLeaderboardRequestParameterException{
-
         User foundUser = null;
 
         if(request == null){
@@ -234,6 +233,55 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
     @Override
     public PointResponse updatePoint(UpdatePointRequest request) throws NullLeaderboardRequestParameterException {
-        return null;
+        if(request == null){
+            return new PointResponse(false,"The UpdatePointRequest passed was NULL", null);
+        }
+
+        if(request.getPointId() == null){
+            throw new NullLeaderboardRequestParameterException();
+        }
+
+        if(request.getAmount() == null && request.getLeaderboardId() == null && request.getUserId() == null){
+            return new PointResponse(false, "Please provide a value for at least one optional value to update a Point", null);
+        }
+
+        //check that the point to update exists
+        Optional<Point> point = pointRepo.findById(request.getPointId());
+        if(point.isEmpty()){
+            return new PointResponse(false, "No point with the provided Id exists", null);
+        }
+
+        //check that if a leaderboard id is provided that it exists
+        if(request.getLeaderboardId() != null) {
+            Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
+            if(leaderboard.isEmpty()){
+                return new PointResponse(false, "Invalid LeaderboardId to update to was provided", null);
+            }else{
+                point.get().setLeaderBoard(leaderboard.get());
+            }
+        }
+
+        //check that if a user id is provided that it exists
+        if(request.getUserId() != null) {
+            GetUserByIdRequest userByIdRequest = new GetUserByIdRequest(request.getUserId());
+            try {
+                GetUserByIdResponse user = userService.getUserById(userByIdRequest);
+                if(!user.isSuccess()){
+                    return new PointResponse(false, "Invalid UserId to update to was provided", null);
+                }else{
+                    point.get().setUser(user.getUser());
+                }
+            } catch (NullUserRequestParameterException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //update amount if it was provided
+        if(request.getAmount() != null){
+            point.get().setAmount(request.getAmount());
+        }
+
+        pointRepo.save(point.get());
+        return new PointResponse(true, "Updated point successfully", point.get());
     }
 }
