@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.user.service;
 
 import java.util.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -38,10 +39,10 @@ public class UserServiceImpl implements UserService {
     private final CollectableRepository collectableRepo;
 
     @NotNull(message = "Collectable Service Implementation may not be null.")
-    private final CollectableService collectableService;
+    private CollectableService collectableService;
 
     @NotNull(message = "Leaderboard Service Implementation may not be null.")
-    private final LeaderboardService leaderboardService;
+    private LeaderboardService leaderboardService;
 
     private final String invalidUserIdMessage = "Invalid user id";
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
