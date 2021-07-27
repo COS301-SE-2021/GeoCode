@@ -178,7 +178,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     }
 
     @Override
-    public UpdatePointResponse updatePoint(UpdatePointRequest request) {
+    public PointResponse updatePoint(UpdatePointRequest request) {
         return null;
     }
 }

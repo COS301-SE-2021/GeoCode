@@ -25,5 +25,5 @@ public interface LeaderboardService {
 
     public DeletePointResponse deletePoint(DeletePointRequest request);
 
-    public UpdatePointResponse updatePoint(UpdatePointRequest request);
+    public PointResponse updatePoint(UpdatePointRequest request);
 }
