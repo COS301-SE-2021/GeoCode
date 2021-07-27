@@ -1,22 +1,19 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Profile</ion-title>
-    <ion-buttons slot="secondary">
-        <ion-button (click)="manage()">
-        <ion-icon name="person-circle-outline"></ion-icon>
-        <ion-label>Manage</ion-label>
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="logout()">
-        <ion-icon name="log-out-outline"></ion-icon>
-        <ion-label>Log Out</ion-label>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Username</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      User stats
+    </ion-card-content>
+  </ion-card>
+
   <ng-template [ngIf]="trackable !== null && currentCollectable !== null">
     <ion-grid>
       <ion-row>
@@ -59,6 +56,34 @@
       </ion-row>
     </ion-grid>
   </ng-template>
+
+  <ion-list>
+    <ion-item button [routerLink]="['collections']">
+      <ion-label>
+        Collections
+      </ion-label>
+    </ion-item>
+    <ion-item button [routerLink]="['missions']">
+      <ion-label>
+        Missions
+      </ion-label>
+    </ion-item>
+    <ion-item button [routerLink]="['geocodes']">
+      <ion-label>
+        Geocodes
+      </ion-label>
+    </ion-item>
+    <ion-item button [routerLink]="['events']">
+      <ion-label>
+        Events
+      </ion-label>
+    </ion-item>
+    <ion-item button [routerLink]="['settings']">
+      <ion-label>
+        Settings
+      </ion-label>
+    </ion-item>
+  </ion-list>
 
 
 </ion-content>
