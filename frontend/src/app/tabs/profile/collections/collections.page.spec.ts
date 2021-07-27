@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { UserCollectionsPage } from './collections.page';
 import {UrlSerializer} from '@angular/router';
 
-describe('CollectionsPage', () => {
+describe('UserCollectionsPage', () => {
   let component: UserCollectionsPage;
   let fixture: ComponentFixture<UserCollectionsPage>;
 

@@ -5,7 +5,7 @@ import { UserSettingsPage } from './settings.page';
 import {UrlSerializer} from '@angular/router';
 import {KeycloakService} from 'keycloak-angular';
 
-describe('SettingsPage', () => {
+describe('UserSettingsPage', () => {
   let component: UserSettingsPage;
   let fixture: ComponentFixture<UserSettingsPage>;
 

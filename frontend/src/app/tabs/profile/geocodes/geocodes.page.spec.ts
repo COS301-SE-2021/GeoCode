@@ -5,7 +5,7 @@ import { UserGeocodesPage } from './geocodes.page';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {UrlSerializer} from '@angular/router';
 
-describe('GeocodesPage', () => {
+describe('UserGeocodesPage', () => {
   let component: UserGeocodesPage;
   let fixture: ComponentFixture<UserGeocodesPage>;
 
