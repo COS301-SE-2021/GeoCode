@@ -20,7 +20,7 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T13:14:20.256Z[GMT]")
 
 @Entity
-@Table(name = "points_table")
+@Table(name = "point")
 public class Point   {
   @Id
   @JsonProperty("id")
