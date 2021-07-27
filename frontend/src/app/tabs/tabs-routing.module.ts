@@ -12,7 +12,7 @@ const routes: Routes = [
         loadChildren: () => import('./geocode/geocode.module').then(m => m.GeocodePageModule)
       },
       {
-        path: 'collectables',
+        path: 'collections',
         loadChildren: () => import('./collectable/collectable.module').then(m => m.CollectablePageModule)
       },
       {
