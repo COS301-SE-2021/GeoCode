@@ -3,8 +3,14 @@ ion-toolbar{
   color: white;
 }
 
-ion-title{
+#page-title{
   font-size: xx-large;
+  text-align: center;
+  padding:0.5%;
+}
+
+#card-title{
+  font-size: x-large;
   text-align: center;
   padding:0.5%;
 }
@@ -14,48 +20,66 @@ ion-title{
   height: 50%;
   border-width: 0px;
   padding: 0px;
-  background-color: white;
-
 }
-
-
 
 #geoCodeDetails{
   width: 100%;
   height: 50%;
-//  background-color: white;
- // color:black;
   padding: 0px;
 }
 
 .row {
-
-  border-color:  var(--ion-color-purple);
-  border-width: .01em;
-  border-style:solid; margin-bottom : -1px;
+  border-bottom-color-color:  white;
+  border-bottom-width: .01em;
+  border-bottom-style:solid; margin-bottom : -1px;
   height: max-content;
 
-}
-
-ion-grid{
-  border-color:  var(--ion-color-purple);
-  border-width: 1px;
-}
-
-ion-content{
- // --ion-background-color:white;
+  border-top-color-color:  white;
+  border-top-width: .01em;
+  border-top-style:solid; margin-bottom : -1px;
+  font-size: medium;
 }
 
 ion-checkbox{
   --checkmark-color: white;
-  --background-checked:var(--ion-color-winered);
-  --border-color:var(--ion-color-winered);
-  --border-color-checked:var(--ion-color-winered);
- // --background: white;
+  --background-checked:var(--ion-color-purple);
+  --border-color:white;
+  --border-color-checked:white;
+}
+#button-col{
+  text-align: center;
 }
 
-ion-fab-button{
-  color: darkred;
+#button{
+  width: 100%;
+}
+
+#close-button{
+  text-align: left;
+
+}
+
+
+
+
+
+
+ion-card{
+  background-color:var(--ion-color-purple) ;
+  color: white;
+  border-color:  var(--ion-color-purple);
+  border-width: 1px;
+  width:85%;
+  text-align: center;
+
+}
+
+#geoCodeDetails{
+  text-align: center;
+  align-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 

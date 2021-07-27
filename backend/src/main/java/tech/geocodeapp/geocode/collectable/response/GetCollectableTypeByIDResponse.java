@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.collectable.response;
 
-import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
 
 public class GetCollectableTypeByIDResponse {

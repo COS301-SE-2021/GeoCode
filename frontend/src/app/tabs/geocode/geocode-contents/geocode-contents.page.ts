@@ -9,6 +9,7 @@ import {
   GetGeoCodeByQRCodeResponse, GetCollectablesResponse, SwapCollectablesRequest, SwapCollectablesResponse
 } from '../../../services/geocode-api';
 import {AlertController, NavController} from '@ionic/angular';
+import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 declare let google;
 @Component({
   selector: 'app-geocode-contents',
@@ -18,6 +19,7 @@ declare let google;
 export class GeocodeContentsPage implements AfterViewInit {
   @ViewChild('mapElement',{static:false}) mapElement;
   @ViewChild('Container',{static:false}) container;
+  googleMaps;
   map;
   geocode;
   mapOptions;
@@ -26,7 +28,13 @@ export class GeocodeContentsPage implements AfterViewInit {
   collectables =[];
 
 
-  constructor(private route: ActivatedRoute,public geocodeApi: GeoCodeService, public navCtrl: NavController, private alertCtrl: AlertController) {
+  constructor(
+    private route: ActivatedRoute,
+    public geocodeApi: GeoCodeService,
+    public navCtrl: NavController,
+    private alertCtrl: AlertController,
+    private mapsLoader: GoogleMapsLoader
+  ) {
     //Get passed in param from routing
     this.route.queryParams.subscribe(params => {
           //Set the geocode to the passed in geocode
@@ -61,9 +69,9 @@ export class GeocodeContentsPage implements AfterViewInit {
       zoom: 18,
     };
   //Create map
-   this.map = new google.maps.Map(this.mapElement.nativeElement,this.mapOptions);
+   this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
    //Create map marker at geocode location
-   new google.maps.Marker({
+   new this.googleMaps.Marker({
       position: {lat: parseFloat(this.geocode.latitude), lng: parseFloat(this.geocode.longitude)},
       map: this.map,
       title: '',
@@ -71,7 +79,10 @@ export class GeocodeContentsPage implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.loadMap();
+    this.mapsLoader.load().then(handle => {
+      this.googleMaps = handle;
+      this.loadMap();
+    }).catch();
   }
 
   found(code){
