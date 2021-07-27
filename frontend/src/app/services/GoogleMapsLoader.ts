@@ -19,7 +19,6 @@ export class GoogleMapsLoader {
   // Script injection is adapted from https://stackoverflow.com/a/42766146
   // Queueing system is original
   load() {
-    console.log('calling real load');
     return new Promise((resolve, reject) => {
       if (window.google) { // Maps API has been loaded and is available
         // Return a handle to the API
