@@ -7,7 +7,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ActivatedRoute, convertToParamMap} from '@angular/router';
 import {of} from 'rxjs';
-import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
+import {MockGoogleMapsLoader} from '../../../mocks/MockGoogleMapsLoader';
 
 describe('GeocodeContentsPage', () => {
   let component: GeocodeContentsPage;
@@ -17,13 +17,13 @@ describe('GeocodeContentsPage', () => {
     id: null,
     available: true,
     collectables: [],
-    description: "",
+    description: '',
     hints: [],
     difficulty: 'EASY',
     latitude: '-25.755918848126488',
     longitude: '28.233110280499492',
-    qrCode: ""
-  }
+    qrCode: ''
+  };
 
   const mockActivatedRoute = {
     queryParams: of({ geocode })
@@ -32,7 +32,7 @@ describe('GeocodeContentsPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodeContentsPage ],
-      providers: [{provide: ActivatedRoute, useValue: mockActivatedRoute}, GeoCodeService, GoogleMapsLoader],
+      providers: [{provide: ActivatedRoute, useValue: mockActivatedRoute}, GeoCodeService, MockGoogleMapsLoader.provider()],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
     }).compileComponents();
 

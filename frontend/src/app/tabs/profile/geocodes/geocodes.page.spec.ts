@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { UserGeocodesPage } from './geocodes.page';
-import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
+import {MockGoogleMapsLoader} from '../../../mocks/MockGoogleMapsLoader';
 import {UrlSerializer} from '@angular/router';
 
 describe('UserGeocodesPage', () => {
@@ -12,7 +12,7 @@ describe('UserGeocodesPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ UserGeocodesPage ],
-      providers: [ UrlSerializer, GoogleMapsLoader ],
+      providers: [ UrlSerializer, MockGoogleMapsLoader.provider() ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

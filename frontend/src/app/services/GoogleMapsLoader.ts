@@ -19,6 +19,7 @@ export class GoogleMapsLoader {
   // Script injection is adapted from https://stackoverflow.com/a/42766146
   // Queueing system is original
   load() {
+    console.log('calling real load');
     return new Promise((resolve, reject) => {
       if (window.google) { // Maps API has been loaded and is available
         // Return a handle to the API
@@ -42,7 +43,7 @@ export class GoogleMapsLoader {
           script.onerror = () => {
             // Run through all the requests in the queue and return an error
             for (let request of GoogleMapsLoader.loadingQueue) {
-              request.reject("Failed to load Google Maps");
+              request.reject('Failed to load Google Maps');
             }
           }
           document.getElementsByTagName('head')[0].appendChild(script);
