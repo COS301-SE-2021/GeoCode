@@ -126,7 +126,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getCurrentCollectableTestNullRequest() {
+    void getCurrentCollectableTestNullRequest() {
         try{
             GetCurrentCollectableResponse response = userService.getCurrentCollectable(null);
             Assertions.assertFalse(response.isSuccess());
@@ -138,7 +138,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getCurrentCollectableTestNullId(){
+    void getCurrentCollectableTestNullId(){
            GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
            request.setUserID(null);
 
@@ -147,7 +147,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getCurrentCollectableTestInvalidUser() {
+    void getCurrentCollectableTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -166,7 +166,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getCurrentCollectableTestValidUser() {
+    void getCurrentCollectableTestValidUser() {
         try{
             /*
             Create a request object
@@ -185,7 +185,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserTrackableTestNullRequest() {
+    void getUserTrackableTestNullRequest() {
         try{
             GetUserTrackableResponse response = userService.getUserTrackable(null);
             Assertions.assertFalse(response.isSuccess());
@@ -197,7 +197,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserTrackableTestNullId(){
+    void getUserTrackableTestNullId(){
         GetUserTrackableRequest request = new GetUserTrackableRequest();
         request.setUserID(null);
 
@@ -206,7 +206,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserTrackableTestInvalidUser() {
+    void getUserTrackableTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -225,7 +225,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserTrackableTestValidUser() {
+    void getUserTrackableTestValidUser() {
         try{
             /*
             Create a request object
@@ -247,7 +247,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundCollectableTypesTestNullRequest() {
+    void getFoundCollectableTypesTestNullRequest() {
         try{
             GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(null);
             Assertions.assertFalse(response.isSuccess());
@@ -259,7 +259,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundCollectableTypesTestNullId(){
+    void getFoundCollectableTypesTestNullId(){
         GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
         request.setUserID(null);
 
@@ -268,7 +268,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundCollectableTypesTestInvalidUser() {
+    void getFoundCollectableTypesTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -287,7 +287,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundCollectableTypesTestValidUser() {
+    void getFoundCollectableTypesTestValidUser() {
         try{
             /*
              Create a request object
@@ -309,7 +309,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundGeoCodesTestNullRequest() {
+    void getFoundGeoCodesTestNullRequest() {
         try{
             GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(null);
             Assertions.assertFalse(response.isSuccess());
@@ -321,7 +321,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundGeoCodesTestNullId(){
+    void getFoundGeoCodesTestNullId(){
         GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
         request.setUserID(null);
 
@@ -330,7 +330,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundGeoCodesTestInvalidUser() {
+    void getFoundGeoCodesTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -349,7 +349,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getFoundGeoCodesTestValidUser() {
+    void getFoundGeoCodesTestValidUser() {
         try{
             /*
              Create a request object
@@ -375,7 +375,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getOwnedGeoCodesTestNullRequest() {
+    void getOwnedGeoCodesTestNullRequest() {
         try{
             GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(null);
             Assertions.assertFalse(response.isSuccess());
@@ -387,7 +387,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getOwnedGeoCodesTestNullId(){
+    void getOwnedGeoCodesTestNullId(){
         GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
         request.setUserID(null);
 
@@ -396,7 +396,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getOwnedGeoCodesTestInvalidUser() {
+    void getOwnedGeoCodesTestInvalidUser() {
         try{
             /*
             Create a request object
@@ -415,7 +415,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getOwnedGeoCodesTestValidUser() {
+    void getOwnedGeoCodesTestValidUser() {
         try{
             /*
              Create a request object
