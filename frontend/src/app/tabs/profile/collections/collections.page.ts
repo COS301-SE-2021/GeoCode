@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {CollectableSet, CollectableTypeComponent} from '../../../services/geocode-api';
 
 @Component({
   selector: 'app-collections',
@@ -6,6 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./collections.page.scss'],
 })
 export class CollectionsPage implements OnInit {
+
+  sets: CollectableSet[];
+  types: {
+    [key: string]: CollectableTypeComponent[];
+  };
 
   constructor() { }
 
