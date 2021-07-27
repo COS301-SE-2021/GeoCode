@@ -24,12 +24,10 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T13:14:20.256Z[GMT]")
 
 @Entity
-@Table(name = "leaderboard")
+@Table(name = "leaderboards")
 public class Leaderboard   {
   @Id
   @JsonProperty("id")
-  //@Type(type="org.hibernate.type.UUIDCharType")
-  //@Type(type="org.hibernate.dialect.MySQL8InnoDBDialect")
   private UUID id = null;
 
   @JsonProperty("name")
