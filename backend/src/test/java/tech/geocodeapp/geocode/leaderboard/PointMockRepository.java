@@ -10,22 +10,47 @@ import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.user.model.User;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class PointMockRepository implements PointRepository {
     private static HashMap<UUID, Point> map = new HashMap<UUID, Point>();
 
     @Override
     public List<Point> findAllByLeaderboard(Leaderboard leaderboard) {
-
+        return null;
     }
 
     @Override
     public List<MyLeaderboardDetails> getMyLeaderboards(UUID userID) {
-        return null;
+        List<MyLeaderboardDetails> detailsList = new ArrayList<>();
+
+        for(Point point : map.values()){
+            String leaderboardName = point.getLeaderBoard().getName();
+            int amount = point.getAmount();
+
+            /* get the rank */
+            int rank = 0;
+
+            /* add the details to the list */
+            detailsList.add(new MyLeaderboardDetails() {
+                @Override
+                public String getName() {
+                    return leaderboardName;
+                }
+
+                @Override
+                public int getPoints() {
+                    return amount;
+                }
+
+                @Override
+                public int getRank() {
+                    return rank;
+                }
+            });
+        }
+
+        return detailsList;
     }
 
     @Override
@@ -52,7 +77,7 @@ public class PointMockRepository implements PointRepository {
 
     @Override
     public List<Point> findPointsByLeaderboardBetween(UUID leaderboardId, int offset, int next) {
-
+        return null;
     }
 
     @Override
