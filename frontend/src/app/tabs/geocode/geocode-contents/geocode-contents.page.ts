@@ -41,11 +41,9 @@ export class GeocodeContentsPage implements AfterViewInit {
   ) {
     //Get passed in param from routing
     const state = router.getCurrentNavigation().extras.state;
-    console.log(state);
     if (state) {
       //Set the geocode to the passed in geocode
       this.geocode = state.geocode;
-      console.log(this.geocode);
     } else {
       this.geocode = null;
       this.geocodeID = route.snapshot.paramMap.get('id');

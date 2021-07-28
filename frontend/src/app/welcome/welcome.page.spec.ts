@@ -16,21 +16,19 @@ describe('WelcomePage', () => {
     })
   };
 
-  const mockRouter = {
-    navigate: (args) => new Promise((resolve, reject) => {
-      resolve(null);
-    })
-  };
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ WelcomePage ],
       providers: [
-        { provide: KeycloakService, useValue: mockKeycloak },
-        { provide: Router, useValue: mockRouter }
+        { provide: KeycloakService, useValue: mockKeycloak }
       ],
       imports: [IonicModule.forRoot(), RouterTestingModule]
     }).compileComponents();
+
+    const router = TestBed.inject(Router);
+    router.navigate = () => new Promise(resolve => {
+      resolve(null);
+    });
 
     fixture = TestBed.createComponent(WelcomePage);
     component = fixture.componentInstance;
