@@ -199,4 +199,8 @@ export class GeocodePage implements AfterViewInit  {
     this.height='90%';
   }
 
+  openInMaps(geocode: GeoCode) {
+    window.open('https://www.google.com/maps/search/?api=1&query='+geocode.latitude+'%2C'+geocode.longitude);
+  }
+
 }
