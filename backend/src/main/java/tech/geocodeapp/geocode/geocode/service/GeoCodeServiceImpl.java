@@ -167,6 +167,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                                       request.getDescription(), request.getHints(), collectable,
                                       qr.toString(), request.getLocation(), UUID.randomUUID() );
 
+        // ToDo: update look at service contract
+
         /* Save the created GeoCode to the repository */
         geoCodeRepo.save( newGeoCode );
 
@@ -203,6 +205,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /* Retrieve all of the stored GeoCodes from the repository */
         List< GeoCode > temp = geoCodeRepo.findAll();
+
+        //ToDo make a custom query to only select fields wanted
+
 
         /* Go through each GeoCode found and hide the sensitive data */
         for ( GeoCode geoCode : temp ) {

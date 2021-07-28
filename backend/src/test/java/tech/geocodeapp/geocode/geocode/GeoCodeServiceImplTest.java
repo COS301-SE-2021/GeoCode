@@ -1,11 +1,15 @@
 package tech.geocodeapp.geocode.geocode;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
+
 import org.mockito.Mock;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import org.springframework.security.test.context.support.WithMockUser;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
@@ -62,6 +66,7 @@ class GeoCodeServiceImplTest {
      */
     @Mock( name = "leaderboardServiceImpl" )
     LeaderboardService leaderboardService;
+
     /**
      * A mock service for the User subsystem
      *
@@ -115,6 +120,18 @@ class GeoCodeServiceImplTest {
         // var userMockRepo = new UserMockRepository();
         // userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), collectableService);
 
+
+       /*
+        collectableService = Mockito.mock( CollectableService.class );
+
+
+        List< UUID > collectables = new ArrayList<>();
+
+        collectables.add( UUID.randomUUID() );
+        collectables.add( UUID.randomUUID() );
+        collectables.add( UUID.randomUUID() );
+        when(collectableService.getCollectables()).thenReturn( new GetCollectablesResponse( collectables ) );
+        */
 
         try {
 
