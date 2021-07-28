@@ -77,7 +77,7 @@ request: CreateGeoCodeRequest= {
         this.hints=[];
         this.locations=[];
         this.difficulty=[];
-        this.navCtrl.navigateBack('/geocode');
+        this.navCtrl.navigateBack('/explore').then().catch();
       });
 
   }

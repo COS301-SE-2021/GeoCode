@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Find GeoCode</ion-title>
+    <ion-title>Open GeoCode</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="explore"></ion-back-button>
+    </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="scan()">
         <ion-icon name="qr-code-outline"></ion-icon>

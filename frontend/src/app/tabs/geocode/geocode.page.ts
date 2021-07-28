@@ -7,7 +7,7 @@ import {
   GetGeoCodesResponse,
   UpdateAvailabilityRequest,
   UpdateAvailabilityResponse,
-  GetGeoCodesByDifficultyRequest
+  GetGeoCodesByDifficultyRequest, GeoCode
 } from '../../services/geocode-api';
 import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
 
@@ -24,9 +24,9 @@ export class GeocodePage implements AfterViewInit  {
   map;
   mapMarker;
   markers= [];
-  geocodes = [];
+  geocodes: GeoCode[] = [];
   selected=[];
-  isHidden=false;
+  isHidden=true;
   height='60%';
 
 
@@ -36,8 +36,9 @@ export class GeocodePage implements AfterViewInit  {
     private geocodeApi: GeoCodeService,
     private mapsLoader: GoogleMapsLoader
   ) {
-    this.geocodes = [{id:'123456789',latitude:-25.75625115327836,longitude:28.235629260918344,difficulty:'EASY',description:'TEST'}];
+    this.geocodes = [];
     this.selected= this.geocodes;
+    this.close();
   }
 
   //Create map and add mapmarkers of geocodes
@@ -68,18 +69,8 @@ export class GeocodePage implements AfterViewInit  {
   }
 
   //Navigate to findGeoCode page
-  findGeoCode(geocode){
-    const navigationExtras: NavigationExtras = {
-      queryParams: {
-        geocode
-      }
-    };
-   this.navCtrl.navigateForward('/geocode/geocode-contents',navigationExtras);
-  }
-
-  //navigate to the create geocode page
-  createGeoCode(){
-    this.navCtrl.navigateForward('/geocode/geocode-create');
+  async findGeoCode(geocode){
+    await this.navCtrl.navigateForward('/explore/open/'+geocode.id,{ state: {geocode} });
   }
 
   //Call Geocode service and update Availability

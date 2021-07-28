@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   GeoCodeService,
   GetHintsRequest,
@@ -23,6 +23,7 @@ export class GeocodeContentsPage implements AfterViewInit {
   googleMaps;
   map;
   geocode;
+  geocodeID: string = null; // Only used if the user did not access this page through the Explore page
   mapOptions;
   hints=[];
   isHidden=false;
@@ -30,7 +31,8 @@ export class GeocodeContentsPage implements AfterViewInit {
 
 
   constructor(
-    private route: ActivatedRoute,
+    route: ActivatedRoute,
+    router: Router,
     public geocodeApi: GeoCodeService,
     public navCtrl: NavController,
     private alertCtrl: AlertController,
@@ -38,28 +40,16 @@ export class GeocodeContentsPage implements AfterViewInit {
     private qrScanner: QRScanner
   ) {
     //Get passed in param from routing
-    this.route.queryParams.subscribe(params => {
-          //Set the geocode to the passed in geocode
-          this.geocode= params.geocode;
-          //Create Hint request
-          const hintsRequest: GetHintsRequest={
-            geoCodeID: this.geocode.id
-          };
-
-      //Get the hints for the passed in geocode by id
-          this.geocodeApi.getHints(hintsRequest)
-            .subscribe((response: GetHintsResponse)=>{
-              //log response and set hints array
-              console.log(response);
-              this.hints=response.hints;
-
-            } ,(error)=>{
-              //If error getting hints log error and put error message in hints array
-              console.log(error);
-              this.hints=['Error loading hints'];
-            });
-    });
-
+    const state = router.getCurrentNavigation().extras.state;
+    console.log(state);
+    if (state) {
+      //Set the geocode to the passed in geocode
+      this.geocode = state.geocode;
+      console.log(this.geocode);
+    } else {
+      this.geocode = null;
+      this.geocodeID = route.snapshot.paramMap.get('id');
+    }
   }
 
   //Create map and add mapmarkers of geocodes
@@ -80,11 +70,42 @@ export class GeocodeContentsPage implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    this.mapsLoader.load().then(handle => {
-      this.googleMaps = handle;
-      this.loadMap();
-    }).catch();
+  async ngAfterViewInit() {
+    if (this.geocode === null) {
+      await this.loadGeoCode();
+    }
+    this.loadHints();
+    this.googleMaps = await this.mapsLoader.load();
+    this.loadMap();
+  }
+
+  loadGeoCode() {
+    return new Promise((resolve, reject) => {
+      //load geocode by ID when we have a backend function for it
+      console.log('Cannot open arbitrary geocodes in this page for now');
+      reject('Failed to load geocode');
+    });
+  }
+
+
+  loadHints() {
+    //Create Hint request
+    const hintsRequest: GetHintsRequest={
+      geoCodeID: this.geocode.id
+    };
+
+    //Get the hints for the passed in geocode by id
+    this.geocodeApi.getHints(hintsRequest)
+      .subscribe((response: GetHintsResponse)=>{
+        //log response and set hints array
+        console.log(response);
+        this.hints=response.hints;
+
+      } ,(error)=>{
+        //If error getting hints log error and put error message in hints array
+        console.log(error);
+        this.hints=['Error loading hints'];
+      });
   }
 
   found(code){
