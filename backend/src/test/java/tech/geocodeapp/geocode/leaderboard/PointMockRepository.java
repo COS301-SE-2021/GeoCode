@@ -7,17 +7,20 @@ import org.springframework.data.domain.Sort;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
-import tech.geocodeapp.geocode.leaderboard.repository.MyLeaderboardDetailsProjectionInterface;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
+import tech.geocodeapp.geocode.user.model.User;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class PointMockRepository implements PointRepository {
+    private static HashMap<UUID, Point> map = new HashMap<UUID, Point>();
+
     @Override
     public List<Point> findAllByLeaderboard(Leaderboard leaderboard) {
-        return null;
+
     }
 
     @Override
@@ -32,12 +35,24 @@ public class PointMockRepository implements PointRepository {
 
     @Override
     public int countByLeaderboard(Leaderboard leaderboard) {
-        return 0;
+        UUID leaderboardID = leaderboard.getId();
+
+        long count = 0;/*
+
+        for(Point point : map.values()){
+            if(point.getLeaderBoard().getId() == leaderboardID){
+                ++count;
+            }
+        }*/
+
+        count = map.values().stream().filter(point -> point.getLeaderBoard().getId() == leaderboardID).count();
+
+        return (int) count;
     }
 
     @Override
     public List<Point> findPointsByLeaderboardBetween(UUID leaderboardId, int offset, int next) {
-        return null;
+
     }
 
     @Override
@@ -87,7 +102,8 @@ public class PointMockRepository implements PointRepository {
 
     @Override
     public <S extends Point> S save(S s) {
-        return null;
+        map.put(s.getId(), s);
+        return s;
     }
 
     @Override

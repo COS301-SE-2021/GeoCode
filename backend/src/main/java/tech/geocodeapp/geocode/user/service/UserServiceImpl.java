@@ -14,7 +14,6 @@ import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDRespon
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
-import tech.geocodeapp.geocode.leaderboard.repository.MyLeaderboardDetailsProjectionInterface;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
