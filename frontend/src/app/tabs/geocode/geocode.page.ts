@@ -52,11 +52,10 @@ export class GeocodePage implements AfterViewInit  {
 
   }
 
-  ngAfterViewInit(): void {
-    this.mapsLoader.load().then(handle => {
-      this.googleMaps = handle;
-      this.loadMap();
-    }).catch();
+  async ngAfterViewInit() {
+    this.googleMaps = await this.mapsLoader.load();
+    this.loadMap();
+    this.getAllMap();
   }
 
 
