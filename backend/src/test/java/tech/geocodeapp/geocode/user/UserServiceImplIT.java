@@ -448,10 +448,6 @@ public class UserServiceImplIT {
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
             Assertions.assertFalse(response.getLeaderboards().isEmpty());
-
-            for(MyLeaderboardDetails details : response.getLeaderboards()){
-                System.out.println(details.getName() + ", " + details.getPoints() + ", " + details.getRank());
-            }
         } catch (NullUserRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }

@@ -255,39 +255,6 @@ public class UserServiceImpl implements UserService {
         User currentUser = optionalUser.get();
 
         List<MyLeaderboardDetails> leaderboardDetailsList = pointRepo.getMyLeaderboards(currentUser.getId());
-
-        /*List<MyLeaderboardDetails> leaderboardDetailsList = new ArrayList<>();
-
-        for(Point point : currentUser.getPoints()){
-            //get the Leaderboard that the Point is for
-            Leaderboard leaderboard = point.getLeaderBoard();
-
-            /* check if point has been assigned to a Leaderboard /
-            if(leaderboard != null){
-                /* add details for current leaderboard ranking /
-                MyLeaderboardDetails leaderboardDetails = new MyLeaderboardDetails();
-                leaderboardDetails.setName(leaderboard.getName());
-
-                int pointAmount = point.getAmount();
-                leaderboardDetails.setPoints(pointAmount);
-
-                //get the rank
-                GetMyRankRequest getMyRankRequest = new GetMyRankRequest(leaderboard, pointAmount);
-
-                try{
-                    GetMyRankResponse getMyRankResponse = leaderboardService.getMyRank(getMyRankRequest);
-
-                    int rank = getMyRankResponse.getRank();
-                    leaderboardDetails.setRank(rank);
-                }catch(NullLeaderboardRequestParameterException e){
-                    return new GetMyLeaderboardsResponse(false, e.getMessage(), null);
-                }
-
-                /* add the leaderboard rank details /
-                leaderboardDetailsList.add(leaderboardDetails);
-            }
-        }*/
-
         return new GetMyLeaderboardsResponse(true, "The details for the User's Leaderboards were successfully returned", leaderboardDetailsList);
     }
 
