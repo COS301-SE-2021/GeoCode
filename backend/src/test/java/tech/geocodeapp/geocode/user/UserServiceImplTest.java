@@ -109,7 +109,6 @@ public class UserServiceImplTest {
             GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(validUserId);
             GetUserByIdResponse getUserByIdResponse = userService.getUserById(getUserByIdRequest);
             validUser = getUserByIdResponse.getUser();
-            System.out.println("validUser");
         }catch(NullUserRequestParameterException e){
             e.printStackTrace();
             return;

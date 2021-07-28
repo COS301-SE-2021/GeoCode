@@ -16,6 +16,8 @@ import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 @SpringBootTest
 @TestMethodOrder( MethodOrderer.OrderAnnotation.class )
 public class UserServiceImplIT {
@@ -199,6 +201,56 @@ public class UserServiceImplIT {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("The GetFoundCollectableTypesRequest object passed was NULL", response.getMessage());
             Assertions.assertNull(response.getCollectableTypeIDs());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getFoundCollectableTypesTestNullId(){
+        GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
+        request.setUserID(null);
+
+        assertThatThrownBy(() -> userService.getFoundCollectableTypes(request))
+                .isInstanceOf(NullUserRequestParameterException.class);
+    }
+
+    @Test
+    void getFoundCollectableTypesTestInvalidUser() {
+        try{
+            /*
+            Create a request object
+            and assign values to it
+            */
+            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
+            request.setUserID(invalidUserId);
+
+            GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertNull(response.getCollectableTypeIDs());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getFoundCollectableTypesTestValidUser() {
+        try{
+            /*
+             Create a request object
+             and assign values to it
+           */
+            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
+            request.setUserID(validUserId);
+
+            GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The IDs of the User's found CollectableTypes was successfully returned", response.getMessage());
+
+            List<UUID> foundCollectableTypeIDs = response.getCollectableTypeIDs();
+            Assertions.assertNotNull(foundCollectableTypeIDs);
+            Assertions.assertEquals(3, foundCollectableTypeIDs.size());
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
