@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import tech.geocodeapp.geocode.collectable.model.Collectable;
-import tech.geocodeapp.geocode.collectable.repository.CollectableTypeRepository;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
-import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
@@ -24,15 +22,12 @@ public class UserServiceImplIT {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserRepository userRepo;
-
-    @Autowired
-    private CollectableTypeRepository collectableTypeRepo;
-
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
+
     private final String invalidUserIdMessage = "Invalid user id";
+    private final UUID firstGeoCodeID = UUID.fromString("537689d1-a0d8-4740-bec6-6a40bb69748e");
+    private final UUID secondGeoCodeID = UUID.fromString("5d709c49-326b-470a-8d9d-e7f7bf77ef6e");
 
     @Test
     public void getCurrentCollectableTestNullRequest() {
@@ -66,7 +61,7 @@ public class UserServiceImplIT {
     }//
 
     @Test
-    public void getCurrentCollectableTestValidUser() throws Exception {
+    public void getCurrentCollectableTestValidUser() {
         try{
             /*
             Create a request object
@@ -251,6 +246,72 @@ public class UserServiceImplIT {
             List<UUID> foundCollectableTypeIDs = response.getCollectableTypeIDs();
             Assertions.assertNotNull(foundCollectableTypeIDs);
             Assertions.assertEquals(3, foundCollectableTypeIDs.size());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getFoundGeoCodesTestNullRequest() {
+        try{
+            GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The GetFoundGeoCodesRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getGeocodeIDs());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getFoundGeoCodesTestNullId(){
+        GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
+        request.setUserID(null);
+
+        assertThatThrownBy(() -> userService.getFoundGeoCodes(request))
+                .isInstanceOf(NullUserRequestParameterException.class);
+    }
+
+    @Test
+    void getFoundGeoCodesTestInvalidUser() {
+        try{
+            /*
+            Create a request object
+            and assign values to it
+            */
+            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
+            request.setUserID(invalidUserId);
+
+            GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertNull(response.getGeocodeIDs());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getFoundGeoCodesTestValidUser() {
+        try{
+            /*
+             Create a request object
+             and assign values to it
+           */
+            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
+            request.setUserID(validUserId);
+
+            GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The IDs of the User's found GeoCodes was successfully returned", response.getMessage());
+
+            List<UUID> foundGeoCodeIDs = response.getGeocodeIDs();
+            Assertions.assertNotNull(foundGeoCodeIDs);
+            Assertions.assertEquals(2, foundGeoCodeIDs.size());
+
+            //HashSet will cause order to not necessarily be order added in
+            Assertions.assertTrue(foundGeoCodeIDs.contains(firstGeoCodeID));
+            Assertions.assertTrue(foundGeoCodeIDs.contains(secondGeoCodeID));
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
