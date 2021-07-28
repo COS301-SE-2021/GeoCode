@@ -8,11 +8,11 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'geocode',
+        path: 'explore',
         loadChildren: () => import('./geocode/geocode.module').then(m => m.GeocodePageModule)
       },
       {
-        path: 'collectables',
+        path: 'collections',
         loadChildren: () => import('./collectable/collectable.module').then(m => m.CollectablePageModule)
       },
       {
@@ -25,7 +25,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/geocode',
+        redirectTo: '/explore',
         pathMatch: 'full'
       }
     ]
