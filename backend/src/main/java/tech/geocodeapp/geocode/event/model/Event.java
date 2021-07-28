@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 @Entity
 @Validated
-@Table( name = "event" )
+@Table( name = "events" )
 public class Event {
 
     @Id

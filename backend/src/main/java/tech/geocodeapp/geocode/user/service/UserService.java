@@ -34,10 +34,12 @@ public interface UserService {
     GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullUserRequestParameterException;
 
     //User helper functions
-    User getUserById(UUID id);
+    GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullUserRequestParameterException;
+
     User getCurrentUser();
-    void registerNewUser(UUID id, String username);
+
+    RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullUserRequestParameterException;
 
     //GeoCode helper functions
-    public SwapCollectableResponse swapCollectable( SwapCollectableRequest request );
+    SwapCollectableResponse swapCollectable(SwapCollectableRequest request) throws NullUserRequestParameterException;
 }

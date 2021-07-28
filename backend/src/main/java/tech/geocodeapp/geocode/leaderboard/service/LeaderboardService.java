@@ -2,13 +2,8 @@ package tech.geocodeapp.geocode.leaderboard.service;
 
 import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.leaderboard.exception.NullLeaderboardRequestParameterException;
-import tech.geocodeapp.geocode.leaderboard.request.GetEventLeaderboardRequest;
-import tech.geocodeapp.geocode.leaderboard.request.GetLeaderboardByIDRequest;
-import tech.geocodeapp.geocode.leaderboard.request.GetMyRankRequest;
-import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
-import tech.geocodeapp.geocode.leaderboard.response.GetLeaderboardByIDResponse;
-import tech.geocodeapp.geocode.leaderboard.response.GetMyRankResponse;
-import tech.geocodeapp.geocode.leaderboard.response.GetPointsByLeaderboardResponse;
+import tech.geocodeapp.geocode.leaderboard.request.*;
+import tech.geocodeapp.geocode.leaderboard.response.*;
 
 /**
  * This interface is for the GeoCode subsystem
@@ -25,4 +20,10 @@ public interface LeaderboardService {
     public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullLeaderboardRequestParameterException;
 
     public GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullLeaderboardRequestParameterException;
+
+    public PointResponse createPoint(CreatePointRequest request) throws NullLeaderboardRequestParameterException;
+
+    public DeletePointResponse deletePoint(DeletePointRequest request) throws NullLeaderboardRequestParameterException;
+
+    public PointResponse updatePoint(UpdatePointRequest request) throws NullLeaderboardRequestParameterException;
 }
