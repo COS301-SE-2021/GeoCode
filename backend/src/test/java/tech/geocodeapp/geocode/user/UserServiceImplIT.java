@@ -28,6 +28,7 @@ public class UserServiceImplIT {
     private final String invalidUserIdMessage = "Invalid user id";
     private final UUID firstGeoCodeID = UUID.fromString("537689d1-a0d8-4740-bec6-6a40bb69748e");
     private final UUID secondGeoCodeID = UUID.fromString("5d709c49-326b-470a-8d9d-e7f7bf77ef6e");
+    private final UUID thirdGeoCodeID = UUID.fromString("92e3e6d5-5457-48f7-adb1-7c2f67ee836b");
 
     @Test
     public void getCurrentCollectableTestNullRequest() {
@@ -312,6 +313,69 @@ public class UserServiceImplIT {
             //HashSet will cause order to not necessarily be order added in
             Assertions.assertTrue(foundGeoCodeIDs.contains(firstGeoCodeID));
             Assertions.assertTrue(foundGeoCodeIDs.contains(secondGeoCodeID));
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getOwnedGeoCodesTestNullRequest() {
+        try{
+            GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The GetOwnedGeoCodesRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getGeocodeIDs());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getOwnedGeoCodesTestNullId(){
+        GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
+        request.setUserID(null);
+
+        assertThatThrownBy(() -> userService.getOwnedGeoCodes(request))
+                .isInstanceOf(NullUserRequestParameterException.class);
+    }
+
+    @Test
+    void getOwnedGeoCodesTestInvalidUser() {
+        try{
+            /*
+            Create a request object
+            and assign values to it
+            */
+            GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
+            request.setUserID(invalidUserId);
+
+            GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertNull(response.getGeocodeIDs());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getOwnedGeoCodesTestValidUser() {
+        try{
+            /*
+             Create a request object
+             and assign values to it
+           */
+            GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
+            request.setUserID(validUserId);
+
+            GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(request);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The IDs of the User's owned GeoCodes was successfully returned", response.getMessage());
+
+            List<UUID> ownedGeoCodeIDs = response.getGeocodeIDs();
+            Assertions.assertNotNull(ownedGeoCodeIDs);
+            Assertions.assertEquals(1, ownedGeoCodeIDs.size());
+            Assertions.assertEquals(thirdGeoCodeID, ownedGeoCodeIDs.get(0));
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
