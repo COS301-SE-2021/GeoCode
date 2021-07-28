@@ -24,6 +24,7 @@ public class UserServiceImplIT {
 
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
+    private final UUID userWithPoints1 = UUID.fromString("a98e8a41-0d6f-454f-a5d9-df809d2c1040");
 
     private final String invalidUserIdMessage = "Invalid user id";
     private final UUID firstGeoCodeID = UUID.fromString("537689d1-a0d8-4740-bec6-6a40bb69748e");
@@ -377,6 +378,76 @@ public class UserServiceImplIT {
             Assertions.assertEquals(1, ownedGeoCodeIDs.size());
             Assertions.assertEquals(thirdGeoCodeID, ownedGeoCodeIDs.get(0));
         }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestNullRequest(){
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(null);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The GetMyLeaderboardsRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getLeaderboards());
+        } catch (NullUserRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestNullUserID(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(null);
+
+        assertThatThrownBy(() -> userService.getMyLeaderboards(request))
+                .isInstanceOf(NullUserRequestParameterException.class);
+    }
+
+    @Test
+    void getMyLeaderboardsTestInvalidUserID(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(invalidUserId);
+
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertNull(response.getLeaderboards());
+        } catch (NullUserRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestUserWithNoPoints(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(validUserId);
+
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
+            Assertions.assertTrue(response.getLeaderboards().isEmpty());
+        } catch (NullUserRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestUserWithPoints(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(userWithPoints1);
+
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
+            Assertions.assertFalse(response.getLeaderboards().isEmpty());
+        } catch (NullUserRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
     }
