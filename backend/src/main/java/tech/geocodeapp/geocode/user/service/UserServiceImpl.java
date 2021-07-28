@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
 /**
  * This class implements the UserService interface
  */
-@Service
+@Service( "UserService" )
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final CollectableRepository collectableRepo;

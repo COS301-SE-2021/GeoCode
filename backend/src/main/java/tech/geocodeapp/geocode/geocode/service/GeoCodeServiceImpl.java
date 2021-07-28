@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.geocode.service;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+
 import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
@@ -11,12 +12,15 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
+
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.geocode.exceptions.RepoException;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.response.*;
+
+import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
@@ -614,7 +618,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Perform the swap */
-        var userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
+        Collectable userToGeocode;
+        try {
+            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
+        } catch ( NullUserRequestParameterException error ) {
+
+            /* Validate the Collectable returned */
+            return new SwapCollectablesResponse( false );
+        }
+
         userToGeocode.changeLocation( geocode.getLocation().getLatitude() + " " + geocode.getLocation().getLongitude() );
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );
