@@ -2386,21 +2386,53 @@ components:
                 - name
                 - description
                 - location
-                - leaderboard
+                - leaderboards
             properties:
                 id:
                     type: string
                     format: uuid
+                    example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
                 name:
                     type: string
                 description:
                     type: string
                 location:
                     $ref: "#/components/schemas/GeoPoint"
-                leaderboard:
-                    $ref: "#/components/schemas/Leaderboard"
+                levels:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Level"
+                begin:
+                    type: string
+                    format: date
+                    pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+                    example: "2017-01-01"
+                end:
+                    type: string
+                    format: date
+                    pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+                    example: "2017-01-01"
+                leaderboards:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Leaderboard"
             xml:
                 name: "Event"
+        Level:
+            type: "object"
+            required:
+                - target
+            properties:
+                target:
+                    $ref: '#/components/schemas/GeoCode'
+                onLevel:
+                    type: object
+                    additionalProperties:
+                        type: string
+                        format: uuid
+                        example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+            xml:
+                name: "TimeTrial"
         TimeTrial:
             type: "object"
             required:
