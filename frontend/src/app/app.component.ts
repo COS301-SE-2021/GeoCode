@@ -13,7 +13,8 @@ export class AppComponent {
     private router: Router
   ) {
     if (!this.keycloak.getKeycloakInstance().authenticated) {
-      this.router.navigate(['welcome']).then().catch();
+      console.log('Not logged in! Not redirecting to welcome page.');
+      //this.router.navigate(['welcome']).then().catch();
     }
   }
 }
