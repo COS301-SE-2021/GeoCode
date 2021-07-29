@@ -1,9 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>ar-test</ion-title>
+    <ion-title>ARLauncher</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()"><ion-icon name="close" slot="icon-only"></ion-icon></ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <iframe src="/assets/aframe-ar.html"></iframe>
 </ion-content>
