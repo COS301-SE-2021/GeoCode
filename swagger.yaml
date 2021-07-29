@@ -22,6 +22,8 @@ tags:
       description: "Everything about the different scores and rankings of users"
     - name: "Notifications"
       description: "Everything about how users are notified"
+    - name: "Event"
+      description: "Everything about the different events where a user finds GeoCodes"
 paths:
     /User/getCurrentCollectable:
         post:
