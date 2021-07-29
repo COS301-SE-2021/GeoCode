@@ -9,17 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GeoPoint } from './geoPoint';
-import { Leaderboard } from './leaderboard';
-import { Level } from './level';
+import { GeoCode } from './geoCode';
 
-export interface Event { 
-    id: string;
-    name: string;
-    description: string;
-    location: GeoPoint;
-    levels?: Array<Level>;
-    begin?: string;
-    end?: string;
-    leaderboards: Array<Leaderboard>;
+export interface Level { 
+    target: GeoCode;
+    onLevel?: { [key: string]: string; };
 }
