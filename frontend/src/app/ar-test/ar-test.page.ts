@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ModalController} from '@ionic/angular';
 
 @Component({
   selector: 'app-ar-test',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ArTestPage implements OnInit {
 
-  constructor() { }
+  constructor(private modalCtrl: ModalController) { }
 
   ngOnInit() {
+
+  }
+
+  close(){
+    this.modalCtrl.dismiss();
   }
 
 }
