@@ -71,6 +71,7 @@ export * from './getUserTrackableResponse';
 export * from './getUsersRequest';
 export * from './getUsersResponse';
 export * from './leaderboard';
+export * from './level';
 export * from './myLeaderboardDetails';
 export * from './point';
 export * from './rarity';
