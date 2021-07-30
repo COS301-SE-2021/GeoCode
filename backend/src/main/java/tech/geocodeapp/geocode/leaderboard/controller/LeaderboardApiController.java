@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import tech.geocodeapp.geocode.leaderboard.exception.NullLeaderboardRequestParameterException;
+import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetEventLeaderboardRequest;
+import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
 
@@ -37,6 +39,21 @@ public class LeaderboardApiController implements LeaderboardApi {
     public LeaderboardApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
+    }
+
+    public ResponseEntity<CreateLeaderboardResponse> createLeaderboard(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a Leaderboard", required=true, schema=@Schema()) @Valid @RequestBody CreateLeaderboardRequest body) {
+        try{
+            CreateLeaderboardResponse response = leaderboardService.createLeaderboard(body);
+
+            if(response.isSuccess()){
+                return new ResponseEntity<CreateLeaderboardResponse>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<CreateLeaderboardResponse>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (NullLeaderboardRequestParameterException e){
+            CreateLeaderboardResponse response = new CreateLeaderboardResponse(false, e.getMessage(), null);
+            return new ResponseEntity<CreateLeaderboardResponse>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
     public ResponseEntity<GetEventLeaderboardResponse> getEventLeaderboard(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a subset of the Event's Leaderboard details", required=true, schema=@Schema()) @Valid @RequestBody GetEventLeaderboardRequest body) {

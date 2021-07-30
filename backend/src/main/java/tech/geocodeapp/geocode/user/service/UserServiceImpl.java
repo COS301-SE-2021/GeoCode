@@ -13,12 +13,8 @@ import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.leaderboard.exception.NullLeaderboardRequestParameterException;
-import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
-import tech.geocodeapp.geocode.leaderboard.model.Point;
-import tech.geocodeapp.geocode.leaderboard.request.GetMyRankRequest;
-import tech.geocodeapp.geocode.leaderboard.response.GetMyRankResponse;
+import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
@@ -36,19 +32,21 @@ import javax.validation.constraints.NotNull;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final CollectableRepository collectableRepo;
+    private final PointRepository pointRepo;
 
     @NotNull(message = "Collectable Service Implementation may not be null.")
-    private final CollectableService collectableService;
+    private CollectableService collectableService;
 
     @NotNull(message = "Leaderboard Service Implementation may not be null.")
-    private final LeaderboardService leaderboardService;
+    private LeaderboardService leaderboardService;
 
     private final String invalidUserIdMessage = "Invalid user id";
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, CollectableService collectableService, LeaderboardService leaderboardService) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, LeaderboardService leaderboardService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
+        this.pointRepo = pointRepo;
         this.collectableService = collectableService;
         this.leaderboardService = leaderboardService;
     }
@@ -253,40 +251,11 @@ public class UserServiceImpl implements UserService {
             return new GetMyLeaderboardsResponse(false, invalidUserIdMessage, null);
         }
 
+        System.out.println("valid user");
+
         User currentUser = optionalUser.get();
 
-        List<MyLeaderboardDetails> leaderboardDetailsList = new ArrayList<>();
-
-        for(Point point : currentUser.getPoints()){
-            //get the Leaderboard that the Point is for
-            Leaderboard leaderboard = point.getLeaderBoard();
-
-            /* check if point has been assigned to a Leaderboard */
-            if(leaderboard != null){
-                /* add details for current leaderboard ranking */
-                MyLeaderboardDetails leaderboardDetails = new MyLeaderboardDetails();
-                leaderboardDetails.setName(leaderboard.getName());
-
-                int pointAmount = point.getAmount();
-                leaderboardDetails.setPoints(pointAmount);
-
-                //get the rank
-                GetMyRankRequest getMyRankRequest = new GetMyRankRequest(leaderboard, pointAmount);
-
-                try{
-                    GetMyRankResponse getMyRankResponse = leaderboardService.getMyRank(getMyRankRequest);
-
-                    int rank = getMyRankResponse.getRank();
-                    leaderboardDetails.setRank(rank);
-                }catch(NullLeaderboardRequestParameterException e){
-                    return new GetMyLeaderboardsResponse(false, e.getMessage(), null);
-                }
-
-                /* add the leaderboard rank details */
-                leaderboardDetailsList.add(leaderboardDetails);
-            }
-        }
-
+        List<MyLeaderboardDetails> leaderboardDetailsList = pointRepo.getMyLeaderboards(currentUser.getId());
         return new GetMyLeaderboardsResponse(true, "The details for the User's Leaderboards were successfully returned", leaderboardDetailsList);
     }
 
