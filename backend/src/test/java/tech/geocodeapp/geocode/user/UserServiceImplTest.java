@@ -15,9 +15,6 @@ import java.util.UUID;
 import tech.geocodeapp.geocode.collectable.*;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
-import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.event.request.*;
-import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
@@ -149,22 +146,7 @@ public class UserServiceImplTest {
             return;
         }
 
-        /* (1) Create Events (which will each have their own Leaderboard) */
-        CreateEventRequest createEasterEventRequest = new CreateEventRequest(hatfieldEaster, easterEventDescription, new GeoPoint(10.0f, 10.0f));
-        CreateEventRequest createChristmasEventRequest = new CreateEventRequest(menloParkChristmas, christmasEventDescription, new GeoPoint(20.0f, 20.0f));
-
-        CreateEventResponse createEasterEventResponse;
-        CreateEventResponse createChristmasEventResponse;
-
-        try {
-            createEasterEventResponse = eventService.createEvent(createEasterEventRequest);
-            createChristmasEventResponse = eventService.createEvent(createChristmasEventRequest);
-        } catch (InvalidRequestException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        /* get the Leaderboards for the Events */
+        /* create Leaderboards */
         /*Leaderboard easterLeaderboard = createEasterEventResponse.getEvent().getLeaderboard();
         Leaderboard christmasLeaderboard = createChristmasEventResponse.getEvent().getLeaderboard();
 

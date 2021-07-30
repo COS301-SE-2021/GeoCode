@@ -11,7 +11,10 @@ import tech.geocodeapp.geocode.leaderboard.response.*;
 @Service
 public interface LeaderboardService {
 
-    //U5.1 getEventLeaderboard
+    //U5.1 createLeaderboard
+
+
+    //U5.2 getEventLeaderboard
     GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullLeaderboardRequestParameterException;
 
     //helper functions
