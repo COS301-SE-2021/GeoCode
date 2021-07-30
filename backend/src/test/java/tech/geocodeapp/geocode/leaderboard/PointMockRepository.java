@@ -10,13 +10,14 @@ import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PointMockRepository implements PointRepository {
     private static final HashMap<UUID, Point> map = new HashMap<>();
 
     @Override
-    public List<Point> findAllByLeaderboard(Leaderboard leaderboard) {
-        return null;
+    public List<Point> findAllByLeaderboardID(UUID leaderboardID) {
+       return map.values().stream().filter(point -> point.getLeaderBoard().getId().equals(leaderboardID)).sorted(Comparator.comparing(Point::getAmount)).collect(Collectors.toList());
     }
 
     @Override
@@ -45,9 +46,9 @@ public class PointMockRepository implements PointRepository {
         for(UUID leaderboardID : leaderboardPoints.keySet()){
             leaderboardPoints.get(leaderboardID).sort(Comparator.reverseOrder());
 
-            String pointString = "";
+            StringBuilder pointString = new StringBuilder();
             for(Integer amount : leaderboardPoints.get(leaderboardID)){
-                pointString += amount +" ";
+                pointString.append(amount).append(" ");
             }
             System.out.println(leaderboardID.toString()+": "+pointString);
 
@@ -95,29 +96,42 @@ public class PointMockRepository implements PointRepository {
 
     @Override
     public int getMyRank(UUID leaderboardID, int amount) {
-        return 0;
+        /* store list_of_unique_points for given Leaderboard */
+        List<Integer> pointsOnLeaderboard = new ArrayList<>();
+
+        for(Point point : map.values()){
+            /* check if found not on wanted Leaderboard */
+            UUID currentLeaderboardID = point.getLeaderBoard().getId();
+
+            if(!currentLeaderboardID.equals(leaderboardID)){
+                continue;
+            }
+
+            if(!pointsOnLeaderboard.contains(point.getAmount())){
+                pointsOnLeaderboard.add(point.getAmount());
+            }
+        }
+
+        /* return 0 rank if Leaderboard does not exist */
+        if(pointsOnLeaderboard.isEmpty()){
+            return 0;
+        }
+
+        /* return rank */
+        pointsOnLeaderboard.sort(Comparator.reverseOrder());
+        return pointsOnLeaderboard.indexOf(amount)+1;
     }
 
     @Override
     public int countByLeaderboard(Leaderboard leaderboard) {
         UUID leaderboardID = leaderboard.getId();
-
-        long count = 0;/*
-
-        for(Point point : map.values()){
-            if(point.getLeaderBoard().getId() == leaderboardID){
-                ++count;
-            }
-        }*/
-
-        count = map.values().stream().filter(point -> point.getLeaderBoard().getId() == leaderboardID).count();
-
-        return (int) count;
+        return (int) map.values().stream().filter(point -> point.getLeaderBoard().getId().equals(leaderboardID)).count();
     }
 
     @Override
     public List<Point> findPointsByLeaderboardBetween(UUID leaderboardId, int offset, int next) {
-        return null;
+        List<Point> pointsOnLeaderboard = findAllByLeaderboardID(leaderboardId);
+        return pointsOnLeaderboard.subList(offset, offset + next);
     }
 
     @Override
@@ -152,7 +166,7 @@ public class PointMockRepository implements PointRepository {
 
     @Override
     public void delete(Point point) {
-
+        map.remove(point.getId());
     }
 
     @Override
@@ -178,7 +192,7 @@ public class PointMockRepository implements PointRepository {
 
     @Override
     public Optional<Point> findById(UUID uuid) {
-        return Optional.empty();
+        return Optional.ofNullable(map.get(uuid));
     }
 
     @Override

@@ -179,7 +179,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             return new GetPointsByLeaderboardResponse(false, "Invalid leaderboard ID", null);
         }
 
-        List<Point> points = pointRepo.findAllByLeaderboard(request.getLeaderboard());
+        List<Point> points = pointRepo.findAllByLeaderboardID(request.getLeaderboard().getId());
         return new GetPointsByLeaderboardResponse(true, "Leaderboard points returned", points);
     }
 

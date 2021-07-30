@@ -15,7 +15,13 @@ import java.util.UUID;
  */
 @Repository
 public interface PointRepository extends JpaRepository<Point, UUID> {
-    List<Point> findAllByLeaderboard(Leaderboard leaderboard);
+    /**
+     * Returns all points on the given Leaderboard
+     * @param leaderboardID UUID of the Leaderboard
+     * @return The points on the Leaderboard
+     */
+    @Query(value = "SELECT * FROM point WHERE leaderboard_id = ?1", nativeQuery = true)
+    List<Point> findAllByLeaderboardID(UUID leaderboardID);
 
     @Query(value = "SELECT name, amount as points, rank FROM (" +
             "SELECT leaderboards.name, amount, DENSE_RANK() OVER (ORDER BY amount) AS rank, user_id" +
