@@ -56,7 +56,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      */
     public CreateLeaderboardResponse createLeaderboard(CreateLeaderboardRequest request) throws NullLeaderboardRequestParameterException{
         System.out.println("here");
-        
+
         if(request == null){
             return new CreateLeaderboardResponse(false, "The CreateLeaderboardRequest object passed was NULL", null);
         }
@@ -107,7 +107,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
                }else if(event.isEmpty()){
                    message = "No event with the provided eventID exists";
                }else{
-                   Optional<Leaderboard> leaderboard = leaderboardRepo.getLeaderboardByEvent(event.get());
+                   Optional<Leaderboard> leaderboard = Optional.empty();//TODO: get Event's Leaderboard
                    if(leaderboard.isEmpty()){
                        message = "No leaderboard exists for the provided event";
                    }else{

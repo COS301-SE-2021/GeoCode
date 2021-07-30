@@ -18,6 +18,7 @@ import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
 import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
@@ -43,6 +44,11 @@ public class UserServiceImplTest {
 
     private final String hatfieldEaster = "Hatfield Easter Hunt 2021";
     private final String menloParkChristmas = "Christmas 2021 market";
+
+    private final int user1EasterPoints = 5;
+    private final int user2EasterPoints = 5;
+    private final int user1ChristmasPoints = 10;
+    private final int user2ChristmasPoints = 5;
 
     UserServiceImplTest() {
 
@@ -162,10 +168,10 @@ public class UserServiceImplTest {
         leaderboardMockRepo.save(christmasLeaderboard);
 
         /* (2) Assign points to the Users that should have Points */
-        pointMockRepo.save(new Point(5, user1, easterLeaderboard));
-        pointMockRepo.save(new Point(5, user2, easterLeaderboard));
-        pointMockRepo.save(new Point(10, user1, christmasLeaderboard));
-        pointMockRepo.save(new Point(5, user2, christmasLeaderboard));
+        pointMockRepo.save(new Point(user1EasterPoints, user1, easterLeaderboard));
+        pointMockRepo.save(new Point(user2EasterPoints, user2, easterLeaderboard));
+        pointMockRepo.save(new Point(user1ChristmasPoints, user1, christmasLeaderboard));
+        pointMockRepo.save(new Point(user2ChristmasPoints, user2, christmasLeaderboard));
     }
 
     @Test
@@ -527,14 +533,15 @@ public class UserServiceImplTest {
             GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
 
             Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());Assertions.assertTrue(response.getLeaderboards().isEmpty());
+            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
+            Assertions.assertTrue(response.getLeaderboards().isEmpty());
         } catch (NullUserRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
     }
 
     @Test
-    void getMyLeaderboardsTestUserWithPoints(){
+    void getMyLeaderboardsTestUserWithPoints1(){
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
         request.setUserID(userWithPoints1);
 
@@ -543,7 +550,63 @@ public class UserServiceImplTest {
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
-            Assertions.assertFalse(response.getLeaderboards().isEmpty());
+
+            List<MyLeaderboardDetails> leaderboardDetails = response.getLeaderboards();
+
+            /* check the user has points */
+            Assertions.assertFalse(leaderboardDetails.isEmpty());
+
+            /* check that the correct details are returned */
+
+            //user1 ranked 1st for Easter event
+            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
+                    details.getName().equals(hatfieldEaster) &&
+                    details.getPoints() == user1EasterPoints &&
+                    details.getRank() == 1
+            ));
+
+            //user1 ranked 1st for Christmas event
+            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
+                    details.getName().equals(menloParkChristmas) &&
+                    details.getPoints() == user1ChristmasPoints &&
+                    details.getRank() == 1
+            ));
+        } catch (NullUserRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestUserWithPoints2(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(userWithPoints2);
+
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
+
+            List<MyLeaderboardDetails> leaderboardDetails = response.getLeaderboards();
+
+            /* check the user has points */
+            Assertions.assertFalse(leaderboardDetails.isEmpty());
+
+            /* check that the correct details are returned */
+
+            //user2 ranked 1st for Easter event
+            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
+                    details.getName().equals(hatfieldEaster) &&
+                    details.getPoints() == user2EasterPoints &&
+                    details.getRank() == 1
+            ));
+
+            //user1 ranked 2nd for Christmas event
+            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
+                    details.getName().equals(menloParkChristmas) &&
+                            details.getPoints() == user2ChristmasPoints &&
+                            details.getRank() == 2
+            ));
         } catch (NullUserRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }

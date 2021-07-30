@@ -8,12 +8,11 @@ import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
-import tech.geocodeapp.geocode.user.model.User;
 
 import java.util.*;
 
 public class PointMockRepository implements PointRepository {
-    private static HashMap<UUID, Point> map = new HashMap<UUID, Point>();
+    private static final HashMap<UUID, Point> map = new HashMap<>();
 
     @Override
     public List<Point> findAllByLeaderboard(Leaderboard leaderboard) {
@@ -24,17 +23,53 @@ public class PointMockRepository implements PointRepository {
     public List<MyLeaderboardDetails> getMyLeaderboards(UUID userID) {
         List<MyLeaderboardDetails> detailsList = new ArrayList<>();
 
+        /* store Map(leaderboard_ID, list_of_unique_points) */
+        HashMap<UUID, List<Integer>> leaderboardPoints = new HashMap<>();
+
+        for(Point point : map.values()){
+            /* check if found new Leaderboard */
+            UUID leaderboardID = point.getLeaderBoard().getId();
+
+            if(!leaderboardPoints.containsKey(leaderboardID)){
+                /* initialize list for the current Leaderboard */
+                leaderboardPoints.put(leaderboardID, new ArrayList<>(List.of(point.getAmount())));
+                System.out.println(leaderboardID+": first amount -> "+point.getAmount());
+            }else if(!leaderboardPoints.get(leaderboardID).contains(point.getAmount())){
+                /* add only unique point amounts */
+                leaderboardPoints.get(leaderboardID).add(point.getAmount());
+                System.out.println(leaderboardID+": adding -> "+point.getAmount());
+            }
+        }
+
+        System.out.println("Printing the leaderboards and the unique points for the current user");
+        for(UUID leaderboardID : leaderboardPoints.keySet()){
+            leaderboardPoints.get(leaderboardID).sort(Comparator.reverseOrder());
+
+            String pointString = "";
+            for(Integer amount : leaderboardPoints.get(leaderboardID)){
+                pointString += amount +" ";
+            }
+            System.out.println(leaderboardID.toString()+": "+pointString);
+
+
+        }
+
+        System.out.println("done");
+
+        /*  */
         for(Point point : map.values()){
             /* check if Point is not for given User */
             if(!point.getUser().getId().equals(userID)){
                 continue;
             }
 
-            String leaderboardName = point.getLeaderBoard().getName();
+            Leaderboard leaderboard = point.getLeaderBoard();
+            String leaderboardName = leaderboard.getName();
             int amount = point.getAmount();
 
             /* get the rank */
-            int rank = 0;
+            int rank = leaderboardPoints.get(leaderboard.getId()).indexOf(amount)+1;
+            System.out.println(leaderboardName+" ("+leaderboard.getId()+"): rank = "+rank);
 
             /* add the details to the list */
             detailsList.add(new MyLeaderboardDetails() {

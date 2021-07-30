@@ -27,6 +27,7 @@ public class Leaderboard   {
   private String name = null;
 
   public Leaderboard(String name){
+    this.id = UUID.randomUUID();
     this.name = name;
   }
 

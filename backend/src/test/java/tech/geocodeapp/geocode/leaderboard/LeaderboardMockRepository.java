@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class LeaderboardMockRepository implements LeaderboardRepository {
-    private static HashMap<UUID, Leaderboard> map = new HashMap<>();
+    private static final HashMap<UUID, Leaderboard> map = new HashMap<>();
 
     @Override
     public Optional<Leaderboard> findByName(String name) {

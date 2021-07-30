@@ -251,6 +251,8 @@ public class UserServiceImpl implements UserService {
             return new GetMyLeaderboardsResponse(false, invalidUserIdMessage, null);
         }
 
+        System.out.println("valid user");
+
         User currentUser = optionalUser.get();
 
         List<MyLeaderboardDetails> leaderboardDetailsList = pointRepo.getMyLeaderboards(currentUser.getId());
