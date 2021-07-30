@@ -1,10 +1,10 @@
 package tech.geocodeapp.geocode.leaderboard;
 
+import lombok.NonNull;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class LeaderboardMockRepository implements LeaderboardRepository {
-    private static HashMap<UUID, Leaderboard> map = new HashMap<UUID, Leaderboard>();
+    private static HashMap<UUID, Leaderboard> map = new HashMap<>();
 
     @Override
     public Optional<Leaderboard> findByName(String name) {
@@ -28,13 +28,9 @@ public class LeaderboardMockRepository implements LeaderboardRepository {
     }
 
     @Override
-    public Optional<Leaderboard> getLeaderboardByEvent(Event event) {
-        return Optional.empty();
-    }
-
-    @Override
+    @NonNull
     public List<Leaderboard> findAll() {
-        return null;
+        return (List<Leaderboard>) map.values();
     }
 
     @Override
