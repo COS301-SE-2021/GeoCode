@@ -25,6 +25,11 @@ public class PointMockRepository implements PointRepository {
         List<MyLeaderboardDetails> detailsList = new ArrayList<>();
 
         for(Point point : map.values()){
+            /* check if Point is not for given User */
+            if(!point.getUser().getId().equals(userID)){
+                continue;
+            }
+
             String leaderboardName = point.getLeaderBoard().getName();
             int amount = point.getAmount();
 
