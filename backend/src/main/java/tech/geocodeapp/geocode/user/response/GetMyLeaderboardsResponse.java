@@ -46,21 +46,21 @@ public class GetMyLeaderboardsResponse extends Response {
       @NotNull
     @Valid
     public List<MyLeaderboardDetails> getLeaderboards() {
+    if(leaderboards == null){//testing
+      return leaderboards;
+    }
+
+    System.out.println("MyLeaderboardDetails");
+
+    for(MyLeaderboardDetails details : leaderboards){
+      System.out.println(details.getName()+","+details.getPoints()+","+details.getRank());
+    }
+
+    System.out.println("===============");
     return leaderboards;
   }
 
   public void setLeaderboards(List<MyLeaderboardDetails> leaderboards) {
     this.leaderboards = leaderboards;
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
   }
 }

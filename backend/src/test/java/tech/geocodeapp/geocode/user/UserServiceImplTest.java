@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -15,14 +14,12 @@ import java.util.UUID;
 import tech.geocodeapp.geocode.collectable.*;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
-import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.event.request.*;
-import tech.geocodeapp.geocode.event.response.*;
-import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.geocode.model.*;
+import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
+import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
-import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
-import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
+import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
@@ -46,19 +43,12 @@ public class UserServiceImplTest {
     private final String invalidUserIdMessage = "Invalid user id";
 
     private final String hatfieldEaster = "Hatfield Easter Hunt 2021";
-    private final String easterEventDescription = "Easter egg hunt in Hatfield";
-
     private final String menloParkChristmas = "Christmas 2021 market";
-    private final String christmasEventDescription = "Christmas market in Menlo Park";
 
-    @Mock( name = "collectableServiceImpl" )
-    CollectableService collectableService;
-
-    @Mock( name = "leaderboardServiceImpl" )
-    LeaderboardService leaderboardService;
-
-    @Mock( name = "eventService" )
-    EventService eventService;
+    private final int user1EasterPoints = 5;
+    private final int user2EasterPoints = 5;
+    private final int user1ChristmasPoints = 10;
+    private final int user2ChristmasPoints = 5;
 
     UserServiceImplTest() {
 
@@ -70,9 +60,12 @@ public class UserServiceImplTest {
         CollectableMockRepository collectableMockRepo = new CollectableMockRepository();
         CollectableSetMockRepository collectableSetMockRepo = new CollectableSetMockRepository();
 
+        LeaderboardMockRepository leaderboardMockRepo = new LeaderboardMockRepository();
+        PointMockRepository pointMockRepo = new PointMockRepository();
+
         UserMockRepository userMockRepo = new UserMockRepository();
         CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo);
-        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), collectableService, leaderboardService);
+        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), new PointMockRepository(),collectableService, null);
 
         //save the valid trackable CollectableType
         CollectableType trackableCollectableType = new CollectableType();
@@ -109,7 +102,6 @@ public class UserServiceImplTest {
             GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(validUserId);
             GetUserByIdResponse getUserByIdResponse = userService.getUserById(getUserByIdRequest);
             validUser = getUserByIdResponse.getUser();
-            System.out.println("validUser");
         }catch(NullUserRequestParameterException e){
             e.printStackTrace();
             return;
@@ -151,30 +143,35 @@ public class UserServiceImplTest {
             return;
         }
 
-        /* (1) Create Events (which will each have their own Leaderboard) */
-        CreateEventRequest createEasterEventRequest = new CreateEventRequest(hatfieldEaster, easterEventDescription, new GeoPoint(10.0f, 10.0f));
-        CreateEventRequest createChristmasEventRequest = new CreateEventRequest(menloParkChristmas, christmasEventDescription, new GeoPoint(20.0f, 20.0f));
+        /* get the users with points */
+        User user1;
+        User user2;
 
-        CreateEventResponse createEasterEventResponse;
-        CreateEventResponse createChristmasEventResponse;
+        try{
+            GetUserByIdRequest getUser1ByIdRequest = new GetUserByIdRequest(userWithPoints1);
+            GetUserByIdResponse getUser1ByIdResponse = userService.getUserById(getUser1ByIdRequest);
+            user1 = getUser1ByIdResponse.getUser();
 
-        try {
-            createEasterEventResponse = eventService.createEvent(createEasterEventRequest);
-            createChristmasEventResponse = eventService.createEvent(createChristmasEventRequest);
-        } catch (InvalidRequestException e) {
+            GetUserByIdRequest getUser2ByIdRequest = new GetUserByIdRequest(userWithPoints2);
+            GetUserByIdResponse getUser2ByIdResponse = userService.getUserById(getUser2ByIdRequest);
+            user2 = getUser2ByIdResponse.getUser();
+        }catch(NullUserRequestParameterException e){
             e.printStackTrace();
             return;
         }
 
-        /* get the Leaderboards for the Events */
-        /*Leaderboard easterLeaderboard = createEasterEventResponse.getEvent().getLeaderboard();
-        Leaderboard christmasLeaderboard = createChristmasEventResponse.getEvent().getLeaderboard();
+        /* create Leaderboards */
+        Leaderboard easterLeaderboard = new Leaderboard(hatfieldEaster);
+        Leaderboard christmasLeaderboard = new Leaderboard(menloParkChristmas);
 
-        /* (2) Assign points to the Users that should have Points /
-        CreatePointRequest createPoint1Request = new CreatePointRequest(5, userWithPoints1, easterLeaderboard.getId());
-        CreatePointRequest createPoint2Request = new CreatePointRequest(5, userWithPoints2, easterLeaderboard.getId());
-        CreatePointRequest createPoint3Request = new CreatePointRequest(10, userWithPoints1, christmasLeaderboard.getId());
-        CreatePointRequest createPoint4Request = new CreatePointRequest(5, userWithPoints2, christmasLeaderboard.getId());*/
+        leaderboardMockRepo.save(easterLeaderboard);
+        leaderboardMockRepo.save(christmasLeaderboard);
+
+        /* (2) Assign points to the Users that should have Points */
+        pointMockRepo.save(new Point(user1EasterPoints, user1, easterLeaderboard));
+        pointMockRepo.save(new Point(user2EasterPoints, user2, easterLeaderboard));
+        pointMockRepo.save(new Point(user1ChristmasPoints, user1, christmasLeaderboard));
+        pointMockRepo.save(new Point(user2ChristmasPoints, user2, christmasLeaderboard));
     }
 
     @Test
@@ -544,7 +541,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void getMyLeaderboardsTestUserWithPoints(){
+    void getMyLeaderboardsTestUserWithPoints1(){
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
         request.setUserID(userWithPoints1);
 
@@ -553,7 +550,63 @@ public class UserServiceImplTest {
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
-            Assertions.assertFalse(response.getLeaderboards().isEmpty());
+
+            List<MyLeaderboardDetails> leaderboardDetails = response.getLeaderboards();
+
+            /* check the user has points */
+            Assertions.assertFalse(leaderboardDetails.isEmpty());
+
+            /* check that the correct details are returned */
+
+            //user1 ranked 1st for Easter event
+            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
+                    details.getName().equals(hatfieldEaster) &&
+                    details.getPoints() == user1EasterPoints &&
+                    details.getRank() == 1
+            ));
+
+            //user1 ranked 1st for Christmas event
+            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
+                    details.getName().equals(menloParkChristmas) &&
+                    details.getPoints() == user1ChristmasPoints &&
+                    details.getRank() == 1
+            ));
+        } catch (NullUserRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestUserWithPoints2(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(userWithPoints2);
+
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
+
+            List<MyLeaderboardDetails> leaderboardDetails = response.getLeaderboards();
+
+            /* check the user has points */
+            Assertions.assertFalse(leaderboardDetails.isEmpty());
+
+            /* check that the correct details are returned */
+
+            //user2 ranked 1st for Easter event
+            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
+                    details.getName().equals(hatfieldEaster) &&
+                    details.getPoints() == user2EasterPoints &&
+                    details.getRank() == 1
+            ));
+
+            //user1 ranked 2nd for Christmas event
+            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
+                    details.getName().equals(menloParkChristmas) &&
+                            details.getPoints() == user2ChristmasPoints &&
+                            details.getRank() == 2
+            ));
         } catch (NullUserRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
