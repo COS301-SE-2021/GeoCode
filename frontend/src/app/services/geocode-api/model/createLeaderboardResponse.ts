@@ -9,7 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Leaderboard } from './leaderboard';
 
 export interface CreateLeaderboardResponse { 
     success: boolean;
+    message: string;
+    leaderboard: Leaderboard;
 }

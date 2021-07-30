@@ -11,15 +11,11 @@
  */
 import { GeoPoint } from './geoPoint';
 import { Leaderboard } from './leaderboard';
-import { Level } from './level';
 
 export interface Event { 
     id: string;
     name: string;
     description: string;
     location: GeoPoint;
-    levels?: Array<Level>;
-    begin?: string;
-    end?: string;
     leaderboards: Array<Leaderboard>;
 }

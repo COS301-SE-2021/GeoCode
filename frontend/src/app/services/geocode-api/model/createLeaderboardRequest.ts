@@ -12,4 +12,5 @@
 
 export interface CreateLeaderboardRequest { 
     name: string;
+    eventID: string;
 }
