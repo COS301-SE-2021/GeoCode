@@ -14,6 +14,12 @@ import java.util.UUID;
  */
 @Repository
 public interface LeaderboardRepository extends JpaRepository< Leaderboard, UUID> {
+    /**
+     * Returns a leaderboard that corresponds with the provided name
+     * @param name name of the Leaderboard
+     * @return an Optional containing the Leaderboard found or null if none is found
+     */
+    Optional<Leaderboard> findByName(String name);
 
     /**
      * Returns a leaderboard that corresponds with the provided event if one exists

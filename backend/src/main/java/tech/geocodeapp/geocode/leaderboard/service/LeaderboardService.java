@@ -12,7 +12,7 @@ import tech.geocodeapp.geocode.leaderboard.response.*;
 public interface LeaderboardService {
 
     //U5.1 createLeaderboard
-
+    CreateLeaderboardResponse createLeaderboard(CreateLeaderboardRequest request) throws NullLeaderboardRequestParameterException;
 
     //U5.2 getEventLeaderboard
     GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullLeaderboardRequestParameterException;
