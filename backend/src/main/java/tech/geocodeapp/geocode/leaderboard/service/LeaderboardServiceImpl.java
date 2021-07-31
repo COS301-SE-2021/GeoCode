@@ -73,7 +73,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         Leaderboard leaderboard = new Leaderboard(request.getName());
         leaderboardRepo.save(leaderboard);
 
-        return new CreateLeaderboardResponse(true, "The The Leaderboard was successfully created", leaderboard);
+        return new CreateLeaderboardResponse(true, "The Leaderboard was successfully created", leaderboard);
     }
 
     /**

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
@@ -18,12 +19,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class LeaderboardServiceImplTest {
     private LeaderboardService leaderboardService;
 
+    private final String hatfieldEaster = "Hatfield Easter Hunt 2021";
+    private final String menloParkChristmas = "Christmas 2021 market";
+
     @BeforeEach
     void setup() {
         LeaderboardMockRepository leaderboardMockRepo = new LeaderboardMockRepository();
 
         leaderboardService = new LeaderboardServiceImpl(leaderboardMockRepo, new PointMockRepository(), null, null);
 
+        /* create a Leaderboard so that can test for uniqueness of names */
+        Leaderboard leaderboard1 = new Leaderboard(hatfieldEaster);
+        leaderboardMockRepo.save(leaderboard1);
     }
 
     @Test
@@ -45,5 +52,39 @@ public class LeaderboardServiceImplTest {
 
         assertThatThrownBy(() -> leaderboardService.createLeaderboard(request))
                 .isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
+    public void createLeaderboardTestExistingName(){
+        CreateLeaderboardRequest request = new CreateLeaderboardRequest(hatfieldEaster);
+
+        try {
+            CreateLeaderboardResponse response = leaderboardService.createLeaderboard(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("A Leaderboard already exists with that name", response.getMessage());
+            Assertions.assertNull(response.getLeaderboard());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void createLeaderboardTestNewName(){
+        CreateLeaderboardRequest request = new CreateLeaderboardRequest(menloParkChristmas);
+
+        try {
+            CreateLeaderboardResponse response = leaderboardService.createLeaderboard(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The Leaderboard was successfully created", response.getMessage());
+
+            Leaderboard christmasLeaderboard = response.getLeaderboard();
+
+            Assertions.assertNotNull(christmasLeaderboard);
+            Assertions.assertEquals(menloParkChristmas, christmasLeaderboard.getName());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
     }
 }
