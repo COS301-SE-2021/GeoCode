@@ -55,8 +55,6 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @throws NullLeaderboardRequestParameterException - an exception for when a request parameter is NULL
      */
     public CreateLeaderboardResponse createLeaderboard(CreateLeaderboardRequest request) throws NullLeaderboardRequestParameterException{
-        System.out.println("here");
-
         if(request == null){
             return new CreateLeaderboardResponse(false, "The CreateLeaderboardRequest object passed was NULL", null);
         }
@@ -64,8 +62,6 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         if(request.getName() == null){
             throw new NullLeaderboardRequestParameterException();
         }
-
-        System.out.println("passed null checks");
 
         /* Leaderboards must have unique names - check if Leaderboard exists with given name */
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findByName(request.getName());

@@ -34,30 +34,17 @@ public class PointMockRepository implements PointRepository {
             if(!leaderboardPoints.containsKey(leaderboardID)){
                 /* initialize list for the current Leaderboard */
                 leaderboardPoints.put(leaderboardID, new ArrayList<>(List.of(point.getAmount())));
-                System.out.println(leaderboardID+": first amount -> "+point.getAmount());
             }else if(!leaderboardPoints.get(leaderboardID).contains(point.getAmount())){
                 /* add only unique point amounts */
                 leaderboardPoints.get(leaderboardID).add(point.getAmount());
-                System.out.println(leaderboardID+": adding -> "+point.getAmount());
             }
         }
 
-        System.out.println("Printing the leaderboards and the unique points for the current user");
         for(UUID leaderboardID : leaderboardPoints.keySet()){
             leaderboardPoints.get(leaderboardID).sort(Comparator.reverseOrder());
-
-            StringBuilder pointString = new StringBuilder();
-            for(Integer amount : leaderboardPoints.get(leaderboardID)){
-                pointString.append(amount).append(" ");
-            }
-            System.out.println(leaderboardID.toString()+": "+pointString);
-
-
         }
 
-        System.out.println("done");
-
-        /*  */
+        /* get the details for the User */
         for(Point point : map.values()){
             /* check if Point is not for given User */
             if(!point.getUser().getId().equals(userID)){
@@ -70,7 +57,6 @@ public class PointMockRepository implements PointRepository {
 
             /* get the rank */
             int rank = leaderboardPoints.get(leaderboard.getId()).indexOf(amount)+1;
-            System.out.println(leaderboardName+" ("+leaderboard.getId()+"): rank = "+rank);
 
             /* add the details to the list */
             detailsList.add(new MyLeaderboardDetails() {

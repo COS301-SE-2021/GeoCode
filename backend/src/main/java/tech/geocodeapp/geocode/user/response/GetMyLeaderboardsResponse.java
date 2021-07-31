@@ -46,17 +46,6 @@ public class GetMyLeaderboardsResponse extends Response {
       @NotNull
     @Valid
     public List<MyLeaderboardDetails> getLeaderboards() {
-    if(leaderboards == null){//testing
-      return leaderboards;
-    }
-
-    System.out.println("MyLeaderboardDetails");
-
-    for(MyLeaderboardDetails details : leaderboards){
-      System.out.println(details.getName()+","+details.getPoints()+","+details.getRank());
-    }
-
-    System.out.println("===============");
     return leaderboards;
   }
 
