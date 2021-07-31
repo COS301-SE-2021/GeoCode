@@ -9,13 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import tech.geocodeapp.geocode.collectable.model.Collectable;
-import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
-import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @TestMethodOrder( MethodOrderer.OrderAnnotation.class )
@@ -46,7 +43,7 @@ public class UserServiceImplIT {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getCollectable());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -65,7 +62,7 @@ public class UserServiceImplIT {
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The user's Collectable was successfully returned", response.getMessage());
             Assertions.assertNotNull(response.getCollectable());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -84,7 +81,7 @@ public class UserServiceImplIT {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getTrackable());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -106,7 +103,7 @@ public class UserServiceImplIT {
             Collectable trackableObject = response.getTrackable();
             Assertions.assertNotNull(trackableObject);
             Assertions.assertEquals(UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3"), trackableObject.getType().getId());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -125,7 +122,7 @@ public class UserServiceImplIT {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getCollectableTypeIDs());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -147,7 +144,7 @@ public class UserServiceImplIT {
             List<UUID> foundCollectableTypeIDs = response.getCollectableTypeIDs();
             Assertions.assertNotNull(foundCollectableTypeIDs);
             Assertions.assertEquals(3, foundCollectableTypeIDs.size());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -166,7 +163,7 @@ public class UserServiceImplIT {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getGeocodeIDs());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -192,7 +189,7 @@ public class UserServiceImplIT {
             //HashSet will cause order to not necessarily be order added in
             Assertions.assertTrue(foundGeoCodeIDs.contains(firstGeoCodeID));
             Assertions.assertTrue(foundGeoCodeIDs.contains(secondGeoCodeID));
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -211,7 +208,7 @@ public class UserServiceImplIT {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getGeocodeIDs());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -234,7 +231,7 @@ public class UserServiceImplIT {
             Assertions.assertNotNull(ownedGeoCodeIDs);
             Assertions.assertEquals(1, ownedGeoCodeIDs.size());
             Assertions.assertEquals(thirdGeoCodeID, ownedGeoCodeIDs.get(0));
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -253,7 +250,7 @@ public class UserServiceImplIT {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getTrackable());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -279,7 +276,7 @@ public class UserServiceImplIT {
 
             List<String> pastLocations = new ArrayList<>(trackableObject.getPastLocations());
             Assertions.assertEquals(location, pastLocations.get(pastLocations.size()-1));
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -295,7 +292,7 @@ public class UserServiceImplIT {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getLeaderboards());
-        } catch (NullUserRequestParameterException e) {
+        } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
     }
@@ -311,7 +308,7 @@ public class UserServiceImplIT {
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
             Assertions.assertTrue(response.getLeaderboards().isEmpty());
-        } catch (NullUserRequestParameterException e) {
+        } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
     }
@@ -327,7 +324,7 @@ public class UserServiceImplIT {
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
             Assertions.assertFalse(response.getLeaderboards().isEmpty());
-        } catch (NullUserRequestParameterException e) {
+        } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
     }

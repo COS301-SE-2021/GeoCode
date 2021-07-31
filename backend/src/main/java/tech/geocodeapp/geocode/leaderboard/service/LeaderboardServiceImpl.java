@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.service.EventService;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.exception.NullLeaderboardRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.model.EventLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
@@ -16,7 +17,6 @@ import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.request.*;
 import tech.geocodeapp.geocode.leaderboard.response.*;
-import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
 import tech.geocodeapp.geocode.user.response.GetUserByIdResponse;
@@ -240,7 +240,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             }else{
                foundUser = userResponse.getUser();
             }
-        } catch (NullUserRequestParameterException e) {
+        } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
         Point point= new Point(request.getAmount(), foundUser, leaderboard.get());
@@ -320,7 +320,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
                 }else{
                     point.get().setUser(user.getUser());
                 }
-            } catch (NullUserRequestParameterException e) {
+            } catch (NullRequestParameterException e) {
                 e.printStackTrace();
             }
         }

@@ -14,11 +14,11 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest
 import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
-import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.*;
@@ -60,13 +60,13 @@ public class UserServiceImpl implements UserService {
      * @return A GetCurrentCollectableResponse object: (success, message, object)
      */
     @Transactional
-    public GetCurrentCollectableResponse getCurrentCollectable(GetCurrentCollectableRequest request) throws NullUserRequestParameterException{
+    public GetCurrentCollectableResponse getCurrentCollectable(GetCurrentCollectableRequest request) throws NullRequestParameterException{
         if (request == null) {
             return new GetCurrentCollectableResponse(false, "The GetCurrentCollectableRequest object passed was NULL", null);
         }
 
         if(request.getUserID() == null){
-            throw new NullUserRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
@@ -85,13 +85,13 @@ public class UserServiceImpl implements UserService {
      * @return A GetUserTrackableResponse object: (success, message, object)
      */
     @Transactional
-    public GetUserTrackableResponse getUserTrackable(GetUserTrackableRequest request) throws NullUserRequestParameterException{
+    public GetUserTrackableResponse getUserTrackable(GetUserTrackableRequest request) throws NullRequestParameterException{
         if (request == null) {
             return new GetUserTrackableResponse(false, "The GetUserTrackableRequest object passed was NULL", null);
         }
 
         if(request.getUserID() == null){
-            throw new NullUserRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
      * @return A UpdateLocationResponse object: (success, message, object)
      */
     @Transactional
-    public UpdateLocationResponse updateLocation(UpdateLocationRequest request) throws NullUserRequestParameterException{
+    public UpdateLocationResponse updateLocation(UpdateLocationRequest request) throws NullRequestParameterException {
         if (request == null) {
             return new UpdateLocationResponse(false, "The UpdateLocationRequest object passed was NULL", null);
         }
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
 
             try {
                 if(field.get(request) == null) {
-                    throw new NullUserRequestParameterException();
+                    throw new NullRequestParameterException();
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -147,16 +147,16 @@ public class UserServiceImpl implements UserService {
      * Gets the IDs of the CollectableTypes that the User has found so far
      * @param request The GetFoundCollectableTypesRequest object
      * @return A GetCollectableTypesResponse object: (success, message, object)
-     * @throws NullUserRequestParameterException Exception for 1 or more NULL parameters when making a User request
+     * @throws NullRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
     @Transactional
-    public GetFoundCollectableTypesResponse getFoundCollectableTypes(GetFoundCollectableTypesRequest request) throws NullUserRequestParameterException{
+    public GetFoundCollectableTypesResponse getFoundCollectableTypes(GetFoundCollectableTypesRequest request) throws NullRequestParameterException{
         if (request == null) {
             return new GetFoundCollectableTypesResponse(false, "The GetFoundCollectableTypesRequest object passed was NULL", null);
         }
 
         if(request.getUserID() == null){
-            throw new NullUserRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
@@ -179,16 +179,16 @@ public class UserServiceImpl implements UserService {
      * Gets the IDs of the GeoCodes that the User has found so far
      * @param request The GetFoundGeoCodesRequest object
      * @return A GetFoundGeoCodesResponse object: (success, message, object)
-     * @throws NullUserRequestParameterException Exception for 1 or more NULL parameters when making a User request
+     * @throws NullRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
     @Transactional
-    public GetFoundGeoCodesResponse getFoundGeoCodes(GetFoundGeoCodesRequest request) throws NullUserRequestParameterException {
+    public GetFoundGeoCodesResponse getFoundGeoCodes(GetFoundGeoCodesRequest request) throws NullRequestParameterException {
         if (request == null) {
             return new GetFoundGeoCodesResponse(false, "The GetFoundGeoCodesRequest object passed was NULL", null);
         }
 
         if(request.getUserID() == null){
-            throw new NullUserRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
@@ -211,16 +211,16 @@ public class UserServiceImpl implements UserService {
      * Gets the IDs of the GeoCodes that the User owns
      * @param request The GetOwnedGeoCodesRequest object
      * @return A GetOwnedGeoCodesResponse object: (success, message, object)
-     * @throws NullUserRequestParameterException Exception for 1 or more NULL parameters when making a User request
+     * @throws NullRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
     @Transactional
-    public GetOwnedGeoCodesResponse getOwnedGeoCodes(GetOwnedGeoCodesRequest request) throws NullUserRequestParameterException {
+    public GetOwnedGeoCodesResponse getOwnedGeoCodes(GetOwnedGeoCodesRequest request) throws NullRequestParameterException {
         if (request == null) {
             return new GetOwnedGeoCodesResponse(false, "The GetOwnedGeoCodesRequest object passed was NULL", null);
         }
 
         if(request.getUserID() == null){
-            throw new NullUserRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
@@ -243,16 +243,16 @@ public class UserServiceImpl implements UserService {
      * Gets the Leaderboard details for all Leaderboards that a given User is on
      * @param request The GetMyLeaderboardsRequest object
      * @return A GetMyLeaderboardsResponse object: (success, message, object)
-     * @throws NullUserRequestParameterException Exception for 1 or more NULL parameters when making a User request
+     * @throws NullRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
     @Transactional
-    public GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullUserRequestParameterException{
+    public GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullRequestParameterException{
         if (request == null) {
             return new GetMyLeaderboardsResponse(false, "The GetMyLeaderboardsRequest object passed was NULL", null);
         }
 
         if(request.getUserID() == null){
-            throw new NullUserRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         /* check if user ID is invalid */
@@ -274,13 +274,13 @@ public class UserServiceImpl implements UserService {
      * @return The User if they exist, else NULL contained in a GetUserByIdResponse object
      */
     @Transactional
-    public GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullUserRequestParameterException {
+    public GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullRequestParameterException {
         if(request == null){
             return new GetUserByIdResponse(false, "The GetUserByIdRequest object passed was NULL", null);
         }
 
         if(request.getUserID() == null){
-            throw new NullUserRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         UUID id = request.getUserID();
@@ -303,7 +303,7 @@ public class UserServiceImpl implements UserService {
 
         try{
             return getUserById(request).getUser();
-        }catch(NullUserRequestParameterException e){
+        }catch(NullRequestParameterException e){
             e.printStackTrace();
             return null;
         }
@@ -314,13 +314,13 @@ public class UserServiceImpl implements UserService {
      * @param request The id for the User
      */
     @Transactional
-    public RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullUserRequestParameterException{
+    public RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException{
         if(request == null){
             return new RegisterNewUserResponse(false, "The RegisterNewUserRequest object passed was NULL");
         }
 
         if(request.getUserID() == null || request.getUsername() == null){
-            throw new NullUserRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         User newUser = new User();
@@ -348,13 +348,13 @@ public class UserServiceImpl implements UserService {
      * @return The original currentCollectable
      */
     @Transactional
-    public SwapCollectableResponse swapCollectable( SwapCollectableRequest request ) throws NullUserRequestParameterException {
+    public SwapCollectableResponse swapCollectable( SwapCollectableRequest request ) throws NullRequestParameterException {
         if(request == null){
             return new SwapCollectableResponse(false, "The SwapCollectableRequest object passed was NULL", null);
         }
 
         if(request.getCollectableID() == null){
-            throw new NullUserRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         //currentCollectable to swap out

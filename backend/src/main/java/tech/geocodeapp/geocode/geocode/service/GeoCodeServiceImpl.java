@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 
 import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
@@ -16,7 +17,6 @@ import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.*;
-import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.user.service.*;
 
@@ -493,7 +493,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         try {
             userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
-        } catch (NullUserRequestParameterException e) {
+        } catch (NullRequestParameterException e) {
             e.printStackTrace();
             return new SwapCollectablesResponse(false);
         }
