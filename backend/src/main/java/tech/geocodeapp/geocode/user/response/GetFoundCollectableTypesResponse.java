@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
-import tech.geocodeapp.geocode.general.Response;
+import tech.geocodeapp.geocode.general.response.Response;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;

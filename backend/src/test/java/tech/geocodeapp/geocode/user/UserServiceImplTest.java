@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -487,6 +488,73 @@ public class UserServiceImplTest {
     }
 
     @Test
+    public void updateLocationTestNullRequest(){
+        try{
+            UpdateLocationResponse response = userService.updateLocation(null);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The UpdateLocationRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getTrackable());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void updateLocationTestNullUser(){
+        UpdateLocationRequest request = new UpdateLocationRequest();
+        request.setUserID(validUserId);
+
+        assertThatThrownBy(() -> userService.updateLocation(request))
+                .isInstanceOf(NullUserRequestParameterException.class);
+    }
+
+    @Test
+    public void updateLocationTestInvalidUser() {
+        try{
+            /*
+            Create a request object
+            and assign values to it
+            */
+            UpdateLocationRequest request = new UpdateLocationRequest();
+            request.setUserID(invalidUserId);
+
+            UpdateLocationResponse response = userService.updateLocation(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertNull(response.getTrackable());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void updateLocationTestValidUser() {
+        try{
+            /*
+             Create a request object
+             and assign values to it
+           */
+            UpdateLocationRequest request = new UpdateLocationRequest();
+            request.setUserID(validUserId);
+            String location = "x:100,y:40";
+            request.setLocation(location);
+
+            UpdateLocationResponse response = userService.updateLocation(request);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The trackable object's location was successfully updated", response.getMessage());
+
+            Collectable trackableObject = response.getTrackable();
+            Assertions.assertNotNull(trackableObject);
+
+            List<String> pastLocations = new ArrayList<>(trackableObject.getPastLocations());
+            Assertions.assertEquals(location, pastLocations.get(pastLocations.size()-1));
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
     void getMyLeaderboardsTestNullRequest(){
         try {
             GetMyLeaderboardsResponse response = userService.getMyLeaderboards(null);
@@ -500,7 +568,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void getMyLeaderboardsTestNullUserID(){
+    void getMyLeaderboardsTestNullUser(){
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
         request.setUserID(null);
 
@@ -509,7 +577,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void getMyLeaderboardsTestInvalidUserID(){
+    void getMyLeaderboardsTestInvalidUser(){
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
         request.setUserID(invalidUserId);
 

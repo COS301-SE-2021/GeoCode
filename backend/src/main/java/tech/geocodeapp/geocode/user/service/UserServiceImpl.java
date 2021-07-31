@@ -1,10 +1,12 @@
 package tech.geocodeapp.geocode.user.service;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
@@ -29,16 +31,17 @@ import javax.validation.constraints.NotNull;
  * This class implements the UserService interface
  */
 @Service
+@Validated
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final CollectableRepository collectableRepo;
     private final PointRepository pointRepo;
 
     @NotNull(message = "Collectable Service Implementation may not be null.")
-    private CollectableService collectableService;
+    private final CollectableService collectableService;
 
     @NotNull(message = "Leaderboard Service Implementation may not be null.")
-    private LeaderboardService leaderboardService;
+    private final LeaderboardService leaderboardService;
 
     private final String invalidUserIdMessage = "Invalid user id";
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
@@ -112,8 +115,16 @@ public class UserServiceImpl implements UserService {
             return new UpdateLocationResponse(false, "The UpdateLocationRequest object passed was NULL", null);
         }
 
-        if(request.getUserID() == null){
-            throw new NullUserRequestParameterException();
+        for(Field field : request.getClass().getDeclaredFields()){
+            field.setAccessible(true);
+
+            try {
+                if(field.get(request) == null) {
+                    throw new NullUserRequestParameterException();
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
@@ -154,7 +165,7 @@ public class UserServiceImpl implements UserService {
             return new GetFoundCollectableTypesResponse(false, invalidUserIdMessage, null);
         }
 
-        //get IDs for all of the found CollectableTypes for the current User
+        //get IDs for all the found CollectableTypes for the current User
         User currentUser = optionalUser.get();
         Set<CollectableType> foundCollectableTypes = currentUser.getFoundCollectableTypes();
 
@@ -186,7 +197,7 @@ public class UserServiceImpl implements UserService {
             return new GetFoundGeoCodesResponse(false, invalidUserIdMessage, null);
         }
 
-        //get IDs for all of the found GeoCodes for the current User
+        //get IDs for all the found GeoCodes for the current User
         User currentUser = optionalUser.get();
         Set<GeoCode> foundGeoCodes = currentUser.getFoundGeocodes();
 
@@ -218,7 +229,7 @@ public class UserServiceImpl implements UserService {
             return new GetOwnedGeoCodesResponse(false, invalidUserIdMessage, null);
         }
 
-        //get IDs for all of the GeoCodes owned by the current User
+        //get IDs for all the GeoCodes owned by the current User
         User currentUser = optionalUser.get();
         Set<GeoCode> ownedGeocodes = currentUser.getOwnedGeocodes();
 

@@ -5,7 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import tech.geocodeapp.geocode.general.Response;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 
 import javax.validation.Valid;

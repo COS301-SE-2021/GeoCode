@@ -1,6 +1,6 @@
 package tech.geocodeapp.geocode.user.response;
 
-import tech.geocodeapp.geocode.general.Response;
+import tech.geocodeapp.geocode.general.response.Response;
 
 /**
  * RegisterNewUserResponse

@@ -33,18 +33,6 @@ public class UserServiceImplIT {
     private final UUID thirdGeoCodeID = UUID.fromString("92e3e6d5-5457-48f7-adb1-7c2f67ee836b");
 
     @Test
-    public void getCurrentCollectableTestNullRequest() {
-        try{
-            GetCurrentCollectableResponse response = userService.getCurrentCollectable(null);
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("The GetCurrentCollectableRequest object passed was NULL", response.getMessage());
-            Assertions.assertNull(response.getCollectable());
-        }catch (NullUserRequestParameterException e){
-            Assertions.fail(e.getMessage());
-        }
-    }//
-
-    @Test
     public void getCurrentCollectableTestInvalidUser() {
         try{
             /*
@@ -61,7 +49,7 @@ public class UserServiceImplIT {
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
-    }//
+    }
 
     @Test
     public void getCurrentCollectableTestValidUser() {
@@ -77,18 +65,6 @@ public class UserServiceImplIT {
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The user's Collectable was successfully returned", response.getMessage());
             Assertions.assertNotNull(response.getCollectable());
-        }catch (NullUserRequestParameterException e){
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    public void getUserTrackableTestNullRequest() {
-        try{
-            GetUserTrackableResponse response = userService.getUserTrackable(null);
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("The GetUserTrackableRequest object passed was NULL", response.getMessage());
-            Assertions.assertNull(response.getTrackable());
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
@@ -136,12 +112,128 @@ public class UserServiceImplIT {
     }
 
     @Test
-    public void updateLocationTestNullRequest() {
+    void getFoundCollectableTypesTestInvalidUser() {
         try{
-            UpdateLocationResponse response = userService.updateLocation(null);
+            /*
+            Create a request object
+            and assign values to it
+            */
+            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
+            request.setUserID(invalidUserId);
+
+            GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
             Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("The UpdateLocationRequest object passed was NULL", response.getMessage());
-            Assertions.assertNull(response.getTrackable());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertNull(response.getCollectableTypeIDs());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getFoundCollectableTypesTestValidUser() {
+        try{
+            /*
+             Create a request object
+             and assign values to it
+           */
+            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
+            request.setUserID(validUserId);
+
+            GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The IDs of the User's found CollectableTypes was successfully returned", response.getMessage());
+
+            List<UUID> foundCollectableTypeIDs = response.getCollectableTypeIDs();
+            Assertions.assertNotNull(foundCollectableTypeIDs);
+            Assertions.assertEquals(3, foundCollectableTypeIDs.size());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getFoundGeoCodesTestInvalidUser() {
+        try{
+            /*
+            Create a request object
+            and assign values to it
+            */
+            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
+            request.setUserID(invalidUserId);
+
+            GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertNull(response.getGeocodeIDs());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getFoundGeoCodesTestValidUser() {
+        try{
+            /*
+             Create a request object
+             and assign values to it
+           */
+            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
+            request.setUserID(validUserId);
+
+            GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The IDs of the User's found GeoCodes was successfully returned", response.getMessage());
+
+            List<UUID> foundGeoCodeIDs = response.getGeocodeIDs();
+            Assertions.assertNotNull(foundGeoCodeIDs);
+            Assertions.assertEquals(2, foundGeoCodeIDs.size());
+
+            //HashSet will cause order to not necessarily be order added in
+            Assertions.assertTrue(foundGeoCodeIDs.contains(firstGeoCodeID));
+            Assertions.assertTrue(foundGeoCodeIDs.contains(secondGeoCodeID));
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getOwnedGeoCodesTestInvalidUser() {
+        try{
+            /*
+            Create a request object
+            and assign values to it
+            */
+            GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
+            request.setUserID(invalidUserId);
+
+            GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertNull(response.getGeocodeIDs());
+        }catch (NullUserRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getOwnedGeoCodesTestValidUser() {
+        try{
+            /*
+             Create a request object
+             and assign values to it
+           */
+            GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
+            request.setUserID(validUserId);
+
+            GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(request);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The IDs of the User's owned GeoCodes was successfully returned", response.getMessage());
+
+            List<UUID> ownedGeoCodeIDs = response.getGeocodeIDs();
+            Assertions.assertNotNull(ownedGeoCodeIDs);
+            Assertions.assertEquals(1, ownedGeoCodeIDs.size());
+            Assertions.assertEquals(thirdGeoCodeID, ownedGeoCodeIDs.get(0));
         }catch (NullUserRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
@@ -193,220 +285,7 @@ public class UserServiceImplIT {
     }
 
     @Test
-    public void getFoundCollectableTypesTestNullRequest(){
-        try{
-            GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(null);
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("The GetFoundCollectableTypesRequest object passed was NULL", response.getMessage());
-            Assertions.assertNull(response.getCollectableTypeIDs());
-        }catch (NullUserRequestParameterException e){
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void getFoundCollectableTypesTestNullId(){
-        GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
-        request.setUserID(null);
-
-        assertThatThrownBy(() -> userService.getFoundCollectableTypes(request))
-                .isInstanceOf(NullUserRequestParameterException.class);
-    }
-
-    @Test
-    void getFoundCollectableTypesTestInvalidUser() {
-        try{
-            /*
-            Create a request object
-            and assign values to it
-            */
-            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
-            request.setUserID(invalidUserId);
-
-            GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
-            Assertions.assertNull(response.getCollectableTypeIDs());
-        }catch (NullUserRequestParameterException e){
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void getFoundCollectableTypesTestValidUser() {
-        try{
-            /*
-             Create a request object
-             and assign values to it
-           */
-            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
-            request.setUserID(validUserId);
-
-            GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
-            Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("The IDs of the User's found CollectableTypes was successfully returned", response.getMessage());
-
-            List<UUID> foundCollectableTypeIDs = response.getCollectableTypeIDs();
-            Assertions.assertNotNull(foundCollectableTypeIDs);
-            Assertions.assertEquals(3, foundCollectableTypeIDs.size());
-        }catch (NullUserRequestParameterException e){
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void getFoundGeoCodesTestNullRequest() {
-        try{
-            GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(null);
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("The GetFoundGeoCodesRequest object passed was NULL", response.getMessage());
-            Assertions.assertNull(response.getGeocodeIDs());
-        }catch (NullUserRequestParameterException e){
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void getFoundGeoCodesTestNullId(){
-        GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
-        request.setUserID(null);
-
-        assertThatThrownBy(() -> userService.getFoundGeoCodes(request))
-                .isInstanceOf(NullUserRequestParameterException.class);
-    }
-
-    @Test
-    void getFoundGeoCodesTestInvalidUser() {
-        try{
-            /*
-            Create a request object
-            and assign values to it
-            */
-            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
-            request.setUserID(invalidUserId);
-
-            GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
-            Assertions.assertNull(response.getGeocodeIDs());
-        }catch (NullUserRequestParameterException e){
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void getFoundGeoCodesTestValidUser() {
-        try{
-            /*
-             Create a request object
-             and assign values to it
-           */
-            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
-            request.setUserID(validUserId);
-
-            GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
-            Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("The IDs of the User's found GeoCodes was successfully returned", response.getMessage());
-
-            List<UUID> foundGeoCodeIDs = response.getGeocodeIDs();
-            Assertions.assertNotNull(foundGeoCodeIDs);
-            Assertions.assertEquals(2, foundGeoCodeIDs.size());
-
-            //HashSet will cause order to not necessarily be order added in
-            Assertions.assertTrue(foundGeoCodeIDs.contains(firstGeoCodeID));
-            Assertions.assertTrue(foundGeoCodeIDs.contains(secondGeoCodeID));
-        }catch (NullUserRequestParameterException e){
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void getOwnedGeoCodesTestNullRequest() {
-        try{
-            GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(null);
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("The GetOwnedGeoCodesRequest object passed was NULL", response.getMessage());
-            Assertions.assertNull(response.getGeocodeIDs());
-        }catch (NullUserRequestParameterException e){
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void getOwnedGeoCodesTestNullId(){
-        GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
-        request.setUserID(null);
-
-        assertThatThrownBy(() -> userService.getOwnedGeoCodes(request))
-                .isInstanceOf(NullUserRequestParameterException.class);
-    }
-
-    @Test
-    void getOwnedGeoCodesTestInvalidUser() {
-        try{
-            /*
-            Create a request object
-            and assign values to it
-            */
-            GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
-            request.setUserID(invalidUserId);
-
-            GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(request);
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
-            Assertions.assertNull(response.getGeocodeIDs());
-        }catch (NullUserRequestParameterException e){
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void getOwnedGeoCodesTestValidUser() {
-        try{
-            /*
-             Create a request object
-             and assign values to it
-           */
-            GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
-            request.setUserID(validUserId);
-
-            GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(request);
-            Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("The IDs of the User's owned GeoCodes was successfully returned", response.getMessage());
-
-            List<UUID> ownedGeoCodeIDs = response.getGeocodeIDs();
-            Assertions.assertNotNull(ownedGeoCodeIDs);
-            Assertions.assertEquals(1, ownedGeoCodeIDs.size());
-            Assertions.assertEquals(thirdGeoCodeID, ownedGeoCodeIDs.get(0));
-        }catch (NullUserRequestParameterException e){
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void getMyLeaderboardsTestNullRequest(){
-        try {
-            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(null);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("The GetMyLeaderboardsRequest object passed was NULL", response.getMessage());
-            Assertions.assertNull(response.getLeaderboards());
-        } catch (NullUserRequestParameterException e) {
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void getMyLeaderboardsTestNullUserID(){
-        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
-        request.setUserID(null);
-
-        assertThatThrownBy(() -> userService.getMyLeaderboards(request))
-                .isInstanceOf(NullUserRequestParameterException.class);
-    }
-
-    @Test
-    void getMyLeaderboardsTestInvalidUserID(){
+    void getMyLeaderboardsTestInvalidUser(){
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
         request.setUserID(invalidUserId);
 

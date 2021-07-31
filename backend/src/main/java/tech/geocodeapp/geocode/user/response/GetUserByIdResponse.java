@@ -3,7 +3,7 @@ package tech.geocodeapp.geocode.user.response;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import tech.geocodeapp.geocode.general.Response;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.user.model.User;
 
 import javax.validation.Valid;
