@@ -7,11 +7,11 @@ import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import java.util.Objects;
 
 /**
- * GetGeoCodeByLocationRequest used to specify the attributes needed to find a specific GeoCode
+ * GetCollectablesInGeoCodesByLocationRequest used to specify the attributes needed to find a specific GeoCode
  * by its longitude and latitude
  */
 @Validated
-public class GetGeoCodeByLocationRequest {
+public class GetCollectablesInGeoCodesByLocationRequest {
 
     /**
      * The location of the GeoCode in the real world
@@ -22,7 +22,7 @@ public class GetGeoCodeByLocationRequest {
     /**
      * Default constructor
      */
-    public GetGeoCodeByLocationRequest() {
+    public GetCollectablesInGeoCodesByLocationRequest() {
 
     }
 
@@ -31,7 +31,7 @@ public class GetGeoCodeByLocationRequest {
      *
      * @param location The longitude and latitude of the GeoCode in the real world
      */
-    public GetGeoCodeByLocationRequest( GeoPoint location ) {
+    public GetCollectablesInGeoCodesByLocationRequest( GeoPoint location ) {
 
         this.location = location;
     }
@@ -43,7 +43,7 @@ public class GetGeoCodeByLocationRequest {
      *
      * @return the request after the location has been changed
      */
-    public GetGeoCodeByLocationRequest location( GeoPoint location ) {
+    public GetCollectablesInGeoCodesByLocationRequest location( GeoPoint location ) {
 
         this.location = location;
         return this;
@@ -88,7 +88,7 @@ public class GetGeoCodeByLocationRequest {
             return false;
         }
 
-        return Objects.equals( this.location, ( ( GetGeoCodeByLocationRequest ) obj ).location );
+        return Objects.equals( this.location, ( ( GetCollectablesInGeoCodesByLocationRequest ) obj ).location );
     }
 
     /**
@@ -110,7 +110,7 @@ public class GetGeoCodeByLocationRequest {
     @Override
     public String toString() {
 
-        return "class GetGeoCodeByLocationRequest {\n" +
+        return "class GetCollectablesInGeoCodesByLocationRequest {\n" +
                 "    longitude: " + toIndentedString( location ) + "\n" +
                 "}";
     }

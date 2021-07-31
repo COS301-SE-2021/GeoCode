@@ -2,71 +2,70 @@ package tech.geocodeapp.geocode.geocode.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
-import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 import java.util.Objects;
 
 /**
- * GetGeoCodeByLocationRequest used to specify the attributes needed to find a specific GeoCode
- * by its longitude and latitude
+ * GetCollectablesInGeoCodeByQRCodeRequest used to specify the attributes needed to locate a specific GeoCode
+ * in the database
  */
 @Validated
-public class GetGeoCodeByLocationRequest {
+public class GetCollectablesInGeoCodeByQRCodeRequest {
 
     /**
-     * The location of the GeoCode in the real world
+     * The QRCode of a specific GeoCode used to locate it
      */
-    @JsonProperty( "location" )
-    private GeoPoint location = null;
+    @JsonProperty( "QRCode" )
+    private String qrCode = null;
 
     /**
      * Default constructor
      */
-    public GetGeoCodeByLocationRequest() {
+    public GetCollectablesInGeoCodeByQRCodeRequest() {
 
     }
 
     /**
      * Overloaded Constructor
      *
-     * @param location The longitude and latitude of the GeoCode in the real world
+     * @param qrCode The QRCode of a specific GeoCode used to locate it
      */
-    public GetGeoCodeByLocationRequest( GeoPoint location ) {
+    public GetCollectablesInGeoCodeByQRCodeRequest( String qrCode ) {
 
-        this.location = location;
+        this.qrCode = qrCode;
     }
 
     /**
-     * Sets the location attribute to the specified value
+     * Sets the qrCode attribute to the specified value
      *
-     * @param location the value the attribute should be set to
+     * @param qrCode the value the attribute should be set to
      *
-     * @return the request after the location has been changed
+     * @return the request after the qrCode has been changed
      */
-    public GetGeoCodeByLocationRequest location( GeoPoint location ) {
+    public GetCollectablesInGeoCodeByQRCodeRequest qrCode( String qrCode ) {
 
-        this.location = location;
+        this.qrCode = qrCode;
         return this;
     }
 
     /**
-     * Gets the saved location attribute
+     * Gets the saved qrCode attribute
      *
-     * @return the stored location attribute
+     * @return the stored qrCode attribute
      */
-    public GeoPoint getLocation() {
+    public String getQrCode() {
 
-        return location;
+        return qrCode;
     }
 
     /**
-     * Sets the location attribute to the specified value
+     * Sets the qrCode attribute to the specified value
      *
-     * @param location the value the location should be set to
+     * @param qrCode the value the attribute should be set to
      */
-    public void setLocation( GeoPoint location ) {
+    public void setQrCode( String qrCode ) {
 
-        this.location = location;
+        this.qrCode = qrCode;
     }
 
     /**
@@ -88,7 +87,7 @@ public class GetGeoCodeByLocationRequest {
             return false;
         }
 
-        return Objects.equals( this.location, ( ( GetGeoCodeByLocationRequest ) obj ).location );
+        return Objects.equals( this.qrCode, ( ( GetCollectablesInGeoCodeByQRCodeRequest ) obj ).qrCode );
     }
 
     /**
@@ -99,7 +98,7 @@ public class GetGeoCodeByLocationRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( location );
+        return Objects.hash( qrCode );
     }
 
     /**
@@ -110,8 +109,8 @@ public class GetGeoCodeByLocationRequest {
     @Override
     public String toString() {
 
-        return "class GetGeoCodeByLocationRequest {\n" +
-                "    longitude: " + toIndentedString( location ) + "\n" +
+        return "class GetCollectablesInGeoCodeByQRCodeRequest {\n" +
+                "    qrCode: " + toIndentedString( qrCode ) + "\n" +
                 "}";
     }
 

@@ -1,14 +1,20 @@
 package tech.geocodeapp.geocode.geocode;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
+
 import org.mockito.Mock;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import org.springframework.security.test.context.support.WithMockUser;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.service.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
@@ -60,6 +66,7 @@ class GeoCodeServiceImplTest {
      */
     @Mock( name = "leaderboardServiceImpl" )
     LeaderboardService leaderboardService;
+
     /**
      * A mock service for the User subsystem
      *
@@ -113,6 +120,18 @@ class GeoCodeServiceImplTest {
         // var userMockRepo = new UserMockRepository();
         // userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), collectableService);
 
+
+       /*
+        collectableService = Mockito.mock( CollectableService.class );
+
+
+        List< UUID > collectables = new ArrayList<>();
+
+        collectables.add( UUID.randomUUID() );
+        collectables.add( UUID.randomUUID() );
+        collectables.add( UUID.randomUUID() );
+        when(collectableService.getCollectables()).thenReturn( new GetCollectablesResponse( collectables ) );
+        */
 
         try {
 
@@ -170,8 +189,7 @@ class GeoCodeServiceImplTest {
         request.setDescription( null );
         request.setDifficulty( Difficulty.INSANE );
         request.setHints( null );
-        request.setLatitude( "Jhb" );
-        request.setLongitude( "Jhb" );
+        request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.createGeoCode( request ) )
@@ -205,8 +223,7 @@ class GeoCodeServiceImplTest {
                 hints.add( "secret " );
                 hints.add( "hint." );
             request.setHints( hints );
-            request.setLatitude( "Jhb" );
-            request.setLongitude( "Jhb" );
+            request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
 
             CreateGeoCodeResponse response = geoCodeService.createGeoCode( request );
 
@@ -249,8 +266,7 @@ class GeoCodeServiceImplTest {
                 hints.add( "secret " );
                 hints.add( "hint." );
             request.setHints( hints );
-            request.setLatitude( "Jhb" );
-            request.setLongitude( "Jhb" );
+            request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
 
             /* create the GeoCode in the repository */
             geoCodeService.createGeoCode( request );
@@ -559,8 +575,7 @@ class GeoCodeServiceImplTest {
          * and assign values to it
          */
         GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
-        request.setLatitude( null );
-        request.setLongitude( null );
+        request.setLocation( null );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( request ) )
@@ -585,8 +600,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the ID of the GeoCode we want */
             GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
-            request.setLatitude( temp.get( 0 ).getLatitude() );
-            request.setLongitude( temp.get( 0 ).getLongitude() );
+            request.setLocation( temp.get( 0 ).getLocation() );
 
 
             /* Get the response by calling the updateAvailability use case */
@@ -771,9 +785,7 @@ class GeoCodeServiceImplTest {
                         hints.add( "Hint two for: " + x );
                         hints.add( "Hint three for: " + x );
                     request.setHints( hints );
-                    request.setLatitude( "Lat " + x );
-                    request.setLongitude( "Long " + x );
-
+                    request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
 
                     /* Add the created GeoCode to the list */
                     geoCodeService.createGeoCode( request );
@@ -792,8 +804,7 @@ class GeoCodeServiceImplTest {
                     hints.add( "Hint two for: " + x );
                     hints.add( "Hint three for: " + x );
                     request.setHints( hints );
-                    request.setLatitude( "Lat " + x );
-                    request.setLongitude( "Long " + x );
+                    request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
 
                     /* Add the created GeoCode to the list */
                     geoCodeService.createGeoCode( request );
@@ -812,8 +823,7 @@ class GeoCodeServiceImplTest {
                     hints.add( "Hint two for: " + x );
                     hints.add( "Hint three for: " + x );
                 request.setHints( hints );
-                request.setLatitude( "Lat " + x );
-                request.setLongitude( "Long " + x );
+                request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
 
                 /* Add the created GeoCode to the list */
                 geoCodeService.createGeoCode( request );
