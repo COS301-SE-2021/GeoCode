@@ -8,7 +8,6 @@ import tech.geocodeapp.geocode.leaderboard.response.*;
 /**
  * This interface is for the GeoCode subsystem
  */
-@Service("LeaderboardService")
 public interface LeaderboardService {
 
     //U5.1 createLeaderboard

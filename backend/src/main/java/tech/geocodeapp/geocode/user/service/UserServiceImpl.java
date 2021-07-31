@@ -1,8 +1,8 @@
 package tech.geocodeapp.geocode.user.service;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +13,7 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest
 import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
+import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
@@ -35,6 +36,8 @@ public class UserServiceImpl implements UserService {
     private final CollectableRepository collectableRepo;
     private final PointRepository pointRepo;
 
+    private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
+
     @NotNull(message = "Collectable Service Implementation may not be null.")
     private final CollectableService collectableService;
 
@@ -44,7 +47,7 @@ public class UserServiceImpl implements UserService {
     private final String invalidUserIdMessage = "Invalid user id";
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, LeaderboardService leaderboardService) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, @Qualifier("LeaderboardService") LeaderboardService leaderboardService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
         this.pointRepo = pointRepo;
@@ -63,9 +66,7 @@ public class UserServiceImpl implements UserService {
             return new GetCurrentCollectableResponse(false, "The GetCurrentCollectableRequest object passed was NULL", null);
         }
 
-        if(request.getUserID() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
@@ -88,9 +89,7 @@ public class UserServiceImpl implements UserService {
             return new GetUserTrackableResponse(false, "The GetUserTrackableRequest object passed was NULL", null);
         }
 
-        if(request.getUserID() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
@@ -113,17 +112,7 @@ public class UserServiceImpl implements UserService {
             return new UpdateLocationResponse(false, "The UpdateLocationRequest object passed was NULL", null);
         }
 
-        for(Field field : request.getClass().getDeclaredFields()){
-            field.setAccessible(true);
-
-            try {
-                if(field.get(request) == null) {
-                    throw new NullRequestParameterException();
-                }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
@@ -153,9 +142,7 @@ public class UserServiceImpl implements UserService {
             return new GetFoundCollectableTypesResponse(false, "The GetFoundCollectableTypesRequest object passed was NULL", null);
         }
 
-        if(request.getUserID() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
@@ -185,9 +172,7 @@ public class UserServiceImpl implements UserService {
             return new GetFoundGeoCodesResponse(false, "The GetFoundGeoCodesRequest object passed was NULL", null);
         }
 
-        if(request.getUserID() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
@@ -217,9 +202,7 @@ public class UserServiceImpl implements UserService {
             return new GetOwnedGeoCodesResponse(false, "The GetOwnedGeoCodesRequest object passed was NULL", null);
         }
 
-        if(request.getUserID() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
@@ -249,9 +232,7 @@ public class UserServiceImpl implements UserService {
             return new GetMyLeaderboardsResponse(false, "The GetMyLeaderboardsRequest object passed was NULL", null);
         }
 
-        if(request.getUserID() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         /* check if user ID is invalid */
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
@@ -277,9 +258,7 @@ public class UserServiceImpl implements UserService {
             return new GetUserByIdResponse(false, "The GetUserByIdRequest object passed was NULL", null);
         }
 
-        if(request.getUserID() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         UUID id = request.getUserID();
         Optional<User> optionalUser = userRepo.findById(id);
@@ -317,9 +296,7 @@ public class UserServiceImpl implements UserService {
             return new RegisterNewUserResponse(false, "The RegisterNewUserRequest object passed was NULL");
         }
 
-        if(request.getUserID() == null || request.getUsername() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         User newUser = new User();
         newUser.setId(request.getUserID());
@@ -351,9 +328,7 @@ public class UserServiceImpl implements UserService {
             return new SwapCollectableResponse(false, "The SwapCollectableRequest object passed was NULL", null);
         }
 
-        if(request.getCollectableID() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         //currentCollectable to swap out
         User currentUser = getCurrentUser();

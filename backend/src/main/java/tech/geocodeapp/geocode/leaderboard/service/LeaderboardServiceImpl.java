@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.service.EventService;
+import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.model.EventLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
@@ -23,17 +24,17 @@ import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
-
 import java.util.ArrayList;
-
 
 /**
  * This class implements the LeaderboardService interface
  */
-@Service
+@Service("LeaderboardService")
 public class LeaderboardServiceImpl implements LeaderboardService {
     private final LeaderboardRepository leaderboardRepo;
     private final PointRepository pointRepo;
+
+    private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
 
     @NotNull(message = "Event Service Implementation may not be null.")
     private final EventService eventService;
@@ -58,9 +59,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             return new CreateLeaderboardResponse(false, "The CreateLeaderboardRequest object passed was NULL", null);
         }
 
-        if(request.getName() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         /* Leaderboards must have unique names - check if Leaderboard exists with given name */
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findByName(request.getName());
@@ -84,46 +83,45 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      */
     @Transactional
     public GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullRequestParameterException{
-       if(request!=null) {
-           if(request.getEventID()==null || request.getStarting()==null || request.getCount()==null) {
-               throw new NullRequestParameterException();
-           }else{
-               boolean success = false;
-               String message = "";
-               List<EventLeaderboardDetails> leaderboardDetails = new ArrayList<>();
+        if (request == null) {
+            return new GetEventLeaderboardResponse(false, "The GetEventLeaderboardRequest object passed was NULL", null);
+        }
 
-               //find the event if it exists
-               Optional<Event> event=Optional.empty(); //ToDo change to find by provided eventID
+        checkNullRequestParameters.checkRequestParameters(request);
 
-               if(request.getStarting()<1) {
-                   message = "Starting is lower than the minimum value allowed";
-               }else if(request.getCount()<1) {
-                   message = "Count is lower than the minimum value allowed";
-               }else if(event.isEmpty()){
-                   message = "No event with the provided eventID exists";
-               }else{
-                   Optional<Leaderboard> leaderboard = Optional.empty();//TODO: get Event's Leaderboard
-                   if(leaderboard.isEmpty()){
-                       message = "No leaderboard exists for the provided event";
-                   }else{
-                       if(pointRepo.countByLeaderboard(leaderboard.get())<request.getStarting()) {
-                           message = "Starting is greater than the number of points in the leaderboard";
-                       }else{
-                            List<Point> points = pointRepo.findPointsByLeaderboardBetween(leaderboard.get().getId(), request.getStarting()-1, request.getCount());
-                            for(int i = 0; i<points.size(); i++) {
-                                EventLeaderboardDetails details = new EventLeaderboardDetails(points.get(i).getUser().getUsername(), points.get(i).getAmount(), request.getStarting()+i);
-                                leaderboardDetails.add(details);
-                           }
-                            success = true;
-                            message = "Successfully found points for event";
-                       }
-                   }
-               }
-               return new GetEventLeaderboardResponse(success, message, leaderboardDetails);
-           }
-       }else{
-           throw new NullRequestParameterException();
-       }
+        boolean success = false;
+        String message = "";
+        List<EventLeaderboardDetails> leaderboardDetails = new ArrayList<>();
+
+        //find the event if it exists
+        Optional<Event> event=Optional.empty(); //ToDo change to find by provided eventID
+
+        if(request.getStarting()<1) {
+            message = "Starting is lower than the minimum value allowed";
+        }else if(request.getCount()<1) {
+            message = "Count is lower than the minimum value allowed";
+        }else if(event.isEmpty()){
+            message = "No event with the provided eventID exists";
+        }else{
+            Optional<Leaderboard> leaderboard = Optional.empty();//TODO: get Event's Leaderboard
+            if(leaderboard.isEmpty()){
+                message = "No leaderboard exists for the provided event";
+            }else{
+                if(pointRepo.countByLeaderboard(leaderboard.get())<request.getStarting()) {
+                    message = "Starting is greater than the number of points in the leaderboard";
+                }else{
+                     List<Point> points = pointRepo.findPointsByLeaderboardBetween(leaderboard.get().getId(), request.getStarting()-1, request.getCount());
+                     for(int i = 0; i<points.size(); i++) {
+                         EventLeaderboardDetails details = new EventLeaderboardDetails(points.get(i).getUser().getUsername(), points.get(i).getAmount(), request.getStarting()+i);
+                         leaderboardDetails.add(details);
+                    }
+                     success = true;
+                     message = "Successfully found points for event";
+                }
+            }
+        }
+
+        return new GetEventLeaderboardResponse(success, message, leaderboardDetails);
     }
 
     /**
@@ -134,16 +132,11 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      */
     @Transactional
     public GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullRequestParameterException{
-        /* Find all of the Leader
-         */
-
         if(request == null){
             return new GetLeaderboardByIDResponse(false, "The GetLeaderboardByIDRequest object passed was NULL", null);
         }
 
-        if(request.getLeaderboardID() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboardID());
 
@@ -152,7 +145,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     }
 
     /**
-     * Gets all of the Point objects that are for the given Leaderboard
+     * Gets all the Point objects that are for the given Leaderboard
      * @param request The GetPointsByLeaderboardRequest object
      * @return A GetPointsByLeaderboardResponse object
      * @throws NullRequestParameterException - an exception for when a request parameter is NULL
@@ -163,9 +156,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             return new GetPointsByLeaderboardResponse(false, "The GetMyRankRequest passed was NULL", null);
         }
 
-        if(request.getLeaderboard() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         /* check if leaderboard is invalid */
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboard().getId());
@@ -190,9 +181,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             return new GetMyRankResponse(false, "The GetMyRankRequest passed was NULL", null);
         }
 
-        if(request.getLeaderboard() == null || request.getAmount() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         /* check if leaderboard is invalid */
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboard().getId());
@@ -213,15 +202,11 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      */
     @Override
     public PointResponse createPoint(CreatePointRequest request) throws NullRequestParameterException{
-        User foundUser = null;
-
         if(request == null){
             return new PointResponse(false, "The CreatePointRequest passed was NULL", null);
         }
 
-        if(request.getAmount() == null || request.getLeaderboardId() == null || request.getUserId() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         // check if leaderboard is invalid
         Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
@@ -232,6 +217,8 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         //check if user is invalid
         GetUserByIdRequest userRequest = new GetUserByIdRequest(request.getUserId());
+        User foundUser = null;
+
         try {
             GetUserByIdResponse userResponse = userService.getUserById(userRequest);
             if(!userResponse.isSuccess()){
@@ -259,9 +246,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             return new DeletePointResponse(false, "The DeletePointRequest passed was NULL");
         }
 
-        if(request.getPointId() == null){
-            throw new NullRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the point to delete exists
         Optional<Point> point = pointRepo.findById(request.getPointId());
