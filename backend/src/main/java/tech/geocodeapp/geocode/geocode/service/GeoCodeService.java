@@ -3,7 +3,6 @@ package tech.geocodeapp.geocode.geocode.service;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
-import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 
 /**
  * This is the main interface is for the GeoCode subsystem,

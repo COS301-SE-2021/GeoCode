@@ -6,7 +6,6 @@ import java.util.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
@@ -30,8 +29,7 @@ import javax.validation.constraints.NotNull;
 /**
  * This class implements the UserService interface
  */
-@Service
-@Validated
+@Service("UserService")
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final CollectableRepository collectableRepo;
