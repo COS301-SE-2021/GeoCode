@@ -327,22 +327,6 @@ public class UserServiceImplIT {
     }
 
     @Test
-    void getMyLeaderboardsTestUserWithPoints(){
-        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
-        request.setUserID(userWithPoints1);
-
-        try {
-            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
-
-            Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
-            Assertions.assertFalse(response.getLeaderboards().isEmpty());
-        } catch (NullRequestParameterException e) {
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
     void getMyLeaderboardsTestUserWithPoints1(){
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
         request.setUserID(userWithPoints1);
