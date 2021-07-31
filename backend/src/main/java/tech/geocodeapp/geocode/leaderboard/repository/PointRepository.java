@@ -24,9 +24,9 @@ public interface PointRepository extends JpaRepository<Point, UUID> {
     List<Point> findAllByLeaderboardID(UUID leaderboardID);
 
     @Query(value = "SELECT name, amount as points, rank FROM (" +
-            "SELECT leaderboards.name, amount, DENSE_RANK() OVER (ORDER BY amount) AS rank, user_id" +
+            "SELECT leaderboards.name, amount, DENSE_RANK() OVER (PARTITION BY leaderboards.name ORDER BY amount DESC) AS rank, user_id" +
             " FROM point JOIN leaderboards ON point.leaderboard_id = leaderboards.id" +
-            " ORDER BY rank" +
+            " ORDER BY leaderboards.name" +
             ") AS all_ranks" +
             " WHERE user_id = ?1", nativeQuery = true)
     List<MyLeaderboardDetails> getMyLeaderboards(UUID userID);
