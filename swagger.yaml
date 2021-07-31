@@ -998,6 +998,99 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
+  
+  /Leaderboard/createPoint:
+    post:
+      tags:
+        - "Leaderboard"
+      summary: "Create a new point object"
+      description: "Creates a new point object for a provided user and leaderboard"
+      operationId: "createPoint"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePointRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreatePointRequest'
+      responses:
+        '200':
+          description: "Successfully created a new point"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+  
+  /Leaderboard/deletePoint:
+    post:
+      tags:
+        - "Leaderboard"
+      summary: "Delete a point"
+      description: "Deletes a point based on a provided id"
+      operationId:  "deletePoint"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeletePointRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/DeletePointRequest'
+      responses:
+        '200':
+          description: "Successfully deleted a point"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DeletePointResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+  
+  /Leaderboard/updatePoint:
+    post:
+      tags:
+        - "Leaderboard"
+      summary: "Updates a point"
+      description: "Updates the fields of a point with values provided for the given id"
+      operationId: "updatePoint"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePointRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UpdatePointRequest'
+      responses:
+        '200':
+          description: "Successfully Updated point"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
 
 components:
   responses:
@@ -2039,3 +2132,93 @@ components:
       xml:
         name: "GetMyLeaderboardsResponse"
       
+    CreatePointRequest:
+      type: "object"
+      required:
+        - amount
+        - userId
+        - leaderboardId
+      properties:
+        amount:
+          type: integer
+          minimum: 1
+          example: 6
+        userId:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        leaderboardId:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+      xml:
+        name: "CreatePointRequest"
+        
+    PointResponse:
+      type: object
+      required:
+        - point
+        - success
+        - message
+      properties:
+        point: 
+          $ref: '#/components/schemas/Point'
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Successfully created a new point"
+      xml:
+        name: "PointResponse"
+        
+    UpdatePointRequest:
+      type: object
+      required:
+        - pointId
+      properties:
+        pointId:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        amount:
+          type: integer
+          minimum: 0
+          example: 6
+        userId:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        leaderboardId:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+      xml:
+        name: "UpdatePointRequest"
+    
+    DeletePointRequest:
+      type: object
+      required:
+        - pointId
+      properties:
+        pointId:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+      xml:
+        name: "DeletePointRequest"
+    
+    DeletePointResponse:
+      type: object
+      required:
+        - success
+        - message
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Successfully deleted point"
+      xml:
+        name: "DeletePointResponse"
