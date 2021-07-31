@@ -8,6 +8,7 @@ import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.response.*;
@@ -498,7 +499,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             return new SwapCollectablesResponse(false);
         }
 
-        userToGeocode.changeLocation( geocode.getLatitude() + " " + geocode.getLongitude() );
+        userToGeocode.changeLocation( new GeoPoint(geocode.getLatitude(), geocode.getLongitude()) );
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );
 

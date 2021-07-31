@@ -517,7 +517,7 @@ public class UserServiceImplTest {
             */
             UpdateLocationRequest request = new UpdateLocationRequest();
             request.setUserID(invalidUserId);
-            request.setLocation();
+            request.setLocation(new GeoPoint(10.0f, 10.0f));
 
             UpdateLocationResponse response = userService.updateLocation(request);
             Assertions.assertFalse(response.isSuccess());
@@ -537,7 +537,8 @@ public class UserServiceImplTest {
            */
             UpdateLocationRequest request = new UpdateLocationRequest();
             request.setUserID(validUserId);
-            String location = "x:100,y:40";
+
+            GeoPoint location = new GeoPoint(100.0f, 40.0f);
             request.setLocation(location);
 
             UpdateLocationResponse response = userService.updateLocation(request);
@@ -547,7 +548,7 @@ public class UserServiceImplTest {
             Collectable trackableObject = response.getTrackable();
             Assertions.assertNotNull(trackableObject);
 
-            List<String> pastLocations = new ArrayList<>(trackableObject.getPastLocations());
+            List<GeoPoint> pastLocations = new ArrayList<>(trackableObject.getPastLocations());
             Assertions.assertEquals(location, pastLocations.get(pastLocations.size()-1));
         }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());

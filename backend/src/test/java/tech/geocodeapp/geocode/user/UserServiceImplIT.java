@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
@@ -264,7 +265,8 @@ public class UserServiceImplIT {
            */
             UpdateLocationRequest request = new UpdateLocationRequest();
             request.setUserID(validUserId);
-            String location = "x:100,y:40";
+
+            GeoPoint location = new GeoPoint(100.0f, 40.0f);
             request.setLocation(location);
 
             UpdateLocationResponse response = userService.updateLocation(request);
@@ -274,7 +276,7 @@ public class UserServiceImplIT {
             Collectable trackableObject = response.getTrackable();
             Assertions.assertNotNull(trackableObject);
 
-            List<String> pastLocations = new ArrayList<>(trackableObject.getPastLocations());
+            List<GeoPoint> pastLocations = new ArrayList<>(trackableObject.getPastLocations());
             Assertions.assertEquals(location, pastLocations.get(pastLocations.size()-1));
         }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
