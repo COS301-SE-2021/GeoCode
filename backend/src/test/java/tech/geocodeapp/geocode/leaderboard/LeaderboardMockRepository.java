@@ -50,17 +50,17 @@ public class LeaderboardMockRepository implements LeaderboardRepository {
 
     @Override
     public long count() {
-        return 0;
+        return map.size();
     }
 
     @Override
     public void deleteById(UUID uuid) {
-
+        map.remove(uuid);
     }
 
     @Override
     public void delete(Leaderboard leaderboard) {
-
+        deleteById(leaderboard.getId());
     }
 
     @Override
@@ -75,7 +75,8 @@ public class LeaderboardMockRepository implements LeaderboardRepository {
 
     @Override
     public <S extends Leaderboard> S save(S s) {
-        return null;
+        map.put(s.getId(), s);
+        return s;
     }
 
     @Override
@@ -85,12 +86,12 @@ public class LeaderboardMockRepository implements LeaderboardRepository {
 
     @Override
     public Optional<Leaderboard> findById(UUID uuid) {
-        return Optional.empty();
+        return Optional.ofNullable(map.get(uuid));
     }
 
     @Override
     public boolean existsById(UUID uuid) {
-        return false;
+        return findById(uuid).isPresent();
     }
 
     @Override
