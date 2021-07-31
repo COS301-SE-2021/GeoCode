@@ -256,6 +256,7 @@ public class UserServiceImplIT {
             */
             UpdateLocationRequest request = new UpdateLocationRequest();
             request.setUserID(invalidUserId);
+            request.setLocation(new GeoPoint(10.0f, 10.0f));
 
             UpdateLocationResponse response = userService.updateLocation(request);
             Assertions.assertFalse(response.isSuccess());
