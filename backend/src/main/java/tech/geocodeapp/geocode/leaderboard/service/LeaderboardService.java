@@ -1,32 +1,32 @@
 package tech.geocodeapp.geocode.leaderboard.service;
 
 import org.springframework.stereotype.Service;
-import tech.geocodeapp.geocode.leaderboard.exception.NullLeaderboardRequestParameterException;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.request.*;
 import tech.geocodeapp.geocode.leaderboard.response.*;
 
 /**
  * This interface is for the GeoCode subsystem
  */
-@Service
+@Service("LeaderboardService")
 public interface LeaderboardService {
 
     //U5.1 createLeaderboard
-    CreateLeaderboardResponse createLeaderboard(CreateLeaderboardRequest request) throws NullLeaderboardRequestParameterException;
+    CreateLeaderboardResponse createLeaderboard(CreateLeaderboardRequest request) throws NullRequestParameterException;
 
     //U5.2 getEventLeaderboard
-    GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullLeaderboardRequestParameterException;
+    GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullRequestParameterException;
 
     //helper functions
-    public GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullLeaderboardRequestParameterException;
+    GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullRequestParameterException;
 
-    public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullLeaderboardRequestParameterException;
+    GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullRequestParameterException;
 
-    public GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullLeaderboardRequestParameterException;
+    GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullRequestParameterException;
 
-    public PointResponse createPoint(CreatePointRequest request) throws NullLeaderboardRequestParameterException;
+    PointResponse createPoint(CreatePointRequest request) throws NullRequestParameterException;
 
-    public DeletePointResponse deletePoint(DeletePointRequest request) throws NullLeaderboardRequestParameterException;
+    DeletePointResponse deletePoint(DeletePointRequest request) throws NullRequestParameterException;
 
-    public PointResponse updatePoint(UpdatePointRequest request) throws NullLeaderboardRequestParameterException;
+    PointResponse updatePoint(UpdatePointRequest request) throws NullRequestParameterException;
 }

@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
-import tech.geocodeapp.geocode.leaderboard.exception.NullLeaderboardRequestParameterException;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetEventLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
@@ -20,7 +20,6 @@ import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T09:14:58.803Z[GMT]")
 @RestController
@@ -50,7 +49,7 @@ public class LeaderboardApiController implements LeaderboardApi {
             }else{
                 return new ResponseEntity<CreateLeaderboardResponse>(response, HttpStatus.BAD_REQUEST);
             }
-        }catch (NullLeaderboardRequestParameterException e){
+        }catch (NullRequestParameterException e){
             CreateLeaderboardResponse response = new CreateLeaderboardResponse(false, e.getMessage(), null);
             return new ResponseEntity<CreateLeaderboardResponse>(response, HttpStatus.BAD_REQUEST);
         }
@@ -65,7 +64,7 @@ public class LeaderboardApiController implements LeaderboardApi {
             }else{
                 return new ResponseEntity<GetEventLeaderboardResponse>(response, HttpStatus.BAD_REQUEST);
             }
-        }catch (NullLeaderboardRequestParameterException e){
+        }catch (NullRequestParameterException e){
             GetEventLeaderboardResponse response = new GetEventLeaderboardResponse(false, e.getMessage(), null);
             return new ResponseEntity<GetEventLeaderboardResponse>(response, HttpStatus.BAD_REQUEST);
         }

@@ -499,6 +499,12 @@ public class UserServiceImplTest {
         }
     }
 
+    /**
+     * Test for when userID parameter is NULL.
+     *
+     * A NullRequestParameterException will be returned no matter which parameter is NULL,
+     * since all fields are checked.
+     */
     @Test
     public void updateLocationTestNullUser(){
         UpdateLocationRequest request = new UpdateLocationRequest();

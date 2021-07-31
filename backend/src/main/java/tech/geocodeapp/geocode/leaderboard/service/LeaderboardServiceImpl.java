@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.leaderboard.exception.NullLeaderboardRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.model.EventLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
@@ -52,15 +51,15 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * Creates a Leaderboard
      * @param request - Contains the name of the Leaderboard to be created
      * @return The created Leaderboard
-     * @throws NullLeaderboardRequestParameterException - an exception for when a request parameter is NULL
+     * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
-    public CreateLeaderboardResponse createLeaderboard(CreateLeaderboardRequest request) throws NullLeaderboardRequestParameterException{
+    public CreateLeaderboardResponse createLeaderboard(CreateLeaderboardRequest request) throws NullRequestParameterException{
         if(request == null){
             return new CreateLeaderboardResponse(false, "The CreateLeaderboardRequest object passed was NULL", null);
         }
 
         if(request.getName() == null){
-            throw new NullLeaderboardRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         /* Leaderboards must have unique names - check if Leaderboard exists with given name */
@@ -81,13 +80,13 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * A method to retrieve a set number of points from a leaderboard for a provided event starting at a specified rank.
      * @param request - Contains the event to get a leaderboard form, the position to start for points and the number of points to get.
      * @return A list of the details of the requested points
-     * @throws NullLeaderboardRequestParameterException - an exception for when a request parameter is NULL
+     * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
     @Transactional
-    public GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullLeaderboardRequestParameterException{
+    public GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullRequestParameterException{
        if(request!=null) {
            if(request.getEventID()==null || request.getStarting()==null || request.getCount()==null) {
-               throw new NullLeaderboardRequestParameterException();
+               throw new NullRequestParameterException();
            }else{
                boolean success = false;
                String message = "";
@@ -123,7 +122,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
                return new GetEventLeaderboardResponse(success, message, leaderboardDetails);
            }
        }else{
-           throw new NullLeaderboardRequestParameterException();
+           throw new NullRequestParameterException();
        }
     }
 
@@ -131,10 +130,10 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * Gets the Leaderboard identified by the given UUID
      * @param request The GetLeaderboardByIDRequest object
      * @return A GetLeaderboardByIDResponse object containing the Leaderboard object
-     * @throws NullLeaderboardRequestParameterException - an exception for when a request parameter is NULL
+     * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
     @Transactional
-    public GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullLeaderboardRequestParameterException{
+    public GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullRequestParameterException{
         /* Find all of the Leader
          */
 
@@ -143,7 +142,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }
 
         if(request.getLeaderboardID() == null){
-            throw new NullLeaderboardRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboardID());
@@ -156,16 +155,16 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * Gets all of the Point objects that are for the given Leaderboard
      * @param request The GetPointsByLeaderboardRequest object
      * @return A GetPointsByLeaderboardResponse object
-     * @throws NullLeaderboardRequestParameterException - an exception for when a request parameter is NULL
+     * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
     @Transactional
-    public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullLeaderboardRequestParameterException{
+    public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullRequestParameterException{
         if(request == null){
             return new GetPointsByLeaderboardResponse(false, "The GetMyRankRequest passed was NULL", null);
         }
 
         if(request.getLeaderboard() == null){
-            throw new NullLeaderboardRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         /* check if leaderboard is invalid */
@@ -183,16 +182,16 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * Gets the rank for the given point amount on the given leaderboard
      * @param request The GetMyRankRequest object
      * @return A GetMyRankResponse object
-     * @throws NullLeaderboardRequestParameterException - an exception for when a request parameter is NULL
+     * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
     @Transactional
-    public GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullLeaderboardRequestParameterException{
+    public GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullRequestParameterException{
         if(request == null){
             return new GetMyRankResponse(false, "The GetMyRankRequest passed was NULL", null);
         }
 
         if(request.getLeaderboard() == null || request.getAmount() == null){
-            throw new NullLeaderboardRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         /* check if leaderboard is invalid */
@@ -210,10 +209,10 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * A method to create a new Point for a user in a leaderboard
      * @param request Contains the amount, leaderboardId and userId to use for creating the Point
      * @return A responses informing of success or failure and containing the created Point.
-     * @throws NullLeaderboardRequestParameterException an exception for when a null value is provided for a parameter of the request
+     * @throws NullRequestParameterException an exception for when a null value is provided for a parameter of the request
      */
     @Override
-    public PointResponse createPoint(CreatePointRequest request) throws NullLeaderboardRequestParameterException{
+    public PointResponse createPoint(CreatePointRequest request) throws NullRequestParameterException{
         User foundUser = null;
 
         if(request == null){
@@ -221,7 +220,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }
 
         if(request.getAmount() == null || request.getLeaderboardId() == null || request.getUserId() == null){
-            throw new NullLeaderboardRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         // check if leaderboard is invalid
@@ -252,16 +251,16 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * deletes a point based on a provided id
      * @param request Contains the id of the point to be deleted
      * @return A response object informing of success or failure and the reason for failure in the event of it
-     * @throws NullLeaderboardRequestParameterException an exception for when the request parameter is null
+     * @throws NullRequestParameterException an exception for when the request parameter is null
      */
     @Override
-    public DeletePointResponse deletePoint(DeletePointRequest request) throws NullLeaderboardRequestParameterException {
+    public DeletePointResponse deletePoint(DeletePointRequest request) throws NullRequestParameterException {
         if(request == null){
             return new DeletePointResponse(false, "The DeletePointRequest passed was NULL");
         }
 
         if(request.getPointId() == null){
-            throw new NullLeaderboardRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         //check if the point to delete exists
@@ -278,16 +277,16 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * updates a point with the given id if it exists
      * @param request contains the id of the point to update and the new values for the fields that should be updated
      * @return A response object informing of success or failure and the reason as well as the updated Point object
-     * @throws NullLeaderboardRequestParameterException an exception for when the provided parameters are all null or pointId is null.
+     * @throws NullRequestParameterException an exception for when the provided parameters are all null or pointId is null.
      */
     @Override
-    public PointResponse updatePoint(UpdatePointRequest request) throws NullLeaderboardRequestParameterException {
+    public PointResponse updatePoint(UpdatePointRequest request) throws NullRequestParameterException {
         if(request == null){
             return new PointResponse(false,"The UpdatePointRequest passed was NULL", null);
         }
 
         if(request.getPointId() == null){
-            throw new NullLeaderboardRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         if(request.getAmount() == null && request.getLeaderboardId() == null && request.getUserId() == null){
