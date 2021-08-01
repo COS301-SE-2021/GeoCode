@@ -21,11 +21,18 @@ public class CreateEventResponse {
     private Boolean success;
 
     /**
+     * Default constructor
+     */
+    public CreateEventResponse() {
+
+    }
+
+    /**
      * Overloaded Constructor
      *
      * @param success the status of the Event created
      */
-    public CreateEventResponse( @Valid Boolean success ) {
+    public CreateEventResponse( Boolean success ) {
 
         this.success = success;
     }
@@ -37,7 +44,7 @@ public class CreateEventResponse {
      *
      * @return the request after the success has been changed
      */
-    public CreateEventResponse success( @Valid Boolean success ) {
+    public CreateEventResponse success( Boolean success ) {
 
         this.success = success;
         return this;
@@ -59,7 +66,7 @@ public class CreateEventResponse {
      *
      * @param success the value the attribute should be set to
      */
-    public void setSuccess( @Valid Boolean success ) {
+    public void setSuccess( Boolean success ) {
 
         this.success = success;
     }

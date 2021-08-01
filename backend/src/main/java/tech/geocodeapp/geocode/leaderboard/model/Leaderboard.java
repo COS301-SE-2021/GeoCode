@@ -26,7 +26,11 @@ public class Leaderboard   {
   @JsonProperty("name")
   private String name = null;
 
-  public Leaderboard(String name){
+  public Leaderboard() {
+
+  }
+
+  public Leaderboard( String name ){
     this.id = UUID.randomUUID();
     this.name = name;
   }

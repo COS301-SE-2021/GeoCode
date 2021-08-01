@@ -62,6 +62,13 @@ public class CreateEventRequest {
     private List< GeoCode > geoCodesToFind;
 
     /**
+     * Default constructor
+     */
+    public CreateEventRequest() {
+
+    }
+
+    /**
      * Overloaded Constructor
      *
      * @param name what the new Event should be called
