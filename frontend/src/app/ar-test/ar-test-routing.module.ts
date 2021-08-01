@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: ArTestPage
+  },  {
+    path: 'ar-test-model',
+    loadChildren: () => import('./ar-test-model/ar-test-model.module').then( m => m.ArTestModelPageModule)
   }
+
 ];
 
 @NgModule({
