@@ -4,11 +4,11 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
-import org.threeten.bp.LocalDate;
 
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
