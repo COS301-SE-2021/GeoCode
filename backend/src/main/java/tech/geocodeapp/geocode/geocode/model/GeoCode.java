@@ -55,7 +55,7 @@ public class GeoCode {
     @JsonProperty( "hints" )
     @ElementCollection( fetch = FetchType.LAZY )
     @NotNull( message = "GeoCode's hints cannot be null." )
-    private Collection< String > hints = new ArrayList<>();
+    private Collection< String > hints;
 
     /**
      * The list of collectables stored inside of the GeoCode
@@ -79,7 +79,7 @@ public class GeoCode {
      * The longitude and latitude of the GeoCode in the real world
      */
     @JsonProperty( "location" )
-    @NotNull( message = "GeoCode's location cannot be empty." )
+    @NotNull( message = "GeoCode's location cannot be null." )
     private GeoPoint location;
 
     /**

@@ -54,7 +54,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-        
+
   /User/getUserTrackable:
     post:
       tags:
@@ -86,7 +86,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-        
+
   /User/updateLocation:
     post:
       tags:
@@ -118,7 +118,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-        
+
   /User/getFoundCollectableTypes:
     post:
       tags:
@@ -150,7 +150,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-  
+
   /User/getFoundGeoCodes:
     post:
       tags:
@@ -182,7 +182,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-        
+
   /User/getOwnedGeoCodes:
     post:
       tags:
@@ -214,7 +214,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-        
+
   /User/getUsers:
     post:
       tags:
@@ -246,7 +246,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-        
+
   /User/getMyLeaderboards:
     post:
       tags:
@@ -278,7 +278,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-  
+
   /GeoCode/createGeoCode:
     post:
       tags:
@@ -579,7 +579,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-  
+
   /Collectable/createCollectableType:
     post:
       tags:
@@ -916,7 +916,48 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
-        
+
+  /Leaderboard/createLeaderboard:
+    post:
+      tags:
+        - "Leaderboard"
+      summary: "Create a Leaderboard"
+      description: "Creates a Leaderboard with the given details"
+      operationId: "createLeaderboard"
+      requestBody:
+        required: true
+        description: "Request to create a Leaderboard"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLeaderboardRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateLeaderboardRequest'
+      responses:
+        '200':
+          description: "Successfully created the Leaderboard"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLeaderboardResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateLeaderboardResponse'
+        '404':
+          description: "Unable to create Leaderboard"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLeaderboardResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateLeaderboardResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
   /Leaderboard/getEventLeaderboard:
     post:
       tags:
@@ -953,6 +994,99 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/GetEventLeaderboardResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Leaderboard/createPoint:
+    post:
+      tags:
+        - "Leaderboard"
+      summary: "Create a new point object"
+      description: "Creates a new point object for a provided user and leaderboard"
+      operationId: "createPoint"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePointRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreatePointRequest'
+      responses:
+        '200':
+          description: "Successfully created a new point"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Leaderboard/deletePoint:
+    post:
+      tags:
+        - "Leaderboard"
+      summary: "Delete a point"
+      description: "Deletes a point based on a provided id"
+      operationId:  "deletePoint"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeletePointRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/DeletePointRequest'
+      responses:
+        '200':
+          description: "Successfully deleted a point"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DeletePointResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Leaderboard/updatePoint:
+    post:
+      tags:
+        - "Leaderboard"
+      summary: "Updates a point"
+      description: "Updates the fields of a point with values provided for the given id"
+      operationId: "updatePoint"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePointRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UpdatePointRequest'
+      responses:
+        '200':
+          description: "Successfully Updated point"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -1021,7 +1155,7 @@ components:
           $ref: '#/components/schemas/GeoPoint'
       xml:
         name: "GeoCode"
-        
+
     CreateGeoCodeRequest:
       type: "object"
       required:
@@ -1049,7 +1183,7 @@ components:
           type: boolean
       xml:
         name: "CreateGeoCodeRequest"
-        
+
     CreateGeoCodeResponse:
       type: "object"
       properties:
@@ -1273,7 +1407,7 @@ components:
           format: uuid
       xml:
         name: "getCollectablesRequest"
-        
+
     CollectableType:
       type: "object"
       required:
@@ -1406,7 +1540,7 @@ components:
             $ref: '#/components/schemas/CollectableTypeComponent'
       xml:
         name: "GetCollectableTypeResponse"
-    
+
     CollectableTypeComponent:
       type: "object"
       required:
@@ -1423,7 +1557,7 @@ components:
           type: string
           format: uuid
         set:
-         $ref: "#/components/schemas/CollectableSet"
+          $ref: "#/components/schemas/CollectableSet"
         expiraryDate:
           type: string
           format: date-time
@@ -1433,7 +1567,7 @@ components:
           type: boolean
       xml:
         name: "CollectableTypeComponent"
-        
+
     CreateCollectableTypeResponse:
       type: "object"
       required:
@@ -1449,7 +1583,7 @@ components:
           $ref: "#/components/schemas/CollectableTypeComponent"
       xml:
         name: "CreateCollectableTypeResponse"
-          
+
     CreateCollectableSetResponse:
       type: "object"
       required:
@@ -1465,7 +1599,7 @@ components:
           $ref: "#/components/schemas/CollectableSet"
       xml:
         name: "CreateCollectableSetResponse"
-          
+
     CollectableResponse:
       type: "object"
       required:
@@ -1482,10 +1616,10 @@ components:
           type: array
           items:
             type: string
-            
+
       xml:
         name: "CollectableResponse"
-          
+
     CreateCollectableResponse:
       type: "object"
       required:
@@ -1501,7 +1635,7 @@ components:
           $ref: "#/components/schemas/CollectableResponse"
       xml:
         name: "CreateCollectableResponse"
-      
+
     GetCollectableSetsResponse:
       type: "object"
       required:
@@ -1548,7 +1682,7 @@ components:
 
     Point:
       type: "object"
-      required: 
+      required:
         - id
         - amount
         - user
@@ -1572,18 +1706,15 @@ components:
       required:
         - id
         - name
-        - event
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
-        event:
-            $ref: "#/components/schemas/Event"
       xml:
         name: "Leaderboard"
-        
+
     Event:
       type: "object"
       required:
@@ -1591,7 +1722,7 @@ components:
         - name
         - description
         - location
-        - leaderboard
+        - leaderboards
       properties:
         id:
           type: string
@@ -1602,11 +1733,13 @@ components:
           type: string
         location:
           $ref: "#/components/schemas/GeoPoint"
-        leaderboard:
-          $ref: "#/components/schemas/Leaderboard"
+        leaderboards:
+          type: array
+          items:
+            $ref: "#/components/schemas/Leaderboard"
       xml:
         name: "Event"
-          
+
     GeoPoint:
       type: "object"
       required:
@@ -1623,7 +1756,7 @@ components:
           example: 28.2314
       xml:
         name: "GeoPoint"
-        
+
     MyLeaderboardDetails:
       type: "object"
       required:
@@ -1644,7 +1777,7 @@ components:
           example: 5
       xml:
         name: "MyLeaderboardDetails"
-        
+
     EventLeaderboardDetails:
       type: "object"
       required:
@@ -1665,7 +1798,7 @@ components:
           example: 5
       xml:
         name: "EventLeaderboardDetails"
-        
+
     User:
       type: "object"
       required:
@@ -1697,7 +1830,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GeoCode'
-        
+
     GetCurrentCollectableRequest:
       type: "object"
       required:
@@ -1707,8 +1840,8 @@ components:
           type: string
           format: uuid
       xml:
-        name: "GetCurrentCollectableRequest" 
-        
+        name: "GetCurrentCollectableRequest"
+
     GetCurrentCollectableResponse:
       type: "object"
       required:
@@ -1725,7 +1858,7 @@ components:
           $ref: '#/components/schemas/Collectable'
       xml:
         name: "GetCurrentCollectableResponse"
-        
+
     GetUserTrackableRequest:
       type: "object"
       required:
@@ -1736,7 +1869,7 @@ components:
           format: uuid
       xml:
         name: "GetUserTrackableRequest"
-    
+
     GetUserTrackableResponse:
       type: "object"
       required:
@@ -1750,10 +1883,10 @@ components:
           type: string
           example: "The user's Trackable was successfully returned"
         Trackable:
-          $ref: '#/components/schemas/Collectable' 
+          $ref: '#/components/schemas/Collectable'
       xml:
         name: "GetUserTrackableResponse"
-        
+
     UpdateLocationRequest:
       type: "object"
       required:
@@ -1764,7 +1897,7 @@ components:
           format: uuid
       xml:
         name: "UpdateLocationRequest"
-        
+
     UpdateLocationResponse:
       type: "object"
       required:
@@ -1778,10 +1911,10 @@ components:
           type: string
           example: "The trackable object's location was successfully updated"
         Trackable:
-          $ref: '#/components/schemas/Collectable' 
+          $ref: '#/components/schemas/Collectable'
       xml:
         name: "UpdateLocationResponse"
-        
+
     GetFoundCollectableTypesRequest:
       type: "object"
       required:
@@ -1792,7 +1925,7 @@ components:
           format: uuid
       xml:
         name: "GetFoundCollectablesRequest"
-        
+
     GetFoundCollectableTypesResponse:
       type: "object"
       required:
@@ -1812,7 +1945,7 @@ components:
             format: uuid
       xml:
         name: "GetFoundCollectablesResponse"
-        
+
     GetFoundGeoCodesRequest:
       type: "object"
       required:
@@ -1823,7 +1956,7 @@ components:
           format: uuid
       xml:
         name: "GetFoundGeocodesRequest"
-        
+
     GetFoundGeoCodesResponse:
       type: "object"
       required:
@@ -1843,7 +1976,7 @@ components:
             format: uuid
       xml:
         name: "GetFoundGeoCodesResponse"
-            
+
     GetOwnedGeoCodesRequest:
       type: "object"
       required:
@@ -1854,7 +1987,7 @@ components:
           format: uuid
       xml:
         name: "GetOwnedGeocodesRequest"
-        
+
     GetOwnedGeoCodesResponse:
       type: "object"
       required:
@@ -1874,7 +2007,7 @@ components:
             format: uuid
       xml:
         name: "GetOwnedGeocodesResponse"
-        
+
     GetUsersRequest:
       type: "object"
       required:
@@ -1885,7 +2018,7 @@ components:
           format: uuid
       xml:
         name: "GetUsersRequest"
-        
+
     GetUsersResponse:
       type: "object"
       required:
@@ -1897,7 +2030,7 @@ components:
             $ref: '#/components/schemas/User'
       xml:
         name: "GetUsersResponse"
-        
+
     GetMyLeaderboardsRequest:
       type: "object"
       required:
@@ -1908,7 +2041,7 @@ components:
           format: uuid
       xml:
         name: "GetMyLeaderboardsRequest"
-        
+
     GetMyLeaderboardsResponse:
       type: "object"
       required:
@@ -1927,7 +2060,39 @@ components:
             $ref: '#/components/schemas/MyLeaderboardDetails'
       xml:
         name: "GetMyLeaderboardsResponse"
-        
+
+    CreateLeaderboardRequest:
+      type: "object"
+      required:
+        - name
+        - eventID
+      properties:
+        name:
+          type: string
+        eventID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+      xml:
+        name: "CreateLeaderboardRequest"
+
+    CreateLeaderboardResponse:
+      type: "object"
+      required:
+        - success
+        - message
+        - leaderboard
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: "The Leaderboard was successfully created"
+        leaderboard:
+          $ref: '#/components/schemas/Leaderboard'
+      xml:
+        name: "GetMyLeaderboardsResponse"
+
     GetEventLeaderboardRequest:
       type: "object"
       required:
@@ -1947,7 +2112,7 @@ components:
           type: integer
           minimum: 1
           example: 10
-          
+
     GetEventLeaderboardResponse:
       type: "object"
       required:
@@ -1966,4 +2131,94 @@ components:
             $ref: '#/components/schemas/EventLeaderboardDetails'
       xml:
         name: "GetMyLeaderboardsResponse"
-      
+
+    CreatePointRequest:
+      type: "object"
+      required:
+        - amount
+        - userId
+        - leaderboardId
+      properties:
+        amount:
+          type: integer
+          minimum: 1
+          example: 6
+        userId:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        leaderboardId:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+      xml:
+        name: "CreatePointRequest"
+
+    PointResponse:
+      type: object
+      required:
+        - point
+        - success
+        - message
+      properties:
+        point:
+          $ref: '#/components/schemas/Point'
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Successfully created a new point"
+      xml:
+        name: "PointResponse"
+
+    UpdatePointRequest:
+      type: object
+      required:
+        - pointId
+      properties:
+        pointId:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        amount:
+          type: integer
+          minimum: 0
+          example: 6
+        userId:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        leaderboardId:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+      xml:
+        name: "UpdatePointRequest"
+
+    DeletePointRequest:
+      type: object
+      required:
+        - pointId
+      properties:
+        pointId:
+          type: string
+          format: UUID
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+      xml:
+        name: "DeletePointRequest"
+
+    DeletePointResponse:
+      type: object
+      required:
+        - success
+        - message
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Successfully deleted point"
+      xml:
+        name: "DeletePointResponse"
