@@ -44,7 +44,7 @@ public class Event {
     private String description;
 
     /**
-     * The location of the Event
+     * The starting location of the Event
      */
     @Embedded
     @NotNull( message = "Event's location cannot be null." )
@@ -63,14 +63,14 @@ public class Event {
     /**
      * The starting Date of the Event
      */
-    @JsonProperty( "begin" )
-    private LocalDate begin;
+    @JsonProperty( "beginDate" )
+    private LocalDate beginDate;
 
     /**
      * The end Date of the Event
      */
     @JsonProperty( "end" )
-    private LocalDate end;
+    private LocalDate endDate;
 
     /**
      * The different rankings of the users partaking in the Event
@@ -96,20 +96,20 @@ public class Event {
      * @param description A brief description on what the Event is about
      * @param location The location of the Event
      * @param levels The different Levels with what GeoCode to find and which Users are searching are on the different Levels
-     * @param begin The starting Date of the Event
-     * @param end The end Date of the Event
+     * @param beginDate The starting Date of the Event
+     * @param endDate The end Date of the Event
      * @param leaderboards The different rankings of the users partaking in the Event
      */
     public Event( UUID id, String name, String description, GeoPoint location, List< Level > levels,
-                  LocalDate begin, LocalDate end, List< Leaderboard > leaderboards ) {
+                  LocalDate beginDate, LocalDate endDate, List< Leaderboard > leaderboards ) {
 
         this.id = id;
         this.name = name;
         this.description = description;
         this.location = location;
         this.levels = levels;
-        this.begin = begin;
-        this.end = end;
+        this.beginDate = beginDate;
+        this.endDate = endDate;
         this.leaderboards = leaderboards;
     }
 
@@ -276,7 +276,7 @@ public class Event {
 
         if ( this.levels == null ) {
 
-            this.levels = new ArrayList< Level >();
+            this.levels = new ArrayList<>();
         }
 
         this.levels.add( levelsItem );
@@ -314,7 +314,7 @@ public class Event {
     @Valid
     public Event begin( LocalDate begin ) {
 
-        this.begin = begin;
+        this.beginDate = begin;
         return this;
     }
 
@@ -323,9 +323,9 @@ public class Event {
      *
      * @return the stored begin attribute
      */
-    public LocalDate getBegin() {
+    public LocalDate getBeginDate() {
 
-        return begin;
+        return beginDate;
     }
 
     /**
@@ -333,9 +333,9 @@ public class Event {
      *
      * @param begin the value the begin should be set to
      */
-    public void setBegin( LocalDate begin ) {
+    public void setBeginDate( LocalDate begin ) {
 
-        this.begin = begin;
+        this.beginDate = begin;
     }
 
     /**
@@ -348,7 +348,7 @@ public class Event {
     @Valid
     public Event end( LocalDate end ) {
 
-        this.end = end;
+        this.endDate = end;
         return this;
     }
 
@@ -357,9 +357,9 @@ public class Event {
      *
      * @return the stored end attribute
      */
-    public LocalDate getEnd() {
+    public LocalDate getEndDate() {
 
-        return end;
+        return endDate;
     }
 
     /**
@@ -367,9 +367,9 @@ public class Event {
      *
      * @param end the value the end should be set to
      */
-    public void setEnd( LocalDate end ) {
+    public void setEndDate( LocalDate end ) {
 
-        this.end = end;
+        this.endDate = end;
     }
 
     /**
@@ -447,8 +447,8 @@ public class Event {
                 Objects.equals( this.description, event.description ) &&
                 Objects.equals( this.location, event.location ) &&
                 Objects.equals( this.levels, event.levels ) &&
-                Objects.equals( this.begin, event.begin ) &&
-                Objects.equals( this.end, event.end ) &&
+                Objects.equals( this.beginDate, event.beginDate ) &&
+                Objects.equals( this.endDate, event.endDate ) &&
                 Objects.equals( this.leaderboards, event.leaderboards );
     }
 
@@ -460,7 +460,7 @@ public class Event {
     @Override
     public int hashCode() {
 
-        return Objects.hash( id, name, description, location, levels, begin, end, leaderboards );
+        return Objects.hash( id, name, description, location, levels, beginDate, endDate, leaderboards );
     }
 
     /**
@@ -477,8 +477,8 @@ public class Event {
                 "    description: " + toIndentedString( description ) + "\n" +
                 "    location: " + toIndentedString( location ) + "\n" +
                 "    levels: " + toIndentedString( levels ) + "\n" +
-                "    begin: " + toIndentedString( begin ) + "\n" +
-                "    end: " + toIndentedString( end ) + "\n" +
+                "    begin: " + toIndentedString( beginDate ) + "\n" +
+                "    end: " + toIndentedString( endDate ) + "\n" +
                 "    leaderboards: " + toIndentedString( leaderboards ) + "\n" +
                 "}";
     }

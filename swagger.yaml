@@ -917,47 +917,6 @@ paths:
       security:
         - bearerAuth: []
 
-  /Leaderboard/createLeaderboard:
-    post:
-      tags:
-        - "Leaderboard"
-      summary: "Create a Leaderboard"
-      description: "Creates a Leaderboard with the given details"
-      operationId: "createLeaderboard"
-      requestBody:
-        required: true
-        description: "Request to create a Leaderboard"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateLeaderboardRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/CreateLeaderboardRequest'
-      responses:
-        '200':
-          description: "Successfully created the Leaderboard"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateLeaderboardResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/CreateLeaderboardResponse'
-        '404':
-          description: "Unable to create Leaderboard"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateLeaderboardResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/CreateLeaderboardResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-      security:
-        - bearerAuth: []
-
   /Leaderboard/getEventLeaderboard:
     post:
       tags:
@@ -999,15 +958,170 @@ paths:
       security:
         - bearerAuth: []
 
-  /Leaderboard/createPoint:
+  /Event/changeAvailability:
     post:
       tags:
-        - "Leaderboard"
-      summary: "Create a new point object"
-      description: "Creates a new point object for a provided user and leaderboard"
+        - "Event"
+      summary: "Changes an Event's availability"
+      description: "Changes the specified Event's availability to the given availability"
+      operationId: "changeAvailability"
+      requestBody:
+        required: true
+        description: "Request to update the availability of an Event"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeAvailabilityRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ChangeAvailabilityRequest'
+      responses:
+        '200':
+          description: "Returns the update of the availability is successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeAvailabilityResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ChangeAvailabilityResponse'
+        '404':
+          description: "Unable to find an Event with the given id"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeAvailabilityResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ChangeAvailabilityResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Event/getAllEvents:
+    post:
+      tags:
+        - "Event"
+      summary: "Returns all the Events"
+      description: "Returns all the Events in the system"
+      operationId: "getAllEvents"
+      responses:
+        '200':
+          description: "Successfully returned all the Event's"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllEventsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetAllEventsResponse'
+        '404':
+          description: "Unable to find any Events"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllEventsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetAllEventsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Event/createEvent:
+    post:
+      tags:
+        - "Event"
+      summary: "Create a new Event"
+      description: "Create a new Event in the system with the specified attributes"
+      operationId: "createEvent"
+      requestBody:
+        required: true
+        description: "Request to create an Event"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEventRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateEventRequest'
+      responses:
+        '200':
+          description: "Return the new Event was successfully created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateEventResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateEventResponse'
+        '404':
+          description: "Return the new Event was not successfully created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateEventResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateEventResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Event/getEventsByLocation:
+    post:
+      tags:
+        - "Event"
+      summary: "Get an Event by its location"
+      description: "Get an Event by its location from the given co-ordinates"
+      operationId: "getEventsByLocation"
+      requestBody:
+        required: true
+        description: "Request to get an Event by its location"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetEventsByLocationRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetEventsByLocationRequest'
+      responses:
+        '200':
+          description: "Return the found Event"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEventsByLocationResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetEventsByLocationResponse'
+        '404':
+          description: "Return the new Event was not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEventsByLocationResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetEventsByLocationResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Event/createPoint:
+    post:
+      tags:
+        - "Event"
+      summary: "Create a new Point for an Event"
+      description: "Create a new Point with specific values for an Event"
       operationId: "createPoint"
       requestBody:
         required: true
+        description: "Request to create a new Point for an Event"
         content:
           application/json:
             schema:
@@ -1017,76 +1131,259 @@ paths:
               $ref: '#/components/schemas/CreatePointRequest'
       responses:
         '200':
-          description: "Successfully created a new point"
+          description: "Return the new new Point for the Event was successfully created"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PointResponse'
+                $ref: '#/components/schemas/CreatePointResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/PointResponse'
+                $ref: '#/components/schemas/CreatePointResponse'
+        '404':
+          description: "Return the new new Point for the Event was not successfully created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreatePointResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
 
-  /Leaderboard/deletePoint:
+  /Event/createTimeTrial:
     post:
       tags:
-        - "Leaderboard"
-      summary: "Delete a point"
-      description: "Deletes a point based on a provided id"
-      operationId:  "deletePoint"
+        - "Event"
+      summary: "Create a new Time Trial for an Event"
+      description: "Create a new Time Trial with a specific timeframe for an Event"
+      operationId: "createTimeTrial"
       requestBody:
         required: true
+        description: "Request to create a new Time Trial for an Event"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DeletePointRequest'
+              $ref: '#/components/schemas/CreateTimeTrialRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/DeletePointRequest'
+              $ref: '#/components/schemas/CreateTimeTrialRequest'
       responses:
         '200':
-          description: "Successfully deleted a point"
+          description: "Return the Time Trial for the Event was successfully created"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeletePointResponse'
+                $ref: '#/components/schemas/CreateTimeTrialResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/DeletePointResponse'
+                $ref: '#/components/schemas/CreateTimeTrialResponse'
+        '404':
+          description: "Return the Time Trial for the Event was not successfully created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTimeTrialResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateTimeTrialResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
 
-  /Leaderboard/updatePoint:
+  /Event/getPointsByUser:
     post:
       tags:
-        - "Leaderboard"
-      summary: "Updates a point"
-      description: "Updates the fields of a point with values provided for the given id"
-      operationId: "updatePoint"
+        - "Event"
+      summary: "Get the points for the specified Event"
+      description: "Get the points for the specified Event"
+      operationId: "getPointsByUser"
       requestBody:
         required: true
+        description: "Request to get the Points for an Event"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdatePointRequest'
+              $ref: '#/components/schemas/GetPointsByUserRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/UpdatePointRequest'
+              $ref: '#/components/schemas/GetPointsByUserRequest'
       responses:
         '200':
-          description: "Successfully Updated point"
+          description: "Return the Points for an Event successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PointResponse'
+                $ref: '#/components/schemas/GetPointsByUserResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/PointResponse'
+                $ref: '#/components/schemas/GetPointsByUserResponse'
+        '404':
+          description: "Return the Points for an Event could not be returned"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPointsByUserResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetPointsByUserResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Event/getPointsByLeaderBoard:
+    post:
+      tags:
+        - "Event"
+      summary: "Get Points for a Leaderboard for an Event"
+      description: "Get Points for a Leaderboard for an Event"
+      operationId: "getPointsByLeaderBoard"
+      requestBody:
+        required: true
+        description: "Request to get Points for a Leaderboard of the specified Event"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetPointsByLeaderBoardRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetPointsByLeaderBoardRequest'
+      responses:
+        '200':
+          description: "Return the Points of a Leaderboard within an Event successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
+        '404':
+          description: "Return the Points for a Leaderboard in an Event was not successfully found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Event/getPoints:
+    post:
+      tags:
+        - "Event"
+      summary: "Get the Points for an Event"
+      description: "Get the Points for an Event"
+      operationId: "getPoints"
+      responses:
+        '200':
+          description: "Return the Points for an Event"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPointsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetPointsResponse'
+        '404':
+          description: "Return that the Points for an Event could not be found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPointsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetPointsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Event/getLeaderBoardByTimeTrial:
+    post:
+      tags:
+        - "Event"
+      summary: "Get the Leaderboard for a TimeTrial"
+      description: "Get the Leaderboard for a TimeTrial"
+      operationId: "getLeaderBoardByTimeTrial"
+      requestBody:
+        required: true
+        description: "Request to get the Leaderboard for a TimeTrial"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetLeaderBoardByTimeTrialRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetLeaderBoardByTimeTrialRequest'
+      responses:
+        '200':
+          description: "Successfully return the Leaderboard"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
+        '404':
+          description: "Return the Leaderboard was not successfully found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+
+  /Event/createLeaderBoard:
+    post:
+      tags:
+        - "Event"
+      summary: "Create a new Leaderboard for an Event"
+      description: "Create a new Leaderboard for an Event"
+      operationId: "createLeaderBoard"
+      requestBody:
+        required: true
+        description: "Request to create a new Leaderboard for an Event"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLeaderboardRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateLeaderboardRequest'
+      responses:
+        '200':
+          description: "Return the Leaderboard was successfully created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLeaderboardResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateLeaderboardResponse'
+        '404':
+          description: "Return the Leaderboard was not successfully created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLeaderboardResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateLeaderboardResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -1102,23 +1399,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    Difficulty:
-      type: string
-      description: "The GeoCode's real world locating difficulty"
-      enum:
-        - "EASY"
-        - "MEDIUM"
-        - "DIFFICULTY"
-        - "INSANE"
-
-    Rarity:
-      type: string
-      enum:
-        - "COMMON"
-        - "UNCOMMON"
-        - "RARE"
-        - "EPIC"
-        - "LEGENDARY"
 
     GeoCode:
       type: "object"
@@ -1155,6 +1435,15 @@ components:
           $ref: '#/components/schemas/GeoPoint'
       xml:
         name: "GeoCode"
+
+    Difficulty:
+      type: string
+      description: "The GeoCode's real world locating difficulty"
+      enum:
+        - "EASY"
+        - "MEDIUM"
+        - "DIFFICULTY"
+        - "INSANE"
 
     CreateGeoCodeRequest:
       type: "object"
@@ -1470,6 +1759,16 @@ components:
             type: string
       xml:
         name: "Collectable"
+
+    Rarity:
+      type: string
+      enum:
+        - "COMMON"
+        - "UNCOMMON"
+        - "RARE"
+        - "EPIC"
+        - "LEGENDARY"
+
     CreateCollectableSetRequest:
       type: "object"
       required:
@@ -1706,39 +2005,17 @@ components:
       required:
         - id
         - name
+        - event
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
+        event:
+          $ref: "#/components/schemas/Event"
       xml:
         name: "Leaderboard"
-
-    Event:
-      type: "object"
-      required:
-        - id
-        - name
-        - description
-        - location
-        - leaderboards
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        location:
-          $ref: "#/components/schemas/GeoPoint"
-        leaderboards:
-          type: array
-          items:
-            $ref: "#/components/schemas/Leaderboard"
-      xml:
-        name: "Event"
 
     GeoPoint:
       type: "object"
@@ -2061,38 +2338,6 @@ components:
       xml:
         name: "GetMyLeaderboardsResponse"
 
-    CreateLeaderboardRequest:
-      type: "object"
-      required:
-        - name
-        - eventID
-      properties:
-        name:
-          type: string
-        eventID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "CreateLeaderboardRequest"
-
-    CreateLeaderboardResponse:
-      type: "object"
-      required:
-        - success
-        - message
-        - leaderboard
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-          example: "The Leaderboard was successfully created"
-        leaderboard:
-          $ref: '#/components/schemas/Leaderboard'
-      xml:
-        name: "GetMyLeaderboardsResponse"
-
     GetEventLeaderboardRequest:
       type: "object"
       required:
@@ -2112,6 +2357,8 @@ components:
           type: integer
           minimum: 1
           example: 10
+      xml:
+        name: "GetMyLeaderboardsResponse"
 
     GetEventLeaderboardResponse:
       type: "object"
@@ -2132,93 +2379,311 @@ components:
       xml:
         name: "GetMyLeaderboardsResponse"
 
+    Event:
+      type: "object"
+      required:
+        - id
+        - name
+        - description
+        - location
+        - leaderboards
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+        levels:
+          type: array
+          items:
+            $ref: "#/components/schemas/Level"
+        beginDate:
+          type: string
+          format: date
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2017-01-01"
+        endDate:
+          type: string
+          format: date
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2017-01-01"
+        leaderboards:
+          type: array
+          items:
+            $ref: "#/components/schemas/Leaderboard"
+      xml:
+        name: "Event"
+    Level:
+      type: "object"
+      required:
+        - target
+      properties:
+        target:
+          $ref: '#/components/schemas/GeoCode'
+        onLevel:
+          type: object
+          additionalProperties:
+            type: string
+            format: uuid
+            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+      xml:
+        name: "TimeTrial"
+    TimeTrial:
+      type: "object"
+      required:
+        - timeLimit
+      properties:
+        timeLimit:
+          type: number
+      xml:
+        name: "TimeTrial"
+
+    ChangeAvailabilityRequest:
+      type: "object"
+      required:
+        - eventID
+        - availability
+      properties:
+        eventID:
+          type: string
+          format: uuid
+        availability:
+          type: boolean
+      xml:
+        name: "ChangeAvailabilityRequest"
+
+    ChangeAvailabilityResponse:
+      type: "object"
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+      xml:
+        name: "ChangeAvailabilityResponse"
+
+    GetAllEventsResponse:
+      type: "object"
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+      xml:
+        name: "GetAllEventsResponse"
+
+    CreateEventRequest:
+      type: "object"
+      required:
+        - name
+        - description
+        - location
+        - beginDate
+        - GeoCodesToFind
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+        beginDate:
+          type: string
+          format: date
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2017-01-01"
+        endDate:
+          type: string
+          format: date
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2017-01-01"
+        GeoCodesToFind:
+          type: array
+          items:
+            $ref: "#/components/schemas/GeoCode"
+      xml:
+        name: "CreateEventRequest"
+
+    CreateEventResponse:
+      type: "object"
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+      xml:
+        name: "CreateEventResponse"
+
+    GetEventsByLocationRequest:
+      type: "object"
+      required:
+        - location
+      properties:
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+      xml:
+        name: "GetEventsByLocationRequest"
+
+    GetEventsByLocationResponse:
+      type: "object"
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+      xml:
+        name: "GetEventsByLocationResponse"
+
     CreatePointRequest:
       type: "object"
       required:
         - amount
-        - userId
-        - leaderboardId
       properties:
         amount:
-          type: integer
-          minimum: 1
-          example: 6
-        userId:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        leaderboardId:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+          type: number
       xml:
         name: "CreatePointRequest"
 
-    PointResponse:
-      type: object
+    CreatePointResponse:
+      type: "object"
       required:
-        - point
-        - success
-        - message
+        - points
       properties:
-        point:
-          $ref: '#/components/schemas/Point'
+        points:
+          type: array
+          items:
+            $ref: '#/components/schemas/Point'
+      xml:
+        name: "CreatePointResponse"
+
+    CreateTimeTrialRequest:
+      type: "object"
+      required:
+        - timeLimit
+      properties:
+        timeLimit:
+          type: number
+      xml:
+        name: "CreateTimeTrialRequest"
+
+    CreateTimeTrialResponse:
+      type: "object"
+      required:
+        - timeTrial
+      properties:
+        timeTrial:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeTrial'
+      xml:
+        name: "CreateTimeTrialResponse"
+
+    GetPointsByUserRequest:
+      type: "object"
+      required:
+        - userID
+      properties:
+        userID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetPointsByUserRequest"
+
+    GetPointsByUserResponse:
+      type: "object"
+      required:
+        - points
+      properties:
+        points:
+          type: array
+          items:
+            $ref: '#/components/schemas/Point'
+      xml:
+        name: "GetPointsByUserResponse"
+
+    GetPointsByLeaderBoardRequest:
+      type: "object"
+      required:
+        - leaderboardID
+      properties:
+        leaderboardID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetPointsByLeaderBoardRequest"
+
+    GetPointsByLeaderBoardResponse:
+      type: "object"
+      required:
+        - points
+      properties:
+        points:
+          type: array
+          items:
+            $ref: '#/components/schemas/Point'
+      xml:
+        name: "GetPointsByLeaderBoardResponse"
+
+    GetPointsResponse:
+      type: "object"
+      required:
+        - points
+      properties:
+        points:
+          type: array
+          items:
+            $ref: '#/components/schemas/Point'
+      xml:
+        name: "GetPointsResponse"
+
+    GetLeaderBoardByTimeTrialRequest:
+      type: "object"
+      required:
+        - timeTrialID
+      properties:
+        timeTrialID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetLeaderBoardByTimeTrialRequest"
+
+    GetLeaderBoardByTimeTrialResponse:
+      type: "object"
+      required:
+        - leaderboard
+      properties:
+        leaderboard:
+          type: array
+          items:
+            $ref: '#/components/schemas/Leaderboard'
+      xml:
+        name: "GetLeaderBoardByTimeTrialResponse"
+
+    CreateLeaderboardRequest:
+      type: "object"
+      required:
+        - name
+      properties:
+        name:
+          type: string
+      xml:
+        name: "GetLeaderBoardByTimeTrialRequest"
+
+    CreateLeaderboardResponse:
+      type: "object"
+      required:
+        - success
+      properties:
         success:
           type: boolean
-          example: true
-        message:
-          type: string
-          example: "Successfully created a new point"
       xml:
-        name: "PointResponse"
-
-    UpdatePointRequest:
-      type: object
-      required:
-        - pointId
-      properties:
-        pointId:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        amount:
-          type: integer
-          minimum: 0
-          example: 6
-        userId:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        leaderboardId:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "UpdatePointRequest"
-
-    DeletePointRequest:
-      type: object
-      required:
-        - pointId
-      properties:
-        pointId:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "DeletePointRequest"
-
-    DeletePointResponse:
-      type: object
-      required:
-        - success
-        - message
-      properties:
-        success:
-          type: boolean
-          example: true
-        message:
-          type: string
-          example: "Successfully deleted point"
-      xml:
-        name: "DeletePointResponse"
+        name: "GetLeaderBoardByTimeTrialResponse"
