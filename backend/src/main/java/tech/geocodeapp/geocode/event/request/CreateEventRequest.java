@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.event.request;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
@@ -44,12 +43,14 @@ public class CreateEventRequest {
      * The starting Date of the Event
      */
     @JsonProperty( "beginDate" )
+    @NotNull( message = "CreateEventRequest beginDate attribute cannot be null." )
     private LocalDate beginDate;
 
     /**
      * The end Date of the Event
      */
     @JsonProperty( "endDate" )
+    @NotNull( message = "CreateEventRequest endDate attribute cannot be null." )
     private LocalDate endDate;
 
     /**
@@ -57,6 +58,7 @@ public class CreateEventRequest {
      */
     @Valid
     @JsonProperty( "GeoCodesToFind" )
+    @NotNull( message = "CreateEventRequest geoCodesToFind attribute cannot be null." )
     private List< GeoCode > geoCodesToFind;
 
     /**
@@ -98,7 +100,6 @@ public class CreateEventRequest {
      *
      * @return the stored difficulty attribute
      */
-    @Valid
     public String getName() {
 
         return name;
@@ -132,7 +133,6 @@ public class CreateEventRequest {
      *
      * @return the stored difficulty attribute
      */
-    @Valid
     public String getDescription() {
 
         return description;
@@ -200,7 +200,6 @@ public class CreateEventRequest {
      *
      * @return the stored beginDate attribute
      */
-    @Valid
     public LocalDate getBeginDate() {
 
         return beginDate;
@@ -234,7 +233,6 @@ public class CreateEventRequest {
      *
      * @return the stored endDate attribute
      */
-    @Valid
     public LocalDate getEndDate() {
 
         return endDate;

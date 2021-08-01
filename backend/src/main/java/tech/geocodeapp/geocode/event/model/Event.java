@@ -64,12 +64,14 @@ public class Event {
      * The starting Date of the Event
      */
     @JsonProperty( "beginDate" )
+    @NotNull( message = "CreateEventRequest beginDate attribute cannot be null." )
     private LocalDate beginDate;
 
     /**
      * The end Date of the Event
      */
     @JsonProperty( "end" )
+    @NotNull( message = "CreateEventRequest endDate attribute cannot be null." )
     private LocalDate endDate;
 
     /**
