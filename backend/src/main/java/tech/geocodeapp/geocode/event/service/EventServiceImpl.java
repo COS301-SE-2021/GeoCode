@@ -6,13 +6,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
 
 import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.model.Level;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
+import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
-
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * This class implements the EventService interface
@@ -20,6 +23,8 @@ import java.util.List;
 @Validated
 @Service( "EventService" )
 public class EventServiceImpl implements EventService {
+
+    //ToDo add the extra three use cases
 
     /**
      * The repository the GeoCode class interacts with
@@ -45,7 +50,7 @@ public class EventServiceImpl implements EventService {
      *
      * @return the newly created response instance from the specified CreateEventRequest
      *
-     * @throws InvalidRequestException  the provided request was invalid and resulted in an error being thrown
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException {
@@ -55,12 +60,38 @@ public class EventServiceImpl implements EventService {
 
             throw new InvalidRequestException( true );
         } else if ( ( request.getDescription() == null ) || ( request.getLocation() == null ) ||
-                    ( request.getName() == null ) ) {
+                    ( request.getName() == null ) || ( request.getBeginDate() == null ) ||
+                    ( request.getEndDate() == null ) || ( request.getGeoCodesToFind() == null ) ) {
 
             throw new InvalidRequestException();
         }
 
-        return null;
+        //ToDo create the levels
+        //ToDo check how to create the default leaderboard
+
+        var levels = new ArrayList<Level>();
+
+        var leaderboard = new ArrayList<Leaderboard>();
+
+        /* Create the new Event object with the specified attributes */
+        var event = new Event( UUID.randomUUID(), request.getName(), request.getDescription(),
+                               request.getLocation(), levels, request.getBeginDate(), request.getEndDate(),
+                               leaderboard );
+
+        /*
+        * Save the newly create Event
+        * Validate if the Event was saved properly
+        */
+        var success = true;
+        try {
+
+            eventRepo.save( event );
+        } catch ( IllegalArgumentException error ) {
+
+            success = false;
+        }
+
+        return new CreateEventResponse( success );
     }
 
     /**
