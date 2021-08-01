@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import {environment} from '../environments/environment';
-
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+import {KeycloakService} from 'keycloak-angular';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +8,12 @@ import {environment} from '../environments/environment';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {
-    localStorage.setItem('accessToken', environment.hardcodedKeycloakToken);
+  constructor(
+    private keycloak: KeycloakService,
+    private router: Router
+  ) {
+    if (!this.keycloak.getKeycloakInstance().authenticated) {
+      this.router.navigate(['welcome']).then().catch();
+    }
   }
 }

@@ -7,7 +7,8 @@ import {
   GetUserTrackableResponse,
   UserService
 } from '../../services/geocode-api';
-import {UserInformationService} from '../../services/UserInformationService';
+import {KeycloakService} from 'keycloak-angular';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-profile',
@@ -22,13 +23,14 @@ export class ProfilePage implements OnInit {
   constructor(
     private modalController: ModalController,
     private userService: UserService,
-    private userDetails: UserInformationService
+    private keycloak: KeycloakService
   ) {
-    this.userService.getUserTrackable({userID: userDetails.getUUID()}).subscribe((response: GetUserTrackableResponse) => {
+    const id = this.keycloak.getKeycloakInstance().subject;
+    this.userService.getUserTrackable({userID: id}).subscribe((response: GetUserTrackableResponse) => {
       console.log(response);
       this.trackable = response.trackable;
     });
-    this.userService.getCurrentCollectable({userID: userDetails.getUUID()}).subscribe((response: GetCurrentCollectableResponse) => {
+    this.userService.getCurrentCollectable({userID: id}).subscribe((response: GetCurrentCollectableResponse) => {
       console.log(response);
       this.currentCollectable = response.collectable;
     });

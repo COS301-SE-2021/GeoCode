@@ -1,18 +1,17 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Collectables</ion-title>
-    <ng-template [ngIf]="isAdmin()">
-      <ion-buttons slot="end">
-        <ion-button (click)="addSet()">
-          <ion-icon name="add-outline"></ion-icon>
-          <ion-label>New Set</ion-label>
-        </ion-button>
-      </ion-buttons>
-    </ng-template>
+    <ion-title>Collections</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ng-template [ngIf]="isAdmin()">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="addSet()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ng-template>
   <ion-card *ngFor="let set of sets">
     <ion-card-content>
       <div class="header">

@@ -14,6 +14,10 @@ const routes: Routes = [
   {
     path: 'event-timetrial',
     loadChildren: () => import('./event-timetrial/event-timetrial.module').then( m => m.EventTimetrialPageModule)
+  },
+  {
+    path: 'events-create',
+    loadChildren: () => import('./events-create/events-create.module').then( m => m.EventsCreatePageModule)
   }
 
 ];
