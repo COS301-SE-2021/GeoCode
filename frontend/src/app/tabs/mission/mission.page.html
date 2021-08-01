@@ -5,7 +5,8 @@
 </ion-header>
 
 <ion-content>
-  <IonProgressBar color="primary" value={0.5}></IonProgressBar><br />
+  <br /><ion-header>Progress</ion-header>
+  <br /><ion-progress-bar type="determinate" value={{0.5}}></ion-progress-bar ><br />
   <ion-card>
     <ion-card-title>Title</ion-card-title>
     <ion-card-content >
@@ -16,4 +17,5 @@
     </ion-card-content>
   </ion-card>
   <ion-header>Current Location</ion-header>
+  <div #mapElement [style.height]="height" class="map"></div>
 </ion-content>
