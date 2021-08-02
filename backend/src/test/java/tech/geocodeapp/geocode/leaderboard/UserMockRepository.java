@@ -7,11 +7,14 @@ import org.springframework.data.domain.Sort;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class UserMockRepository implements UserRepository {
+    private static final HashMap<UUID, User> map = new HashMap<>();
+
     @Override
     public List<User> findAll() {
         return null;
@@ -59,7 +62,8 @@ public class UserMockRepository implements UserRepository {
 
     @Override
     public <S extends User> S save(S s) {
-        return null;
+        map.put(s.getId(), s);
+        return s;
     }
 
     @Override
