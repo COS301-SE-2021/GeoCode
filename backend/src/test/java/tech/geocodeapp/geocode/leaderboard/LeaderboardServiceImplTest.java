@@ -256,4 +256,27 @@ public class LeaderboardServiceImplTest {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Test that when give a valid pointId that it is deleted and the response is properly returned
+     */
+    @Test
+    public void DeletePointTestValidPointId() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test delete");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            UUID userId = UUID.randomUUID();
+            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "delete point");
+            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
+            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            PointResponse createPointResponse = leaderboardService.createPoint(createPointRequest);
+            DeletePointRequest request = new DeletePointRequest(createPointResponse.getPoint().getId());
+            DeletePointResponse response = leaderboardService.deletePoint(request);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Successfully deleted the provided point", response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
