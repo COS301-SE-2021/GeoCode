@@ -361,4 +361,28 @@ public class LeaderboardServiceImplTest {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Test that the correct response is given when a leaderboardId to update to is invalid
+     */
+    @Test
+    public void updatePointTestInvalidLeaderboardId() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("update leaderboard invalid");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            UUID userId = UUID.randomUUID();
+            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
+            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
+            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            PointResponse createPointResponse = leaderboardService.createPoint(createPointRequest);
+            UpdatePointRequest request = new UpdatePointRequest(createPointResponse.getPoint().getId(), null, null, UUID.randomUUID());
+            PointResponse response = leaderboardService.updatePoint(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Invalid LeaderboardId to update to was provided", response.getMessage());
+            Assertions.assertNull(response.getPoint());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
