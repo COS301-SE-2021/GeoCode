@@ -150,4 +150,20 @@ public class LeaderboardServiceImplTest {
         assertThatThrownBy(() -> leaderboardService.createPoint(request))
                 .isInstanceOf(NullRequestParameterException.class);
     }
+
+    /**
+     * Test that the response object is created correctly when an invalid leaderboardId is provided
+     */
+    @Test
+    public void createPointTestInvalidLeaderboardId() {
+        CreatePointRequest request = new CreatePointRequest(1, UUID.randomUUID(), UUID.randomUUID());
+        try {
+            PointResponse response = leaderboardService.createPoint(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Invalid leaderboard Id provided", response.getMessage());
+            Assertions.assertNull(response.getPoint());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
