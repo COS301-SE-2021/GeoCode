@@ -7,7 +7,8 @@ const routes: Routes = [
   {
     path: '',
     component: ProfilePage
-  },  {
+  },
+  {
     path: 'events',
     loadChildren: () => import('./events/events.module').then( m => m.EventsPageModule)
   },

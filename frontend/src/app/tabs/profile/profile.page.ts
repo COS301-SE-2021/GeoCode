@@ -9,6 +9,7 @@ import {
 } from '../../services/geocode-api';
 import {KeycloakService} from 'keycloak-angular';
 import {environment} from '../../../environments/environment';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -17,15 +18,21 @@ import {environment} from '../../../environments/environment';
 })
 export class ProfilePage implements OnInit {
 
+  showBackButton = true;
   currentCollectable: Collectable = null;
   trackable: Collectable = null;
 
   constructor(
     private modalController: ModalController,
     private userService: UserService,
-    private keycloak: KeycloakService
+    keycloak: KeycloakService,
+    route: ActivatedRoute
   ) {
-    const id = this.keycloak.getKeycloakInstance().subject;
+    let id = route.snapshot.paramMap.get('id');
+    if (!id) {
+      this.showBackButton = false;
+      id = keycloak.getKeycloakInstance().subject;
+    }
     this.userService.getUserTrackable({userID: id}).subscribe((response: GetUserTrackableResponse) => {
       console.log(response);
       this.trackable = response.trackable;

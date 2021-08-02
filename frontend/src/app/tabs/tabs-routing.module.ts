@@ -20,16 +20,22 @@ const routes: Routes = [
         loadChildren: () => import('./events/events.module').then(m => m.EventsPageModule)
       },
       {
-        path: 'profile',
+        path: 'profile/me',
         loadChildren: () => import('./profile/profile.module').then(m => m.ProfilePageModule)
       },
       {
         path: '',
         redirectTo: '/explore',
         pathMatch: 'full'
-      }
+      },
+      {
+        path: 'profile',
+        redirectTo: '/profile/me',
+        pathMatch: 'full'
+      },
     ]
-  },  {
+  },
+  {
     path: 'mission',
     loadChildren: () => import('./mission/mission.module').then( m => m.MissionPageModule)
   }

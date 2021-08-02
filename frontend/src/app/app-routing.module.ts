@@ -9,7 +9,11 @@ const routes: Routes = [
   {
     path: 'welcome',
     loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule)
-  }
+  },
+  {
+    path: 'profile/:id',
+    loadChildren: () => import('./tabs/profile/profile.module').then(m => m.ProfilePageModule)
+  },
 
 
 
