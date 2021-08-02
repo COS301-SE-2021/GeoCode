@@ -96,7 +96,7 @@ public class LeaderboardServiceImplTest {
      * Test to see that when a null request is received it is handled correctly
      */
     @Test
-    public void createPointTestNullRequest(){
+    public void createPointTestNullRequest() {
         try {
             PointResponse response = leaderboardService.createPoint(null);
             Assertions.assertFalse(response.isSuccess());
@@ -107,6 +107,9 @@ public class LeaderboardServiceImplTest {
         }
     }
 
+    /**
+     * Test that the correct exception is thrown when the amount parameter is null
+     */
     @Test
     public void createPointTestNullAmount() {
         CreatePointRequest request = new CreatePointRequest(null, UUID.randomUUID(), UUID.randomUUID());
@@ -115,9 +118,23 @@ public class LeaderboardServiceImplTest {
                 .isInstanceOf(NullRequestParameterException.class);
     }
 
+    /**
+     * Test that the correct exception is thrown when the userId parameter is null
+     */
     @Test
     public void createPointTestNullUserId() {
         CreatePointRequest request = new CreatePointRequest(1,null, UUID.randomUUID());
+
+        assertThatThrownBy(() -> leaderboardService.createPoint(request))
+                .isInstanceOf(NullRequestParameterException.class);
+    }
+
+    /**
+     * Test that the correct exception is thrown when the leaderboardId parameter is null
+     */
+    @Test
+    public void createPointTestNullLeaderboardId() {
+        CreatePointRequest request = new CreatePointRequest(1, UUID.randomUUID(), null);
 
         assertThatThrownBy(() -> leaderboardService.createPoint(request))
                 .isInstanceOf(NullRequestParameterException.class);
