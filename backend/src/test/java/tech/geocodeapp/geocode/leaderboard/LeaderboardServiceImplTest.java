@@ -16,6 +16,7 @@ import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.RegisterNewUserRequest;
 import tech.geocodeapp.geocode.user.request.UpdateLocationRequest;
+import tech.geocodeapp.geocode.user.response.RegisterNewUserResponse;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.UUID;
@@ -188,6 +189,28 @@ public class LeaderboardServiceImplTest {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("Invalid user Id provided", response.getMessage());
             Assertions.assertNull(response.getPoint());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test that a point is created correctly when valid parameters are provided
+     */
+    @Test
+    public void CreatePointTestValidRequestParameters() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("testValid");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            UUID userId = UUID.randomUUID();
+            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
+            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
+            CreatePointRequest request = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            PointResponse response = leaderboardService.createPoint(request);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The Point was successfully created.", response.getMessage());
+            Assertions.assertNotNull(response.getPoint());
+            Assertions.assertEquals(1, response.getPoint().getAmount());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
