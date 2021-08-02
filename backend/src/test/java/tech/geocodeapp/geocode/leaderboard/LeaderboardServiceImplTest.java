@@ -294,4 +294,14 @@ public class LeaderboardServiceImplTest {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Test that a request with a null value for pointId throws the correct exception
+     */
+    @Test
+    public void updatePointTestNullPointId() {
+        UpdatePointRequest request = new UpdatePointRequest(null, null, null, null);
+        assertThatThrownBy(() -> leaderboardService.updatePoint(request))
+                .isInstanceOf(NullRequestParameterException.class);
+    }
 }
