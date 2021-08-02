@@ -320,4 +320,20 @@ public class LeaderboardServiceImplTest {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Check that the method correctly handles being given a pointId that does not exist
+     */
+    @Test
+    public void updatePointTestInvalidPointId() {
+        UpdatePointRequest request  = new UpdatePointRequest(UUID.randomUUID(), 1, null, null);
+        try {
+            PointResponse response = leaderboardService.updatePoint(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("No point with the provided Id exists", response.getMessage());
+            Assertions.assertNull(response.getPoint());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
