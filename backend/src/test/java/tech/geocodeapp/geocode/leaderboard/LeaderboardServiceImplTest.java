@@ -139,4 +139,15 @@ public class LeaderboardServiceImplTest {
         assertThatThrownBy(() -> leaderboardService.createPoint(request))
                 .isInstanceOf(NullRequestParameterException.class);
     }
+
+    /**
+     * Test that the correct exception is thrown when all parameters are null
+     */
+    @Test
+    public void createPointTestNullAllParameters() {
+        CreatePointRequest request = new CreatePointRequest(null, null, null);
+
+        assertThatThrownBy(() -> leaderboardService.createPoint(request))
+                .isInstanceOf(NullRequestParameterException.class);
+    }
 }
