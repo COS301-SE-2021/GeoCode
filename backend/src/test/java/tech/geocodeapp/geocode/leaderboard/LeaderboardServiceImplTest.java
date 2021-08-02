@@ -9,6 +9,7 @@ import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
+import tech.geocodeapp.geocode.leaderboard.request.DeletePointRequest;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.DeletePointResponse;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
@@ -229,5 +230,15 @@ public class LeaderboardServiceImplTest {
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Test that the correct exception is thrown when the request has a null pointId parameter
+     */
+    @Test
+    public void DeletePointTestNullPointId() {
+        DeletePointRequest request = new DeletePointRequest(null);
+        assertThatThrownBy(() -> leaderboardService.deletePoint(request))
+                .isInstanceOf(NullRequestParameterException.class);
     }
 }
