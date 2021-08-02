@@ -57,7 +57,7 @@ public class UserMockRepository implements UserRepository {
 
     @Override
     public void deleteAll() {
-
+        map.clear();
     }
 
     @Override
