@@ -15,6 +15,8 @@ import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
 import tech.geocodeapp.geocode.user.request.UpdateLocationRequest;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith( MockitoExtension.class )
@@ -103,5 +105,13 @@ public class LeaderboardServiceImplTest {
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void createPointTestNullAmount() {
+        CreatePointRequest request = new CreatePointRequest(null, UUID.randomUUID(),UUID.randomUUID());
+
+        assertThatThrownBy(() -> leaderboardService.createPoint(request))
+                .isInstanceOf(NullRequestParameterException.class);
     }
 }
