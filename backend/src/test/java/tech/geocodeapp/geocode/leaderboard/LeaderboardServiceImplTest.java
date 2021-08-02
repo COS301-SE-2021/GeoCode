@@ -304,4 +304,20 @@ public class LeaderboardServiceImplTest {
         assertThatThrownBy(() -> leaderboardService.updatePoint(request))
                 .isInstanceOf(NullRequestParameterException.class);
     }
+
+    /**
+     * Test that the correct response is given when all optional parameters are null
+     */
+    @Test
+    public void updatePointTestAllOptionalParametersNull() {
+        UpdatePointRequest request = new UpdatePointRequest(UUID.randomUUID(), null, null, null);
+        try {
+            PointResponse response = leaderboardService.updatePoint(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Please provide a value for at least one optional value to update a Point", response.getMessage());
+            Assertions.assertNull(response.getPoint());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
