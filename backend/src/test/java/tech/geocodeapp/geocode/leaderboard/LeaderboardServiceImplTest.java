@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.leaderboard;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,21 +32,31 @@ public class LeaderboardServiceImplTest {
     private LeaderboardService leaderboardService;
     private UserService userService;
     private UserRepository userRepository;
+    private LeaderboardMockRepository leaderboardMockRepo;
+    private PointMockRepository pointMockRepository;
 
     private final String hatfieldEaster = "Hatfield Easter Hunt 2021";
     private final String menloParkChristmas = "Christmas 2021 market";
 
     @BeforeEach
     void setup() {
-        LeaderboardMockRepository leaderboardMockRepo = new LeaderboardMockRepository();
+        leaderboardMockRepo = new LeaderboardMockRepository();
         userRepository = new UserMockRepository();
         userService = new UserMockService(userRepository);
+        pointMockRepository = new PointMockRepository();
 
-        leaderboardService = new LeaderboardServiceImpl(leaderboardMockRepo, new PointMockRepository(), null, userService);
+        leaderboardService = new LeaderboardServiceImpl(leaderboardMockRepo, pointMockRepository, null, userService);
 
         /* create a Leaderboard so that can test for uniqueness of names */
         Leaderboard leaderboard1 = new Leaderboard(hatfieldEaster);
         leaderboardMockRepo.save(leaderboard1);
+    }
+
+    @AfterEach
+    void clear() {
+        userRepository.deleteAll();
+        leaderboardMockRepo.deleteAll();
+        pointMockRepository.deleteAll();
     }
 
     @Test
@@ -385,4 +396,7 @@ public class LeaderboardServiceImplTest {
             e.printStackTrace();
         }
     }
+
+
+
 }
