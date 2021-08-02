@@ -109,7 +109,15 @@ public class LeaderboardServiceImplTest {
 
     @Test
     public void createPointTestNullAmount() {
-        CreatePointRequest request = new CreatePointRequest(null, UUID.randomUUID(),UUID.randomUUID());
+        CreatePointRequest request = new CreatePointRequest(null, UUID.randomUUID(), UUID.randomUUID());
+
+        assertThatThrownBy(() -> leaderboardService.createPoint(request))
+                .isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
+    public void createPointTestNullUserId() {
+        CreatePointRequest request = new CreatePointRequest(1,null, UUID.randomUUID());
 
         assertThatThrownBy(() -> leaderboardService.createPoint(request))
                 .isInstanceOf(NullRequestParameterException.class);
