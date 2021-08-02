@@ -572,4 +572,39 @@ public class LeaderboardServiceImplTest {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Test that when provided with a valid leaderboardId, userId and amount that a point is correctly updated with them
+     */
+    @Test
+    public void updatePointTestAllOptionalFieldsValid() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            UUID userId = UUID.randomUUID();
+            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "test user");
+            userService.registerNewUser(userRequest);
+            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
+
+            UUID updatedUserId = UUID.randomUUID();
+            RegisterNewUserRequest updatedUserRequest = new RegisterNewUserRequest(updatedUserId, "updated user");
+            userService.registerNewUser(updatedUserRequest);
+
+            CreateLeaderboardRequest updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
+            CreateLeaderboardResponse updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
+
+            UpdatePointRequest request = new UpdatePointRequest(pointResponse.getPoint().getId(), 2, updatedUserId, updatedLeaderboardResponse.getLeaderboard().getId());
+            PointResponse response = leaderboardService.updatePoint(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Updated point successfully", response.getMessage());
+            Assertions.assertNotNull(response.getPoint());
+            Assertions.assertEquals(userService.getUserById(new GetUserByIdRequest(updatedUserId)).getUser(), response.getPoint().getUser());
+            Assertions.assertEquals(updatedLeaderboardResponse.getLeaderboard(), response.getPoint().getLeaderBoard());
+            Assertions.assertEquals(2, response.getPoint().getAmount());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
