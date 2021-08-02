@@ -336,4 +336,29 @@ public class LeaderboardServiceImplTest {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Test that the amount of a point is updated correctly when it is the only field to be updated
+     */
+    @Test
+    public void updatePointTestOnlyAmountUpdated() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("update amount");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            UUID userId = UUID.randomUUID();
+            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
+            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
+            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            PointResponse createPointResponse = leaderboardService.createPoint(createPointRequest);
+            UpdatePointRequest request = new UpdatePointRequest(createPointResponse.getPoint().getId(), 2, null, null);
+            PointResponse response = leaderboardService.updatePoint(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Updated point successfully", response.getMessage());
+            Assertions.assertNotNull(response.getPoint());
+            Assertions.assertEquals(2, response.getPoint().getAmount());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
