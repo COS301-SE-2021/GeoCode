@@ -147,7 +147,7 @@ public class PointMockRepository implements PointRepository {
 
     @Override
     public void deleteById(UUID uuid) {
-
+        map.remove(uuid);
     }
 
     @Override
