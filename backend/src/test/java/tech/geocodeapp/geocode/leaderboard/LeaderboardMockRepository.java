@@ -70,7 +70,7 @@ public class LeaderboardMockRepository implements LeaderboardRepository {
 
     @Override
     public void deleteAll() {
-
+        map.clear();
     }
 
     @Override
