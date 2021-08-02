@@ -7,6 +7,8 @@ import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 import tech.geocodeapp.geocode.user.service.UserService;
 
+import java.util.Optional;
+
 public class UserMockService implements UserService {
 
     private final UserRepository userRepo;
@@ -52,7 +54,12 @@ public class UserMockService implements UserService {
 
     @Override
     public GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullRequestParameterException {
-        return null;
+        Optional<User> foundUser = userRepo.findById(request.getUserID());
+        if(foundUser.isEmpty()){
+            return new GetUserByIdResponse(false, "The User was not found", null);
+        }else{
+            return new GetUserByIdResponse(true, "The User was found", foundUser.get());
+        }
     }
 
     @Override
