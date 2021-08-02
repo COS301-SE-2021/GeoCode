@@ -10,6 +10,7 @@ import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
 import tech.geocodeapp.geocode.leaderboard.request.DeletePointRequest;
+import tech.geocodeapp.geocode.leaderboard.request.UpdatePointRequest;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.DeletePointResponse;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
@@ -279,4 +280,18 @@ public class LeaderboardServiceImplTest {
         }
     }
 
+    /**
+     * Test to check that a null request is correctly handled
+     */
+    @Test
+    public void updatePointTestNullRequest() {
+        try {
+            PointResponse response = leaderboardService.updatePoint(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The UpdatePointRequest passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getPoint());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
