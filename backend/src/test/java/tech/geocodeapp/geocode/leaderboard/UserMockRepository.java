@@ -73,7 +73,7 @@ public class UserMockRepository implements UserRepository {
 
     @Override
     public Optional<User> findById(UUID uuid) {
-        return Optional.empty();
+        return Optional.ofNullable(map.get(uuid));
     }
 
     @Override
