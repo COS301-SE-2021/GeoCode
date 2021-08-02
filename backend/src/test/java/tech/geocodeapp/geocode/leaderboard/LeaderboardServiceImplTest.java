@@ -13,7 +13,10 @@ import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
+import tech.geocodeapp.geocode.user.repository.UserRepository;
+import tech.geocodeapp.geocode.user.request.RegisterNewUserRequest;
 import tech.geocodeapp.geocode.user.request.UpdateLocationRequest;
+import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.UUID;
 
@@ -22,6 +25,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ExtendWith( MockitoExtension.class )
 public class LeaderboardServiceImplTest {
     private LeaderboardService leaderboardService;
+    private UserService userService;
+    private UserRepository userRepository;
 
     private final String hatfieldEaster = "Hatfield Easter Hunt 2021";
     private final String menloParkChristmas = "Christmas 2021 market";
@@ -29,8 +34,10 @@ public class LeaderboardServiceImplTest {
     @BeforeEach
     void setup() {
         LeaderboardMockRepository leaderboardMockRepo = new LeaderboardMockRepository();
+        userRepository = new UserMockRepository();
+        userService = new UserMockService(userRepository);
 
-        leaderboardService = new LeaderboardServiceImpl(leaderboardMockRepo, new PointMockRepository(), null, null);
+        leaderboardService = new LeaderboardServiceImpl(leaderboardMockRepo, new PointMockRepository(), null, userService);
 
         /* create a Leaderboard so that can test for uniqueness of names */
         Leaderboard leaderboard1 = new Leaderboard(hatfieldEaster);
@@ -161,6 +168,25 @@ public class LeaderboardServiceImplTest {
             PointResponse response = leaderboardService.createPoint(request);
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("Invalid leaderboard Id provided", response.getMessage());
+            Assertions.assertNull(response.getPoint());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test that the correct response object is created when an invalid userId is provided
+     */
+    @Test
+    public void CreatePointTestInvalidUserId() {
+        //create a leaderboard to ensure a valid id for leaderboardId parameter
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            CreatePointRequest request = new CreatePointRequest(1, UUID.randomUUID(), leaderboardResponse.getLeaderboard().getId());
+            PointResponse response = leaderboardService.createPoint(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Invalid user Id provided", response.getMessage());
             Assertions.assertNull(response.getPoint());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
