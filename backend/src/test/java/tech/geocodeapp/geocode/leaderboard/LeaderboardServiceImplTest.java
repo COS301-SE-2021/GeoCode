@@ -181,7 +181,7 @@ public class LeaderboardServiceImplTest {
      * Test that the correct response object is created when an invalid userId is provided
      */
     @Test
-    public void CreatePointTestInvalidUserId() {
+    public void createPointTestInvalidUserId() {
         //create a leaderboard to ensure a valid id for leaderboardId parameter
         CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
         try {
@@ -200,7 +200,7 @@ public class LeaderboardServiceImplTest {
      * Test that a point is created correctly when valid parameters are provided
      */
     @Test
-    public void CreatePointTestValidRequestParameters() {
+    public void createPointTestValidRequestParameters() {
         CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("testValid");
         try {
             CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
@@ -222,7 +222,7 @@ public class LeaderboardServiceImplTest {
      * Test that the correct response is returned when the request is null
      */
     @Test
-    public void DeletePointTestNullRequest() {
+    public void deletePointTestNullRequest() {
         try {
             DeletePointResponse response = leaderboardService.deletePoint(null);
             Assertions.assertFalse(response.isSuccess());
@@ -236,7 +236,7 @@ public class LeaderboardServiceImplTest {
      * Test that the correct exception is thrown when the request has a null pointId parameter
      */
     @Test
-    public void DeletePointTestNullPointId() {
+    public void deletePointTestNullPointId() {
         DeletePointRequest request = new DeletePointRequest(null);
         assertThatThrownBy(() -> leaderboardService.deletePoint(request))
                 .isInstanceOf(NullRequestParameterException.class);
@@ -246,7 +246,7 @@ public class LeaderboardServiceImplTest {
      * Test that the correct response is returned when an invalid pointId is sent
      */
     @Test
-    public void DeletePointTestInvalidPointId() {
+    public void deletePointTestInvalidPointId() {
         DeletePointRequest request = new DeletePointRequest(UUID.randomUUID());
         try {
             DeletePointResponse response = leaderboardService.deletePoint(request);
@@ -261,7 +261,7 @@ public class LeaderboardServiceImplTest {
      * Test that when give a valid pointId that it is deleted and the response is properly returned
      */
     @Test
-    public void DeletePointTestValidPointId() {
+    public void deletePointTestValidPointId() {
         CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test delete");
         try {
             CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
@@ -277,6 +277,6 @@ public class LeaderboardServiceImplTest {
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
-
     }
+
 }
