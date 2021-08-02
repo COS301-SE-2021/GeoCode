@@ -5,8 +5,8 @@
     </ion-buttons>
     <ion-title>Geocodes</ion-title>
   </ion-toolbar>
-  <ng-template [ngIf]="created.length > 0">
-    <ion-segment (ionChange)="segmentChanged($event)" value="found">
+  <ng-template [ngIf]="createdIDs && createdIDs.length > 0">
+    <ion-segment (ionChange)="segmentChanged($event)" value="found" color="main">
       <ion-segment-button value="found">
         <ion-label>Found</ion-label>
       </ion-segment-button>
