@@ -7,6 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserMissionsPage implements OnInit {
 
+  missions = [{
+    name: 'Mission Name',
+    id: 'random',
+    progress: 0.42
+  },{
+    name: 'Mission Name',
+    id: 'random',
+    progress: 0.42
+  }];
+
   constructor() { }
 
   ngOnInit() {
