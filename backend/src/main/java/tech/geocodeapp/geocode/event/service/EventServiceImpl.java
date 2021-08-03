@@ -24,8 +24,6 @@ import java.util.UUID;
 @Service( "EventService" )
 public class EventServiceImpl implements EventService {
 
-    //ToDo add the extra three use cases
-
     /**
      * The repository the GeoCode class interacts with
      */
@@ -95,6 +93,102 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
+     * Get a specified Event that is stored in the repository
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetEventRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetEventResponse getEvent( GetEventRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getEventID() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get a specific Event that a User is currently partaking in and the Event stored in the repository
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetCurrentEventRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetCurrentEventResponse getCurrentEvent( GetCurrentEventRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( ( request.getEventID() == null ) || ( request.getUserID() == null ) ) {
+
+            throw new InvalidRequestException();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the next GeoCode the User has to find for their current Event
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified NextStageRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public NextStageResponse nextStage( NextStageRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( ( request.getEventID() == null ) || ( request.getUserID() == null ) ) {
+
+            throw new InvalidRequestException();
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieve a list of Events around a certain radius of a location
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified EventsNearMeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public EventsNearMeResponse eventsNearMe( EventsNearMeRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getLocation() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        return null;
+    }
+
+    /**
      * Get all the stored Events in the repository
      *
      * @return the newly created response instance
@@ -113,6 +207,8 @@ public class EventServiceImpl implements EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified ChangeAvailabilityRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public ChangeAvailabilityResponse changeAvailability( ChangeAvailabilityRequest request ) throws InvalidRequestException {
@@ -135,6 +231,8 @@ public class EventServiceImpl implements EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public GetEventsByLocationResponse getEventsByLocation( GetEventsByLocationRequest request ) throws InvalidRequestException {
@@ -157,6 +255,8 @@ public class EventServiceImpl implements EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) throws InvalidRequestException {
@@ -179,6 +279,8 @@ public class EventServiceImpl implements EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public CreatePointResponse createPoint( CreatePointRequest request ) throws InvalidRequestException {
@@ -202,9 +304,17 @@ public class EventServiceImpl implements EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public CreateTimeTrialResponse createTimeTrial( CreateTimeTrialRequest request ) {
+    public CreateTimeTrialResponse createTimeTrial( CreateTimeTrialRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        }
 
         return null;
     }
@@ -215,6 +325,8 @@ public class EventServiceImpl implements EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public GetPointsByUserResponse getPointsByUser( GetPointsByUserRequest request ) throws InvalidRequestException {
@@ -237,6 +349,8 @@ public class EventServiceImpl implements EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public GetPointsByLeaderBoardResponse getPointsByLeaderboard( GetPointsByLeaderBoardRequest request ) throws InvalidRequestException {
@@ -270,6 +384,8 @@ public class EventServiceImpl implements EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public GetLeaderBoardByTimeTrialResponse getLeaderBoardByTimeTrial( GetLeaderBoardByTimeTrialRequest request ) throws InvalidRequestException {
