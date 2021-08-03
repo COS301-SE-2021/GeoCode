@@ -351,7 +351,6 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
-
   /GeoCode/getCollectables:
     post:
       tags:
@@ -414,6 +413,46 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
+  /GeoCode/getGeoCodesByDifficultyList:
+    post:
+      tags:
+        - "GeoCode"
+      summary: "Get all all the stored GeoCodes by the specified difficulties"
+      description: "Get all GeoCodes by difficulty"
+      operationId: "getGeoCodesByDifficultyList"
+      requestBody:
+        required: true
+        description: "Request to get all the GeoCodes by the specified difficulties"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetGeoCodesByDifficultyListRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetGeoCodesByDifficultyListRequest"
+      responses:
+        '200':
+          description: "Returned all the GeoCode's with the specified difficulties"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodesByDifficultyListResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodesByDifficultyListResponse"
+        '404':
+          description: "Could not return GeoCode's with the specified difficulties"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodesByDifficultyListResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodesByDifficultyListResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        -   bearerAuth: [ ]
   /GeoCode/getGeoCodes:
     get:
       tags:
@@ -1713,19 +1752,8 @@ components:
     GetGeoCodesByDifficultyRequest:
       type: "object"
       required:
-        - description
-        - location
         - difficulty
-        - hints
       properties:
-        description:
-          type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
         difficulty:
           $ref: "#/components/schemas/Difficulty"
       xml:
@@ -1740,6 +1768,28 @@ components:
             $ref: "#/components/schemas/GeoCode"
       xml:
         name: "getGeoCodesByDifficultyResponse"
+
+    GetGeoCodesByDifficultyListRequest:
+      type: "object"
+      required:
+        - difficulty
+      properties:
+        difficulty:
+          type: array
+          items:
+            $ref: "#/components/schemas/Difficulty"
+      xml:
+        name: "GetGeoCodesByDifficultyListRequest"
+
+    GetGeoCodesByDifficultyListResponse:
+      type: "object"
+      properties:
+        geocodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/GeoCode"
+      xml:
+        name: "GetGeoCodesByDifficultyListResponse"
 
     GetGeoCodesResponse:
       type: "object"
