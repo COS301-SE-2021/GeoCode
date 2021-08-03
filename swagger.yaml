@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.0.0"
+  version: "1.5.0"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -310,6 +310,48 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
+
+  /GeoCode/getGeoCode:
+    post:
+      tags:
+        - "GeoCode"
+      summary: "Get a specific GeoCode"
+      description: "Get a GeoCode with a specified ID"
+      operationId: "getGeoCode"
+      requestBody:
+        required: true
+        description: "Request to get a stored GeoCode with teh specified ID"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetGeoCodeRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetGeoCodeRequest"
+      responses:
+        '200':
+          description: "Successfully found the GeoCode with the given ID"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodeResponse"
+        '404':
+          description: "Could not find the GeoCode with the given ID"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodeResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
   /GeoCode/getCollectables:
     post:
       tags:
@@ -1639,11 +1681,34 @@ components:
 
     CreateGeoCodeResponse:
       type: "object"
+      required:
+        - geoCode
       properties:
         geoCode:
           $ref: "#/components/schemas/GeoCode"
       xml:
         name: "CreateGeoCodeResponse"
+
+    GetGeoCodeRequest:
+      type: "object"
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+      xml:
+        name: "GetGeoCodeRequest"
+
+    GetGeoCodeResponse:
+      type: "object"
+      required:
+        - geoCode
+      properties:
+        geoCode:
+          $ref: "#/components/schemas/GeoCode"
+      xml:
+        name: "GetGeoCodeResponse"
 
     GetGeoCodesByDifficultyRequest:
       type: "object"
