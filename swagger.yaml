@@ -28,11 +28,11 @@ paths:
       tags:
         - "User"
       summary: "Get the Collectable the User is currently holding"
-      description: "Get the user"s current Collectable"
+      description: "Get the user's current Collectable"
       operationId: "getCurrentCollectable"
       requestBody:
         required: true
-        description: "Request to get the user"s current Collectable"
+        description: "Request to get the user's current Collectable"
         content:
           application/json:
             schema:
@@ -59,12 +59,12 @@ paths:
     post:
       tags:
         - "User"
-      summary: "Gets the user"s trackable"
-      description: "Get the given user"s trackable"
+      summary: "Gets the user's trackable"
+      description: "Get the given user's trackable"
       operationId: "getUserTrackable"
       requestBody:
         required: true
-        description: "Request to get the user"s trackable"
+        description: "Request to get the user's trackable"
         content:
           application/json:
             schema:
@@ -74,7 +74,7 @@ paths:
               $ref: "#/components/schemas/GetUserTrackableRequest"
       responses:
         '200':
-          description: "The user"s trackable was successfully returned"
+          description: "The user's trackable was successfully returned"
           content:
             application/json:
               schema:
@@ -91,12 +91,12 @@ paths:
     post:
       tags:
         - "User"
-      summary: "Update the location of the user"s trackable"
-      description: "Update the location of the user"s trackable when they place it"
+      summary: "Update the location of the user's trackable"
+      description: "Update the location of the user's trackable when they place it"
       operationId: "updateLocation"
       requestBody:
         required: true
-        description: "Request to update the location of the user"s trackable"
+        description: "Request to update the location of the user's trackable"
         content:
           application/json:
             schema:
@@ -106,7 +106,7 @@ paths:
               $ref: "#/components/schemas/UpdateLocationRequest"
       responses:
         '200':
-          description: "The user"s trackable had it"s location successfully updated"
+          description: "The user's trackable had it's location successfully updated"
           content:
             application/json:
               schema:
@@ -124,11 +124,11 @@ paths:
       tags:
         - "User"
       summary: "Gets the Collectable Types that the user has ever found"
-      description: "Get a user"s found Collectable Types"
+      description: "Get a user's found Collectable Types"
       operationId: "getFoundCollectableTypes"
       requestBody:
         required: true
-        description: "Request to get the IDs of the user"s found Collectable Types"
+        description: "Request to get the IDs of the user's found Collectable Types"
         content:
           application/json:
             schema:
@@ -138,7 +138,7 @@ paths:
               $ref: "#/components/schemas/GetFoundCollectableTypesRequest"
       responses:
         '200':
-          description: "Successfully returned the user"s found collectables"
+          description: "Successfully returned the user's found collectables"
           content:
             application/json:
               schema:
@@ -156,11 +156,11 @@ paths:
       tags:
         - "User"
       summary: "Gets the GeoCodes that the user has ever found"
-      description: "Gets the user"s found GeoCodes"
+      description: "Gets the user's found GeoCodes"
       operationId: "getFoundGeoCodes"
       requestBody:
         required: true
-        description: "Request to get the user"s found GeoCodes"
+        description: "Request to get the user's found GeoCodes"
         content:
           application/json:
             schema:
@@ -187,12 +187,12 @@ paths:
     post:
       tags:
         - "User"
-      summary: "Gets the user"s owned GeoCodes"
-      description: "Get"s the user"s owned GeoCodes"
+      summary: "Gets the user's owned GeoCodes"
+      description: "Get's the user's owned GeoCodes"
       operationId: "getOwnedGeoCodes"
       requestBody:
         required: true
-        description: "Request to get the user"s owned GeoCodes"
+        description: "Request to get the user's owned GeoCodes"
         content:
           application/json:
             schema:
@@ -251,7 +251,7 @@ paths:
     post:
       tags:
         - "User"
-      summary: "Gets the User"s Leaderboard rankings"
+      summary: "Gets the User's Leaderboard rankings"
       description: "Gets all the points and ranking for the Leaderboards that the given User is on"
       operationId: "getMyLeaderboards"
       requestBody:
@@ -315,11 +315,11 @@ paths:
       tags:
         - "GeoCode"
       summary: "Get all Collectables for a certain GeoCode"
-      description: "Get a GeoCode"s Collectables"
+      description: "Get a GeoCode's Collectables"
       operationId: "getGeoCodeCollectables"
       requestBody:
         required: true
-        description: "Request to get a GeoCode"s Collectables"
+        description: "Request to get a GeoCode's Collectables"
         content:
           application/json:
             schema:
@@ -329,7 +329,7 @@ paths:
               $ref: "#/components/schemas/GetCollectablesRequest"
       responses:
         '200':
-          description: "Returned the GeoCode"s Collectables successfully"
+          description: "Returned the GeoCode's Collectables successfully"
           content:
             application/json:
               schema:
@@ -360,7 +360,7 @@ paths:
               $ref: "#/components/schemas/GetGeoCodesByDifficultyRequest"
       responses:
         '200':
-          description: "Returned all the GeoCode"s with the specified difficulty"
+          description: "Returned all the GeoCode's with the specified difficulty"
           content:
             application/json:
               schema:
@@ -433,7 +433,7 @@ paths:
       operationId: "getGeoCodeByQRCode"
       requestBody:
         required: true
-        description: "Request to get a GeoCode"s associated with the given QR Code"
+        description: "Request to get a GeoCode's associated with the given QR Code"
         content:
           application/json:
             schema:
@@ -491,11 +491,11 @@ paths:
       tags:
         - "GeoCode"
       summary: "Get the Trackable for a certain GeoCode"
-      description: "Get a GeoCode"s Trackable"
+      description: "Get a GeoCode's Trackable"
       operationId: "getTrackables"
       requestBody:
         required: true
-        description: "Request to get a GeoCode"s Trackable"
+        description: "Request to get a GeoCode's Trackable"
         content:
           application/json:
             schema:
@@ -505,7 +505,7 @@ paths:
               $ref: "#/components/schemas/GetTrackablesRequest"
       responses:
         '200':
-          description: "Returned the GeoCode"s Trackable successfully"
+          description: "Returned the GeoCode's Trackable successfully"
           content:
             application/json:
               schema:
@@ -521,12 +521,12 @@ paths:
     post:
       tags:
         - "GeoCode"
-      summary: "Swap a specific GeoCode"s Collectable"
-      description: "Swap a specific GeoCode"s Collectable"
+      summary: "Swap a specific GeoCode's Collectable"
+      description: "Swap a specific GeoCode's Collectable"
       operationId: "swapCollectables"
       requestBody:
         required: true
-        description: "Request to swap a GeoCode"s Collectables"
+        description: "Request to swap a GeoCode's Collectables"
         content:
           application/json:
             schema:
@@ -536,7 +536,7 @@ paths:
               $ref: "#/components/schemas/SwapCollectablesRequest"
       responses:
         '200':
-          description: "Swapped the GeoCode"s Collectable successfully"
+          description: "Swapped the GeoCode's Collectable successfully"
           content:
             application/json:
               schema:
@@ -557,7 +557,7 @@ paths:
       operationId: "updateAvailability"
       requestBody:
         required: true
-        description: "Request to update a GeoCode"s availability"
+        description: "Request to update a GeoCode's availability"
         content:
           application/json:
             schema:
@@ -567,7 +567,7 @@ paths:
               $ref: "#/components/schemas/UpdateAvailabilityRequest"
       responses:
         '200':
-          description: "Updated the GeoCode"s availability successfully"
+          description: "Updated the GeoCode's availability successfully"
           content:
             application/json:
               schema:
@@ -921,12 +921,12 @@ paths:
     post:
       tags:
         - "Leaderboard"
-      summary: "Get an Event"s Leaderboard details"
-      description: "Returns the Event"s Leaderboard details from a specific rank down for a specified number of users"
+      summary: "Get an Event's Leaderboard details"
+      description: "Returns the Event's Leaderboard details from a specific rank down for a specified number of users"
       operationId: "getEventLeaderboard"
       requestBody:
         required: true
-        description: "Request to get a subset of the Event"s Leaderboard details"
+        description: "Request to get a subset of the Event's Leaderboard details"
         content:
           application/json:
             schema:
@@ -936,7 +936,7 @@ paths:
               $ref: "#/components/schemas/GetEventLeaderboardRequest"
       responses:
         '200':
-          description: "Successfully returned the Event"s Leaderboard details"
+          description: "Successfully returned the Event's Leaderboard details"
           content:
             application/json:
               schema:
@@ -962,8 +962,8 @@ paths:
     post:
       tags:
         - "Event"
-      summary: "Changes an Event"s availability"
-      description: "Changes the specified Event"s availability to the given availability"
+      summary: "Changes an Event's availability"
+      description: "Changes the specified Event's availability to the given availability"
       operationId: "changeAvailability"
       requestBody:
         required: true
@@ -1008,7 +1008,7 @@ paths:
       operationId: "getAllEvents"
       responses:
         '200':
-          description: "Successfully returned all the Event"s"
+          description: "Successfully returned all the Event's"
           content:
             application/json:
               schema:
@@ -1602,7 +1602,7 @@ components:
 
     Difficulty:
       type: string
-      description: "The GeoCode"s real world locating difficulty"
+      description: "The GeoCode's real world locating difficulty"
       enum:
         - "EASY"
         - "MEDIUM"
@@ -2294,7 +2294,7 @@ components:
           type: boolean
         message:
           type: string
-          example: "The user"s Collectable was successfully returned"
+          example: "The user's Collectable was successfully returned"
         Collectable:
           $ref: "#/components/schemas/Collectable"
       xml:
@@ -2322,7 +2322,7 @@ components:
           type: boolean
         message:
           type: string
-          example: "The user"s Trackable was successfully returned"
+          example: "The user's Trackable was successfully returned"
         Trackable:
           $ref: "#/components/schemas/Collectable"
       xml:
@@ -2350,7 +2350,7 @@ components:
           type: boolean
         message:
           type: string
-          example: "The trackable object"s location was successfully updated"
+          example: "The trackable object's location was successfully updated"
         Trackable:
           $ref: "#/components/schemas/Collectable"
       xml:
@@ -2378,7 +2378,7 @@ components:
           type: boolean
         message:
           type: string
-          example: "The IDs of the User"s found CollectableTypes was successfully returned"
+          example: "The IDs of the User's found CollectableTypes was successfully returned"
         collectableTypeIDs:
           type: array
           items:
@@ -2409,7 +2409,7 @@ components:
           type: boolean
         message:
           type: string
-          example: "The IDs of the User"s found GeoCodes was successfully returned"
+          example: "The IDs of the User's found GeoCodes was successfully returned"
         geocodeIDs:
           type: array
           items:
@@ -2440,7 +2440,7 @@ components:
           type: boolean
         message:
           type: string
-          example: "The IDs of the User"s owned GeoCodes was successfully returned"
+          example: "The IDs of the User's owned GeoCodes was successfully returned"
         geocodeIDs:
           type: array
           items:
@@ -2494,7 +2494,7 @@ components:
           type: boolean
         message:
           type: string
-          example: "The details for the User"s Leaderboards were successfully returned"
+          example: "The details for the User's Leaderboards were successfully returned"
         leaderboards:
           type: array
           items:
@@ -2535,7 +2535,7 @@ components:
           type: boolean
         message:
           type: string
-          example: "The details for the Event"s Leaderboard were successfully returned"
+          example: "The details for the Event's Leaderboard were successfully returned"
         leaderboard:
           type: array
           items:
