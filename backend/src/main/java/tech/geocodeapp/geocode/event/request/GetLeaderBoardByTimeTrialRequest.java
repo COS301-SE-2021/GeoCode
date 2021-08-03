@@ -23,14 +23,6 @@ public class GetLeaderBoardByTimeTrialRequest {
         return this;
     }
 
-    /**
-     * Get timeTrialID
-     *
-     * @return timeTrialID
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
-
     @Valid
     public UUID getTimeTrialID() {
 
@@ -41,7 +33,6 @@ public class GetLeaderBoardByTimeTrialRequest {
 
         this.timeTrialID = timeTrialID;
     }
-
 
     @Override
     public boolean equals( java.lang.Object o ) {

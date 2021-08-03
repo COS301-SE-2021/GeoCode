@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * NextStageRequest
+ * NextStageRequest object gets the next GeoCode for a user to find
  */
 @Validated
 public class NextStageRequest {

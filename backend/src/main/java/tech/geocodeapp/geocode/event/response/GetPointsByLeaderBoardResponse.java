@@ -1,15 +1,14 @@
 package tech.geocodeapp.geocode.event.response;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.Valid;
+
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GetPointsByLeaderBoardResponse
@@ -17,8 +16,8 @@ import javax.validation.constraints.*;
 @Validated
 public class GetPointsByLeaderBoardResponse {
 
-    @JsonProperty( "points" )
     @Valid
+    @JsonProperty( "points" )
     private List< Point > points = new ArrayList<>();
 
     public GetPointsByLeaderBoardResponse points( List< Point > points ) {
@@ -33,13 +32,6 @@ public class GetPointsByLeaderBoardResponse {
         return this;
     }
 
-    /**
-     * Get points
-     *
-     * @return points
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
     @Valid
     public List< Point > getPoints() {
 
@@ -63,8 +55,8 @@ public class GetPointsByLeaderBoardResponse {
 
             return false;
         }
-        GetPointsByLeaderBoardResponse getPointsByLeaderBoardResponse = ( GetPointsByLeaderBoardResponse ) o;
-        return Objects.equals( this.points, getPointsByLeaderBoardResponse.points );
+
+        return Objects.equals( this.points, ( ( GetPointsByLeaderBoardResponse ) o ).points );
     }
 
     @Override
@@ -91,6 +83,7 @@ public class GetPointsByLeaderBoardResponse {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 

@@ -1,15 +1,13 @@
 package tech.geocodeapp.geocode.event.response;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.Valid;
+
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
+import java.util.List;
 
 /**
  * GetPointsByUserResponse
@@ -17,9 +15,9 @@ import javax.validation.constraints.*;
 @Validated
 public class GetPointsByUserResponse {
 
-    @JsonProperty( "points" )
     @Valid
-    private List< Point > points = new ArrayList<>();
+    @JsonProperty( "points" )
+    private List< Point > points;
 
     public GetPointsByUserResponse points( List< Point > points ) {
 
@@ -33,13 +31,6 @@ public class GetPointsByUserResponse {
         return this;
     }
 
-    /**
-     * Get points
-     *
-     * @return points
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
     @Valid
     public List< Point > getPoints() {
 
@@ -50,7 +41,6 @@ public class GetPointsByUserResponse {
 
         this.points = points;
     }
-
 
     @Override
     public boolean equals( java.lang.Object o ) {
@@ -63,8 +53,8 @@ public class GetPointsByUserResponse {
 
             return false;
         }
-        GetPointsByUserResponse getPointsByUserResponse = ( GetPointsByUserResponse ) o;
-        return Objects.equals( this.points, getPointsByUserResponse.points );
+
+        return Objects.equals( this.points, ( ( GetPointsByUserResponse ) o ).points );
     }
 
     @Override
@@ -91,6 +81,7 @@ public class GetPointsByUserResponse {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 

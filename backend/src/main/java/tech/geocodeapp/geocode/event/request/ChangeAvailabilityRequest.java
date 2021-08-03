@@ -34,7 +34,7 @@ public class ChangeAvailabilityRequest {
      * @param eventID the id of the Event to updated
      * @param availability the availability to update to
      */
-    public ChangeAvailabilityRequest( @Valid UUID eventID, @Valid Boolean availability ) {
+    public ChangeAvailabilityRequest( UUID eventID, Boolean availability ) {
 
         this.eventID = eventID;
         this.availability = availability;
@@ -47,7 +47,7 @@ public class ChangeAvailabilityRequest {
      *
      * @return the request after the eventID has been changed
      */
-    public ChangeAvailabilityRequest eventID( @Valid UUID eventID ) {
+    public ChangeAvailabilityRequest eventID( UUID eventID ) {
 
         this.eventID = eventID;
         return this;
@@ -69,7 +69,7 @@ public class ChangeAvailabilityRequest {
      *
      * @param eventID the value the attribute should be set to
      */
-    public void setEventID( @Valid UUID eventID ) {
+    public void setEventID( UUID eventID ) {
 
         this.eventID = eventID;
     }
@@ -81,7 +81,7 @@ public class ChangeAvailabilityRequest {
      *
      * @return the request after the availability has been changed
      */
-    public ChangeAvailabilityRequest availability( @Valid Boolean availability ) {
+    public ChangeAvailabilityRequest availability( Boolean availability ) {
 
         this.availability = availability;
         return this;
@@ -103,7 +103,7 @@ public class ChangeAvailabilityRequest {
      *
      * @param availability the value the attribute should be set to
      */
-    public void setAvailability( @Valid Boolean availability ) {
+    public void setAvailability( Boolean availability ) {
 
         this.availability = availability;
     }
