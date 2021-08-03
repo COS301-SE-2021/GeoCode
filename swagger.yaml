@@ -10,7 +10,7 @@ info:
     name: "Apache 2.0"
     url: "https://www.apache.org/licenses/LICENSE-2.0.html"
 servers:
-  - url: 'http://geocodeapp.tech:8080/api'
+  - url: "http://geocodeapp.tech:8080/api"
 tags:
   - name: "User"
     description: "Everything about the users of the platform"
@@ -28,30 +28,30 @@ paths:
       tags:
         - "User"
       summary: "Get the Collectable the User is currently holding"
-      description: "Get the user's current Collectable"
+      description: "Get the user"s current Collectable"
       operationId: "getCurrentCollectable"
       requestBody:
         required: true
-        description: "Request to get the user's current Collectable"
+        description: "Request to get the user"s current Collectable"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCurrentCollectableRequest'
+              $ref: "#/components/schemas/GetCurrentCollectableRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCurrentCollectableRequest'
+              $ref: "#/components/schemas/GetCurrentCollectableRequest"
       responses:
         '200':
           description: "Create GeoCode Response"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCurrentCollectableResponse'
+                $ref: "#/components/schemas/GetCurrentCollectableResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCurrentCollectableResponse'
+                $ref: "#/components/schemas/GetCurrentCollectableResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -59,31 +59,31 @@ paths:
     post:
       tags:
         - "User"
-      summary: "Gets the user's trackable"
-      description: "Get the given user's trackable"
+      summary: "Gets the user"s trackable"
+      description: "Get the given user"s trackable"
       operationId: "getUserTrackable"
       requestBody:
         required: true
-        description: "Request to get the user's trackable"
+        description: "Request to get the user"s trackable"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetUserTrackableRequest'
+              $ref: "#/components/schemas/GetUserTrackableRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetUserTrackableRequest'
+              $ref: "#/components/schemas/GetUserTrackableRequest"
       responses:
         '200':
-          description: "The user's trackable was successfully returned"
+          description: "The user"s trackable was successfully returned"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetUserTrackableResponse'
+                $ref: "#/components/schemas/GetUserTrackableResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetUserTrackableResponse'
+                $ref: "#/components/schemas/GetUserTrackableResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -91,31 +91,31 @@ paths:
     post:
       tags:
         - "User"
-      summary: "Update the location of the user's trackable"
-      description: "Update the location of the user's trackable when they place it"
+      summary: "Update the location of the user"s trackable"
+      description: "Update the location of the user"s trackable when they place it"
       operationId: "updateLocation"
       requestBody:
         required: true
-        description: "Request to update the location of the user's trackable"
+        description: "Request to update the location of the user"s trackable"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateLocationRequest'
+              $ref: "#/components/schemas/UpdateLocationRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/UpdateLocationRequest'
+              $ref: "#/components/schemas/UpdateLocationRequest"
       responses:
         '200':
-          description: "The user's trackable had it's location successfully updated"
+          description: "The user"s trackable had it"s location successfully updated"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateLocationResponse'
+                $ref: "#/components/schemas/UpdateLocationResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/UpdateLocationResponse'
+                $ref: "#/components/schemas/UpdateLocationResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -124,30 +124,30 @@ paths:
       tags:
         - "User"
       summary: "Gets the Collectable Types that the user has ever found"
-      description: "Get a user's found Collectable Types"
+      description: "Get a user"s found Collectable Types"
       operationId: "getFoundCollectableTypes"
       requestBody:
         required: true
-        description: "Request to get the IDs of the user's found Collectable Types"
+        description: "Request to get the IDs of the user"s found Collectable Types"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetFoundCollectableTypesRequest'
+              $ref: "#/components/schemas/GetFoundCollectableTypesRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetFoundCollectableTypesRequest'
+              $ref: "#/components/schemas/GetFoundCollectableTypesRequest"
       responses:
         '200':
-          description: "Successfully returned the user's found collectables"
+          description: "Successfully returned the user"s found collectables"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetFoundCollectableTypesResponse'
+                $ref: "#/components/schemas/GetFoundCollectableTypesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetFoundCollectableTypesResponse'
+                $ref: "#/components/schemas/GetFoundCollectableTypesResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -156,30 +156,30 @@ paths:
       tags:
         - "User"
       summary: "Gets the GeoCodes that the user has ever found"
-      description: "Gets the user's found GeoCodes"
+      description: "Gets the user"s found GeoCodes"
       operationId: "getFoundGeoCodes"
       requestBody:
         required: true
-        description: "Request to get the user's found GeoCodes"
+        description: "Request to get the user"s found GeoCodes"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetFoundGeoCodesRequest'
+              $ref: "#/components/schemas/GetFoundGeoCodesRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetFoundGeoCodesRequest'
+              $ref: "#/components/schemas/GetFoundGeoCodesRequest"
       responses:
         '200':
           description: "Successfully returned all owned GeoCodes for the user"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetFoundGeoCodesResponse'
+                $ref: "#/components/schemas/GetFoundGeoCodesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetFoundGeoCodesResponse'
+                $ref: "#/components/schemas/GetFoundGeoCodesResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -187,31 +187,31 @@ paths:
     post:
       tags:
         - "User"
-      summary: "Gets the user's owned GeoCodes"
-      description: "Get's the user's owned GeoCodes"
+      summary: "Gets the user"s owned GeoCodes"
+      description: "Get"s the user"s owned GeoCodes"
       operationId: "getOwnedGeoCodes"
       requestBody:
         required: true
-        description: "Request to get the user's owned GeoCodes"
+        description: "Request to get the user"s owned GeoCodes"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetOwnedGeoCodesRequest'
+              $ref: "#/components/schemas/GetOwnedGeoCodesRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetOwnedGeoCodesRequest'
+              $ref: "#/components/schemas/GetOwnedGeoCodesRequest"
       responses:
         '200':
           description: "Successfully returned all owned GeoCodes for the user"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetOwnedGeoCodesResponse'
+                $ref: "#/components/schemas/GetOwnedGeoCodesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetOwnedGeoCodesResponse'
+                $ref: "#/components/schemas/GetOwnedGeoCodesResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -228,22 +228,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetUsersRequest'
+              $ref: "#/components/schemas/GetUsersRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetUsersRequest'
+              $ref: "#/components/schemas/GetUsersRequest"
       responses:
         '200':
           description: "Successfully returned all of the users"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetUsersResponse'
+                $ref: "#/components/schemas/GetUsersResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetUsersResponse'
+                $ref: "#/components/schemas/GetUsersResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -251,7 +251,7 @@ paths:
     post:
       tags:
         - "User"
-      summary: "Gets the User's Leaderboard rankings"
+      summary: "Gets the User"s Leaderboard rankings"
       description: "Gets all the points and ranking for the Leaderboards that the given User is on"
       operationId: "getMyLeaderboards"
       requestBody:
@@ -260,22 +260,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetMyLeaderboardsRequest'
+              $ref: "#/components/schemas/GetMyLeaderboardsRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetMyLeaderboardsRequest'
+              $ref: "#/components/schemas/GetMyLeaderboardsRequest"
       responses:
         '200':
           description: "getMyLeaderboards Response"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetMyLeaderboardsResponse'
+                $ref: "#/components/schemas/GetMyLeaderboardsResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetMyLeaderboardsResponse'
+                $ref: "#/components/schemas/GetMyLeaderboardsResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -292,22 +292,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateGeoCodeRequest'
+              $ref: "#/components/schemas/CreateGeoCodeRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/CreateGeoCodeRequest'
+              $ref: "#/components/schemas/CreateGeoCodeRequest"
       responses:
         '200':
           description: "Create GeoCode Response"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateGeoCodeResponse'
+                $ref: "#/components/schemas/CreateGeoCodeResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateGeoCodeResponse'
+                $ref: "#/components/schemas/CreateGeoCodeResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
   /GeoCode/getCollectables:
@@ -315,30 +315,30 @@ paths:
       tags:
         - "GeoCode"
       summary: "Get all Collectables for a certain GeoCode"
-      description: "Get a GeoCode's Collectables"
+      description: "Get a GeoCode"s Collectables"
       operationId: "getGeoCodeCollectables"
       requestBody:
         required: true
-        description: "Request to get a GeoCode's Collectables"
+        description: "Request to get a GeoCode"s Collectables"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: "#/components/schemas/GetCollectablesRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCollectablesRequest'
+              $ref: "#/components/schemas/GetCollectablesRequest"
       responses:
         '200':
-          description: "Returned the GeoCode's Collectables successfully"
+          description: "Returned the GeoCode"s Collectables successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: "#/components/schemas/GetCollectablesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: "#/components/schemas/GetCollectablesResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
   /GeoCode/getGeoCodesByDifficulty:
@@ -354,22 +354,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetGeoCodesByDifficultyRequest'
+              $ref: "#/components/schemas/GetGeoCodesByDifficultyRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetGeoCodesByDifficultyRequest'
+              $ref: "#/components/schemas/GetGeoCodesByDifficultyRequest"
       responses:
         '200':
-          description: "Returned all the GeoCode's with the specified difficulty"
+          description: "Returned all the GeoCode"s with the specified difficulty"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetGeoCodesByDifficultyResponse'
+                $ref: "#/components/schemas/GetGeoCodesByDifficultyResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetGeoCodesByDifficultyResponse'
+                $ref: "#/components/schemas/GetGeoCodesByDifficultyResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
   /GeoCode/getGeoCodes:
@@ -385,12 +385,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetGeoCodesResponse'
+                $ref: "#/components/schemas/GetGeoCodesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetGeoCodesResponse'
+                $ref: "#/components/schemas/GetGeoCodesResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
   /GeoCode/getHints:
@@ -406,22 +406,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetHintsRequest'
+              $ref: "#/components/schemas/GetHintsRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetHintsRequest'
+              $ref: "#/components/schemas/GetHintsRequest"
       responses:
         '200':
           description: "Returned the hints for the GeoCode successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetHintsResponse'
+                $ref: "#/components/schemas/GetHintsResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetHintsResponse'
+                $ref: "#/components/schemas/GetHintsResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
   /GeoCode/getGeoCodeByQRCode:
@@ -433,26 +433,26 @@ paths:
       operationId: "getGeoCodeByQRCode"
       requestBody:
         required: true
-        description: "Request to get a GeoCode's associated with the given QR Code"
+        description: "Request to get a GeoCode"s associated with the given QR Code"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetGeoCodeByQRCodeRequest'
+              $ref: "#/components/schemas/GetGeoCodeByQRCodeRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetGeoCodeByQRCodeRequest'
+              $ref: "#/components/schemas/GetGeoCodeByQRCodeRequest"
       responses:
         '200':
           description: "Returned the associated GeoCode successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetGeoCodeByQRCodeResponse'
+                $ref: "#/components/schemas/GetGeoCodeByQRCodeResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetGeoCodeByQRCodeResponse'
+                $ref: "#/components/schemas/GetGeoCodeByQRCodeResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
   /GeoCode/getGeoCodeByLocation:
@@ -468,22 +468,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetGeoCodeByLocationRequest'
+              $ref: "#/components/schemas/GetGeoCodeByLocationRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetGeoCodeByLocationRequest'
+              $ref: "#/components/schemas/GetGeoCodeByLocationRequest"
       responses:
         '200':
           description: "Return the GeoCodec at or near the given location"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetGeoCodeByLocationResponse'
+                $ref: "#/components/schemas/GetGeoCodeByLocationResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetGeoCodeByLocationResponse'
+                $ref: "#/components/schemas/GetGeoCodeByLocationResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
   /GeoCode/getTrackables:
@@ -491,61 +491,61 @@ paths:
       tags:
         - "GeoCode"
       summary: "Get the Trackable for a certain GeoCode"
-      description: "Get a GeoCode's Trackable"
+      description: "Get a GeoCode"s Trackable"
       operationId: "getTrackables"
       requestBody:
         required: true
-        description: "Request to get a GeoCode's Trackable"
+        description: "Request to get a GeoCode"s Trackable"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetTrackablesRequest'
+              $ref: "#/components/schemas/GetTrackablesRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetTrackablesRequest'
+              $ref: "#/components/schemas/GetTrackablesRequest"
       responses:
         '200':
-          description: "Returned the GeoCode's Trackable successfully"
+          description: "Returned the GeoCode"s Trackable successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetTrackablesResponse'
+                $ref: "#/components/schemas/GetTrackablesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetTrackablesResponse'
+                $ref: "#/components/schemas/GetTrackablesResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
   /GeoCode/swapCollectables:
     post:
       tags:
         - "GeoCode"
-      summary: "Swap a specific GeoCode's Collectable"
-      description: "Swap a specific GeoCode's Collectable"
+      summary: "Swap a specific GeoCode"s Collectable"
+      description: "Swap a specific GeoCode"s Collectable"
       operationId: "swapCollectables"
       requestBody:
         required: true
-        description: "Request to swap a GeoCode's Collectables"
+        description: "Request to swap a GeoCode"s Collectables"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SwapCollectablesRequest'
+              $ref: "#/components/schemas/SwapCollectablesRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/SwapCollectablesRequest'
+              $ref: "#/components/schemas/SwapCollectablesRequest"
       responses:
         '200':
-          description: "Swapped the GeoCode's Collectable successfully"
+          description: "Swapped the GeoCode"s Collectable successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SwapCollectablesResponse'
+                $ref: "#/components/schemas/SwapCollectablesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/SwapCollectablesResponse'
+                $ref: "#/components/schemas/SwapCollectablesResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
   /GeoCode/updateAvailability:
@@ -557,26 +557,26 @@ paths:
       operationId: "updateAvailability"
       requestBody:
         required: true
-        description: "Request to update a GeoCode's availability"
+        description: "Request to update a GeoCode"s availability"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateAvailabilityRequest'
+              $ref: "#/components/schemas/UpdateAvailabilityRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/UpdateAvailabilityRequest'
+              $ref: "#/components/schemas/UpdateAvailabilityRequest"
       responses:
         '200':
-          description: "Updated the GeoCode's availability successfully"
+          description: "Updated the GeoCode"s availability successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateAvailabilityResponse'
+                $ref: "#/components/schemas/UpdateAvailabilityResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/UpdateAvailabilityResponse'
+                $ref: "#/components/schemas/UpdateAvailabilityResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -593,31 +593,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCollectableTypeRequest'
+              $ref: "#/components/schemas/CreateCollectableTypeRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/CreateCollectableTypeRequest'
+              $ref: "#/components/schemas/CreateCollectableTypeRequest"
       responses:
         '200':
           description: "CollectableType created successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateCollectableTypeResponse'
+                $ref: "#/components/schemas/CreateCollectableTypeResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateCollectableTypeResponse'
-        '400':
+                $ref: "#/components/schemas/CreateCollectableTypeResponse"
+        "400":
           description: "Failed to create CollectableType"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateCollectableTypeResponse'
+                $ref: "#/components/schemas/CreateCollectableTypeResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateCollectableTypeResponse'
+                $ref: "#/components/schemas/CreateCollectableTypeResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
   /Collectable/createCollectable:
@@ -633,31 +633,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCollectableRequest'
+              $ref: "#/components/schemas/CreateCollectableRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/CreateCollectableRequest'
+              $ref: "#/components/schemas/CreateCollectableRequest"
       responses:
         '200':
           description: "Collectable created successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateCollectableResponse'
+                $ref: "#/components/schemas/CreateCollectableResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateCollectableResponse'
-        '400':
+                $ref: "#/components/schemas/CreateCollectableResponse"
+        "400":
           description: "Failed to create Collectable"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateCollectableResponse'
+                $ref: "#/components/schemas/CreateCollectableResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateCollectableResponse'
+                $ref: "#/components/schemas/CreateCollectableResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
   /Collectable/createCollectableSet:
@@ -673,31 +673,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCollectableSetRequest'
+              $ref: "#/components/schemas/CreateCollectableSetRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/CreateCollectableSetRequest'
+              $ref: "#/components/schemas/CreateCollectableSetRequest"
       responses:
         '200':
           description: "Successfully created CollectableSet"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateCollectableSetResponse'
+                $ref: "#/components/schemas/CreateCollectableSetResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateCollectableSetResponse'
-        '400':
+                $ref: "#/components/schemas/CreateCollectableSetResponse"
+        "400":
           description: "Failed to create CollectableSet"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateCollectableSetResponse'
+                $ref: "#/components/schemas/CreateCollectableSetResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateCollectableSetResponse'
+                $ref: "#/components/schemas/CreateCollectableSetResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -714,21 +714,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: "#/components/schemas/GetCollectablesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: "#/components/schemas/GetCollectablesResponse"
         '404':
           description: "No Collectables found"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: "#/components/schemas/GetCollectablesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: "#/components/schemas/GetCollectablesResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -745,21 +745,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectableTypesResponse'
+                $ref: "#/components/schemas/GetCollectableTypesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectableTypesResponse'
+                $ref: "#/components/schemas/GetCollectableTypesResponse"
         '404':
           description: "No CollectableTypes found"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectableTypesResponse'
+                $ref: "#/components/schemas/GetCollectableTypesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectableTypesResponse'
+                $ref: "#/components/schemas/GetCollectableTypesResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -776,21 +776,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectableSetsResponse'
+                $ref: "#/components/schemas/GetCollectableSetsResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectableSetsResponse'
+                $ref: "#/components/schemas/GetCollectableSetsResponse"
         '404':
           description: "No CollectableSets found"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectableSetsResponse'
+                $ref: "#/components/schemas/GetCollectableSetsResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectableSetsResponse'
+                $ref: "#/components/schemas/GetCollectableSetsResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -807,31 +807,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCollectableByTypeRequest'
+              $ref: "#/components/schemas/GetCollectableByTypeRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCollectableByTypeRequest'
+              $ref: "#/components/schemas/GetCollectableByTypeRequest"
       responses:
         '200':
           description: "Successfully returned Collectables of given type"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: "#/components/schemas/GetCollectablesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: "#/components/schemas/GetCollectablesResponse"
         '404':
           description: "Unable to find Collectables of the given type"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: "#/components/schemas/GetCollectablesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectablesResponse'
+                $ref: "#/components/schemas/GetCollectablesResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -848,31 +848,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCollectableTypeByRarityRequest'
+              $ref: "#/components/schemas/GetCollectableTypeByRarityRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCollectableTypeByRarityRequest'
+              $ref: "#/components/schemas/GetCollectableTypeByRarityRequest"
       responses:
         '200':
           description: "Successfully returned Collectable Types of given rarity"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectableTypesResponse'
+                $ref: "#/components/schemas/GetCollectableTypesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectableTypesResponse'
+                $ref: "#/components/schemas/GetCollectableTypesResponse"
         '404':
           description: "Unable to find CollectableTypes of provided rarity"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectableTypesResponse'
+                $ref: "#/components/schemas/GetCollectableTypesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectableTypesResponse'
+                $ref: "#/components/schemas/GetCollectableTypesResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -889,31 +889,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCollectableTypesBySetRequest'
+              $ref: "#/components/schemas/GetCollectableTypesBySetRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetCollectableTypesBySetRequest'
+              $ref: "#/components/schemas/GetCollectableTypesBySetRequest"
       responses:
         '200':
           description: "Successfully returned CollectableTypes of given set"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectableTypesResponse'
+                $ref: "#/components/schemas/GetCollectableTypesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectableTypesResponse'
+                $ref: "#/components/schemas/GetCollectableTypesResponse"
         '404':
           description: "Unable to find CollectableTypes of given set"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCollectableTypesResponse'
+                $ref: "#/components/schemas/GetCollectableTypesResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetCollectableTypesResponse'
+                $ref: "#/components/schemas/GetCollectableTypesResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -921,40 +921,40 @@ paths:
     post:
       tags:
         - "Leaderboard"
-      summary: "Get an Event's Leaderboard details"
-      description: "Returns the Event's Leaderboard details from a specific rank down for a specified number of users"
+      summary: "Get an Event"s Leaderboard details"
+      description: "Returns the Event"s Leaderboard details from a specific rank down for a specified number of users"
       operationId: "getEventLeaderboard"
       requestBody:
         required: true
-        description: "Request to get a subset of the Event's Leaderboard details"
+        description: "Request to get a subset of the Event"s Leaderboard details"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetEventLeaderboardRequest'
+              $ref: "#/components/schemas/GetEventLeaderboardRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetEventLeaderboardRequest'
+              $ref: "#/components/schemas/GetEventLeaderboardRequest"
       responses:
         '200':
-          description: "Successfully returned the Event's Leaderboard details"
+          description: "Successfully returned the Event"s Leaderboard details"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetEventLeaderboardResponse'
+                $ref: "#/components/schemas/GetEventLeaderboardResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetEventLeaderboardResponse'
+                $ref: "#/components/schemas/GetEventLeaderboardResponse"
         '404':
           description: "Unable to find CollectableTypes of given set"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetEventLeaderboardResponse'
+                $ref: "#/components/schemas/GetEventLeaderboardResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetEventLeaderboardResponse'
+                $ref: "#/components/schemas/GetEventLeaderboardResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -962,8 +962,8 @@ paths:
     post:
       tags:
         - "Event"
-      summary: "Changes an Event's availability"
-      description: "Changes the specified Event's availability to the given availability"
+      summary: "Changes an Event"s availability"
+      description: "Changes the specified Event"s availability to the given availability"
       operationId: "changeAvailability"
       requestBody:
         required: true
@@ -971,31 +971,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ChangeAvailabilityRequest'
+              $ref: "#/components/schemas/ChangeAvailabilityRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/ChangeAvailabilityRequest'
+              $ref: "#/components/schemas/ChangeAvailabilityRequest"
       responses:
         '200':
           description: "Returns the update of the availability is successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChangeAvailabilityResponse'
+                $ref: "#/components/schemas/ChangeAvailabilityResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/ChangeAvailabilityResponse'
+                $ref: "#/components/schemas/ChangeAvailabilityResponse"
         '404':
           description: "Unable to find an Event with the given id"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChangeAvailabilityResponse'
+                $ref: "#/components/schemas/ChangeAvailabilityResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/ChangeAvailabilityResponse'
+                $ref: "#/components/schemas/ChangeAvailabilityResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -1008,25 +1008,25 @@ paths:
       operationId: "getAllEvents"
       responses:
         '200':
-          description: "Successfully returned all the Event's"
+          description: "Successfully returned all the Event"s"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetAllEventsResponse'
+                $ref: "#/components/schemas/GetAllEventsResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetAllEventsResponse'
+                $ref: "#/components/schemas/GetAllEventsResponse"
         '404':
           description: "Unable to find any Events"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetAllEventsResponse'
+                $ref: "#/components/schemas/GetAllEventsResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetAllEventsResponse'
+                $ref: "#/components/schemas/GetAllEventsResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -1043,31 +1043,195 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateEventRequest'
+              $ref: "#/components/schemas/CreateEventRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/CreateEventRequest'
+              $ref: "#/components/schemas/CreateEventRequest"
       responses:
         '200':
           description: "Return the new Event was successfully created"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateEventResponse'
+                $ref: "#/components/schemas/CreateEventResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateEventResponse'
+                $ref: "#/components/schemas/CreateEventResponse"
         '404':
           description: "Return the new Event was not successfully created"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateEventResponse'
+                $ref: "#/components/schemas/CreateEventResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateEventResponse'
+                $ref: "#/components/schemas/CreateEventResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
+  /Event/getEvent:
+    post:
+      tags:
+        - "Event"
+      summary: "Retrieves a specific stored Event"
+      description: "Get a stored Event in the system with the specified id"
+      operationId: "getEvent"
+      requestBody:
+        required: true
+        description: "Request to get an Event"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetEventGeoCodeRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetEventGeoCodeRequest"
+      responses:
+        '200':
+          description: "Return the Event was successfully found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetEventGeoCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetEventGeoCodeResponse"
+        '404':
+          description: "Return the specified Event was not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetEventGeoCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetEventGeoCodeResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
+  /Event/getCurrentEvent:
+    post:
+      tags:
+        - "Event"
+      summary: "Retrieves a specific stored Event that a user is involved in"
+      description: "Get a stored Event in the system with the specified id that a user is busy with"
+      operationId: "getCurrentEvent"
+      requestBody:
+        required: true
+        description: "Request to get a specified Event a user is busy with"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetCurrentEventGeoCodeRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetCurrentEventGeoCodeRequest"
+      responses:
+        '200':
+          description: "Return the Event was successfully found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCurrentEventGeoCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetCurrentEventGeoCodeResponse"
+        '404':
+          description: "Return the specified Event was not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCurrentEventGeoCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetCurrentEventGeoCodeResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
+  /Event/nextStage:
+    post:
+      tags:
+        - "Event"
+      summary: "Retrieves the next GeoCode to find to complete an Event"
+      description: "Retrieves the next GeoCode a User has to find to complete an Event"
+      operationId: "nextStage"
+      requestBody:
+        required: true
+        description: "Request to get a specified GeoCode for an Event a user is busy with"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NextStageRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/NextStageRequest"
+      responses:
+        '200':
+          description: "Return the GeoCode for the specified Event was successfully found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NextStageResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/NextStageResponse"
+        '404':
+          description: "Return the GeoCode for the specified Event was not successfully found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NextStageResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/NextStageResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
+  /Event/eventsNearMe:
+    post:
+      tags:
+        - "Event"
+      summary: "Retrieves all the Events within a specified radius"
+      description: "Retrieves all the Events within a specified radius of a User"
+      operationId: "eventsNearMe"
+      requestBody:
+        required: true
+        description: "Request to all the Events near a specified location"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventsNearMeRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/EventsNearMeRequest"
+      responses:
+        '200':
+          description: "Return all the Events near a specified location"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsNearMeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/EventsNearMeResponse"
+        '404':
+          description: "Return specified area's Events was not successfully found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsNearMeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/EventsNearMeResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -1084,31 +1248,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetEventsByLocationRequest'
+              $ref: "#/components/schemas/GetEventsByLocationRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetEventsByLocationRequest'
+              $ref: "#/components/schemas/GetEventsByLocationRequest"
       responses:
         '200':
           description: "Return the found Event"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetEventsByLocationResponse'
+                $ref: "#/components/schemas/GetEventsByLocationResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetEventsByLocationResponse'
+                $ref: "#/components/schemas/GetEventsByLocationResponse"
         '404':
           description: "Return the new Event was not found"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetEventsByLocationResponse'
+                $ref: "#/components/schemas/GetEventsByLocationResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetEventsByLocationResponse'
+                $ref: "#/components/schemas/GetEventsByLocationResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -1125,31 +1289,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreatePointRequest'
+              $ref: "#/components/schemas/CreatePointRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/CreatePointRequest'
+              $ref: "#/components/schemas/CreatePointRequest"
       responses:
         '200':
           description: "Return the new new Point for the Event was successfully created"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreatePointResponse'
+                $ref: "#/components/schemas/CreatePointResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreatePointResponse'
+                $ref: "#/components/schemas/CreatePointResponse"
         '404':
           description: "Return the new new Point for the Event was not successfully created"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreatePointResponse'
+                $ref: "#/components/schemas/CreatePointResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreatePointResponse'
+                $ref: "#/components/schemas/CreatePointResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -1166,31 +1330,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTimeTrialRequest'
+              $ref: "#/components/schemas/CreateTimeTrialRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/CreateTimeTrialRequest'
+              $ref: "#/components/schemas/CreateTimeTrialRequest"
       responses:
         '200':
           description: "Return the Time Trial for the Event was successfully created"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateTimeTrialResponse'
+                $ref: "#/components/schemas/CreateTimeTrialResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateTimeTrialResponse'
+                $ref: "#/components/schemas/CreateTimeTrialResponse"
         '404':
           description: "Return the Time Trial for the Event was not successfully created"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateTimeTrialResponse'
+                $ref: "#/components/schemas/CreateTimeTrialResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateTimeTrialResponse'
+                $ref: "#/components/schemas/CreateTimeTrialResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -1207,31 +1371,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetPointsByUserRequest'
+              $ref: "#/components/schemas/GetPointsByUserRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetPointsByUserRequest'
+              $ref: "#/components/schemas/GetPointsByUserRequest"
       responses:
         '200':
           description: "Return the Points for an Event successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetPointsByUserResponse'
+                $ref: "#/components/schemas/GetPointsByUserResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetPointsByUserResponse'
+                $ref: "#/components/schemas/GetPointsByUserResponse"
         '404':
           description: "Return the Points for an Event could not be returned"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetPointsByUserResponse'
+                $ref: "#/components/schemas/GetPointsByUserResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetPointsByUserResponse'
+                $ref: "#/components/schemas/GetPointsByUserResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -1248,31 +1412,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetPointsByLeaderBoardRequest'
+              $ref: "#/components/schemas/GetPointsByLeaderBoardRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetPointsByLeaderBoardRequest'
+              $ref: "#/components/schemas/GetPointsByLeaderBoardRequest"
       responses:
         '200':
           description: "Return the Points of a Leaderboard within an Event successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
+                $ref: "#/components/schemas/GetPointsByLeaderBoardResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
+                $ref: "#/components/schemas/GetPointsByLeaderBoardResponse"
         '404':
           description: "Return the Points for a Leaderboard in an Event was not successfully found"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
+                $ref: "#/components/schemas/GetPointsByLeaderBoardResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetPointsByLeaderBoardResponse'
+                $ref: "#/components/schemas/GetPointsByLeaderBoardResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -1289,21 +1453,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetPointsResponse'
+                $ref: "#/components/schemas/GetPointsResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetPointsResponse'
+                $ref: "#/components/schemas/GetPointsResponse"
         '404':
           description: "Return that the Points for an Event could not be found"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetPointsResponse'
+                $ref: "#/components/schemas/GetPointsResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetPointsResponse'
+                $ref: "#/components/schemas/GetPointsResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -1320,31 +1484,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetLeaderBoardByTimeTrialRequest'
+              $ref: "#/components/schemas/GetLeaderBoardByTimeTrialRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/GetLeaderBoardByTimeTrialRequest'
+              $ref: "#/components/schemas/GetLeaderBoardByTimeTrialRequest"
       responses:
         '200':
           description: "Successfully return the Leaderboard"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
+                $ref: "#/components/schemas/GetLeaderBoardByTimeTrialResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
+                $ref: "#/components/schemas/GetLeaderBoardByTimeTrialResponse"
         '404':
           description: "Return the Leaderboard was not successfully found"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
+                $ref: "#/components/schemas/GetLeaderBoardByTimeTrialResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/GetLeaderBoardByTimeTrialResponse'
+                $ref: "#/components/schemas/GetLeaderBoardByTimeTrialResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -1361,31 +1525,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateLeaderboardRequest'
+              $ref: "#/components/schemas/CreateLeaderboardRequest"
           application/xml:
             schema:
-              $ref: '#/components/schemas/CreateLeaderboardRequest'
+              $ref: "#/components/schemas/CreateLeaderboardRequest"
       responses:
         '200':
           description: "Return the Leaderboard was successfully created"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateLeaderboardResponse'
+                $ref: "#/components/schemas/CreateLeaderboardResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateLeaderboardResponse'
+                $ref: "#/components/schemas/CreateLeaderboardResponse"
         '404':
           description: "Return the Leaderboard was not successfully created"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateLeaderboardResponse'
+                $ref: "#/components/schemas/CreateLeaderboardResponse"
             application/xml:
               schema:
-                $ref: '#/components/schemas/CreateLeaderboardResponse'
+                $ref: "#/components/schemas/CreateLeaderboardResponse"
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
 
@@ -1415,7 +1579,7 @@ components:
           type: string
           format: uuid
         difficulty:
-          $ref: '#/components/schemas/Difficulty'
+          $ref: "#/components/schemas/Difficulty"
         available:
           type: boolean
         description:
@@ -1432,13 +1596,13 @@ components:
         qrCode:
           type: string
         location:
-          $ref: '#/components/schemas/GeoPoint'
+          $ref: "#/components/schemas/GeoPoint"
       xml:
         name: "GeoCode"
 
     Difficulty:
       type: string
-      description: "The GeoCode's real world locating difficulty"
+      description: "The GeoCode"s real world locating difficulty"
       enum:
         - "EASY"
         - "MEDIUM"
@@ -1467,7 +1631,7 @@ components:
           items:
             type: string
         difficulty:
-          $ref: '#/components/schemas/Difficulty'
+          $ref: "#/components/schemas/Difficulty"
         available:
           type: boolean
       xml:
@@ -1477,7 +1641,7 @@ components:
       type: "object"
       properties:
         geoCode:
-          $ref: '#/components/schemas/GeoCode'
+          $ref: "#/components/schemas/GeoCode"
       xml:
         name: "CreateGeoCodeResponse"
 
@@ -1498,7 +1662,7 @@ components:
           items:
             type: string
         difficulty:
-          $ref: '#/components/schemas/Difficulty'
+          $ref: "#/components/schemas/Difficulty"
       xml:
         name: "getGeoCodesByDifficultyRequest"
 
@@ -1508,7 +1672,7 @@ components:
         geocodes:
           type: array
           items:
-            $ref: '#/components/schemas/GeoCode'
+            $ref: "#/components/schemas/GeoCode"
       xml:
         name: "getGeoCodesByDifficultyResponse"
 
@@ -1520,7 +1684,7 @@ components:
         geocodes:
           type: array
           items:
-            $ref: '#/components/schemas/GeoCode'
+            $ref: "#/components/schemas/GeoCode"
       xml:
         name: "getGeoCodesByDifficultyResponse"
 
@@ -1562,7 +1726,7 @@ components:
           items:
             type: string
         difficulty:
-          $ref: '#/components/schemas/Difficulty'
+          $ref: "#/components/schemas/Difficulty"
       xml:
         name: "getGeoCodeByQRCodeRequest"
 
@@ -1594,7 +1758,7 @@ components:
           items:
             type: string
         difficulty:
-          $ref: '#/components/schemas/Difficulty'
+          $ref: "#/components/schemas/Difficulty"
       xml:
         name: "getGeoCodeByLocationRequest"
 
@@ -1626,7 +1790,7 @@ components:
           items:
             type: string
         difficulty:
-          $ref: '#/components/schemas/Difficulty'
+          $ref: "#/components/schemas/Difficulty"
       xml:
         name: "getTrackablesRequest"
 
@@ -1824,7 +1988,7 @@ components:
         collectables:
           type: array
           items:
-            $ref: '#/components/schemas/CollectableResponse'
+            $ref: "#/components/schemas/CollectableResponse"
       xml:
         name: "GetCollectablesResponse"
 
@@ -1836,7 +2000,7 @@ components:
         collectableTypes:
           type: array
           items:
-            $ref: '#/components/schemas/CollectableTypeComponent'
+            $ref: "#/components/schemas/CollectableTypeComponent"
       xml:
         name: "GetCollectableTypeResponse"
 
@@ -1943,7 +2107,7 @@ components:
         collectableSets:
           type: array
           items:
-            $ref: '#/components/schemas/CollectableSet'
+            $ref: "#/components/schemas/CollectableSet"
       xml:
         name: "GetCollectableSetsResponse"
 
@@ -2088,25 +2252,25 @@ components:
         username:
           type: string
         trackableObject:
-          $ref: '#/components/schemas/Collectable'
+          $ref: "#/components/schemas/Collectable"
         points:
           type: array
           items:
-            $ref: '#/components/schemas/Point'
+            $ref: "#/components/schemas/Point"
         currentCollectable:
-          $ref: '#/components/schemas/Collectable'
+          $ref: "#/components/schemas/Collectable"
         foundCollectableTypes:
           type: array
           items:
-            $ref: '#/components/schemas/CollectableType'
+            $ref: "#/components/schemas/CollectableType"
         foundGeocodes:
           type: array
           items:
-            $ref: '#/components/schemas/GeoCode'
+            $ref: "#/components/schemas/GeoCode"
         ownedGeocodes:
           type: array
           items:
-            $ref: '#/components/schemas/GeoCode'
+            $ref: "#/components/schemas/GeoCode"
 
     GetCurrentCollectableRequest:
       type: "object"
@@ -2130,9 +2294,9 @@ components:
           type: boolean
         message:
           type: string
-          example: "The user's Collectable was successfully returned"
+          example: "The user"s Collectable was successfully returned"
         Collectable:
-          $ref: '#/components/schemas/Collectable'
+          $ref: "#/components/schemas/Collectable"
       xml:
         name: "GetCurrentCollectableResponse"
 
@@ -2158,9 +2322,9 @@ components:
           type: boolean
         message:
           type: string
-          example: "The user's Trackable was successfully returned"
+          example: "The user"s Trackable was successfully returned"
         Trackable:
-          $ref: '#/components/schemas/Collectable'
+          $ref: "#/components/schemas/Collectable"
       xml:
         name: "GetUserTrackableResponse"
 
@@ -2186,9 +2350,9 @@ components:
           type: boolean
         message:
           type: string
-          example: "The trackable object's location was successfully updated"
+          example: "The trackable object"s location was successfully updated"
         Trackable:
-          $ref: '#/components/schemas/Collectable'
+          $ref: "#/components/schemas/Collectable"
       xml:
         name: "UpdateLocationResponse"
 
@@ -2214,7 +2378,7 @@ components:
           type: boolean
         message:
           type: string
-          example: "The IDs of the User's found CollectableTypes was successfully returned"
+          example: "The IDs of the User"s found CollectableTypes was successfully returned"
         collectableTypeIDs:
           type: array
           items:
@@ -2245,7 +2409,7 @@ components:
           type: boolean
         message:
           type: string
-          example: "The IDs of the User's found GeoCodes was successfully returned"
+          example: "The IDs of the User"s found GeoCodes was successfully returned"
         geocodeIDs:
           type: array
           items:
@@ -2276,7 +2440,7 @@ components:
           type: boolean
         message:
           type: string
-          example: "The IDs of the User's owned GeoCodes was successfully returned"
+          example: "The IDs of the User"s owned GeoCodes was successfully returned"
         geocodeIDs:
           type: array
           items:
@@ -2304,7 +2468,7 @@ components:
         users:
           type: array
           items:
-            $ref: '#/components/schemas/User'
+            $ref: "#/components/schemas/User"
       xml:
         name: "GetUsersResponse"
 
@@ -2330,11 +2494,11 @@ components:
           type: boolean
         message:
           type: string
-          example: "The details for the User's Leaderboards were successfully returned"
+          example: "The details for the User"s Leaderboards were successfully returned"
         leaderboards:
           type: array
           items:
-            $ref: '#/components/schemas/MyLeaderboardDetails'
+            $ref: "#/components/schemas/MyLeaderboardDetails"
       xml:
         name: "GetMyLeaderboardsResponse"
 
@@ -2371,11 +2535,11 @@ components:
           type: boolean
         message:
           type: string
-          example: "The details for the Event's Leaderboard were successfully returned"
+          example: "The details for the Event"s Leaderboard were successfully returned"
         leaderboard:
           type: array
           items:
-            $ref: '#/components/schemas/EventLeaderboardDetails'
+            $ref: "#/components/schemas/EventLeaderboardDetails"
       xml:
         name: "GetMyLeaderboardsResponse"
 
@@ -2424,7 +2588,7 @@ components:
         - target
       properties:
         target:
-          $ref: '#/components/schemas/GeoCode'
+          $ref: "#/components/schemas/GeoCode"
         onLevel:
           type: object
           additionalProperties:
@@ -2475,7 +2639,7 @@ components:
         events:
           type: array
           items:
-            $ref: '#/components/schemas/Event'
+            $ref: "#/components/schemas/Event"
       xml:
         name: "GetAllEventsResponse"
 
@@ -2521,6 +2685,108 @@ components:
       xml:
         name: "CreateEventResponse"
 
+    GetEventGeoCodeRequest:
+      type: "object"
+      required:
+        - eventID
+      properties:
+        eventID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetEventGeoCodeRequest"
+
+    GetEventGeoCodeResponse:
+      type: "object"
+      required:
+        - found
+        - foundEvent
+      properties:
+        found:
+          type: boolean
+        foundEvent:
+          $ref: "#/components/schemas/Event"
+      xml:
+        name: "GetEventGeoCodeResponse"
+
+    GetCurrentEventGeoCodeRequest:
+      type: "object"
+      required:
+        - eventID
+        - userID
+      properties:
+        eventID:
+          type: string
+          format: uuid
+        userID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetCurrentEventGeoCodeRequest"
+
+    GetCurrentEventGeoCodeResponse:
+      type: "object"
+      required:
+        - foundEvent
+        - found
+      properties:
+        found:
+          type: boolean
+        foundEvent:
+          $ref: "#/components/schemas/Event"
+      xml:
+        name: "GetCurrentEventGeoCodeResponse"
+
+    NextStageRequest:
+      type: "object"
+      required:
+        - eventID
+        - userID
+      properties:
+        eventID:
+          type: string
+          format: uuid
+        userID:
+          type: string
+          format: uuid
+      xml:
+        name: "NextStageRequest"
+
+    NextStageResponse:
+      type: "object"
+      required:
+        - nextGeoCode
+      properties:
+        nextGeoCode:
+          $ref: "#/components/schemas/GeoCode"
+      xml:
+        name: "NextStageResponse"
+
+    EventsNearMeRequest:
+      type: "object"
+      required:
+        - location
+        - radius
+      properties:
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+        radius:
+          type: number
+      xml:
+        name: "EventsNearMeRequest"
+
+    EventsNearMeResponse:
+      type: "object"
+      required:
+        - foundEvents
+      properties:
+        foundEvents:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+      xml:
+        name: "EventsNearMeResponse"
+
     GetEventsByLocationRequest:
       type: "object"
       required:
@@ -2539,7 +2805,7 @@ components:
         events:
           type: array
           items:
-            $ref: '#/components/schemas/Event'
+            $ref: "#/components/schemas/Event"
       xml:
         name: "GetEventsByLocationResponse"
 
@@ -2561,7 +2827,7 @@ components:
         points:
           type: array
           items:
-            $ref: '#/components/schemas/Point'
+            $ref: "#/components/schemas/Point"
       xml:
         name: "CreatePointResponse"
 
@@ -2583,7 +2849,7 @@ components:
         timeTrial:
           type: array
           items:
-            $ref: '#/components/schemas/TimeTrial'
+            $ref: "#/components/schemas/TimeTrial"
       xml:
         name: "CreateTimeTrialResponse"
 
@@ -2606,7 +2872,7 @@ components:
         points:
           type: array
           items:
-            $ref: '#/components/schemas/Point'
+            $ref: "#/components/schemas/Point"
       xml:
         name: "GetPointsByUserResponse"
 
@@ -2629,7 +2895,7 @@ components:
         points:
           type: array
           items:
-            $ref: '#/components/schemas/Point'
+            $ref: "#/components/schemas/Point"
       xml:
         name: "GetPointsByLeaderBoardResponse"
 
@@ -2641,7 +2907,7 @@ components:
         points:
           type: array
           items:
-            $ref: '#/components/schemas/Point'
+            $ref: "#/components/schemas/Point"
       xml:
         name: "GetPointsResponse"
 
@@ -2664,7 +2930,7 @@ components:
         leaderboard:
           type: array
           items:
-            $ref: '#/components/schemas/Leaderboard'
+            $ref: "#/components/schemas/Leaderboard"
       xml:
         name: "GetLeaderBoardByTimeTrialResponse"
 
