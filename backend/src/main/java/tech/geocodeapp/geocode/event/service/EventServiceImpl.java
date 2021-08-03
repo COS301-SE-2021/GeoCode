@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.event.service;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.stereotype.Service;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
 
@@ -113,7 +114,23 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        return null;
+        /* Create the response to return */
+        GetEventResponse response;
+        try {
+
+            /*
+             * Query the repository for the Event object
+             * and set the response to true with the found Event
+             */
+            Event temp = eventRepo.getOne( request.getEventID() );
+            response = new GetEventResponse( true, temp );
+        } catch ( EntityNotFoundException error ) {
+
+            /* No Event found so set the response to false */
+            response = new GetEventResponse( false );
+        }
+
+        return response;
     }
 
     /**
