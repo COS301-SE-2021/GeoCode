@@ -7,6 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserEventsPage implements OnInit {
 
+  events = [{
+    name: 'Event Name',
+    position: 1,
+    id: 'random'
+  }];
+
   constructor() { }
 
   ngOnInit() {
