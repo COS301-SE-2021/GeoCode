@@ -1165,29 +1165,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GetEventGeoCodeRequest"
+              $ref: "#/components/schemas/GetEventRequest"
           application/xml:
             schema:
-              $ref: "#/components/schemas/GetEventGeoCodeRequest"
+              $ref: "#/components/schemas/GetEventRequest"
       responses:
         '200':
           description: "Return the Event was successfully found"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetEventGeoCodeResponse"
+                $ref: "#/components/schemas/GetEventResponse"
             application/xml:
               schema:
-                $ref: "#/components/schemas/GetEventGeoCodeResponse"
+                $ref: "#/components/schemas/GetEventResponse"
         '404':
           description: "Return the specified Event was not found"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetEventGeoCodeResponse"
+                $ref: "#/components/schemas/GetEventResponse"
             application/xml:
               schema:
-                $ref: "#/components/schemas/GetEventGeoCodeResponse"
+                $ref: "#/components/schemas/GetEventResponse"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
       security:
@@ -2800,7 +2800,7 @@ components:
       xml:
         name: "CreateEventResponse"
 
-    GetEventGeoCodeRequest:
+    GetEventRequest:
       type: "object"
       required:
         - eventID
@@ -2809,9 +2809,9 @@ components:
           type: string
           format: uuid
       xml:
-        name: "GetEventGeoCodeRequest"
+        name: "GetEventRequest"
 
-    GetEventGeoCodeResponse:
+    GetEventResponse:
       type: "object"
       required:
         - found
@@ -2822,7 +2822,7 @@ components:
         foundEvent:
           $ref: "#/components/schemas/Event"
       xml:
-        name: "GetEventGeoCodeResponse"
+        name: "GetEventResponse"
 
     GetCurrentEventGeoCodeRequest:
       type: "object"
