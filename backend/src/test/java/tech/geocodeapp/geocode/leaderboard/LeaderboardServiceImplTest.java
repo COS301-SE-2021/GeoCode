@@ -662,7 +662,7 @@ public class LeaderboardServiceImplTest {
     }
 
     /**
-     * Test that if the starting position given in the request is not below the minimum value allowed of 1
+     * Test that if the starting position given in the request is below the minimum value allowed of 1 that the correct response object is returned
      */
     @Test
     public void getEventLeaderboardStartingLowerThanMinimumValue() {
@@ -671,6 +671,22 @@ public class LeaderboardServiceImplTest {
             GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("Starting is lower than the minimum value allowed", response.getMessage());
+            Assertions.assertTrue(response.getLeaderboard().isEmpty());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test that if the count provided in the request is lower than the minimum allowed value that the correct response is returned
+     */
+    @Test
+    public void getEventLeaderboardCountLowerThanMinimumValue() {
+        GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(UUID.randomUUID(), 1, 0);
+        try {
+            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Count is lower than the minimum value allowed", response.getMessage());
             Assertions.assertTrue(response.getLeaderboard().isEmpty());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
