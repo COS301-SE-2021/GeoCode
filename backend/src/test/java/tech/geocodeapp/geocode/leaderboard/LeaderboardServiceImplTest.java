@@ -650,4 +650,14 @@ public class LeaderboardServiceImplTest {
         assertThatThrownBy(() -> leaderboardService.getEventLeaderboard(request))
                 .isInstanceOf(NullRequestParameterException.class);
     }
+
+    /**
+     * Test that when the count provided in the request is null that the correct exception is thrown
+     */
+    @Test
+    public void getEventLeaderboardNullCount() {
+        GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(UUID.randomUUID(), 1, null);
+        assertThatThrownBy(() -> leaderboardService.getEventLeaderboard(request))
+                .isInstanceOf(NullRequestParameterException.class);
+    }
 }
