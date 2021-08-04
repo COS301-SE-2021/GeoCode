@@ -31,7 +31,6 @@ import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetPointForUserRequest;
 import tech.geocodeapp.geocode.leaderboard.request.UpdatePointRequest;
-import tech.geocodeapp.geocode.leaderboard.response.GetPointForUserResponse;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.model.User;
@@ -417,7 +416,7 @@ public class UserServiceImpl implements UserService {
 
             //check if the User does not already have points for the Leaderboard
             GetPointForUserRequest getPointForUserRequest = new GetPointForUserRequest(userID, leaderboardID);
-            GetPointForUserResponse getPointForUserResponse = leaderboardService.getPointForUser(getPointForUserRequest);
+            PointResponse getPointForUserResponse = leaderboardService.getPointForUser(getPointForUserRequest);
 
             //add new Point entry if first time User is scoring on the Leaderboard
             if(!getPointForUserResponse.isSuccess()){
