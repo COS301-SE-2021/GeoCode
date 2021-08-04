@@ -16,6 +16,7 @@ import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -115,15 +116,23 @@ public class EventServiceImpl implements EventService {
         }
 
         /* Create the response to return */
-        GetEventResponse response;
+        GetEventResponse response = null;
         try {
 
             /*
              * Query the repository for the Event object
              * and set the response to true with the found Event
              */
-            Event temp = eventRepo.getOne( request.getEventID() );
-            response = new GetEventResponse( true, temp );
+            Optional< Event > temp = eventRepo.findById( request.getEventID() );
+            if ( temp.isPresent() ) {
+
+                //ToDo continue here
+                response = new GetEventResponse( true );
+            } else {
+
+                response = new GetEventResponse( false );
+            }
+
         } catch ( EntityNotFoundException error ) {
 
             /* No Event found so set the response to false */
@@ -149,12 +158,28 @@ public class EventServiceImpl implements EventService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( ( request.getEventID() == null ) || ( request.getUserID() == null ) ) {
+        } else if ( request.getUserID() == null ) {
 
             throw new InvalidRequestException();
         }
 
-        return null;
+        /* Create the response to return */
+        GetCurrentEventResponse response = null;
+        try {
+
+            /*
+             * Query the repository for the Event object
+             * and set the response to true with the found Event
+             */
+            List<Event> temp = eventRepo.findAll();
+            //response = new GetCurrentEventResponse( true, temp );
+        } catch ( EntityNotFoundException error ) {
+
+            /* No Event found so set the response to false */
+            response = new GetCurrentEventResponse( false );
+        }
+
+        return response;
     }
 
     /**

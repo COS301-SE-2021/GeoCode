@@ -40,6 +40,22 @@ public class GetCurrentEventResponse {
      *  Overloaded Constructor
      *
      * @param found Determines if an Event was found or not
+     */
+    public GetCurrentEventResponse( Boolean found ) {
+
+        this.found = found;
+
+        if ( !found ) {
+
+            this.foundEvent = null;
+        }
+
+    }
+
+    /**
+     *  Overloaded Constructor
+     *
+     * @param found Determines if an Event was found or not
      * @param foundEvent The found Event
      */
     public GetCurrentEventResponse( Boolean found, Event foundEvent ) {

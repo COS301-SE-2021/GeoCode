@@ -14,12 +14,12 @@ import java.util.UUID;
 @Validated
 public class GetCurrentEventRequest {
 
-    /**
-     * The unique id of the event to get
-     */
-    @JsonProperty( "eventID" )
-    @NotNull( message = "GetCurrentEventGeoCodeRequest eventID attribute cannot be null." )
-    private UUID eventID ;
+//    /**
+//     * The unique id of the event to get
+//     */
+//    @JsonProperty( "eventID" )
+//    @NotNull( message = "GetCurrentEventGeoCodeRequest eventID attribute cannot be null." )
+//    private UUID eventID ;
 
     /**
      * The unique id of the user doing the event to get
@@ -35,51 +35,61 @@ public class GetCurrentEventRequest {
 
     }
 
-    /**
-     * Overloaded Constructor
-     *
-     * @param eventID The unique id of the event to get
-     * @param userID The unique id of the user doing the event to get
-     */
-    public GetCurrentEventRequest( UUID eventID, UUID userID ) {
+//    /**
+//     * Overloaded Constructor
+//     *
+//     * @param eventID The unique id of the event to get
+//     * @param userID The unique id of the user doing the event to get
+//     */
+//    public GetCurrentEventRequest( UUID eventID, UUID userID ) {
+//
+//        this.eventID = eventID;
+//        this.userID = userID;
+//    }
 
-        this.eventID = eventID;
-        this.userID = userID;
-    }
+        /**
+         * Overloaded Constructor
+         *
+         * @param userID The unique id of the user doing the event to get
+         */
+        public GetCurrentEventRequest( UUID userID ) {
 
-    /**
-     * Sets the eventID attribute to the specified value
-     *
-     * @param eventID the value the attribute should be set to
-     *
-     * @return the request after the eventID has been changed
-     */
-    public GetCurrentEventRequest eventID( UUID eventID ) {
+            this.userID = userID;
+        }
 
-        this.eventID = eventID;
-        return this;
-    }
-
-    /**
-     * Gets the saved eventID attribute
-     *
-     * @return the stored eventID attribute
-     */
-    @Valid
-    public UUID getEventID() {
-
-        return eventID;
-    }
-
-    /**
-     * Sets the eventID attribute to the specified value
-     *
-     * @param eventID the value the attribute should be set to
-     */
-    public void setEventID( UUID eventID ) {
-
-        this.eventID = eventID;
-    }
+//    /**
+//     * Sets the eventID attribute to the specified value
+//     *
+//     * @param eventID the value the attribute should be set to
+//     *
+//     * @return the request after the eventID has been changed
+//     */
+//    public GetCurrentEventRequest eventID( UUID eventID ) {
+//
+//        this.eventID = eventID;
+//        return this;
+//    }
+//
+//    /**
+//     * Gets the saved eventID attribute
+//     *
+//     * @return the stored eventID attribute
+//     */
+//    @Valid
+//    public UUID getEventID() {
+//
+//        return eventID;
+//    }
+//
+//    /**
+//     * Sets the eventID attribute to the specified value
+//     *
+//     * @param eventID the value the attribute should be set to
+//     */
+//    public void setEventID( UUID eventID ) {
+//
+//        this.eventID = eventID;
+//    }
 
     /**
      * Sets the userID attribute to the specified value
@@ -135,8 +145,9 @@ public class GetCurrentEventRequest {
         }
 
         GetCurrentEventRequest getCurrentEventRequest = ( GetCurrentEventRequest ) obj;
-        return Objects.equals( this.eventID, getCurrentEventRequest.eventID ) &&
-                Objects.equals( this.userID, getCurrentEventRequest.userID );
+//        return Objects.equals( this.eventID, getCurrentEventRequest.eventID ) &&
+//                Objects.equals( this.userID, getCurrentEventRequest.userID );
+        return Objects.equals( this.userID, getCurrentEventRequest.userID );
     }
 
     /**
@@ -147,7 +158,8 @@ public class GetCurrentEventRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( eventID, userID );
+//        return Objects.hash( eventID, userID );
+        return Objects.hash( userID );
     }
 
     /**
@@ -159,7 +171,7 @@ public class GetCurrentEventRequest {
     public String toString() {
 
         return "class GetCurrentEventGeoCodeRequest {\n" +
-                "    eventID: " + toIndentedString( eventID ) + "\n" +
+                //"    eventID: " + toIndentedString( eventID ) + "\n" +
                 "    userID: " + toIndentedString( userID ) + "\n" +
                 "}";
     }
