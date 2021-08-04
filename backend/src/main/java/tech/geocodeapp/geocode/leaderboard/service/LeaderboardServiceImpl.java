@@ -328,7 +328,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         //update amount if it was provided
         if(request.getAmount() != null){
-            point.get().setAmount(point.get().getAmount() + request.getAmount());
+            point.get().setAmount(request.getAmount());
         }
 
         pointRepo.save(point.get());
