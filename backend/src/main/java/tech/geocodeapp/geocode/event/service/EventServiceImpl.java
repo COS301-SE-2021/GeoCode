@@ -13,6 +13,7 @@ import tech.geocodeapp.geocode.event.exceptions.*;
 
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class implements the EventService interface
@@ -61,6 +62,29 @@ public class EventServiceImpl implements EventService {
         }
 
         return null;
+    }
+
+    /**
+     * Get the Event identified by the given ID
+     * @param request the attributes the response should be created from
+     * @return A GetEventByIDResponse object containing the Event if it exists
+     */
+    public GetEventByIDResponse getEventByID(GetEventByIDRequest request) throws InvalidRequestException{
+        /* Validate the request */
+        if ( request == null ) {
+            throw new InvalidRequestException(true);
+        } else if ( request.getEventID() == null ){
+            throw new InvalidRequestException();
+        }
+
+        /* check if the Event exists */
+        Optional<Event> optionalEvent = eventRepo.findById( request.getEventID() );
+
+        if ( optionalEvent.isEmpty() ){
+            return new GetEventByIDResponse(false, "No Event exists with the given UUID", null);
+        } else {
+            return new GetEventByIDResponse(true, "Event successfully returned", optionalEvent.get());
+        }
     }
 
     /**

@@ -117,7 +117,31 @@ public class PointMockRepository implements PointRepository {
     @Override
     public List<Point> findPointsByLeaderboardBetween(UUID leaderboardId, int offset, int next) {
         List<Point> pointsOnLeaderboard = findAllByLeaderboardID(leaderboardId);
-        return pointsOnLeaderboard.subList(offset, offset + next);
+        int index;
+        if(offset + next > pointsOnLeaderboard.size()) {
+            index = pointsOnLeaderboard.size();
+        }else{
+            index = offset + next;
+        }
+        List<Point> sorted = pointsOnLeaderboard;
+        Collections.sort(sorted, new Comparator<Point>() {
+            @Override
+            public int compare(Point o1, Point o2) {
+                return o2.getAmount().compareTo(o1.getAmount());
+            }
+        });
+        return sorted.subList(offset, index);
+    }
+
+    @Override
+    public Optional<Point> getPointForUser(UUID userID, UUID leaderboardID) {
+        for(Point point : map.values()){
+            if(point.getUser().getId().equals(userID) && point.getLeaderBoard().getId().equals(leaderboardID)){
+                return Optional.of(point);
+            }
+        }
+
+        return Optional.empty();
     }
 
     @Override

@@ -8,6 +8,7 @@ import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -36,6 +37,9 @@ public interface PointRepository extends JpaRepository<Point, UUID> {
 
     int countByLeaderboard(Leaderboard leaderboard);
 
-    @Query(value = "SELECT * FROM point WHERE leaderboard_id = ?1 ORDER BY amount OFFSET ?2 ROWS FETCH NEXT ?3 ROWS ONLY ", nativeQuery = true)
+    @Query(value = "SELECT * FROM point WHERE leaderboard_id = ?1 ORDER BY amount DESC OFFSET ?2 ROWS FETCH NEXT ?3 ROWS ONLY ", nativeQuery = true)
     List<Point> findPointsByLeaderboardBetween(UUID leaderboardId, int offset, int next);
+
+    @Query(value = "SELECT * FROM point WHERE user_id = ?1 AND leaderboard_id = ?2", nativeQuery = true)
+    Optional<Point> getPointForUser(UUID userID, UUID leaderboardID);
 }

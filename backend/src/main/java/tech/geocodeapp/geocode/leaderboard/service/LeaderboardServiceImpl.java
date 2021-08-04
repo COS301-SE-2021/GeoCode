@@ -76,8 +76,8 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     }
 
     /**
-     * A method to retrieve a set number of points from a leaderboard for a provided event starting at a specified rank.
-     * @param request - Contains the event to get a leaderboard form, the position to start for points and the number of points to get.
+     * A method to retrieve a set number of points from a leaderboard for a provided leaderboardId starting at a specified rank.
+     * @param request - Contains the leaderboardId to use, the position to start for points and the number of points to get.
      * @return A list of the details of the requested points
      * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
@@ -93,19 +93,14 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         String message = "";
         List<EventLeaderboardDetails> leaderboardDetails = new ArrayList<>();
 
-        //find the event if it exists
-        Optional<Event> event=Optional.empty(); //ToDo change to find by provided eventID
-
         if(request.getStarting()<1) {
             message = "Starting is lower than the minimum value allowed";
         }else if(request.getCount()<1) {
             message = "Count is lower than the minimum value allowed";
-        }else if(event.isEmpty()){
-            message = "No event with the provided eventID exists";
         }else{
-            Optional<Leaderboard> leaderboard = Optional.empty();//TODO: get Event's Leaderboard
+            Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
             if(leaderboard.isEmpty()){
-                message = "No leaderboard exists for the provided event";
+                message = "No leaderboard exists for the provided leaderboardId";
             }else{
                 if(pointRepo.countByLeaderboard(leaderboard.get())<request.getStarting()) {
                     message = "Starting is greater than the number of points in the leaderboard";
@@ -122,6 +117,28 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }
 
         return new GetEventLeaderboardResponse(success, message, leaderboardDetails);
+    }
+
+    /**
+     * Gets the Point object for the given User ID and Leaderboard ID
+     * @param request Request object containing the user and leaderboard IDs
+     * @return The wanted Point object
+     */
+    public GetPointForUserResponse getPointForUser(GetPointForUserRequest request) throws NullRequestParameterException{
+        if(request == null){
+            return new GetPointForUserResponse(false, "The GetPointForUserRequest object passed was NULL", null);
+        }
+
+        checkNullRequestParameters.checkRequestParameters(request);
+
+        /* check if the User has got a Point for the given Leaderboard */
+        Optional<Point> optionalPoint = pointRepo.getPointForUser(request.getUserID(), request.getLeaderboardID());
+
+        if(optionalPoint.isEmpty()){
+            return new GetPointForUserResponse(false, "The User does not have any points yet for the given Leaderboard", null);
+        }else{
+            return new GetPointForUserResponse(true, "Point object returned successfully", optionalPoint.get());
+        }
     }
 
     /**
@@ -311,7 +328,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         //update amount if it was provided
         if(request.getAmount() != null){
-            point.get().setAmount(request.getAmount());
+            point.get().setAmount(point.get().getAmount() + request.getAmount());
         }
 
         pointRepo.save(point.get());

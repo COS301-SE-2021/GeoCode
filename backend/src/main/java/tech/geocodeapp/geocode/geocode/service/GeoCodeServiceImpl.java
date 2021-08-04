@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.geocode.service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -13,6 +14,10 @@ import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
+import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.request.GetEventByIDRequest;
+import tech.geocodeapp.geocode.event.response.GetEventByIDResponse;
+import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.geocode.exceptions.RepoException;
@@ -71,17 +76,26 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     private static final int QR_SIZE = 8;
 
     /**
+     * The Event service to access the use cases and
+     * Event repository
+     */
+    @NotNull( message = "GeoCodeService: Event Service Implementation may not be null." )
+    private EventService eventService;
+
+    /**
      * Constructor
      *
      * @param geoCodeRepo        the repo the created response attributes should save to
      * @param collectableService access to the collectable use cases and repository
      * @param userService        access to the user use cases and repository
      *
+     * @param eventService
      * @throws RepoException the GeoCode repository was invalid
      */
-    public GeoCodeServiceImpl( @Qualifier( "GeoCodeRepository" ) GeoCodeRepository geoCodeRepo,
-                               @Qualifier( "CollectableService" ) CollectableService collectableService,
-                               @Qualifier( "UserService" ) UserService userService ) throws RepoException {
+    public GeoCodeServiceImpl(@Qualifier("GeoCodeRepository") GeoCodeRepository geoCodeRepo,
+                              @Qualifier("CollectableService") CollectableService collectableService,
+                              @Qualifier("UserService") @Lazy UserService userService,
+                              @Qualifier("EventService") EventService eventService) throws RepoException {
 
         /* Check if the given repo exists */
         if ( geoCodeRepo != null ) {
@@ -92,6 +106,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             /* The subsystems service implementations  */
             this.collectableService = Objects.requireNonNull( collectableService, "GeoCodeService: Collectable service must not be null." );
             this.userService = Objects.requireNonNull( userService, "GeoCodeService: User service must not be null." );
+            this.eventService = Objects.requireNonNull( eventService, "GeoCodeService: Event service must not be null.");
         } else {
 
             /* The repo does not exist throw an error */
@@ -168,9 +183,20 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * and set its attributes to the given attributes in the request
          */
         var id = UUID.randomUUID();
+
+        var getEventByIDRequest = new GetEventByIDRequest(request.getEventID());
+        GetEventByIDResponse getEventByIDResponse = null;
+
+        try {
+            getEventByIDResponse = eventService.getEventByID(getEventByIDRequest);
+        } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+            e.printStackTrace();
+            throw new InvalidRequestException();
+        }
+
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
-                                      qr.toString(), request.getLocation(), UUID.randomUUID() );
+                                      qr.toString(), request.getLocation(), UUID.randomUUID(), getEventByIDResponse.getEvent() );
 
         // ToDo: update look at service contract
 
@@ -198,6 +224,29 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         return response;
+    }
+
+    /**
+     * Get the GeoCode identified by the given UUID
+     * @param request Request object containing the UUID
+     * @return Response object containing the wanted GeoCode (if it is found)
+     */
+    public GetGeoCodeByIDResponse getGeoCodeByID(GetGeoCodeByIDRequest request) throws InvalidRequestException{
+        /* Validate the request */
+        if ( request == null ) {
+            throw new InvalidRequestException(true);
+        } else if ( request.getGeoCodeID() == null ){
+            throw new InvalidRequestException();
+        }
+
+        /* check if the Event exists */
+        Optional<GeoCode> optionalGeoCode = geoCodeRepo.findById( request.getGeoCodeID() );
+
+        if ( optionalGeoCode.isEmpty() ){
+            return new GetGeoCodeByIDResponse(false, "No GeoCode exists with the given UUID", null);
+        } else {
+            return new GetGeoCodeByIDResponse(true, "GeoCode successfully returned", optionalGeoCode.get());
+        }
     }
 
     /**
@@ -599,7 +648,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             return new SwapCollectablesResponse( false );
         }
 
-        /* Find all of the available Collectables */
+        /* Find all the available Collectables */
         UUID hold = null;
         var geocodeToUser = storedCollectables.get( replaceIndex );
         var temp = collectableService.getCollectables().getCollectables();
@@ -621,7 +670,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Perform the swap */
         Collectable userToGeocode;
         try {
-            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold ) ).getCollectable();
+            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold, geocode.getId()) ).getCollectable();
         } catch ( NullRequestParameterException error ) {
 
             /* Validate the Collectable returned */

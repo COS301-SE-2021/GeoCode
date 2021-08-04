@@ -10,7 +10,7 @@ public enum Difficulty {
 
     EASY( "EASY" ),
     MEDIUM( "MEDIUM" ),
-    DIFFICULTY( "DIFFICULTY" ),
+    HARD( "HARD" ),
     INSANE( "INSANE" );
 
     /**

@@ -13,11 +13,24 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest
 import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
+import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.response.CreatePointResponse;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.request.GetGeoCodeByIDRequest;
+import tech.geocodeapp.geocode.geocode.response.GetGeoCodeByIDResponse;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
+import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
+import tech.geocodeapp.geocode.leaderboard.request.GetPointForUserRequest;
+import tech.geocodeapp.geocode.leaderboard.request.UpdatePointRequest;
+import tech.geocodeapp.geocode.leaderboard.response.GetPointForUserResponse;
+import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
@@ -47,12 +60,16 @@ public class UserServiceImpl implements UserService {
     private final String invalidUserIdMessage = "Invalid user id";
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, @Qualifier("LeaderboardService") LeaderboardService leaderboardService) {
+    @NotNull(message = "GeoCode Service Implementation may not be null.")
+    private final GeoCodeService geoCodeService;
+
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, @Qualifier("LeaderboardService") LeaderboardService leaderboardService, @Qualifier("GeoCodeService") GeoCodeService geoCodeService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
         this.pointRepo = pointRepo;
         this.collectableService = collectableService;
         this.leaderboardService = leaderboardService;
+        this.geoCodeService = geoCodeService;
     }
 
     /**
@@ -330,6 +347,85 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
+        /* assign points to the User for finding the GeoCode */
+
+        //get the GeoCode
+        GetGeoCodeByIDRequest getGeoCodeByIDRequest = new GetGeoCodeByIDRequest(request.getGeoCodeID());
+        GetGeoCodeByIDResponse getGeoCodeByIDResponse;
+
+        try {
+            getGeoCodeByIDResponse = geoCodeService.getGeoCodeByID(getGeoCodeByIDRequest);
+        } catch (InvalidRequestException e) {
+            e.printStackTrace();
+            return new SwapCollectableResponse(false, e.getMessage(), null);
+        }
+
+        //check if the ID passed is valid
+        if(!getGeoCodeByIDResponse.isSuccess()){
+            return new SwapCollectableResponse(false, "Invalid ID given for the GeoCode", null);
+        }
+
+        GeoCode geoCode = getGeoCodeByIDResponse.getGeoCode();
+
+        //check if the GeoCode is part of an Event
+        Event event = geoCode.getEvent();
+
+        if(event != null){
+            //get the difficulty of the GeoCode
+            Difficulty geocodeDifficulty = geoCode.getDifficulty();
+
+            //determine how many points the User should get
+            int pointsAmount = 0;
+
+            switch(geocodeDifficulty){
+                case EASY:
+                    pointsAmount = 1;
+                    break;
+                case MEDIUM:
+                    pointsAmount = 5;
+                    break;
+                case HARD:
+                    pointsAmount = 10;
+                    break;
+                case INSANE:
+                    pointsAmount = 20;
+                    break;
+            }
+
+            //get the LeaderboardID of the Leaderboard for the Event
+            UUID leaderboardID = event.getLeaderboard().getId();
+
+            //get the ID of the current User
+            UUID userID = getCurrentUser().getId();
+
+            //check if the User does not already have points for the Leaderboard
+            GetPointForUserRequest getPointForUserRequest = new GetPointForUserRequest(userID, leaderboardID);
+            GetPointForUserResponse getPointForUserResponse = leaderboardService.getPointForUser(getPointForUserRequest);
+
+            //add new Point entry if first time User is scoring on the Leaderboard
+            if(!getPointForUserResponse.isSuccess()){
+                CreatePointRequest createPointRequest = new CreatePointRequest(pointsAmount, userID, leaderboardID);
+                PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
+
+                //check if the Point was not created successfully
+                if(!pointResponse.isSuccess()){
+                    return new SwapCollectableResponse(false, "Point could not be created", null);
+                }
+            }else{
+                //update Point entry if already has scored on the Leaderboard
+                Point point = getPointForUserResponse.getPoint();
+
+                UpdatePointRequest updatePointRequest = new UpdatePointRequest(point.getId(), pointsAmount);
+                PointResponse updatePointResponse = leaderboardService.updatePoint(updatePointRequest);
+
+                //check if the Point was not successfully updated
+                if(!updatePointResponse.isSuccess()){
+                    return new SwapCollectableResponse(false, "Point could not be updated", null);
+                }
+            }
+        }
+
+        /* only swap the Collectables if no errors have occurred before now */
         //currentCollectable to swap out
         User currentUser = getCurrentUser();
         Collectable oldCurrentCollectable = currentUser.getCurrentCollectable();

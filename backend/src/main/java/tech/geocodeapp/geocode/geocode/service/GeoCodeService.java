@@ -22,6 +22,13 @@ public interface GeoCodeService {
     CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException;
 
     /**
+     * Get the GeoCode identified by the given UUID
+     * @param request Request object containing the UUID
+     * @return Response object containing the wanted GeoCode (if it is found)
+     */
+    GetGeoCodeByIDResponse getGeoCodeByID( GetGeoCodeByIDRequest request ) throws InvalidRequestException;
+
+    /**
      * Get all the stored GeoCodes in the repository
      *
      * @return the newly created response instance

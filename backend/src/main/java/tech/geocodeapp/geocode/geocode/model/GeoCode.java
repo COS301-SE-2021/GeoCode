@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Cascade;
+import tech.geocodeapp.geocode.event.model.Event;
+
 import javax.validation.Valid;
 import javax.persistence.*;
 
@@ -90,6 +92,15 @@ public class GeoCode {
     private UUID createdBy;
 
     /**
+     * The Event that the GeoCode is for.
+     * Is NULL if the GeoCode is not for an Event
+     */
+    @JsonProperty( "event" )
+    @ManyToOne
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private Event event = null;
+
+    /**
      * Default constructor
      */
     public GeoCode() {
@@ -110,7 +121,7 @@ public class GeoCode {
      * @param createdBy The user's ID who created the GeoCode
      */
     public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints,
-                    Collection< UUID > collectables, String qrCode, GeoPoint location, UUID createdBy ) {
+                    Collection< UUID > collectables, String qrCode, GeoPoint location, UUID createdBy, Event event ) {
 
         this.id = id;
         this.difficulty = difficulty;
@@ -121,6 +132,7 @@ public class GeoCode {
         this.qrCode = qrCode;
         this.location = location;
         this.createdBy = createdBy;
+        this.event = event;
     }
 
     /**
@@ -543,4 +555,11 @@ public class GeoCode {
         return o.toString().replace( "\n", "\n    " );
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 }
