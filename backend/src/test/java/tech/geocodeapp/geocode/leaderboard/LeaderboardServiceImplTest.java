@@ -660,4 +660,20 @@ public class LeaderboardServiceImplTest {
         assertThatThrownBy(() -> leaderboardService.getEventLeaderboard(request))
                 .isInstanceOf(NullRequestParameterException.class);
     }
+
+    /**
+     * Test that if the starting position given in the request is not below the minimum value allowed of 1
+     */
+    @Test
+    public void getEventLeaderboardStartingLowerThanMinimumValue() {
+        GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(UUID.randomUUID(), 0, 2);
+        try {
+            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Starting is lower than the minimum value allowed", response.getMessage());
+            Assertions.assertTrue(response.getLeaderboard().isEmpty());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
