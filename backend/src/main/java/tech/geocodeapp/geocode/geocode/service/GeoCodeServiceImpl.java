@@ -169,7 +169,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         var id = UUID.randomUUID();
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
-                                      qr.toString(), request.getLocation(), UUID.randomUUID() );
+                                      qr.toString(), request.getLocation(), UUID.randomUUID(), eventID);
 
         // ToDo: update look at service contract
 

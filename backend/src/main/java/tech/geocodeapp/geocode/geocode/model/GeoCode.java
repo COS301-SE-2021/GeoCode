@@ -90,6 +90,13 @@ public class GeoCode {
     private UUID createdBy;
 
     /**
+     * The ID of the Event that this GeoCode is part of.
+     * Is NULL if this GeoCode is not part of an Event
+     */
+    @JsonProperty( "eventID" )
+    private UUID eventID;
+
+    /**
      * Default constructor
      */
     public GeoCode() {
@@ -98,8 +105,7 @@ public class GeoCode {
 
     /**
      * Overloaded Constructor
-     *
-     * @param id The unique identifier for the GeoCode
+     *  @param id The unique identifier for the GeoCode
      * @param difficulty The description of how difficult it is to locate the GeoCode in the real world
      * @param available If the GeoCode is active in the system
      * @param description The description of where the GeoCode is and what it involves
@@ -108,9 +114,10 @@ public class GeoCode {
      * @param qrCode A short unique identifier to find the GeoCode in the system by the user from the real world
      * @param location The longitude and latitude of the GeoCode in the real world
      * @param createdBy The user's ID who created the GeoCode
+     * @param eventID The ID of the Event that this GeoCode is part of. Is NULL if this GeoCode is not part of an Event
      */
-    public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints,
-                    Collection< UUID > collectables, String qrCode, GeoPoint location, UUID createdBy ) {
+    public GeoCode(UUID id, Difficulty difficulty, Boolean available, String description, Collection<String> hints,
+                   Collection<UUID> collectables, String qrCode, GeoPoint location, UUID createdBy, UUID eventID) {
 
         this.id = id;
         this.difficulty = difficulty;
@@ -121,6 +128,7 @@ public class GeoCode {
         this.qrCode = qrCode;
         this.location = location;
         this.createdBy = createdBy;
+        this.eventID = eventID;
     }
 
     /**
@@ -543,4 +551,11 @@ public class GeoCode {
         return o.toString().replace( "\n", "\n    " );
     }
 
+    public UUID getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(UUID eventID) {
+        this.eventID = eventID;
+    }
 }
