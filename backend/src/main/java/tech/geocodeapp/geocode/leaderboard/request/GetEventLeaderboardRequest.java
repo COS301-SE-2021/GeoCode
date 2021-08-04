@@ -1,6 +1,8 @@
 package tech.geocodeapp.geocode.leaderboard.request;
 
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +18,7 @@ import javax.validation.constraints.*;
 
 public class GetEventLeaderboardRequest   {
   @JsonProperty("leaderboardID")
-  private String leaderboardId = null;
+  private UUID leaderboardId = null;
 
   @JsonProperty("starting")
   private Integer starting = null;
@@ -24,7 +26,7 @@ public class GetEventLeaderboardRequest   {
   @JsonProperty("count")
   private Integer count = null;
 
-  public GetEventLeaderboardRequest leaderboardID(String leaderboardId) {
+  public GetEventLeaderboardRequest leaderboardID(UUID leaderboardId) {
     this.leaderboardId = leaderboardId;
     return this;
   }
@@ -36,11 +38,11 @@ public class GetEventLeaderboardRequest   {
   @Schema(example = "054463f2-2f7c-4864-8130-68e5aa79ee7f", required = true, description = "")
       @NotNull
 
-    public String getLeaderboardId() {
+    public UUID getLeaderboardId() {
     return leaderboardId;
   }
 
-  public void setLeaderboardId(String leaderboardId) {
+  public void setLeaderboardId(UUID leaderboardId) {
     this.leaderboardId = leaderboardId;
   }
 
