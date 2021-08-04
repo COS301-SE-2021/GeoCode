@@ -124,14 +124,15 @@ public class EventServiceImpl implements EventService {
              * and set the response to true with the found Event
              */
             Optional< Event > temp = eventRepo.findById( request.getEventID() );
-            if ( temp.isPresent() ) {
+            response = temp.map(
 
-                //ToDo continue here
-                response = new GetEventResponse( true );
-            } else {
+                                    /* Indicate the Event was found and return it */
+                                    event -> new GetEventResponse( true, event )
+                               ).orElseGet(
 
-                response = new GetEventResponse( false );
-            }
+                                     /* Indicate the Event was not found */
+                                   () -> new GetEventResponse( false )
+                               );
 
         } catch ( EntityNotFoundException error ) {
 
@@ -202,6 +203,8 @@ public class EventServiceImpl implements EventService {
 
             throw new InvalidRequestException();
         }
+
+        NextStageResponse response = null;
 
         return null;
     }
