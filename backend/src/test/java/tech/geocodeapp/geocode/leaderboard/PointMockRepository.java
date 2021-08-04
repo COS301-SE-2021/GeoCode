@@ -123,14 +123,14 @@ public class PointMockRepository implements PointRepository {
         }else{
             index = offset + next;
         }
-        List<Point> sorted = pointsOnLeaderboard.subList(offset, index);
+        List<Point> sorted = pointsOnLeaderboard;
         Collections.sort(sorted, new Comparator<Point>() {
             @Override
             public int compare(Point o1, Point o2) {
                 return o2.getAmount().compareTo(o1.getAmount());
             }
         });
-        return sorted;
+        return sorted.subList(offset, index);
     }
 
     @Override
