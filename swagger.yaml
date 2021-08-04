@@ -1025,15 +1025,6 @@ paths:
             application/xml:
               schema:
                 $ref: "#/components/schemas/GetEventLeaderboardResponse"
-        '404':
-          description: "Unable to find CollectableTypes of given set"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetEventLeaderboardResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetEventLeaderboardResponse"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
       security:
@@ -2714,11 +2705,11 @@ components:
     GetEventLeaderboardRequest:
       type: "object"
       required:
-        - eventID
+        - leaderboardId
         - starting
         - count
       properties:
-        eventID:
+        leaderboardId:
           type: string
           format: UUID
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
