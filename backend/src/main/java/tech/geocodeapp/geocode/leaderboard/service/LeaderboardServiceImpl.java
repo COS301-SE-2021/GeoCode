@@ -76,7 +76,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     }
 
     /**
-     * A method to retrieve a set number of points from a leaderboard for a provided event starting at a specified rank.
+     * A method to retrieve a set number of points from a leaderboard for a provided leaderboardId starting at a specified rank.
      * @param request - Contains the leaderboardId to use, the position to start for points and the number of points to get.
      * @return A list of the details of the requested points
      * @throws NullRequestParameterException - an exception for when a request parameter is NULL
@@ -100,7 +100,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }else{
             Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
             if(leaderboard.isEmpty()){
-                message = "No leaderboard exists for the provided event";
+                message = "No leaderboard exists for the provided leaderboardId";
             }else{
                 if(pointRepo.countByLeaderboard(leaderboard.get())<request.getStarting()) {
                     message = "Starting is greater than the number of points in the leaderboard";
