@@ -10,8 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface CreatePointRequest { 
-    amount: number;
-    userID: string;
-    leaderboardID: string;
+export interface RegisterNewUserResponse { 
+    success: boolean;
+    message: string;
 }

@@ -9,9 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { User } from './user';
 
-export interface CreatePointRequest { 
-    amount: number;
-    userID: string;
-    leaderboardID: string;
+export interface GetUserByIdResponse { 
+    success: boolean;
+    message: string;
+    user: User;
 }

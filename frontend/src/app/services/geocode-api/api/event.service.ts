@@ -21,9 +21,9 @@ import { ChangeAvailabilityRequest } from '../model/changeAvailabilityRequest';
 import { ChangeAvailabilityResponse } from '../model/changeAvailabilityResponse';
 import { CreateEventRequest } from '../model/createEventRequest';
 import { CreateEventResponse } from '../model/createEventResponse';
+import { CreateLeaderboardRequest } from '../model/createLeaderboardRequest';
 import { CreateLeaderboardResponse } from '../model/createLeaderboardResponse';
 import { CreatePointRequest } from '../model/createPointRequest';
-import { CreatePointResponse } from '../model/createPointResponse';
 import { CreateTimeTrialRequest } from '../model/createTimeTrialRequest';
 import { CreateTimeTrialResponse } from '../model/createTimeTrialResponse';
 import { EventsNearMeRequest } from '../model/eventsNearMeRequest';
@@ -44,6 +44,7 @@ import { GetPointsByUserResponse } from '../model/getPointsByUserResponse';
 import { GetPointsResponse } from '../model/getPointsResponse';
 import { NextStageRequest } from '../model/nextStageRequest';
 import { NextStageResponse } from '../model/nextStageResponse';
+import { PointResponse } from '../model/pointResponse';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -194,65 +195,19 @@ export class EventService {
     }
 
     /**
-     * Create a new Leaderboard for an Event
-     * Create a new Leaderboard for an Event
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public createLeaderBoard(observe?: 'body', reportProgress?: boolean): Observable<CreateLeaderboardResponse>;
-    public createLeaderBoard(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CreateLeaderboardResponse>>;
-    public createLeaderBoard(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CreateLeaderboardResponse>>;
-    public createLeaderBoard(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-
-        return this.httpClient.request<CreateLeaderboardResponse>('post',`${this.basePath}/Event/createLeaderBoard`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Create a new Point for an Event
      * Create a new Point with specific values for an Event
      * @param body Request to create a new Point for an Event
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createPoint(body: CreatePointRequest, observe?: 'body', reportProgress?: boolean): Observable<CreatePointResponse>;
-    public createPoint(body: CreatePointRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CreatePointResponse>>;
-    public createPoint(body: CreatePointRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CreatePointResponse>>;
-    public createPoint(body: CreatePointRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createEventPoint(body: CreatePointRequest, observe?: 'body', reportProgress?: boolean): Observable<PointResponse>;
+    public createEventPoint(body: CreatePointRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PointResponse>>;
+    public createEventPoint(body: CreatePointRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PointResponse>>;
+    public createEventPoint(body: CreatePointRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling createPoint.');
+            throw new Error('Required parameter body was null or undefined when calling createEventPoint.');
         }
 
         let headers = this.defaultHeaders;
@@ -284,7 +239,63 @@ export class EventService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<CreatePointResponse>('post',`${this.basePath}/Event/createPoint`,
+        return this.httpClient.request<PointResponse>('post',`${this.basePath}/Event/createPoint`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Create a new Leaderboard for an Event
+     * Create a new Leaderboard for an Event
+     * @param body Request to create a new Leaderboard for an Event
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createLeaderBoard(body: CreateLeaderboardRequest, observe?: 'body', reportProgress?: boolean): Observable<CreateLeaderboardResponse>;
+    public createLeaderBoard(body: CreateLeaderboardRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CreateLeaderboardResponse>>;
+    public createLeaderBoard(body: CreateLeaderboardRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CreateLeaderboardResponse>>;
+    public createLeaderBoard(body: CreateLeaderboardRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling createLeaderBoard.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<CreateLeaderboardResponse>('post',`${this.basePath}/Event/createLeaderBoard`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

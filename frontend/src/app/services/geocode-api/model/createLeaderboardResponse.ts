@@ -9,8 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Point } from './point';
+import { Leaderboard } from './leaderboard';
 
-export interface CreatePointResponse { 
-    points: Array<Point>;
+export interface CreateLeaderboardResponse { 
+    success: boolean;
+    message: string;
+    leaderboard: Leaderboard;
 }
