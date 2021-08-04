@@ -77,7 +77,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
     /**
      * A method to retrieve a set number of points from a leaderboard for a provided event starting at a specified rank.
-     * @param request - Contains the event to get a leaderboard form, the position to start for points and the number of points to get.
+     * @param request - Contains the leaderboardId to use, the position to start for points and the number of points to get.
      * @return A list of the details of the requested points
      * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
@@ -93,17 +93,12 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         String message = "";
         List<EventLeaderboardDetails> leaderboardDetails = new ArrayList<>();
 
-        //find the event if it exists
-        Optional<Event> event=Optional.empty(); //ToDo change to find by provided eventID
-
         if(request.getStarting()<1) {
             message = "Starting is lower than the minimum value allowed";
         }else if(request.getCount()<1) {
             message = "Count is lower than the minimum value allowed";
-        }else if(event.isEmpty()){
-            message = "No event with the provided eventID exists";
         }else{
-            Optional<Leaderboard> leaderboard = Optional.empty();//TODO: get Event's Leaderboard
+            Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
             if(leaderboard.isEmpty()){
                 message = "No leaderboard exists for the provided event";
             }else{
