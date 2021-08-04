@@ -833,4 +833,53 @@ public class LeaderboardServiceImplTest {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Test that when starting and count do not reach the end of the points in a leaderboard that only points up until
+     * there are returned
+     */
+    @Test
+    public void getEventLeaderboardTestCountLowerThanNumberOfPointsInLeaderboard() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            //Create three users to use
+            List<UUID> userIds = new ArrayList<UUID>();
+            for (int i = 0; i < 3; i++) {
+                userIds.add(UUID.randomUUID());
+            }
+            for (int i = 0; i < 3; i++) {
+                RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userIds.get(i), "test user");
+                userService.registerNewUser(userRequest);
+            }
+
+            //create 3 points to rank
+            List<PointResponse> pointResponses = new ArrayList<PointResponse>();
+            CreatePointRequest pointRequest = new CreatePointRequest(5, userIds.get(0), leaderboardResponse.getLeaderboard().getId());
+            pointResponses.add(leaderboardService.createPoint(pointRequest));
+            pointRequest.setAmount(10);
+            pointRequest.setUserId(userIds.get(1));
+            pointResponses.add(leaderboardService.createPoint(pointRequest));
+            pointRequest.setAmount(6);
+            pointRequest.setUserId(userIds.get(2));
+            pointResponses.add(leaderboardService.createPoint(pointRequest));
+
+            GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(leaderboardResponse.getLeaderboard().getId(), 1, 2);
+            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Successfully found points for event", response.getMessage());
+            Assertions.assertFalse(response.getLeaderboard().isEmpty());
+            Assertions.assertEquals(2, response.getLeaderboard().size());
+
+            //test that each value in the list is in the correct place with the correct value of points and rank
+            Assertions.assertEquals(10, response.getLeaderboard().get(0).getPoints());
+            Assertions.assertEquals(1, response.getLeaderboard().get(0).getRank());
+            Assertions.assertEquals(6, response.getLeaderboard().get(1).getPoints());
+            Assertions.assertEquals(2, response.getLeaderboard().get(1).getRank());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
