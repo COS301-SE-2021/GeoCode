@@ -17,8 +17,13 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { CreatePointRequest } from '../model/createPointRequest';
+import { DeletePointRequest } from '../model/deletePointRequest';
+import { DeletePointResponse } from '../model/deletePointResponse';
 import { GetEventLeaderboardRequest } from '../model/getEventLeaderboardRequest';
 import { GetEventLeaderboardResponse } from '../model/getEventLeaderboardResponse';
+import { PointResponse } from '../model/pointResponse';
+import { UpdatePointRequest } from '../model/updatePointRequest';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -55,6 +60,118 @@ export class LeaderboardService {
         return false;
     }
 
+
+    /**
+     * Create a new point object
+     * Creates a new point object for a provided user and leaderboard
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createPoint(body: CreatePointRequest, observe?: 'body', reportProgress?: boolean): Observable<PointResponse>;
+    public createPoint(body: CreatePointRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PointResponse>>;
+    public createPoint(body: CreatePointRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PointResponse>>;
+    public createPoint(body: CreatePointRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling createPoint.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<PointResponse>('post',`${this.basePath}/Leaderboard/createPoint`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Delete a point
+     * Deletes a point based on a provided id
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deletePoint(body: DeletePointRequest, observe?: 'body', reportProgress?: boolean): Observable<DeletePointResponse>;
+    public deletePoint(body: DeletePointRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DeletePointResponse>>;
+    public deletePoint(body: DeletePointRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DeletePointResponse>>;
+    public deletePoint(body: DeletePointRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling deletePoint.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<DeletePointResponse>('post',`${this.basePath}/Leaderboard/deletePoint`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * Get an Event&#x27;s Leaderboard details
@@ -102,6 +219,62 @@ export class LeaderboardService {
         }
 
         return this.httpClient.request<GetEventLeaderboardResponse>('post',`${this.basePath}/Leaderboard/getEventLeaderboard`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Updates a point
+     * Updates the fields of a point with values provided for the given id
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updatePoint(body: UpdatePointRequest, observe?: 'body', reportProgress?: boolean): Observable<PointResponse>;
+    public updatePoint(body: UpdatePointRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PointResponse>>;
+    public updatePoint(body: UpdatePointRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PointResponse>>;
+    public updatePoint(body: UpdatePointRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling updatePoint.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<PointResponse>('post',`${this.basePath}/Leaderboard/updatePoint`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

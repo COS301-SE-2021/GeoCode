@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface CreateLeaderboardRequest { 
-    name: string;
+export interface DeletePointResponse { 
+    success: boolean;
+    message: string;
 }
