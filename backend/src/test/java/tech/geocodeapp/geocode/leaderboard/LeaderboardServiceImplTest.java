@@ -612,7 +612,7 @@ public class LeaderboardServiceImplTest {
      * Tests that a null request is handled correctly
      */
     @Test
-    public void getEventLeaderboardNullRequest() {
+    public void getEventLeaderboardTestNullRequest() {
         try {
             GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(null);
             Assertions.assertFalse(response.isSuccess());
@@ -627,7 +627,7 @@ public class LeaderboardServiceImplTest {
      * Test that the correct exception is thrown when all request parameters are set to null
      */
     @Test
-    public void getEventLeaderboardNullRequestParameters() {
+    public void getEventLeaderboardTestNullRequestParameters() {
         GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(null, null, null);
         assertThatThrownBy(() -> leaderboardService.getEventLeaderboard(request))
                 .isInstanceOf(NullRequestParameterException.class);
@@ -637,7 +637,7 @@ public class LeaderboardServiceImplTest {
      * Test that when the leaderboardId provided in the request is null that the correct exception is thrown
      */
     @Test
-    public void getEventLeaderboardNullLeaderboardId() {
+    public void getEventLeaderboardTestNullLeaderboardId() {
         GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(null, 1, 2);
         assertThatThrownBy(() -> leaderboardService.getEventLeaderboard(request))
                 .isInstanceOf(NullRequestParameterException.class);
@@ -647,7 +647,7 @@ public class LeaderboardServiceImplTest {
      * Test that when the starting position provided in the request is null that the correct exception is thrown
      */
     @Test
-    public void getEventLeaderboardNullStarting() {
+    public void getEventLeaderboardTestNullStarting() {
         GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(UUID.randomUUID(), null, 4);
         assertThatThrownBy(() -> leaderboardService.getEventLeaderboard(request))
                 .isInstanceOf(NullRequestParameterException.class);
@@ -657,7 +657,7 @@ public class LeaderboardServiceImplTest {
      * Test that when the count provided in the request is null that the correct exception is thrown
      */
     @Test
-    public void getEventLeaderboardNullCount() {
+    public void getEventLeaderboardTestNullCount() {
         GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(UUID.randomUUID(), 1, null);
         assertThatThrownBy(() -> leaderboardService.getEventLeaderboard(request))
                 .isInstanceOf(NullRequestParameterException.class);
@@ -667,7 +667,7 @@ public class LeaderboardServiceImplTest {
      * Test that if the starting position given in the request is below the minimum value allowed of 1 that the correct response object is returned
      */
     @Test
-    public void getEventLeaderboardStartingLowerThanMinimumValue() {
+    public void getEventLeaderboardTestStartingLowerThanMinimumValue() {
         GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(UUID.randomUUID(), 0, 2);
         try {
             GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
@@ -683,7 +683,7 @@ public class LeaderboardServiceImplTest {
      * Test that if the count provided in the request is lower than the minimum allowed value that the correct response is returned
      */
     @Test
-    public void getEventLeaderboardCountLowerThanMinimumValue() {
+    public void getEventLeaderboardTestCountLowerThanMinimumValue() {
         GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(UUID.randomUUID(), 1, 0);
         try {
             GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
@@ -697,7 +697,7 @@ public class LeaderboardServiceImplTest {
 
 
     @Test
-    public void getEventLeaderboardInvalidLeaderboardId() {
+    public void getEventLeaderboardTestInvalidLeaderboardId() {
         GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(UUID.randomUUID(), 1, 1);
         try {
             GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
@@ -714,7 +714,7 @@ public class LeaderboardServiceImplTest {
      * number of points in the leaderboard
      */
     @Test
-    public void getEventLeaderboardStartingGreaterThanPointsInLeaderboard() {
+    public void getEventLeaderboardTestStartingGreaterThanPointsInLeaderboard() {
         CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
         try {
             CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
@@ -740,7 +740,7 @@ public class LeaderboardServiceImplTest {
      * in the leaderboard that all points are correctly included in the response and are correctly ranked
      */
     @Test
-    public void getEventLeaderboardResponseWithAllPointsInLeaderboard() {
+    public void getEventLeaderboardTestResponseWithAllPointsInLeaderboard() {
         CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
         try {
             CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
@@ -784,4 +784,5 @@ public class LeaderboardServiceImplTest {
             e.printStackTrace();
         }
     }
+
 }
