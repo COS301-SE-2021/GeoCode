@@ -3193,23 +3193,3 @@ components:
             $ref: "#/components/schemas/Leaderboard"
       xml:
         name: "GetLeaderBoardByTimeTrialResponse"
-
-    CreateLeaderboardRequest:
-      type: "object"
-      required:
-        - name
-      properties:
-        name:
-          type: string
-      xml:
-        name: "GetLeaderBoardByTimeTrialRequest"
-
-    CreateLeaderboardResponse:
-      type: "object"
-      required:
-        - success
-      properties:
-        success:
-          type: boolean
-      xml:
-        name: "GetLeaderBoardByTimeTrialResponse"
