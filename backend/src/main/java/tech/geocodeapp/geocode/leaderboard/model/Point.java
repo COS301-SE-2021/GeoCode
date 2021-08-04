@@ -9,10 +9,7 @@ import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.user.model.User;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -33,14 +30,26 @@ public class Point   {
   private Integer amount = null;
 
   @JsonProperty("user")
-  @OneToOne
+  @ManyToOne
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private User user = null;
 
   @JsonProperty("leaderboard")
-  @OneToOne
+  @ManyToOne
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Leaderboard leaderboard = null;
+
+  public Point() {
+    id = UUID.randomUUID();
+  }
+
+  //constructor to use when creating a point when values are already known
+  public Point(Integer amount, User user, Leaderboard leaderboard) {
+    id = UUID.randomUUID();
+    this.amount = amount;
+    this.user = user;
+    this.leaderboard = leaderboard;
+  }
 
   public Point id(UUID id) {
     this.id = id;

@@ -11,7 +11,6 @@ import java.util.UUID;
 /**
  * This interface is for the service for the User subsystem
  */
-@Service
 public interface UserService {
     //U1.1 getCurrentCollectable
     GetCurrentCollectableResponse getCurrentCollectable(GetCurrentCollectableRequest request) throws NullUserRequestParameterException;
@@ -31,11 +30,16 @@ public interface UserService {
     //U1.6 getOwnedGeoCodes
     GetOwnedGeoCodesResponse getOwnedGeoCodes(GetOwnedGeoCodesRequest request) throws NullUserRequestParameterException;
 
+    //U1.7 getMyLeaderboards
+    GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullUserRequestParameterException;
+
     //User helper functions
-    User getUserById(UUID id);
+    GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullUserRequestParameterException;
+
     User getCurrentUser();
-    void registerNewUser(UUID id, String username);
+
+    RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullUserRequestParameterException;
 
     //GeoCode helper functions
-    public SwapCollectableResponse swapCollectable( SwapCollectableRequest request );
+    SwapCollectableResponse swapCollectable(SwapCollectableRequest request) throws NullUserRequestParameterException;
 }

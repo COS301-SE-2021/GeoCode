@@ -14,15 +14,13 @@ module.exports = function (config) {
       require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
-    files: [
-      'src/app/mocks/google-maps-api.js'
-    ],
     client: {
       jasmine: {
         // you can add configuration options for Jasmine here
         // the possible options are listed at https://jasmine.github.io/api/edge/Configuration.html
         // for example, you can disable the random execution with `random: false`
         // or set a specific seed with `seed: 4321`
+        random: false
       },
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
@@ -43,7 +41,7 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     usePolling: true,
-    browsers: ['ChromeHeadless'],
+    browsers: ['Chrome'], // automated tests will run ChromeHeadless - this is defined in the workflow
     singleRun: false,
     restartOnFileChange: true
   });

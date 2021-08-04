@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.geocode.service;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
+import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 
 /**
  * This is the main interface is for the GeoCode subsystem,
@@ -15,27 +16,25 @@ public interface GeoCodeService {
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly create response instance from the specified CreateGeoCodeRequest
+     * @return the newly created response instance from the specified CreateGeoCodeRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException;
 
     /**
-     * Get all the stored GeoCodes in the Repo
+     * Get all the stored GeoCodes in the repository
      *
-     * @return the newly create response instance from the specified GetAllGeoCodesRequest
-     *
-     * @throws RepoException there was an issue accessing the repository
+     * @return the newly created response instance
      */
-    GetGeoCodesResponse getAllGeoCodes( ) throws RepoException;
+    GetGeoCodesResponse getAllGeoCodes( );
 
     /**
-     * Get tje stored Collectables inside of a GeoCode
+     * Get the stored Collectables inside of a GeoCode
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly create response instance from the specified GetCollectablesRequest
+     * @return the newly created response instance from the specified GetCollectablesRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
@@ -46,18 +45,18 @@ public interface GeoCodeService {
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly create response instance from the specified GetGeoCodesByDifficultyRequest
+     * @return the newly created response instance from the specified GetGeoCodesByDifficultyRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException;
 
     /**
-     * Get the Hints of how to locate a GeoCode in the real world
+     * Get the hints of how to locate a GeoCode in the real world
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly create response instance from the specified GetHintsRequest
+     * @return the newly created response instance from the specified GetHintsRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
@@ -68,27 +67,51 @@ public interface GeoCodeService {
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly create response instance from the specified GetGeoCodeByQRCodeRequest
+     * @return the newly created response instance from the specified GetGeoCodeByQRCodeRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     GetGeoCodeByQRCodeResponse getGeoCodeByQRCode( GetGeoCodeByQRCodeRequest request ) throws InvalidRequestException;
 
     /**
-     * Finds the stored GeoCode associated at the given Location
+     * Finds the stored GeoCode associated with the generated QR Code and returns its Collectables
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly create response instance from the specified GetGeoCodeByLocationRequest
+     * @return the newly created response instance from the specified GetCollectablesInGeoCodeByQRCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetCollectablesInGeoCodeByQRCodeResponse getCollectablesInGeoCodeByQRCode( GetCollectablesInGeoCodeByQRCodeRequest request ) throws InvalidRequestException;
+
+    /**
+     * Finds the stored GeoCode associated at the given location
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetGeoCodeByLocationRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     GetGeoCodeByLocationResponse getGeoCodesByLocation( GetGeoCodeByLocationRequest request ) throws InvalidRequestException;
+
+    /**
+     * Finds the stored GeoCode associated at the given location and returns its Collectables
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetCollectablesInGeoCodesByLocationRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetCollectablesInGeoCodesByLocationResponse getCollectablesInGeoCodesByLocation( GetCollectablesInGeoCodesByLocationRequest request ) throws InvalidRequestException;
 
     /**
      * Swaps a stored Collectable in a GeoCode with the Users GeoCode
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly create response instance from the specified SwapCollectablesRequest
+     * @return the newly created response instance from the specified SwapCollectablesRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
@@ -99,9 +122,10 @@ public interface GeoCodeService {
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly create response instance from the specified UpdateAvailabilityRequest
+     * @return the newly created response instance from the specified UpdateAvailabilityRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws InvalidRequestException;
+
 }

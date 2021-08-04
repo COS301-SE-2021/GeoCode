@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
-import tech.geocodeapp.geocode.collectable.model.Difficulty;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -23,16 +24,10 @@ public class CreateGeoCodeRequest {
     private String description = null;
 
     /**
-     * The longitude of the location of the GeoCode in the real world
-     */
-    @JsonProperty( "longitude" )
-    private String longitude = null;
-
-    /**
      * The latitude of the location of the GeoCode in the real world
      */
-    @JsonProperty( "latitude" )
-    private String latitude = null;
+    @JsonProperty( "location" )
+    private GeoPoint location = null;
 
     /**
      * The list of hints provided by the user who created the GeoCode
@@ -65,17 +60,15 @@ public class CreateGeoCodeRequest {
      * Overloaded Constructor
      *
      * @param description  The description of where the GeoCode is and what it involves
-     * @param longitude The longitude of the location of the GeoCode in the real world
-     * @param latitude The latitude of the location of the GeoCode in the real world
+     * @param location The location of the GeoCode in the real world
      * @param hints The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
      * @param difficulty The level of difficulty to find a GeoCode in the real world
      * @param available If the GeoCode is active in the system
      */
-    public CreateGeoCodeRequest( String description, String longitude, String latitude, List< String > hints, Difficulty difficulty, Boolean available ) {
+    public CreateGeoCodeRequest( String description, GeoPoint location, List< String > hints, Difficulty difficulty, Boolean available ) {
 
         this.description = description;
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.location = location;
         this.hints = hints;
         this.difficulty = difficulty;
         this.available = available;
@@ -115,69 +108,36 @@ public class CreateGeoCodeRequest {
     }
 
     /**
-     * Sets the longitude attribute to the specified value
+     * Sets the location attribute to the specified value
      *
-     * @param longitude the value the attribute should be set to
+     * @param location the value the attribute should be set to
      *
-     * @return the request after the longitude has been changed
+     * @return the request after the location has been changed
      */
-    public CreateGeoCodeRequest longitude( String longitude ) {
+    public CreateGeoCodeRequest location( GeoPoint location ) {
 
-        this.longitude = longitude;
+        this.location = location;
         return this;
     }
 
     /**
-     * Gets the saved longitude attribute
+     * Gets the saved location attribute
      *
-     * @return the stored longitude attribute
+     * @return the stored location attribute
      */
-    public String getLongitude() {
+    public GeoPoint getLocation() {
 
-        return longitude;
+        return location;
     }
 
     /**
-     * Sets the longitude attribute to the specified value
+     * Sets the location attribute to the specified value
      *
-     * @param longitude the value the longitude should be set to
+     * @param location the value the location should be set to
      */
-    public void setLongitude( String longitude ) {
+    public void setLocation( GeoPoint location ) {
 
-        this.longitude = longitude;
-    }
-
-    /**
-     * Sets the latitude attribute to the specified value
-     *
-     * @param latitude the value the attribute should be set to
-     *
-     * @return the request after the latitude has been changed
-     */
-    public CreateGeoCodeRequest latitude( String latitude ) {
-
-        this.latitude = latitude;
-        return this;
-    }
-
-    /**
-     * Gets the saved latitude attribute
-     *
-     * @return the stored latitude attribute
-     */
-    public String getLatitude() {
-
-        return latitude;
-    }
-
-    /**
-     * Sets the latitude attribute to the specified value
-     *
-     * @param latitude the value the attribute should be set to
-     */
-    public void setLatitude( String latitude ) {
-
-        this.latitude = latitude;
+        this.location = location;
     }
 
     /**
@@ -314,8 +274,7 @@ public class CreateGeoCodeRequest {
         }
         var createGeoCodeRequest = ( CreateGeoCodeRequest ) obj;
         return  Objects.equals( this.description, createGeoCodeRequest.description ) &&
-                Objects.equals( this.longitude, createGeoCodeRequest.longitude ) &&
-                Objects.equals( this.latitude, createGeoCodeRequest.latitude ) &&
+                Objects.equals( this.location, createGeoCodeRequest.location ) &&
                 Objects.equals( this.hints, createGeoCodeRequest.hints ) &&
                 Objects.equals( this.difficulty, createGeoCodeRequest.difficulty ) &&
                 Objects.equals( this.available, createGeoCodeRequest.available );
@@ -329,7 +288,7 @@ public class CreateGeoCodeRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( description, longitude, latitude, hints, difficulty, available );
+        return Objects.hash( description, location, hints, difficulty, available );
     }
 
     /**
@@ -342,8 +301,7 @@ public class CreateGeoCodeRequest {
 
         return "class CreateGeoCodeRequest {\n" +
                 "    description: " + toIndentedString( description ) + "\n" +
-                "    longitude: " + toIndentedString( longitude ) + "\n" +
-                "    latitude: " + toIndentedString( latitude ) + "\n" +
+                "    location: " + toIndentedString( location ) + "\n" +
                 "    hints: " + toIndentedString( hints ) + "\n" +
                 "    difficulty: " + toIndentedString( difficulty ) + "\n" +
                 "    available: " + toIndentedString( available ) + "\n" +

@@ -4,6 +4,7 @@ import {IonicModule, ModalController, NavParams, ToastController} from '@ionic/a
 import { AddTypeComponent } from './add-type.component';
 import {CollectableService} from '../../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {FormsModule} from '@angular/forms';
 
 describe('AddTypeComponent', () => {
   let component: AddTypeComponent;
@@ -13,7 +14,7 @@ describe('AddTypeComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ AddTypeComponent ],
       providers: [ModalController, CollectableService, ToastController, NavParams],
-      imports: [IonicModule.forRoot(), HttpClientTestingModule]
+      imports: [IonicModule.forRoot(), HttpClientTestingModule, FormsModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddTypeComponent);

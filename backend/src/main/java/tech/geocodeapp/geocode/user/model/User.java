@@ -41,7 +41,7 @@ public class User   {
   @Valid
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<Point> points = null;
+  private Set<Point> points = new HashSet<Point>();
 
   @JsonProperty("currentCollectable")
   @ManyToOne
@@ -133,9 +133,6 @@ public class User   {
   }
 
   public User addPointsItem(Point pointsItem) {
-    if (this.points == null) {
-      this.points = new HashSet<Point>();
-    }
     this.points.add(pointsItem);
     return this;
   }
@@ -146,7 +143,7 @@ public class User   {
    **/
   @Schema(description = "")
       @Valid
-    public Set<Point> getPoints() {
+    public Collection<Point> getPoints() {
     return points;
   }
 

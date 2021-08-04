@@ -7,7 +7,6 @@ import tech.geocodeapp.geocode.collectable.response.*;
 /**
  * This interface is for the User subsystem
  */
-@Service
 public interface CollectableService {
     //Creators
     CreateCollectableSetResponse createCollectableSet(CreateCollectableSetRequest request);
