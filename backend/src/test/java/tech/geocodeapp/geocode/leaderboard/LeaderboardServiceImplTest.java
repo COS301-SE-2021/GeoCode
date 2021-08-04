@@ -8,10 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
-import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
-import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
-import tech.geocodeapp.geocode.leaderboard.request.DeletePointRequest;
-import tech.geocodeapp.geocode.leaderboard.request.UpdatePointRequest;
+import tech.geocodeapp.geocode.leaderboard.request.*;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.DeletePointResponse;
 import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
@@ -622,5 +619,15 @@ public class LeaderboardServiceImplTest {
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Test that the correct exception is thrown when all request parameters are set to null
+     */
+    @Test
+    public void getEventLeaderboardNullRequestParameters() {
+        GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(null, null, null);
+        assertThatThrownBy(() -> leaderboardService.getEventLeaderboard(request))
+                .isInstanceOf(NullRequestParameterException.class);
     }
 }
