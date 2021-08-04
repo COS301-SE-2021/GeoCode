@@ -432,7 +432,7 @@ public class UserServiceImpl implements UserService {
                 //update Point entry if already has scored on the Leaderboard
                 Point point = getPointForUserResponse.getPoint();
 
-                UpdatePointRequest updatePointRequest = new UpdatePointRequest(point.getId(), pointsAmount);
+                UpdatePointRequest updatePointRequest = new UpdatePointRequest(point.getId(), point.getAmount()+pointsAmount);
                 PointResponse updatePointResponse = leaderboardService.updatePoint(updatePointRequest);
 
                 //check if the Point was not successfully updated
