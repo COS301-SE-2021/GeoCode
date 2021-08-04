@@ -13,11 +13,6 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
-
-import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.request.GetEventByIDRequest;
-import tech.geocodeapp.geocode.event.response.GetEventByIDResponse;
-import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.geocode.exceptions.RepoException;
@@ -79,8 +74,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * The Event service to access the use cases and
      * Event repository
      */
-    @NotNull( message = "GeoCodeService: Event Service Implementation may not be null." )
-    private EventService eventService;
 
     /**
      * Constructor
@@ -89,13 +82,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @param collectableService access to the collectable use cases and repository
      * @param userService        access to the user use cases and repository
      *
-     * @param eventService
      * @throws RepoException the GeoCode repository was invalid
      */
     public GeoCodeServiceImpl(@Qualifier("GeoCodeRepository") GeoCodeRepository geoCodeRepo,
                               @Qualifier("CollectableService") CollectableService collectableService,
-                              @Qualifier("UserService") @Lazy UserService userService,
-                              @Qualifier("EventService") EventService eventService) throws RepoException {
+                              @Qualifier("UserService") @Lazy UserService userService) throws RepoException {
 
         /* Check if the given repo exists */
         if ( geoCodeRepo != null ) {
@@ -106,7 +97,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             /* The subsystems service implementations  */
             this.collectableService = Objects.requireNonNull( collectableService, "GeoCodeService: Collectable service must not be null." );
             this.userService = Objects.requireNonNull( userService, "GeoCodeService: User service must not be null." );
-            this.eventService = Objects.requireNonNull( eventService, "GeoCodeService: Event service must not be null.");
         } else {
 
             /* The repo does not exist throw an error */
@@ -183,20 +173,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * and set its attributes to the given attributes in the request
          */
         var id = UUID.randomUUID();
-
-        var getEventByIDRequest = new GetEventByIDRequest(request.getEventID());
-        GetEventByIDResponse getEventByIDResponse = null;
-
-        try {
-            getEventByIDResponse = eventService.getEventByID(getEventByIDRequest);
-        } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-            e.printStackTrace();
-            throw new InvalidRequestException();
-        }
-
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
-                                      qr.toString(), request.getLocation(), UUID.randomUUID(), getEventByIDResponse.getEvent() );
+                                      qr.toString(), request.getLocation(), UUID.randomUUID(), request.getEventID() );
 
         // ToDo: update look at service contract
 
