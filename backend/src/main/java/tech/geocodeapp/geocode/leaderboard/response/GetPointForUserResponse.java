@@ -1,18 +1,15 @@
 package tech.geocodeapp.geocode.leaderboard.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 
-public class PointResponse extends Response {
-    @JsonProperty("point")
+public class GetPointForUserResponse extends Response {
+    /**
+     * The wanted Point object
+     */
     private Point point;
 
-    public PointResponse() {
-
-    }
-
-    public PointResponse(boolean success, String message, Point point) {
+    public GetPointForUserResponse(boolean success, String message, Point point) {
         super(success, message);
         this.point = point;
     }

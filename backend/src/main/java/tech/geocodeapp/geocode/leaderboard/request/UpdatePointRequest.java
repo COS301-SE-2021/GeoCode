@@ -5,11 +5,21 @@ import java.util.UUID;
 public class UpdatePointRequest {
 
     private UUID pointId;
+
+    /**
+     * Increase the User's points by this amount
+     */
     private Integer amount;
-    private UUID userId;
-    private UUID leaderboardId;
+
+    private UUID userId = null;
+    private UUID leaderboardId = null;
 
     public UpdatePointRequest() {
+    }
+
+    public UpdatePointRequest(UUID pointId, Integer amount) {
+        this.pointId = pointId;
+        this.amount = amount;
     }
 
     public UpdatePointRequest(UUID pointId, Integer amount, UUID userId, UUID leaderboardId) {

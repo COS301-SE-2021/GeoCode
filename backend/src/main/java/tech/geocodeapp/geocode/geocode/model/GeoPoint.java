@@ -4,7 +4,6 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.*;
 import javax.persistence.Embeddable;
-import javax.persistence.Table;
 
 import java.util.Objects;
 
@@ -13,7 +12,6 @@ import java.util.Objects;
  */
 @Validated
 @Embeddable
-@Table( name = "geopoint" )
 public class GeoPoint {
 
     /**

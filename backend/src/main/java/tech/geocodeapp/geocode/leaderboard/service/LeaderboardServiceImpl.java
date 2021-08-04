@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.service.EventService;
-import tech.geocodeapp.geocode.leaderboard.exception.NullLeaderboardRequestParameterException;
+import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.model.EventLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
@@ -16,7 +17,6 @@ import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.request.*;
 import tech.geocodeapp.geocode.leaderboard.response.*;
-import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
 import tech.geocodeapp.geocode.user.response.GetUserByIdResponse;
@@ -24,17 +24,17 @@ import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
-
 import java.util.ArrayList;
-
 
 /**
  * This class implements the LeaderboardService interface
  */
-@Service
+@Service("LeaderboardService")
 public class LeaderboardServiceImpl implements LeaderboardService {
     private final LeaderboardRepository leaderboardRepo;
     private final PointRepository pointRepo;
+
+    private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
 
     @NotNull(message = "Event Service Implementation may not be null.")
     private final EventService eventService;
@@ -52,20 +52,14 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * Creates a Leaderboard
      * @param request - Contains the name of the Leaderboard to be created
      * @return The created Leaderboard
-     * @throws NullLeaderboardRequestParameterException - an exception for when a request parameter is NULL
+     * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
-    public CreateLeaderboardResponse createLeaderboard(CreateLeaderboardRequest request) throws NullLeaderboardRequestParameterException{
-        System.out.println("here");
-
+    public CreateLeaderboardResponse createLeaderboard(CreateLeaderboardRequest request) throws NullRequestParameterException{
         if(request == null){
             return new CreateLeaderboardResponse(false, "The CreateLeaderboardRequest object passed was NULL", null);
         }
 
-        if(request.getName() == null){
-            throw new NullLeaderboardRequestParameterException();
-        }
-
-        System.out.println("passed null checks");
+        checkNullRequestParameters.checkRequestParameters(request);
 
         /* Leaderboards must have unique names - check if Leaderboard exists with given name */
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findByName(request.getName());
@@ -78,77 +72,88 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         Leaderboard leaderboard = new Leaderboard(request.getName());
         leaderboardRepo.save(leaderboard);
 
-        return new CreateLeaderboardResponse(true, "The The Leaderboard was successfully created", leaderboard);
+        return new CreateLeaderboardResponse(true, "The Leaderboard was successfully created", leaderboard);
     }
 
     /**
-     * A method to retrieve a set number of points from a leaderboard for a provided event starting at a specified rank.
-     * @param request - Contains the event to get a leaderboard form, the position to start for points and the number of points to get.
+     * A method to retrieve a set number of points from a leaderboard for a provided leaderboardId starting at a specified rank.
+     * @param request - Contains the leaderboardId to use, the position to start for points and the number of points to get.
      * @return A list of the details of the requested points
-     * @throws NullLeaderboardRequestParameterException - an exception for when a request parameter is NULL
+     * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
     @Transactional
-    public GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullLeaderboardRequestParameterException{
-       if(request!=null) {
-           if(request.getEventID()==null || request.getStarting()==null || request.getCount()==null) {
-               throw new NullLeaderboardRequestParameterException();
-           }else{
-               boolean success = false;
-               String message = "";
-               List<EventLeaderboardDetails> leaderboardDetails = new ArrayList<>();
+    public GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullRequestParameterException{
+        if (request == null) {
+            return new GetEventLeaderboardResponse(false, "The GetEventLeaderboardRequest object passed was NULL", null);
+        }
 
-               //find the event if it exists
-               Optional<Event> event=Optional.empty(); //ToDo change to find by provided eventID
+        checkNullRequestParameters.checkRequestParameters(request);
 
-               if(request.getStarting()<1) {
-                   message = "Starting is lower than the minimum value allowed";
-               }else if(request.getCount()<1) {
-                   message = "Count is lower than the minimum value allowed";
-               }else if(event.isEmpty()){
-                   message = "No event with the provided eventID exists";
-               }else{
-                   Optional<Leaderboard> leaderboard = Optional.empty();//TODO: get Event's Leaderboard
-                   if(leaderboard.isEmpty()){
-                       message = "No leaderboard exists for the provided event";
-                   }else{
-                       if(pointRepo.countByLeaderboard(leaderboard.get())<request.getStarting()) {
-                           message = "Starting is greater than the number of points in the leaderboard";
-                       }else{
-                            List<Point> points = pointRepo.findPointsByLeaderboardBetween(leaderboard.get().getId(), request.getStarting()-1, request.getCount());
-                            for(int i = 0; i<points.size(); i++) {
-                                EventLeaderboardDetails details = new EventLeaderboardDetails(points.get(i).getUser().getUsername(), points.get(i).getAmount(), request.getStarting()+i);
-                                leaderboardDetails.add(details);
-                           }
-                            success = true;
-                            message = "Successfully found points for event";
-                       }
-                   }
-               }
-               return new GetEventLeaderboardResponse(success, message, leaderboardDetails);
-           }
-       }else{
-           throw new NullLeaderboardRequestParameterException();
-       }
+        boolean success = false;
+        String message = "";
+        List<EventLeaderboardDetails> leaderboardDetails = new ArrayList<>();
+
+        if(request.getStarting()<1) {
+            message = "Starting is lower than the minimum value allowed";
+        }else if(request.getCount()<1) {
+            message = "Count is lower than the minimum value allowed";
+        }else{
+            Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
+            if(leaderboard.isEmpty()){
+                message = "No leaderboard exists for the provided leaderboardId";
+            }else{
+                if(pointRepo.countByLeaderboard(leaderboard.get())<request.getStarting()) {
+                    message = "Starting is greater than the number of points in the leaderboard";
+                }else{
+                     List<Point> points = pointRepo.findPointsByLeaderboardBetween(leaderboard.get().getId(), request.getStarting()-1, request.getCount());
+                     for(int i = 0; i<points.size(); i++) {
+                         EventLeaderboardDetails details = new EventLeaderboardDetails(points.get(i).getUser().getUsername(), points.get(i).getAmount(), request.getStarting()+i);
+                         leaderboardDetails.add(details);
+                    }
+                     success = true;
+                     message = "Successfully found points for event";
+                }
+            }
+        }
+
+        return new GetEventLeaderboardResponse(success, message, leaderboardDetails);
+    }
+
+    /**
+     * Gets the Point object for the given User ID and Leaderboard ID
+     * @param request Request object containing the user and leaderboard IDs
+     * @return The wanted Point object
+     */
+    public GetPointForUserResponse getPointForUser(GetPointForUserRequest request) throws NullRequestParameterException{
+        if(request == null){
+            return new GetPointForUserResponse(false, "The GetPointForUserRequest object passed was NULL", null);
+        }
+
+        checkNullRequestParameters.checkRequestParameters(request);
+
+        /* check if the User has got a Point for the given Leaderboard */
+        Optional<Point> optionalPoint = pointRepo.getPointForUser(request.getUserID(), request.getLeaderboardID());
+
+        if(optionalPoint.isEmpty()){
+            return new GetPointForUserResponse(false, "The User does not have any points yet for the given Leaderboard", null);
+        }else{
+            return new GetPointForUserResponse(true, "Point object returned successfully", optionalPoint.get());
+        }
     }
 
     /**
      * Gets the Leaderboard identified by the given UUID
      * @param request The GetLeaderboardByIDRequest object
      * @return A GetLeaderboardByIDResponse object containing the Leaderboard object
-     * @throws NullLeaderboardRequestParameterException - an exception for when a request parameter is NULL
+     * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
     @Transactional
-    public GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullLeaderboardRequestParameterException{
-        /* Find all of the Leader
-         */
-
+    public GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullRequestParameterException{
         if(request == null){
             return new GetLeaderboardByIDResponse(false, "The GetLeaderboardByIDRequest object passed was NULL", null);
         }
 
-        if(request.getLeaderboardID() == null){
-            throw new NullLeaderboardRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboardID());
 
@@ -157,20 +162,18 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     }
 
     /**
-     * Gets all of the Point objects that are for the given Leaderboard
+     * Gets all the Point objects that are for the given Leaderboard
      * @param request The GetPointsByLeaderboardRequest object
      * @return A GetPointsByLeaderboardResponse object
-     * @throws NullLeaderboardRequestParameterException - an exception for when a request parameter is NULL
+     * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
     @Transactional
-    public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullLeaderboardRequestParameterException{
+    public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullRequestParameterException{
         if(request == null){
             return new GetPointsByLeaderboardResponse(false, "The GetMyRankRequest passed was NULL", null);
         }
 
-        if(request.getLeaderboard() == null){
-            throw new NullLeaderboardRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         /* check if leaderboard is invalid */
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboard().getId());
@@ -187,17 +190,15 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * Gets the rank for the given point amount on the given leaderboard
      * @param request The GetMyRankRequest object
      * @return A GetMyRankResponse object
-     * @throws NullLeaderboardRequestParameterException - an exception for when a request parameter is NULL
+     * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
     @Transactional
-    public GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullLeaderboardRequestParameterException{
+    public GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullRequestParameterException{
         if(request == null){
             return new GetMyRankResponse(false, "The GetMyRankRequest passed was NULL", null);
         }
 
-        if(request.getLeaderboard() == null || request.getAmount() == null){
-            throw new NullLeaderboardRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         /* check if leaderboard is invalid */
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboard().getId());
@@ -214,19 +215,15 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * A method to create a new Point for a user in a leaderboard
      * @param request Contains the amount, leaderboardId and userId to use for creating the Point
      * @return A responses informing of success or failure and containing the created Point.
-     * @throws NullLeaderboardRequestParameterException an exception for when a null value is provided for a parameter of the request
+     * @throws NullRequestParameterException an exception for when a null value is provided for a parameter of the request
      */
     @Override
-    public PointResponse createPoint(CreatePointRequest request) throws NullLeaderboardRequestParameterException{
-        User foundUser = null;
-
+    public PointResponse createPoint(CreatePointRequest request) throws NullRequestParameterException{
         if(request == null){
             return new PointResponse(false, "The CreatePointRequest passed was NULL", null);
         }
 
-        if(request.getAmount() == null || request.getLeaderboardId() == null || request.getUserId() == null){
-            throw new NullLeaderboardRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         // check if leaderboard is invalid
         Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
@@ -237,6 +234,8 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         //check if user is invalid
         GetUserByIdRequest userRequest = new GetUserByIdRequest(request.getUserId());
+        User foundUser = null;
+
         try {
             GetUserByIdResponse userResponse = userService.getUserById(userRequest);
             if(!userResponse.isSuccess()){
@@ -244,7 +243,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             }else{
                foundUser = userResponse.getUser();
             }
-        } catch (NullUserRequestParameterException e) {
+        } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
         Point point= new Point(request.getAmount(), foundUser, leaderboard.get());
@@ -256,17 +255,15 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * deletes a point based on a provided id
      * @param request Contains the id of the point to be deleted
      * @return A response object informing of success or failure and the reason for failure in the event of it
-     * @throws NullLeaderboardRequestParameterException an exception for when the request parameter is null
+     * @throws NullRequestParameterException an exception for when the request parameter is null
      */
     @Override
-    public DeletePointResponse deletePoint(DeletePointRequest request) throws NullLeaderboardRequestParameterException {
+    public DeletePointResponse deletePoint(DeletePointRequest request) throws NullRequestParameterException {
         if(request == null){
             return new DeletePointResponse(false, "The DeletePointRequest passed was NULL");
         }
 
-        if(request.getPointId() == null){
-            throw new NullLeaderboardRequestParameterException();
-        }
+        checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the point to delete exists
         Optional<Point> point = pointRepo.findById(request.getPointId());
@@ -282,16 +279,16 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * updates a point with the given id if it exists
      * @param request contains the id of the point to update and the new values for the fields that should be updated
      * @return A response object informing of success or failure and the reason as well as the updated Point object
-     * @throws NullLeaderboardRequestParameterException an exception for when the provided parameters are all null or pointId is null.
+     * @throws NullRequestParameterException an exception for when the provided parameters are all null or pointId is null.
      */
     @Override
-    public PointResponse updatePoint(UpdatePointRequest request) throws NullLeaderboardRequestParameterException {
+    public PointResponse updatePoint(UpdatePointRequest request) throws NullRequestParameterException {
         if(request == null){
             return new PointResponse(false,"The UpdatePointRequest passed was NULL", null);
         }
 
         if(request.getPointId() == null){
-            throw new NullLeaderboardRequestParameterException();
+            throw new NullRequestParameterException();
         }
 
         if(request.getAmount() == null && request.getLeaderboardId() == null && request.getUserId() == null){
@@ -324,14 +321,14 @@ public class LeaderboardServiceImpl implements LeaderboardService {
                 }else{
                     point.get().setUser(user.getUser());
                 }
-            } catch (NullUserRequestParameterException e) {
+            } catch (NullRequestParameterException e) {
                 e.printStackTrace();
             }
         }
 
         //update amount if it was provided
         if(request.getAmount() != null){
-            point.get().setAmount(request.getAmount());
+            point.get().setAmount(point.get().getAmount() + request.getAmount());
         }
 
         pointRepo.save(point.get());
