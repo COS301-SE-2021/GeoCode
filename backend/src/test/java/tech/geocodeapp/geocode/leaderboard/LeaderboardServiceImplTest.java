@@ -14,6 +14,7 @@ import tech.geocodeapp.geocode.leaderboard.request.DeletePointRequest;
 import tech.geocodeapp.geocode.leaderboard.request.UpdatePointRequest;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.DeletePointResponse;
+import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
@@ -603,6 +604,21 @@ public class LeaderboardServiceImplTest {
             Assertions.assertEquals(userService.getUserById(new GetUserByIdRequest(updatedUserId)).getUser(), response.getPoint().getUser());
             Assertions.assertEquals(updatedLeaderboardResponse.getLeaderboard(), response.getPoint().getLeaderBoard());
             Assertions.assertEquals(2, response.getPoint().getAmount());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Tests that a null request is handled correctly
+     */
+    @Test
+    public void getEventLeaderboardNullRequest() {
+        try {
+            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The GetEventLeaderboardRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getLeaderboard());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
