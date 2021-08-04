@@ -686,4 +686,9 @@ public class UserServiceImplTest {
             Assertions.fail(e.getMessage());
         }
     }
+
+    @Test
+    public void swapCollectableTestNullRequest(){
+
+    }
 }
