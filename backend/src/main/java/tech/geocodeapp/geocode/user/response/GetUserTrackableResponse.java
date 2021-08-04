@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.general.response.Response;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -16,32 +17,13 @@ import java.util.Objects;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
 
 
-public class GetUserTrackableResponse {
+public class GetUserTrackableResponse extends Response {
   @JsonProperty("trackable")
   private Collectable trackable = null;
-  private boolean success;
-  private String message;
 
   public GetUserTrackableResponse(boolean success, String message, Collectable trackable) {
-    this.success = success;
-    this.message = message;
+    super(success, message);
     this.trackable = trackable;
-  }
-
-  public boolean isSuccess() {
-    return success;
-  }
-
-  public void setSuccess(boolean success) {
-    this.success = success;
-  }
-
-  public String getMessage() {
-    return message;
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
   }
 
   public GetUserTrackableResponse trackable(Collectable trackable) {
