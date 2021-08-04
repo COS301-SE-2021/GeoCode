@@ -1,16 +1,14 @@
 package tech.geocodeapp.geocode.geocode;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.when;
 
 import org.mockito.Mock;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.springframework.security.test.context.support.WithMockUser;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
+import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
@@ -22,8 +20,6 @@ import tech.geocodeapp.geocode.collectable.*;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
-import tech.geocodeapp.geocode.user.UserMockRepository;
-import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
 
 import java.util.ArrayList;
@@ -74,6 +70,13 @@ class GeoCodeServiceImplTest {
      */
     @Mock( name = "userServiceImpl" )
     UserService userService;
+
+    /** A mock service for the Event subsystem
+     *
+     * This is used to access Event subsystem in some use cases
+     */
+    @Mock( name = "leaderboardServiceImpl" )
+    EventService eventService;
 
     /**
      * The expected exception message for if the given request has invalid attributes
@@ -136,7 +139,7 @@ class GeoCodeServiceImplTest {
         try {
 
             /* Create a new GeoCodeServiceImpl instance to access the different use cases */
-            geoCodeService = new GeoCodeServiceImpl( repo, collectableService, userService );
+            geoCodeService = new GeoCodeServiceImpl( repo, collectableService, userService, eventService);
         } catch ( RepoException e ) {
 
             e.printStackTrace();
@@ -153,7 +156,7 @@ class GeoCodeServiceImplTest {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService ) )
+        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService, eventService) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }
@@ -817,7 +820,7 @@ class GeoCodeServiceImplTest {
                 CreateGeoCodeRequest request = new CreateGeoCodeRequest();
                 request.setAvailable( true );
                 request.setDescription( "The DIFFICULTY GeoCode is stored at location " + x );
-                request.setDifficulty( Difficulty.DIFFICULTY );
+                request.setDifficulty( Difficulty.HARD );
                 List< String > hints = new ArrayList<>();
                     hints.add( "Hint one for: " + x );
                     hints.add( "Hint two for: " + x );

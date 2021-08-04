@@ -134,6 +134,17 @@ public class PointMockRepository implements PointRepository {
     }
 
     @Override
+    public Optional<Point> getPointForUser(UUID userID, UUID leaderboardID) {
+        for(Point point : map.values()){
+            if(point.getUser().getId().equals(userID) && point.getLeaderBoard().getId().equals(leaderboardID)){
+                return Optional.of(point);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
     public List<Point> findAll() {
         return null;
     }

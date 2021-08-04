@@ -21,6 +21,13 @@ public interface EventService {
     CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException;
 
     /**
+     * Get the Event identified by the given ID
+     * @param request the attributes the response should be created from
+     * @return A GetEventByIDResponse object containing the Event if it exists
+     */
+    GetEventByIDResponse getEventByID( GetEventByIDRequest request) throws InvalidRequestException;
+
+    /**
      * Get all the stored Events in the repository
      *
      * @return the newly created response instance
