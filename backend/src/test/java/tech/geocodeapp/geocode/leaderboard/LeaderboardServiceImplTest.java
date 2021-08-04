@@ -706,4 +706,30 @@ public class LeaderboardServiceImplTest {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Test that the correct response is returned when the starting parameter of a request is greater than the total
+     * number of points in the leaderboard
+     */
+    @Test
+    public void getEventLeaderboardStartingGreaterThanPointsInLeaderboard() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            UUID userId = UUID.randomUUID();
+            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
+            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
+            CreatePointRequest pointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            leaderboardService.createPoint(pointRequest);
+
+            GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(leaderboardResponse.getLeaderboard().getId(), 2, 1);
+            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Starting is greater than the number of points in the leaderboard", response.getMessage());
+            Assertions.assertTrue(response.getLeaderboard().isEmpty());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
