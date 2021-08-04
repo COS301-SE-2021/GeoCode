@@ -14,7 +14,9 @@ import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.response.CreatePointResponse;
+import tech.geocodeapp.geocode.event.request.GetEventByIDRequest;
+import tech.geocodeapp.geocode.event.response.GetEventByIDResponse;
+import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
@@ -63,13 +65,17 @@ public class UserServiceImpl implements UserService {
     @NotNull(message = "GeoCode Service Implementation may not be null.")
     private final GeoCodeService geoCodeService;
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, @Qualifier("LeaderboardService") LeaderboardService leaderboardService, @Qualifier("GeoCodeService") GeoCodeService geoCodeService) {
+    @NotNull(message = "Event Service Implementation may not be null.")
+    private final EventService eventService;
+
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, @Qualifier("LeaderboardService") LeaderboardService leaderboardService, @Qualifier("GeoCodeService") GeoCodeService geoCodeService, @Qualifier("EventService") EventService eventService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
         this.pointRepo = pointRepo;
         this.collectableService = collectableService;
         this.leaderboardService = leaderboardService;
         this.geoCodeService = geoCodeService;
+        this.eventService = eventService;
     }
 
     /**
@@ -368,9 +374,9 @@ public class UserServiceImpl implements UserService {
         GeoCode geoCode = getGeoCodeByIDResponse.getGeoCode();
 
         //check if the GeoCode is part of an Event
-        Event event = geoCode.getEvent();
+        UUID eventID = geoCode.getEventID();
 
-        if(event != null){
+        if(eventID != null){
             //get the difficulty of the GeoCode
             Difficulty geocodeDifficulty = geoCode.getDifficulty();
 
@@ -393,6 +399,17 @@ public class UserServiceImpl implements UserService {
             }
 
             //get the LeaderboardID of the Leaderboard for the Event
+            GetEventByIDRequest getEventByIDRequest = new GetEventByIDRequest(eventID);
+            GetEventByIDResponse getEventByIDResponse;
+
+            try {
+                getEventByIDResponse = eventService.getEventByID(getEventByIDRequest);
+            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+                e.printStackTrace();
+                return new SwapCollectableResponse(false, e.getMessage(), null);
+            }
+
+            Event event = getEventByIDResponse.getEvent();
             UUID leaderboardID = event.getLeaderboard().getId();
 
             //get the ID of the current User
