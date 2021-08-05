@@ -13,11 +13,11 @@
 /**
  * The GeoCode's real world locating difficulty
  */
-export type Difficulty = 'EASY' | 'MEDIUM' | 'DIFFICULTY' | 'INSANE';
+export type Difficulty = 'EASY' | 'MEDIUM' | 'HARD' | 'INSANE';
 
 export const Difficulty = {
     EASY: 'EASY' as Difficulty,
     MEDIUM: 'MEDIUM' as Difficulty,
-    DIFFICULTY: 'DIFFICULTY' as Difficulty,
+    HARD: 'HARD' as Difficulty,
     INSANE: 'INSANE' as Difficulty
 };
