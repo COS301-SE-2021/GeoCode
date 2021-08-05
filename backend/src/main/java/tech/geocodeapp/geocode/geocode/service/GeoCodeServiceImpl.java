@@ -14,7 +14,6 @@ import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
-import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.request.GetEventRequest;
 import tech.geocodeapp.geocode.event.response.GetEventResponse;
 import tech.geocodeapp.geocode.event.service.EventService;
@@ -197,7 +196,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
-                                      qr.toString(), request.getLocation(), UUID.randomUUID(), getEventResponse.getFoundEvent() );
+                                      qr.toString(), request.getLocation(), UUID.randomUUID(), getEventResponse.getFoundEvent().getId() );
 
         // ToDo: update look at service contract
 
