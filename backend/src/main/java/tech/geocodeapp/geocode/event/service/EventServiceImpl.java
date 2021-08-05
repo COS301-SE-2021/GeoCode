@@ -13,6 +13,7 @@ import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
 import java.util.*;
@@ -280,7 +281,52 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        return null;
+        /* The list of Events within the radius */
+        List< Event > foundEvents = new ArrayList<>();
+
+        /* All the Events in the repository */
+        List< Event > temp = eventRepo.findAll();
+
+        /* The radius the location needs to fall into */
+        var radius = request.getRadius();
+
+        /* Go through each Event in the repository */
+        for ( Event event : temp ) {
+
+            /* Calculate the range of the radius */
+                /* Get the latitude & longitude values for the current Event */
+                var latitude = event.getLocation().getLatitude();
+                var longitude = event.getLocation().getLongitude();
+
+                /* Set the max value */
+                GeoPoint min = new GeoPoint();
+                min.setLatitude( latitude - radius );
+                min.setLongitude( longitude - radius );
+
+                /* Set the max value */
+                GeoPoint max = new GeoPoint();
+                min.setLatitude( latitude + radius );
+                min.setLongitude( longitude + radius );
+
+            /* The location to check within the radius */
+            GeoPoint locate = request.getLocation();
+
+            /* Check if the value is within the max radius */
+            if ( ( max.getLatitude() >= locate.getLatitude() ) && ( max.getLongitude() >= locate.getLongitude() ) ) {
+
+                /* Check if the value is within the min radius */
+                if ( ( min.getLatitude() <= locate.getLatitude() ) && ( min.getLongitude() <= locate.getLongitude() ) ) {
+
+                    /*
+                    * The current Event is within the radius
+                    * therefore add it to the found list
+                    */
+                    foundEvents.add( event );
+                }
+            }
+        }
+
+        return new EventsNearMeResponse( foundEvents );
     }
 
     /**
