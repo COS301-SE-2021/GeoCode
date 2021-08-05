@@ -14,10 +14,7 @@ import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This class implements the EventService interface
@@ -173,7 +170,27 @@ public class EventServiceImpl implements EventService {
              * and set the response to true with the found Event
              */
             List<Event> temp = eventRepo.findAll();
-            //response = new GetCurrentEventResponse( true, temp );
+
+            /* Go through each available Event */
+            for ( Event event : temp ) {
+
+                /* Get the Levels for each Event */
+                List< Level > levels = event.getLevels();
+
+                /* Go through each found Level to check if the User's ID is present */
+                for ( Level level : levels ) {
+
+                    Map< String, UUID > onLevel = level.getOnLevel();
+                    if ( onLevel.containsKey( request.getUserID() ) ) {
+
+                        return new GetCurrentEventResponse( true, event );
+                    } else {
+
+                        new GetCurrentEventResponse( false );
+                    }
+                }
+            }
+
         } catch ( EntityNotFoundException error ) {
 
             /* No Event found so set the response to false */
