@@ -15,6 +15,10 @@ public class CreateLeaderboardResponse extends Response {
     @JsonProperty("leaderboard")
     private Leaderboard leaderboard = null;
 
+    public  CreateLeaderboardResponse() {
+
+    }
+
     public CreateLeaderboardResponse(boolean success, String message, Leaderboard leaderboard){
         super(success, message);
         this.leaderboard = leaderboard;
