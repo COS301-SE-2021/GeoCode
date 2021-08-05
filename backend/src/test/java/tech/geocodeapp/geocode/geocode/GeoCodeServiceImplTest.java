@@ -139,7 +139,7 @@ class GeoCodeServiceImplTest {
         try {
 
             /* Create a new GeoCodeServiceImpl instance to access the different use cases */
-            geoCodeService = new GeoCodeServiceImpl( repo, collectableService, userService, eventService);
+            geoCodeService = new GeoCodeServiceImpl( repo, collectableService, userService, eventService );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
@@ -156,7 +156,7 @@ class GeoCodeServiceImplTest {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService, eventService) )
+        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService, eventService ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }

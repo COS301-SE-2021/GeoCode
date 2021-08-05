@@ -185,7 +185,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         var id = UUID.randomUUID();
 
         var getEventRequest = new GetEventRequest( request.getEventID() );
-        GetEventResponse getEventResponse = null;
+        GetEventResponse getEventResponse;
 
         try {
 
