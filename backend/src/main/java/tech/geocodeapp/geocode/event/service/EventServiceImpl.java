@@ -282,12 +282,13 @@ public class EventServiceImpl implements EventService {
         }
 
         /* The list of Events within the radius */
-        List< Event > foundEvents = new ArrayList<>();
+        var foundEvents = new ArrayList<Event>();
 
         /* All the Events in the repository */
-        List< Event > temp = eventRepo.findAll();
+        var temp = eventRepo.findAll();
 
-        /* The radius the location needs to fall into */
+        /* The location and radius the location needs to fall into */
+        GeoPoint locate = request.getLocation();
         var radius = request.getRadius();
 
         /* Go through each Event in the repository */
@@ -307,9 +308,6 @@ public class EventServiceImpl implements EventService {
                 GeoPoint max = new GeoPoint();
                 min.setLatitude( latitude + radius );
                 min.setLongitude( longitude + radius );
-
-            /* The location to check within the radius */
-            GeoPoint locate = request.getLocation();
 
             /* Check if the value is within the max radius */
             if ( ( max.getLatitude() >= locate.getLatitude() ) && ( max.getLongitude() >= locate.getLongitude() ) ) {
@@ -337,7 +335,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public GetAllEventsResponse getAllEvents() {
 
-        List< Event > temp = eventRepo.findAll();
+        var temp = eventRepo.findAll();
 
         return new GetAllEventsResponse( temp );
     }
@@ -387,7 +385,30 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        return null;
+        /* The list of Events within the radius */
+        var foundEvents = new ArrayList<Event>();
+
+        /* All the Events in the repository */
+        var temp = eventRepo.findAll();
+
+        /* The location to look for */
+        GeoPoint locate = request.getLocation();
+
+        /* Go through each Event in the repository */
+        for ( Event event : temp ) {
+
+            /* Check if the value is within the max radius */
+            if ( locate.equals( event.getLocation() ) ) {
+
+                /*
+                 * The current Event is the same
+                 * therefore add it to the list
+                 */
+                foundEvents.add( event );
+            }
+        }
+
+        return new GetEventsByLocationResponse( foundEvents );
     }
 
     /**
