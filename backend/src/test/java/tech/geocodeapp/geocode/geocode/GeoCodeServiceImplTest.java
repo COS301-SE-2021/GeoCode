@@ -7,6 +7,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import org.springframework.util.Assert;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.event.EventMockRepository;
 import tech.geocodeapp.geocode.event.model.Event;
@@ -293,6 +294,7 @@ class GeoCodeServiceImplTest {
                 hints.add( "hint." );
             request.setHints( hints );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
+            request.setEventID( eventID );
 
             /* create the GeoCode in the repository */
             geoCodeService.createGeoCode( request );
@@ -310,6 +312,9 @@ class GeoCodeServiceImplTest {
                  * through checking the description created with the code
                  */
                 Assertions.assertEquals( "The GeoCode is stored at the art Museum in Jhb South", geocodes.get( 0 ).getDescription() );
+            } else {
+
+                Assert.notEmpty( geocodes );
             }
         } catch ( Exception e ) {
 

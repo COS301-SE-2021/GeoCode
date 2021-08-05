@@ -27,28 +27,28 @@ public class Event {
     @Id
     @JsonProperty( "id" )
     @NotNull( message = "Event's id cannot be null." )
-    private UUID id;
+    protected UUID id;
 
     /**
      * What the Event is called
      */
     @JsonProperty( "name" )
     @NotEmpty( message = "Event's name cannot be empty." )
-    private String name;
+    protected String name;
 
     /**
      * A brief description on what the Event is about
      */
     @JsonProperty( "description" )
     @NotEmpty( message = "Event's description cannot be empty." )
-    private String description;
+    protected String description;
 
     /**
      * The starting location of the Event
      */
     @Embedded
     @NotNull( message = "Event's location cannot be null." )
-    private GeoPoint location;
+    protected GeoPoint location;
 
     /**
      * The different Levels with what GeoCode to find and which Users
@@ -58,21 +58,21 @@ public class Event {
     @ManyToMany
     @JsonProperty( "levels" )
     @NotNull( message = "Event's location cannot be null." )
-    private List< Level > levels;
+    protected List< Level > levels;
 
     /**
      * The starting Date of the Event
      */
     @JsonProperty( "beginDate" )
     @NotNull( message = "CreateEventRequest beginDate attribute cannot be null." )
-    private LocalDate beginDate;
+    protected LocalDate beginDate;
 
     /**
      * The end Date of the Event
      */
     @JsonProperty( "end" )
     @NotNull( message = "CreateEventRequest endDate attribute cannot be null." )
-    private LocalDate endDate;
+    protected LocalDate endDate;
 
     /**
      * The different rankings of the users partaking in the Event
@@ -81,7 +81,7 @@ public class Event {
     @ManyToMany
     @JsonProperty( "leaderboard" )
     @NotNull( message = "Event's location cannot be null." )
-    private List< Leaderboard > leaderboards;
+    protected List< Leaderboard > leaderboards;
 
     /**
      * Default constructor
@@ -489,7 +489,7 @@ public class Event {
      * Convert the given object to string with each line indented by 4 spaces
      * (except the first line).
      */
-    private String toIndentedString( java.lang.Object o ) {
+    String toIndentedString( java.lang.Object o ) {
 
         if ( o == null ) {
 

@@ -22,14 +22,6 @@ import java.util.UUID;
 public class TimeTrial extends Event {
 
     /**
-     * The unique identifier for the TimeTrial
-     */
-    @Id
-    @JsonProperty( "id" )
-    @NotNull( message = "TimeTrial's id cannot be null." )
-    private UUID id;
-
-    /**
      * The amount of time a user has to complete a special Event
      */
     @JsonProperty( "timeLimit" )
@@ -53,40 +45,6 @@ public class TimeTrial extends Event {
 
         this.id = id;
         this.timeLimit = timeLimit;
-    }
-
-    /**
-     * Sets the id attribute to the specified value
-     *
-     * @param id the unique id to set the TimeTrial to
-     *
-     * @return the model after changing the id
-     */
-    @Valid
-    public TimeTrial id( UUID id ) {
-
-        this.id = id;
-        return this;
-    }
-
-    /**
-     * Gets the saved id attribute
-     *
-     * @return the stored id attribute
-     */
-    public UUID getId() {
-
-        return id;
-    }
-
-    /**
-     * Sets the id attribute to the specified value
-     *
-     * @param id the value the id should be set to
-     */
-    public void setId( UUID id ) {
-
-        this.id = id;
     }
 
     /**
@@ -141,7 +99,16 @@ public class TimeTrial extends Event {
             return false;
         }
 
-        return Objects.equals( this.timeLimit, ( ( TimeTrial ) obj ).timeLimit );
+        TimeTrial timeTrial = ( TimeTrial ) obj;
+        return Objects.equals( this.id, timeTrial.id ) &&
+                Objects.equals( this.name, timeTrial.name ) &&
+                Objects.equals( this.description, timeTrial.description ) &&
+                Objects.equals( this.location, timeTrial.location ) &&
+                Objects.equals( this.levels, timeTrial.levels ) &&
+                Objects.equals( this.beginDate, timeTrial.beginDate ) &&
+                Objects.equals( this.endDate, timeTrial.endDate ) &&
+                Objects.equals( this.leaderboards, timeTrial.leaderboards ) &&
+                Objects.equals( this.timeLimit, timeTrial.timeLimit );
     }
 
     /**
@@ -152,7 +119,7 @@ public class TimeTrial extends Event {
     @Override
     public int hashCode() {
 
-        return Objects.hash( timeLimit );
+        return Objects.hash( id, name, description, location, levels, beginDate, endDate, leaderboards, timeLimit );
     }
 
     /**
@@ -164,22 +131,16 @@ public class TimeTrial extends Event {
     public String toString() {
 
         return "class TimeTrial {\n" +
+                "    id: " + toIndentedString( id ) + "\n" +
+                "    name: " + toIndentedString( name ) + "\n" +
+                "    description: " + toIndentedString( description ) + "\n" +
+                "    location: " + toIndentedString( location ) + "\n" +
+                "    levels: " + toIndentedString( levels ) + "\n" +
+                "    begin: " + toIndentedString( beginDate ) + "\n" +
+                "    end: " + toIndentedString( endDate ) + "\n" +
+                "    leaderboards: " + toIndentedString( leaderboards ) + "\n" +
                 "    timeLimit: " + toIndentedString( timeLimit ) + "\n" +
                 "}";
-    }
-
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
-    private String toIndentedString( java.lang.Object o ) {
-
-        if ( o == null ) {
-
-            return "null";
-        }
-
-        return o.toString().replace( "\n", "\n    " );
     }
 
 }
