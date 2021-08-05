@@ -1,43 +1,50 @@
 package tech.geocodeapp.geocode.event.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import java.util.Objects;
 import java.util.UUID;
 
 /**
- * ChangeAvailabilityRequest object to specify what Event to updated the availability
+ * NextStageRequest object gets the next GeoCode for a user to find
  */
 @Validated
-public class ChangeAvailabilityRequest {
+public class NextStageRequest {
 
     /**
-     * The unique id of the event that needs to be updated
+     * The unique id of the event to get the next stage from
      */
     @JsonProperty( "eventID" )
-    @NotNull( message = "ChangeAvailabilityRequest eventID attribute cannot be null." )
+    @NotNull( message = "NextStageRequest eventID attribute cannot be null." )
     private UUID eventID;
 
     /**
-     * The availability the Event should be changed to
+     * The unique id of the user competing in the event
      */
-    @JsonProperty( "availability" )
-    @NotNull( message = "ChangeAvailabilityRequest availability attribute cannot be null." )
-    private Boolean availability;
+    @JsonProperty( "userID" )
+    @NotNull( message = "NextStageRequest userID attribute cannot be null." )
+    private UUID userID;
+
+    /**
+     * Default Constructor
+     */
+    public NextStageRequest() {
+
+    }
 
     /**
      * Overloaded Constructor
      *
-     * @param eventID the id of the Event to updated
-     * @param availability the availability to update to
+     * @param eventID The unique id of the event to get the next stage from
+     * @param userID The unique id of the user competing in the event
      */
-    public ChangeAvailabilityRequest( UUID eventID, Boolean availability ) {
+    public NextStageRequest( UUID eventID, UUID userID ) {
 
         this.eventID = eventID;
-        this.availability = availability;
+        this.userID = userID;
     }
 
     /**
@@ -47,7 +54,7 @@ public class ChangeAvailabilityRequest {
      *
      * @return the request after the eventID has been changed
      */
-    public ChangeAvailabilityRequest eventID( UUID eventID ) {
+    public NextStageRequest eventID( UUID eventID ) {
 
         this.eventID = eventID;
         return this;
@@ -75,37 +82,37 @@ public class ChangeAvailabilityRequest {
     }
 
     /**
-     * Sets the availability attribute to the specified value
+     * Sets the userID attribute to the specified value
      *
-     * @param availability the value the attribute should be set to
+     * @param userID the value the attribute should be set to
      *
-     * @return the request after the availability has been changed
+     * @return the request after the userID has been changed
      */
-    public ChangeAvailabilityRequest availability( Boolean availability ) {
+    public NextStageRequest userID( UUID userID ) {
 
-        this.availability = availability;
+        this.userID = userID;
         return this;
     }
 
     /**
-     * Gets the saved availability attribute
+     * Gets the saved userID attribute
      *
-     * @return the stored availability attribute
+     * @return the stored userID attribute
      */
     @Valid
-    public Boolean isAvailability() {
+    public UUID getUserID() {
 
-        return availability;
+        return userID;
     }
 
     /**
-     * Sets the availability attribute to the specified value
+     * Sets the userID attribute to the specified value
      *
-     * @param availability the value the attribute should be set to
+     * @param userID the value the attribute should be set to
      */
-    public void setAvailability( Boolean availability ) {
+    public void setUserID( UUID userID ) {
 
-        this.availability = availability;
+        this.userID = userID;
     }
 
     /**
@@ -126,9 +133,10 @@ public class ChangeAvailabilityRequest {
 
             return false;
         }
-        ChangeAvailabilityRequest changeAvailabilityRequest = ( ChangeAvailabilityRequest ) obj;
-        return Objects.equals( this.eventID, changeAvailabilityRequest.eventID ) &&
-                Objects.equals( this.availability, changeAvailabilityRequest.availability );
+
+        NextStageRequest nextStageRequest = ( NextStageRequest ) obj;
+        return Objects.equals( this.eventID, nextStageRequest.eventID ) &&
+                Objects.equals( this.userID, nextStageRequest.userID );
     }
 
     /**
@@ -139,7 +147,7 @@ public class ChangeAvailabilityRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( eventID, availability );
+        return Objects.hash( eventID, userID );
     }
 
     /**
@@ -150,9 +158,9 @@ public class ChangeAvailabilityRequest {
     @Override
     public String toString() {
 
-        return "class ChangeAvailabilityRequest {\n" +
+        return "class NextStageRequest {\n" +
                 "    eventID: " + toIndentedString( eventID ) + "\n" +
-                "    availability: " + toIndentedString( availability ) + "\n" +
+                "    userID: " + toIndentedString( userID ) + "\n" +
                 "}";
     }
 
@@ -166,6 +174,7 @@ public class ChangeAvailabilityRequest {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 

@@ -65,14 +65,16 @@ public class CreateGeoCodeRequest {
 
     /**
      * Overloaded Constructor
-     *  @param description  The description of where the GeoCode is and what it involves
-     * @param location The location of the GeoCode in the real world
-     * @param hints The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
-     * @param difficulty The level of difficulty to find a GeoCode in the real world
-     * @param available If the GeoCode is active in the system
-     * @param eventID The UUID for the GeoCode's event
+     *
+     * @param description The description of where the GeoCode is and what it involves
+     * @param location    The location of the GeoCode in the real world
+     * @param hints       The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
+     * @param difficulty  The level of difficulty to find a GeoCode in the real world
+     * @param available   If the GeoCode is active in the system
+     * @param eventID     The UUID for the GeoCode's event
      */
-    public CreateGeoCodeRequest(String description, GeoPoint location, List<String> hints, Difficulty difficulty, Boolean available, UUID eventID) {
+    public CreateGeoCodeRequest( String description, GeoPoint location, List< String > hints, Difficulty difficulty, Boolean available, UUID eventID ) {
+
         this.description = description;
         this.location = location;
         this.hints = hints;
@@ -262,6 +264,38 @@ public class CreateGeoCodeRequest {
     }
 
     /**
+     * Sets the eventID attribute to the specified value
+     *
+     * @param eventID the value the attribute should be set to
+     *
+     * @return the request after the eventID has been changed
+     */
+    public CreateGeoCodeRequest eventID( UUID eventID ) {
+
+        this.eventID = eventID;
+        return this;
+    }
+    /**
+     * Gets the saved eventID attribute
+     *
+     * @return the stored eventID attribute
+     */
+    public UUID getEventID() {
+
+        return eventID;
+    }
+
+    /**
+     * Sets the eventID attribute to the specified value
+     *
+     * @param eventID the value the attribute should be set to
+     */
+    public void setEventID( UUID eventID ) {
+
+        this.eventID = eventID;
+    }
+
+    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -328,11 +362,4 @@ public class CreateGeoCodeRequest {
         return o.toString().replace( "\n", "\n    " );
     }
 
-    public UUID getEventID() {
-        return eventID;
-    }
-
-    public void setEventID(UUID eventID) {
-        this.eventID = eventID;
-    }
 }

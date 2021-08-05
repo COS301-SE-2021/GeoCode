@@ -2,73 +2,75 @@ package tech.geocodeapp.geocode.event.response;
 
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
+import javax.validation.constraints.*;
+
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 
 import java.util.Objects;
 
 /**
- * CreateEventResponse object that determines if the Event was created successfully
+ * NextStageResponse object to return the next GeoCode the user needs to search for
  */
 @Validated
-public class CreateEventResponse {
+public class NextStageResponse {
 
     /**
-     * If the Event was successfully created or not
+     * The next GeoCode the User needs to search for
      */
-    @JsonProperty( "success" )
-    @NotNull( message = "CreateEventResponse success attribute cannot be null." )
-    private Boolean success;
+    @JsonProperty( "nextGeoCode" )
+    @NotNull( message = "NextStageResponse eventID attribute cannot be null." )
+    private GeoCode nextGeoCode;
 
     /**
-     * Default constructor
+     * Default Constructor
      */
-    public CreateEventResponse() {
+    public NextStageResponse() {
 
     }
 
     /**
      * Overloaded Constructor
      *
-     * @param success the status of the Event created
+     * @param nextGeoCode The next GeoCode the User needs to search for
      */
-    public CreateEventResponse( Boolean success ) {
+    public NextStageResponse( GeoCode nextGeoCode ) {
 
-        this.success = success;
+        this.nextGeoCode = nextGeoCode;
     }
 
     /**
-     * Sets the success attribute to the specified value
+     * Sets the nextGeoCode attribute to the specified value
      *
-     * @param success the value the attribute should be set to
+     * @param nextGeoCode the value the attribute should be set to
      *
-     * @return the request after the success has been changed
+     * @return the request after the nextGeoCode has been changed
      */
-    public CreateEventResponse success( Boolean success ) {
+    public NextStageResponse nextGeoCode( GeoCode nextGeoCode ) {
 
-        this.success = success;
+        this.nextGeoCode = nextGeoCode;
         return this;
     }
 
     /**
-     * Gets the saved success attribute
+     * Gets the saved nextGeoCode attribute
      *
-     * @return the stored success attribute
+     * @return the stored nextGeoCode attribute
      */
     @Valid
-    public Boolean isSuccess() {
+    public GeoCode getNextGeoCode() {
 
-        return success;
+        return nextGeoCode;
     }
 
     /**
-     * Sets the success attribute to the specified value
+     * Sets the nextGeoCode attribute to the specified value
      *
-     * @param success the value the attribute should be set to
+     * @param nextGeoCode the value the attribute should be set to
      */
-    public void setSuccess( Boolean success ) {
+    public void setNextGeoCode( GeoCode nextGeoCode ) {
 
-        this.success = success;
+        this.nextGeoCode = nextGeoCode;
     }
 
     /**
@@ -90,7 +92,7 @@ public class CreateEventResponse {
             return false;
         }
 
-        return Objects.equals( this.success, ( ( CreateEventResponse ) obj ).success );
+        return Objects.equals( this.nextGeoCode, ( ( NextStageResponse ) obj ).nextGeoCode );
     }
 
     /**
@@ -101,7 +103,7 @@ public class CreateEventResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( nextGeoCode );
     }
 
     /**
@@ -112,8 +114,8 @@ public class CreateEventResponse {
     @Override
     public String toString() {
 
-        return "class CreateEventResponse {\n" +
-                "    success: " + toIndentedString( success ) + "\n" +
+        return "class NextStageResponse {\n" +
+                "    nextGeoCode: " + toIndentedString( nextGeoCode ) + "\n" +
                 "}";
     }
 
@@ -127,6 +129,7 @@ public class CreateEventResponse {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 

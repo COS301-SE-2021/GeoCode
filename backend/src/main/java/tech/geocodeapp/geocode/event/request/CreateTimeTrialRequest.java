@@ -1,12 +1,9 @@
 package tech.geocodeapp.geocode.event.request;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+
+import java.util.Objects;
 
 /**
  * CreateTimeTrialRequest
@@ -15,33 +12,23 @@ import javax.validation.constraints.*;
 public class CreateTimeTrialRequest {
 
     @JsonProperty( "timeLimit" )
-    private BigDecimal timeLimit = null;
+    private double timeLimit;
 
-    public CreateTimeTrialRequest timeLimit( BigDecimal timeLimit ) {
+    public CreateTimeTrialRequest timeLimit( double timeLimit ) {
 
         this.timeLimit = timeLimit;
         return this;
     }
 
-    /**
-     * Get timeLimit
-     *
-     * @return timeLimit
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
-
-    @Valid
-    public BigDecimal getTimeLimit() {
+    public double getTimeLimit() {
 
         return timeLimit;
     }
 
-    public void setTimeLimit( BigDecimal timeLimit ) {
+    public void setTimeLimit( double timeLimit ) {
 
         this.timeLimit = timeLimit;
     }
-
 
     @Override
     public boolean equals( java.lang.Object o ) {
@@ -54,8 +41,8 @@ public class CreateTimeTrialRequest {
 
             return false;
         }
-        CreateTimeTrialRequest createTimeTrialRequest = ( CreateTimeTrialRequest ) o;
-        return Objects.equals( this.timeLimit, createTimeTrialRequest.timeLimit );
+
+        return Objects.equals( this.timeLimit, ( ( CreateTimeTrialRequest ) o ).timeLimit );
     }
 
     @Override
@@ -82,6 +69,7 @@ public class CreateTimeTrialRequest {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 

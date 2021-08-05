@@ -5,8 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
 
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -37,17 +40,53 @@ public class CreateEventRequest {
     private GeoPoint location;
 
     /**
+     * The starting Date of the Event
+     */
+    @JsonProperty( "beginDate" )
+    @NotNull( message = "CreateEventRequest beginDate attribute cannot be null." )
+    private LocalDate beginDate;
+
+    /**
+     * The end Date of the Event
+     */
+    @JsonProperty( "endDate" )
+    @NotNull( message = "CreateEventRequest endDate attribute cannot be null." )
+    private LocalDate endDate;
+
+    /**
+     * The different GeoCodes to find during the Event
+     */
+    @Valid
+    @JsonProperty( "GeoCodesToFind" )
+    @NotNull( message = "CreateEventRequest geoCodesToFind attribute cannot be null." )
+    private List< GeoCode > geoCodesToFind;
+
+    /**
+     * Default constructor
+     */
+    public CreateEventRequest() {
+
+    }
+
+    /**
      * Overloaded Constructor
      *
      * @param name what the new Event should be called
      * @param description what the Event to be created is going to be about
      * @param location the Event will be held at in the real world's location
+     * @param beginDate The starting Date of the Event
+     * @param endDate The end Date of the Event
+     * @param geoCodesToFind The different GeoCodes to find during the Event
      */
-    public CreateEventRequest( String name, String description, GeoPoint location ) {
+    public CreateEventRequest( String name, String description, GeoPoint location,
+                               LocalDate beginDate, LocalDate endDate, List< GeoCode > geoCodesToFind ) {
 
         this.name = name;
         this.description = description;
         this.location = location;
+        this.beginDate = beginDate;
+        this.endDate = endDate;
+        this.geoCodesToFind = geoCodesToFind;
     }
 
     /**
@@ -68,7 +107,6 @@ public class CreateEventRequest {
      *
      * @return the stored difficulty attribute
      */
-    @Valid
     public String getName() {
 
         return name;
@@ -102,7 +140,6 @@ public class CreateEventRequest {
      *
      * @return the stored difficulty attribute
      */
-    @Valid
     public String getDescription() {
 
         return description;
@@ -153,6 +190,119 @@ public class CreateEventRequest {
     }
 
     /**
+     * Sets the beginDate attribute to the specified value
+     *
+     * @param beginDate the value the attribute should be set to
+     *
+     * @return the request after the beginDate has been changed
+     */
+    public CreateEventRequest beginDate( LocalDate beginDate ) {
+
+        this.beginDate = beginDate;
+        return this;
+    }
+
+    /**
+     * Gets the saved beginDate attribute
+     *
+     * @return the stored beginDate attribute
+     */
+    public LocalDate getBeginDate() {
+
+        return beginDate;
+    }
+
+    /**
+     * Sets the beginDate attribute to the specified value
+     *
+     * @param beginDate the value the attribute should be set to
+     */
+    public void setBeginDate( LocalDate beginDate ) {
+
+        this.beginDate = beginDate;
+    }
+
+    /**
+     * Sets the endDate attribute to the specified value
+     *
+     * @param endDate the value the attribute should be set to
+     *
+     * @return the request after the endDate has been changed
+     */
+    public CreateEventRequest endDate( LocalDate endDate ) {
+
+        this.endDate = endDate;
+        return this;
+    }
+
+    /**
+     * Gets the saved endDate attribute
+     *
+     * @return the stored endDate attribute
+     */
+    public LocalDate getEndDate() {
+
+        return endDate;
+    }
+
+    /**
+     * Sets the endDate attribute to the specified value
+     *
+     * @param endDate the value the attribute should be set to
+     */
+    public void setEndDate( LocalDate endDate ) {
+
+        this.endDate = endDate;
+    }
+
+    /**
+     * Sets the geoCodesToFind attribute to the specified value
+     *
+     * @param geoCodesToFind the value the attribute should be set to
+     *
+     * @return the request after the geoCodesToFind has been changed
+     */
+    public CreateEventRequest geoCodesToFind( List< GeoCode > geoCodesToFind ) {
+
+        this.geoCodesToFind = geoCodesToFind;
+        return this;
+    }
+
+    /**
+     * Adds a single entry into the geoCodesToFind list
+     *
+     * @param geoCodesToFindItem the entry to insert into the geoCodesToFind list
+     *
+     * @return the request after the geoCodesToFind has been changed
+     */
+    public CreateEventRequest addGeoCodesToFindItem( GeoCode geoCodesToFindItem ) {
+
+        this.geoCodesToFind.add( geoCodesToFindItem );
+        return this;
+    }
+
+    /**
+     * Gets the saved geoCodesToFind attribute
+     *
+     * @return the stored geoCodesToFind attribute
+     */
+    @Valid
+    public List< GeoCode > getGeoCodesToFind() {
+
+        return geoCodesToFind;
+    }
+
+    /**
+     * Sets the geoCodesToFind attribute to the specified value
+     *
+     * @param geoCodesToFind the value the attribute should be set to
+     */
+    public void setGeoCodesToFind( List< GeoCode > geoCodesToFind ) {
+
+        this.geoCodesToFind = geoCodesToFind;
+    }
+
+    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -170,10 +320,14 @@ public class CreateEventRequest {
 
             return false;
         }
+
         CreateEventRequest createEventRequest = ( CreateEventRequest ) obj;
-        return  Objects.equals( this.name, createEventRequest.name ) &&
+        return Objects.equals( this.name, createEventRequest.name ) &&
                 Objects.equals( this.description, createEventRequest.description ) &&
-                Objects.equals( this.location, createEventRequest.location );
+                Objects.equals( this.location, createEventRequest.location ) &&
+                Objects.equals( this.beginDate, createEventRequest.beginDate ) &&
+                Objects.equals( this.endDate, createEventRequest.endDate ) &&
+                Objects.equals( this.geoCodesToFind, createEventRequest.geoCodesToFind );
     }
 
     /**
@@ -184,7 +338,7 @@ public class CreateEventRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( name, description, location );
+        return Objects.hash( name, description, location, beginDate, endDate, geoCodesToFind );
     }
 
     /**
@@ -199,6 +353,9 @@ public class CreateEventRequest {
                 "    name: " + toIndentedString( name ) + "\n" +
                 "    description: " + toIndentedString( description ) + "\n" +
                 "    location: " + toIndentedString( location ) + "\n" +
+                "    beginDate: " + toIndentedString( beginDate ) + "\n" +
+                "    endDate: " + toIndentedString( endDate ) + "\n" +
+                "    geoCodesToFind: " + toIndentedString( geoCodesToFind ) + "\n" +
                 "}";
     }
 
@@ -212,6 +369,7 @@ public class CreateEventRequest {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 

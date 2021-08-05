@@ -2,78 +2,40 @@ package tech.geocodeapp.geocode.event.request;
 
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.validation.constraints.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import java.util.Objects;
 import java.util.UUID;
 
 /**
- * CreateLeaderboardRequest object to specify what Leaderboard to be created
+ * GetEventRequest object retrieves the specified Event object
  */
 @Validated
-public class CreateLeaderboardRequest {
-
-    @JsonProperty( "name" )
-    @NotEmpty( message = "CreateLeaderboardRequest name attribute cannot be empty." )
-    private String name;
+public class GetEventRequest {
 
     /**
      * The unique id of the event to get
      */
     @JsonProperty( "eventID" )
-    @NotNull( message = "CreateLeaderboardRequest eventID attribute cannot be null." )
+    @NotNull( message = "GetEventRequest eventID attribute cannot be null." )
     private UUID eventID;
 
     /**
      * Default Constructor
      */
-    public CreateLeaderboardRequest() {
+    public GetEventRequest() {
 
     }
 
     /**
      * Overloaded Constructor
      *
-     * @param name the name of the Leaderboard to create
+     * @param eventID The unique id of the event to get
      */
-    public CreateLeaderboardRequest( @Valid String name ) {
+    public GetEventRequest( UUID eventID ) {
 
-        this.name = name;
-    }
-
-    /**
-     * Sets the name attribute to the specified value
-     *
-     * @param name the value the attribute should be set to
-     *
-     * @return the request after the name has been changed
-     */
-    public CreateLeaderboardRequest name( @Valid String name ) {
-
-        this.name = name;
-        return this;
-    }
-
-    /**
-     * Gets the saved name attribute
-     *
-     * @return the stored name attribute
-     */
-    @Valid
-    public String getName() {
-
-        return name;
-    }
-
-    /**
-     * Sets the name attribute to the specified value
-     *
-     * @param name the value the attribute should be set to
-     */
-    public void setName( @Valid String name ) {
-
-        this.name = name;
+        this.eventID = eventID;
     }
 
     /**
@@ -83,7 +45,7 @@ public class CreateLeaderboardRequest {
      *
      * @return the request after the eventID has been changed
      */
-    public CreateLeaderboardRequest eventID( UUID eventID ) {
+    public GetEventRequest eventID( UUID eventID ) {
 
         this.eventID = eventID;
         return this;
@@ -109,7 +71,8 @@ public class CreateLeaderboardRequest {
 
         this.eventID = eventID;
     }
-    
+
+
     /**
      * Determines if the specified object is the same as the current object
      *
@@ -129,11 +92,7 @@ public class CreateLeaderboardRequest {
             return false;
         }
 
-        CreateLeaderboardRequest createLeaderboardRequest = ( CreateLeaderboardRequest ) obj;
-        return  Objects.equals( this.name, createLeaderboardRequest.name ) &&
-                Objects.equals( this.eventID, createLeaderboardRequest.eventID );
-
-
+        return Objects.equals( this.eventID, ( ( GetEventRequest ) obj ).eventID );
     }
 
     /**
@@ -144,7 +103,7 @@ public class CreateLeaderboardRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( name, eventID );
+        return Objects.hash( eventID );
     }
 
     /**
@@ -155,8 +114,7 @@ public class CreateLeaderboardRequest {
     @Override
     public String toString() {
 
-        return "class CreateLeaderboardRequest {\n" +
-                "    name: " + toIndentedString( name ) + "\n" +
+        return "class GetEventRequest {\n" +
                 "    eventID: " + toIndentedString( eventID ) + "\n" +
                 "}";
     }
@@ -171,6 +129,7 @@ public class CreateLeaderboardRequest {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 

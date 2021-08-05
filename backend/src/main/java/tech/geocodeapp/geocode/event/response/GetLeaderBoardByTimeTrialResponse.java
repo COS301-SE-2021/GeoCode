@@ -1,15 +1,13 @@
 package tech.geocodeapp.geocode.event.response;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.Valid;
+
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
+import java.util.List;
 
 /**
  * GetLeaderBoardByTimeTrialResponse
@@ -17,9 +15,9 @@ import javax.validation.constraints.*;
 @Validated
 public class GetLeaderBoardByTimeTrialResponse {
 
-    @JsonProperty( "leaderboard" )
     @Valid
-    private List< Leaderboard > leaderboard = new ArrayList<>();
+    @JsonProperty( "leaderboard" )
+    private List< Leaderboard > leaderboard;
 
     public GetLeaderBoardByTimeTrialResponse leaderboard( List< Leaderboard > leaderboard ) {
 
@@ -33,13 +31,6 @@ public class GetLeaderBoardByTimeTrialResponse {
         return this;
     }
 
-    /**
-     * Get leaderboard
-     *
-     * @return leaderboard
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
     @Valid
     public List< Leaderboard > getLeaderboard() {
 
@@ -63,8 +54,8 @@ public class GetLeaderBoardByTimeTrialResponse {
 
             return false;
         }
-        GetLeaderBoardByTimeTrialResponse getLeaderBoardByTimeTrialResponse = ( GetLeaderBoardByTimeTrialResponse ) o;
-        return Objects.equals( this.leaderboard, getLeaderBoardByTimeTrialResponse.leaderboard );
+
+        return Objects.equals( this.leaderboard, ( ( GetLeaderBoardByTimeTrialResponse ) o ).leaderboard );
     }
 
     @Override
@@ -91,6 +82,7 @@ public class GetLeaderBoardByTimeTrialResponse {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 

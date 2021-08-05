@@ -1,32 +1,51 @@
 package tech.geocodeapp.geocode.event.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 import java.util.Objects;
 
 /**
- * GetEventsByLocationRequest object to specify what location to search for Events
+ * EventsNearMeRequest object to retrieve Events in the vicinity of the user
  */
 @Validated
-public class GetEventsByLocationRequest {
+public class EventsNearMeRequest {
 
+    /**
+     * The location to look for Events for
+     */
     @JsonProperty( "location" )
-    @NotNull( message = "GetEventsByLocationRequest location attribute cannot be null." )
+    @NotNull( message = "EventsNearMeRequest location attribute cannot be null." )
     private GeoPoint location;
+
+    /**
+     * The radius to search around the location for Events
+     */
+    @JsonProperty( "radius" )
+    @NotNull( message = "EventsNearMeRequest radius attribute cannot be null." )
+    private double radius;
+
+    /**
+     * Default Constructor
+     */
+    public EventsNearMeRequest() {
+
+    }
 
     /**
      * Overloaded Constructor
      *
-     * @param location the location to look for Events
+     * @param location The location to look for Events for
+     * @param radius The radius to search around the location for Events
      */
-    public GetEventsByLocationRequest( GeoPoint location ) {
+    public EventsNearMeRequest( GeoPoint location, double radius ) {
 
         this.location = location;
+        this.radius = radius;
     }
 
     /**
@@ -36,7 +55,7 @@ public class GetEventsByLocationRequest {
      *
      * @return the request after the location has been changed
      */
-    public GetEventsByLocationRequest location( GeoPoint location ) {
+    public EventsNearMeRequest location( GeoPoint location ) {
 
         this.location = location;
         return this;
@@ -64,6 +83,39 @@ public class GetEventsByLocationRequest {
     }
 
     /**
+     * Sets the radius attribute to the specified value
+     *
+     * @param radius the value the attribute should be set to
+     *
+     * @return the request after the radius has been changed
+     */
+    public EventsNearMeRequest radius( double radius ) {
+
+        this.radius = radius;
+        return this;
+    }
+
+    /**
+     * Gets the saved radius attribute
+     *
+     * @return the stored eventID attribute
+     */
+    public double getRadius() {
+
+        return radius;
+    }
+
+    /**
+     * Sets the radius attribute to the specified value
+     *
+     * @param radius the value the attribute should be set to
+     */
+    public void setRadius( double radius ) {
+
+        this.radius = radius;
+    }
+
+    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -82,7 +134,9 @@ public class GetEventsByLocationRequest {
             return false;
         }
 
-        return Objects.equals( this.location, ( ( GetEventsByLocationRequest ) obj ).location );
+        EventsNearMeRequest eventsNearMeRequest = ( EventsNearMeRequest ) obj;
+        return Objects.equals( this.location, eventsNearMeRequest.location ) &&
+                Objects.equals( this.radius, eventsNearMeRequest.radius );
     }
 
     /**
@@ -93,7 +147,7 @@ public class GetEventsByLocationRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( location );
+        return Objects.hash( location, radius );
     }
 
     /**
@@ -104,8 +158,9 @@ public class GetEventsByLocationRequest {
     @Override
     public String toString() {
 
-        return "class GetEventsByLocationRequest {\n" +
+        return "class EventsNearMeRequest {\n" +
                 "    location: " + toIndentedString( location ) + "\n" +
+                "    radius: " + toIndentedString( radius ) + "\n" +
                 "}";
     }
 
@@ -119,6 +174,7 @@ public class GetEventsByLocationRequest {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 
