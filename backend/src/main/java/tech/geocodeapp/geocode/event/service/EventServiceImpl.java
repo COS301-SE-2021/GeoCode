@@ -1,10 +1,10 @@
 package tech.geocodeapp.geocode.event.service;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
-import javax.validation.Valid;
 
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.Level;
@@ -12,9 +12,10 @@ import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 
 import java.util.*;
 
@@ -32,13 +33,23 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepo;
 
     /**
+     * The Event service to access the use cases and
+     * Event repository
+     */
+    @NotNull( message = "GeoCodeService: Event Service Implementation may not be null." )
+    private final LeaderboardService leaderboardService;
+
+    /**
      * Overloaded Constructor
      *
      * @param eventRepo the repo the created response attributes should save to
+     * @param leaderboardService access to the Leaderboard use cases and repository
      */
-    public EventServiceImpl( @Valid EventRepository eventRepo ) {
+    public EventServiceImpl( EventRepository eventRepo,
+                             @Qualifier("LeaderboardService") LeaderboardService leaderboardService ) {
 
         this.eventRepo = eventRepo;
+        this.leaderboardService = leaderboardService;
     }
 
     /**
@@ -432,7 +443,36 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        return null;
+        try {
+
+            /*
+            * Create the request to the leaderboard service
+            * and store the response
+            */
+            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() );
+            Leaderboard hold =  leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
+
+            /* Find the Event object with the given ID */
+            var event = eventRepo.findById( request.getEventID() );
+            if ( event.isPresent() ) {
+
+                /* Get the actual Event and append to its leaderboards */
+                var currEvent = event.get();
+                currEvent.addLeaderboardsItem( hold );
+            } else {
+
+                /* The object was not found */
+                return new CreateLeaderboardResponse( false );
+            }
+
+        } catch ( NullRequestParameterException error ) {
+
+            /* An error occurred and the leaderboard could not be created */
+            return new CreateLeaderboardResponse( false );
+        }
+
+        /* The new leaderboard was successfully made */
+        return new CreateLeaderboardResponse( true );
     }
 
     /**
