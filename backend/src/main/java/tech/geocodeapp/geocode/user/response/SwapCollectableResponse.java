@@ -2,7 +2,7 @@ package tech.geocodeapp.geocode.user.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
-import tech.geocodeapp.geocode.general.Response;
+import tech.geocodeapp.geocode.general.response.Response;
 
 public class SwapCollectableResponse extends Response {
 

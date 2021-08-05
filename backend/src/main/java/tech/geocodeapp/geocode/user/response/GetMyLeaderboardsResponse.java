@@ -5,7 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import tech.geocodeapp.geocode.general.Response;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 
 import javax.validation.Valid;
@@ -46,17 +46,6 @@ public class GetMyLeaderboardsResponse extends Response {
       @NotNull
     @Valid
     public List<MyLeaderboardDetails> getLeaderboards() {
-    if(leaderboards == null){//testing
-      return leaderboards;
-    }
-
-    System.out.println("MyLeaderboardDetails");
-
-    for(MyLeaderboardDetails details : leaderboards){
-      System.out.println(details.getName()+","+details.getPoints()+","+details.getRank());
-    }
-
-    System.out.println("===============");
     return leaderboards;
   }
 

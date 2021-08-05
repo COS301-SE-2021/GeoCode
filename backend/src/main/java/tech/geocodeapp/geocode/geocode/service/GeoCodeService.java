@@ -3,7 +3,6 @@ package tech.geocodeapp.geocode.geocode.service;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
-import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
 
 /**
  * This is the main interface is for the GeoCode subsystem,
@@ -21,6 +20,13 @@ public interface GeoCodeService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException;
+
+    /**
+     * Get the GeoCode identified by the given UUID
+     * @param request Request object containing the UUID
+     * @return Response object containing the wanted GeoCode (if it is found)
+     */
+    GetGeoCodeByIDResponse getGeoCodeByID( GetGeoCodeByIDRequest request ) throws InvalidRequestException;
 
     /**
      * Get all the stored GeoCodes in the repository

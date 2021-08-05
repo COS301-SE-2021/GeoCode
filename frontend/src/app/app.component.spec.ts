@@ -3,14 +3,33 @@ import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AppComponent } from './app.component';
 import {environment} from '../environments/environment';
+import {KeycloakService} from 'keycloak-angular';
+import {Router} from '@angular/router';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('AppComponent', () => {
 
+  const mockKeycloak = {
+    getKeycloakInstance: () => ({
+      authenticated: true
+    })
+  };
+
+  const mockRouter = {
+    navigate: (args) => new Promise((resolve, reject) => {
+      resolve(null);
+    })
+  };
+
   beforeEach(waitForAsync(() => {
-    localStorage.setItem('accessToken', environment.hardcodedKeycloakToken);
     TestBed.configureTestingModule({
       declarations: [AppComponent],
+      providers: [
+        { provide: KeycloakService, useValue: mockKeycloak },
+        { provide: Router, useValue: mockRouter }
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [RouterTestingModule]
     }).compileComponents();
   }));
 

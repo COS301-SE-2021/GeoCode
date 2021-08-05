@@ -11,6 +11,10 @@ public class CreateLeaderboardRequest   {
     @JsonProperty("name")
     private String name = null;
 
+    public CreateLeaderboardRequest(String name){
+        this.name = name;
+    }
+
     /**
      * Get name
      * @return name

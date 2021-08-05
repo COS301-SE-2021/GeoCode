@@ -1,6 +1,6 @@
 package tech.geocodeapp.geocode.leaderboard.response;
 
-import tech.geocodeapp.geocode.general.Response;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
 public class GetLeaderboardByIDResponse extends Response {

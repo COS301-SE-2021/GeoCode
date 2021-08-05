@@ -1,7 +1,7 @@
 package tech.geocodeapp.geocode.leaderboard.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.general.Response;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 
 public class PointResponse extends Response {

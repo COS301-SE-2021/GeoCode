@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 
-import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
-import tech.geocodeapp.geocode.user.model.User;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 import tech.geocodeapp.geocode.user.service.UserServiceImpl;
@@ -52,7 +50,7 @@ public class UserApiController implements UserApi {
             }else{
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             GetCurrentCollectableResponse response = new GetCurrentCollectableResponse(false, e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
@@ -67,7 +65,7 @@ public class UserApiController implements UserApi {
             }else{
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             GetUserTrackableResponse response = new GetUserTrackableResponse(false, e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
@@ -82,7 +80,7 @@ public class UserApiController implements UserApi {
             }else{
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
-        }catch(NullUserRequestParameterException e){
+        }catch(NullRequestParameterException e){
             UpdateLocationResponse response = new UpdateLocationResponse(false, e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
@@ -97,7 +95,7 @@ public class UserApiController implements UserApi {
             }else{
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
-        }catch(NullUserRequestParameterException e){
+        }catch(NullRequestParameterException e){
             GetFoundCollectableTypesResponse response = new GetFoundCollectableTypesResponse(false, e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
@@ -112,7 +110,7 @@ public class UserApiController implements UserApi {
             }else{
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
-        }catch(NullUserRequestParameterException e){
+        }catch(NullRequestParameterException e){
             GetFoundGeoCodesResponse response = new GetFoundGeoCodesResponse(false, e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
@@ -127,7 +125,7 @@ public class UserApiController implements UserApi {
             }else{
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
-        }catch(NullUserRequestParameterException e){
+        }catch(NullRequestParameterException e){
             GetOwnedGeoCodesResponse response = new GetOwnedGeoCodesResponse(false, e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
@@ -146,7 +144,7 @@ public class UserApiController implements UserApi {
             }else{
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             GetMyLeaderboardsResponse response = new GetMyLeaderboardsResponse(false, e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }

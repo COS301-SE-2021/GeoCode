@@ -26,8 +26,8 @@ export class GeocodePage implements AfterViewInit  {
   markers= [];
   geocodes = [];
   selected=[];
-  isHidden=true;
-  height='90%';
+  isHidden=false;
+  height='60%';
 
 
 

@@ -1,6 +1,6 @@
 package tech.geocodeapp.geocode.leaderboard.response;
 
-import tech.geocodeapp.geocode.general.Response;
+import tech.geocodeapp.geocode.general.response.Response;
 
 public class GetMyRankResponse extends Response {
     /**
