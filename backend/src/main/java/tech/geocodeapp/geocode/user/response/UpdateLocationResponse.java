@@ -18,7 +18,7 @@ import java.util.Objects;
 
 
 public class UpdateLocationResponse extends Response {
-  @JsonProperty("Trackable")
+  @JsonProperty("trackable")
   private Collectable trackable = null;
 
   public UpdateLocationResponse(boolean success, String message, Collectable trackable) {
