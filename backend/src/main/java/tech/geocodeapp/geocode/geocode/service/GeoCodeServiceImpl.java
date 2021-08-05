@@ -15,8 +15,8 @@ import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
 import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.request.GetEventByIDRequest;
-import tech.geocodeapp.geocode.event.response.GetEventByIDResponse;
+import tech.geocodeapp.geocode.event.request.GetEventRequest;
+import tech.geocodeapp.geocode.event.response.GetEventResponse;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
@@ -63,6 +63,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     private final UserService userService;
 
     /**
+     * The Event service to access the use cases and
+     * Event repository
+     */
+    @NotNull( message = "GeoCodeService: Event Service Implementation may not be null." )
+    private final EventService eventService;
+
+    /**
      * The number of collectables to make when creating a new GeoCode
      */
     @Min( 0 )
@@ -76,20 +83,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     private static final int QR_SIZE = 8;
 
     /**
-     * The Event service to access the use cases and
-     * Event repository
-     */
-    @NotNull( message = "GeoCodeService: Event Service Implementation may not be null." )
-    private EventService eventService;
-
-    /**
      * Constructor
      *
      * @param geoCodeRepo        the repo the created response attributes should save to
      * @param collectableService access to the collectable use cases and repository
      * @param userService        access to the user use cases and repository
+     * @param eventService        access to the Event use cases and repository
      *
-     * @param eventService
      * @throws RepoException the GeoCode repository was invalid
      */
     public GeoCodeServiceImpl(@Qualifier("GeoCodeRepository") GeoCodeRepository geoCodeRepo,
@@ -184,19 +184,20 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         var id = UUID.randomUUID();
 
-        var getEventByIDRequest = new GetEventByIDRequest(request.getEventID());
-        GetEventByIDResponse getEventByIDResponse = null;
+        var getEventRequest = new GetEventRequest( request.getEventID() );
+        GetEventResponse getEventResponse = null;
 
         try {
-            getEventByIDResponse = eventService.getEventByID(getEventByIDRequest);
-        } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-            e.printStackTrace();
-            throw new InvalidRequestException();
+
+            getEventResponse = eventService.getEvent( getEventRequest );
+        } catch ( tech.geocodeapp.geocode.event.exceptions.InvalidRequestException error ) {
+
+            return new CreateGeoCodeResponse( false );
         }
 
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
-                                      qr.toString(), request.getLocation(), UUID.randomUUID(), getEventByIDResponse.getEvent() );
+                                      qr.toString(), request.getLocation(), UUID.randomUUID(), getEventResponse.getFoundEvent() );
 
         // ToDo: update look at service contract
 
@@ -228,14 +229,19 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
     /**
      * Get the GeoCode identified by the given UUID
+     *
      * @param request Request object containing the UUID
+     *
      * @return Response object containing the wanted GeoCode (if it is found)
      */
     public GetGeoCodeByIDResponse getGeoCodeByID(GetGeoCodeByIDRequest request) throws InvalidRequestException{
+
         /* Validate the request */
         if ( request == null ) {
+
             throw new InvalidRequestException(true);
         } else if ( request.getGeoCodeID() == null ){
+
             throw new InvalidRequestException();
         }
 
@@ -243,8 +249,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         Optional<GeoCode> optionalGeoCode = geoCodeRepo.findById( request.getGeoCodeID() );
 
         if ( optionalGeoCode.isEmpty() ){
+
             return new GetGeoCodeByIDResponse(false, "No GeoCode exists with the given UUID", null);
         } else {
+
             return new GetGeoCodeByIDResponse(true, "GeoCode successfully returned", optionalGeoCode.get());
         }
     }
