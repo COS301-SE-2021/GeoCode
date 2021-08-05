@@ -133,10 +133,10 @@ export class GeocodePage implements AfterViewInit  {
   }
 
   //get all geocodes with difficult difficulty
-  difficultMap(){
+  hardMap(){
     this.clearMarkers();
     const request: GetGeoCodesByDifficultyRequest={
-      difficulty: 'DIFFICULTY'
+      difficulty: 'HARD'
     };
     this.loadFilterMap(request);
   }
