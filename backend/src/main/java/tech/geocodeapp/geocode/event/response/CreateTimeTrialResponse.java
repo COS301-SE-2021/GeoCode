@@ -1,15 +1,11 @@
 package tech.geocodeapp.geocode.event.response;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
+
 import tech.geocodeapp.geocode.event.model.TimeTrial;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
 
 /**
  * CreateTimeTrialResponse
@@ -17,62 +13,100 @@ import javax.validation.constraints.*;
 @Validated
 public class CreateTimeTrialResponse {
 
+    /**
+     * The newly create timeTrial
+     */
     @JsonProperty( "timeTrial" )
-    @Valid
-    private List< TimeTrial > timeTrial = new ArrayList<>();
+    private TimeTrial timeTrial;
 
-    public CreateTimeTrialResponse timeTrial( List< TimeTrial > timeTrial ) {
+    /**
+     * Default Constructor
+     */
+    public CreateTimeTrialResponse() {
 
-        this.timeTrial = timeTrial;
-        return this;
     }
 
-    public CreateTimeTrialResponse addTimeTrialItem( TimeTrial timeTrialItem ) {
+    /**
+     *  Overloaded Constructor
+     *
+     * @param timeTrial The newly create timeTrial
+     */
+    public CreateTimeTrialResponse( TimeTrial timeTrial ) {
 
-        this.timeTrial.add( timeTrialItem );
+        this.timeTrial = timeTrial;
+    }
+
+    /**
+     * Sets the timeTrial attribute to the specified value
+     *
+     * @param timeTrial the value the attribute should be set to
+     *
+     * @return the request after the name has been changed
+     */
+    public CreateTimeTrialResponse timeTrial( TimeTrial timeTrial ) {
+
+        this.timeTrial = timeTrial;
         return this;
     }
 
     /**
-     * Get timeTrial
+     * Gets the saved timeTrial attribute
      *
-     * @return timeTrial
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
-    @Valid
-    public List< TimeTrial > getTimeTrial() {
+     * @return the stored timeTrial attribute
+     */
+    public TimeTrial getTimeTrial() {
 
         return timeTrial;
     }
 
-    public void setTimeTrial( List< TimeTrial > timeTrial ) {
+    /**
+     * Sets the timeTrial attribute to the specified value
+     *
+     * @param timeTrial the value the attribute should be set to
+     */
+    public void setTimeTrial( TimeTrial timeTrial ) {
 
         this.timeTrial = timeTrial;
     }
 
-
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
     @Override
-    public boolean equals( java.lang.Object o ) {
+    public boolean equals( java.lang.Object obj ) {
 
-        if ( this == o ) {
+        if ( this == obj ) {
 
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if ( obj == null || getClass() != obj.getClass() ) {
 
             return false;
         }
-        CreateTimeTrialResponse createTimeTrialResponse = ( CreateTimeTrialResponse ) o;
-        return Objects.equals( this.timeTrial, createTimeTrialResponse.timeTrial );
+
+        return Objects.equals( this.timeTrial, ( ( CreateTimeTrialResponse ) obj ).timeTrial );
     }
 
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
     @Override
     public int hashCode() {
 
         return Objects.hash( timeTrial );
     }
 
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
     @Override
     public String toString() {
 
@@ -91,6 +125,7 @@ public class CreateTimeTrialResponse {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 
