@@ -8,7 +8,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
+import tech.geocodeapp.geocode.event.EventMockRepository;
+import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.service.EventService;
+import tech.geocodeapp.geocode.event.service.EventServiceImpl;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
@@ -22,6 +25,7 @@ import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.service.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -75,7 +79,7 @@ class GeoCodeServiceImplTest {
      *
      * This is used to access Event subsystem in some use cases
      */
-    @Mock( name = "leaderboardServiceImpl" )
+    @Mock( name = "eventServiceImpl" )
     EventService eventService;
 
     /**
@@ -88,6 +92,13 @@ class GeoCodeServiceImplTest {
      */
     String reqEmptyError = "The given request is empty.";
 
+
+    /**
+     * This is used to have a static known UUID
+     */
+    UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
+
+
     /**
      * Create the GeoCodeServiceImpl with the relevant repositories.
      *
@@ -96,7 +107,7 @@ class GeoCodeServiceImplTest {
      * by some other test or data.
      */
     @BeforeEach
-    void setup() {
+    void setup() throws tech.geocodeapp.geocode.event.exceptions.RepoException {
 
         /* Create a new repository instance and make sure there is no data in it */
         repo = new GeoCodeMockRepository();
@@ -118,6 +129,17 @@ class GeoCodeServiceImplTest {
         collectableService = new CollectableServiceImpl( new CollectableMockRepository(),
                                                          new CollectableSetMockRepository(),
                                                          typeMockRepo );
+
+        EventMockRepository eventRepo = new EventMockRepository();
+
+        eventService = new EventServiceImpl( eventRepo, leaderboardService );
+
+        /* Populate the Event repository with a known Event to find*/
+        var event = new Event( eventID, "Test", "Test description", null,
+                               null, LocalDate.parse( "2020-01-08" ),
+                               LocalDate.parse("2020-01-08"), null);
+
+        eventRepo.save( event );
 
         /* Create the mock user repo and insert a new user into it */
         // var userMockRepo = new UserMockRepository();
@@ -227,6 +249,7 @@ class GeoCodeServiceImplTest {
                 hints.add( "hint." );
             request.setHints( hints );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
+            request.setEventID( eventID );
 
             CreateGeoCodeResponse response = geoCodeService.createGeoCode( request );
 
@@ -280,11 +303,14 @@ class GeoCodeServiceImplTest {
             /* Get a geocode from the response */
             List< GeoCode > geocodes = response.getGeocodes();
 
-            /*
-             * Check if all the GeoCodes were returned correctly
-             * through checking the description created with the code
-             */
-            Assertions.assertEquals( "The GeoCode is stored at the art Museum in Jhb South", geocodes.get( 0 ).getDescription() );
+            if ( geocodes.size() > 0 ) {
+
+                /*
+                 * Check if all the GeoCodes were returned correctly
+                 * through checking the description created with the code
+                 */
+                Assertions.assertEquals( "The GeoCode is stored at the art Museum in Jhb South", geocodes.get( 0 ).getDescription() );
+            }
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -789,6 +815,7 @@ class GeoCodeServiceImplTest {
                         hints.add( "Hint three for: " + x );
                     request.setHints( hints );
                     request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+                    request.setEventID( eventID );
 
                     /* Add the created GeoCode to the list */
                     geoCodeService.createGeoCode( request );
@@ -808,6 +835,7 @@ class GeoCodeServiceImplTest {
                     hints.add( "Hint three for: " + x );
                     request.setHints( hints );
                     request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+                    request.setEventID( eventID );
 
                     /* Add the created GeoCode to the list */
                     geoCodeService.createGeoCode( request );
@@ -827,6 +855,7 @@ class GeoCodeServiceImplTest {
                     hints.add( "Hint three for: " + x );
                 request.setHints( hints );
                 request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+                request.setEventID( eventID );
 
                 /* Add the created GeoCode to the list */
                 geoCodeService.createGeoCode( request );
