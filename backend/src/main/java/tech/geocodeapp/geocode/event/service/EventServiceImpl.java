@@ -87,8 +87,7 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        //ToDo create the levels
-
+        /* Hold the created leaderboards */
         var leaderboard = new ArrayList<Leaderboard>();
         try {
 
