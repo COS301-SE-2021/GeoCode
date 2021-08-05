@@ -77,11 +77,24 @@ public class EventServiceImpl implements EventService {
         }
 
         //ToDo create the levels
-        //ToDo check how to create the default leaderboard
-
-        var levels = new ArrayList<Level>();
 
         var leaderboard = new ArrayList<Leaderboard>();
+        try {
+
+            /*
+             * Create the request to the leaderboard service
+             * and store the response
+             */
+            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() + "Default" );
+            var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
+
+            leaderboard.add( hold );
+        } catch ( NullRequestParameterException e ) {
+
+            return new CreateEventResponse( false );
+        }
+
+        var levels = new ArrayList<Level>();
 
         /* Create the new Event object with the specified attributes */
         var event = new Event( UUID.randomUUID(), request.getName(), request.getDescription(),
@@ -450,7 +463,7 @@ public class EventServiceImpl implements EventService {
             * and store the response
             */
             var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() );
-            Leaderboard hold =  leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
+            var hold =  leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
 
             /* Find the Event object with the given ID */
             var event = eventRepo.findById( request.getEventID() );
