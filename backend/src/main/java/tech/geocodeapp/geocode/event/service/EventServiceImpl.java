@@ -13,6 +13,7 @@ import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
@@ -94,7 +95,21 @@ public class EventServiceImpl implements EventService {
             return new CreateEventResponse( false );
         }
 
+        /* Hold each created Level object */
         var levels = new ArrayList<Level>();
+
+        /* Store the list of GeoCOde UUIDs to create a Level on */
+        var geoCodes = request.getGeoCodesToFind();
+
+        /* Go through each UUID */
+        for ( GeoCode geoCode : geoCodes ) {
+
+            /*
+            * Create the Level with a random UUID
+            * and add it to the list
+            */
+            levels.add( new Level( geoCode ) );
+        }
 
         /* Create the new Event object with the specified attributes */
         var event = new Event( UUID.randomUUID(), request.getName(), request.getDescription(),

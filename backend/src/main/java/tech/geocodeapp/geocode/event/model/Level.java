@@ -58,6 +58,29 @@ public class Level {
     /**
      * Overloaded Constructor
      *
+     * @param target The GeoCode to find on this Level of an Event
+     */
+    public Level( GeoCode target ) {
+
+        this.id = UUID.randomUUID();
+        this.target = target;
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param id The unique identifier for the Level
+     * @param target The GeoCode to find on this Level of an Event
+     */
+    public Level( UUID id, GeoCode target ) {
+
+        this.id = id;
+        this.target = target;
+    }
+
+    /**
+     * Overloaded Constructor
+     *
      * @param id The unique identifier for the Level
      * @param target The GeoCode to find on this Level of an Event
      * @param onLevel A map of all the user IDs on this level of the Event
