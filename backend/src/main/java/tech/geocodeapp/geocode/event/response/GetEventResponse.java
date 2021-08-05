@@ -26,8 +26,7 @@ public class GetEventResponse {
      * The found Event
      */
     @JsonProperty( "foundEvent" )
-    @NotNull( message = "GetEventResponse eventID attribute cannot be null." )
-    private Event foundEvent;
+    private Event foundEvent = null;
 
     /**
      * Default Constructor

@@ -26,8 +26,7 @@ public class GetCurrentEventResponse {
      * The found Event
      */
     @JsonProperty( "foundEvent" )
-    @NotNull( message = "GetCurrentEventGeoCodeResponse eventID attribute cannot be null." )
-    private Event foundEvent;
+    private Event foundEvent = null;
 
     /**
      * Default Constructor
