@@ -12,6 +12,7 @@ import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
 import java.util.*;
@@ -113,7 +114,7 @@ public class EventServiceImpl implements EventService {
         }
 
         /* Create the response to return */
-        GetEventResponse response = null;
+        GetEventResponse response;
         try {
 
             /*
@@ -184,9 +185,6 @@ public class EventServiceImpl implements EventService {
                     if ( onLevel.containsKey( request.getUserID() ) ) {
 
                         return new GetCurrentEventResponse( true, event );
-                    } else {
-
-                        new GetCurrentEventResponse( false );
                     }
                 }
             }
@@ -194,10 +192,10 @@ public class EventServiceImpl implements EventService {
         } catch ( EntityNotFoundException error ) {
 
             /* No Event found so set the response to false */
-            response = new GetCurrentEventResponse( false );
+            return new GetCurrentEventResponse( false );
         }
 
-        return response;
+        return new GetCurrentEventResponse( false );
     }
 
     /**
@@ -221,9 +219,44 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        NextStageResponse response = null;
+        try {
 
-        return null;
+            /*
+             * Query the repository for the Event object
+             * and set the response to true with the found Event
+             */
+            Optional< Event > temp = eventRepo.findById( request.getEventID() );
+            if ( temp.isPresent() ) {
+
+                Event currEvent = temp.get();
+                if (  temp.get() == null ) {
+
+                    return new NextStageResponse( null );
+                }
+
+                /* Get the Levels for each Event */
+                List< Level > levels = currEvent.getLevels();
+
+                /* Go through each found Level to check if the User's ID is present */
+                for ( Level level : levels ) {
+
+                    /* Check if the current Level contains the User */
+                    Map< String, UUID > onLevel = level.getOnLevel();
+                    if ( onLevel.containsKey( request.getUserID() ) ) {
+
+                        /* The current Level contains the User so return the GeoCode */
+                        return new NextStageResponse( level.getTarget() );
+                    }
+                }
+            }
+
+        } catch ( EntityNotFoundException error ) {
+
+            /* No Event found so set the response to false */
+            return new NextStageResponse( null );
+        }
+
+        return new NextStageResponse( null );
     }
 
     /**
