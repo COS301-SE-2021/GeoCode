@@ -1990,7 +1990,7 @@ components:
       enum:
         - "EASY"
         - "MEDIUM"
-        - "DIFFICULTY"
+        - "HARD"
         - "INSANE"
 
     CreateGeoCodeRequest:
