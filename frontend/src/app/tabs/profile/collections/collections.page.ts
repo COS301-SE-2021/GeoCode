@@ -1,11 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  CollectableService,
-  CollectableSet,
-  CollectableTypeComponent,
-  GetCollectableSetsResponse,
-  GetCollectableTypesResponse, GetFoundCollectablesResponse, UserService
-} from '../../../services/geocode-api';
 import {ModalController} from '@ionic/angular';
 import {KeycloakService} from 'keycloak-angular';
 import {ActivatedRoute} from '@angular/router';

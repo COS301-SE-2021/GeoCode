@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {
   CollectableService,
-  CollectableSet, CollectableType, CollectableTypeComponent,
+  CollectableSet, CollectableTypeComponent,
   GetCollectableSetsResponse,
-  GetCollectableTypesResponse, GetFoundCollectablesResponse, UserService
+  GetCollectableTypesResponse, GetFoundCollectableTypesResponse, UserService
 } from './geocode-api';
 
 export interface Collection extends CollectableSet {
@@ -44,11 +44,11 @@ export class CollectionFacade {
   }
 
   getFoundCollectables(found: string[], id: string) {
-    this.userService.getFoundCollectables({userID: id}).subscribe((response: GetFoundCollectablesResponse) => {
+    this.userService.getFoundCollectableTypes({userID: id}).subscribe((response: GetFoundCollectableTypesResponse) => {
       console.log(response);
       found.splice(0, found.length); //Empty the array
-      for (const collectable of response.collectables) {
-        found.push(collectable.type.id);
+      for (const id of response.collectableTypeIDs) {
+        found.push(id);
       }
     });
   }
