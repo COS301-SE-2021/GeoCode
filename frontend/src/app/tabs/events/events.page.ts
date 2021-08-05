@@ -66,4 +66,7 @@ export class EventsPage implements AfterViewInit {
     this.navCtrl.navigateForward('/events/event-leaderboard',navigationExtras);
   }
 
+  async addEvent() {}
+
+
 }

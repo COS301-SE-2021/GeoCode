@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.user.model.User;
 
 import javax.validation.Valid;
@@ -18,10 +19,14 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T08:18:28.046Z[GMT]")
 
 
-public class GetUsersResponse   {
+public class GetUsersResponse extends Response {
   @JsonProperty("users")
   @Valid
   private List<User> users = new ArrayList<User>();
+
+  public GetUsersResponse(boolean success, String message){
+    super(success, message);
+  }
 
   public GetUsersResponse users(List<User> users) {
     this.users = users;

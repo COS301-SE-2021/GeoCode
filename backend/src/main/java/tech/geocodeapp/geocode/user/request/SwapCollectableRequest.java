@@ -5,9 +5,14 @@ import java.util.UUID;
 public class SwapCollectableRequest {
 
     /**
-     * The id of the collectable to be searched for
+     * The id of the collectable to be swapped in
      */
     private UUID collectableID;
+
+    /**
+     * The UUID of the GeoCode
+     */
+    private UUID geoCodeID;
 
     /**
      * Default constructor
@@ -18,12 +23,12 @@ public class SwapCollectableRequest {
 
     /**
      * Overloaded Constructor
-     *
      * @param collectableID The collectableID to be searched for
+     * @param geoCodeID The UUID of the GeoCode
      */
-    public SwapCollectableRequest( UUID collectableID ) {
-
+    public SwapCollectableRequest(UUID collectableID, UUID geoCodeID) {
         this.collectableID = collectableID;
+        this.geoCodeID = geoCodeID;
     }
 
     /**
@@ -44,5 +49,13 @@ public class SwapCollectableRequest {
     public void setCollectableID( UUID collectableID ) {
 
         this.collectableID = collectableID;
+    }
+
+    public UUID getGeoCodeID() {
+        return geoCodeID;
+    }
+
+    public void setGeoCodeID(UUID geoCodeID) {
+        this.geoCodeID = geoCodeID;
     }
 }

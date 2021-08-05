@@ -1,30 +1,31 @@
 package tech.geocodeapp.geocode.user;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import tech.geocodeapp.geocode.collectable.CollectableMockRepository;
-import tech.geocodeapp.geocode.collectable.CollectableSetMockRepository;
-import tech.geocodeapp.geocode.collectable.CollectableTypeMockRepository;
-import tech.geocodeapp.geocode.collectable.model.Collectable;
-import tech.geocodeapp.geocode.collectable.model.CollectableType;
-import tech.geocodeapp.geocode.collectable.service.CollectableService;
-import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.user.exception.NullUserRequestParameterException;
+import tech.geocodeapp.geocode.collectable.*;
+import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.model.*;
+import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
+import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
+import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
-
 
 @ExtendWith( MockitoExtension.class )
 public class UserServiceImplTest {
@@ -32,6 +33,8 @@ public class UserServiceImplTest {
 
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
+    private final UUID userWithPoints1 = UUID.fromString("f1f1cc86-47f0-4cdd-b313-e9275b9e8925");
+    private final UUID userWithPoints2 = UUID.fromString("38437809-528e-464e-a81f-140ad9f50cda");
     private final UUID firstGeoCodeID = UUID.fromString("0998cf20-8256-4529-b144-d3c8aa4f0fb1");
     private final UUID secondGeoCodeID = UUID.fromString("8c3e3a65-118b-47ca-8cca-097134cd00d9");
     private final UUID thirdGeoCodeID = UUID.fromString("7b32fce8-44e4-422b-a80d-521d490e9ee3");
@@ -39,8 +42,13 @@ public class UserServiceImplTest {
 
     private final String invalidUserIdMessage = "Invalid user id";
 
-    @Mock( name = "collectableServiceImpl" )
-    CollectableService collectableService;
+    private final String hatfieldEaster = "Hatfield Easter Hunt 2021";
+    private final String menloParkChristmas = "Christmas 2021 market";
+
+    private final int user1EasterPoints = 5;
+    private final int user2EasterPoints = 5;
+    private final int user1ChristmasPoints = 10;
+    private final int user2ChristmasPoints = 5;
 
     UserServiceImplTest() {
 
@@ -52,9 +60,12 @@ public class UserServiceImplTest {
         CollectableMockRepository collectableMockRepo = new CollectableMockRepository();
         CollectableSetMockRepository collectableSetMockRepo = new CollectableSetMockRepository();
 
+        LeaderboardMockRepository leaderboardMockRepo = new LeaderboardMockRepository();
+        PointMockRepository pointMockRepo = new PointMockRepository();
+
         UserMockRepository userMockRepo = new UserMockRepository();
         CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo);
-        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), collectableService);
+        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), new PointMockRepository(),collectableService, null, null, null);
 
         //save the valid trackable CollectableType
         CollectableType trackableCollectableType = new CollectableType();
@@ -62,7 +73,14 @@ public class UserServiceImplTest {
         collectableTypeMockRepo.save(trackableCollectableType);
 
         //save the valid user to the MockRepo
-        userService.registerNewUser(validUserId, "john_smith");
+        RegisterNewUserRequest registerNewUserRequest = new RegisterNewUserRequest(validUserId, "john_smith");
+
+        try {
+            userService.registerNewUser(registerNewUserRequest);
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return;
+        }
 
         //make 3 CollectableTypes for Easter
         CollectableType egg = new CollectableType();
@@ -77,8 +95,18 @@ public class UserServiceImplTest {
         bunny.setId(UUID.fromString("0998cf20-8256-4529-b144-d3c8aa4f0fb1"));
         collectableTypeMockRepo.save(bunny);
 
+        User validUser;
+
         //add to the User's found CollectableTypes
-        User validUser = userService.getUserById(validUserId);
+        try{
+            GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(validUserId);
+            GetUserByIdResponse getUserByIdResponse = userService.getUserById(getUserByIdRequest);
+            validUser = getUserByIdResponse.getUser();
+        }catch(NullRequestParameterException e){
+            e.printStackTrace();
+            return;
+        }
+
         validUser.addFoundCollectableTypesItem(egg);
         validUser.addFoundCollectableTypesItem(chocolateBar);
         validUser.addFoundCollectableTypesItem(bunny);
@@ -102,6 +130,48 @@ public class UserServiceImplTest {
 
         //update the User's details
         userMockRepo.save(validUser);
+
+        /* add two Users that will have points */
+        RegisterNewUserRequest registerNewUserRequest1 = new RegisterNewUserRequest(userWithPoints1, "alice");
+        RegisterNewUserRequest registerNewUserRequest2 = new RegisterNewUserRequest(userWithPoints2, "bob");
+
+        try {
+            userService.registerNewUser(registerNewUserRequest1);
+            userService.registerNewUser(registerNewUserRequest2);
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        /* get the users with points */
+        User user1;
+        User user2;
+
+        try{
+            GetUserByIdRequest getUser1ByIdRequest = new GetUserByIdRequest(userWithPoints1);
+            GetUserByIdResponse getUser1ByIdResponse = userService.getUserById(getUser1ByIdRequest);
+            user1 = getUser1ByIdResponse.getUser();
+
+            GetUserByIdRequest getUser2ByIdRequest = new GetUserByIdRequest(userWithPoints2);
+            GetUserByIdResponse getUser2ByIdResponse = userService.getUserById(getUser2ByIdRequest);
+            user2 = getUser2ByIdResponse.getUser();
+        }catch(NullRequestParameterException e){
+            e.printStackTrace();
+            return;
+        }
+
+        /* create Leaderboards */
+        Leaderboard easterLeaderboard = new Leaderboard(hatfieldEaster);
+        Leaderboard christmasLeaderboard = new Leaderboard(menloParkChristmas);
+
+        leaderboardMockRepo.save(easterLeaderboard);
+        leaderboardMockRepo.save(christmasLeaderboard);
+
+        /* (2) Assign points to the Users that should have Points */
+        pointMockRepo.save(new Point(user1EasterPoints, user1, easterLeaderboard));
+        pointMockRepo.save(new Point(user2EasterPoints, user2, easterLeaderboard));
+        pointMockRepo.save(new Point(user1ChristmasPoints, user1, christmasLeaderboard));
+        pointMockRepo.save(new Point(user2ChristmasPoints, user2, christmasLeaderboard));
     }
 
     @Test
@@ -111,7 +181,7 @@ public class UserServiceImplTest {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("The GetCurrentCollectableRequest object passed was NULL", response.getMessage());
             Assertions.assertNull(response.getCollectable());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -122,7 +192,7 @@ public class UserServiceImplTest {
            request.setUserID(null);
 
            assertThatThrownBy(() -> userService.getCurrentCollectable(request))
-                .isInstanceOf(NullUserRequestParameterException.class);
+                .isInstanceOf(NullRequestParameterException.class);
     }
 
     @Test
@@ -139,7 +209,7 @@ public class UserServiceImplTest {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getCollectable());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -158,7 +228,7 @@ public class UserServiceImplTest {
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The user's Collectable was successfully returned", response.getMessage());
             Assertions.assertNotNull(response.getCollectable());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -170,7 +240,7 @@ public class UserServiceImplTest {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("The GetUserTrackableRequest object passed was NULL", response.getMessage());
             Assertions.assertNull(response.getTrackable());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -181,7 +251,7 @@ public class UserServiceImplTest {
         request.setUserID(null);
 
         assertThatThrownBy(() -> userService.getUserTrackable(request))
-                .isInstanceOf(NullUserRequestParameterException.class);
+                .isInstanceOf(NullRequestParameterException.class);
     }
 
     @Test
@@ -198,7 +268,7 @@ public class UserServiceImplTest {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getTrackable());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -220,7 +290,7 @@ public class UserServiceImplTest {
             Collectable trackableObject = response.getTrackable();
             Assertions.assertNotNull(trackableObject);
             Assertions.assertEquals(trackableUUID, trackableObject.getType().getId());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -232,7 +302,7 @@ public class UserServiceImplTest {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("The GetFoundCollectableTypesRequest object passed was NULL", response.getMessage());
             Assertions.assertNull(response.getCollectableTypeIDs());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -243,7 +313,7 @@ public class UserServiceImplTest {
         request.setUserID(null);
 
         assertThatThrownBy(() -> userService.getFoundCollectableTypes(request))
-                .isInstanceOf(NullUserRequestParameterException.class);
+                .isInstanceOf(NullRequestParameterException.class);
     }
 
     @Test
@@ -260,7 +330,7 @@ public class UserServiceImplTest {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getCollectableTypeIDs());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -282,7 +352,7 @@ public class UserServiceImplTest {
             List<UUID> foundCollectableTypeIDs = response.getCollectableTypeIDs();
             Assertions.assertNotNull(foundCollectableTypeIDs);
             Assertions.assertEquals(3, foundCollectableTypeIDs.size());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -294,7 +364,7 @@ public class UserServiceImplTest {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("The GetFoundGeoCodesRequest object passed was NULL", response.getMessage());
             Assertions.assertNull(response.getGeocodeIDs());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -305,7 +375,7 @@ public class UserServiceImplTest {
         request.setUserID(null);
 
         assertThatThrownBy(() -> userService.getFoundGeoCodes(request))
-                .isInstanceOf(NullUserRequestParameterException.class);
+                .isInstanceOf(NullRequestParameterException.class);
     }
 
     @Test
@@ -322,7 +392,7 @@ public class UserServiceImplTest {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getGeocodeIDs());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -348,7 +418,7 @@ public class UserServiceImplTest {
             //HashSet will cause order to not necessarily be order added in
             Assertions.assertTrue(foundGeoCodeIDs.contains(firstGeoCodeID));
             Assertions.assertTrue(foundGeoCodeIDs.contains(secondGeoCodeID));
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -360,7 +430,7 @@ public class UserServiceImplTest {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("The GetOwnedGeoCodesRequest object passed was NULL", response.getMessage());
             Assertions.assertNull(response.getGeocodeIDs());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -371,7 +441,7 @@ public class UserServiceImplTest {
         request.setUserID(null);
 
         assertThatThrownBy(() -> userService.getOwnedGeoCodes(request))
-                .isInstanceOf(NullUserRequestParameterException.class);
+                .isInstanceOf(NullRequestParameterException.class);
     }
 
     @Test
@@ -388,7 +458,7 @@ public class UserServiceImplTest {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getGeocodeIDs());
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
@@ -411,8 +481,214 @@ public class UserServiceImplTest {
             Assertions.assertNotNull(ownedGeoCodeIDs);
             Assertions.assertEquals(1, ownedGeoCodeIDs.size());
             Assertions.assertEquals(thirdGeoCodeID, ownedGeoCodeIDs.get(0));
-        }catch (NullUserRequestParameterException e){
+        }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void updateLocationTestNullRequest(){
+        try{
+            UpdateLocationResponse response = userService.updateLocation(null);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The UpdateLocationRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getTrackable());
+        }catch (NullRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Test for when userID parameter is NULL.
+     *
+     * A NullRequestParameterException will be returned no matter which parameter is NULL,
+     * since all fields are checked.
+     */
+    @Test
+    public void updateLocationTestNullUser(){
+        UpdateLocationRequest request = new UpdateLocationRequest();
+        request.setUserID(validUserId);
+
+        assertThatThrownBy(() -> userService.updateLocation(request))
+                .isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
+    public void updateLocationTestInvalidUser() {
+        try{
+            /*
+            Create a request object
+            and assign values to it
+            */
+            UpdateLocationRequest request = new UpdateLocationRequest();
+            request.setUserID(invalidUserId);
+            request.setLocation(new GeoPoint(10.0f, 10.0f));
+
+            UpdateLocationResponse response = userService.updateLocation(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertNull(response.getTrackable());
+        }catch (NullRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void updateLocationTestValidUser() {
+        try{
+            /*
+             Create a request object
+             and assign values to it
+           */
+            UpdateLocationRequest request = new UpdateLocationRequest();
+            request.setUserID(validUserId);
+
+            GeoPoint location = new GeoPoint(100.0f, 40.0f);
+            request.setLocation(location);
+
+            UpdateLocationResponse response = userService.updateLocation(request);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The trackable object's location was successfully updated", response.getMessage());
+
+            Collectable trackableObject = response.getTrackable();
+            Assertions.assertNotNull(trackableObject);
+
+            List<GeoPoint> pastLocations = new ArrayList<>(trackableObject.getPastLocations());
+            Assertions.assertEquals(location, pastLocations.get(pastLocations.size()-1));
+        }catch (NullRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestNullRequest(){
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(null);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The GetMyLeaderboardsRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getLeaderboards());
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestNullUser(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(null);
+
+        assertThatThrownBy(() -> userService.getMyLeaderboards(request))
+                    .isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
+    void getMyLeaderboardsTestInvalidUser(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(invalidUserId);
+
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertNull(response.getLeaderboards());
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestUserWithNoPoints(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(validUserId);
+
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
+            Assertions.assertTrue(response.getLeaderboards().isEmpty());
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestUserWithPoints1(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(userWithPoints1);
+
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
+
+            List<MyLeaderboardDetails> leaderboardDetails = response.getLeaderboards();
+
+            /* check the user has points */
+            Assertions.assertFalse(leaderboardDetails.isEmpty());
+
+            /* check that the correct details are returned */
+
+            //user1 ranked 1st for Easter event
+            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
+                    details.getName().equals(hatfieldEaster) &&
+                    details.getPoints() == user1EasterPoints &&
+                    details.getRank() == 1
+            ));
+
+            //user1 ranked 1st for Christmas event
+            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
+                    details.getName().equals(menloParkChristmas) &&
+                    details.getPoints() == user1ChristmasPoints &&
+                    details.getRank() == 1
+            ));
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyLeaderboardsTestUserWithPoints2(){
+        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        request.setUserID(userWithPoints2);
+
+        try {
+            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
+
+            List<MyLeaderboardDetails> leaderboardDetails = response.getLeaderboards();
+
+            /* check the user has points */
+            Assertions.assertFalse(leaderboardDetails.isEmpty());
+
+            /* check that the correct details are returned */
+
+            //user2 ranked 1st for Easter event
+            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
+                    details.getName().equals(hatfieldEaster) &&
+                    details.getPoints() == user2EasterPoints &&
+                    details.getRank() == 1
+            ));
+
+            //user1 ranked 2nd for Christmas event
+            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
+                    details.getName().equals(menloParkChristmas) &&
+                            details.getPoints() == user2ChristmasPoints &&
+                            details.getRank() == 2
+            ));
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void swapCollectableTestNullRequest(){
+
     }
 }
