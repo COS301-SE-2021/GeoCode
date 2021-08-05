@@ -77,7 +77,7 @@ export class GeocodePage implements AfterViewInit  {
     //create request object to update the availability
     const request: UpdateAvailabilityRequest={
       geoCodeID: geocode.id,
-      isAvailable: geocode.available
+      available: geocode.available
     };
 
     //Call the geocodeAPI and send request to controller and log any errors
@@ -96,7 +96,7 @@ export class GeocodePage implements AfterViewInit  {
       //Add markers to map
       for(const code of this.geocodes){
         const marker=new this.googleMaps.Marker({
-          position: {lat: parseFloat(code.latitude), lng:parseFloat( code.longitude)},
+          position: {lat: parseFloat(String(code.location.latitude)), lng:parseFloat( String(code.location.longitude))},
           map: this.map,
           title: '',
 
@@ -167,7 +167,7 @@ export class GeocodePage implements AfterViewInit  {
       //Add all geocodes locations to map
       for(const code of this.geocodes){
         const marker=new this.googleMaps.Marker({
-          position: {lat: parseFloat(code.latitude), lng:parseFloat( code.longitude)},
+          position: {lat: parseFloat(String(code.location.latitude)), lng:parseFloat( String(code.location.longitude))},
           map: this.map,
           title: '',
         });
@@ -199,7 +199,7 @@ export class GeocodePage implements AfterViewInit  {
   }
 
   openInMaps(geocode: GeoCode) {
-    window.open('https://www.google.com/maps/search/?api=1&query='+geocode.latitude+'%2C'+geocode.longitude);
+    window.open('https://www.google.com/maps/search/?api=1&query='+geocode.location.latitude+'%2C'+geocode.location.longitude);
   }
 
 }
