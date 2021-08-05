@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.event.service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
@@ -47,10 +48,19 @@ public class EventServiceImpl implements EventService {
      * @param leaderboardService access to the Leaderboard use cases and repository
      */
     public EventServiceImpl( EventRepository eventRepo,
-                             @Qualifier("LeaderboardService") LeaderboardService leaderboardService ) {
+                             @Qualifier("LeaderboardService") @Lazy LeaderboardService leaderboardService ) throws RepoException {
 
-        this.eventRepo = eventRepo;
-        this.leaderboardService = leaderboardService;
+        if ( eventRepo != null ) {
+
+            /* The repo exists therefore it can be set for the class */
+            this.eventRepo = eventRepo;
+
+            this.leaderboardService = Objects.requireNonNull( leaderboardService, "EventService: Leaderboard service must not be null." );
+        } else {
+
+            /* The repo does not exist throw an error */
+            throw new RepoException();
+        }
     }
 
     /**
