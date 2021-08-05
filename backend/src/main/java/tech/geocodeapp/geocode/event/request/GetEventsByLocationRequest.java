@@ -24,7 +24,7 @@ public class GetEventsByLocationRequest {
      *
      * @param location the location to look for Events
      */
-    public GetEventsByLocationRequest( @Valid GeoPoint location ) {
+    public GetEventsByLocationRequest( GeoPoint location ) {
 
         this.location = location;
     }
@@ -36,7 +36,7 @@ public class GetEventsByLocationRequest {
      *
      * @return the request after the location has been changed
      */
-    public GetEventsByLocationRequest location( @Valid GeoPoint location ) {
+    public GetEventsByLocationRequest location( GeoPoint location ) {
 
         this.location = location;
         return this;
@@ -58,7 +58,7 @@ public class GetEventsByLocationRequest {
      *
      * @param location the value the attribute should be set to
      */
-    public void setLocation( @Valid GeoPoint location ) {
+    public void setLocation( GeoPoint location ) {
 
         this.location = location;
     }

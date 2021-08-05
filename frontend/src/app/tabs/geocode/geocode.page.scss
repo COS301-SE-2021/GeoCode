@@ -1,8 +1,3 @@
-ion-toolbar{
-  --background: var(--ion-color-teal);
-  color: white;
-}
-
 #page-title{
   font-size: xx-large;
   text-align: center;
@@ -13,6 +8,21 @@ ion-toolbar{
   font-size: x-large;
   text-align: center;
   padding:0.5%;
+  color: var(--ion-color-accent);
+}
+
+.horizontalscroll {
+  position: relative;
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  height: auto;
+}
+
+.items {
+  width: auto;
+  white-space: nowrap;
+  position: relative;
 }
 
 .map{
@@ -42,7 +52,7 @@ ion-toolbar{
 
 ion-checkbox{
   --checkmark-color: white;
-  --background-checked:var(--ion-color-purple);
+  --background-checked:var(--ion-color-accent);
   --border-color:white;
   --border-color-checked:white;
 }
@@ -51,27 +61,28 @@ ion-checkbox{
 }
 
 #button{
-  width: 100%;
+  width: auto;
+ // background: var(--ion-color-button);
+  //color: var(--ion-color-button-contrast);
+
 }
 
 #close-button{
   text-align: left;
+}
+
+#close{
+  color: var(--ion-color-button);
 
 }
 
-
-
-
-
-
 ion-card{
-  background-color:var(--ion-color-purple) ;
-  color: white;
-  border-color:  var(--ion-color-purple);
-  border-width: 1px;
+  background-color:var(--ion-color-card) ;
+  border:  var(--ion-color-accent) solid 5px;
   width:85%;
   text-align: center;
-
+  border-radius: 8px;
+  margin: 5px;
 }
 
 #geoCodeDetails{

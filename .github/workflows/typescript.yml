@@ -50,7 +50,6 @@ jobs:
             cd frontend/src
             cp environments/environment.prod.ts environments/environment.ts
             sudo sed -i "s/googleMapsKey: ''/googleMapsKey: '${{secrets.GOOGLE_MAPS_KEY}}'/g" environments/environment.ts
-            sudo sed -i "s/hardcodedKeycloakToken: ''/hardcodedKeycloakToken: '${{secrets.EXAMPLE_KEYCLOAK_TOKEN}}'/g" environments/environment.ts
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.5

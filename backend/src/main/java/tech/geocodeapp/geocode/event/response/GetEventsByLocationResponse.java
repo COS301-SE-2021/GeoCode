@@ -131,6 +131,7 @@ public class GetEventsByLocationResponse {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 
