@@ -124,9 +124,9 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @param request Request object containing the user and leaderboard IDs
      * @return The wanted Point object
      */
-    public GetPointForUserResponse getPointForUser(GetPointForUserRequest request) throws NullRequestParameterException{
+    public PointResponse getPointForUser(GetPointForUserRequest request) throws NullRequestParameterException{
         if(request == null){
-            return new GetPointForUserResponse(false, "The GetPointForUserRequest object passed was NULL", null);
+            return new PointResponse(false, "The GetPointForUserRequest object passed was NULL", null);
         }
 
         checkNullRequestParameters.checkRequestParameters(request);
@@ -135,9 +135,9 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         Optional<Point> optionalPoint = pointRepo.getPointForUser(request.getUserID(), request.getLeaderboardID());
 
         if(optionalPoint.isEmpty()){
-            return new GetPointForUserResponse(false, "The User does not have any points yet for the given Leaderboard", null);
+            return new PointResponse(false, "The User does not have any points yet for the given Leaderboard", null);
         }else{
-            return new GetPointForUserResponse(true, "Point object returned successfully", optionalPoint.get());
+            return new PointResponse(true, "Point object returned successfully", optionalPoint.get());
         }
     }
 
@@ -328,7 +328,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         //update amount if it was provided
         if(request.getAmount() != null){
-            point.get().setAmount(point.get().getAmount() + request.getAmount());
+            point.get().setAmount(request.getAmount());
         }
 
         pointRepo.save(point.get());

@@ -65,7 +65,7 @@ public class UserServiceImplTest {
 
         UserMockRepository userMockRepo = new UserMockRepository();
         CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo);
-        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), new PointMockRepository(),collectableService, null, null);
+        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), new PointMockRepository(),collectableService, null, null, null);
 
         //save the valid trackable CollectableType
         CollectableType trackableCollectableType = new CollectableType();
@@ -685,5 +685,10 @@ public class UserServiceImplTest {
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void swapCollectableTestNullRequest(){
+
     }
 }
