@@ -43,7 +43,6 @@ public class Level {
      * A map of all the user IDs on this level of the Event
      */
     @Valid
-    @Type( type = "json" )
     @JsonProperty( "onLevel" )
     @NotNull( message = "Level's onLevel cannot be null." )
     private HashMap< String, UUID > onLevel;
