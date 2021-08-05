@@ -36,15 +36,16 @@ public class Level {
      */
     @OneToOne
     @JsonProperty( "target" )
-    @NotNull( message = "Level's id cannot be null." )
+    @NotNull( message = "Level's target cannot be null." )
     private GeoCode target;
 
     /**
      * A map of all the user IDs on this level of the Event
      */
     @Valid
-    @JsonProperty( "onLevel" )
     @Type( type = "json" )
+    @JsonProperty( "onLevel" )
+    @NotNull( message = "Level's onLevel cannot be null." )
     private HashMap< String, UUID > onLevel;
 
     /**
