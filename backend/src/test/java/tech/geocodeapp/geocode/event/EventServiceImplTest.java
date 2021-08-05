@@ -4,34 +4,24 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.event.exceptions.RepoException;
+import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.request.CreateEventRequest;
-import tech.geocodeapp.geocode.event.request.GetEventRequest;
-import tech.geocodeapp.geocode.event.response.CreateEventResponse;
-import tech.geocodeapp.geocode.event.response.GetEventResponse;
-import tech.geocodeapp.geocode.event.service.EventService;
-import tech.geocodeapp.geocode.event.service.EventServiceImpl;
-import tech.geocodeapp.geocode.geocode.model.Difficulty;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.geocode.model.GeoPoint;
-import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
+import tech.geocodeapp.geocode.event.request.*;
+import tech.geocodeapp.geocode.event.response.*;
+import tech.geocodeapp.geocode.event.service.*;
+import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
 import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
 import tech.geocodeapp.geocode.leaderboard.UserMockRepository;
 import tech.geocodeapp.geocode.leaderboard.UserMockService;
-import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
-import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
+import tech.geocodeapp.geocode.leaderboard.service.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 
 /**
  * This is the unit testing class for the Event subsystem
