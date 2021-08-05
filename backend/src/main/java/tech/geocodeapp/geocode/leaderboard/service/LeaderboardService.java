@@ -17,7 +17,7 @@ public interface LeaderboardService {
     GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullRequestParameterException;
 
     //U5.3 GetPointForUser
-    GetPointForUserResponse getPointForUser(GetPointForUserRequest request) throws NullRequestParameterException;
+    PointResponse getPointForUser(GetPointForUserRequest request) throws NullRequestParameterException;
 
     //helper functions
     GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullRequestParameterException;
