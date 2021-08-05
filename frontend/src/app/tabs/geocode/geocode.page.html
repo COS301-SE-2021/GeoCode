@@ -46,16 +46,8 @@
             <ion-col>Difficulty</ion-col>
             <ion-col>{{geocode.difficulty}}</ion-col>
           </ion-row>
-          <ion-row class="row">
-            <ion-col>Latitude</ion-col>
-            <ion-col>{{geocode.latitude}} </ion-col>
-          </ion-row>
-          <ion-row class="row" >
-            <ion-col>Longitude</ion-col>
-            <ion-col>{{geocode.longitude}} </ion-col>
-          </ion-row>
           <ion-button id="button" color="button" (click)="findGeoCode(geocode)"  >Open GeoCode</ion-button>
-          <ion-button (click)="openInMaps(geocode)">Open Location in Google Maps</ion-button>
+          <ion-button color="button" (click)="openInMaps(geocode)">Open Location in Google Maps</ion-button>
 
       </ion-card-content>
     </ion-card>
