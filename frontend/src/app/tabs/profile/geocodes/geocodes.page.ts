@@ -118,8 +118,8 @@ export class UserGeocodesPage implements OnInit {
       this.markers.push(new this.googleMaps.Marker({
         map: this.map,
         position: {
-          lat: parseFloat(g.latitude),
-          lng: parseFloat(g.longitude)
+          lat: parseFloat(String(g.location.latitude)),
+          lng: parseFloat(String(g.location.longitude))
         }
       }));
     }
