@@ -25,7 +25,11 @@
 
   <div #mapElement [style.height]="height" class="map"></div>
 
-
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button color="button" [routerLink]="['create-geocode']">
+      <ion-icon  name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
   <div  id ="geoCodeDetails" [hidden]="isHidden">
 
@@ -53,10 +57,6 @@
     </ion-card>
 </div>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="button" [routerLink]="['create-geocode']">
-      <ion-icon  name="add-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+
 
 </ion-content>
