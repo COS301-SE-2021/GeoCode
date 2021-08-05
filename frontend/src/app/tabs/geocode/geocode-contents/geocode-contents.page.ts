@@ -107,27 +107,26 @@ export class GeocodeContentsPage implements AfterViewInit {
   }
 
   found(code){
-    const requestQR: GetGeoCodeByQRCodeRequest={
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      QRCode: code.value
-    };
-    console.log(requestQR);
-    this.geocodeApi.getGeoCodeByQRCode(requestQR).subscribe((response: GetGeoCodeByQRCodeResponse) =>{
-      console.log(response);
-
-      if(response.id == this.geocode.id){
-        this.isHidden=true;
-        const requestCollectables: GetCollectablesRequest={
-          geoCodeID: response.id
-        };
-        this.geocodeApi.getGeoCodeCollectables(requestCollectables).subscribe((response2 :GetCollectablesResponse) =>{
-          console.log(response2);
-          this.collectables= response2.collectables;
-        });
-      }else{
-
-      }
-    });
+    // const requestQR: GetGeoCodeByQRCodeRequest={
+    //  // QRCode: code.value
+    // };
+    // console.log(requestQR);
+    // this.geocodeApi.getGeoCodeByQRCode(requestQR).subscribe((response: GetGeoCodeByQRCodeResponse) =>{
+    //   console.log(response);
+    //
+    //   if(response.id == this.geocode.id){
+    //     this.isHidden=true;
+    //     const requestCollectables: GetCollectablesRequest={
+    //       //geoCodeID: response.id
+    //     };
+    //     this.geocodeApi.getGeoCodeCollectables(requestCollectables).subscribe((response2 :GetCollectablesResponse) =>{
+    //       console.log(response2);
+    //       this.collectables= response2.collectables;
+    //     });
+    //   }else{
+    //
+    //   }
+    // });
 
   }
 
@@ -150,8 +149,8 @@ export class GeocodeContentsPage implements AfterViewInit {
           text: 'Swap',
           handler: data => {
             const request: SwapCollectablesRequest={
-              targetCollectableID:collectable.id,
-              targetGeoCodeID:this.geocode.id
+              collectable:collectable.id,
+              geoCodeID:this.geocode.id
             };
             console.log(request);
             this.geocodeApi.swapCollectables(request).subscribe((response: SwapCollectablesResponse) =>{
