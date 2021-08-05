@@ -231,7 +231,7 @@ public class EventServiceImpl implements EventService {
                 for ( Level level : levels ) {
 
                     Map< String, UUID > onLevel = level.getOnLevel();
-                    if ( onLevel.containsKey( request.getUserID() ) ) {
+                    if ( onLevel.containsValue( request.getUserID() ) ) {
 
                         return new GetCurrentEventResponse( true, event );
                     }
@@ -291,7 +291,7 @@ public class EventServiceImpl implements EventService {
 
                     /* Check if the current Level contains the User */
                     Map< String, UUID > onLevel = level.getOnLevel();
-                    if ( onLevel.containsKey( request.getUserID() ) ) {
+                    if ( onLevel.containsValue( request.getUserID() ) ) {
 
                         /* The current Level contains the User so return the GeoCode */
                         return new NextStageResponse( level.getTarget() );
