@@ -18,17 +18,18 @@
     </ion-item>
     <ion-item>
       <ion-label>Location</ion-label>
-      <ion-button color="button">Select location on map</ion-button>
+      <ion-button color="button"  (click)="selectLocation()">Select location on map</ion-button>
     </ion-item>
     <ion-item>
       <ion-label>Add GeoCode</ion-label>
-      <ion-button color="button">Create +</ion-button>
+      <ion-button color="button"  (click)="createGeoCode()" >Create +</ion-button>
     </ion-item>
   </ion-list>
   <ion-item>
     <ion-label>Created GeoCodes</ion-label>
-    <ion-button color="button">Show</ion-button>
+    <ion-button color="button"  (click)="showGeoCodes()">Show</ion-button>
   </ion-item>
+  <ion-button color="button"  (click)="createEvent()">Create Event</ion-button>
   <div #mapElement [style.height]="height" class="map"></div>
 
 
