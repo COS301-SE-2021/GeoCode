@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 
 import java.util.Objects;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -40,7 +39,7 @@ public class Level {
     @Valid
     @JsonProperty( "onLevel" )
     @NotNull( message = "Level's onLevel cannot be null." )
-    private Map< String, UUID > onLevel;
+    private HashMap< String, UUID > onLevel;
 
     /**
      * Default constructor
@@ -79,7 +78,7 @@ public class Level {
      * @param target The GeoCode to find on this Level of an Event
      * @param onLevel A map of all the user IDs on this level of the Event
      */
-    public Level( UUID id, UUID target, Map< String, UUID > onLevel ) {
+    public Level( UUID id, UUID target, HashMap< String, UUID > onLevel ) {
 
         this.id = id;
         this.target = target;
@@ -160,7 +159,7 @@ public class Level {
      *
      * @return the model after changing the onLevel
      */
-    public Level onLevel( Map< String, UUID > onLevel ) {
+    public Level onLevel( HashMap< String, UUID > onLevel ) {
 
         this.onLevel = onLevel;
         return this;
@@ -191,7 +190,7 @@ public class Level {
      * @return the stored onLevel attribute
      */
     @Valid
-    public Map< String, UUID > getOnLevel() {
+    public HashMap< String, UUID > getOnLevel() {
 
         return onLevel;
     }
@@ -201,7 +200,7 @@ public class Level {
      *
      * @param onLevel the value the onLevel should be set to
      */
-    public void setOnLevel( Map< String, UUID > onLevel ) {
+    public void setOnLevel( HashMap< String, UUID > onLevel ) {
 
         this.onLevel = onLevel;
     }
