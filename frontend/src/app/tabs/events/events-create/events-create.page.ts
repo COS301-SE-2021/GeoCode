@@ -3,6 +3,7 @@ import {CreateGeoCodeResponse, GeoCode, GeoCodeService} from '../../../services/
 import {ModalController, NavController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
+import {EventLocationComponent} from "./event-location/event-location.component";
 
 @Component({
   selector: 'app-events-create',
@@ -60,6 +61,21 @@ export class EventsCreatePage implements AfterViewInit  {
             await toast.present();
 
         });
+    }else{
+      console.log('Null');
+    }
+  }
+
+  async selectLocation(){
+    const modal = await this.modalController.create({
+      component: EventLocationComponent,
+      swipeToClose: true,
+      componentProps: {}
+    });
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data != null) {
+    console.log(data.getPosition().lat());
     }else{
       console.log('Null');
     }
