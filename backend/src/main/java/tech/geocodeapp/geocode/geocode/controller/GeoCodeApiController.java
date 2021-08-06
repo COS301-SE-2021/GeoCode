@@ -74,6 +74,22 @@ public class GeoCodeApiController implements GeoCodeApi {
         }
     }
 
+    public ResponseEntity< GetCollectablesInGeoCodeByQRCodeResponse > getCollectablesInGeoCodeByQRCode( @Parameter( in = ParameterIn.DEFAULT,
+            description = "Request to get a GeoCode's collectables associated with the given QR Code and GeoCode ID",
+            required = true, schema = @Schema() )
+                                                                                                        @Valid @RequestBody GetCollectablesInGeoCodeByQRCodeRequest body ) throws InvalidRequestException {
+
+        GetCollectablesInGeoCodeByQRCodeResponse response = geoCodeService.getCollectablesInGeoCodeByQRCode( body );
+
+        if ( response != null ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( null, HttpStatus.BAD_REQUEST );
+        }
+    }
+
     public ResponseEntity< GetCollectablesResponse > getGeoCodeCollectables( @Parameter( in = ParameterIn.DEFAULT,
                                                                             description = "Request to get a GeoCode's Collectables",
                                                                             required = true, schema = @Schema() )
