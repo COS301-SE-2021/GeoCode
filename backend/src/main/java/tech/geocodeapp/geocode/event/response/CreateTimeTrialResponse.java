@@ -3,70 +3,72 @@ package tech.geocodeapp.geocode.event.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 
-import tech.geocodeapp.geocode.event.model.TimeTrial;
-
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
- * CreateTimeTrialResponse
+ * CreateTimeTrialResponse object that determines if the TimeTrial was created successfully
  */
 @Validated
 public class CreateTimeTrialResponse {
 
     /**
-     * The newly create timeTrial
+     * If the TimeTrial was successfully created or not
      */
-    @JsonProperty( "timeTrial" )
-    private TimeTrial timeTrial;
+    @JsonProperty( "success" )
+    @NotNull( message = "CreateTimeTrialResponse success attribute cannot be null." )
+    private Boolean success;
 
     /**
-     * Default Constructor
+     * Default constructor
      */
     public CreateTimeTrialResponse() {
 
     }
 
     /**
-     *  Overloaded Constructor
+     * Overloaded Constructor
      *
-     * @param timeTrial The newly create timeTrial
+     * @param success the status of the TimeTrial created
      */
-    public CreateTimeTrialResponse( TimeTrial timeTrial ) {
+    public CreateTimeTrialResponse( Boolean success ) {
 
-        this.timeTrial = timeTrial;
+        this.success = success;
     }
 
     /**
-     * Sets the timeTrial attribute to the specified value
+     * Sets the success attribute to the specified value
      *
-     * @param timeTrial the value the attribute should be set to
+     * @param success the value the attribute should be set to
      *
-     * @return the request after the name has been changed
+     * @return the request after the success has been changed
      */
-    public CreateTimeTrialResponse timeTrial( TimeTrial timeTrial ) {
+    public CreateTimeTrialResponse success( Boolean success ) {
 
-        this.timeTrial = timeTrial;
+        this.success = success;
         return this;
     }
 
     /**
-     * Gets the saved timeTrial attribute
+     * Gets the saved success attribute
      *
-     * @return the stored timeTrial attribute
+     * @return the stored success attribute
      */
-    public TimeTrial getTimeTrial() {
+    @Valid
+    public Boolean isSuccess() {
 
-        return timeTrial;
+        return success;
     }
 
     /**
-     * Sets the timeTrial attribute to the specified value
+     * Sets the success attribute to the specified value
      *
-     * @param timeTrial the value the attribute should be set to
+     * @param success the value the attribute should be set to
      */
-    public void setTimeTrial( TimeTrial timeTrial ) {
+    public void setSuccess( Boolean success ) {
 
-        this.timeTrial = timeTrial;
+        this.success = success;
     }
 
     /**
@@ -88,7 +90,7 @@ public class CreateTimeTrialResponse {
             return false;
         }
 
-        return Objects.equals( this.timeTrial, ( ( CreateTimeTrialResponse ) obj ).timeTrial );
+        return Objects.equals( this.success, ( ( CreateTimeTrialResponse ) obj ).success );
     }
 
     /**
@@ -99,7 +101,7 @@ public class CreateTimeTrialResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( timeTrial );
+        return Objects.hash( success );
     }
 
     /**
@@ -111,7 +113,7 @@ public class CreateTimeTrialResponse {
     public String toString() {
 
         return "class CreateTimeTrialResponse {\n" +
-                "    timeTrial: " + toIndentedString( timeTrial ) + "\n" +
+                "    success: " + toIndentedString( success ) + "\n" +
                 "}";
     }
 
@@ -125,7 +127,6 @@ public class CreateTimeTrialResponse {
 
             return "null";
         }
-
         return o.toString().replace( "\n", "\n    " );
     }
 
