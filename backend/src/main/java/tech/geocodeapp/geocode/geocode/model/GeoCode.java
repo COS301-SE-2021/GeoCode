@@ -58,7 +58,7 @@ public class GeoCode {
     private Collection< String > hints;
 
     /**
-     * The list of collectables stored inside of the GeoCode
+     * The list of collectables stored inside the GeoCode
      */
     @Valid
     @JsonProperty( "collectables" )
@@ -83,7 +83,7 @@ public class GeoCode {
     private GeoPoint location;
 
     /**
-     * The ID of the user whom created the GeoCode
+     * The ID of the user who created the GeoCode
      */
     @JsonProperty( "createdBy" )
     @NotNull( message = "GeoCode's createdBy cannot be null." )
@@ -105,12 +105,13 @@ public class GeoCode {
 
     /**
      * Overloaded Constructor
-     *  @param id The unique identifier for the GeoCode
+     *
+     * @param id The unique identifier for the GeoCode
      * @param difficulty The description of how difficult it is to locate the GeoCode in the real world
      * @param available If the GeoCode is active in the system
      * @param description The description of where the GeoCode is and what it involves
      * @param hints The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
-     * @param collectables The list of collectables stored inside of the GeoCode
+     * @param collectables The list of collectables stored inside the GeoCode
      * @param qrCode A short unique identifier to find the GeoCode in the system by the user from the real world
      * @param location The longitude and latitude of the GeoCode in the real world
      * @param createdBy The user's ID who created the GeoCode
@@ -332,7 +333,7 @@ public class GeoCode {
     }
 
     /**
-     * Sets a single hint inside of the collectables attribute to the specified value
+     * Sets a single hint inside the collectables attribute to the specified value
      *
      * @param collectablesItem the value the attribute should be set to
      *
