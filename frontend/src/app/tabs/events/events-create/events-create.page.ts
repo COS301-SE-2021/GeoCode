@@ -1,7 +1,8 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {GeoCode, GeoCodeService} from '../../../services/geocode-api';
-import {NavController} from '@ionic/angular';
+import {CreateGeoCodeResponse, GeoCode, GeoCodeService} from '../../../services/geocode-api';
+import {ModalController, NavController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
+import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
 
 @Component({
   selector: 'app-events-create',
@@ -19,9 +20,11 @@ export class EventsCreatePage implements AfterViewInit  {
   selected=[];
   isHidden=true;
   height='0%';
-  constructor(    private navCtrl: NavController,
-                  private geocodeApi: GeoCodeService,
-                  private mapsLoader: GoogleMapsLoader) { }
+  constructor(      private modalController: ModalController,
+                    private navCtrl: NavController,
+                    private geocodeApi: GeoCodeService,
+                    private mapsLoader: GoogleMapsLoader,
+                    private toastController: ToastController) { }
 
   //Create map and add mapmarkers of geocodes
   loadMap(){
@@ -38,6 +41,30 @@ export class EventsCreatePage implements AfterViewInit  {
     this.googleMaps = await this.mapsLoader.load();
     this.loadMap();
   }
+
+  async createGeoCode() {
+    const modal = await this.modalController.create({
+      component: CreateGeocodeComponent,
+      swipeToClose: true,
+      componentProps: {}
+    });
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data != null) {
+      this.geocodeApi.createGeoCode(data)
+        .subscribe(async (response: CreateGeoCodeResponse) =>{
+            const toast =  await this.toastController.create({
+              message: 'GeoCode Created',
+              duration: 2000
+            });
+            await toast.present();
+
+        });
+    }else{
+      console.log('Null');
+    }
+  }
+
 
 
 }
