@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { UserEventsPage } from './events.page';
 import {UrlSerializer} from '@angular/router';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('UserEventsPage', () => {
   let component: UserEventsPage;
@@ -11,8 +12,8 @@ describe('UserEventsPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ UserEventsPage ],
-      providers: [ UrlSerializer ],
-      imports: [IonicModule.forRoot()]
+      providers: [],
+      imports: [IonicModule.forRoot(), RouterTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(UserEventsPage);
