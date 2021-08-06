@@ -75,8 +75,8 @@ public class GeoCodeApiController implements GeoCodeApi {
     }
 
     public ResponseEntity< GetCollectablesInGeoCodeByQRCodeResponse > getCollectablesInGeoCodeByQRCode( @Parameter( in = ParameterIn.DEFAULT,
-            description = "Request to get a GeoCode's collectables associated with the given QR Code and GeoCode ID",
-            required = true, schema = @Schema() )
+                                                                                                        description = "Request to get a GeoCode's collectables associated with the given QR Code and GeoCode ID",
+                                                                                                        required = true, schema = @Schema() )
                                                                                                         @Valid @RequestBody GetCollectablesInGeoCodeByQRCodeRequest body ) throws InvalidRequestException {
 
         GetCollectablesInGeoCodeByQRCodeResponse response = geoCodeService.getCollectablesInGeoCodeByQRCode( body );
