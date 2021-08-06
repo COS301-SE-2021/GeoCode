@@ -2,11 +2,11 @@ package tech.geocodeapp.geocode.event.model;
 
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.geocode.model.GeoPoint;
-import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
 import java.time.LocalDate;
 import java.util.List;
