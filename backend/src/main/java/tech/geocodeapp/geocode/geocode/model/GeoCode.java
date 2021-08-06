@@ -106,19 +106,19 @@ public class GeoCode {
     /**
      * Overloaded Constructor
      *
-     * @param id The unique identifier for the GeoCode
-     * @param difficulty The description of how difficult it is to locate the GeoCode in the real world
-     * @param available If the GeoCode is active in the system
-     * @param description The description of where the GeoCode is and what it involves
-     * @param hints The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
+     * @param id           The unique identifier for the GeoCode
+     * @param difficulty   The description of how difficult it is to locate the GeoCode in the real world
+     * @param available    If the GeoCode is active in the system
+     * @param description  The description of where the GeoCode is and what it involves
+     * @param hints        The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
      * @param collectables The list of collectables stored inside the GeoCode
-     * @param qrCode A short unique identifier to find the GeoCode in the system by the user from the real world
-     * @param location The longitude and latitude of the GeoCode in the real world
-     * @param createdBy The user's ID who created the GeoCode
-     * @param eventID The ID of the Event that this GeoCode is part of. Is NULL if this GeoCode is not part of an Event
+     * @param qrCode       A short unique identifier to find the GeoCode in the system by the user from the real world
+     * @param location     The longitude and latitude of the GeoCode in the real world
+     * @param createdBy    The user's ID who created the GeoCode
+     * @param eventID      The ID of the Event that this GeoCode is part of. Is NULL if this GeoCode is not part of an Event
      */
-    public GeoCode(UUID id, Difficulty difficulty, Boolean available, String description, Collection<String> hints,
-                   Collection<UUID> collectables, String qrCode, GeoPoint location, UUID createdBy, UUID eventID) {
+    public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints,
+                    Collection< UUID > collectables, String qrCode, GeoPoint location, UUID createdBy, UUID eventID ) {
 
         this.id = id;
         this.difficulty = difficulty;
@@ -476,6 +476,40 @@ public class GeoCode {
     }
 
     /**
+     * Sets the eventID attribute to the specified value
+     *
+     * @param eventID the unique eventID to set the GeoCode to
+     *
+     * @return the model after changing the eventID
+     */
+    @Valid
+    public GeoCode eventID( UUID eventID ) {
+
+        this.eventID = eventID;
+        return this;
+    }
+
+    /**
+     * Gets the saved createdBy attribute
+     *
+     * @return the stored createdBy attribute
+     */
+    public UUID getEventID() {
+
+        return eventID;
+    }
+
+    /**
+     * Sets the eventID attribute to the specified value
+     *
+     * @param eventID the value the eventID should be set to
+     */
+    public void setEventID( UUID eventID ) {
+
+        this.eventID = eventID;
+    }
+
+    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -503,7 +537,8 @@ public class GeoCode {
                 Objects.equals( this.collectables, geoCode.collectables ) &&
                 Objects.equals( this.qrCode, geoCode.qrCode ) &&
                 Objects.equals( this.location, geoCode.location ) &&
-                Objects.equals( this.createdBy, geoCode.createdBy );
+                Objects.equals( this.createdBy, geoCode.createdBy ) &&
+                Objects.equals( this.eventID, geoCode.eventID );
     }
 
     /**
@@ -535,6 +570,7 @@ public class GeoCode {
                 "    qrCode: " + toIndentedString( qrCode ) + "\n" +
                 "    location: " + toIndentedString( location ) + "\n" +
                 "    createdBy: " + toIndentedString( createdBy ) + "\n" +
+                "    eventID: " + toIndentedString( eventID ) + "\n" +
                 "}";
     }
 
@@ -552,11 +588,4 @@ public class GeoCode {
         return o.toString().replace( "\n", "\n    " );
     }
 
-    public UUID getEventID() {
-        return eventID;
-    }
-
-    public void setEventID(UUID eventID) {
-        this.eventID = eventID;
-    }
 }
