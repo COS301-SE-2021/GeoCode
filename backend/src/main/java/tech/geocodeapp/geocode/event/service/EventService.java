@@ -23,6 +23,18 @@ public interface EventService {
     CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException;
 
     /**
+     * Create a new TimeTrial for an event, that will be active for a pre-determined
+     * amount of time
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    CreateTimeTrialResponse createTimeTrial( CreateTimeTrialRequest request ) throws InvalidRequestException;
+
+    /**
      * Get a specified Event that is stored in the repository
      *
      * @param request the attributes the response should be created from
@@ -105,17 +117,5 @@ public interface EventService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) throws InvalidRequestException;
-
-    /**
-     * Create a new TimeTrial for an event, that will be active for a pre-determined
-     * amount of time
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    CreateTimeTrialResponse createTimeTrial( CreateTimeTrialRequest request ) throws InvalidRequestException;
 
 }
