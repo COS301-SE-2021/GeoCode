@@ -108,10 +108,10 @@ public class EventServiceImpl implements EventService {
         var levels = new ArrayList<Level>();
 
         /* Store the list of GeoCOde UUIDs to create a Level on */
-        var geoCodes = request.getGeoCodesToFind();
+        List< UUID > geoCodes = request.getGeoCodesToFind();
 
         /* Go through each UUID */
-        for ( GeoCode geoCode : geoCodes ) {
+        for ( UUID geoCode : geoCodes ) {
 
             /*
             * Create the Level with a random UUID
@@ -511,5 +511,32 @@ public class EventServiceImpl implements EventService {
         /* The new leaderboard was successfully made */
         return new CreateLeaderboardResponse( true );
     }
-    
+
+    /**
+     * Create a new TimeTrial for an event, that will be active for a pre-determined
+     * amount of time
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public CreateTimeTrialResponse createTimeTrial( CreateTimeTrialRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getTimeLimit() != 0.0 ) {
+
+            throw new InvalidRequestException();
+        }
+
+
+
+        return null;
+    }
+
 }
