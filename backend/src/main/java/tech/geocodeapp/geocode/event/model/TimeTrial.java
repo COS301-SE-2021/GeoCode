@@ -5,11 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,7 +19,7 @@ import java.util.UUID;
  */
 @Entity
 @Validated
-@Table( name = "timetrial" )
+@DiscriminatorValue( "1" )
 public class TimeTrial extends Event {
 
     /**
