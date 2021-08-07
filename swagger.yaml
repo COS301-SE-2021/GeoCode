@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.0"
+  version: "1.5.1"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -402,11 +402,49 @@ paths:
             application/xml:
               schema:
                 $ref: "#/components/schemas/CreateGeoCodeResponse"
+        '404':
+          description: "Return the GeoCode could not be created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateGeoCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/CreateGeoCodeResponse"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
-
+  /GeoCode/getAllGeoCodes:
+    get:
+      tags:
+        - "GeoCode"
+      summary: "Get all the GeoCodes on the platform"
+      description: "Get all the GeoCodes that are stored on the platform"
+      operationId: "getGeoCodes"
+      responses:
+        '200':
+          description: "Returned all the GeoCodes successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodesResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodesResponse"
+        '404':
+          description: "Return GeoCodes were not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodesResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodesResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
   /GeoCode/getGeoCode:
     post:
       tags:
@@ -474,6 +512,15 @@ paths:
             application/xml:
               schema:
                 $ref: "#/components/schemas/GetCollectablesResponse"
+        '404':
+          description: "Return the Collectables for a GeoCode was not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCollectablesResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetCollectablesResponse"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
       security:
@@ -498,6 +545,15 @@ paths:
       responses:
         '200':
           description: "Returned all the GeoCode's with the specified difficulty"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodesByDifficultyResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodesByDifficultyResponse"
+        '404':
+          description: "Return the new Event was not successfully created"
           content:
             application/json:
               schema:
@@ -549,27 +605,6 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
       security:
         -   bearerAuth: [ ]
-  /GeoCode/getGeoCodes:
-    get:
-      tags:
-        - "GeoCode"
-      summary: "Get all the GeoCodes on the platform"
-      description: "Get all the GeoCodes that are stored on the platform"
-      operationId: "getGeoCodes"
-      responses:
-        '200':
-          description: "Returned all the GeoCodes successfully"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetGeoCodesResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetGeoCodesResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
   /GeoCode/getHints:
     post:
       tags:
@@ -597,6 +632,15 @@ paths:
             application/xml:
               schema:
                 $ref: "#/components/schemas/GetHintsResponse"
+        '404':
+          description: "Return the hints for the GeoCode was not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetHintsResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetHintsResponse"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
       security:
@@ -610,7 +654,7 @@ paths:
       operationId: "getGeoCodeByQRCode"
       requestBody:
         required: true
-        description: "Request to get a GeoCode's associated with the given QR Code"
+        description: "Request to get a GeoCode associated with the given QR Code"
         content:
           application/json:
             schema:
@@ -628,10 +672,59 @@ paths:
             application/xml:
               schema:
                 $ref: "#/components/schemas/GetGeoCodeByQRCodeResponse"
+        '404':
+          description: "Return the GeoCode was not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodeByQRCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetGeoCodeByQRCodeResponse"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
+  /GeoCode/getCollectablesInGeoCodeByQRCode:
+    post:
+      tags:
+        - "GeoCode"
+      summary: "Get the GeoCode's collectables associated with the given QR Code"
+      description: "Get the GeoCode's collectables associated with the given QR Code"
+      operationId: "getGeoCodeByQRCode"
+      requestBody:
+        required: true
+        description: "Request to get a GeoCode's collectables associated with the given QR Code"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetCollectablesInGeoCodeByQRCodeRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetCollectablesInGeoCodeByQRCodeRequest"
+      responses:
+        '200':
+          description: "Returned the associated GeoCode successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCollectablesInGeoCodeByQRCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetCollectablesInGeoCodeByQRCodeResponse"
+        '404':
+          description: "Return the GeoCode's collectables was not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCollectablesInGeoCodeByQRCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetCollectablesInGeoCodeByQRCodeResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        -   bearerAuth: [ ]
   /GeoCode/getGeoCodeByLocation:
     post:
       tags:
@@ -659,41 +752,60 @@ paths:
             application/xml:
               schema:
                 $ref: "#/components/schemas/GetGeoCodeByLocationResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
-  /GeoCode/getTrackables:
-    post:
-      tags:
-        - "GeoCode"
-      summary: "Get the Trackable for a certain GeoCode"
-      description: "Get a GeoCode's Trackable"
-      operationId: "getTrackables"
-      requestBody:
-        required: true
-        description: "Request to get a GeoCode's Trackable"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GetTrackablesRequest"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/GetTrackablesRequest"
-      responses:
-        '200':
-          description: "Returned the GeoCode's Trackable successfully"
+        '404':
+          description: "Return the GeoCode was not found"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetTrackablesResponse"
+                $ref: "#/components/schemas/GetGeoCodeByLocationResponse"
             application/xml:
               schema:
-                $ref: "#/components/schemas/GetTrackablesResponse"
+                $ref: "#/components/schemas/GetGeoCodeByLocationResponse"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
+  /GeoCode/getCollectablesInGeoCodesByLocation:
+    post:
+      tags:
+        - "GeoCode"
+      summary: "Get the GeoCode's collectables at or near the given location"
+      description: "Get the GeoCode's collectables at or near the given location"
+      operationId: "getGeoCodeByLocation"
+      requestBody:
+        required: true
+        description: "Request to get a GeoCode's collectables at or near the given location"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetCollectablesInGeoCodeByQRCodeRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetCollectablesInGeoCodeByQRCodeRequest"
+      responses:
+        '200':
+          description: "Return the GeoCodec at or near the given location"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCollectablesInGeoCodesByLocationResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetCollectablesInGeoCodesByLocationResponse"
+        '404':
+          description: "Return the GeoCode's collectables was not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCollectablesInGeoCodesByLocationResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetCollectablesInGeoCodesByLocationResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
   /GeoCode/swapCollectables:
     post:
       tags:
@@ -714,6 +826,15 @@ paths:
       responses:
         '200':
           description: "Swapped the GeoCode's Collectable successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SwapCollectablesResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/SwapCollectablesResponse"
+        '404':
+          description: "Return the GeoCode did not swap collectables successfully"
           content:
             application/json:
               schema:
@@ -745,6 +866,15 @@ paths:
       responses:
         '200':
           description: "Updated the GeoCode's availability successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateAvailabilityResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/UpdateAvailabilityResponse"
+        '404':
+          description: "Return the GeoCode Availability was not updated successfully"
           content:
             application/json:
               schema:
@@ -1962,12 +2092,15 @@ components:
         id:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         difficulty:
           $ref: "#/components/schemas/Difficulty"
         available:
           type: boolean
+          example: "True"
         description:
           type: string
+          example: "This describes a GeoCode"
         hints:
           type: array
           items:
@@ -1979,10 +2112,36 @@ components:
             format: uuid
         qrCode:
           type: string
+          example: "1qwer3d4"
         location:
           $ref: "#/components/schemas/GeoPoint"
+        createdBy:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        eventID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "GeoCode"
+
+    GeoPoint:
+      type: "object"
+      required:
+        - latitude
+        - longitude
+      properties:
+        latitude:
+          type: number
+          format: float
+          example: "25.7545"
+        longitude:
+          type: number
+          format: float
+          example: "28.2314"
+      xml:
+        name: "GeoPoint"
 
     Difficulty:
       type: string
@@ -1996,20 +2155,17 @@ components:
     CreateGeoCodeRequest:
       type: "object"
       required:
-        - id
         - description
         - location
         - difficulty
         - hints
         - available
       properties:
-        id:
-          type: string
-          format: uuid
         description:
           type: string
+          example: "This describes the GeoCode to be created"
         location:
-          type: string
+          $ref: "#/components/schemas/GeoPoint"
         hints:
           type: array
           items:
@@ -2018,36 +2174,55 @@ components:
           $ref: "#/components/schemas/Difficulty"
         available:
           type: boolean
+          example: "This describes the GeoCode to be created"
+        eventID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "CreateGeoCodeRequest"
 
     CreateGeoCodeResponse:
       type: "object"
       required:
-        - geoCode
+        - success
       properties:
-        geoCode:
-          $ref: "#/components/schemas/GeoCode"
+        success:
+          type: boolean
+          example: "True"
       xml:
         name: "CreateGeoCodeResponse"
+
+    GetGeoCodesResponse:
+      type: "object"
+      required:
+        - geocodes
+      properties:
+        geocodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/GeoCode"
+      xml:
+        name: "GetGeoCodesResponse"
 
     GetGeoCodeRequest:
       type: "object"
       required:
-        - id
+        - geoCodeID
       properties:
-        id:
+        geoCodeID:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "GetGeoCodeRequest"
 
     GetGeoCodeResponse:
       type: "object"
       required:
-        - geoCode
+        - foundGeoCode
       properties:
-        geoCode:
+        foundGeoCode:
           $ref: "#/components/schemas/GeoCode"
       xml:
         name: "GetGeoCodeResponse"
@@ -2060,7 +2235,7 @@ components:
         difficulty:
           $ref: "#/components/schemas/Difficulty"
       xml:
-        name: "getGeoCodesByDifficultyRequest"
+        name: "GetGeoCodesByDifficultyRequest"
 
     GetGeoCodesByDifficultyResponse:
       type: "object"
@@ -2070,7 +2245,7 @@ components:
           items:
             $ref: "#/components/schemas/GeoCode"
       xml:
-        name: "getGeoCodesByDifficultyResponse"
+        name: "GetGeoCodesByDifficultyResponse"
 
     GetGeoCodesByDifficultyListRequest:
       type: "object"
@@ -2094,18 +2269,6 @@ components:
       xml:
         name: "GetGeoCodesByDifficultyListResponse"
 
-    GetGeoCodesResponse:
-      type: "object"
-      required:
-        - geocodes
-      properties:
-        geocodes:
-          type: array
-          items:
-            $ref: "#/components/schemas/GeoCode"
-      xml:
-        name: "getGeoCodesByDifficultyResponse"
-
     GetHintsRequest:
       type: "object"
       required:
@@ -2114,8 +2277,9 @@ components:
         geoCodeID:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
-        name: "getGeoCodesByDifficultyRequest"
+        name: "GetHintsRequest"
 
     GetHintsResponse:
       type: "object"
@@ -2125,103 +2289,130 @@ components:
           items:
             type: string
       xml:
-        name: "getGeoCodesByDifficultyResponse"
+        name: "GetHintsResponse"
 
     GetGeoCodeByQRCodeRequest:
       type: "object"
       required:
-        - description
-        - location
-        - difficulty
-        - hints
+        - qrCode
       properties:
-        description:
+        qrCode:
           type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: "#/components/schemas/Difficulty"
+          example: "1qwer3d4"
       xml:
-        name: "getGeoCodeByQRCodeRequest"
+        name: "GetGeoCodeByQRCodeRequest"
 
     GetGeoCodeByQRCodeResponse:
       type: "object"
+      required:
+        - id
+        - available
+        - description
+        - location
+        - difficulty
       properties:
         id:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        available:
+          type: boolean
+          example: "True"
+        description:
+          type: string
+          example: "This describes the GeoCode to be created"
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+        difficulty:
+          $ref: "#/components/schemas/Difficulty"
+      xml:
+        name: "GetGeoCodeByQRCodeResponse"
+
+    GetCollectablesInGeoCodeByQRCodeRequest:
+      type: "object"
+      required:
+        - qrCode
+        - geoCodeID
+      properties:
         qrCode:
           type: string
+          example: "1qwer3d4"
+        geoCodeID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
-        name: "getGeoCodeByQRCodeResponse"
+        name: "GetCollectablesInGeoCodeByQRCodeRequest"
+
+    GetCollectablesInGeoCodeByQRCodeResponse:
+      type: "object"
+      required:
+        - storedCollectable
+      properties:
+        storedCollectable:
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectableResponse"
+      xml:
+        name: "GetCollectablesInGeoCodeByQRCodeResponse"
 
     GetGeoCodeByLocationRequest:
       type: "object"
       required:
-        - description
         - location
-        - difficulty
-        - hints
       properties:
-        description:
-          type: string
         location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: "#/components/schemas/Difficulty"
+          $ref: "#/components/schemas/GeoPoint"
       xml:
-        name: "getGeoCodeByLocationRequest"
+        name: "GetGeoCodeByLocationRequest"
 
     GetGeoCodeByLocationResponse:
       type: "object"
-      properties:
-        id:
-          type: string
-          format: uuid
-        qrCode:
-          type: string
-      xml:
-        name: "getGeoCodeByLocationResponse"
-
-    GetTrackablesRequest:
-      type: "object"
       required:
+        - id
+        - available
         - description
         - location
         - difficulty
-        - hints
-      properties:
-        description:
-          type: string
-        location:
-          type: string
-        hints:
-          type: array
-          items:
-            type: string
-        difficulty:
-          $ref: "#/components/schemas/Difficulty"
-      xml:
-        name: "getTrackablesRequest"
-
-    GetTrackablesResponse:
-      type: "object"
       properties:
         id:
           type: string
           format: uuid
-        qrCode:
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        available:
+          type: boolean
+          example: "True"
+        description:
           type: string
+          example: "This describes the GeoCode to be created"
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+        difficulty:
+          $ref: "#/components/schemas/Difficulty"
       xml:
-        name: "getTrackablesResponse"
+        name: "GetGeoCodeByLocationResponse"
+
+    GetCollectablesInGeoCodesByLocationRequest:
+      type: "object"
+      required:
+        - location
+      properties:
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+      xml:
+        name: "GetCollectablesInGeoCodeByQRCodeRequest"
+
+    GetCollectablesInGeoCodesByLocationResponse:
+      type: "object"
+      required:
+        - storedCollectable
+      properties:
+        storedCollectable:
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectableResponse"
+      xml:
+        name: "GetCollectablesInGeoCodeByQRCodeResponse"
 
     SwapCollectablesRequest:
       type: "object"
@@ -2232,41 +2423,49 @@ components:
         collectable:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         geoCodeID:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
-        name: "swapCollectablesRequest"
+        name: "SwapCollectablesRequest"
 
     SwapCollectablesResponse:
       type: "object"
+      required:
+        - success
       properties:
         success:
           type: boolean
+          example: "True"
       xml:
-        name: "swapCollectablesResponse"
+        name: "SwapCollectablesResponse"
 
     UpdateAvailabilityRequest:
       type: "object"
       required:
-        - geoCodeID
         - available
       properties:
         geoCodeID:
           type: string
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
           format: uuid
         available:
           type: boolean
+          example: "True"
       xml:
-        name: "updateAvailabilityRequest"
+        name: "UpdateAvailabilityRequest"
 
     UpdateAvailabilityResponse:
       type: "object"
+      required:
+        - success
       properties:
         success:
           type: boolean
       xml:
-        name: "updateAvailabilityResponse"
+        name: "UpdateAvailabilityResponse"
 
     GetCollectablesRequest:
       type: "object"
@@ -2277,7 +2476,19 @@ components:
           type: string
           format: uuid
       xml:
-        name: "getCollectablesRequest"
+        name: "GetCollectablesRequest"
+
+    GetCollectablesResponse:  #This is for GeoCode
+      type: "object"
+      required:
+        - collectables
+      properties:
+        collectables:
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectableResponse"
+      xml:
+        name: "GetCollectablesResponse"
 
     CollectableType:
       type: "object"
@@ -2397,18 +2608,6 @@ components:
           format: uuid
       xml:
         name: "CreateCollectableRequest"
-
-    GetCollectablesResponse:
-      type: "object"
-      required:
-        - collectables
-      properties:
-        collectables:
-          type: array
-          items:
-            $ref: "#/components/schemas/CollectableResponse"
-      xml:
-        name: "GetCollectablesResponse"
 
     GetCollectableTypesResponse:
       type: "object"
@@ -2598,23 +2797,6 @@ components:
           $ref: "#/components/schemas/Event"
       xml:
         name: "Leaderboard"
-
-    GeoPoint:
-      type: "object"
-      required:
-        - latitude
-        - longitude
-      properties:
-        latitude:
-          type: number
-          format: float
-          example: 25.7545
-        longitude:
-          type: number
-          format: float
-          example: 28.2314
-      xml:
-        name: "GeoPoint"
 
     MyLeaderboardDetails:
       type: "object"
@@ -3163,8 +3345,10 @@ components:
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         name:
           type: string
+          example: "My Event"
         description:
           type: string
+          example: "There are 4 GeoCodes to find in this Event."
         location:
           $ref: "#/components/schemas/GeoPoint"
         levels:
@@ -3187,11 +3371,28 @@ components:
             $ref: "#/components/schemas/Leaderboard"
       xml:
         name: "Event"
+    TimeTrial:
+      type: "object"
+      allOf:
+        -   $ref: "#/components/schemas/Event"
+      required:
+        - timeLimit
+      properties:
+        timeLimit:
+          type: number
+          example: "60.0"
+      xml:
+        name: "TimeTrial"
     Level:
       type: "object"
       required:
+        - id
         - target
       properties:
+        id:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         target:
           $ref: "#/components/schemas/GeoCode"
         onLevel:
@@ -3201,45 +3402,38 @@ components:
             format: uuid
             example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
-        name: "TimeTrial"
-    TimeTrial:
+        name: "Level"
+    TimeLog:
       type: "object"
       required:
-        - timeLimit
+        - userID
+        - geoCodeID
+        - startTime
       properties:
-        timeLimit:
-          type: number
-      xml:
-        name: "TimeTrial"
-
-    ChangeAvailabilityRequest:
-      type: "object"
-      required:
-        - eventID
-        - availability
-      properties:
-        eventID:
+        userID:
           type: string
           format: uuid
-        availability:
-          type: boolean
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        geoCodeID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        startTime:
+          type: string
+          format: date-time
       xml:
-        name: "ChangeAvailabilityRequest"
+        name: "Level"
 
-    ChangeAvailabilityResponse:
-      type: "object"
-      required:
-        - success
-      properties:
-        success:
-          type: boolean
-      xml:
-        name: "ChangeAvailabilityResponse"
+    OrderLevels:
+      type: string
+      description: "The order an Event should follow with completing Levels"
+      enum:
+        - "GIVEN"
+        - "DIFFICULTY"
+        - "DISTANCE"
 
     GetAllEventsResponse:
       type: "object"
-      required:
-        - events
       properties:
         events:
           type: array
@@ -3255,12 +3449,67 @@ components:
         - description
         - location
         - beginDate
-        - GeoCodesToFind
+        - geoCodesToFind
+        - orderBy
       properties:
         name:
           type: string
+          example: "My Event"
         description:
           type: string
+          example: "There are 4 GeoCodes to find in this Event."
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+        beginDate:
+          type: string
+          format: date
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2017-01-01"
+        endDate:
+          type: string
+          format: date
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2017-01-01"
+        geoCodesToFind:
+          type: array
+          items:
+            $ref: "#/components/schemas/GeoCode"
+        orderBy:
+          $ref: "#/components/schemas/OrderLevels"
+      xml:
+        name: "CreateEventRequest"
+
+    CreateEventResponse:
+      type: "object"
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          example: "True"
+      xml:
+        name: "CreateEventResponse"
+
+    CreateTimeTrialRequest:
+      type: "object"
+      required:
+        - timeLimit
+        - name
+        - description
+        - location
+        - beginDate
+        - GeoCodesToFind
+        - orderBy
+      properties:
+        timeLimit:
+          type: number
+          example: "10.0"
+        name:
+          type: string
+          example: "My Event"
+        description:
+          type: string
+          example: "There are 4 GeoCodes to find in this Event."
         location:
           $ref: "#/components/schemas/GeoPoint"
         beginDate:
@@ -3277,27 +3526,29 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/GeoCode"
+        orderBy:
+          $ref: "#/components/schemas/OrderLevels"
       xml:
-        name: "CreateEventRequest"
+        name: "CreateTimeTrialRequest"
 
-    CreateEventResponse:
+    CreateTimeTrialResponse:
       type: "object"
       required:
         - success
       properties:
         success:
           type: boolean
+          example: "True"
       xml:
-        name: "CreateEventResponse"
+        name: "CreateTimeTrialResponse"
 
     GetEventRequest:
       type: "object"
-      required:
-        - eventID
       properties:
         eventID:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "GetEventRequest"
 
@@ -3305,10 +3556,10 @@ components:
       type: "object"
       required:
         - found
-        - foundEvent
       properties:
         found:
           type: boolean
+          example: "True"
         foundEvent:
           $ref: "#/components/schemas/Event"
       xml:
@@ -3317,26 +3568,23 @@ components:
     GetCurrentEventGeoCodeRequest:
       type: "object"
       required:
-        - eventID
         - userID
       properties:
-        eventID:
-          type: string
-          format: uuid
         userID:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "GetCurrentEventGeoCodeRequest"
 
     GetCurrentEventGeoCodeResponse:
       type: "object"
       required:
-        - foundEvent
         - found
       properties:
         found:
           type: boolean
+          example: "True"
         foundEvent:
           $ref: "#/components/schemas/Event"
       xml:
@@ -3351,19 +3599,21 @@ components:
         eventID:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         userID:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "NextStageRequest"
 
     NextStageResponse:
       type: "object"
-      required:
-        - nextGeoCode
       properties:
         nextGeoCode:
-          $ref: "#/components/schemas/GeoCode"
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "NextStageResponse"
 
@@ -3377,13 +3627,12 @@ components:
           $ref: "#/components/schemas/GeoPoint"
         radius:
           type: number
+          example: "10.0"
       xml:
         name: "EventsNearMeRequest"
 
     EventsNearMeResponse:
       type: "object"
-      required:
-        - foundEvents
       properties:
         foundEvents:
           type: array
@@ -3404,8 +3653,6 @@ components:
 
     GetEventsByLocationResponse:
       type: "object"
-      required:
-        - events
       properties:
         events:
           type: array
@@ -3413,59 +3660,6 @@ components:
             $ref: "#/components/schemas/Event"
       xml:
         name: "GetEventsByLocationResponse"
-
-    CreatePointRequest:
-      type: "object"
-      required:
-        - amount
-        - userID
-        - leaderboardID
-      properties:
-        amount:
-          type: number
-          example: 1
-        userID:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        leaderboardID:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "CreatePointRequest"
-
-    PointResponse:
-      type: "object"
-      required:
-        - point
-      properties:
-        point:
-          $ref: "#/components/schemas/Point"
-      xml:
-        name: "PointResponse"
-
-    CreateTimeTrialRequest:
-      type: "object"
-      required:
-        - timeLimit
-      properties:
-        timeLimit:
-          type: number
-      xml:
-        name: "CreateTimeTrialRequest"
-
-    CreateTimeTrialResponse:
-      type: "object"
-      required:
-        - timeTrial
-      properties:
-        timeTrial:
-          type: array
-          items:
-            $ref: "#/components/schemas/TimeTrial"
-      xml:
-        name: "CreateTimeTrialResponse"
 
     GetPointsByUserRequest:
       type: "object"

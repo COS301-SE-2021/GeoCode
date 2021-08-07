@@ -2,13 +2,14 @@ package tech.geocodeapp.geocode.event.model;
 
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -18,15 +19,14 @@ import java.util.UUID;
  */
 @Entity
 @Validated
-@Table( name = "timetrial" )
+@DiscriminatorValue( "1" )
 public class TimeTrial extends Event {
 
     /**
      * The amount of time a user has to complete a special Event
      */
     @JsonProperty( "timeLimit" )
-    @NotNull( message = "TimeTrial's timeLimit cannot be null." )
-    private Double timeLimit;
+    private double timeLimit;
 
     /**
      * Default constructor
@@ -38,13 +38,27 @@ public class TimeTrial extends Event {
     /**
      * Overloaded Constructor
      *
-     * @param id The unique identifier for the TimeTrial
+     * @param id The unique identifier for the Event
+     * @param name What the Event is called
+     * @param description A brief description on what the Event is about
+     * @param location The location of the Event
+     * @param levels The different Levels with what GeoCode to find and which Users are searching are on the different Levels
+     * @param beginDate The starting Date of the Event
+     * @param endDate The end Date of the Event
+     * @param leaderboards The different rankings of the users partaking in the Event
      * @param timeLimit The amount of time a user has to complete a special Event
      */
-    public TimeTrial( UUID id, Double timeLimit ) {
+    public TimeTrial( UUID id, String name, String description, GeoPoint location, List< Level > levels,
+                  LocalDate beginDate, LocalDate endDate, List< Leaderboard > leaderboards, double timeLimit ) {
 
         this.id = id;
-        this.timeLimit = timeLimit;
+        this.name = name;
+        this.description = description;
+        this.location = location;
+        this.levels = levels;
+        this.beginDate = beginDate;
+        this.endDate = endDate;
+        this.leaderboards = leaderboards;
     }
 
     /**
@@ -65,7 +79,7 @@ public class TimeTrial extends Event {
      *
      * @return the stored timeLimit attribute
      */
-    public Double getTimeLimit() {
+    public double getTimeLimit() {
 
         return timeLimit;
     }
@@ -75,7 +89,7 @@ public class TimeTrial extends Event {
      *
      * @param timeLimit the value the timeLimit should be set to
      */
-    public void setTimeLimit( Double timeLimit ) {
+    public void setTimeLimit( double timeLimit ) {
 
         this.timeLimit = timeLimit;
     }

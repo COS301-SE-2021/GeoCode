@@ -8,6 +8,7 @@ import javax.validation.constraints.*;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * NextStageResponse object to return the next GeoCode the user needs to search for
@@ -19,8 +20,7 @@ public class NextStageResponse {
      * The next GeoCode the User needs to search for
      */
     @JsonProperty( "nextGeoCode" )
-    @NotNull( message = "NextStageResponse eventID attribute cannot be null." )
-    private GeoCode nextGeoCode;
+    private UUID nextGeoCode;
 
     /**
      * Default Constructor
@@ -34,7 +34,7 @@ public class NextStageResponse {
      *
      * @param nextGeoCode The next GeoCode the User needs to search for
      */
-    public NextStageResponse( GeoCode nextGeoCode ) {
+    public NextStageResponse( UUID nextGeoCode ) {
 
         this.nextGeoCode = nextGeoCode;
     }
@@ -46,7 +46,7 @@ public class NextStageResponse {
      *
      * @return the request after the nextGeoCode has been changed
      */
-    public NextStageResponse nextGeoCode( GeoCode nextGeoCode ) {
+    public NextStageResponse nextGeoCode( UUID nextGeoCode ) {
 
         this.nextGeoCode = nextGeoCode;
         return this;
@@ -57,8 +57,7 @@ public class NextStageResponse {
      *
      * @return the stored nextGeoCode attribute
      */
-    @Valid
-    public GeoCode getNextGeoCode() {
+    public UUID getNextGeoCode() {
 
         return nextGeoCode;
     }
@@ -68,7 +67,7 @@ public class NextStageResponse {
      *
      * @param nextGeoCode the value the attribute should be set to
      */
-    public void setNextGeoCode( GeoCode nextGeoCode ) {
+    public void setNextGeoCode( UUID nextGeoCode ) {
 
         this.nextGeoCode = nextGeoCode;
     }
