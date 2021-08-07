@@ -135,6 +135,118 @@ export class GeoCodeService {
     }
 
     /**
+     * Get the GeoCode&#x27;s collectables associated with the given QR Code
+     * Get the GeoCode&#x27;s collectables associated with the given QR Code
+     * @param body Request to get a GeoCode&#x27;s collectables associated with the given QR Code
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getCollectablesInGeoCodeByQRCode(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'body', reportProgress?: boolean): Observable<GetCollectablesInGeoCodeByQRCodeResponse>;
+    public getCollectablesInGeoCodeByQRCode(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetCollectablesInGeoCodeByQRCodeResponse>>;
+    public getCollectablesInGeoCodeByQRCode(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetCollectablesInGeoCodeByQRCodeResponse>>;
+    public getCollectablesInGeoCodeByQRCode(body: GetCollectablesInGeoCodeByQRCodeRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getCollectablesInGeoCodeByQRCode.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetCollectablesInGeoCodeByQRCodeResponse>('post',`${this.basePath}/GeoCode/getCollectablesInGeoCodeByQRCode`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get the GeoCode&#x27;s collectables at or near the given location
+     * Get the GeoCode&#x27;s collectables at or near the given location
+     * @param body Request to get a GeoCode&#x27;s collectables at or near the given location
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getCollectablesInGeoCodesByLocation(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'body', reportProgress?: boolean): Observable<GetCollectablesInGeoCodesByLocationResponse>;
+    public getCollectablesInGeoCodesByLocation(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetCollectablesInGeoCodesByLocationResponse>>;
+    public getCollectablesInGeoCodesByLocation(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetCollectablesInGeoCodesByLocationResponse>>;
+    public getCollectablesInGeoCodesByLocation(body: GetCollectablesInGeoCodeByQRCodeRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getCollectablesInGeoCodesByLocation.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetCollectablesInGeoCodesByLocationResponse>('post',`${this.basePath}/GeoCode/getCollectablesInGeoCodesByLocation`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get a specific GeoCode
      * Get a GeoCode with a specified ID
      * @param body Request to get a stored GeoCode with teh specified ID
@@ -247,62 +359,6 @@ export class GeoCodeService {
     }
 
     /**
-     * Get the GeoCode&#x27;s collectables at or near the given location
-     * Get the GeoCode&#x27;s collectables at or near the given location
-     * @param body Request to get a GeoCode&#x27;s collectables at or near the given location
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getGeoCodeByLocation_1(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'body', reportProgress?: boolean): Observable<GetCollectablesInGeoCodesByLocationResponse>;
-    public getGeoCodeByLocation_1(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetCollectablesInGeoCodesByLocationResponse>>;
-    public getGeoCodeByLocation_1(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetCollectablesInGeoCodesByLocationResponse>>;
-    public getGeoCodeByLocation_1(body: GetCollectablesInGeoCodeByQRCodeRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getGeoCodeByLocation_1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<GetCollectablesInGeoCodesByLocationResponse>('post',`${this.basePath}/GeoCode/getCollectablesInGeoCodesByLocation`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Get the GeoCode associated with the given QR Code
      * Get the GeoCode associated with the given QR Code
      * @param body Request to get a GeoCode associated with the given QR Code
@@ -348,62 +404,6 @@ export class GeoCodeService {
         }
 
         return this.httpClient.request<GetGeoCodeByQRCodeResponse>('post',`${this.basePath}/GeoCode/getGeoCodeByQRCode`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get the GeoCode&#x27;s collectables associated with the given QR Code
-     * Get the GeoCode&#x27;s collectables associated with the given QR Code
-     * @param body Request to get a GeoCode&#x27;s collectables associated with the given QR Code
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getGeoCodeByQRCode_2(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'body', reportProgress?: boolean): Observable<GetCollectablesInGeoCodeByQRCodeResponse>;
-    public getGeoCodeByQRCode_2(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetCollectablesInGeoCodeByQRCodeResponse>>;
-    public getGeoCodeByQRCode_2(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetCollectablesInGeoCodeByQRCodeResponse>>;
-    public getGeoCodeByQRCode_2(body: GetCollectablesInGeoCodeByQRCodeRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getGeoCodeByQRCode_2.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<GetCollectablesInGeoCodeByQRCodeResponse>('post',`${this.basePath}/GeoCode/getCollectablesInGeoCodeByQRCode`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

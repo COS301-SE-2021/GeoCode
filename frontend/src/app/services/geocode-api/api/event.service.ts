@@ -17,7 +17,6 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { ChangeAvailabilityResponse } from '../model/changeAvailabilityResponse';
 import { CreateEventRequest } from '../model/createEventRequest';
 import { CreateEventResponse } from '../model/createEventResponse';
 import { CreateLeaderboardRequest } from '../model/createLeaderboardRequest';
@@ -33,16 +32,8 @@ import { GetEventRequest } from '../model/getEventRequest';
 import { GetEventResponse } from '../model/getEventResponse';
 import { GetEventsByLocationRequest } from '../model/getEventsByLocationRequest';
 import { GetEventsByLocationResponse } from '../model/getEventsByLocationResponse';
-import { GetLeaderBoardByTimeTrialRequest } from '../model/getLeaderBoardByTimeTrialRequest';
-import { GetLeaderBoardByTimeTrialResponse } from '../model/getLeaderBoardByTimeTrialResponse';
-import { GetPointsByLeaderBoardRequest } from '../model/getPointsByLeaderBoardRequest';
-import { GetPointsByLeaderBoardResponse } from '../model/getPointsByLeaderBoardResponse';
-import { GetPointsByUserRequest } from '../model/getPointsByUserRequest';
-import { GetPointsByUserResponse } from '../model/getPointsByUserResponse';
-import { GetPointsResponse } from '../model/getPointsResponse';
 import { NextStageRequest } from '../model/nextStageRequest';
 import { NextStageResponse } from '../model/nextStageResponse';
-import { PointResponse } from '../model/pointResponse';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -79,52 +70,6 @@ export class EventService {
         return false;
     }
 
-
-    /**
-     * Changes an Event&#x27;s availability
-     * Changes the specified Event&#x27;s availability to the given availability
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public changeAvailability(observe?: 'body', reportProgress?: boolean): Observable<ChangeAvailabilityResponse>;
-    public changeAvailability(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ChangeAvailabilityResponse>>;
-    public changeAvailability(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ChangeAvailabilityResponse>>;
-    public changeAvailability(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-
-        return this.httpClient.request<ChangeAvailabilityResponse>('post',`${this.basePath}/Event/changeAvailability`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
 
     /**
      * Create a new Event
@@ -174,52 +119,6 @@ export class EventService {
         return this.httpClient.request<CreateEventResponse>('post',`${this.basePath}/Event/createEvent`,
             {
                 body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Create a new Point for an Event
-     * Create a new Point with specific values for an Event
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public createEventPoint(observe?: 'body', reportProgress?: boolean): Observable<PointResponse>;
-    public createEventPoint(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PointResponse>>;
-    public createEventPoint(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PointResponse>>;
-    public createEventPoint(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-
-        return this.httpClient.request<PointResponse>('post',`${this.basePath}/Event/createPoint`,
-            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -598,218 +497,6 @@ export class EventService {
         }
 
         return this.httpClient.request<GetEventsByLocationResponse>('post',`${this.basePath}/Event/getEventsByLocation`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get the Leaderboard for a TimeTrial
-     * Get the Leaderboard for a TimeTrial
-     * @param body Request to get the Leaderboard for a TimeTrial
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getLeaderBoardByTimeTrial(body: GetLeaderBoardByTimeTrialRequest, observe?: 'body', reportProgress?: boolean): Observable<GetLeaderBoardByTimeTrialResponse>;
-    public getLeaderBoardByTimeTrial(body: GetLeaderBoardByTimeTrialRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetLeaderBoardByTimeTrialResponse>>;
-    public getLeaderBoardByTimeTrial(body: GetLeaderBoardByTimeTrialRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetLeaderBoardByTimeTrialResponse>>;
-    public getLeaderBoardByTimeTrial(body: GetLeaderBoardByTimeTrialRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getLeaderBoardByTimeTrial.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<GetLeaderBoardByTimeTrialResponse>('post',`${this.basePath}/Event/getLeaderBoardByTimeTrial`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get the Points for an Event
-     * Get the Points for an Event
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getPoints(observe?: 'body', reportProgress?: boolean): Observable<GetPointsResponse>;
-    public getPoints(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetPointsResponse>>;
-    public getPoints(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetPointsResponse>>;
-    public getPoints(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<GetPointsResponse>('post',`${this.basePath}/Event/getPoints`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get Points for a Leaderboard for an Event
-     * Get Points for a Leaderboard for an Event
-     * @param body Request to get Points for a Leaderboard of the specified Event
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getPointsByLeaderBoard(body: GetPointsByLeaderBoardRequest, observe?: 'body', reportProgress?: boolean): Observable<GetPointsByLeaderBoardResponse>;
-    public getPointsByLeaderBoard(body: GetPointsByLeaderBoardRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetPointsByLeaderBoardResponse>>;
-    public getPointsByLeaderBoard(body: GetPointsByLeaderBoardRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetPointsByLeaderBoardResponse>>;
-    public getPointsByLeaderBoard(body: GetPointsByLeaderBoardRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getPointsByLeaderBoard.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<GetPointsByLeaderBoardResponse>('post',`${this.basePath}/Event/getPointsByLeaderBoard`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get the points for the specified Event
-     * Get the points for the specified Event
-     * @param body Request to get the Points for an Event
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getPointsByUser(body: GetPointsByUserRequest, observe?: 'body', reportProgress?: boolean): Observable<GetPointsByUserResponse>;
-    public getPointsByUser(body: GetPointsByUserRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetPointsByUserResponse>>;
-    public getPointsByUser(body: GetPointsByUserRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetPointsByUserResponse>>;
-    public getPointsByUser(body: GetPointsByUserRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getPointsByUser.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<GetPointsByUserResponse>('post',`${this.basePath}/Event/getPointsByUser`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

@@ -15,6 +15,8 @@ export * from './createGeoCodeRequest';
 export * from './createGeoCodeResponse';
 export * from './createLeaderboardRequest';
 export * from './createLeaderboardResponse';
+export * from './createPointRequest';
+export * from './createPointResponse';
 export * from './createTimeTrialRequest';
 export * from './createTimeTrialResponse';
 export * from './deletePointRequest';

@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { CreateLeaderboardRequest } from '../model/createLeaderboardRequest';
 import { CreateLeaderboardResponse } from '../model/createLeaderboardResponse';
+import { CreatePointRequest } from '../model/createPointRequest';
 import { DeletePointRequest } from '../model/deletePointRequest';
 import { DeletePointResponse } from '../model/deletePointResponse';
 import { GetEventLeaderboardRequest } from '../model/getEventLeaderboardRequest';
@@ -124,13 +125,18 @@ export class LeaderboardService {
     /**
      * Create a new point object
      * Creates a new point object for a provided user and leaderboard
+     * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createPoint(observe?: 'body', reportProgress?: boolean): Observable<PointResponse>;
-    public createPoint(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PointResponse>>;
-    public createPoint(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PointResponse>>;
-    public createPoint(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createPoint(body: CreatePointRequest, observe?: 'body', reportProgress?: boolean): Observable<PointResponse>;
+    public createPoint(body: CreatePointRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PointResponse>>;
+    public createPoint(body: CreatePointRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PointResponse>>;
+    public createPoint(body: CreatePointRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling createPoint.');
+        }
 
         let headers = this.defaultHeaders;
 
@@ -156,9 +162,14 @@ export class LeaderboardService {
             'application/json',
             'application/xml'
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
         return this.httpClient.request<PointResponse>('post',`${this.basePath}/Leaderboard/createPoint`,
             {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
