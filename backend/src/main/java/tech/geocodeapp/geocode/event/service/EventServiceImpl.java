@@ -20,6 +20,7 @@ import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
@@ -56,7 +57,8 @@ public class EventServiceImpl implements EventService {
 
     /**
      * Overloaded Constructor
-     * @param eventRepo the repo the created response attributes should save to
+     *
+     * @param eventRepo          the repo the created response attributes should save to
      * @param leaderboardService access to the Leaderboard use cases and repository
      */
     public EventServiceImpl( EventRepository eventRepo,
@@ -93,14 +95,14 @@ public class EventServiceImpl implements EventService {
 
             throw new InvalidRequestException( true );
         } else if ( ( request.getDescription() == null ) || ( request.getLocation() == null ) ||
-                    ( request.getName() == null ) || ( request.getBeginDate() == null ) ||
-                    ( request.getEndDate() == null ) || ( request.getGeoCodesToFind() == null ) ) {
+                ( request.getName() == null ) || ( request.getBeginDate() == null ) ||
+                ( request.getEndDate() == null ) || ( request.getGeoCodesToFind() == null ) ) {
 
             throw new InvalidRequestException();
         }
 
         /* Hold the created leaderboards */
-        var leaderboard = new ArrayList<Leaderboard>();
+        var leaderboard = new ArrayList< Leaderboard >();
         try {
 
             /*
@@ -117,19 +119,19 @@ public class EventServiceImpl implements EventService {
         }
 
         /* Hold each created Level object */
-        var levels = new ArrayList<Level>();
+        var levels = new ArrayList< Level >();
 
         /* Store the list of GeoCode UUIDs to create a Level on */
         List< UUID > geoCodes = request.getGeoCodesToFind();
 
         /*
-        * Determine which order to set the GeoCodes in
-        * the default is OrderLevels.GIVEN
-        */
+         * Determine which order to set the GeoCodes in
+         * the default is OrderLevels.GIVEN
+         */
         if ( request.getOrderBy().equals( OrderLevels.DIFFICULTY ) ) {
 
             /* Set the list to go from easiest to most difficult on finding the GeoCode */
-            geoCodes = sortByDistance( geoCodes );
+            geoCodes = sortByDifficulty( geoCodes );
         } else if ( request.getOrderBy().equals( OrderLevels.DISTANCE ) ) {
 
             /* Set the list to go from least to most distance with where the GeoCode is located */
@@ -159,9 +161,9 @@ public class EventServiceImpl implements EventService {
                                leaderboard );
 
         /*
-        * Save the newly create Event
-        * Validate if the Event was saved properly
-        */
+         * Save the newly create Event
+         * Validate if the Event was saved properly
+         */
         var success = true;
         try {
 
@@ -199,15 +201,15 @@ public class EventServiceImpl implements EventService {
 
             throw new InvalidRequestException( true );
         } else if ( ( request.getTimeLimit() != 0.0 ) || ( request.getDescription() == null ) ||
-                    ( request.getLocation() == null ) || ( request.getName() == null ) ||
-                    ( request.getBeginDate() == null ) || ( request.getEndDate() == null ) ||
-                    ( request.getGeoCodesToFind() == null )) {
+                ( request.getLocation() == null ) || ( request.getName() == null ) ||
+                ( request.getBeginDate() == null ) || ( request.getEndDate() == null ) ||
+                ( request.getGeoCodesToFind() == null ) ) {
 
             throw new InvalidRequestException();
         }
 
         /* Hold the created leaderboards */
-        var leaderboard = new ArrayList<Leaderboard>();
+        var leaderboard = new ArrayList< Leaderboard >();
         try {
 
             /*
@@ -224,7 +226,7 @@ public class EventServiceImpl implements EventService {
         }
 
         /* Hold each created Level object */
-        var levels = new ArrayList<Level>();
+        var levels = new ArrayList< Level >();
 
         /* Store the list of GeoCOde UUIDs to create a Level on */
         List< UUID > geoCodes = request.getGeoCodesToFind();
@@ -299,13 +301,13 @@ public class EventServiceImpl implements EventService {
             Optional< Event > temp = eventRepo.findById( request.getEventID() );
             response = temp.map(
 
-                                    /* Indicate the Event was found and return it */
-                                    event -> new GetEventResponse( true, event )
+                    /* Indicate the Event was found and return it */
+                    event -> new GetEventResponse( true, event )
                                ).orElseGet(
 
-                                     /* Indicate the Event was not found */
-                                   () -> new GetEventResponse( false )
-                               );
+                    /* Indicate the Event was not found */
+                    () -> new GetEventResponse( false )
+                                          );
 
         } catch ( EntityNotFoundException error ) {
 
@@ -343,7 +345,7 @@ public class EventServiceImpl implements EventService {
              * Query the repository for the Event object
              * and set the response to true with the found Event
              */
-            List<Event> temp = eventRepo.findAll();
+            List< Event > temp = eventRepo.findAll();
 
             /* Go through each available Event */
             for ( Event event : temp ) {
@@ -450,7 +452,7 @@ public class EventServiceImpl implements EventService {
         }
 
         /* The list of Events within the radius */
-        var foundEvents = new ArrayList<Event>();
+        var foundEvents = new ArrayList< Event >();
 
         /* All the Events in the repository */
         var temp = eventRepo.findAll();
@@ -463,19 +465,19 @@ public class EventServiceImpl implements EventService {
         for ( Event event : temp ) {
 
             /* Calculate the range of the radius */
-                /* Get the latitude & longitude values for the current Event */
-                var latitude = event.getLocation().getLatitude();
-                var longitude = event.getLocation().getLongitude();
+            /* Get the latitude & longitude values for the current Event */
+            var latitude = event.getLocation().getLatitude();
+            var longitude = event.getLocation().getLongitude();
 
-                /* Set the max value */
-                GeoPoint min = new GeoPoint();
-                min.setLatitude( latitude - radius );
-                min.setLongitude( longitude - radius );
+            /* Set the max value */
+            GeoPoint min = new GeoPoint();
+            min.setLatitude( latitude - radius );
+            min.setLongitude( longitude - radius );
 
-                /* Set the max value */
-                GeoPoint max = new GeoPoint();
-                min.setLatitude( latitude + radius );
-                min.setLongitude( longitude + radius );
+            /* Set the max value */
+            GeoPoint max = new GeoPoint();
+            min.setLatitude( latitude + radius );
+            min.setLongitude( longitude + radius );
 
             /* Check if the value is within the max radius */
             if ( ( max.getLatitude() >= locate.getLatitude() ) && ( max.getLongitude() >= locate.getLongitude() ) ) {
@@ -484,9 +486,9 @@ public class EventServiceImpl implements EventService {
                 if ( ( min.getLatitude() <= locate.getLatitude() ) && ( min.getLongitude() <= locate.getLongitude() ) ) {
 
                     /*
-                    * The current Event is within the radius
-                    * therefore add it to the found list
-                    */
+                     * The current Event is within the radius
+                     * therefore add it to the found list
+                     */
                     foundEvents.add( event );
                 }
             }
@@ -554,7 +556,7 @@ public class EventServiceImpl implements EventService {
         }
 
         /* The list of Events within the radius */
-        var foundEvents = new ArrayList<Event>();
+        var foundEvents = new ArrayList< Event >();
 
         /* All the Events in the repository */
         var temp = eventRepo.findAll();
@@ -603,11 +605,11 @@ public class EventServiceImpl implements EventService {
         try {
 
             /*
-            * Create the request to the leaderboard service
-            * and store the response
-            */
+             * Create the request to the leaderboard service
+             * and store the response
+             */
             var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() );
-            var hold =  leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
+            var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
 
             /* Find the Event object with the given ID */
             var event = eventRepo.findById( request.getEventID() );
@@ -639,12 +641,13 @@ public class EventServiceImpl implements EventService {
      *
      * @param geoCodeService the service to be set
      */
-    public void setGeoCodeService( GeoCodeService  geoCodeService ) {
+    public void setGeoCodeService( GeoCodeService geoCodeService ) {
 
         this.geoCodeService = geoCodeService;
     }
 
     /*-------------------------------------*/
+
 
     /*---------- Helper Functions for creating an Event ----------*/
 
@@ -654,25 +657,104 @@ public class EventServiceImpl implements EventService {
 
         if ( geoCodes != null ) {
 
-            /* Get the order of difficulties */
-            List< Difficulty > difficultyOrder = Difficulty.getDifficultyOrder();
+            /* Hold all the found GeoCode Objects */
             List< GeoCode > temp = new ArrayList<>();
+
             /*
              * Go through each GeoCode ID
              * and get the GeoCode object
              */
-            for ( int x = 0; x < geoCodes.size(); x++ ) {
+            for ( UUID geoCode : geoCodes ) {
 
-                temp.add( null );
+                try {
+
+                    /*
+                     * Call the GeoCode service to get the GeoCode Object
+                     * add the found object to the list
+                     * */
+                    var found = geoCodeService.getGeoCode( new GetGeoCodeRequest( geoCode ) ).getFoundGeoCode();
+                    temp.add( found );
+                } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
+
+                    return null;
+                }
             }
 
-            /* Apply sorting algorithm to get the objects in the correct order */
+            /* Apply Bubble sorting algorithm to get the objects in the correct order */
+
+            /* Size of the list to sort */
+            int n = temp.size();
+
+            for ( int i = 0; i < n - 1; i++ ) {
+
+                for ( int j = 0; j < n - i - 1; j++ ) {
+
+                    /* Hold the index of Difficulties */
+                    var checkOne = getDifficultyIndex( temp.get( j ).getDifficulty() );
+                    var checkTwo = getDifficultyIndex( temp.get( j + 1 ).getDifficulty() );
+
+                    /* Check if the two positions needs to be swapped */
+                    if ( checkOne > checkTwo ) {
+
+                        /* Perform the swap */
+                        var tempSwap = temp.get( j );
+                        temp.set( j, temp.get( j + 1 ) );
+                        temp.set( j + 1, tempSwap );
+                    }
+                }
+            }
+
+            hold = new ArrayList<>();
+
+            /* Add the sorted GeoCode Objects ID's to the return list */
+            for ( GeoCode geoCode : temp ) {
+
+                /* Get the ID from the current object */
+                var geoCodeID = geoCode.getId();
+
+                /* Valid the ID */
+                if ( geoCodeID != null ) {
+
+                    hold.add( geoCodeID );
+                }
+            }
+
         }
 
         return hold;
     }
 
-    public List< UUID > sortByDistance( List< UUID > geoCodes ) {
+    /**
+     * Determines the index of importance of a Difficulty
+     *
+     * @param difficulty the Difficulty to search for
+     *
+     * @return the index of the Difficulty in the List
+     */
+    private int getDifficultyIndex( Difficulty difficulty ) {
+
+        /* Current index */
+        int x = 0;
+
+        /* Get the order of difficulties */
+        List< Difficulty > difficultyOrder = Difficulty.getDifficultyOrder();
+
+        /* Go through each object in the list */
+        for ( ; x < difficultyOrder.size(); x++ ) {
+
+            /* Check if the current object matches the required one */
+            if ( difficulty.equals( difficultyOrder.get( x ) ) ) {
+
+                /* The current object is the index wanted */
+                return x;
+            }
+        }
+
+        return x;
+    }
+
+
+    private List< UUID > sortByDistance( List< UUID > geoCodes ) {
 
         /* Holds the new order of the GeoCodes */
         List< UUID > hold = null;
