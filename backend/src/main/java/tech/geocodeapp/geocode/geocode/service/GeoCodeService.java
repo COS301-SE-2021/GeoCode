@@ -22,11 +22,15 @@ public interface GeoCodeService {
     CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException;
 
     /**
-     * Get the GeoCode identified by the given UUID
-     * @param request Request object containing the UUID
-     * @return Response object containing the wanted GeoCode (if it is found)
+     * Get the GeoCode associated with the given ID
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    GetGeoCodeByIDResponse getGeoCodeByID( GetGeoCodeByIDRequest request ) throws InvalidRequestException;
+    public GetGeoCodeResponse getGeoCode( GetGeoCodeRequest request ) throws InvalidRequestException;
 
     /**
      * Get all the stored GeoCodes in the repository
@@ -56,6 +60,17 @@ public interface GeoCodeService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException;
+
+    /**
+     * Get all the GeoCodes with a certain level of difficulty that can be a list of items
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetGeoCodesByDifficultyListRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetGeoCodesByDifficultyListResponse getGeoCodesByDifficultyList( GetGeoCodesByDifficultyListRequest request ) throws InvalidRequestException;
 
     /**
      * Get the hints of how to locate a GeoCode in the real world

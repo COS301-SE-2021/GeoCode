@@ -411,6 +411,106 @@ class GeoCodeServiceImplTest {
      * Check how the use case handles the request being null
      */
     @Test
+    @Order( 3 )
+    @DisplayName( "Null repository handling - getGeoCodesByDifficultyList" )
+    void getGeoCodesByDifficultyListNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> geoCodeService.getGeoCodesByDifficultyList( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 11 )
+    @DisplayName( "Invalid repository attribute handling - getGeoCodesByDifficultyList" )
+    void getGeoCodesByDifficultyListInvalidRequestTest() {
+
+        /*
+         * Create a request object
+         * and assign values to it
+         * */
+        GetGeoCodesByDifficultyListRequest request = new GetGeoCodesByDifficultyListRequest();
+        request.setDifficulty( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.getGeoCodesByDifficultyList( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Using valid data does the getGeoCodesByDifficultyList use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 20 )
+    @DisplayName( "Valid request - getGeoCodesByDifficultyList" )
+    void getGeoCodesByDifficultyListTest() {
+
+        try {
+
+            /* Control variables */
+            int size = 6;
+
+            List< Difficulty > listOfDifficulties = new ArrayList<>();
+            listOfDifficulties.add( Difficulty.INSANE );
+            listOfDifficulties.add( Difficulty.EASY );
+
+            /* Populate the repo with the given amount of GeoCodes */
+            populate( size );
+
+            /*
+             * Create a request object
+             * and assign values to it
+             */
+            GetGeoCodesByDifficultyListRequest request = new GetGeoCodesByDifficultyListRequest();
+            request.setDifficulty( listOfDifficulties );
+
+            /* Get the response by calling the getGeoCodesByDifficultyList use case */
+            GetGeoCodesByDifficultyListResponse response = geoCodeService.getGeoCodesByDifficultyList( request );
+
+            var valid = true;
+
+            /* Go through each GeoCode returned in the response */
+            for ( int x = 0; x < response.getGeocodes().size(); x++ ) {
+
+                /* Used to determine if any of the GeoCodes tested valid */
+                var checks = 0;
+
+                /* Go through each possibility it could be */
+                for ( Difficulty listOfDifficulty : listOfDifficulties ) {
+
+                    /* Check if the GeoCode is of the correct difficulty type */
+                    if ( !response.getGeocodes().get( x ).getDifficulty().equals( listOfDifficulty ) ) {
+
+                        checks++;
+                    }
+                }
+
+                if ( listOfDifficulties.size() == checks ) {
+
+                    /* The GeoCode was not of the correct difficulty type */
+                    valid = false;
+                    break;
+                }
+            }
+
+            Assertions.assertTrue( valid );
+        } catch ( Exception e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
     @Order( 4 )
     @DisplayName( "Null repository handling - getHints" )
     void getHintsNullRequestTest() {
