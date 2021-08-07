@@ -20,6 +20,9 @@ export class EventsCreatePage implements AfterViewInit  {
   geocodes: GeoCode[] = [];
   selected=[];
   isHidden=true;
+  type='event';
+  timeHidden=true;
+  challengeHidden=true;
   height='0%';
   constructor(      private modalController: ModalController,
                     private navCtrl: NavController,
@@ -81,6 +84,19 @@ export class EventsCreatePage implements AfterViewInit  {
     }
   }
 
-
+  eventType($event){
+    console.log($event.detail.value);
+    this.type=$event.detail.value;
+    if($event.detail.value =='timetrial'){
+      this.challengeHidden=true;
+      this.timeHidden=false;
+    }else if($event.detail.value == 'challenge'){
+      this.challengeHidden=false;
+      this.timeHidden=true;
+    }else{
+      this.timeHidden=true;
+      this.challengeHidden=true;
+    }
+  }
 
 }
