@@ -176,10 +176,10 @@ class EventServiceImplTest {
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse("2020-01-08") );
             request.setEndDate(  LocalDate.parse("2020-05-21") );
-                List< GeoCode > geoCodesToFind = new ArrayList<>();
-                geoCodesToFind.add( new GeoCode() );
-                geoCodesToFind.add( new GeoCode() );
-                geoCodesToFind.add( new GeoCode() );
+                List< UUID > geoCodesToFind = new ArrayList<>();
+                geoCodesToFind.add( UUID.randomUUID() );
+                geoCodesToFind.add( UUID.randomUUID() );
+                geoCodesToFind.add( UUID.randomUUID() );
             request.setGeoCodesToFind( geoCodesToFind );
 
             CreateEventResponse response = eventService.createEvent( request );
@@ -296,10 +296,10 @@ class EventServiceImplTest {
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse("2020-01-08") );
             request.setEndDate(  LocalDate.parse("2020-05-21") );
-            List< GeoCode > geoCodesToFind = new ArrayList<>();
-            geoCodesToFind.add( new GeoCode() );
-            geoCodesToFind.add( new GeoCode() );
-            geoCodesToFind.add( new GeoCode() );
+            List< UUID > geoCodesToFind = new ArrayList<>();
+            geoCodesToFind.add( UUID.randomUUID() );
+            geoCodesToFind.add( UUID.randomUUID() );
+            geoCodesToFind.add( UUID.randomUUID() );
             request.setGeoCodesToFind( geoCodesToFind );
 
             eventService.createEvent( request );
@@ -311,4 +311,5 @@ class EventServiceImplTest {
         }
 
     }
+
 }

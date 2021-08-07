@@ -5,8 +5,8 @@
 </ion-header>
 
 <ion-content>
-  <div class="horizontalscroll">
-    <div class="items">
+  <div  slot="fixed" class="horizontalscroll" >
+    <div class="items" >
       <ion-row>
       <ion-col id="button-col"><ion-select id="button"  value='{radius}' placeholder= "Select Radius">
         <ion-select-option value="10">10km</ion-select-option>
@@ -26,6 +26,7 @@
       </ion-row>
     </div>
   </div>
+<br><br><br>
   <div #mapElement [style.height]="height" class="map"></div>
 
   <div  id ="eventDetails" [hidden]="isHidden">
@@ -44,14 +45,14 @@
         <ion-row class="row">
         {{event.description}}
         </ion-row>
-        <ion-row class="row">
-          <ion-col class="heading">Latitude</ion-col>
-          <ion-col>{{event.latitude}} </ion-col>
-        </ion-row>
-        <ion-row class="row" >
-          <ion-col class="heading">Longitude</ion-col>
-          <ion-col>{{event.longitude}} </ion-col>
-        </ion-row>
+<!--        <ion-row class="row">-->
+<!--          <ion-col class="heading">Latitude</ion-col>-->
+<!--          <ion-col>{{event.latitude}} </ion-col>-->
+<!--        </ion-row>-->
+<!--        <ion-row class="row" >-->
+<!--          <ion-col class="heading">Longitude</ion-col>-->
+<!--          <ion-col>{{event.longitude}} </ion-col>-->
+<!--        </ion-row>-->
         <ion-button id="button" color="button" (click)="goToEvent(event)">Go to Event</ion-button>
         <ion-button id="button" color="button" (click)="goToLeaderBoard(event)">LeaderBoard</ion-button>
 

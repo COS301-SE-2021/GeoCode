@@ -9,12 +9,12 @@ import javax.validation.constraints.NotNull;
 
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.Level;
+import tech.geocodeapp.geocode.event.model.TimeTrial;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
@@ -108,10 +108,10 @@ public class EventServiceImpl implements EventService {
         var levels = new ArrayList<Level>();
 
         /* Store the list of GeoCOde UUIDs to create a Level on */
-        var geoCodes = request.getGeoCodesToFind();
+        List< UUID > geoCodes = request.getGeoCodesToFind();
 
         /* Go through each UUID */
-        for ( GeoCode geoCode : geoCodes ) {
+        for ( UUID geoCode : geoCodes ) {
 
             /*
             * Create the Level with a random UUID
@@ -132,13 +132,106 @@ public class EventServiceImpl implements EventService {
         var success = true;
         try {
 
-            eventRepo.save( event );
+            /* Save the newly created entry to the repository */
+            var check = eventRepo.save( event );
+
+            /* Check if the Object was saved correctly */
+            if ( !event.equals( check ) ) {
+
+                success = false;
+            }
         } catch ( IllegalArgumentException error ) {
 
             success = false;
         }
 
         return new CreateEventResponse( success );
+    }
+
+    /**
+     * Create a new TimeTrial for an event, that will be active for a pre-determined
+     * amount of time
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public CreateTimeTrialResponse createTimeTrial( CreateTimeTrialRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( ( request.getTimeLimit() != 0.0 ) || ( request.getDescription() == null ) ||
+                    ( request.getLocation() == null ) || ( request.getName() == null ) ||
+                    ( request.getBeginDate() == null ) || ( request.getEndDate() == null ) ||
+                    ( request.getGeoCodesToFind() == null )) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Hold the created leaderboards */
+        var leaderboard = new ArrayList<Leaderboard>();
+        try {
+
+            /*
+             * Create the request to the leaderboard service
+             * and store the response
+             */
+            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() + " - Default" );
+            var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
+
+            leaderboard.add( hold );
+        } catch ( NullRequestParameterException e ) {
+
+            return new CreateTimeTrialResponse( false );
+        }
+
+        /* Hold each created Level object */
+        var levels = new ArrayList<Level>();
+
+        /* Store the list of GeoCOde UUIDs to create a Level on */
+        List< UUID > geoCodes = request.getGeoCodesToFind();
+
+        /* Go through each UUID */
+        for ( UUID geoCode : geoCodes ) {
+
+            /*
+             * Create the Level with a random UUID
+             * and add it to the list
+             */
+            levels.add( new Level( geoCode ) );
+        }
+
+        /* Create the new Event object with the specified attributes */
+        var timeTrial = new TimeTrial( UUID.randomUUID(), request.getName(), request.getDescription(),
+                                       request.getLocation(), levels, request.getBeginDate(), request.getEndDate(),
+                                       leaderboard, request.getTimeLimit() );
+
+        /*
+         * Save the newly create Event
+         * Validate if the Event was saved properly
+         */
+        var success = true;
+        try {
+
+            /* Save the newly created entry to the repository */
+            var check = eventRepo.save( timeTrial );
+
+            /* Check if the Object was saved correctly */
+            if ( !timeTrial.equals( check ) ) {
+
+                success = false;
+            }
+        } catch ( IllegalArgumentException error ) {
+
+            success = false;
+        }
+
+        return new CreateTimeTrialResponse( success );
     }
 
     /**
@@ -211,8 +304,6 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        /* Create the response to return */
-        GetCurrentEventResponse response = null;
         try {
 
             /*
@@ -278,10 +369,6 @@ public class EventServiceImpl implements EventService {
             if ( temp.isPresent() ) {
 
                 Event currEvent = temp.get();
-                if (  temp.get() == null ) {
-
-                    return new NextStageResponse( null );
-                }
 
                 /* Get the Levels for each Event */
                 List< Level > levels = currEvent.getLevels();
@@ -511,5 +598,5 @@ public class EventServiceImpl implements EventService {
         /* The new leaderboard was successfully made */
         return new CreateLeaderboardResponse( true );
     }
-    
+
 }
