@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {GeoCodeService, CreateGeoCodeRequest, CreateGeoCodeResponse} from '../../../services/geocode-api';
 import {NavController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
+import {GeoPoint} from '../../../services/geocode-api';
 
 let map;
 @Component({
@@ -18,15 +19,15 @@ mapOptions;
 hints = [];
 difficulty;
 marker;
-
+geoLocation: GeoPoint={latitude:0,longitude:0};
 //Request object to be updated as fields change
 request: CreateGeoCodeRequest= {
     description: 'Testing insert',
     available: true,
     difficulty:'EASY',
     hints:['Hint1','Hint2'],
-    location:'',
-    id:''
+    location:{latitude:0,longitude:0}
+
 };
 
   constructor(public geocodeAPI: GeoCodeService,public navCtrl: NavController, private mapsLoader: GoogleMapsLoader) {}
@@ -65,7 +66,8 @@ request: CreateGeoCodeRequest= {
   //create the geocode and update the remaining fields
   createGeoCode(){
     this.locations=this.marker.getPosition();
-    this.request.location=this.locations.lat()+','+this.locations.lng();
+    this.request.location.longitude=this.locations.lng();
+    this.request.location.latitude=this.locations.lat();
     this.request.hints=this.hints;
     this.request.difficulty = this.difficulty;
 
