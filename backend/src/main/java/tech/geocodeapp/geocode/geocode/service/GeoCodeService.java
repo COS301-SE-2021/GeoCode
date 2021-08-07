@@ -58,6 +58,17 @@ public interface GeoCodeService {
     GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException;
 
     /**
+     * Get all the GeoCodes with a certain level of difficulty that can be a list of items
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetGeoCodesByDifficultyListRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetGeoCodesByDifficultyListResponse getGeoCodesByDifficultyList( GetGeoCodesByDifficultyListRequest request ) throws InvalidRequestException;
+
+    /**
      * Get the hints of how to locate a GeoCode in the real world
      *
      * @param request the attributes the response should be created from
