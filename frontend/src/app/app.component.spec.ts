@@ -15,22 +15,20 @@ describe('AppComponent', () => {
     })
   };
 
-  const mockRouter = {
-    navigate: (args) => new Promise((resolve, reject) => {
-      resolve(null);
-    })
-  };
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       providers: [
-        { provide: KeycloakService, useValue: mockKeycloak },
-        { provide: Router, useValue: mockRouter }
+        { provide: KeycloakService, useValue: mockKeycloak }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [RouterTestingModule]
     }).compileComponents();
+
+    const router = TestBed.inject(Router);
+    router.navigate = () => new Promise(resolve => {
+      resolve(null);
+    });
   }));
 
   it('should create the app', () => {

@@ -1,5 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
+import {NavController} from '@ionic/angular';
+import {GeoCodeService} from '../../../services/geocode-api';
 
 
 
@@ -10,6 +12,10 @@ import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 })
 export class EventTimetrialPage implements AfterViewInit {
   @ViewChild('mapElement',{static:false}) mapElement;
+  selected=[{stage:1,description:'code',difficulty:'Easy',found:true}];
+  current='A';
+  route='a->b->c';
+
   googleMaps;
   mapOptions;
   map;
@@ -19,7 +25,9 @@ export class EventTimetrialPage implements AfterViewInit {
   geocodes=[{stage:1,description:'code',difficulty:'Easy',found:true},
     {stage:2,description:'code',difficulty:'Easy',found:false},{stage:3,description:'code',difficulty:'Easy',found:false},
     {stage:4,description:'code',difficulty:'Medium',found:false},{stage:5,description:'code',difficulty:'Insane',found:false}];
-  constructor(private mapsLoader: GoogleMapsLoader) { }
+  constructor(    private navCtrl: NavController,
+                  private geocodeApi: GeoCodeService,
+                  private mapsLoader: GoogleMapsLoader) { }
 
 
 
@@ -42,6 +50,11 @@ export class EventTimetrialPage implements AfterViewInit {
     };
     //Create map
     this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
+  }
+
+  //Navigate to findGeoCode page
+  async findGeoCode(geocode){
+    await this.navCtrl.navigateForward('/explore/open/'+geocode.id,{ state: {geocode} });
   }
 
 }

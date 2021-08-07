@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Geocodes</ion-title>
+  </ion-toolbar>
+  <ng-template [ngIf]="createdIDs && createdIDs.length > 0">
+    <ion-segment (ionChange)="segmentChanged($event)" value="found" color="main">
+      <ion-segment-button value="found">
+        <ion-label>Found</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="created">
+        <ion-label>Created</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ng-template>
+</ion-header>
+
+<ion-content>
+  <div #mapElement class="map"></div>
+</ion-content>

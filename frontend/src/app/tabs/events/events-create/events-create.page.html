@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Create Event</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>Name</ion-label>
+      <ion-input type="text" placeholder="Event Name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Description</ion-label>
+    </ion-item>
+    <ion-item>
+         <ion-textarea type="text" placeholder="Event description"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label>Location</ion-label>
+      <ion-button color="button"  (click)="selectLocation()">Select location on map</ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-label>Add GeoCode</ion-label>
+      <ion-button color="button"  (click)="createGeoCode()" >Create +</ion-button>
+    </ion-item>
+  </ion-list>
+  <ion-item>
+    <ion-label>Created GeoCodes</ion-label>
+    <ion-button color="button"  (click)="showGeoCodes()">Show</ion-button>
+  </ion-item>
+  <ion-button color="button"  (click)="createEvent()">Create Event</ion-button>
+  <div #mapElement [style.height]="height" class="map"></div>
+
+
+</ion-content>

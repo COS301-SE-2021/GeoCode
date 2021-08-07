@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Missions</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let mission of missions" button detail [routerLink]="['/mission']">
+      <ion-label slot="start">{{mission.name}}</ion-label><br>
+      <ion-progress-bar color="accent" type="determinate" value="{{mission.progress}}"></ion-progress-bar ><br /><br />
+    </ion-item>
+  </ion-list>
+</ion-content>
