@@ -3222,34 +3222,8 @@ components:
       xml:
         name: "Level"
 
-    ChangeAvailabilityRequest:
-      type: "object"
-      required:
-        - eventID
-        - availability
-      properties:
-        eventID:
-          type: string
-          format: uuid
-        availability:
-          type: boolean
-      xml:
-        name: "ChangeAvailabilityRequest"
-
-    ChangeAvailabilityResponse:
-      type: "object"
-      required:
-        - success
-      properties:
-        success:
-          type: boolean
-      xml:
-        name: "ChangeAvailabilityResponse"
-
     GetAllEventsResponse:
       type: "object"
-      required:
-        - events
       properties:
         events:
           type: array
@@ -3269,8 +3243,10 @@ components:
       properties:
         name:
           type: string
+          example: "My Event"
         description:
           type: string
+          example: "There are 4 GeoCodes to find in this Event."
         location:
           $ref: "#/components/schemas/GeoPoint"
         beginDate:
@@ -3297,17 +3273,66 @@ components:
       properties:
         success:
           type: boolean
+          example: "True"
       xml:
         name: "CreateEventResponse"
 
-    GetEventRequest:
+    CreateTimeTrialRequest:
       type: "object"
       required:
-        - eventID
+        - timeLimit
+        - name
+        - description
+        - location
+        - beginDate
+        - GeoCodesToFind
+      properties:
+        timeLimit:
+          type: number
+          example: "10.0"
+        name:
+          type: string
+          example: "My Event"
+        description:
+          type: string
+          example: "There are 4 GeoCodes to find in this Event."
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+        beginDate:
+          type: string
+          format: date
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2017-01-01"
+        endDate:
+          type: string
+          format: date
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2017-01-01"
+        GeoCodesToFind:
+          type: array
+          items:
+            $ref: "#/components/schemas/GeoCode"
+      xml:
+        name: "CreateTimeTrialRequest"
+
+    CreateTimeTrialResponse:
+      type: "object"
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          example: "True"
+      xml:
+        name: "CreateTimeTrialResponse"
+
+    GetEventRequest:
+      type: "object"
       properties:
         eventID:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "GetEventRequest"
 
@@ -3315,10 +3340,10 @@ components:
       type: "object"
       required:
         - found
-        - foundEvent
       properties:
         found:
           type: boolean
+          example: "True"
         foundEvent:
           $ref: "#/components/schemas/Event"
       xml:
@@ -3327,26 +3352,23 @@ components:
     GetCurrentEventGeoCodeRequest:
       type: "object"
       required:
-        - eventID
         - userID
       properties:
-        eventID:
-          type: string
-          format: uuid
         userID:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "GetCurrentEventGeoCodeRequest"
 
     GetCurrentEventGeoCodeResponse:
       type: "object"
       required:
-        - foundEvent
         - found
       properties:
         found:
           type: boolean
+          example: "True"
         foundEvent:
           $ref: "#/components/schemas/Event"
       xml:
@@ -3361,19 +3383,21 @@ components:
         eventID:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         userID:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "NextStageRequest"
 
     NextStageResponse:
       type: "object"
-      required:
-        - nextGeoCode
       properties:
         nextGeoCode:
-          $ref: "#/components/schemas/GeoCode"
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "NextStageResponse"
 
@@ -3387,13 +3411,12 @@ components:
           $ref: "#/components/schemas/GeoPoint"
         radius:
           type: number
+          example: "10.0"
       xml:
         name: "EventsNearMeRequest"
 
     EventsNearMeResponse:
       type: "object"
-      required:
-        - foundEvents
       properties:
         foundEvents:
           type: array
@@ -3414,8 +3437,6 @@ components:
 
     GetEventsByLocationResponse:
       type: "object"
-      required:
-        - events
       properties:
         events:
           type: array
@@ -3423,59 +3444,6 @@ components:
             $ref: "#/components/schemas/Event"
       xml:
         name: "GetEventsByLocationResponse"
-
-    CreatePointRequest:
-      type: "object"
-      required:
-        - amount
-        - userID
-        - leaderboardID
-      properties:
-        amount:
-          type: number
-          example: 1
-        userID:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        leaderboardID:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "CreatePointRequest"
-
-    PointResponse:
-      type: "object"
-      required:
-        - point
-      properties:
-        point:
-          $ref: "#/components/schemas/Point"
-      xml:
-        name: "PointResponse"
-
-    CreateTimeTrialRequest:
-      type: "object"
-      required:
-        - timeLimit
-      properties:
-        timeLimit:
-          type: number
-      xml:
-        name: "CreateTimeTrialRequest"
-
-    CreateTimeTrialResponse:
-      type: "object"
-      required:
-        - timeTrial
-      properties:
-        timeTrial:
-          type: array
-          items:
-            $ref: "#/components/schemas/TimeTrial"
-      xml:
-        name: "CreateTimeTrialResponse"
 
     GetPointsByUserRequest:
       type: "object"
