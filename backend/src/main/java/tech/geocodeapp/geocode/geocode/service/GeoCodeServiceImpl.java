@@ -20,7 +20,7 @@ import tech.geocodeapp.geocode.event.service.EventService;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.exceptions.RepoException;
 import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.request.*;
@@ -227,13 +227,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     }
 
     /**
-     * Get the GeoCode identified by the given UUID
+     * Get the GeoCode associated with the given ID
      *
-     * @param request Request object containing the UUID
+     * @param request the attributes the response should be created from
      *
-     * @return Response object containing the wanted GeoCode (if it is found)
+     * @return the newly created response instance from the specified GetGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    public GetGeoCodeByIDResponse getGeoCodeByID( GetGeoCodeByIDRequest request ) throws InvalidRequestException {
+    public GetGeoCodeResponse getGeoCode( GetGeoCodeRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -249,10 +251,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         if ( optionalGeoCode.isEmpty() ) {
 
-            return new GetGeoCodeByIDResponse( false, "No GeoCode exists with the given UUID", null );
+            return new GetGeoCodeResponse( null );
         } else {
 
-            return new GetGeoCodeByIDResponse( true, "GeoCode successfully returned", optionalGeoCode.get() );
+            return new GetGeoCodeResponse( optionalGeoCode.get() );
         }
     }
 
