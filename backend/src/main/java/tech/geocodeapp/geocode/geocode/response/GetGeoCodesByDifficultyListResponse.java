@@ -1,7 +1,7 @@
 package tech.geocodeapp.geocode.geocode.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
 
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
@@ -11,23 +11,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * GetGeoCodesByDifficultyResponse used to access the attributes received to create the response
+ * GetGeoCodesByDifficultyListResponse used to access the attributes received to create the response
  * to filter all the GeoCodes by a specified difficulty
  */
 @Validated
-public class GetGeoCodesByDifficultyResponse {
+public class GetGeoCodesByDifficultyListResponse {
 
     /**
      * The list of GeoCodes with the specified difficulty
      */
     @Valid
     @JsonProperty( "geocodes" )
-    private List< GeoCode > geocodes = null;
+    private List< GeoCode > geocodes;
 
     /**
      * Default constructor
      */
-    public GetGeoCodesByDifficultyResponse() {
+    public GetGeoCodesByDifficultyListResponse() {
 
     }
 
@@ -36,7 +36,7 @@ public class GetGeoCodesByDifficultyResponse {
      *
      * @param geocodes The list of GeoCodes with the specified difficulty
      */
-    public GetGeoCodesByDifficultyResponse( List< GeoCode > geocodes ) {
+    public GetGeoCodesByDifficultyListResponse( List< GeoCode > geocodes ) {
 
         this.geocodes = geocodes;
     }
@@ -48,24 +48,26 @@ public class GetGeoCodesByDifficultyResponse {
      *
      * @return the request after the hints has been changed
      */
-    public GetGeoCodesByDifficultyResponse geocodes( List< GeoCode > geocodes ) {
+    public GetGeoCodesByDifficultyListResponse geocodes( List< GeoCode > geocodes ) {
 
         this.geocodes = geocodes;
         return this;
     }
 
     /**
-     * Sets a single hint inside the hints attribute to the specified value
+     * Sets a single hint inside of the hints attribute to the specified value
      *
      * @param geocodesItem the value the attribute should be set to
      *
      * @return the stored hints attribute
      */
-    public GetGeoCodesByDifficultyResponse addGeocodesItem( GeoCode geocodesItem ) {
+    public GetGeoCodesByDifficultyListResponse addGeocodesItem( GeoCode geocodesItem ) {
 
         if ( this.geocodes == null ) {
+
             this.geocodes = new ArrayList<>();
         }
+
         this.geocodes.add( geocodesItem );
         return this;
     }
@@ -75,6 +77,7 @@ public class GetGeoCodesByDifficultyResponse {
      *
      * @return the stored hints attribute
      */
+    @Valid
     public List< GeoCode > getGeocodes() {
 
         return geocodes;
@@ -109,7 +112,7 @@ public class GetGeoCodesByDifficultyResponse {
             return false;
         }
 
-        return Objects.equals( this.geocodes, ( ( GetGeoCodesByDifficultyResponse ) obj ).geocodes );
+        return Objects.equals( this.geocodes, ( ( GetGeoCodesByDifficultyListResponse ) obj ).geocodes );
     }
 
     /**
@@ -131,7 +134,7 @@ public class GetGeoCodesByDifficultyResponse {
     @Override
     public String toString() {
 
-        return "class GetGeoCodesByDifficultyResponse {\n" +
+        return "class GetGeoCodesByDifficultyListResponse {\n" +
                 "    geocodes: " + toIndentedString( geocodes ) + "\n" +
                 "}";
     }
