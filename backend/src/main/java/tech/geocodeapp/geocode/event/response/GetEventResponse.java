@@ -43,7 +43,7 @@ public class GetEventResponse {
     public GetEventResponse( Boolean found ) {
 
         this.found = found;
-        if ( !found ) {
+        if ( Boolean.FALSE.equals( found ) ) {
 
             this.foundEvent = null;
         }
@@ -147,9 +147,9 @@ public class GetEventResponse {
             return false;
         }
 
-        GetEventResponse GetEventResponse = ( GetEventResponse ) obj;
-        return Objects.equals( this.found, GetEventResponse.found ) &&
-                Objects.equals( this.foundEvent, GetEventResponse.foundEvent );
+        GetEventResponse getEventResponse = ( GetEventResponse ) obj;
+        return Objects.equals( this.found, getEventResponse.found ) &&
+                Objects.equals( this.foundEvent, getEventResponse.foundEvent );
     }
 
     /**

@@ -7,12 +7,13 @@ const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
-    path: 'geocode-create',
-    loadChildren: () => import('./tabs/geocode/geocode-create/geocode-create.module').then(m => m.GeocodeCreatePageModule)
-  },  {
     path: 'welcome',
     loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule)
-  }
+  },
+  {
+    path: 'profile/:id',
+    loadChildren: () => import('./tabs/profile/profile.module').then(m => m.ProfilePageModule)
+  },
 
 
 

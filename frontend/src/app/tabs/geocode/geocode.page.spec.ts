@@ -5,8 +5,8 @@ import { GeocodePage } from './geocode.page';
 import {GeoCodeService} from '../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
-import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
 import {FormsModule} from '@angular/forms';
+import {MockGoogleMapsLoader} from '../../mocks/MockGoogleMapsLoader';
 
 describe('GeocodePage', () => {
   let component: GeocodePage;
@@ -15,7 +15,7 @@ describe('GeocodePage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodePage ],
-      providers: [AlertController, NavController, GeoCodeService, GoogleMapsLoader],
+      providers: [AlertController, NavController, GeoCodeService, MockGoogleMapsLoader.provider()],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, FormsModule]
     }).compileComponents();
 

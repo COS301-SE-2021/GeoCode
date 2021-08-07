@@ -1,17 +1,13 @@
 package tech.geocodeapp.geocode.event.model;
 
-import org.hibernate.annotations.Type;
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
-
 import java.util.Objects;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -34,10 +30,8 @@ public class Level {
     /**
      * The GeoCode to find on this Level of an Event
      */
-    @OneToOne
     @JsonProperty( "target" )
-    @NotNull( message = "Level's target cannot be null." )
-    private GeoCode target;
+    private UUID target;
 
     /**
      * A map of all the user IDs on this level of the Event
@@ -59,7 +53,7 @@ public class Level {
      *
      * @param target The GeoCode to find on this Level of an Event
      */
-    public Level( GeoCode target ) {
+    public Level( UUID target ) {
 
         this.id = UUID.randomUUID();
         this.target = target;
@@ -71,7 +65,7 @@ public class Level {
      * @param id The unique identifier for the Level
      * @param target The GeoCode to find on this Level of an Event
      */
-    public Level( UUID id, GeoCode target ) {
+    public Level( UUID id, UUID target ) {
 
         this.id = id;
         this.target = target;
@@ -84,7 +78,7 @@ public class Level {
      * @param target The GeoCode to find on this Level of an Event
      * @param onLevel A map of all the user IDs on this level of the Event
      */
-    public Level( UUID id, GeoCode target, HashMap< String, UUID > onLevel ) {
+    public Level( UUID id, UUID target, HashMap< String, UUID > onLevel ) {
 
         this.id = id;
         this.target = target;
@@ -132,7 +126,7 @@ public class Level {
      *
      * @return the model after changing the target
      */
-    public Level target( GeoCode target ) {
+    public Level target( UUID target ) {
 
         this.target = target;
         return this;
@@ -143,8 +137,7 @@ public class Level {
      *
      * @return the stored target attribute
      */
-    @Valid
-    public GeoCode getTarget() {
+    public UUID getTarget() {
 
         return target;
     }
@@ -154,7 +147,7 @@ public class Level {
      *
      * @param target the value the target should be set to
      */
-    public void setTarget( GeoCode target ) {
+    public void setTarget( UUID target ) {
 
         this.target = target;
     }
@@ -184,7 +177,7 @@ public class Level {
 
         if ( this.onLevel == null ) {
 
-            this.onLevel = new HashMap< String, UUID >();
+            this.onLevel = new HashMap<>();
         }
 
         this.onLevel.put( key, onLevelItem );
@@ -197,7 +190,7 @@ public class Level {
      * @return the stored onLevel attribute
      */
     @Valid
-    public Map< String, UUID > getOnLevel() {
+    public HashMap< String, UUID > getOnLevel() {
 
         return onLevel;
     }
@@ -231,7 +224,7 @@ public class Level {
             return false;
         }
 
-        Level level = ( Level ) obj;
+        var level = ( Level ) obj;
         return Objects.equals( this.target, level.target ) &&
                 Objects.equals( this.onLevel, level.onLevel );
     }

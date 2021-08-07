@@ -24,6 +24,9 @@ public class GetEventLeaderboardResponse extends Response {
   @Valid
   private List<EventLeaderboardDetails> leaderboard = new ArrayList<EventLeaderboardDetails>();
 
+  public GetEventLeaderboardResponse() {
+  }
+
   public GetEventLeaderboardResponse(boolean success, String message, List<EventLeaderboardDetails> leaderboard){
     super(success, message);
     this.leaderboard = leaderboard;

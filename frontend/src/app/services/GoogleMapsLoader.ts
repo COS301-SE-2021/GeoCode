@@ -42,7 +42,7 @@ export class GoogleMapsLoader {
           script.onerror = () => {
             // Run through all the requests in the queue and return an error
             for (let request of GoogleMapsLoader.loadingQueue) {
-              request.reject("Failed to load Google Maps");
+              request.reject('Failed to load Google Maps');
             }
           }
           document.getElementsByTagName('head')[0].appendChild(script);

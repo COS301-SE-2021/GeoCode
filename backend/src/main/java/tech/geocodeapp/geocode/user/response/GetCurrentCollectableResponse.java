@@ -17,7 +17,7 @@ import javax.validation.constraints.*;
 
 
 public class GetCurrentCollectableResponse extends Response {
-  @JsonProperty("Collectable")
+  @JsonProperty("collectable")
   private Collectable collectable = null;
 
   public GetCurrentCollectableResponse(boolean success, String message, Collectable collectable) {
