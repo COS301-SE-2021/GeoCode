@@ -96,7 +96,8 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException( true );
         } else if ( ( request.getDescription() == null ) || ( request.getLocation() == null ) ||
                 ( request.getName() == null ) || ( request.getBeginDate() == null ) ||
-                ( request.getEndDate() == null ) || ( request.getGeoCodesToFind() == null ) ) {
+                ( request.getEndDate() == null ) || ( request.getGeoCodesToFind() == null ) ||
+                ( request.getOrderBy() == null ) ) {
 
             throw new InvalidRequestException();
         }

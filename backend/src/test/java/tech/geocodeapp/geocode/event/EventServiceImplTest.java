@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.service.*;
@@ -188,6 +189,7 @@ class EventServiceImplTest {
                 geoCodesToFind.add( UUID.randomUUID() );
                 geoCodesToFind.add( UUID.randomUUID() );
             request.setGeoCodesToFind( geoCodesToFind );
+            request.setOrderBy( OrderLevels.GIVEN );
 
             CreateEventResponse response = eventService.createEvent( request );
 
@@ -318,6 +320,7 @@ class EventServiceImplTest {
             geoCodesToFind.add( UUID.randomUUID() );
             geoCodesToFind.add( UUID.randomUUID() );
             request.setGeoCodesToFind( geoCodesToFind );
+            request.setOrderBy( OrderLevels.GIVEN );
 
             eventService.createEvent( request );
 
