@@ -11,6 +11,7 @@
  */
 
 export interface TimeLog { 
+    eventID: string;
     userID: string;
     geoCodeID: string;
     startTime: Date;

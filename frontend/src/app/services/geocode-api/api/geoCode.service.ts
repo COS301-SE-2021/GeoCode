@@ -193,18 +193,13 @@ export class GeoCodeService {
     /**
      * Get the GeoCode&#x27;s collectables at or near the given location
      * Get the GeoCode&#x27;s collectables at or near the given location
-     * @param body Request to get a GeoCode&#x27;s collectables at or near the given location
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getCollectablesInGeoCodesByLocation(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'body', reportProgress?: boolean): Observable<GetCollectablesInGeoCodesByLocationResponse>;
-    public getCollectablesInGeoCodesByLocation(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetCollectablesInGeoCodesByLocationResponse>>;
-    public getCollectablesInGeoCodesByLocation(body: GetCollectablesInGeoCodeByQRCodeRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetCollectablesInGeoCodesByLocationResponse>>;
-    public getCollectablesInGeoCodesByLocation(body: GetCollectablesInGeoCodeByQRCodeRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getCollectablesInGeoCodesByLocation.');
-        }
+    public getCollectablesInGeoCodesByLocation(observe?: 'body', reportProgress?: boolean): Observable<GetCollectablesInGeoCodesByLocationResponse>;
+    public getCollectablesInGeoCodesByLocation(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetCollectablesInGeoCodesByLocationResponse>>;
+    public getCollectablesInGeoCodesByLocation(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetCollectablesInGeoCodesByLocationResponse>>;
+    public getCollectablesInGeoCodesByLocation(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -230,14 +225,9 @@ export class GeoCodeService {
             'application/json',
             'application/xml'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
 
         return this.httpClient.request<GetCollectablesInGeoCodesByLocationResponse>('post',`${this.basePath}/GeoCode/getCollectablesInGeoCodesByLocation`,
             {
-                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
