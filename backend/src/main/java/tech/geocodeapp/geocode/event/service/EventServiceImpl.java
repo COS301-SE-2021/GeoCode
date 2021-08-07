@@ -651,6 +651,13 @@ public class EventServiceImpl implements EventService {
 
     /*---------- Helper Functions for creating an Event ----------*/
 
+    /**
+     * Gets a list of GeoCode ID's and sorts them according to their Difficulty
+     *
+     * @param geoCodes the list of GeoCode ID's to sort
+     *
+     * @return the sorted GeoCode ID's in order of Difficulty
+     */
     private List< UUID > sortByDifficulty( List< UUID > geoCodes ) {
 
         List< UUID > hold = null;
@@ -754,6 +761,13 @@ public class EventServiceImpl implements EventService {
     }
 
 
+    /**
+     * Gets a list of GeoCode ID's and sorts them according to their distance from one another
+     *
+     * @param geoCodes the list of GeoCode ID's to sort
+     *
+     * @return the sorted GeoCode ID's in order of distance
+     */
     private List< UUID > sortByDistance( List< UUID > geoCodes ) {
 
         /* Holds the new order of the GeoCodes */
@@ -761,7 +775,36 @@ public class EventServiceImpl implements EventService {
 
         if ( geoCodes != null ) {
 
+            /*
 
+                Use this to calculate the distance of each GeoPoint to One Another
+
+
+                 // The math module contains a function
+                // named toRadians which converts from
+                // degrees to radians.
+                double lon1 = Math.toRadians(lon1);
+                double lon2 = Math.toRadians(lon2);
+                double lat1 = Math.toRadians(lat1);
+                double lat2 = Math.toRadians(lat2);
+
+                // Haversine formula
+                double dlon = lon2 - lon1;
+                double dlat = lat2 - lat1;
+                double a = Math.pow(Math.sin(dlat / 2), 2)
+                         + Math.cos(lat1) * Math.cos(lat2)
+                         * Math.pow(Math.sin(dlon / 2),2);
+
+                double c = 2 * Math.asin(Math.sqrt(a));
+
+                // Radius of earth in kilometers. Use 3956
+                // for miles
+                double r = 6371;
+
+                // calculate the result
+                return(c * r);
+
+            */
 
         }
 
