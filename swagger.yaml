@@ -778,10 +778,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GetCollectablesInGeoCodeByQRCodeRequest"
+              $ref: "#/components/schemas/GetCollectablesInGeoCodeByLocationRequest"
           application/xml:
             schema:
-              $ref: "#/components/schemas/GetCollectablesInGeoCodeByQRCodeRequest"
+              $ref: "#/components/schemas/GetCollectablesInGeoCodeByLocationRequest"
       responses:
         '200':
           description: "Return the GeoCodec at or near the given location"
