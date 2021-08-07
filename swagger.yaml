@@ -3221,6 +3221,26 @@ components:
             example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "Level"
+    TimeLog:
+      type: "object"
+      required:
+        - userID
+        - geoCodeID
+        - startTime
+      properties:
+        userID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        geoCodeID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        startTime:
+          type: string
+          format: date-time
+      xml:
+        name: "Level"
 
     OrderLevels:
       type: string
