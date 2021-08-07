@@ -20,16 +20,16 @@ import tech.geocodeapp.geocode.event.service.EventService;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.geocode.exceptions.RepoException;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.geocode.exceptions.RepoException;
+import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 
 import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.security.SecureRandom;
@@ -85,10 +85,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     /**
      * Constructor
      *
-     * @param geoCodeRepo        the repo the created response attributes should save to
+     * @param geoCodeRepo the repo the created response attributes should save to
      * @param collectableService access to the collectable use cases and repository
-     * @param userService        access to the user use cases and repository
-     * @param eventService       access to the Event use cases and repository
+     * @param userService access to the user use cases and repository
+     * @param eventService access to the Event use cases and repository
      *
      * @throws RepoException the GeoCode repository was invalid
      */
@@ -112,6 +112,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             /* The repo does not exist throw an error */
             throw new RepoException();
         }
+    }
+
+    @PostConstruct
+    public void init() {
+
+        eventService.setGeoCodeService( this );
     }
 
     /**
@@ -228,13 +234,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     }
 
     /**
-     * Get the GeoCode identified by the given UUID
+     * Get the GeoCode associated with the given ID
      *
-     * @param request Request object containing the UUID
+     * @param request the attributes the response should be created from
      *
-     * @return Response object containing the wanted GeoCode (if it is found)
+     * @return the newly created response instance from the specified GetGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    public GetGeoCodeByIDResponse getGeoCodeByID( GetGeoCodeByIDRequest request ) throws InvalidRequestException {
+    public GetGeoCodeResponse getGeoCode( GetGeoCodeRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -250,10 +258,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         if ( optionalGeoCode.isEmpty() ) {
 
-            return new GetGeoCodeByIDResponse( false, "No GeoCode exists with the given UUID", null );
+            return new GetGeoCodeResponse( null );
         } else {
 
-            return new GetGeoCodeByIDResponse( true, "GeoCode successfully returned", optionalGeoCode.get() );
+            return new GetGeoCodeResponse( optionalGeoCode.get() );
         }
     }
 
@@ -372,6 +380,64 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         return new GetGeoCodesByDifficultyResponse( hold );
     }
+
+    /**
+     * Get all the GeoCodes with a certain level of difficulty that can be a list of items
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetGeoCodesByDifficultyListRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetGeoCodesByDifficultyListResponse getGeoCodesByDifficultyList( GetGeoCodesByDifficultyListRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+            if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getDifficulty() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /*
+         * Sort through the stored GeoCodes and
+         * find all the GeoCodes with the specified difficulty
+         */
+        List< GeoCode > hold = new ArrayList<>();
+        for ( GeoCode code : geoCodeRepo.findAll() ) {
+
+            var temp = request.getDifficulty();
+            for ( Difficulty difficulty : temp ) {
+
+                /* Check if the current GeoCode has the Difficulty wanted */
+                if ( code.getDifficulty().equals( difficulty ) ) {
+
+                    /*
+                     * Ensure only the relevant data is shown
+                     */
+                    code.setHints( null );
+                    code.setQrCode( null );
+                    code.setCollectables( null );
+
+                    /*
+                     * The current GeoCode has the valid GeoCode
+                     * add it to the list
+                     */
+                    hold.add( code );
+                }
+            }
+        }
+
+        /*
+         * Create the new response
+         * and add valid GeoCodes to it
+         */
+        return new GetGeoCodesByDifficultyListResponse( hold );
+    }
+
 
     /**
      * Get the hints of how to locate a GeoCode in the real world

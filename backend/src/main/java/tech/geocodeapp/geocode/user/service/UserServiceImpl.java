@@ -22,8 +22,8 @@ import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.geocode.request.GetGeoCodeByIDRequest;
-import tech.geocodeapp.geocode.geocode.response.GetGeoCodeByIDResponse;
+import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
+import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
@@ -355,22 +355,22 @@ public class UserServiceImpl implements UserService {
         /* assign points to the User for finding the GeoCode */
 
         //get the GeoCode
-        GetGeoCodeByIDRequest getGeoCodeByIDRequest = new GetGeoCodeByIDRequest(request.getGeoCodeID());
-        GetGeoCodeByIDResponse getGeoCodeByIDResponse;
+        GetGeoCodeRequest getGeoCodeByIDRequest = new GetGeoCodeRequest(request.getGeoCodeID());
+        GetGeoCodeResponse getGeoCodeByIDResponse;
 
         try {
-            getGeoCodeByIDResponse = geoCodeService.getGeoCodeByID(getGeoCodeByIDRequest);
+            getGeoCodeByIDResponse = geoCodeService.getGeoCode(getGeoCodeByIDRequest);
         } catch (InvalidRequestException e) {
             e.printStackTrace();
             return new SwapCollectableResponse(false, e.getMessage(), null);
         }
 
         //check if the ID passed is valid
-        if(!getGeoCodeByIDResponse.isSuccess()){
-            return new SwapCollectableResponse(false, "Invalid ID given for the GeoCode", null);
-        }
+//        if(!getGeoCodeByIDResponse.success()){
+//            return new SwapCollectableResponse(false, "Invalid ID given for the GeoCode", null);
+//        }
 
-        GeoCode geoCode = getGeoCodeByIDResponse.getGeoCode();
+        GeoCode geoCode = getGeoCodeByIDResponse.getFoundGeoCode();
 
         //check if the GeoCode is part of an Event
         UUID eventID = geoCode.getEventID();
