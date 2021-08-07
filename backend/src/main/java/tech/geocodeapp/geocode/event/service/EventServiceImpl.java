@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.event.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.annotation.Validated;
@@ -9,13 +10,17 @@ import javax.validation.constraints.NotNull;
 
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.Level;
+import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.event.model.TimeTrial;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 
@@ -35,20 +40,27 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepo;
 
     /**
-     * The Event service to access the use cases and
-     * Event repository
+     * The Leaderboard service to access the use cases and
+     * Leaderboard repository
      */
-    @NotNull( message = "GeoCodeService: Event Service Implementation may not be null." )
+    @NotNull( message = "GeoCodeService: Leaderboard Service Implementation may not be null." )
     private final LeaderboardService leaderboardService;
 
     /**
+     * The GeoCode service to access the use cases and
+     * GeoCode repository
+     */
+    @Autowired
+    //@NotNull( message = "GeoCodeService: GeoCode Service Implementation may not be null." )
+    private GeoCodeService geoCodeService;
+
+    /**
      * Overloaded Constructor
-     *
      * @param eventRepo the repo the created response attributes should save to
      * @param leaderboardService access to the Leaderboard use cases and repository
      */
     public EventServiceImpl( EventRepository eventRepo,
-                             @Qualifier("LeaderboardService") @Lazy LeaderboardService leaderboardService ) throws RepoException {
+                             @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService ) throws RepoException {
 
         if ( eventRepo != null ) {
 
@@ -107,16 +119,37 @@ public class EventServiceImpl implements EventService {
         /* Hold each created Level object */
         var levels = new ArrayList<Level>();
 
-        /* Store the list of GeoCOde UUIDs to create a Level on */
+        /* Store the list of GeoCode UUIDs to create a Level on */
         List< UUID > geoCodes = request.getGeoCodesToFind();
+
+        /*
+        * Determine which order to set the GeoCodes in
+        * the default is OrderLevels.GIVEN
+        */
+        if ( request.getOrderBy().equals( OrderLevels.DIFFICULTY ) ) {
+
+            /* Set the list to go from easiest to most difficult on finding the GeoCode */
+            geoCodes = sortByDistance( geoCodes );
+        } else if ( request.getOrderBy().equals( OrderLevels.DISTANCE ) ) {
+
+            /* Set the list to go from least to most distance with where the GeoCode is located */
+            geoCodes = sortByDistance( geoCodes );
+        }
+
+        /* Check if the GeoCodes are still valid after sorting */
+        if ( geoCodes == null ) {
+
+            /* THe GeoCodes are no longer valid so stop */
+            return new CreateEventResponse( false );
+        }
 
         /* Go through each UUID */
         for ( UUID geoCode : geoCodes ) {
 
             /*
-            * Create the Level with a random UUID
-            * and add it to the list
-            */
+             * Create the Level with a random UUID
+             * and add it to the list
+             */
             levels.add( new Level( geoCode ) );
         }
 
@@ -598,5 +631,62 @@ public class EventServiceImpl implements EventService {
         /* The new leaderboard was successfully made */
         return new CreateLeaderboardResponse( true );
     }
+
+    /*---------- Post Construct GeoCode service ----------*/
+
+    /**
+     * Post construct the GeoCode service, this avoids a circular dependency
+     *
+     * @param geoCodeService the service to be set
+     */
+    public void setGeoCodeService( GeoCodeService  geoCodeService ) {
+
+        this.geoCodeService = geoCodeService;
+    }
+
+    /*-------------------------------------*/
+
+    /*---------- Helper Functions for creating an Event ----------*/
+
+    private List< UUID > sortByDifficulty( List< UUID > geoCodes ) {
+
+        List< UUID > hold = null;
+
+        if ( geoCodes != null ) {
+
+            /* Get the order of difficulties */
+            List< Difficulty > difficultyOrder = Difficulty.getDifficultyOrder();
+            List< GeoCode > temp = new ArrayList<>();
+            /*
+             * Go through each GeoCode ID
+             * and get the GeoCode object
+             */
+            for ( int x = 0; x < geoCodes.size(); x++ ) {
+
+                temp.add( null );
+            }
+
+            /* Apply sorting algorithm to get the objects in the correct order */
+        }
+
+        return hold;
+    }
+
+    public List< UUID > sortByDistance( List< UUID > geoCodes ) {
+
+        /* Holds the new order of the GeoCodes */
+        List< UUID > hold = null;
+
+        if ( geoCodes != null ) {
+
+
+
+        }
+
+        return hold;
+    }
+
+    /*-------------------------------------*/
+
 
 }

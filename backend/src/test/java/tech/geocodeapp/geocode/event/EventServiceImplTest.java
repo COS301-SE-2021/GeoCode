@@ -12,6 +12,7 @@ import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.service.*;
 import tech.geocodeapp.geocode.geocode.model.*;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
 import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
 import tech.geocodeapp.geocode.leaderboard.UserMockRepository;
@@ -53,6 +54,12 @@ class EventServiceImplTest {
      */
     @Mock( name = "leaderboardServiceImpl" )
     LeaderboardService leaderboardService;
+
+    /**
+     * The GeoCode service accessor
+     */
+    @Mock( name = "geoCodeServiceImpl" )
+    GeoCodeService geoCodeService;
 
     /**
      * The expected exception message for if the given request has invalid attributes
@@ -276,6 +283,16 @@ class EventServiceImplTest {
         }
     }
 
+    @Test
+    @DisplayName( "check" )
+    void check() {
+
+        /* Get the order of difficulties */
+        /* Get the order of difficulties */
+        List< Difficulty > difficultyOrder = Difficulty.getDifficultyOrder();
+
+        System.out.println( difficultyOrder );
+    }
 
     ////////////////Helper functions////////////////
 

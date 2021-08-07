@@ -108,7 +108,7 @@ class GeoCodeServiceImplTest {
      * by some other test or data.
      */
     @BeforeEach
-    void setup() throws tech.geocodeapp.geocode.event.exceptions.RepoException {
+    void setup() throws RepoException, tech.geocodeapp.geocode.event.exceptions.RepoException {
 
         /* Create a new repository instance and make sure there is no data in it */
         repo = new GeoCodeMockRepository();

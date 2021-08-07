@@ -29,6 +29,7 @@ import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.security.SecureRandom;
@@ -111,6 +112,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             /* The repo does not exist throw an error */
             throw new RepoException();
         }
+    }
+
+    @PostConstruct
+    public void init() {
+
+        eventService.setGeoCodeService( this );
     }
 
     /**
