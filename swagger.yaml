@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.1"
+  version: "1.5.2"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -3100,11 +3100,19 @@ components:
       xml:
         name: "CreatePointRequest"
 
-    CreatePointResponse:
+    PointResponse:
       type: "object"
       required:
+        - success
+        - message
         - point
       properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Successfully created a new point"
         point:
           $ref: "#/components/schemas/Point"
       xml:
