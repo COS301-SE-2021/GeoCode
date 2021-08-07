@@ -90,7 +90,7 @@ public class GeoCodeApiControllerV2 implements GeoCodeApi {
         return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
-    public ResponseEntity< GetCollectablesInGeoCodesByLocationResponse > getCollectablesInGeoCodesByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's collectables at or near the given location", required = true, schema = @Schema() ) @Valid @RequestBody GetCollectablesInGeoCodeByQRCodeRequest body ) {
+    public ResponseEntity< GetCollectablesInGeoCodesByLocationResponse > getCollectablesInGeoCodesByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's collectables at or near the given location", required = true, schema = @Schema() ) @Valid @RequestBody GetCollectablesInGeoCodesByLocationRequest body ) {
 
         String accept = request.getHeader( "Accept" );
         if ( accept != null && accept.contains( "application/json" ) ) {

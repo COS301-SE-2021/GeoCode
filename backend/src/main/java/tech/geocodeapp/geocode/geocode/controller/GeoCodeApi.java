@@ -61,7 +61,7 @@ public interface GeoCodeApi {
     @PostMapping( value = "/GeoCode/getCollectablesInGeoCodesByLocation",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity< GetCollectablesInGeoCodesByLocationResponse > getCollectablesInGeoCodesByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's collectables at or near the given location", required = true, schema = @Schema() ) @Valid @RequestBody GetCollectablesInGeoCodeByQRCodeRequest body );
+    ResponseEntity< GetCollectablesInGeoCodesByLocationResponse > getCollectablesInGeoCodesByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's collectables at or near the given location", required = true, schema = @Schema() ) @Valid @RequestBody GetCollectablesInGeoCodesByLocationRequest body ) throws InvalidRequestException;
 
 
     @Operation( summary = "Get a specific GeoCode", description = "Get a GeoCode with a specified ID", security = {
@@ -75,7 +75,7 @@ public interface GeoCodeApi {
     @PostMapping( value = "/GeoCode/getGeoCode",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity< GetGeoCodeResponse > getGeoCode( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get a stored GeoCode with teh specified ID", required = true, schema = @Schema() ) @Valid @RequestBody GetGeoCodeRequest body );
+    ResponseEntity< GetGeoCodeResponse > getGeoCode( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get a stored GeoCode with teh specified ID", required = true, schema = @Schema() ) @Valid @RequestBody GetGeoCodeRequest body ) throws InvalidRequestException;
 
 
     @Operation( summary = "Get the GeoCode at or near the given location", description = "Get the GeoCode at or near the given location", security = {
@@ -158,7 +158,7 @@ public interface GeoCodeApi {
     @PostMapping( value = "/GeoCode/getGeoCodesByDifficultyList",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity< GetGeoCodesByDifficultyListResponse > getGeoCodesByDifficultyList( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get all the GeoCodes by the specified difficulties", required = true, schema = @Schema() ) @Valid @RequestBody GetGeoCodesByDifficultyListRequest body );
+    ResponseEntity< GetGeoCodesByDifficultyListResponse > getGeoCodesByDifficultyList( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get all the GeoCodes by the specified difficulties", required = true, schema = @Schema() ) @Valid @RequestBody GetGeoCodesByDifficultyListRequest body ) throws InvalidRequestException;
 
 
     @Operation( summary = "Get the hints for the specified GeoCode", description = "Get the hints for the specified GeoCode to help locate it", security = {

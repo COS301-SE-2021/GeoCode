@@ -15,8 +15,6 @@ import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
 
-import java.io.IOException;
-
 @RestController
 @Validated
 public class GeoCodeApiController implements GeoCodeApi {
@@ -92,6 +90,37 @@ public class GeoCodeApiController implements GeoCodeApi {
         }
     }
 
+    public ResponseEntity< GetCollectablesInGeoCodesByLocationResponse > getCollectablesInGeoCodesByLocation( @Parameter( in = ParameterIn.DEFAULT,
+            description = "Request to get a GeoCode's collectables at or near the given location", required = true, schema = @Schema() )
+                                                                                                              @Valid @RequestBody GetCollectablesInGeoCodesByLocationRequest body ) throws InvalidRequestException {
+
+        GetCollectablesInGeoCodesByLocationResponse response = geoCodeService.getCollectablesInGeoCodesByLocation( body );
+
+        if ( response != null ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( null, HttpStatus.BAD_REQUEST );
+        }
+    }
+
+    public ResponseEntity< GetGeoCodeResponse > getGeoCode( @Parameter( in = ParameterIn.DEFAULT,
+            description = "Request to get a stored GeoCode with teh specified ID", required = true, schema = @Schema() )
+                                                            @Valid @RequestBody GetGeoCodeRequest body ) throws InvalidRequestException {
+
+        GetGeoCodeResponse response = geoCodeService.getGeoCode( body );
+
+        if ( response != null ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( null, HttpStatus.BAD_REQUEST );
+        }
+    }
+
+
     public ResponseEntity< GetCollectablesResponse > getGeoCodeCollectables( @Parameter( in = ParameterIn.DEFAULT,
             description = "Request to get a GeoCode's Collectables",
             required = true, schema = @Schema() )
@@ -99,7 +128,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         GetCollectablesResponse response = geoCodeService.getCollectables( body );
 
-        if (  ( response != null ) && ( response.getCollectables() != null ) && ( !response.getCollectables().isEmpty() ) ) {
+        if ( ( response != null ) && ( response.getCollectables() != null ) && ( !response.getCollectables().isEmpty() ) ) {
 
             return new ResponseEntity<>( response, HttpStatus.OK );
         } else {
@@ -112,7 +141,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         GetGeoCodesResponse response = geoCodeService.getAllGeoCodes();
 
-        if (  ( response != null ) ) {
+        if ( ( response != null ) ) {
 
             return new ResponseEntity<>( response, HttpStatus.OK );
         } else {
@@ -127,6 +156,21 @@ public class GeoCodeApiController implements GeoCodeApi {
                                                                                       @Valid @RequestBody GetGeoCodesByDifficultyRequest body ) throws InvalidRequestException {
 
         GetGeoCodesByDifficultyResponse response = geoCodeService.getGeoCodesByDifficulty( body );
+
+        if ( response != null ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( null, HttpStatus.BAD_REQUEST );
+        }
+    }
+
+    public ResponseEntity< GetGeoCodesByDifficultyListResponse > getGeoCodesByDifficultyList( @Parameter( in = ParameterIn.DEFAULT,
+            description = "Request to get all the GeoCodes by the specified difficulties", required = true, schema = @Schema() )
+                                                                                              @Valid @RequestBody GetGeoCodesByDifficultyListRequest body ) throws InvalidRequestException {
+
+        GetGeoCodesByDifficultyListResponse response = geoCodeService.getGeoCodesByDifficultyList( body );
 
         if ( response != null ) {
 
