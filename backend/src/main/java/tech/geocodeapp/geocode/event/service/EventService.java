@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.event.service;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 
 /**
  * This is the main interface is for the Event subsystem,
@@ -118,4 +119,10 @@ public interface EventService {
      */
     CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) throws InvalidRequestException;
 
+    /**
+     * Post construct the GeoCode service, this avoids a circular dependency
+     *
+     * @param geoCodeService the service to be set
+     */
+    void setGeoCodeService( GeoCodeService geoCodeService );
 }
