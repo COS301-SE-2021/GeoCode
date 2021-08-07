@@ -1,72 +1,74 @@
 package tech.geocodeapp.geocode.geocode.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.Valid;
+
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 
 import java.util.Objects;
 
 /**
- * CreateGeoCodeResponse used to access the attributes received to create the response
- * of if a GeoCode was created
+ * GetGeoCodeResponse
  */
 @Validated
-public class CreateGeoCodeResponse {
+public class GetGeoCodeResponse {
 
     /**
-     * Determines if the creation of a GeoCode with the specified attributes
-     * in the request was a success or not
+     * The found GeoCode with the given ID
      */
-    @JsonProperty( "success" )
-    private Boolean success = null;
+    @JsonProperty( "foundGeoCode" )
+    private GeoCode foundGeoCode;
 
     /**
      * Default constructor
      */
-    public CreateGeoCodeResponse() {
+    public GetGeoCodeResponse() {
 
     }
 
     /**
      * Overloaded Constructor
      *
-     * @param isSuccess Determines if the creation of a GeoCode with the specified attributes in the request was a success or not
+     * @param foundGeoCode The found GeoCode with the given ID
      */
-    public CreateGeoCodeResponse( Boolean isSuccess ) {
+    public GetGeoCodeResponse( GeoCode foundGeoCode ) {
 
-        this.success = isSuccess;
+        this.foundGeoCode = foundGeoCode;
     }
 
     /**
-     * Sets the success attribute to the specified value
+     * Sets the foundGeoCode attribute to the specified value
      *
-     * @param isSuccess the value the attribute should be set to
+     * @param foundGeoCode the value the attribute should be set to
      *
-     * @return the response after the success has been changed
+     * @return the request after the foundGeoCode has been changed
      */
-    public CreateGeoCodeResponse isSuccess( Boolean isSuccess ) {
+    public GetGeoCodeResponse foundGeoCode( GeoCode foundGeoCode ) {
 
-        this.success = isSuccess;
+        this.foundGeoCode = foundGeoCode;
         return this;
     }
 
     /**
-     * Gets the saved success attribute
+     * Gets the saved foundGeoCode attribute
      *
-     * @return the stored success attribute
+     * @return the stored foundGeoCode attribute
      */
-    public Boolean isIsSuccess() {
+    @Valid
+    public GeoCode getFoundGeoCode() {
 
-        return success;
+        return foundGeoCode;
     }
 
     /**
-     * Sets the success attribute to the specified value
+     * Sets the foundGeoCode attribute to the specified value
      *
-     * @param isSuccess the value the attribute should be set to
+     * @param foundGeoCode the value the attribute should be set to
      */
-    public void setIsSuccess( Boolean isSuccess ) {
+    public void setFoundGeoCode( GeoCode foundGeoCode ) {
 
-        this.success = isSuccess;
+        this.foundGeoCode = foundGeoCode;
     }
 
     /**
@@ -88,7 +90,7 @@ public class CreateGeoCodeResponse {
             return false;
         }
 
-        return Objects.equals( this.success, ( ( CreateGeoCodeResponse ) obj ).success );
+        return Objects.equals( this.foundGeoCode, ( ( GetGeoCodeResponse ) obj ).foundGeoCode );
     }
 
     /**
@@ -99,7 +101,7 @@ public class CreateGeoCodeResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( foundGeoCode );
     }
 
     /**
@@ -110,8 +112,8 @@ public class CreateGeoCodeResponse {
     @Override
     public String toString() {
 
-        return "class CreateGeoCodeResponse {\n" +
-                "    success: " + toIndentedString( success ) + "\n" +
+        return "class GetGeoCodeResponse {\n" +
+                "    foundGeoCode: " + toIndentedString( foundGeoCode ) + "\n" +
                 "}";
     }
 
