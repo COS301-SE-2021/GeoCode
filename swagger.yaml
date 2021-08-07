@@ -3222,6 +3222,14 @@ components:
       xml:
         name: "Level"
 
+    OrderLevels:
+      type: string
+      description: "The order an Event should follow with completing Levels"
+      enum:
+        - "GIVEN"
+        - "DIFFICULTY"
+        - "DISTANCE"
+
     GetAllEventsResponse:
       type: "object"
       properties:
@@ -3239,7 +3247,8 @@ components:
         - description
         - location
         - beginDate
-        - GeoCodesToFind
+        - geoCodesToFind
+        - orderBy
       properties:
         name:
           type: string
@@ -3259,10 +3268,12 @@ components:
           format: date
           pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
           example: "2017-01-01"
-        GeoCodesToFind:
+        geoCodesToFind:
           type: array
           items:
             $ref: "#/components/schemas/GeoCode"
+        orderBy:
+          $ref: "#/components/schemas/OrderLevels"
       xml:
         name: "CreateEventRequest"
 
@@ -3286,6 +3297,7 @@ components:
         - location
         - beginDate
         - GeoCodesToFind
+        - orderBy
       properties:
         timeLimit:
           type: number
@@ -3312,6 +3324,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/GeoCode"
+        orderBy:
+          $ref: "#/components/schemas/OrderLevels"
       xml:
         name: "CreateTimeTrialRequest"
 
