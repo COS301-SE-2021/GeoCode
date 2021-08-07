@@ -21,6 +21,14 @@
       <ion-button color="button"  (click)="selectLocation()">Select location on map</ion-button>
     </ion-item>
     <ion-item>
+      <ion-label>Event Type</ion-label>
+      <ion-select value="event" >
+        <ion-select-option value="event">Event</ion-select-option>
+        <ion-select-option value="timetrial">Time Trial</ion-select-option>
+        <ion-select-option value="challenge">Coding Challenge</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
       <ion-label>Add GeoCode</ion-label>
       <ion-button color="button"  (click)="createGeoCode()" >Create +</ion-button>
     </ion-item>
