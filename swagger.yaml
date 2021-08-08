@@ -1954,6 +1954,10 @@ components:
         success:
           type: boolean
           example: "True"
+        geoCodeID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "CreateGeoCodeResponse"
 
@@ -3281,7 +3285,9 @@ components:
         geoCodesToFind:
           type: array
           items:
-            $ref: "#/components/schemas/GeoCode"
+            type: string
+            format: uuid
+            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         orderBy:
           $ref: "#/components/schemas/OrderLevels"
       xml:
