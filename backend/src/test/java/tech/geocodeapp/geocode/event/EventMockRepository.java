@@ -15,11 +15,12 @@ import java.util.*;
 
 public class EventMockRepository< T extends Event > implements EventRepository< T > {
 
+    private HashMap< UUID, T > map = new HashMap<>();
 
     @Override
     public List< T > findAll() {
 
-        return null;
+        return new ArrayList< T >( map.values() );
     }
 
     @Override
@@ -100,6 +101,7 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
     @Override
     public void deleteAll() {
 
+        map.clear();
     }
 
     /**
@@ -115,7 +117,8 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
     @Override
     public < S extends T > S save( S entity ) {
 
-        return null;
+        map.put( entity.getId(), entity );
+        return entity;
     }
 
     @Override
@@ -136,7 +139,17 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
     @Override
     public Optional< T > findById( UUID uuid ) {
 
-        return Optional.empty();
+        Optional< T > hold = Optional.empty();
+
+        for ( int x = 0; x < map.size(); x++ ) {
+
+            if ( map.containsKey( uuid ) ) {
+
+                hold = Optional.ofNullable( map.get( uuid ) );
+            }
+        }
+
+        return hold;
     }
 
     /**
