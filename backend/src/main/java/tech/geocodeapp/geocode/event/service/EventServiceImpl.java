@@ -365,11 +365,11 @@ public class EventServiceImpl implements EventService {
             Optional< TimeTrial > temp = timeTrialRepo.findById( request.getEventID() );
             response = temp.map(
 
-                                    /* Indicate the Event was found and return it */
+                                    /* Indicate the TimeTrial was found and return it */
                                     timeTrial -> new GetTimeTrialResponse( true, timeTrial )
                                ).orElseGet(
 
-                                    /* Indicate the Event was not found */
+                                    /* Indicate the TimeTrial was not found */
                                     () -> new GetTimeTrialResponse( false )
                                );
 
@@ -394,7 +394,42 @@ public class EventServiceImpl implements EventService {
     @Override
     public IsTimeTrialResponse isTimeTrial( IsTimeTrialRequest request ) throws InvalidRequestException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getEventID() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Create the response to return */
+        IsTimeTrialResponse response;
+        try {
+
+            //ToDO come back to the repo and check how it is storing items
+            /*
+             * Query the repository for the TimeTrial object
+             * and set the response to true with the found TimeTrial
+             */
+            Optional< TimeTrial > temp = timeTrialRepo.findById( request.getEventID() );
+            response = temp.map(
+
+                                    /* Indicate the Event was found and return it */
+                                    timeTrial -> new IsTimeTrialResponse( true, timeTrial )
+                               ).orElseGet(
+
+                                    /* Indicate the Event was not found */
+                                    () -> new IsTimeTrialResponse( false )
+                              );
+
+        } catch ( EntityNotFoundException error ) {
+
+            /* No TimeTrial found so set the response to false */
+            response = new IsTimeTrialResponse( false );
+        }
+
+        return response;
     }
 
     /**
