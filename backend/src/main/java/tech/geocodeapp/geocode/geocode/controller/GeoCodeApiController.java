@@ -33,7 +33,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         CreateGeoCodeResponse response = geoCodeService.createGeoCode( body );
 
-        if ( ( response != null ) && ( response.isIsSuccess() != null ) ) {
+        if ( ( response != null ) && ( response.isSuccess() != null ) ) {
 
             return new ResponseEntity<>( response, HttpStatus.OK );
         } else {
