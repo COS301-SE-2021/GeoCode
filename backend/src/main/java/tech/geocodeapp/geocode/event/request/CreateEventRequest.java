@@ -1,11 +1,13 @@
 package tech.geocodeapp.geocode.event.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
 
+import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 import java.time.LocalDate;
@@ -61,6 +63,12 @@ public class CreateEventRequest {
     private List< UUID > geoCodesToFind;
 
     /**
+     * The order in which the Users will complete the different Levels
+     */
+    @JsonProperty( "orderBy" )
+    private OrderLevels orderBy;
+
+    /**
      * Default constructor
      */
     public CreateEventRequest() {
@@ -70,15 +78,17 @@ public class CreateEventRequest {
     /**
      * Overloaded Constructor
      *
-     * @param name what the new Event should be called
-     * @param description what the Event to be created is going to be about
-     * @param location the Event will be held at in the real world's location
-     * @param beginDate The starting Date of the Event
-     * @param endDate The end Date of the Event
+     * @param name           what the new Event should be called
+     * @param description    what the Event to be created is going to be about
+     * @param location       the Event will be held at in the real world's location
+     * @param beginDate      The starting Date of the Event
+     * @param endDate        The end Date of the Event
      * @param geoCodesToFind The different GeoCodes to find during the Event
+     * @param orderBy        The order in which the Users will complete the different Levels
      */
     public CreateEventRequest( String name, String description, GeoPoint location,
-                               LocalDate beginDate, LocalDate endDate, List< UUID > geoCodesToFind ) {
+                               LocalDate beginDate, LocalDate endDate,
+                               List< UUID > geoCodesToFind, OrderLevels orderBy ) {
 
         this.name = name;
         this.description = description;
@@ -86,6 +96,7 @@ public class CreateEventRequest {
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.geoCodesToFind = geoCodesToFind;
+        this.orderBy = orderBy;
     }
 
     /**
@@ -301,6 +312,40 @@ public class CreateEventRequest {
     }
 
     /**
+     * Sets the orderBy attribute to the specified value
+     *
+     * @param orderBy the value the attribute should be set to
+     *
+     * @return the request after the orderBy has been changed
+     */
+    public CreateEventRequest orderBy( OrderLevels orderBy ) {
+
+        this.orderBy = orderBy;
+        return this;
+    }
+
+    /**
+     * Gets the saved orderBy attribute
+     *
+     * @return the stored orderBy attribute
+     */
+    @Valid
+    public OrderLevels getOrderBy() {
+
+        return orderBy;
+    }
+
+    /**
+     * Sets the orderBy attribute to the specified value
+     *
+     * @param orderBy the value the attribute should be set to
+     */
+    public void setOrderBy( OrderLevels orderBy ) {
+
+        this.orderBy = orderBy;
+    }
+
+    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -325,7 +370,8 @@ public class CreateEventRequest {
                 Objects.equals( this.location, createEventRequest.location ) &&
                 Objects.equals( this.beginDate, createEventRequest.beginDate ) &&
                 Objects.equals( this.endDate, createEventRequest.endDate ) &&
-                Objects.equals( this.geoCodesToFind, createEventRequest.geoCodesToFind );
+                Objects.equals( this.geoCodesToFind, createEventRequest.geoCodesToFind ) &&
+                Objects.equals( this.orderBy, createEventRequest.orderBy );
     }
 
     /**
@@ -336,7 +382,7 @@ public class CreateEventRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( name, description, location, beginDate, endDate, geoCodesToFind );
+        return Objects.hash( name, description, location, beginDate, endDate, geoCodesToFind, orderBy );
     }
 
     /**
@@ -354,6 +400,7 @@ public class CreateEventRequest {
                 "    beginDate: " + toIndentedString( beginDate ) + "\n" +
                 "    endDate: " + toIndentedString( endDate ) + "\n" +
                 "    geoCodesToFind: " + toIndentedString( geoCodesToFind ) + "\n" +
+                "    orderBy: " + toIndentedString( orderBy ) + "\n" +
                 "}";
     }
 

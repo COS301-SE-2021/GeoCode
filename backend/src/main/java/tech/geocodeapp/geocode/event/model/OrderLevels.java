@@ -1,23 +1,19 @@
-package tech.geocodeapp.geocode.geocode.model;
+package tech.geocodeapp.geocode.event.model;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
- * The GeoCode's real world locating difficulty
+ * The order an Event should follow with completing Levels
  */
-public enum Difficulty {
+public enum OrderLevels {
 
-    EASY( "EASY" ),
-    MEDIUM( "MEDIUM" ),
-    HARD( "HARD" ),
-    INSANE( "INSANE" );
+    GIVEN( "GIVEN" ),
+    DIFFICULTY( "DIFFICULTY" ),
+    DISTANCE( "DISTANCE" );
 
     /**
-     * The value of the difficulty
+     * The value of the order
      */
     private final String value;
 
@@ -26,21 +22,10 @@ public enum Difficulty {
      *
      * @param value the enum to be created
      */
-    Difficulty( String value ) {
+    OrderLevels( String value ) {
 
         this.value = value;
     }
-
-    /**
-     * Get all the values in the enum
-     *
-     * @return the values the enum can take on
-     */
-    public static List< Difficulty > getDifficultyOrder() {
-
-        return Arrays.asList( Difficulty.values() );
-    }
-
 
     /**
      * Get the enum stored as a string
@@ -62,9 +47,9 @@ public enum Difficulty {
      * @return the enum that corresponds to the value
      */
     @JsonCreator
-    public static Difficulty fromValue( String text ) {
+    public static OrderLevels fromValue( String text ) {
 
-        for ( Difficulty b : Difficulty.values() ) {
+        for ( OrderLevels b : OrderLevels.values() ) {
 
             if ( String.valueOf( b.value ).equals( text ) ) {
 
@@ -74,4 +59,5 @@ public enum Difficulty {
 
         return null;
     }
+
 }

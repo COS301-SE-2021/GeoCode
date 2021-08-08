@@ -55,14 +55,14 @@ export class GeocodeContentsPage implements AfterViewInit {
     //Create map and center towards passed in geocode
     console.log(this.geocode);
     this.mapOptions = {
-      center: {lat: parseFloat(this.geocode.latitude), lng: parseFloat(this.geocode.longitude)},
+      center: {lat: parseFloat(this.geocode.location.latitude), lng: parseFloat(this.geocode.location.longitude)},
       zoom: 18,
     };
   //Create map
    this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
    //Create map marker at geocode location
    new this.googleMaps.Marker({
-      position: {lat: parseFloat(this.geocode.latitude), lng: parseFloat(this.geocode.longitude)},
+      position: {lat: parseFloat(this.geocode.location.latitude), lng: parseFloat(this.geocode.location.longitude)},
       map: this.map,
       title: '',
     });

@@ -3209,15 +3209,10 @@ components:
     TimeLog:
       type: "object"
       required:
-        - eventID
         - userID
         - geoCodeID
         - startTime
       properties:
-        eventID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         userID:
           type: string
           format: uuid

@@ -1,72 +1,73 @@
-package tech.geocodeapp.geocode.geocode.response;
+package tech.geocodeapp.geocode.geocode.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
- * CreateGeoCodeResponse used to access the attributes received to create the response
- * of if a GeoCode was created
+ * GetGeoCodeRequest
  */
 @Validated
-public class CreateGeoCodeResponse {
+public class GetGeoCodeRequest {
 
     /**
-     * Determines if the creation of a GeoCode with the specified attributes
-     * in the request was a success or not
+     * The unique identifier of a specific GeoCode
      */
-    @JsonProperty( "success" )
-    private Boolean success = null;
+    @JsonProperty( "geoCodeID" )
+    private UUID geoCodeID;
 
     /**
      * Default constructor
      */
-    public CreateGeoCodeResponse() {
+    public GetGeoCodeRequest() {
 
     }
 
     /**
      * Overloaded Constructor
      *
-     * @param isSuccess Determines if the creation of a GeoCode with the specified attributes in the request was a success or not
+     * @param geoCodeID The unique identifier of a specific GeoCode
      */
-    public CreateGeoCodeResponse( Boolean isSuccess ) {
+    public GetGeoCodeRequest( UUID geoCodeID ) {
 
-        this.success = isSuccess;
+        this.geoCodeID = geoCodeID;
     }
 
     /**
-     * Sets the success attribute to the specified value
+     * Sets the geoCodeID attribute to the specified value
      *
-     * @param isSuccess the value the attribute should be set to
+     * @param geoCodeID the value the attribute should be set to
      *
-     * @return the response after the success has been changed
+     * @return the request after the geoCodeID has been changed
      */
-    public CreateGeoCodeResponse isSuccess( Boolean isSuccess ) {
+    public GetGeoCodeRequest geoCodeID( UUID geoCodeID ) {
 
-        this.success = isSuccess;
+        this.geoCodeID = geoCodeID;
         return this;
     }
 
     /**
-     * Gets the saved success attribute
+     * Gets the saved geoCodeID attribute
      *
-     * @return the stored success attribute
+     * @return the stored geoCodeID attribute
      */
-    public Boolean isIsSuccess() {
+    @Valid
+    public UUID getGeoCodeID() {
 
-        return success;
+        return geoCodeID;
     }
 
     /**
-     * Sets the success attribute to the specified value
+     * Sets the geoCodeID attribute to the specified value
      *
-     * @param isSuccess the value the attribute should be set to
+     * @param geoCodeID the value the attribute should be set to
      */
-    public void setIsSuccess( Boolean isSuccess ) {
+    public void setGeoCodeID( UUID geoCodeID ) {
 
-        this.success = isSuccess;
+        this.geoCodeID = geoCodeID;
     }
 
     /**
@@ -80,15 +81,13 @@ public class CreateGeoCodeResponse {
     public boolean equals( java.lang.Object obj ) {
 
         if ( this == obj ) {
-
             return true;
         }
         if ( obj == null || getClass() != obj.getClass() ) {
-
             return false;
         }
 
-        return Objects.equals( this.success, ( ( CreateGeoCodeResponse ) obj ).success );
+        return Objects.equals( this.geoCodeID, ( ( GetGeoCodeRequest ) obj ).geoCodeID );
     }
 
     /**
@@ -99,7 +98,7 @@ public class CreateGeoCodeResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( geoCodeID );
     }
 
     /**
@@ -110,8 +109,8 @@ public class CreateGeoCodeResponse {
     @Override
     public String toString() {
 
-        return "class CreateGeoCodeResponse {\n" +
-                "    success: " + toIndentedString( success ) + "\n" +
+        return "class GetGeoCodeRequest {\n" +
+                "    geoCodeID: " + toIndentedString( geoCodeID ) + "\n" +
                 "}";
     }
 
