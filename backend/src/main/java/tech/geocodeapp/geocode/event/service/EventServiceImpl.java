@@ -335,6 +335,21 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
+     * Determine if the given ID is for a TimeTrial or Event
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified IsTimeTrialRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public IsTimeTrialResponse isTimeTrial( IsTimeTrialRequest request ) throws InvalidRequestException {
+
+        return null;
+    }
+
+    /**
      * Get a specific Event that a User is currently partaking in and the Event stored in the repository
      *
      * @param request the attributes the response should be created from

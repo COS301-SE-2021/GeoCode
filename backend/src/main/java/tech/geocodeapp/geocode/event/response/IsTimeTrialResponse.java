@@ -10,28 +10,28 @@ import tech.geocodeapp.geocode.event.model.TimeTrial;
 import java.util.Objects;
 
 /**
- * GetTimeTrialResponse object to hold the found TimeTrial
+ * IsTimeTrialResponse
  */
 @Validated
-public class GetTimeTrialResponse {
+public class IsTimeTrialResponse {
 
     /**
      * Determines if an Event was found or not
      */
     @JsonProperty( "found" )
-    @NotNull( message = "GetTimeTrialResponse found attribute cannot be null." )
+    @NotNull( message = "IsTimeTrialResponse found attribute cannot be null." )
     private Boolean found;
 
     /**
      * The found TimeTrial
      */
     @JsonProperty( "foundEvent" )
-    private TimeTrial foundEvent = null;
+    private TimeTrial foundEvent;
 
     /**
      * Default Constructor
      */
-    public GetTimeTrialResponse() {
+    public IsTimeTrialResponse() {
 
     }
 
@@ -40,7 +40,7 @@ public class GetTimeTrialResponse {
      *
      * @param found Determines if an Event was found or not
      */
-    public GetTimeTrialResponse( Boolean found ) {
+    public IsTimeTrialResponse( Boolean found ) {
 
         this.found = found;
     }
@@ -51,7 +51,7 @@ public class GetTimeTrialResponse {
      * @param found Determines if an Event was found or not
      * @param foundEvent The found Event
      */
-    public GetTimeTrialResponse( Boolean found, TimeTrial foundEvent ) {
+    public IsTimeTrialResponse( Boolean found, TimeTrial foundEvent ) {
 
         this.found = found;
         this.foundEvent = foundEvent;
@@ -64,7 +64,7 @@ public class GetTimeTrialResponse {
      *
      * @return the request after the found has been changed
      */
-    public GetTimeTrialResponse found( Boolean found ) {
+    public IsTimeTrialResponse found( Boolean found ) {
 
         this.found = found;
         return this;
@@ -97,7 +97,7 @@ public class GetTimeTrialResponse {
      *
      * @return the request after the foundEvent has been changed
      */
-    public GetTimeTrialResponse foundEvent( TimeTrial foundEvent ) {
+    public IsTimeTrialResponse foundEvent( TimeTrial foundEvent ) {
 
         this.foundEvent = foundEvent;
         return this;
@@ -143,9 +143,9 @@ public class GetTimeTrialResponse {
             return false;
         }
 
-        var getTimeTrialResponse = ( GetTimeTrialResponse ) obj;
-        return Objects.equals( this.found, getTimeTrialResponse.found ) &&
-                Objects.equals( this.foundEvent, getTimeTrialResponse.foundEvent );
+        IsTimeTrialResponse isTimeTrialResponse = ( IsTimeTrialResponse ) obj;
+        return Objects.equals( this.found, isTimeTrialResponse.found ) &&
+                Objects.equals( this.foundEvent, isTimeTrialResponse.foundEvent );
     }
 
     /**
@@ -167,7 +167,7 @@ public class GetTimeTrialResponse {
     @Override
     public String toString() {
 
-        return "class GetTimeTrialResponse {\n" +
+        return "class IsTimeTrialResponse {\n" +
                 "    found: " + toIndentedString( found ) + "\n" +
                 "    foundEvent: " + toIndentedString( foundEvent ) + "\n" +
                 "}";
