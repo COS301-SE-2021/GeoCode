@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.2"
+  version: "1.5.3"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -778,10 +778,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GetCollectablesInGeoCodeByLocationRequest"
+              $ref: "#/components/schemas/GetCollectablesInGeoCodesByLocationRequest"
           application/xml:
             schema:
-              $ref: "#/components/schemas/GetCollectablesInGeoCodeByLocationRequest"
+              $ref: "#/components/schemas/GetCollectablesInGeoCodesByLocationRequest"
       responses:
         '200':
           description: "Return the GeoCodec at or near the given location"
