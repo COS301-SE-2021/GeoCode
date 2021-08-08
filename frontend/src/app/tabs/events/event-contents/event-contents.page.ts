@@ -8,9 +8,9 @@ import {GeoCodeService} from '../../../services/geocode-api';
 @Component({
   selector: 'app-event-timetrial',
   templateUrl: './event-timetrial.page.html',
-  styleUrls: ['./event-timetrial.page.scss'],
+  styleUrls: ['./event-contents.page.scss'],
 })
-export class EventTimetrialPage implements AfterViewInit {
+export class EventContentsPage implements AfterViewInit {
   @ViewChild('mapElement',{static:false}) mapElement;
   selected=[{stage:1,description:'code',difficulty:'Easy',found:true}];
   current='A';

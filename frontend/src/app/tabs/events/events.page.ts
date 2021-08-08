@@ -54,7 +54,7 @@ export class EventsPage implements AfterViewInit {
         event
       }
     };
-    this.navCtrl.navigateForward('/events/event-timetrial',navigationExtras);
+    this.navCtrl.navigateForward('/events/event-contents',navigationExtras);
   }
 
   goToLeaderBoard(event){

@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EventTimetrialPageRoutingModule } from './event-timetrial-routing.module';
+import { EventTimetrialPageRoutingModule } from './event-contents-routing.module';
 
-import { EventTimetrialPage } from './event-timetrial.page';
+import { EventContentsPage } from './event-contents.page';
 
 @NgModule({
   imports: [
@@ -15,6 +15,6 @@ import { EventTimetrialPage } from './event-timetrial.page';
     IonicModule,
     EventTimetrialPageRoutingModule
   ],
-  declarations: [EventTimetrialPage]
+  declarations: [EventContentsPage]
 })
 export class EventTimetrialPageModule {}
