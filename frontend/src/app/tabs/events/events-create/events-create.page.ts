@@ -159,7 +159,7 @@ this.minEndDate=$event.detail.value;
         beginDate: this.request.beginDate,
         description: this.request.description,
         endDate: this.request.endDate,
-        geoCodesToFind: this.request.geoCodesToFind,
+       // geoCodesToFind: this.request.geoCodesToFind,
         location: this.request.location,
         name: this.request.name,
         orderBy: this.request.orderBy,

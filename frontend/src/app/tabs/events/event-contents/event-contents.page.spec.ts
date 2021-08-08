@@ -8,7 +8,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {GeoCodeService} from '../../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
-describe('EventTimetrialPage', () => {
+describe('EventContentsPage', () => {
   let component: EventContentsPage;
   let fixture: ComponentFixture<EventContentsPage>;
 

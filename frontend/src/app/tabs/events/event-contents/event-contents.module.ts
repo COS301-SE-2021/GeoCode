@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EventTimetrialPageRoutingModule } from './event-contents-routing.module';
+import {EventContentsRoutingModule} from './event-contents-routing.module';
 
 import { EventContentsPage } from './event-contents.page';
 
@@ -13,8 +13,8 @@ import { EventContentsPage } from './event-contents.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    EventTimetrialPageRoutingModule
+    EventContentsRoutingModule
   ],
   declarations: [EventContentsPage]
 })
-export class EventTimetrialPageModule {}
+export class EventContentsModule {}

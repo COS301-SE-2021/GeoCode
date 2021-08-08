@@ -6,8 +6,8 @@ import {GeoCodeService} from '../../../services/geocode-api';
 
 
 @Component({
-  selector: 'app-event-timetrial',
-  templateUrl: './event-timetrial.page.html',
+  selector: 'app-event-contents',
+  templateUrl: './event-contents.page.html',
   styleUrls: ['./event-contents.page.scss'],
 })
 export class EventContentsPage implements AfterViewInit {
