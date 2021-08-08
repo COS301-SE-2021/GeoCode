@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.3"
+  version: "1.5.4"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -1958,6 +1958,9 @@ components:
           type: string
           format: uuid
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        qrCode:
+          type: string
+          example: "1qwer3d4"
       xml:
         name: "CreateGeoCodeResponse"
 
