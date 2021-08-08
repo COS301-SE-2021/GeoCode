@@ -69,6 +69,17 @@ public interface EventService {
     IsTimeTrialResponse isTimeTrial( IsTimeTrialRequest request ) throws InvalidRequestException;
 
     /**
+     *  Get a specified TimeLog entry that is stored in the repository
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetTimeLogRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetTimeLogResponse getTimeLog( GetTimeLogRequest request ) throws InvalidRequestException;
+
+    /**
      * Get a specific Event that a User is currently partaking in and the Event stored in the repository
      *
      * @param request the attributes the response should be created from

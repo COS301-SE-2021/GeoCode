@@ -3583,7 +3583,7 @@ components:
         found:
           type: boolean
           example: "True"
-        foundEvent:
+        foundTimeLog:
           $ref: "#/components/schemas/TimeLog"
       xml:
         name: "GetEventResponse"
