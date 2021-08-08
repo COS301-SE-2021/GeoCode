@@ -201,14 +201,31 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             return new CreateGeoCodeResponse( false );
         }
 
+        /* Create the GeoCode Object */
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
                                       qr.toString(), request.getLocation(), UUID.randomUUID(), getEventResponse.getFoundEvent().getId() );
 
-        // ToDo: update look at service contract
+        /*
+         * Save the newly created GeoCode
+         * Validate if the GeoCode was saved properly
+         */
+        try {
 
-        /* Save the created GeoCode to the repository */
-        geoCodeRepo.save( newGeoCode );
+            /* Save the newly created entry to the repository */
+            var check = geoCodeRepo.save( newGeoCode );
+
+            /* Check if the Object was saved correctly */
+            if ( !newGeoCode.equals( check ) ) {
+
+                /* Saved GeoCode not the same therefore creation failed */
+                return new CreateGeoCodeResponse( false );
+            }
+        } catch ( IllegalArgumentException error ) {
+
+            /* Exception thrown therefore creation failed */
+            return new CreateGeoCodeResponse( false );
+        }
 
         /*
          * Create the new response
@@ -224,10 +241,20 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         var temp = geoCodeRepo.findById( id );
         if ( temp.isPresent() ) {
 
-            response.setIsSuccess( temp.get().getId().equals( id ) );
+            /* Check the ID's are identical */
+            if ( temp.get().getId().equals( id ) ) {
+
+                /* Set the attributes as the creation was successful */
+                response = new CreateGeoCodeResponse( true, id, qr.toString() );
+            } else {
+
+                /* An error occurred since the ID's are not identical */
+                response.setSuccess( false );
+            }
         } else {
 
-            response.setIsSuccess( false );
+            /* Exception thrown therefore creation failed */
+            response.setSuccess( false );
         }
 
         return response;

@@ -3,7 +3,9 @@ package tech.geocodeapp.geocode.geocode.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * CreateGeoCodeResponse used to access the attributes received to create the response
@@ -17,7 +19,19 @@ public class CreateGeoCodeResponse {
      * in the request was a success or not
      */
     @JsonProperty( "success" )
-    private Boolean success = null;
+    private Boolean success;
+
+    /**
+     * The unique identifier of the created GeoCode
+     */
+    @JsonProperty( "geoCodeID" )
+    private UUID geoCodeID;
+
+    /**
+     * The QRCode of the created GeoCode
+     */
+    @JsonProperty( "QRCode" )
+    private String qrCode;
 
     /**
      * Default constructor
@@ -29,23 +43,37 @@ public class CreateGeoCodeResponse {
     /**
      * Overloaded Constructor
      *
-     * @param isSuccess Determines if the creation of a GeoCode with the specified attributes in the request was a success or not
+     * @param success Determines if the creation of a GeoCode with the specified attributes in the request was a success or not
      */
-    public CreateGeoCodeResponse( Boolean isSuccess ) {
+    public CreateGeoCodeResponse( Boolean success ) {
 
-        this.success = isSuccess;
+        this.success = success;
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param success Determines if the creation of a GeoCode with the specified attributes in the request was a success or not
+     * @param geoCodeID The unique identifier of the created GeoCode
+     * @param qrCode The QRCode of the created GeoCode
+     */
+    public CreateGeoCodeResponse( Boolean success, UUID geoCodeID, String qrCode ) {
+
+        this.success = success;
+        this.geoCodeID = geoCodeID;
+        this.qrCode = qrCode;
     }
 
     /**
      * Sets the success attribute to the specified value
      *
-     * @param isSuccess the value the attribute should be set to
+     * @param success the value the attribute should be set to
      *
      * @return the response after the success has been changed
      */
-    public CreateGeoCodeResponse isSuccess( Boolean isSuccess ) {
+    public CreateGeoCodeResponse success( Boolean success ) {
 
-        this.success = isSuccess;
+        this.success = success;
         return this;
     }
 
@@ -54,7 +82,7 @@ public class CreateGeoCodeResponse {
      *
      * @return the stored success attribute
      */
-    public Boolean isIsSuccess() {
+    public Boolean isSuccess() {
 
         return success;
     }
@@ -62,11 +90,78 @@ public class CreateGeoCodeResponse {
     /**
      * Sets the success attribute to the specified value
      *
-     * @param isSuccess the value the attribute should be set to
+     * @param success the value the attribute should be set to
      */
-    public void setIsSuccess( Boolean isSuccess ) {
+    public void setSuccess( Boolean success ) {
 
-        this.success = isSuccess;
+        this.success = success;
+    }
+
+    /**
+     * Sets the geoCodeID attribute to the specified value
+     *
+     * @param geoCodeID the value the attribute should be set to
+     *
+     * @return the request after the geoCodeID has been changed
+     */
+    public CreateGeoCodeResponse geoCodeID( UUID geoCodeID ) {
+
+        this.geoCodeID = geoCodeID;
+        return this;
+    }
+
+    /**
+     * Gets the saved geoCodeID attribute
+     *
+     * @return the stored geoCodeID attribute
+     */
+    @Valid
+    public UUID getGeoCodeID() {
+
+        return geoCodeID;
+    }
+
+    /**
+     * Sets the geoCodeID attribute to the specified value
+     *
+     * @param geoCodeID the value the attribute should be set to
+     */
+    public void setGeoCodeID( UUID geoCodeID ) {
+
+        this.geoCodeID = geoCodeID;
+    }
+
+    /**
+     * Sets the qrCode attribute to the specified value
+     *
+     * @param qrCode the value the attribute should be set to
+     *
+     * @return the request after the qrCode has been changed
+     */
+    public CreateGeoCodeResponse qrCode( String qrCode ) {
+
+        this.qrCode = qrCode;
+        return this;
+    }
+
+    /**
+     * Gets the saved qrCode attribute
+     *
+     * @return the stored qrCode attribute
+     */
+    public String getQrCode() {
+
+        return qrCode;
+    }
+
+    /**
+     * Sets the qrCode attribute to the specified value
+     *
+     * @param qrCode the value the attribute should be set to
+     */
+    public void setQrCode( String qrCode ) {
+
+        this.qrCode = qrCode;
     }
 
     /**
@@ -88,7 +183,10 @@ public class CreateGeoCodeResponse {
             return false;
         }
 
-        return Objects.equals( this.success, ( ( CreateGeoCodeResponse ) obj ).success );
+        var createGeoCodeResponse = ( CreateGeoCodeResponse ) obj;
+        return Objects.equals( this.success, createGeoCodeResponse.success ) &&
+               Objects.equals( this.geoCodeID, createGeoCodeResponse.geoCodeID ) &&
+               Objects.equals( this.qrCode, createGeoCodeResponse.qrCode );
     }
 
     /**
@@ -99,7 +197,7 @@ public class CreateGeoCodeResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( success, geoCodeID, qrCode );
     }
 
     /**
@@ -112,6 +210,8 @@ public class CreateGeoCodeResponse {
 
         return "class CreateGeoCodeResponse {\n" +
                 "    success: " + toIndentedString( success ) + "\n" +
+                "    geoCodeID: " + toIndentedString( geoCodeID ) + "\n" +
+                "    qrCode: " + toIndentedString( qrCode ) + "\n" +
                 "}";
     }
 

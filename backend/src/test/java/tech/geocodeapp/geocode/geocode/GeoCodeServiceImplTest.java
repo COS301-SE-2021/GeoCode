@@ -258,7 +258,7 @@ class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the description created with the code
              */
-            Assertions.assertTrue( response.isIsSuccess() );
+            Assertions.assertTrue( response.isSuccess() );
 
         } catch ( InvalidRequestException e ) {
 
