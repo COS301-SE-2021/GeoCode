@@ -9,9 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { CollectableResponse } from './collectableResponse';
 
-export interface CreateGeoCodeResponse { 
-    success: boolean;
-    geoCodeID?: string;
-    qrCode?: string;
+export interface GetCollectablesInGeoCodeByQRCodeResponse { 
+    storedCollectable: Array<CollectableResponse>;
 }
