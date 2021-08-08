@@ -21,6 +21,14 @@
       <ion-button color="button"  (click)="selectLocation()">Select location on map</ion-button>
     </ion-item>
     <ion-item>
+      <ion-label>Start Date</ion-label>
+      <ion-datetime displayFormat="MMM D YYYY" min="{{minDate}}" max="4000"  (ionChange)="startDate($event)"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>End Date</ion-label>
+      <ion-datetime displayFormat="MMM D YYYY" min="{{minEndDate}}" max="4000" (ionChange)="endDate($event)"></ion-datetime>
+    </ion-item>
+    <ion-item>
       <ion-label>Event Type</ion-label>
       <ion-select value="event" (ionChange)="eventType($event)" >
         <ion-select-option value="event">Event</ion-select-option>
@@ -32,7 +40,14 @@
       <ion-label>Time Limit(days:hours:minutes)</ion-label>
       <ion-datetime displayFormat="D:HH:mm"></ion-datetime>
     </ion-item>
-
+    <ion-item>
+      <ion-label>Order GeoCodes By</ion-label>
+      <ion-select value="GIVEN" (ionChange)="orderBy($event)" >
+        <ion-select-option value="DIFFICULTY">Difficulty</ion-select-option>
+        <ion-select-option value="DISTANCE">Quickest Route</ion-select-option>
+        <ion-select-option value="GIVEN">Given Order</ion-select-option>
+      </ion-select>
+    </ion-item>
     <ion-item>
       <ion-label>Add GeoCode</ion-label>
       <ion-button color="button"  (click)="createGeoCode()" >Create +</ion-button>

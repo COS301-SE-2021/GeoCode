@@ -1,9 +1,15 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {CreateGeoCodeResponse, GeoCode, GeoCodeService} from '../../../services/geocode-api';
+import {
+  CreateEventRequest, CreateEventResponse,
+  CreateGeoCodeResponse, CreateTimeTrialRequest, CreateTimeTrialResponse,
+  EventService,
+  GeoCode,
+  GeoCodeService
+} from '../../../services/geocode-api';
 import {ModalController, NavController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
-import {EventLocationComponent} from "./event-location/event-location.component";
+import {EventLocationComponent} from './event-location/event-location.component';
 
 @Component({
   selector: 'app-events-create',
@@ -19,16 +25,31 @@ export class EventsCreatePage implements AfterViewInit  {
   markers= [];
   geocodes: GeoCode[] = [];
   selected=[];
-  isHidden=true;
   type='event';
   timeHidden=true;
   challengeHidden=true;
   height='0%';
+  minDate;
+  minEndDate;
+  timeLimit=0;
+  // @ts-ignore
+  request: CreateEventRequest = {
+    beginDate: '',
+    description: '',
+    geoCodesToFind: [],
+    location: {latitude: 0,longitude: 0},
+    name: '',
+    orderBy: 'GIVEN',
+    endDate:''
+  };
   constructor(      private modalController: ModalController,
                     private navCtrl: NavController,
                     private geocodeApi: GeoCodeService,
                     private mapsLoader: GoogleMapsLoader,
-                    private toastController: ToastController) { }
+                    private toastController: ToastController,
+                    private eventApi: EventService) {
+
+  }
 
   //Create map and add mapmarkers of geocodes
   loadMap(){
@@ -44,6 +65,11 @@ export class EventsCreatePage implements AfterViewInit  {
   async ngAfterViewInit() {
     this.googleMaps = await this.mapsLoader.load();
     this.loadMap();
+    const date= new Date();
+
+    this.minDate= new Date().toISOString();
+    this.minEndDate= new Date().toISOString();
+
   }
 
   async createGeoCode() {
@@ -78,7 +104,9 @@ export class EventsCreatePage implements AfterViewInit  {
     await modal.present();
     const { data } = await modal.onDidDismiss();
     if (data != null) {
-    console.log(data.getPosition().lat());
+      this.request.location.latitude=data.getPosition().lat();
+      this.request.location.longitude=data.getPosition().lng();
+      console.log(this.request);
     }else{
       console.log('Null');
     }
@@ -97,6 +125,54 @@ export class EventsCreatePage implements AfterViewInit  {
       this.timeHidden=true;
       this.challengeHidden=true;
     }
+  }
+
+  orderBy($event){
+    console.log($event.detail.value);
+    this.request.orderBy=$event.detail.value;
+  }
+
+  startDate($event){
+console.log($event);
+this.request.beginDate=$event.detail.value;
+this.minEndDate=$event.detail.value;
+  }
+
+  endDate($event){
+    this.request.endDate=$event.detail.value;
+  }
+
+  showGeoCodes(){
+
+  }
+
+  createEvent(){
+    // eslint-disable-next-line eqeqeq
+    if(this.type=='event'){
+      this.eventApi.createEvent(this.request).subscribe((response: CreateEventResponse) =>{
+        console.log(response);
+      });
+      // eslint-disable-next-line eqeqeq
+    }else if(this.type =='timetrial'){
+      // @ts-ignore
+      const timeRequest: CreateTimeTrialRequest={
+        beginDate: this.request.beginDate,
+        description: this.request.description,
+        endDate: this.request.endDate,
+        geoCodesToFind: this.request.geoCodesToFind,
+        location: this.request.location,
+        name: this.request.name,
+        orderBy: this.request.orderBy,
+        timeLimit: this.timeLimit
+
+      };
+      this.eventApi.createTimeTrial(timeRequest).subscribe((response: CreateTimeTrialResponse) =>{
+        console.log(response);
+      });
+    }else{
+    //challenge wow factor demo 4
+    }
+
   }
 
 }
