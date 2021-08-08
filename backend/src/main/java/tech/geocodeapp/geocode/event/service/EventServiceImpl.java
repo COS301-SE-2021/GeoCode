@@ -36,13 +36,19 @@ import java.util.*;
 public class EventServiceImpl implements EventService {
 
     /**
-     * The repository the GeoCode class interacts with
+     * The repository the Event class interacts with
      */
     @NotNull( message = "Events repository may not be null." )
-    private final EventRepository eventRepo;
+    private final EventRepository< Event > eventRepo;
 
     /**
-     * The repository the GeoCode class interacts with
+     * The repository the Event class interacts with
+     */
+    @NotNull( message = "Events repository may not be null." )
+    private final EventRepository< TimeTrial > timeTrialRepo;
+
+    /**
+     * The repository the Event class interacts with
      */
     @NotNull( message = "TimeLog repository may not be null." )
     private final TimeLogRepository timeLogRepo;
@@ -67,13 +73,14 @@ public class EventServiceImpl implements EventService {
      * @param eventRepo          the repo the created response attributes should save to
      * @param leaderboardService access to the Leaderboard use cases and repository
      */
-    public EventServiceImpl( EventRepository eventRepo, TimeLogRepository timeLogRepo,
+    public EventServiceImpl( EventRepository< Event > eventRepo, EventRepository< TimeTrial > timeTrialRepo, TimeLogRepository timeLogRepo,
                              @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService ) throws RepoException {
 
         if ( ( eventRepo != null ) && ( timeLogRepo != null ) ) {
 
             /* The repo exists therefore it can be set for the class */
             this.eventRepo = eventRepo;
+            this.timeTrialRepo = timeTrialRepo;
             this.timeLogRepo = timeLogRepo;
 
             this.leaderboardService = Objects.requireNonNull( leaderboardService, "EventService: Leaderboard service must not be null." );
@@ -262,7 +269,7 @@ public class EventServiceImpl implements EventService {
         try {
 
             /* Save the newly created entry to the repository */
-            var check = eventRepo.save( timeTrial );
+            var check = timeTrialRepo.save( timeTrial );
 
             /* Check if the Object was saved correctly */
             if ( !timeTrial.equals( check ) ) {
@@ -309,13 +316,13 @@ public class EventServiceImpl implements EventService {
             Optional< Event > temp = eventRepo.findById( request.getEventID() );
             response = temp.map(
 
-                    /* Indicate the Event was found and return it */
-                    event -> new GetEventResponse( true, event )
+                                    /* Indicate the Event was found and return it */
+                                    event -> new GetEventResponse( true, event )
                                ).orElseGet(
 
-                    /* Indicate the Event was not found */
-                    () -> new GetEventResponse( false )
-                                          );
+                                    /* Indicate the Event was not found */
+                                    () -> new GetEventResponse( false )
+                               );
 
         } catch ( EntityNotFoundException error ) {
 
@@ -352,23 +359,23 @@ public class EventServiceImpl implements EventService {
         try {
 
             /*
-             * Query the repository for the Event object
-             * and set the response to true with the found Event
+             * Query the repository for the TimeTrial object
+             * and set the response to true with the found TimeTrial
              */
-            Optional< Event > temp = eventRepo.findById( request.getEventID() );
+            Optional< TimeTrial > temp = timeTrialRepo.findById( request.getEventID() );
             response = temp.map(
 
-                    /* Indicate the Event was found and return it */
-                    event -> new GetTimeTrialResponse( true, null )
+                                    /* Indicate the Event was found and return it */
+                                    timeTrial -> new GetTimeTrialResponse( true, timeTrial )
                                ).orElseGet(
 
-                    /* Indicate the Event was not found */
-                    () -> new GetTimeTrialResponse( false )
-                                          );
+                                    /* Indicate the Event was not found */
+                                    () -> new GetTimeTrialResponse( false )
+                               );
 
         } catch ( EntityNotFoundException error ) {
 
-            /* No Event found so set the response to false */
+            /* No TimeTrial found so set the response to false */
             response = new GetTimeTrialResponse( false );
         }
 
@@ -647,6 +654,7 @@ public class EventServiceImpl implements EventService {
 
         /* All the Events in the repository */
         var temp = eventRepo.findAll();
+
 
         /* The location to look for */
         GeoPoint locate = request.getLocation();

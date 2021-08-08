@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
+import tech.geocodeapp.geocode.event.model.TimeTrial;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.service.*;
@@ -48,7 +49,13 @@ class EventServiceImplTest {
      * The mock repository for the Event subsystem
      * All the data will be saved here and is used to mock the JPA repository
      */
-    EventMockRepository repo;
+    EventMockRepository<Event> eventRepo;
+
+    /**
+     * The mock repository for the Event subsystem for TimeTrials
+     * All the data will be saved here and is used to mock the JPA repository
+     */
+    EventMockRepository< TimeTrial > timeTrialRepo;
 
     /**
      * The mock repository for the Event subsystem TimeLog repoistory
@@ -94,9 +101,11 @@ class EventServiceImplTest {
     void setup() {
 
         /* Create a new repository instance and make sure there is no data in it */
-        repo = new EventMockRepository();
-        repo.deleteAll();
+        eventRepo = new EventMockRepository<>();
+        timeTrialRepo = new EventMockRepository<>();
         timelogRepo = new TimeLogMockRepository();
+        eventRepo.deleteAll();
+        timeTrialRepo.deleteAll();
         timelogRepo.deleteAll();
 
         var leaderboardMockRepo = new LeaderboardMockRepository();
@@ -109,7 +118,7 @@ class EventServiceImplTest {
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
-            eventService = new EventServiceImpl( repo, timelogRepo, leaderboardService );
+            eventService = new EventServiceImpl( eventRepo, timeTrialRepo, timelogRepo, leaderboardService );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
@@ -127,7 +136,7 @@ class EventServiceImplTest {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, null, leaderboardService ) )
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, null, null, leaderboardService ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }
@@ -267,7 +276,7 @@ class EventServiceImplTest {
             var event = new Event( eventID, "Test", "Test description", null,
                                    null, LocalDate.parse("2020-01-08"),
                                    LocalDate.parse("2020-01-08"), null);
-            repo.save( event );
+            eventRepo.save( event );
 
             /*
              * Create a request object
@@ -294,8 +303,8 @@ class EventServiceImplTest {
     }
 
     @Test
-    @DisplayName( "check" )
-    void check() {
+    @DisplayName( "check Difficulty" )
+    void checkDifficulty() {
 
         /* Get the order of difficulties */
         /* Get the order of difficulties */

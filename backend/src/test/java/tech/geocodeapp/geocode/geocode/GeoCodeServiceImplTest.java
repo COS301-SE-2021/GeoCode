@@ -12,6 +12,7 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest
 import tech.geocodeapp.geocode.event.EventMockRepository;
 import tech.geocodeapp.geocode.event.TimeLogMockRepository;
 import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.model.TimeTrial;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.event.service.EventServiceImpl;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
@@ -132,10 +133,11 @@ class GeoCodeServiceImplTest {
                                                          new CollectableSetMockRepository(),
                                                          typeMockRepo );
 
-        EventMockRepository eventRepo = new EventMockRepository();
+        EventMockRepository< Event > eventRepo = new EventMockRepository<>();
+        EventMockRepository< TimeTrial > timeTrialRepo = new EventMockRepository<>();
         TimeLogMockRepository timelogRepo = new TimeLogMockRepository();
 
-        eventService = new EventServiceImpl( eventRepo, timelogRepo, leaderboardService );
+        eventService = new EventServiceImpl( eventRepo, timeTrialRepo, timelogRepo, leaderboardService );
 
         /* Populate the Event repository with a known Event to find*/
         var event = new Event( eventID, "Test", "Test description", null,
