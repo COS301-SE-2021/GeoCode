@@ -11,7 +11,7 @@ import java.util.UUID;
  * This class implements the repository for the Event Subsystem
  */
 @Repository( "EventRepository" )
-public interface EventRepository extends JpaRepository< Event, UUID> {
+public interface EventRepository< T extends Event > extends JpaRepository< T, UUID> {
 
     //SELECT
 
