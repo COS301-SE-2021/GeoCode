@@ -384,16 +384,16 @@ public class UserServiceImpl implements UserService {
 
             switch(geocodeDifficulty){
                 case EASY:
-                    pointsAmount = 1;
-                    break;
-                case MEDIUM:
-                    pointsAmount = 5;
-                    break;
-                case HARD:
                     pointsAmount = 10;
                     break;
-                case INSANE:
+                case MEDIUM:
                     pointsAmount = 20;
+                    break;
+                case HARD:
+                    pointsAmount = 30;
+                    break;
+                case INSANE:
+                    pointsAmount = 40;
                     break;
             }
 
