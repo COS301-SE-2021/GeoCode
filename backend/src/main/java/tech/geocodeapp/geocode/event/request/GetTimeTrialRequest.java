@@ -2,29 +2,29 @@ package tech.geocodeapp.geocode.event.request;
 
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.*;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import java.util.Objects;
 import java.util.UUID;
 
 /**
- * GetEventRequest object retrieves the specified Event object
+ * GetTimeTrialRequest object retrieves the specified TimeTrial object
  */
 @Validated
-public class GetEventRequest {
+public class GetTimeTrialRequest {
 
     /**
      * The unique id of the event to get
      */
     @JsonProperty( "eventID" )
-    @NotNull( message = "GetEventRequest eventID attribute cannot be null." )
-    private UUID eventID;
+    @NotNull( message = "GetTimeTrialRequest eventID attribute cannot be null." )
+    private UUID eventID = null;
 
     /**
      * Default Constructor
      */
-    public GetEventRequest() {
+    public GetTimeTrialRequest() {
 
     }
 
@@ -33,7 +33,7 @@ public class GetEventRequest {
      *
      * @param eventID The unique id of the event to get
      */
-    public GetEventRequest( UUID eventID ) {
+    public GetTimeTrialRequest( UUID eventID ) {
 
         this.eventID = eventID;
     }
@@ -45,7 +45,7 @@ public class GetEventRequest {
      *
      * @return the request after the eventID has been changed
      */
-    public GetEventRequest eventID( UUID eventID ) {
+    public GetTimeTrialRequest eventID( UUID eventID ) {
 
         this.eventID = eventID;
         return this;
@@ -91,7 +91,7 @@ public class GetEventRequest {
             return false;
         }
 
-        return Objects.equals( this.eventID, ( ( GetEventRequest ) obj ).eventID );
+        return Objects.equals( this.eventID, ( ( GetTimeTrialRequest ) obj ).eventID );
     }
 
     /**
@@ -113,7 +113,7 @@ public class GetEventRequest {
     @Override
     public String toString() {
 
-        return "class GetEventRequest {\n" +
+        return "class GetTimeTrialRequest {\n" +
                 "    eventID: " + toIndentedString( eventID ) + "\n" +
                 "}";
     }
