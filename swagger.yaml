@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.2"
+  version: "1.5.5"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -778,10 +778,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GetCollectablesInGeoCodeByLocationRequest"
+              $ref: "#/components/schemas/GetCollectablesInGeoCodesByLocationRequest"
           application/xml:
             schema:
-              $ref: "#/components/schemas/GetCollectablesInGeoCodeByLocationRequest"
+              $ref: "#/components/schemas/GetCollectablesInGeoCodesByLocationRequest"
       responses:
         '200':
           description: "Return the GeoCodec at or near the given location"
@@ -1460,6 +1460,129 @@ paths:
       security:
         - bearerAuth: []
 
+  /Event/getTimeTrial:
+    post:
+      tags:
+        - "Event"
+      summary: "Retrieves a specific stored TimeTrial"
+      description: "Get a stored Event in the system with the specified id"
+      operationId: "getTimeTrial"
+      requestBody:
+        required: true
+        description: "Request to get a TimeTrial"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetTimeTrialRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetTimeTrialRequest"
+      responses:
+        '200':
+          description: "Return the TimeTrial was successfully found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTimeTrialResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetTimeTrialResponse"
+        '404':
+          description: "Return the specified TimeTrial was not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTimeTrialResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetTimeTrialResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
+  /Event/isTimeTrial:
+    post:
+      tags:
+        - "Event"
+      summary: "Determines if the given object is an Event or TimeTrial"
+      description: "Determines if the given object is an Event or TimeTrial"
+      operationId: "isTimeTrial"
+      requestBody:
+        required: true
+        description: "Request to determine if an ID is for a TimeTrial"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IsTimeTrialRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/IsTimeTrialRequest"
+      responses:
+        '200':
+          description: "Return if TimeTrial or not successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IsTimeTrialResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/IsTimeTrialResponse"
+        '404':
+          description: "Return the specified ID was not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IsTimeTrialResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/IsTimeTrialResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
+  /Event/getTimeLog:
+    post:
+      tags:
+        - "Event"
+      summary: "Retrieves a specific stored TimeLog entry"
+      description: "Get a stored Event in the system with the specified id"
+      operationId: "getTimeLog"
+      requestBody:
+        required: true
+        description: "Request to get a TimeLog entry"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetTimeLogRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetTimeLogRequest"
+      responses:
+        '200':
+          description: "Return the TimeLog entry was successfully found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTimeLogResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetTimeLogResponse"
+        '404':
+          description: "Return the specified TimeLog entry was not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTimeLogResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetTimeLogResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
   /Event/getCurrentEvent:
     post:
       tags:
@@ -1954,6 +2077,13 @@ components:
         success:
           type: boolean
           example: "True"
+        geoCodeID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        qrCode:
+          type: string
+          example: "1qwer3d4"
       xml:
         name: "CreateGeoCodeResponse"
 
@@ -3209,10 +3339,15 @@ components:
     TimeLog:
       type: "object"
       required:
+        - eventID
         - userID
         - geoCodeID
         - startTime
       properties:
+        eventID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         userID:
           type: string
           format: uuid
@@ -3276,7 +3411,9 @@ components:
         geoCodesToFind:
           type: array
           items:
-            $ref: "#/components/schemas/GeoCode"
+            type: string
+            format: uuid
+            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         orderBy:
           $ref: "#/components/schemas/OrderLevels"
       xml:
@@ -3328,7 +3465,9 @@ components:
         GeoCodesToFind:
           type: array
           items:
-            $ref: "#/components/schemas/GeoCode"
+            type: string
+            format: uuid
+            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         orderBy:
           $ref: "#/components/schemas/OrderLevels"
       xml:
@@ -3365,6 +3504,87 @@ components:
           example: "True"
         foundEvent:
           $ref: "#/components/schemas/Event"
+      xml:
+        name: "GetEventResponse"
+
+    GetTimeTrialRequest:
+      type: "object"
+      properties:
+        eventID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+      xml:
+        name: "GetEventRequest"
+
+    GetTimeTrialResponse:
+      type: "object"
+      required:
+        - found
+      properties:
+        found:
+          type: boolean
+          example: "True"
+        foundEvent:
+          $ref: "#/components/schemas/TimeTrial"
+      xml:
+        name: "GetEventResponse"
+
+    IsTimeTrialRequest:
+      type: "object"
+      properties:
+        eventID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+      xml:
+        name: "GetEventRequest"
+
+    IsTimeTrialResponse:
+      type: "object"
+      required:
+        - found
+      properties:
+        found:
+          type: boolean
+          example: "True"
+        foundEvent:
+          $ref: "#/components/schemas/TimeTrial"
+      xml:
+        name: "GetEventResponse"
+
+    GetTimeLogRequest:
+      type: "object"
+      required:
+        - eventID
+        - userID
+        - geoCodeID
+      properties:
+        eventID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        userID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        geoCodeID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+      xml:
+        name: "GetEventRequest"
+
+    GetTimeLogResponse:
+      type: "object"
+      required:
+        - found
+      properties:
+        found:
+          type: boolean
+          example: "True"
+        foundTimeLog:
+          $ref: "#/components/schemas/TimeLog"
       xml:
         name: "GetEventResponse"
 
