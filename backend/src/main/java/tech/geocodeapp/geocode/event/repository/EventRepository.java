@@ -1,10 +1,13 @@
 package tech.geocodeapp.geocode.event.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.model.TimeTrial;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -13,9 +16,6 @@ import java.util.UUID;
 @Repository( "EventRepository" )
 public interface EventRepository< T extends Event > extends JpaRepository< T, UUID> {
 
-    //SELECT
-
-    //UPDATE
-
-    //DELETE
+    @Query( value =  "FROM TimeTrial")
+    List< TimeTrial > findAllTimeTrials();
 }

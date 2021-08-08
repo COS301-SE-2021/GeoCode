@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.model.TimeTrial;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
 
 import javax.persistence.EntityManager;
@@ -291,6 +292,22 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
     public < S extends T > boolean exists( Example< S > example ) {
 
         return false;
+    }
+
+    @Override
+    public List< TimeTrial > findAllTimeTrials() {
+
+        List< TimeTrial > hold = new ArrayList<>();
+
+        for ( Map.Entry< UUID, T > entry : map.entrySet()) {
+
+            if ( entry instanceof TimeTrial ) {
+
+                hold.add( ( TimeTrial ) entry );
+            }
+        }
+
+        return hold;
     }
 
 }
