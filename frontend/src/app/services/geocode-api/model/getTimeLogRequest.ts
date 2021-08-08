@@ -9,10 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { CollectableType } from './collectableType';
 
-export interface Collectable { 
-    id: string;
-    type: CollectableType;
-    pastLocations: Array<string>;
+export interface GetTimeLogRequest { 
+    eventID: string;
+    userID: string;
+    geoCodeID: string;
 }
