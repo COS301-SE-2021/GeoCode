@@ -778,10 +778,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GetCollectablesInGeoCodeByLocationRequest"
+              $ref: "#/components/schemas/GetCollectablesInGeoCodesByLocationRequest"
           application/xml:
             schema:
-              $ref: "#/components/schemas/GetCollectablesInGeoCodeByLocationRequest"
+              $ref: "#/components/schemas/GetCollectablesInGeoCodesByLocationRequest"
       responses:
         '200':
           description: "Return the GeoCodec at or near the given location"
@@ -3209,10 +3209,15 @@ components:
     TimeLog:
       type: "object"
       required:
+        - eventID
         - userID
         - geoCodeID
         - startTime
       properties:
+        eventID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         userID:
           type: string
           format: uuid
