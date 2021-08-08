@@ -16,8 +16,8 @@ public class CreateGeoCodeResponse {
      * Determines if the creation of a GeoCode with the specified attributes
      * in the request was a success or not
      */
-    @JsonProperty( "isSuccess" )
-    private Boolean isSuccess = null;
+    @JsonProperty( "success" )
+    private Boolean success = null;
 
     /**
      * Default constructor
@@ -33,40 +33,40 @@ public class CreateGeoCodeResponse {
      */
     public CreateGeoCodeResponse( Boolean isSuccess ) {
 
-        this.isSuccess = isSuccess;
+        this.success = isSuccess;
     }
 
     /**
-     * Sets the isSuccess attribute to the specified value
+     * Sets the success attribute to the specified value
      *
      * @param isSuccess the value the attribute should be set to
      *
-     * @return the response after the isSuccess has been changed
+     * @return the response after the success has been changed
      */
     public CreateGeoCodeResponse isSuccess( Boolean isSuccess ) {
 
-        this.isSuccess = isSuccess;
+        this.success = isSuccess;
         return this;
     }
 
     /**
-     * Gets the saved isSuccess attribute
+     * Gets the saved success attribute
      *
-     * @return the stored isSuccess attribute
+     * @return the stored success attribute
      */
     public Boolean isIsSuccess() {
 
-        return isSuccess;
+        return success;
     }
 
     /**
-     * Sets the isSuccess attribute to the specified value
+     * Sets the success attribute to the specified value
      *
      * @param isSuccess the value the attribute should be set to
      */
     public void setIsSuccess( Boolean isSuccess ) {
 
-        this.isSuccess = isSuccess;
+        this.success = isSuccess;
     }
 
     /**
@@ -88,7 +88,7 @@ public class CreateGeoCodeResponse {
             return false;
         }
 
-        return Objects.equals( this.isSuccess, ( ( CreateGeoCodeResponse ) obj ).isSuccess );
+        return Objects.equals( this.success, ( ( CreateGeoCodeResponse ) obj ).success );
     }
 
     /**
@@ -99,7 +99,7 @@ public class CreateGeoCodeResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( isSuccess );
+        return Objects.hash( success );
     }
 
     /**
@@ -111,7 +111,7 @@ public class CreateGeoCodeResponse {
     public String toString() {
 
         return "class CreateGeoCodeResponse {\n" +
-                "    isSuccess: " + toIndentedString( isSuccess ) + "\n" +
+                "    success: " + toIndentedString( success ) + "\n" +
                 "}";
     }
 

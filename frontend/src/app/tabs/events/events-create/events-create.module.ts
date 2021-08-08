@@ -7,6 +7,10 @@ import { IonicModule } from '@ionic/angular';
 import { EventsCreatePageRoutingModule } from './events-create-routing.module';
 
 import { EventsCreatePage } from './events-create.page';
+import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
+import {EventLocationComponent} from './event-location/event-location.component';
+
+
 
 @NgModule({
   imports: [
@@ -15,6 +19,6 @@ import { EventsCreatePage } from './events-create.page';
     IonicModule,
     EventsCreatePageRoutingModule
   ],
-  declarations: [EventsCreatePage]
+  declarations: [EventsCreatePage,CreateGeocodeComponent,EventLocationComponent]
 })
 export class EventsCreatePageModule {}

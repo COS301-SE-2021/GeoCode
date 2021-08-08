@@ -1,74 +1,74 @@
-package tech.geocodeapp.geocode.event.response;
+package tech.geocodeapp.geocode.geocode.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+
 import java.util.Objects;
 
 /**
- * CreateTimeTrialResponse object that determines if the TimeTrial was created successfully
+ * GetGeoCodeResponse
  */
 @Validated
-public class CreateTimeTrialResponse {
+public class GetGeoCodeResponse {
 
     /**
-     * If the TimeTrial was successfully created or not
+     * The found GeoCode with the given ID
      */
-    @JsonProperty( "success" )
-    @NotNull( message = "CreateTimeTrialResponse success attribute cannot be null." )
-    private Boolean success;
+    @JsonProperty( "foundGeoCode" )
+    private GeoCode foundGeoCode;
 
     /**
      * Default constructor
      */
-    public CreateTimeTrialResponse() {
+    public GetGeoCodeResponse() {
 
     }
 
     /**
      * Overloaded Constructor
      *
-     * @param success the status of the TimeTrial created
+     * @param foundGeoCode The found GeoCode with the given ID
      */
-    public CreateTimeTrialResponse( Boolean success ) {
+    public GetGeoCodeResponse( GeoCode foundGeoCode ) {
 
-        this.success = success;
+        this.foundGeoCode = foundGeoCode;
     }
 
     /**
-     * Sets the success attribute to the specified value
+     * Sets the foundGeoCode attribute to the specified value
      *
-     * @param success the value the attribute should be set to
+     * @param foundGeoCode the value the attribute should be set to
      *
-     * @return the request after the success has been changed
+     * @return the request after the foundGeoCode has been changed
      */
-    public CreateTimeTrialResponse success( Boolean success ) {
+    public GetGeoCodeResponse foundGeoCode( GeoCode foundGeoCode ) {
 
-        this.success = success;
+        this.foundGeoCode = foundGeoCode;
         return this;
     }
 
     /**
-     * Gets the saved success attribute
+     * Gets the saved foundGeoCode attribute
      *
-     * @return the stored success attribute
+     * @return the stored foundGeoCode attribute
      */
     @Valid
-    public Boolean isSuccess() {
+    public GeoCode getFoundGeoCode() {
 
-        return success;
+        return foundGeoCode;
     }
 
     /**
-     * Sets the success attribute to the specified value
+     * Sets the foundGeoCode attribute to the specified value
      *
-     * @param success the value the attribute should be set to
+     * @param foundGeoCode the value the attribute should be set to
      */
-    public void setSuccess( Boolean success ) {
+    public void setFoundGeoCode( GeoCode foundGeoCode ) {
 
-        this.success = success;
+        this.foundGeoCode = foundGeoCode;
     }
 
     /**
@@ -90,7 +90,7 @@ public class CreateTimeTrialResponse {
             return false;
         }
 
-        return Objects.equals( this.success, ( ( CreateTimeTrialResponse ) obj ).success );
+        return Objects.equals( this.foundGeoCode, ( ( GetGeoCodeResponse ) obj ).foundGeoCode );
     }
 
     /**
@@ -101,7 +101,7 @@ public class CreateTimeTrialResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( foundGeoCode );
     }
 
     /**
@@ -112,8 +112,8 @@ public class CreateTimeTrialResponse {
     @Override
     public String toString() {
 
-        return "class CreateTimeTrialResponse {\n" +
-                "    success: " + toIndentedString( success ) + "\n" +
+        return "class GetGeoCodeResponse {\n" +
+                "    foundGeoCode: " + toIndentedString( foundGeoCode ) + "\n" +
                 "}";
     }
 
@@ -127,6 +127,7 @@ public class CreateTimeTrialResponse {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 

@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.event.service;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 
 /**
  * This is the main interface is for the Event subsystem,
@@ -21,6 +22,18 @@ public interface EventService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException;
+
+    /**
+     * Create a new TimeTrial for an event, that will be active for a pre-determined
+     * amount of time
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    CreateTimeTrialResponse createTimeTrial( CreateTimeTrialRequest request ) throws InvalidRequestException;
 
     /**
      * Get a specified Event that is stored in the repository
@@ -106,4 +119,10 @@ public interface EventService {
      */
     CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) throws InvalidRequestException;
 
+    /**
+     * Post construct the GeoCode service, this avoids a circular dependency
+     *
+     * @param geoCodeService the service to be set
+     */
+    void setGeoCodeService( GeoCodeService geoCodeService );
 }

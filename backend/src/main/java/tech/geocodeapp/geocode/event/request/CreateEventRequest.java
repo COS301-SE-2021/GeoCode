@@ -1,16 +1,19 @@
 package tech.geocodeapp.geocode.event.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
 
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * CreateEventRequest object that is used to specify the attributes for a new Event
@@ -22,14 +25,14 @@ public class CreateEventRequest {
      * The name of the Event to be created
      */
     @JsonProperty( "name" )
-    @NotNull( message = "CreateEventRequest name attribute cannot be null." )
+    @NotEmpty( message = "CreateEventRequest name attribute cannot be null." )
     private String name;
 
     /**
      * The description of what the Event to be created is
      */
     @JsonProperty( "description" )
-    @NotNull( message = "CreateEventRequest description attribute cannot be null." )
+    @NotEmpty( message = "CreateEventRequest description attribute cannot be null." )
     private String description;
 
     /**
@@ -56,10 +59,14 @@ public class CreateEventRequest {
     /**
      * The different GeoCodes to find during the Event
      */
-    @Valid
     @JsonProperty( "GeoCodesToFind" )
-    @NotNull( message = "CreateEventRequest geoCodesToFind attribute cannot be null." )
-    private List< GeoCode > geoCodesToFind;
+    private List< UUID > geoCodesToFind;
+
+    /**
+     * The order in which the Users will complete the different Levels
+     */
+    @JsonProperty( "orderBy" )
+    private OrderLevels orderBy;
 
     /**
      * Default constructor
@@ -71,15 +78,17 @@ public class CreateEventRequest {
     /**
      * Overloaded Constructor
      *
-     * @param name what the new Event should be called
-     * @param description what the Event to be created is going to be about
-     * @param location the Event will be held at in the real world's location
-     * @param beginDate The starting Date of the Event
-     * @param endDate The end Date of the Event
+     * @param name           what the new Event should be called
+     * @param description    what the Event to be created is going to be about
+     * @param location       the Event will be held at in the real world's location
+     * @param beginDate      The starting Date of the Event
+     * @param endDate        The end Date of the Event
      * @param geoCodesToFind The different GeoCodes to find during the Event
+     * @param orderBy        The order in which the Users will complete the different Levels
      */
     public CreateEventRequest( String name, String description, GeoPoint location,
-                               LocalDate beginDate, LocalDate endDate, List< GeoCode > geoCodesToFind ) {
+                               LocalDate beginDate, LocalDate endDate,
+                               List< UUID > geoCodesToFind, OrderLevels orderBy ) {
 
         this.name = name;
         this.description = description;
@@ -87,10 +96,11 @@ public class CreateEventRequest {
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.geoCodesToFind = geoCodesToFind;
+        this.orderBy = orderBy;
     }
 
     /**
-     * Sets the difficulty attribute to the specified value
+     * Sets the name attribute to the specified value
      *
      * @param name the value the attribute should be set to
      *
@@ -103,9 +113,9 @@ public class CreateEventRequest {
     }
 
     /**
-     * Gets the saved difficulty attribute
+     * Gets the saved name attribute
      *
-     * @return the stored difficulty attribute
+     * @return the stored name attribute
      */
     public String getName() {
 
@@ -113,7 +123,7 @@ public class CreateEventRequest {
     }
 
     /**
-     * Sets the hints attribute to the specified value
+     * Sets the name attribute to the specified value
      *
      * @param name the value the attribute should be set to
      */
@@ -123,11 +133,11 @@ public class CreateEventRequest {
     }
 
     /**
-     * Sets the difficulty attribute to the specified value
+     * Sets the description attribute to the specified value
      *
      * @param description the value the attribute should be set to
      *
-     * @return the request after the difficulty has been changed
+     * @return the request after the description has been changed
      */
     public CreateEventRequest description( String description ) {
 
@@ -136,9 +146,9 @@ public class CreateEventRequest {
     }
 
     /**
-     * Gets the saved difficulty attribute
+     * Gets the saved description attribute
      *
-     * @return the stored difficulty attribute
+     * @return the stored description attribute
      */
     public String getDescription() {
 
@@ -146,7 +156,7 @@ public class CreateEventRequest {
     }
 
     /**
-     * Sets the difficulty attribute to the specified value
+     * Sets the description attribute to the specified value
      *
      * @param description the value the attribute should be set to
      */
@@ -156,11 +166,11 @@ public class CreateEventRequest {
     }
 
     /**
-     * Sets the available attribute to the specified value
+     * Sets the location attribute to the specified value
      *
      * @param location the value the attribute should be set to
      *
-     * @return the request after the available has been changed
+     * @return the request after the location has been changed
      */
     public CreateEventRequest location( GeoPoint location ) {
 
@@ -169,9 +179,9 @@ public class CreateEventRequest {
     }
 
     /**
-     * Gets the saved available attribute
+     * Gets the saved location attribute
      *
-     * @return the stored available attribute
+     * @return the stored location attribute
      */
     @Valid
     public GeoPoint getLocation() {
@@ -180,7 +190,7 @@ public class CreateEventRequest {
     }
 
     /**
-     * Sets the available attribute to the specified value
+     * Sets the location attribute to the specified value
      *
      * @param location the value the attribute should be set to
      */
@@ -262,7 +272,7 @@ public class CreateEventRequest {
      *
      * @return the request after the geoCodesToFind has been changed
      */
-    public CreateEventRequest geoCodesToFind( List< GeoCode > geoCodesToFind ) {
+    public CreateEventRequest geoCodesToFind( List< UUID > geoCodesToFind ) {
 
         this.geoCodesToFind = geoCodesToFind;
         return this;
@@ -275,7 +285,7 @@ public class CreateEventRequest {
      *
      * @return the request after the geoCodesToFind has been changed
      */
-    public CreateEventRequest addGeoCodesToFindItem( GeoCode geoCodesToFindItem ) {
+    public CreateEventRequest addGeoCodesToFindItem( UUID geoCodesToFindItem ) {
 
         this.geoCodesToFind.add( geoCodesToFindItem );
         return this;
@@ -286,8 +296,7 @@ public class CreateEventRequest {
      *
      * @return the stored geoCodesToFind attribute
      */
-    @Valid
-    public List< GeoCode > getGeoCodesToFind() {
+    public List< UUID > getGeoCodesToFind() {
 
         return geoCodesToFind;
     }
@@ -297,9 +306,43 @@ public class CreateEventRequest {
      *
      * @param geoCodesToFind the value the attribute should be set to
      */
-    public void setGeoCodesToFind( List< GeoCode > geoCodesToFind ) {
+    public void setGeoCodesToFind( List< UUID > geoCodesToFind ) {
 
         this.geoCodesToFind = geoCodesToFind;
+    }
+
+    /**
+     * Sets the orderBy attribute to the specified value
+     *
+     * @param orderBy the value the attribute should be set to
+     *
+     * @return the request after the orderBy has been changed
+     */
+    public CreateEventRequest orderBy( OrderLevels orderBy ) {
+
+        this.orderBy = orderBy;
+        return this;
+    }
+
+    /**
+     * Gets the saved orderBy attribute
+     *
+     * @return the stored orderBy attribute
+     */
+    @Valid
+    public OrderLevels getOrderBy() {
+
+        return orderBy;
+    }
+
+    /**
+     * Sets the orderBy attribute to the specified value
+     *
+     * @param orderBy the value the attribute should be set to
+     */
+    public void setOrderBy( OrderLevels orderBy ) {
+
+        this.orderBy = orderBy;
     }
 
     /**
@@ -321,13 +364,14 @@ public class CreateEventRequest {
             return false;
         }
 
-        CreateEventRequest createEventRequest = ( CreateEventRequest ) obj;
+        var createEventRequest = ( CreateEventRequest ) obj;
         return Objects.equals( this.name, createEventRequest.name ) &&
                 Objects.equals( this.description, createEventRequest.description ) &&
                 Objects.equals( this.location, createEventRequest.location ) &&
                 Objects.equals( this.beginDate, createEventRequest.beginDate ) &&
                 Objects.equals( this.endDate, createEventRequest.endDate ) &&
-                Objects.equals( this.geoCodesToFind, createEventRequest.geoCodesToFind );
+                Objects.equals( this.geoCodesToFind, createEventRequest.geoCodesToFind ) &&
+                Objects.equals( this.orderBy, createEventRequest.orderBy );
     }
 
     /**
@@ -338,7 +382,7 @@ public class CreateEventRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( name, description, location, beginDate, endDate, geoCodesToFind );
+        return Objects.hash( name, description, location, beginDate, endDate, geoCodesToFind, orderBy );
     }
 
     /**
@@ -356,6 +400,7 @@ public class CreateEventRequest {
                 "    beginDate: " + toIndentedString( beginDate ) + "\n" +
                 "    endDate: " + toIndentedString( endDate ) + "\n" +
                 "    geoCodesToFind: " + toIndentedString( geoCodesToFind ) + "\n" +
+                "    orderBy: " + toIndentedString( orderBy ) + "\n" +
                 "}";
     }
 

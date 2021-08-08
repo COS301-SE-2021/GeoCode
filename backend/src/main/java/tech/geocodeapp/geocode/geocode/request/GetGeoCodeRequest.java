@@ -1,74 +1,73 @@
-package tech.geocodeapp.geocode.event.response;
+package tech.geocodeapp.geocode.geocode.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
-
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+
 import java.util.Objects;
+import java.util.UUID;
 
 /**
- * CreateTimeTrialResponse object that determines if the TimeTrial was created successfully
+ * GetGeoCodeRequest
  */
 @Validated
-public class CreateTimeTrialResponse {
+public class GetGeoCodeRequest {
 
     /**
-     * If the TimeTrial was successfully created or not
+     * The unique identifier of a specific GeoCode
      */
-    @JsonProperty( "success" )
-    @NotNull( message = "CreateTimeTrialResponse success attribute cannot be null." )
-    private Boolean success;
+    @JsonProperty( "geoCodeID" )
+    private UUID geoCodeID;
 
     /**
      * Default constructor
      */
-    public CreateTimeTrialResponse() {
+    public GetGeoCodeRequest() {
 
     }
 
     /**
      * Overloaded Constructor
      *
-     * @param success the status of the TimeTrial created
+     * @param geoCodeID The unique identifier of a specific GeoCode
      */
-    public CreateTimeTrialResponse( Boolean success ) {
+    public GetGeoCodeRequest( UUID geoCodeID ) {
 
-        this.success = success;
+        this.geoCodeID = geoCodeID;
     }
 
     /**
-     * Sets the success attribute to the specified value
+     * Sets the geoCodeID attribute to the specified value
      *
-     * @param success the value the attribute should be set to
+     * @param geoCodeID the value the attribute should be set to
      *
-     * @return the request after the success has been changed
+     * @return the request after the geoCodeID has been changed
      */
-    public CreateTimeTrialResponse success( Boolean success ) {
+    public GetGeoCodeRequest geoCodeID( UUID geoCodeID ) {
 
-        this.success = success;
+        this.geoCodeID = geoCodeID;
         return this;
     }
 
     /**
-     * Gets the saved success attribute
+     * Gets the saved geoCodeID attribute
      *
-     * @return the stored success attribute
+     * @return the stored geoCodeID attribute
      */
     @Valid
-    public Boolean isSuccess() {
+    public UUID getGeoCodeID() {
 
-        return success;
+        return geoCodeID;
     }
 
     /**
-     * Sets the success attribute to the specified value
+     * Sets the geoCodeID attribute to the specified value
      *
-     * @param success the value the attribute should be set to
+     * @param geoCodeID the value the attribute should be set to
      */
-    public void setSuccess( Boolean success ) {
+    public void setGeoCodeID( UUID geoCodeID ) {
 
-        this.success = success;
+        this.geoCodeID = geoCodeID;
     }
 
     /**
@@ -82,15 +81,13 @@ public class CreateTimeTrialResponse {
     public boolean equals( java.lang.Object obj ) {
 
         if ( this == obj ) {
-
             return true;
         }
         if ( obj == null || getClass() != obj.getClass() ) {
-
             return false;
         }
 
-        return Objects.equals( this.success, ( ( CreateTimeTrialResponse ) obj ).success );
+        return Objects.equals( this.geoCodeID, ( ( GetGeoCodeRequest ) obj ).geoCodeID );
     }
 
     /**
@@ -101,7 +98,7 @@ public class CreateTimeTrialResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( success );
+        return Objects.hash( geoCodeID );
     }
 
     /**
@@ -112,8 +109,8 @@ public class CreateTimeTrialResponse {
     @Override
     public String toString() {
 
-        return "class CreateTimeTrialResponse {\n" +
-                "    success: " + toIndentedString( success ) + "\n" +
+        return "class GetGeoCodeRequest {\n" +
+                "    geoCodeID: " + toIndentedString( geoCodeID ) + "\n" +
                 "}";
     }
 
@@ -127,6 +124,7 @@ public class CreateTimeTrialResponse {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 
