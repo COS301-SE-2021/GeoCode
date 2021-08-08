@@ -84,29 +84,23 @@ export class UserGeocodesPage implements OnInit {
     }
   }
 
-  loadCreated() {
-    return new Promise(resolve => {
-      if (this.created) {
-        resolve(this.created);
-      } else {
-        this.created = [];
-        //load from backend
-        resolve(this.created);
-      }
-    });
+  async loadCreated() {
+    if (!(this.created)) {
+      this.created = [];
+      //await this.geocodeService.getGeocodeBy
+    }
+    return this.created;
   }
 
-  loadFound() {
-    return new Promise(resolve => {
-      if (this.found) {
-        resolve(this.found);
-      } else {
-        this.found = [];
-        //load from backend
-        resolve(this.found);
-      }
-    });
+  async loadFound() {
+    if (!(this.found)) {
+      this.found = [];
+      //load from backend
+    }
+    return this.found;
   }
+
+
 
 
   placeMarkers(locations: GeoCode[]) {
