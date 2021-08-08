@@ -8,10 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
-import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.model.Level;
-import tech.geocodeapp.geocode.event.model.OrderLevels;
-import tech.geocodeapp.geocode.event.model.TimeTrial;
+import tech.geocodeapp.geocode.event.model.*;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.repository.TimeLogRepository;
 import tech.geocodeapp.geocode.event.request.*;
@@ -444,7 +441,38 @@ public class EventServiceImpl implements EventService {
     @Override
     public GetTimeLogResponse getTimeLog( GetTimeLogRequest request ) throws InvalidRequestException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getEventID() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        try {
+
+            /* Get all the entries to search them */
+            var temp = timeLogRepo.findAll();
+
+            /* Go through each entry */
+            for ( TimeLog timeLog : temp ) {
+
+                /* Check if current entry is what is needed */
+                if ( ( timeLog.getEventID().equals( request.getEventID() ) ) &&
+                        ( timeLog.getUserID().equals( request.getUserID() ) ) &&
+                        ( timeLog.getGeoCodeID().equals( request.getGeoCodeID() ) ) ) {
+
+                    /* Current is the desired therefore return it */
+                    return new GetTimeLogResponse( true, timeLog );
+                }
+            }
+        } catch ( EntityNotFoundException error  ) {
+
+            return new GetTimeLogResponse( false );
+        }
+
+        return new GetTimeLogResponse( false );
     }
 
     /**
