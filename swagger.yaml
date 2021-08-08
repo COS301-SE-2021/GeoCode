@@ -3465,7 +3465,9 @@ components:
         GeoCodesToFind:
           type: array
           items:
-            $ref: "#/components/schemas/GeoCode"
+            type: string
+            format: uuid
+            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         orderBy:
           $ref: "#/components/schemas/OrderLevels"
       xml:
@@ -3582,7 +3584,7 @@ components:
           type: boolean
           example: "True"
         foundEvent:
-          $ref: "#/components/schemas/TimeTrial"
+          $ref: "#/components/schemas/TimeLog"
       xml:
         name: "GetEventResponse"
 
