@@ -13,6 +13,7 @@ import tech.geocodeapp.geocode.event.model.Level;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.event.model.TimeTrial;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
+import tech.geocodeapp.geocode.event.repository.TimeLogRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
@@ -41,6 +42,12 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepo;
 
     /**
+     * The repository the GeoCode class interacts with
+     */
+    @NotNull( message = "TimeLog repository may not be null." )
+    private final TimeLogRepository timeLogRepo;
+
+    /**
      * The Leaderboard service to access the use cases and
      * Leaderboard repository
      */
@@ -52,7 +59,6 @@ public class EventServiceImpl implements EventService {
      * GeoCode repository
      */
     @Autowired
-    //@NotNull( message = "GeoCodeService: GeoCode Service Implementation may not be null." )
     private GeoCodeService geoCodeService;
 
     /**
@@ -61,13 +67,14 @@ public class EventServiceImpl implements EventService {
      * @param eventRepo          the repo the created response attributes should save to
      * @param leaderboardService access to the Leaderboard use cases and repository
      */
-    public EventServiceImpl( EventRepository eventRepo,
+    public EventServiceImpl( EventRepository eventRepo, TimeLogRepository timeLogRepo,
                              @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService ) throws RepoException {
 
-        if ( eventRepo != null ) {
+        if ( ( eventRepo != null ) && ( timeLogRepo != null ) ) {
 
             /* The repo exists therefore it can be set for the class */
             this.eventRepo = eventRepo;
+            this.timeLogRepo = timeLogRepo;
 
             this.leaderboardService = Objects.requireNonNull( leaderboardService, "EventService: Leaderboard service must not be null." );
         } else {
@@ -331,7 +338,41 @@ public class EventServiceImpl implements EventService {
     @Override
     public GetTimeTrialResponse getTimeTrial( GetTimeTrialRequest request ) throws InvalidRequestException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getEventID() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Create the response to return */
+        GetTimeTrialResponse response;
+        try {
+
+            /*
+             * Query the repository for the Event object
+             * and set the response to true with the found Event
+             */
+            Optional< Event > temp = eventRepo.findById( request.getEventID() );
+            response = temp.map(
+
+                    /* Indicate the Event was found and return it */
+                    event -> new GetTimeTrialResponse( true, null )
+                               ).orElseGet(
+
+                    /* Indicate the Event was not found */
+                    () -> new GetTimeTrialResponse( false )
+                                          );
+
+        } catch ( EntityNotFoundException error ) {
+
+            /* No Event found so set the response to false */
+            response = new GetTimeTrialResponse( false );
+        }
+
+        return response;
     }
 
     /**
