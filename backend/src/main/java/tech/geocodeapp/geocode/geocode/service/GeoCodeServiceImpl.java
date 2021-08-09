@@ -105,8 +105,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* The subsystems service implementations  */
             this.collectableService = Objects.requireNonNull( collectableService, "GeoCodeService: Collectable service must not be null." );
-            this.userService = Objects.requireNonNull( userService, "GeoCodeService: User service must not be null." );
-            this.eventService = Objects.requireNonNull( eventService, "GeoCodeService: Event service must not be null." );
+            this.userService = userService;
+            this.eventService = eventService;
         } else {
 
             /* The repo does not exist throw an error */
@@ -116,7 +116,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
     @PostConstruct
     public void init() {
-
+        userService.setGeoCodeService( this );
         eventService.setGeoCodeService( this );
     }
 
@@ -768,7 +768,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Perform the swap */
         Collectable userToGeocode;
         try {
-            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold, geocode.getId() ) ).getCollectable();
+            userToGeocode = userService.swapCollectable( new SwapCollectableRequest(userID, hold, geocode.getId() ) ).getCollectable();
         } catch ( NullRequestParameterException error ) {
 
             /* Validate the Collectable returned */

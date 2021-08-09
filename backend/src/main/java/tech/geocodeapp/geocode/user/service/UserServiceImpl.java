@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
     @NotNull(message = "GeoCode Service Implementation may not be null.")
-    private final GeoCodeService geoCodeService;
+    private GeoCodeService geoCodeService;
 
     @NotNull(message = "Event Service Implementation may not be null.")
     private final EventService eventService;
@@ -357,6 +357,16 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
+        /* check if UserID is invalid */
+        GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(request.getUserID());
+        GetUserByIdResponse getUserByIdResponse = this.getUserById(getUserByIdRequest);
+
+        if(!getUserByIdResponse.isSuccess()){
+            return new SwapCollectableResponse(false, getUserByIdResponse.getMessage(), null);
+        }
+
+        User currentUser = getUserByIdResponse.getUser();
+
         /* assign points to the User for finding the GeoCode */
 
         //get the GeoCode
@@ -370,12 +380,17 @@ public class UserServiceImpl implements UserService {
             return new SwapCollectableResponse(false, e.getMessage(), null);
         }
 
-        //check if the ID passed is valid
-//        if(!getGeoCodeByIDResponse.success()){
-//            return new SwapCollectableResponse(false, "Invalid ID given for the GeoCode", null);
-//        }
-
         GeoCode geoCode = getGeoCodeByIDResponse.getFoundGeoCode();
+
+        //check if GeoCodeID is invalid
+        if(geoCode == null){
+            return new SwapCollectableResponse(false, "Invalid ID given for the GeoCode", null);
+        }
+
+        //check if the GeoCode contains the given Collectable
+        if(!geoCode.getCollectables().contains(request.getCollectableID())){
+            return new SwapCollectableResponse(false, "Invalid ID given for the Collectable", null);
+        }
 
         //check if the GeoCode is part of an Event
         UUID eventID = geoCode.getEventID();
@@ -492,7 +507,6 @@ public class UserServiceImpl implements UserService {
 
         /* only swap the Collectables if no errors have occurred before now */
         //currentCollectable to swap out
-        User currentUser = getCurrentUser();
         Collectable oldCurrentCollectable = currentUser.getCurrentCollectable();
 
         //swap in newCurrentCollectable
@@ -502,5 +516,14 @@ public class UserServiceImpl implements UserService {
         userRepo.save(currentUser);
 
         return new SwapCollectableResponse(true, "The User's Collectable was swapped with the Collectable in the GeoCode", oldCurrentCollectable );
+    }
+
+    /**
+     * Post construct the GeoCode service, this avoids a circular dependency
+     *
+     * @param geoCodeService the service to be set
+     */
+    public void setGeoCodeService( GeoCodeService geoCodeService ){
+        this.geoCodeService = geoCodeService;
     }
 }
