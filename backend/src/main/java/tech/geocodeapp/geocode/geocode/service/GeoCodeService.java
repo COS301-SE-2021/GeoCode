@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.geocode.service;
 
 import tech.geocodeapp.geocode.geocode.exceptions.*;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
 
@@ -149,4 +150,10 @@ public interface GeoCodeService {
      */
     UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws InvalidRequestException;
 
+    /**
+     * Helper function that saves the given geocode into the repository
+     *
+     * @param geocode the GeoCode object to save
+     */
+    void saveGeoCode( GeoCode geocode );
 }
