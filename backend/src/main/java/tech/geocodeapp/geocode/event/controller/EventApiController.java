@@ -152,4 +152,17 @@ public class EventApiController implements EventApi {
         }
     }
 
+    public ResponseEntity< GetEventResponse > getEvent( GetEventRequest body ) throws InvalidRequestException {
+
+        GetEventResponse response = eventService.getEvent( body );
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
+    }
+
 }
