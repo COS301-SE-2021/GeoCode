@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.persistence.*;
 import javax.validation.Valid;
 
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
@@ -87,6 +88,13 @@ public class Event {
     protected List< Leaderboard > leaderboards;
 
     /**
+     * If the Event is active in the system for a user to participate
+     */
+    @JsonProperty( "available" )
+    @NotNull( message = "Event's available cannot be null." )
+    private Boolean available;
+
+    /**
      * Default constructor
      */
     public Event() {
@@ -116,6 +124,33 @@ public class Event {
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.leaderboards = leaderboards;
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param id The unique identifier for the Event
+     * @param name What the Event is called
+     * @param description A brief description on what the Event is about
+     * @param location The location of the Event
+     * @param levels The different Levels with what GeoCode to find and which Users are searching are on the different Levels
+     * @param beginDate The starting Date of the Event
+     * @param endDate The end Date of the Event
+     * @param leaderboards The different rankings of the users partaking in the Event
+     * @param available If the Event is active in the system for a user to participate
+     */
+    public Event( UUID id, String name, String description, GeoPoint location, List< Level > levels,
+                  LocalDate beginDate, LocalDate endDate, List< Leaderboard > leaderboards, Boolean available ) {
+
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.location = location;
+        this.levels = levels;
+        this.beginDate = beginDate;
+        this.endDate = endDate;
+        this.leaderboards = leaderboards;
+        this.available = available;
     }
 
     /**
@@ -426,6 +461,39 @@ public class Event {
         this.leaderboards = leaderboards;
     }
 
+    /**
+     * Sets the available attribute to the specified value
+     *
+     * @param available the value the attribute should be set to
+     *
+     * @return the model after the available has been changed
+     */
+    @Valid
+    public Event available( Boolean available ) {
+
+        this.available = available;
+        return this;
+    }
+
+    /**
+     * Gets the saved available attribute
+     *
+     * @return the stored available attribute
+     */
+    public Boolean isAvailable() {
+
+        return available;
+    }
+
+    /**
+     * Sets the available attribute to the specified value
+     *
+     * @param available the value the attribute should be set to
+     */
+    public void setAvailable( Boolean available ) {
+
+        this.available = available;
+    }
 
     /**
      * Determines if the specified object is the same as the current object
@@ -454,7 +522,8 @@ public class Event {
                 Objects.equals( this.levels, event.levels ) &&
                 Objects.equals( this.beginDate, event.beginDate ) &&
                 Objects.equals( this.endDate, event.endDate ) &&
-                Objects.equals( this.leaderboards, event.leaderboards );
+                Objects.equals( this.leaderboards, event.leaderboards ) &&
+                Objects.equals( this.available, event.available );
     }
 
     /**
@@ -465,7 +534,7 @@ public class Event {
     @Override
     public int hashCode() {
 
-        return Objects.hash( id, name, description, location, levels, beginDate, endDate, leaderboards );
+        return Objects.hash( id, name, description, location, levels, beginDate, endDate, leaderboards,available );
     }
 
     /**
@@ -485,6 +554,7 @@ public class Event {
                 "    begin: " + toIndentedString( beginDate ) + "\n" +
                 "    end: " + toIndentedString( endDate ) + "\n" +
                 "    leaderboards: " + toIndentedString( leaderboards ) + "\n" +
+                "    available: " + toIndentedString( available ) + "\n" +
                 "}";
     }
 

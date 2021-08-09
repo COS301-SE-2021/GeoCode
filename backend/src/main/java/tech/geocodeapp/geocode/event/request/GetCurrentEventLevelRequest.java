@@ -3,29 +3,48 @@ package tech.geocodeapp.geocode.event.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 
 import java.util.Objects;
 import java.util.UUID;
 
 /**
- * GetCurrentEventRequest object to specify what Event to retrieve
+ * GetCurrentEventGeoCodeRequest object to specify what Event to retrieve
  */
 @Validated
-public class GetCurrentEventRequest {
+public class GetCurrentEventLevelRequest {
+
+    /**
+     * The unique id of the event to get
+     */
+    @JsonProperty( "eventID" )
+    @NotNull( message = "GetCurrentEventLevelRequest eventID attribute cannot be null." )
+    private UUID eventID ;
 
     /**
      * The unique id of the user doing the event to get
      */
     @JsonProperty( "userID" )
-    @NotNull( message = "GetCurrentEventRequest userID attribute cannot be null." )
+    @NotNull( message = "GetCurrentEventLevelRequest userID attribute cannot be null." )
     private UUID userID;
 
     /**
      * Default Constructor
      */
-    public GetCurrentEventRequest() {
+    public GetCurrentEventLevelRequest() {
 
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param eventID The unique id of the event to get
+     * @param userID The unique id of the user doing the event to get
+     */
+    public GetCurrentEventLevelRequest( UUID eventID, UUID userID ) {
+
+        this.eventID = eventID;
+        this.userID = userID;
     }
 
     /**
@@ -33,9 +52,43 @@ public class GetCurrentEventRequest {
      *
      * @param userID The unique id of the user doing the event to get
      */
-    public GetCurrentEventRequest( UUID userID ) {
+    public GetCurrentEventLevelRequest( UUID userID ) {
 
         this.userID = userID;
+    }
+
+    /**
+     * Sets the eventID attribute to the specified value
+     *
+     * @param eventID the value the attribute should be set to
+     *
+     * @return the request after the eventID has been changed
+     */
+    public GetCurrentEventLevelRequest eventID( UUID eventID ) {
+
+        this.eventID = eventID;
+        return this;
+    }
+
+    /**
+     * Gets the saved eventID attribute
+     *
+     * @return the stored eventID attribute
+     */
+    @Valid
+    public UUID getEventID() {
+
+        return eventID;
+    }
+
+    /**
+     * Sets the eventID attribute to the specified value
+     *
+     * @param eventID the value the attribute should be set to
+     */
+    public void setEventID( UUID eventID ) {
+
+        this.eventID = eventID;
     }
 
     /**
@@ -45,7 +98,7 @@ public class GetCurrentEventRequest {
      *
      * @return the request after the userID has been changed
      */
-    public GetCurrentEventRequest userID( UUID userID ) {
+    public GetCurrentEventLevelRequest userID( UUID userID ) {
 
         this.userID = userID;
         return this;
@@ -80,7 +133,7 @@ public class GetCurrentEventRequest {
      * @return if the object is the same or not
      */
     @Override
-    public boolean equals( java.lang.Object obj ) {
+    public boolean equals( Object obj ) {
 
         if ( this == obj ) {
 
@@ -91,8 +144,10 @@ public class GetCurrentEventRequest {
             return false;
         }
 
-        GetCurrentEventRequest getCurrentEventRequest = ( GetCurrentEventRequest ) obj;
-        return Objects.equals( this.userID, getCurrentEventRequest.userID );
+        GetCurrentEventLevelRequest getCurrentEventRequest = ( GetCurrentEventLevelRequest ) obj;
+        return Objects.equals( this.eventID, getCurrentEventRequest.eventID ) &&
+                Objects.equals( this.userID, getCurrentEventRequest.userID );
+
     }
 
     /**
@@ -103,7 +158,7 @@ public class GetCurrentEventRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( userID );
+        return Objects.hash( eventID, userID );
     }
 
     /**
@@ -114,7 +169,8 @@ public class GetCurrentEventRequest {
     @Override
     public String toString() {
 
-        return "class GetCurrentEventRequest {\n" +
+        return "class GetCurrentEventGeoCodeRequest {\n" +
+                "    eventID: " + toIndentedString( eventID ) + "\n" +
                 "    userID: " + toIndentedString( userID ) + "\n" +
                 "}";
     }
@@ -123,7 +179,7 @@ public class GetCurrentEventRequest {
      * Convert the given object to string with each line indented by 4 spaces
      * (except the first line).
      */
-    private String toIndentedString( java.lang.Object o ) {
+    private String toIndentedString( Object o ) {
 
         if ( o == null ) {
 
