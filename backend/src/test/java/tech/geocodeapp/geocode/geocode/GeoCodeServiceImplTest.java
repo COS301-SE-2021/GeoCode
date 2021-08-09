@@ -298,7 +298,6 @@ class GeoCodeServiceImplTest {
                 hints.add( "hint." );
             request.setHints( hints );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
-            request.setEventID( eventID );
 
             /* create the GeoCode in the repository */
             geoCodeService.createGeoCode( request );
@@ -924,7 +923,6 @@ class GeoCodeServiceImplTest {
                         hints.add( "Hint three for: " + x );
                     request.setHints( hints );
                     request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
-                    request.setEventID( eventID );
 
                     /* Add the created GeoCode to the list */
                     geoCodeService.createGeoCode( request );
@@ -944,7 +942,6 @@ class GeoCodeServiceImplTest {
                     hints.add( "Hint three for: " + x );
                     request.setHints( hints );
                     request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
-                    request.setEventID( eventID );
 
                     /* Add the created GeoCode to the list */
                     geoCodeService.createGeoCode( request );
@@ -964,7 +961,6 @@ class GeoCodeServiceImplTest {
                     hints.add( "Hint three for: " + x );
                 request.setHints( hints );
                 request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
-                request.setEventID( eventID );
 
                 /* Add the created GeoCode to the list */
                 geoCodeService.createGeoCode( request );
