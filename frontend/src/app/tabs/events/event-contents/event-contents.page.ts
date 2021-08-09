@@ -95,4 +95,9 @@ export class EventContentsPage implements AfterViewInit {
     await this.navCtrl.navigateForward('/explore/open/'+geocode.id,{ state: {geocode} });
   }
 
+  openInMaps(geocode: GeoCode) {
+    window.open('https://www.google.com/maps/search/?api=1&query='+geocode.location.latitude+'%2C'+geocode.location.longitude);
+  }
+
+
 }
