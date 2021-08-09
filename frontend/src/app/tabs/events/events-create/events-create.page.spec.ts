@@ -3,8 +3,9 @@ import { IonicModule } from '@ionic/angular';
 
 import { EventsCreatePage } from './events-create.page';
 import {RouterTestingModule} from '@angular/router/testing';
-import {GeoCodeService} from '../../../services/geocode-api';
+import {EventService, GeoCodeService} from '../../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {MockGoogleMapsLoader} from '../../../mocks/MockGoogleMapsLoader';
 
 describe('EventsCreatePage', () => {
   let component: EventsCreatePage;
@@ -13,7 +14,7 @@ describe('EventsCreatePage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ EventsCreatePage ],
-      providers: [GeoCodeService],
+      providers: [GeoCodeService, EventService, MockGoogleMapsLoader.provider()],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
     }).compileComponents();
 

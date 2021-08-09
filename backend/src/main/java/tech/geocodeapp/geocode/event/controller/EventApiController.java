@@ -66,7 +66,7 @@ public class EventApiController implements EventApi {
     }
 
     public ResponseEntity< GetAllEventsResponse > getAllEvents() {
-
+      
         GetAllEventsResponse response = eventService.getAllEvents();
 
         if ( ( response != null ) ) {
@@ -79,7 +79,7 @@ public class EventApiController implements EventApi {
     }
 
     public ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body ) throws InvalidRequestException {
-
+      
         GetEventsByLocationResponse response = eventService.getEventsByLocation(body);
 
         if ( ( response != null ) ) {
@@ -107,8 +107,21 @@ public class EventApiController implements EventApi {
     }
 
     public ResponseEntity< GetPointsByUserResponse > getPointsByUser( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get the Points for an Event", required = true, schema = @Schema() ) @Valid @RequestBody GetPointsByUserRequest body ) {
-
+        
         return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
+    }
+
+    public ResponseEntity< EventsNearMeResponse > getEventsNearMe( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody EventsNearMeRequest body ) throws InvalidRequestException {
+
+        EventsNearMeResponse response = eventService.eventsNearMe(body);
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
     }
 
 }
