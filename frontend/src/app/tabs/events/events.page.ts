@@ -89,12 +89,7 @@ export class EventsPage implements AfterViewInit {
   }
 
   goToLeaderBoard(event){
-    const navigationExtras: NavigationExtras = {
-      queryParams: {
-        event
-      }
-    };
-    this.navCtrl.navigateForward('/events/'+event.id+'/leaderboard',navigationExtras);
+    this.navCtrl.navigateForward('/events/'+event.id+'/leaderboard', {state: {event}});
   }
 
   async addEvent() {}
