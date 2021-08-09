@@ -2,13 +2,14 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {
   GeoCode,
   GeoCodeService,
-  GetFoundGeoCodesResponse,
+  GetFoundGeoCodesResponse, GetGeoCodeResponse,
   GetOwnedGeoCodesResponse,
   UserService
 } from '../../../services/geocode-api';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {KeycloakService} from 'keycloak-angular';
 import {ActivatedRoute} from '@angular/router';
+import {ModalController} from '@ionic/angular';
 
 @Component({
   selector: 'app-geocodes',
@@ -21,46 +22,65 @@ export class UserGeocodesPage implements OnInit {
   googleMaps;
   map;
 
-  createdIDs: string[] = null;
+  userID;
+  createdIDs: string[] = [];
   created: GeoCode[] = null;
-  foundIDs: string[] = null;
+  foundIDs: string[] = [];
   found: GeoCode[] = null;
   markers = [];
+  detailedGeoCode: GeoCode = null;
 
   constructor(
     private mapsLoader: GoogleMapsLoader,
     private geocodeService: GeoCodeService,
     private userService: UserService,
     keycloak: KeycloakService,
-    route: ActivatedRoute
+    route: ActivatedRoute,
+    private modalController: ModalController
   ) {
-    let id = route.snapshot.paramMap.get('id');
-    if (!id) {
-      id = keycloak.getKeycloakInstance().subject;
+    this.userID = route.snapshot.paramMap.get('id');
+    if (!this.userID) {
+      this.userID = keycloak.getKeycloakInstance().subject;
     }
-    this.userService.getFoundGeoCodes({
-      userID: id
-    }).subscribe((response: GetFoundGeoCodesResponse) => {
-      console.log(response);
-      // @ts-ignore
-      this.foundIDs = response.geocodeIDs;
-    });
+  }
 
-    this.userService.getOwnedGeoCodes({
-      userID: id
-    }).subscribe((response: GetOwnedGeoCodesResponse) => {
-      console.log(response);
-      // @ts-ignore
-      this.createdIDs = response.geocodeIDs;
+  loadInitialData() {
+    return new Promise(resolve => {
+      //Only resolve promise when completed === 3
+      let completed = 0;
+
+      // Load Maps
+      this.mapsLoader.load()
+        .then(handle => {
+          this.googleMaps = handle;
+          completed++;
+          if (completed === 3) { resolve(null); }
+        }).catch();
+
+      // Get found geocode IDs
+      this.userService.getFoundGeoCodes({ userID: this.userID }).subscribe((response: GetFoundGeoCodesResponse) => {
+        console.log(response);
+        this.foundIDs = response.geocodeIDs;
+        completed++;
+        if (completed === 3) { resolve(null); }
+      });
+
+      // Get created geocode IDs
+      this.userService.getOwnedGeoCodes({ userID: this.userID }).subscribe((response: GetOwnedGeoCodesResponse) => {
+        console.log(response);
+        this.createdIDs = response.geocodeIDs;
+        completed++;
+        if (completed === 3) { resolve(null); }
+      });
     });
   }
 
   async ngOnInit() {
-    this.googleMaps = await this.mapsLoader.load();
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.loadMap(position.coords.latitude, position.coords.longitude);
-    }, (positionError) => {
-      this.loadMap(0, 0);
+    await this.loadInitialData();
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      await this.loadMap(position.coords.latitude, position.coords.longitude);
+    }, async (positionError) => {
+      await this.loadMap(0, 0);
     });
   }
 
@@ -71,37 +91,43 @@ export class UserGeocodesPage implements OnInit {
     };
     this.map = new this.googleMaps.Map(this.mapElement.nativeElement, mapOptions);
     await this.loadFound();
-    this.placeMarkers(this.found);
   }
 
   async segmentChanged(event) {
     if (event.target.value === 'found') {
       await this.loadFound();
-      this.placeMarkers(this.found);
     } else if (event.target.value === 'created') {
       await this.loadCreated();
-      this.placeMarkers(this.created);
     }
-  }
-
-  async loadCreated() {
-    if (!(this.created)) {
-      this.created = [];
-      //await this.geocodeService.getGeocodeBy
-    }
-    return this.created;
   }
 
   async loadFound() {
     if (!(this.found)) {
       this.found = [];
-      //load from backend
+      await this.loadGeoCodes(this.foundIDs, this.found);
     }
-    return this.found;
+    this.placeMarkers(this.found);
   }
 
+  async loadCreated() {
+    if (!(this.created)) {
+      this.created = [];
+      await this.loadGeoCodes(this.createdIDs, this.created);
+    }
+    this.placeMarkers(this.created);
+  }
 
-
+  loadGeoCodes(ids: string[], target: GeoCode[]) {
+    return new Promise(resolve => {
+      for (const id of ids) {
+        this.geocodeService.getGeoCode({geoCodeID: id}).subscribe((response: GetGeoCodeResponse) => {
+          console.log(response);
+          target.push(response.foundGeoCode);
+          if (target.length === ids.length) { resolve(null); }
+        });
+      }
+    });
+  }
 
   placeMarkers(locations: GeoCode[]) {
     for (const m of this.markers) {
@@ -109,13 +135,38 @@ export class UserGeocodesPage implements OnInit {
     }
     this.markers = [];
     for (const g of locations) {
-      this.markers.push(new this.googleMaps.Marker({
+      const marker = new this.googleMaps.Marker({
         map: this.map,
+        title: g.description,
         position: {
           lat: parseFloat(String(g.location.latitude)),
           lng: parseFloat(String(g.location.longitude))
         }
-      }));
+      });
+      marker.addListener('click' , (event) => {
+        this.detailedGeoCode = g;
+      });
+      this.markers.push(marker);
+    }
+  }
+
+  closeDetails() {
+    this.detailedGeoCode = null;
+  }
+
+  mapSizeMD() {
+    if (this.detailedGeoCode) {
+      return 6;
+    } else {
+      return 12;
+    }
+  }
+
+  mapSizeLG() {
+    if (this.detailedGeoCode) {
+      return 9;
+    } else {
+      return 12;
     }
   }
 }
