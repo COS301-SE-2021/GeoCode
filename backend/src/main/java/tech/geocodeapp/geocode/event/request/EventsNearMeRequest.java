@@ -23,7 +23,7 @@ public class EventsNearMeRequest {
     private GeoPoint location;
 
     /**
-     * The radius to search around the location for Events
+     * The radius (in kilometres) to search around the location for Events.
      */
     @JsonProperty( "radius" )
     @NotNull( message = "EventsNearMeRequest radius attribute cannot be null." )
