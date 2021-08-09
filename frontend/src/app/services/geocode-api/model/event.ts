@@ -21,6 +21,6 @@ export interface Event {
     levels?: Array<Level>;
     beginDate?: string;
     endDate?: string;
-    leaderboards: Array<Leaderboard>;
-    avaialble?: boolean;
+    leaderboard: Array<Leaderboard>;
+    available?: boolean;
 }
