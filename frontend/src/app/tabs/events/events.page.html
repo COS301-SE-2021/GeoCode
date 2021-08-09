@@ -8,21 +8,21 @@
   <div  slot="fixed" class="horizontalscroll" >
     <div class="items" >
       <ion-row>
-      <ion-col id="button-col"><ion-select id="button"  value='{radius}' placeholder= "Select Radius">
+      <ion-col id="button-col"><ion-select id="button"  value='{radius}' placeholder= "Select Radius" (ionChange)="radius($event)">
         <ion-select-option value="10">10km</ion-select-option>
         <ion-select-option value="50">50km</ion-select-option>
         <ion-select-option value="100">100km</ion-select-option>
         <ion-select-option value="500">500km</ion-select-option>
         <ion-select-option value="0">No radius limit</ion-select-option>
       </ion-select></ion-col>
-      <ion-col id="button-col"><ion-select id="button"  value='{radius}' placeholder= "Select Time Range">
-        <ion-select-option value="1">1 Day</ion-select-option>
-        <ion-select-option value="7">1 Week</ion-select-option>
-        <ion-select-option value="30">1 Month</ion-select-option>
-        <ion-select-option value="180">6 Month</ion-select-option>
-        <ion-select-option value="365">1 Year</ion-select-option>
-        <ion-select-option value="0">No time limit</ion-select-option>
-      </ion-select></ion-col>
+<!--      <ion-col id="button-col"><ion-select id="button"  value='{radius}' placeholder= "Select Time Range">-->
+<!--        <ion-select-option value="1">1 Day</ion-select-option>-->
+<!--        <ion-select-option value="7">1 Week</ion-select-option>-->
+<!--        <ion-select-option value="30">1 Month</ion-select-option>-->
+<!--        <ion-select-option value="180">6 Month</ion-select-option>-->
+<!--        <ion-select-option value="365">1 Year</ion-select-option>-->
+<!--        <ion-select-option value="0">No time limit</ion-select-option>-->
+<!--      </ion-select></ion-col>-->
       </ion-row>
     </div>
   </div>
