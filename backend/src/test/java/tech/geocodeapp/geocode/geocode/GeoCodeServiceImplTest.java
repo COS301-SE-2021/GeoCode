@@ -254,7 +254,6 @@ class GeoCodeServiceImplTest {
                 hints.add( "hint." );
             request.setHints( hints );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
-            request.setEventID( eventID );
 
             CreateGeoCodeResponse response = geoCodeService.createGeoCode( request );
 
