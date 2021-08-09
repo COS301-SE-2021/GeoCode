@@ -1,13 +1,14 @@
 package tech.geocodeapp.geocode.event.model;
 
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import java.util.Collection;
 import java.util.Objects;
-import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -38,8 +39,10 @@ public class Level {
      */
     @Valid
     @JsonProperty( "onLevel" )
+    @ElementCollection( fetch = FetchType.EAGER )
+    @Cascade( org.hibernate.annotations.CascadeType.ALL )
     @NotNull( message = "Level's onLevel cannot be null." )
-    private HashMap< String, UUID > onLevel;
+    private Collection<  UUID > onLevel;
 
     /**
      * Default constructor
@@ -78,7 +81,7 @@ public class Level {
      * @param target The GeoCode to find on this Level of an Event
      * @param onLevel A map of all the user IDs on this level of the Event
      */
-    public Level( UUID id, UUID target, HashMap< String, UUID > onLevel ) {
+    public Level( UUID id, UUID target, Collection< UUID > onLevel ) {
 
         this.id = id;
         this.target = target;
@@ -159,28 +162,35 @@ public class Level {
      *
      * @return the model after changing the onLevel
      */
-    public Level onLevel( HashMap< String, UUID > onLevel ) {
+    public Level onLevel( Collection< UUID > onLevel ) {
 
         this.onLevel = onLevel;
         return this;
     }
 
     /**
-     * Adds a new entry into the onLevel HashMap
+     * Adds a new entry into the onLevel list
      *
-     * @param key the key value for the HashMap
+     * @param onLevelItem the uuid to add to the list
+     *
+     * @return the model after adding a new entry
+     */
+    public Level putOnLevelItem( UUID onLevelItem ) {
+
+        this.onLevel.add( onLevelItem );
+        return this;
+    }
+
+    /**
+     * Removes a new entry into the onLevel list
+     *
      * @param onLevelItem the uuid to add to the HashMap
      *
      * @return the model after adding a new entry
      */
-    public Level putOnLevelItem( String key, UUID onLevelItem ) {
+    public Level removeOnLevelItem( UUID onLevelItem ) {
 
-        if ( this.onLevel == null ) {
-
-            this.onLevel = new HashMap<>();
-        }
-
-        this.onLevel.put( key, onLevelItem );
+        this.onLevel.remove( onLevelItem );
         return this;
     }
 
@@ -190,7 +200,7 @@ public class Level {
      * @return the stored onLevel attribute
      */
     @Valid
-    public HashMap< String, UUID > getOnLevel() {
+    public Collection< UUID > getOnLevel() {
 
         return onLevel;
     }
@@ -200,7 +210,7 @@ public class Level {
      *
      * @param onLevel the value the onLevel should be set to
      */
-    public void setOnLevel( HashMap< String, UUID > onLevel ) {
+    public void setOnLevel( Collection< UUID > onLevel ) {
 
         this.onLevel = onLevel;
     }
