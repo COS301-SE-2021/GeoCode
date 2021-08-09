@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.event.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 import javax.validation.Valid;
@@ -67,6 +68,12 @@ public class CreateTimeTrialRequest {
     private List< UUID > geoCodesToFind;
 
     /**
+     * If the TimeTrial is active in the system for a user to participate
+     */
+    @JsonProperty( "available" )
+    private Boolean available;
+
+    /**
      * Default constructor
      */
     public CreateTimeTrialRequest() {
@@ -95,6 +102,32 @@ public class CreateTimeTrialRequest {
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.geoCodesToFind = geoCodesToFind;
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param timeLimit The amount of time a TimeTrial should be completed in
+     * @param name what the new Event should be called
+     * @param description what the Event to be created is going to be about
+     * @param location the Event will be held at in the real world's location
+     * @param beginDate The starting Date of the Event
+     * @param endDate The end Date of the Event
+     * @param geoCodesToFind The different GeoCodes to find during the Event
+     * @param available If the TimeTrial is active in the system for a user to participate
+     */
+    public CreateTimeTrialRequest( double timeLimit, String name, String description,
+                                   GeoPoint location, LocalDate beginDate, LocalDate endDate,
+                                   List< UUID > geoCodesToFind, Boolean available ) {
+
+        this.timeLimit = timeLimit;
+        this.name = name;
+        this.description = description;
+        this.location = location;
+        this.beginDate = beginDate;
+        this.endDate = endDate;
+        this.geoCodesToFind = geoCodesToFind;
+        this.available = available;
     }
 
     /**
@@ -341,7 +374,41 @@ public class CreateTimeTrialRequest {
 
         this.geoCodesToFind = geoCodesToFind;
     }
-    
+
+    /**
+     * Sets the available attribute to the specified value
+     *
+     * @param available the value the attribute should be set to
+     *
+     * @return the model after the available has been changed
+     */
+    @Valid
+    public CreateTimeTrialRequest available( Boolean available ) {
+
+        this.available = available;
+        return this;
+    }
+
+    /**
+     * Gets the saved available attribute
+     *
+     * @return the stored available attribute
+     */
+    public Boolean isAvailable() {
+
+        return available;
+    }
+
+    /**
+     * Sets the available attribute to the specified value
+     *
+     * @param available the value the attribute should be set to
+     */
+    public void setAvailable( Boolean available ) {
+
+        this.available = available;
+    }
+
     /**
      * Determines if the specified object is the same as the current object
      *
@@ -367,7 +434,8 @@ public class CreateTimeTrialRequest {
                 Objects.equals( this.location, createTimeTrialRequest.location ) &&
                 Objects.equals( this.beginDate, createTimeTrialRequest.beginDate ) &&
                 Objects.equals( this.endDate, createTimeTrialRequest.endDate ) &&
-                Objects.equals( this.geoCodesToFind, createTimeTrialRequest.geoCodesToFind );
+                Objects.equals( this.geoCodesToFind, createTimeTrialRequest.geoCodesToFind ) &&
+                Objects.equals( this.available, createTimeTrialRequest.available );
     }
 
     /**
@@ -378,7 +446,7 @@ public class CreateTimeTrialRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( timeLimit, name, description, location, beginDate, endDate, geoCodesToFind );
+        return Objects.hash( timeLimit, name, description, location, beginDate, endDate, geoCodesToFind, available );
     }
 
     /**
@@ -397,6 +465,7 @@ public class CreateTimeTrialRequest {
                 "    beginDate: " + toIndentedString( beginDate ) + "\n" +
                 "    endDate: " + toIndentedString( endDate ) + "\n" +
                 "    geoCodesToFind: " + toIndentedString( geoCodesToFind ) + "\n" +
+                "    available: " + toIndentedString( available ) + "\n" +
                 "}";
     }
 
