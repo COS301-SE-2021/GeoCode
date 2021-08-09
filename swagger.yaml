@@ -2495,11 +2495,11 @@ components:
         - targetGeoCodeID
         - targetCollectableID
       properties:
-        collectable:
+        targetGeoCodeID:
           type: string
           format: uuid
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        geoCodeID:
+        targetCollectableID:
           type: string
           format: uuid
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
