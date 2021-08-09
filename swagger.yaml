@@ -3270,8 +3270,8 @@ components:
     SwapCollectableRequest:
       type: "object"
       required:
-        - collectableID
-        - geoCodeID
+        - targetCollectableID
+        - targetGeoCodeID
       properties:
         collectableID:
           type: string
