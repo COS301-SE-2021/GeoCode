@@ -67,12 +67,28 @@ public class EventApiController implements EventApi {
 
     public ResponseEntity< GetAllEventsResponse > getAllEvents() {
 
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
+        GetAllEventsResponse response = eventService.getAllEvents();
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
     }
 
-    public ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body ) {
+    public ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body ) throws InvalidRequestException {
 
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
+        GetEventsByLocationResponse response = eventService.getEventsByLocation(body);
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
     }
 
     public ResponseEntity< GetLeaderBoardByTimeTrialResponse > getLeaderBoardByTimeTrial( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get the Leaderboard for a TimeTrial", required = true, schema = @Schema() ) @Valid @RequestBody GetLeaderBoardByTimeTrialRequest body ) {

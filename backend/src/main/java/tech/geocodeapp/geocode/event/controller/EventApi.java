@@ -119,7 +119,7 @@ public interface EventApi {
     @PostMapping( value = "/Event/getEventsByLocation",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body );
+    ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body ) throws InvalidRequestException;
 
 
     @Operation( summary = "Get the Leaderboard for a TimeTrial", description = "Get the Leaderboard for a TimeTrial", security = {

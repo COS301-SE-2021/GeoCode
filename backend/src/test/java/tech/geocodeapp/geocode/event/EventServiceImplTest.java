@@ -110,6 +110,7 @@ class EventServiceImplTest {
         eventRepo = new EventMockRepository<>();
         timeTrialRepo = new EventMockRepository<>();
         timelogRepo = new TimeLogMockRepository();
+        levelRepo = new LevelMockRepository();
         eventRepo.deleteAll();
         timeTrialRepo.deleteAll();
         timelogRepo.deleteAll();
