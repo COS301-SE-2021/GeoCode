@@ -206,7 +206,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* Check if the Object was saved correctly */
             if ( !newGeoCode.equals( check ) ) {
-
+              
                 /* Saved GeoCode not the same therefore creation failed */
                 return new CreateGeoCodeResponse( false );
             }
