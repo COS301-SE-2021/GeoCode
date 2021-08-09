@@ -99,5 +99,10 @@ export class EventContentsPage implements AfterViewInit {
     window.open('https://www.google.com/maps/search/?api=1&query='+geocode.location.latitude+'%2C'+geocode.location.longitude);
   }
 
+  async openLeaderBoard() {
+    const e = this.event;
+    await this.navCtrl.navigateForward('/events/' + this.event.id+'/leaderboard', {state: {e}});
+  }
+
 
 }
