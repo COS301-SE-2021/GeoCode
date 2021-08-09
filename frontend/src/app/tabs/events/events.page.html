@@ -53,7 +53,7 @@
 <!--          <ion-col class="heading">Longitude</ion-col>-->
 <!--          <ion-col>{{event.longitude}} </ion-col>-->
 <!--        </ion-row>-->
-        <ion-button id="button" color="button" (click)="goToEvent(event)">Go to Event</ion-button>
+        <ion-button id="button" color="button" (click)="goToEvent(event)">Join Event</ion-button>
         <ion-button id="button" color="button" (click)="goToLeaderBoard(event)">LeaderBoard</ion-button>
 
       </ion-card-content>
@@ -61,7 +61,7 @@
   </div>
 
   <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button color="button" [routerLink]="['events-create']">
+    <ion-fab-button color="button" [routerLink]="['create']">
       <ion-icon  name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
