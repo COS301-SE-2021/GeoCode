@@ -51,12 +51,6 @@ public class CreateGeoCodeRequest {
     private Boolean available = null;
 
     /**
-     * The UUID for the GeoCode's event (is NULL if GeoCode is not part of an Event)
-     */
-    @JsonProperty( "eventID" )
-    private UUID eventID;
-
-    /**
      * Default constructor
      */
     public CreateGeoCodeRequest() {
@@ -71,16 +65,14 @@ public class CreateGeoCodeRequest {
      * @param hints       The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
      * @param difficulty  The level of difficulty to find a GeoCode in the real world
      * @param available   If the GeoCode is active in the system
-     * @param eventID     The UUID for the GeoCode's event
      */
-    public CreateGeoCodeRequest( String description, GeoPoint location, List< String > hints, Difficulty difficulty, Boolean available, UUID eventID ) {
+    public CreateGeoCodeRequest( String description, GeoPoint location, List< String > hints, Difficulty difficulty, Boolean available ) {
 
         this.description = description;
         this.location = location;
         this.hints = hints;
         this.difficulty = difficulty;
         this.available = available;
-        this.eventID = eventID;
     }
 
     /**
@@ -261,38 +253,6 @@ public class CreateGeoCodeRequest {
     public void setAvailable( Boolean available ) {
 
         this.available = available;
-    }
-
-    /**
-     * Sets the eventID attribute to the specified value
-     *
-     * @param eventID the value the attribute should be set to
-     *
-     * @return the request after the eventID has been changed
-     */
-    public CreateGeoCodeRequest eventID( UUID eventID ) {
-
-        this.eventID = eventID;
-        return this;
-    }
-    /**
-     * Gets the saved eventID attribute
-     *
-     * @return the stored eventID attribute
-     */
-    public UUID getEventID() {
-
-        return eventID;
-    }
-
-    /**
-     * Sets the eventID attribute to the specified value
-     *
-     * @param eventID the value the attribute should be set to
-     */
-    public void setEventID( UUID eventID ) {
-
-        this.eventID = eventID;
     }
 
     /**
