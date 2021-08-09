@@ -120,6 +120,13 @@ public interface EventService {
     GetAllEventsResponse getAllEvents();
 
     /**
+     * Get all the stored TimeTrials in the repository
+     *
+     * @return the newly created response instance
+     */
+    public GetAllTimeTrialsResponse getAllTimeTrials();
+
+    /**
      * Change the availability of a specific Event object
      *
      * @param request the attributes the response should be created from

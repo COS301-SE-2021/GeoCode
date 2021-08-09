@@ -155,7 +155,7 @@ public class EventServiceImpl implements EventService {
         /* Check if the GeoCodes are still valid after sorting */
         if ( geoCodes == null ) {
 
-            /* THe GeoCodes are no longer valid so stop */
+            /* The GeoCodes are no longer valid so stop */
             return new CreateEventResponse( false );
         }
 
@@ -173,6 +173,17 @@ public class EventServiceImpl implements EventService {
         var event = new Event( eventID, request.getName(), request.getDescription(),
                                request.getLocation(), levels, request.getBeginDate(), request.getEndDate(),
                                leaderboard );
+
+        /* Check the availability of the Event */
+        if ( request.isAvailable() == null ) {
+
+            /* None is set so make it default available */
+            event.setAvailable( true );
+        } else {
+
+            /* Set to the given */
+            event.setAvailable( request.isAvailable() );
+        }
 
         /*
          * Save the newly create Event
@@ -259,6 +270,17 @@ public class EventServiceImpl implements EventService {
         var timeTrial = new TimeTrial( UUID.randomUUID(), request.getName(), request.getDescription(),
                                        request.getLocation(), levels, request.getBeginDate(), request.getEndDate(),
                                        leaderboard, request.getTimeLimit() );
+
+        /* Check the availability of the Event */
+        if ( request.isAvailable() == null ) {
+
+            /* None is set so make it default available */
+            timeTrial.setAvailable( true );
+        } else {
+
+            /* Set to the given */
+            timeTrial.setAvailable( request.isAvailable() );
+        }
 
         /*
          * Save the newly create Event
@@ -670,6 +692,19 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
+     * Get all the stored TimeTrials in the repository
+     *
+     * @return the newly created response instance
+     */
+    @Override
+    public GetAllTimeTrialsResponse getAllTimeTrials() {
+
+        var temp = timeTrialRepo.findAllTimeTrials();
+
+        return new GetAllTimeTrialsResponse( temp );
+    }
+
+    /**
      * Change the availability of a specific Event object
      *
      * @param request the attributes the response should be created from
@@ -680,6 +715,12 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public ChangeAvailabilityResponse changeAvailability( ChangeAvailabilityRequest request ) throws InvalidRequestException {
+
+        /*
+
+            ToDo maybe this should be called check Availability instead where it checks the date to the current
+
+         */
 
         /* Validate the request */
         if ( request == null ) {

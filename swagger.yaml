@@ -1378,6 +1378,37 @@ paths:
       security:
         - bearerAuth: []
 
+  /Event/getAllTimeTrials:
+    post:
+      tags:
+        - "Event"
+      summary: "Returns all the TimeTrials"
+      description: "Returns all the TimeTrials in the system"
+      operationId: "getAllTimeTrials"
+      responses:
+        '200':
+          description: "Successfully returned all the TimeTrials's"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetAllTimeTrialsResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetAllTimeTrialsResponse"
+        '404':
+          description: "Unable to find any TimeTrials"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetAllTimeTrialsResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetAllTimeTrialsResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
   /Event/createEvent:
     post:
       tags:
@@ -3302,6 +3333,9 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Leaderboard"
+        avaialble:
+          type: boolean
+          example: "True"
       xml:
         name: "Event"
     TimeTrial:
@@ -3360,7 +3394,7 @@ components:
           type: string
           format: date-time
       xml:
-        name: "Level"
+        name: "TimeLog"
 
     OrderLevels:
       type: string
@@ -3379,6 +3413,16 @@ components:
             $ref: "#/components/schemas/Event"
       xml:
         name: "GetAllEventsResponse"
+
+    GetAllTimeTrialsResponse:
+      type: "object"
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeTrial"
+      xml:
+        name: "GetAllTimeTrialsResponse"
 
     CreateEventRequest:
       type: "object"
