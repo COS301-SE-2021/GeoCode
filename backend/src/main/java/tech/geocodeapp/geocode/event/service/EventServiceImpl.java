@@ -109,8 +109,6 @@ public class EventServiceImpl implements EventService {
     @Override
     public CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException {
 
-        System.out.println(request);
-        System.out.println(request.getBeginDate());
         /* Validate the request */
         if ( request == null ) {
 
