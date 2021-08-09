@@ -26,6 +26,10 @@ import { CreateTimeTrialResponse } from '../model/createTimeTrialResponse';
 import { EventsNearMeRequest } from '../model/eventsNearMeRequest';
 import { EventsNearMeResponse } from '../model/eventsNearMeResponse';
 import { GetAllEventsResponse } from '../model/getAllEventsResponse';
+import { GetAllTimeTrialsResponse } from '../model/getAllTimeTrialsResponse';
+import { GetAllTypeOfEventsResponse } from '../model/getAllTypeOfEventsResponse';
+import { GetByLocationRequest } from '../model/getByLocationRequest';
+import { GetByLocationResponse } from '../model/getByLocationResponse';
 import { GetCurrentEventGeoCodeRequest } from '../model/getCurrentEventGeoCodeRequest';
 import { GetCurrentEventGeoCodeResponse } from '../model/getCurrentEventGeoCodeResponse';
 import { GetEventRequest } from '../model/getEventRequest';
@@ -34,6 +38,8 @@ import { GetEventsByLocationRequest } from '../model/getEventsByLocationRequest'
 import { GetEventsByLocationResponse } from '../model/getEventsByLocationResponse';
 import { GetTimeLogRequest } from '../model/getTimeLogRequest';
 import { GetTimeLogResponse } from '../model/getTimeLogResponse';
+import { GetTimeTrialByLocationRequest } from '../model/getTimeTrialByLocationRequest';
+import { GetTimeTrialByLocationResponse } from '../model/getTimeTrialByLocationResponse';
 import { GetTimeTrialRequest } from '../model/getTimeTrialRequest';
 import { GetTimeTrialResponse } from '../model/getTimeTrialResponse';
 import { IsTimeTrialRequest } from '../model/isTimeTrialRequest';
@@ -281,6 +287,150 @@ export class EventService {
 
         return this.httpClient.request<GetAllEventsResponse>('get',`${this.basePath}/Event/getAllEvents`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all the TimeTrials
+     * Returns all the TimeTrials in the system
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAllTimeTrials(observe?: 'body', reportProgress?: boolean): Observable<GetAllTimeTrialsResponse>;
+    public getAllTimeTrials(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetAllTimeTrialsResponse>>;
+    public getAllTimeTrials(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetAllTimeTrialsResponse>>;
+    public getAllTimeTrials(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GetAllTimeTrialsResponse>('get',`${this.basePath}/Event/getAllTimeTrials`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all type of Events
+     * Returns all type of Events in the system
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAllTypeOfEvents(observe?: 'body', reportProgress?: boolean): Observable<GetAllTypeOfEventsResponse>;
+    public getAllTypeOfEvents(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetAllTypeOfEventsResponse>>;
+    public getAllTypeOfEvents(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetAllTypeOfEventsResponse>>;
+    public getAllTypeOfEvents(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GetAllTypeOfEventsResponse>('get',`${this.basePath}/Event/getAllTypeOfEvents`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get an Event by its location
+     * Get an Event and/or TimeTrial  by its location from the given co-ordinates
+     * @param body Request to get an Event and/or TimeTrial by its location
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getByLocation(body: GetByLocationRequest, observe?: 'body', reportProgress?: boolean): Observable<GetByLocationResponse>;
+    public getByLocation(body: GetByLocationRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetByLocationResponse>>;
+    public getByLocation(body: GetByLocationRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetByLocationResponse>>;
+    public getByLocation(body: GetByLocationRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getByLocation.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetByLocationResponse>('post',`${this.basePath}/Event/getByLocation`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -615,6 +765,62 @@ export class EventService {
         }
 
         return this.httpClient.request<GetTimeTrialResponse>('post',`${this.basePath}/Event/getTimeTrial`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get an TimeTrial by its location
+     * Get an TimeTrial by its location from the given co-ordinates
+     * @param body Request to get an Event by its location
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getTimeTrialByLocation(body: GetTimeTrialByLocationRequest, observe?: 'body', reportProgress?: boolean): Observable<GetTimeTrialByLocationResponse>;
+    public getTimeTrialByLocation(body: GetTimeTrialByLocationRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetTimeTrialByLocationResponse>>;
+    public getTimeTrialByLocation(body: GetTimeTrialByLocationRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetTimeTrialByLocationResponse>>;
+    public getTimeTrialByLocation(body: GetTimeTrialByLocationRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getTimeTrialByLocation.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetTimeTrialByLocationResponse>('post',`${this.basePath}/Event/getTimeTrialByLocation`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

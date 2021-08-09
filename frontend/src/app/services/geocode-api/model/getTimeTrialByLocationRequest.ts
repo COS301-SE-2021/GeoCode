@@ -10,17 +10,7 @@
  * Do not edit the class manually.
  */
 import { GeoPoint } from './geoPoint';
-import { Leaderboard } from './leaderboard';
-import { Level } from './level';
 
-export interface Event { 
-    id: string;
-    name: string;
-    description: string;
+export interface GetTimeTrialByLocationRequest { 
     location: GeoPoint;
-    levels?: Array<Level>;
-    beginDate?: string;
-    endDate?: string;
-    leaderboards: Array<Leaderboard>;
-    avaialble?: boolean;
 }

@@ -9,18 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GeoPoint } from './geoPoint';
-import { Leaderboard } from './leaderboard';
-import { Level } from './level';
+import { TimeTrial } from './timeTrial';
 
-export interface Event { 
-    id: string;
-    name: string;
-    description: string;
-    location: GeoPoint;
-    levels?: Array<Level>;
-    beginDate?: string;
-    endDate?: string;
-    leaderboards: Array<Leaderboard>;
-    avaialble?: boolean;
+export interface GetTimeTrialByLocationResponse { 
+    timeTrials?: Array<TimeTrial>;
 }
