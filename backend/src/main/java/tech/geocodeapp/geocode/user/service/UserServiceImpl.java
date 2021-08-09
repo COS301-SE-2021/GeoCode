@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import org.threeten.bp.OffsetDateTime;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
@@ -15,7 +16,11 @@ import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDRespon
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.request.GetEventRequest;
+import tech.geocodeapp.geocode.event.request.GetTimeLogRequest;
+import tech.geocodeapp.geocode.event.request.IsTimeTrialRequest;
 import tech.geocodeapp.geocode.event.response.GetEventResponse;
+import tech.geocodeapp.geocode.event.response.GetTimeLogResponse;
+import tech.geocodeapp.geocode.event.response.IsTimeTrialResponse;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
@@ -384,31 +389,75 @@ public class UserServiceImpl implements UserService {
 
             switch(geocodeDifficulty){
                 case EASY:
-                    pointsAmount = 1;
-                    break;
-                case MEDIUM:
-                    pointsAmount = 5;
-                    break;
-                case HARD:
                     pointsAmount = 10;
                     break;
-                case INSANE:
+                case MEDIUM:
                     pointsAmount = 20;
                     break;
+                case HARD:
+                    pointsAmount = 30;
+                    break;
+                case INSANE:
+                    pointsAmount = 40;
+                    break;
+            }
+            Event event;
+            IsTimeTrialRequest timeTrialRequest = new IsTimeTrialRequest(eventID);
+            IsTimeTrialResponse timeTrialResponse = null;
+            try {
+                timeTrialResponse = eventService.isTimeTrial(timeTrialRequest);
+            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+                e.printStackTrace();
+            }
+
+            //check if the event is a time trial or not
+            if(timeTrialResponse != null && timeTrialResponse.isFound()){
+                event = timeTrialResponse.getFoundEvent();
+                double timeLimit = timeTrialResponse.getFoundEvent().getTimeLimit();
+                //get the timelog to see starting time
+                GetTimeLogRequest timeLogRequest= new GetTimeLogRequest(eventID, getCurrentUser().getId(), request.getGeoCodeID());
+                double timeTaken;
+                try {
+                    GetTimeLogResponse timeLogResponse = eventService.getTimeLog(timeLogRequest);
+                    OffsetDateTime now = OffsetDateTime.now();
+                    if(timeLogResponse.isFound()){
+                       timeTaken = now.getHour() - timeLogResponse.getFoundTimeLog().getStartTime().getHour();
+                       timeTaken = timeTaken * 60;
+                       double minutes = now.getMinute() - timeLogResponse.getFoundTimeLog().getStartTime().getMinute();
+                       timeTaken += minutes;
+
+                       //check if timeTaken is greater than the allowed time
+                        if(timeTaken > timeLimit){
+                            double percentage;
+                            percentage = (timeTaken - timeLimit) / timeLimit;
+                            if(percentage == 1) {
+                                pointsAmount = 0;
+                            }else {
+                               int difference = (int) Math.round(pointsAmount * percentage);
+                               pointsAmount = pointsAmount - difference;
+                            }
+                        }
+                    }else{
+                        return new SwapCollectableResponse(false, "Timelog does not exist", null);
+                    }
+                } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+                    e.printStackTrace();
+                }
+
+            }else{
+                GetEventRequest getEventByIDRequest = new GetEventRequest( eventID);
+                GetEventResponse getEventByIDResponse;
+
+                try {
+                    getEventByIDResponse = eventService.getEvent(getEventByIDRequest);
+                    event = getEventByIDResponse.getFoundEvent();
+                } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+                    e.printStackTrace();
+                    return new SwapCollectableResponse(false, e.getMessage(), null);
+                }
             }
 
             //get the LeaderboardID of the Leaderboard for the Event
-            GetEventRequest getEventByIDRequest = new GetEventRequest( eventID);
-            GetEventResponse getEventByIDResponse;
-
-            try {
-                getEventByIDResponse = eventService.getEvent(getEventByIDRequest);
-            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-                e.printStackTrace();
-                return new SwapCollectableResponse(false, e.getMessage(), null);
-            }
-
-            Event event = getEventByIDResponse.getFoundEvent();
             UUID leaderboardID = event.getLeaderboards().get( 0 ).getId();
 
             //get the ID of the current User

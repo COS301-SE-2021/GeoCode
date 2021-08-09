@@ -18,5 +18,30 @@
 </ion-header>
 
 <ion-content>
-  <div #mapElement class="map"></div>
+  <ion-grid>
+    <ion-row>
+      <ion-col #yeet id="mapColumn" [ngClass]="getClass()" [sizeMd]="mapSizeMD()" [sizeLg]="mapSizeLG()" size="12">
+        <div #mapElement class="map"></div>
+      </ion-col>
+      <ion-col id="geocodeColumn" [ngClass]="getClass()" size-md="4" size-lg="3" size="12" *ngIf="detailedGeoCode">
+        <ion-button (click)="closeDetails()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+        <ion-card>
+          <ion-card-header>
+            <ion-label>{{detailedGeoCode.description}}</ion-label>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-button>
+              <ion-label>Open in Google Maps</ion-label>
+            </ion-button>
+            <ion-button>
+              <ion-label>Export QR Code</ion-label>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>
