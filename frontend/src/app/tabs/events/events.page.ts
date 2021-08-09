@@ -85,7 +85,7 @@ export class EventsPage implements AfterViewInit {
         event
       }
     };
-    this.navCtrl.navigateForward('/events/event-contents',navigationExtras);
+    this.navCtrl.navigateForward('/events/'+event.id,navigationExtras);
   }
 
   goToLeaderBoard(event){
@@ -94,7 +94,7 @@ export class EventsPage implements AfterViewInit {
         event
       }
     };
-    this.navCtrl.navigateForward('/events/event-leaderboard',navigationExtras);
+    this.navCtrl.navigateForward('/events/'+event.id+'/leaderboard',navigationExtras);
   }
 
   async addEvent() {}
