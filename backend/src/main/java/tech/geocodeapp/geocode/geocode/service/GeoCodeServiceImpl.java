@@ -151,7 +151,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* Create the response and give it a Collectable type */
             var collectableRequest = new CreateCollectableRequest();
-            collectableRequest.setCollectableTypeId( UUID.fromString( "333599b9-94c7-403d-8389-83ed48387d13" ) );
+            collectableRequest.setCollectableTypeId( UUID.fromString( "f44306a6-accb-4e7f-9eb6-e9f6a90e17c0" ) );
 
             /* Get the response from the created request */
             CreateCollectableResponse collectableResponse = collectableService.createCollectable( collectableRequest );
@@ -190,21 +190,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         var id = UUID.randomUUID();
 
-        var getEventRequest = new GetEventRequest( request.getEventID() );
-        GetEventResponse getEventResponse;
-
-        try {
-
-            getEventResponse = eventService.getEvent( getEventRequest );
-        } catch ( tech.geocodeapp.geocode.event.exceptions.InvalidRequestException error ) {
-
-            return new CreateGeoCodeResponse( false );
-        }
-
         /* Create the GeoCode Object */
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
-                                      qr.toString(), request.getLocation(), UUID.randomUUID(), getEventResponse.getFoundEvent().getId() );
+                                      qr.toString(), request.getLocation(), UUID.randomUUID(), null );
 
         /*
          * Save the newly created GeoCode
@@ -217,7 +206,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* Check if the Object was saved correctly */
             if ( !newGeoCode.equals( check ) ) {
-
+              
                 /* Saved GeoCode not the same therefore creation failed */
                 return new CreateGeoCodeResponse( false );
             }
