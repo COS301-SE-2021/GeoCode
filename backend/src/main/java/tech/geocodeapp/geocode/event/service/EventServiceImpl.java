@@ -20,6 +20,7 @@ import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
+import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
@@ -618,6 +619,18 @@ public class EventServiceImpl implements EventService {
                     }
                 }
             }
+
+
+            try {
+                /* User is not on any level, start at level 1 */
+                NextStageRequest nextStageRequest = new NextStageRequest( request.getEventID(), request.getUserID() );
+                NextStageResponse nextStageResponse = nextStage(nextStageRequest);
+                GetGeoCodeResponse hold = geoCodeService.getGeoCode( new GetGeoCodeRequest( nextStageResponse.getNextGeoCode() ) );
+                return new GetCurrentEventLevelResponse( true, hold.getFoundGeoCode() );
+            } catch (tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e) {
+                /* return false below */
+            }
+
         }
 
         return new GetCurrentEventLevelResponse( false );
@@ -670,11 +683,18 @@ public class EventServiceImpl implements EventService {
                         /* Check if the user can move onto the next stage */
                         if ( ( x + 1 ) < levels.size() ) {
 
-                            levels.get( x ).removeOnLevelItem( id );
-                            levels.get( x + 1 ).putOnLevelItem( id );
+                            var oldLevel = levels.get( x );
+                            var newLevel = levels.get( x + 1 );
+                            
+                            oldLevel.removeOnLevelItem( id );
+                            newLevel.putOnLevelItem( id );
+
+                            /* Save the levels */
+                            levelRepo.save(oldLevel);
+                            levelRepo.save(newLevel);
 
                             /* The current Level contains the User so return the GeoCode */
-                            return new NextStageResponse( levels.get( x ).getTarget() );
+                            return new NextStageResponse( newLevel.getTarget() );
                         }
 
                         /* The user has completed the Event */
@@ -684,8 +704,10 @@ public class EventServiceImpl implements EventService {
                     /* Add the user to the first level and return the first GeoCode */
                     if (  x == levels.size() - 1 ) {
 
-                        levels.get( 0 ).putOnLevelItem( id );
-                        return new NextStageResponse( levels.get( 0 ).getTarget() );
+                        var level = levels.get( 0 );
+                        level.putOnLevelItem( id );
+                        levelRepo.save(level);
+                        return new NextStageResponse( level.getTarget() );
                     }
                 }
             }

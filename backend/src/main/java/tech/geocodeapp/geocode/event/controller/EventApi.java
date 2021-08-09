@@ -214,5 +214,17 @@ public interface EventApi {
             consumes = { "application/json", "application/xml" } )
     ResponseEntity< EventsNearMeResponse > getEventsNearMe( @Parameter( in = ParameterIn.DEFAULT, description = "Retrieve a list of Events around a certain radius of a location", required = true, schema = @Schema() ) @Valid @RequestBody EventsNearMeRequest body ) throws InvalidRequestException;
 
+    @Operation(summary = "Get a specified Event that is stored in the repository", description = "Get a specified Event that is stored in the repository", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Event" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Return the Event was successfully found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetEventResponse.class))),
+
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
+
+            @ApiResponse(responseCode = "404", description = "Return the specified Event was not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetEventResponse.class))) })
+    @PostMapping(value = "/Event/getEvent",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" } )
+    ResponseEntity<GetEventResponse> getEvent(@Parameter(in = ParameterIn.DEFAULT, description = "Get a specified Event that is stored in the repository", required=true, schema=@Schema()) @Valid @RequestBody GetEventRequest body) throws InvalidRequestException;
 }
 
