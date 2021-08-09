@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import tech.geocodeapp.geocode.event.request.*;
 import javax.validation.Valid;
 
 @Validated
+@CrossOrigin(origins = "${web_referrer}", maxAge = 3600)
 public interface EventApi {
 
     @Operation( summary = "Changes an Event's availability", description = "Changes the specified Event's availability to the given availability", security = {
@@ -117,7 +119,7 @@ public interface EventApi {
     @PostMapping( value = "/Event/getEventsByLocation",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body );
+    ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body ) throws InvalidRequestException;
 
 
     @Operation( summary = "Get the Leaderboard for a TimeTrial", description = "Get the Leaderboard for a TimeTrial", security = {
@@ -173,6 +175,20 @@ public interface EventApi {
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
     ResponseEntity< GetPointsByUserResponse > getPointsByUser( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get the Points for an Event", required = true, schema = @Schema() ) @Valid @RequestBody GetPointsByUserRequest body );
+
+
+    @Operation( summary = "Retrieve a list of Events around a certain radius of a location", description = "Retrieve a list of Events around a certain radius of a location", security = {
+            @SecurityRequirement( name = "bearerAuth" ) }, tags = { "Event" } )
+    @ApiResponses( value = {
+            @ApiResponse( responseCode = "200", description = "Return the found Events", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetEventsByLocationResponse.class ) ) ),
+
+            @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
+
+            @ApiResponse( responseCode = "404", description = "Return the new Event was not found", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetEventsByLocationResponse.class ) ) ) } )
+    @PostMapping( value = "/Event/getEventsNearMe",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" } )
+    ResponseEntity< EventsNearMeResponse > getEventsNearMe( @Parameter( in = ParameterIn.DEFAULT, description = "Retrieve a list of Events around a certain radius of a location", required = true, schema = @Schema() ) @Valid @RequestBody EventsNearMeRequest body ) throws InvalidRequestException;
 
 }
 
