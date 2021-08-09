@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import tech.geocodeapp.geocode.event.request.*;
 import javax.validation.Valid;
 
 @Validated
+@CrossOrigin(origins = "${web_referrer}", maxAge = 3600)
 public interface EventApi {
 
     @Operation( summary = "Changes an Event's availability", description = "Changes the specified Event's availability to the given availability", security = {
@@ -117,7 +119,7 @@ public interface EventApi {
     @PostMapping( value = "/Event/getEventsByLocation",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body );
+    ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body ) throws InvalidRequestException;
 
 
     @Operation( summary = "Get the Leaderboard for a TimeTrial", description = "Get the Leaderboard for a TimeTrial", security = {
