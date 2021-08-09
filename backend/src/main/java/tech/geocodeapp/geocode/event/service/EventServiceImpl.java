@@ -569,7 +569,7 @@ public class EventServiceImpl implements EventService {
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly created response instance from the specified GetCurrentEventLevelGeoCodeRequest
+     * @return the newly created response instance from the specified GetCurrentEventLevelResponse
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
@@ -580,12 +580,47 @@ public class EventServiceImpl implements EventService {
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( request.getUserID() == null ) {
+        } else if ( ( request.getEventID() == null ) || ( request.getUserID() == null ) ) {
 
             throw new InvalidRequestException();
         }
 
-        return null;
+        /* Get the Event object from the repository */
+        Optional< Event > temp = eventRepo.findById( request.getEventID() );
+
+        /* Check if the object was returned */
+        if ( temp.isPresent() ) {
+
+            /* Get the Event object's Levels to iterate through */
+            var levels = temp.get().getLevels();
+
+            /* Go through each level contained in the Event */
+            for ( Level level : levels ) {
+
+                /* Get the list of Users on the Level */
+                var users = level.getOnLevel();
+
+                /* Check if the user is contained on the level */
+                if ( users.containsValue( request.getUserID() ) ) {
+
+                    try {
+
+                        /*
+                         * Query the GeoCode subsystem for the targeted GeoCodeID for the level
+                         * Return the found GeoCode object
+                         */
+                        var hold = geoCodeService.getGeoCode( new GetGeoCodeRequest( level.getTarget() ) );
+                        return new GetCurrentEventLevelResponse( true, hold.getFoundGeoCode() );
+                    } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
+
+                        /* An exception was thrown therefore could not find the GeoCode */
+                        return new GetCurrentEventLevelResponse( false );
+                    }
+                }
+            }
+        }
+
+        return new GetCurrentEventLevelResponse( false );
     }
 
     /**
