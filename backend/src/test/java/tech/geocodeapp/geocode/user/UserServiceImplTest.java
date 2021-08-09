@@ -818,4 +818,32 @@ public class UserServiceImplTest {
             Assertions.fail(e.getMessage());
         }
     }
+
+    @Test
+    public void swapCollectableTestNoEvent(){
+        try {
+            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, fishCollectableID, geoCodeWithCollectablesID);
+            SwapCollectableResponse response = userService.swapCollectable(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The User's Collectable was swapped with the Collectable in the GeoCode", response.getMessage());
+
+            Collectable collectable = response.getCollectable();
+            Assertions.assertNotNull(collectable);
+
+            //test that the User's Collectable is now the fishCollectable
+            Assertions.assertEquals(fishCollectableID, validUser.getCurrentCollectable().getId());
+
+            //test that the User was not allocated any points
+            GetMyLeaderboardsRequest getMyLeaderboardsRequest = new GetMyLeaderboardsRequest();
+            getMyLeaderboardsRequest.setUserID(validUserId);
+
+            GetMyLeaderboardsResponse getMyLeaderboardResponse = userService.getMyLeaderboards(getMyLeaderboardsRequest);
+            List<MyLeaderboardDetails> leaderboards = getMyLeaderboardResponse.getLeaderboards();
+
+            Assertions.assertTrue(leaderboards.isEmpty());
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
 }
