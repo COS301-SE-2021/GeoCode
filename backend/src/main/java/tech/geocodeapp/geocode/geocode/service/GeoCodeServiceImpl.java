@@ -861,4 +861,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         return storedCollectable;
     }
 
+    /**
+     * Helper function that saves the given geocode into the repository
+     *
+     * @param geocode the GeoCode object to save
+     */
+    public void saveGeoCode( GeoCode geocode ) {
+        geoCodeRepo.save(geocode);
+    }
+
 }

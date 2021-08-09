@@ -136,6 +136,8 @@ public class EventServiceImpl implements EventService {
         /* Store the list of GeoCode UUIDs to create a Level on */
         List< UUID > geoCodes = request.getGeoCodesToFind();
 
+        UUID eventID = UUID.randomUUID();
+
         /*
          * Determine which order to set the GeoCodes in
          * the default is OrderLevels.GIVEN
@@ -143,11 +145,11 @@ public class EventServiceImpl implements EventService {
         if ( request.getOrderBy().equals( OrderLevels.DIFFICULTY ) ) {
 
             /* Set the list to go from easiest to most difficult on finding the GeoCode */
-            geoCodes = sortByDifficulty( geoCodes );
+            geoCodes = sortByDifficulty( geoCodes, eventID );
         } else if ( request.getOrderBy().equals( OrderLevels.DISTANCE ) ) {
 
             /* Set the list to go from least to most distance with where the GeoCode is located */
-            geoCodes = sortByDistance( geoCodes );
+            geoCodes = sortByDistance( geoCodes, eventID );
         }
 
         /* Check if the GeoCodes are still valid after sorting */
@@ -168,7 +170,7 @@ public class EventServiceImpl implements EventService {
         }
 
         /* Create the new Event object with the specified attributes */
-        var event = new Event( UUID.randomUUID(), request.getName(), request.getDescription(),
+        var event = new Event( eventID, request.getName(), request.getDescription(),
                                request.getLocation(), levels, request.getBeginDate(), request.getEndDate(),
                                leaderboard );
 
@@ -816,7 +818,7 @@ public class EventServiceImpl implements EventService {
      *
      * @return the sorted GeoCode ID's in order of Difficulty
      */
-    private List< UUID > sortByDifficulty( List< UUID > geoCodes ) {
+    private List< UUID > sortByDifficulty( List< UUID > geoCodes, UUID eventID ) {
 
         List< UUID > hold = null;
 
@@ -881,6 +883,8 @@ public class EventServiceImpl implements EventService {
                 if ( geoCodeID != null ) {
 
                     hold.add( geoCodeID );
+                    geoCode.setEventID(eventID);
+                    geoCodeService.saveGeoCode(geoCode);
                 }
             }
 
@@ -926,7 +930,7 @@ public class EventServiceImpl implements EventService {
      *
      * @return the sorted GeoCode ID's in order of distance
      */
-    private List< UUID > sortByDistance( List< UUID > geoCodes ) {
+    private List< UUID > sortByDistance( List< UUID > geoCodes, UUID eventID ) {
 
         /* Holds the new order of the GeoCodes */
         List< UUID > hold = null;
