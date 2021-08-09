@@ -2062,10 +2062,6 @@ components:
         available:
           type: boolean
           example: "This describes the GeoCode to be created"
-        eventID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "CreateGeoCodeRequest"
 
