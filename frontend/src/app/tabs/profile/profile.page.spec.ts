@@ -4,8 +4,8 @@ import {IonicModule, ModalController} from '@ionic/angular';
 import { ProfilePage } from './profile.page';
 import {UserService} from '../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {KeycloakService} from 'keycloak-angular';
-import {RouterTestingModule, setupTestingRouter} from '@angular/router/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {MockKeycloak} from '../../mocks/MockKeycloak';
 
 describe('ProfilePage', () => {
   let component: ProfilePage;
@@ -21,19 +21,13 @@ describe('ProfilePage', () => {
     })
   };
 
-  const mockKeycloak = {
-    getKeycloakInstance: () => ({
-      subject: 'uuid'
-    })
-  };
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ProfilePage ],
       providers: [
         ModalController,
         UserService,
-        { provide: KeycloakService, useValue: mockKeycloak }
+        MockKeycloak.provider();
       ],
       imports: [IonicModule.forRoot(), RouterTestingModule.withRoutes([]), HttpClientTestingModule]
     }).compileComponents();
