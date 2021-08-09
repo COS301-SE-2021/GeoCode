@@ -335,7 +335,7 @@ export class EventService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<GetAllEventsResponse>('post',`${this.basePath}/Event/getAllEvents`,
+        return this.httpClient.request<GetAllEventsResponse>('get',`${this.basePath}/Event/getAllEvents`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

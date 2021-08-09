@@ -11,6 +11,7 @@
  */
 
 export interface MyLeaderboardDetails { 
+    eventID: string;
     name: string;
     points: number;
     rank: number;
