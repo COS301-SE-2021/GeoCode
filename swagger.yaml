@@ -3455,7 +3455,7 @@ components:
         - name
         - description
         - location
-        - leaderboards
+        - leaderboard
       properties:
         id:
           type: string
@@ -3483,11 +3483,11 @@ components:
           format: date
           pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
           example: "2017-01-01"
-        leaderboards:
+        leaderboard:
           type: array
           items:
             $ref: "#/components/schemas/Leaderboard"
-        avaialble:
+        available:
           type: boolean
           example: "True"
       xml:
