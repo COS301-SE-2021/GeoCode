@@ -1,52 +1,52 @@
 package tech.geocodeapp.geocode.event.response;
 
-import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.validation.annotation.Validated;
+
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+
 import javax.validation.Valid;
-import javax.validation.constraints.*;
-
-import tech.geocodeapp.geocode.event.model.Event;
-
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
- * GetCurrentEventResponse object to return the found Event
+ * GetCurrentEventGeoCodeResponse object to return the found GeoCode
  */
 @Validated
-public class GetCurrentEventResponse {
+public class GetCurrentEventLevelResponse {
 
     /**
-     * Determines if an Event was found or not
+     * Determines if an GeoCode was found or not
      */
     @JsonProperty( "found" )
-    @NotNull( message = "GetCurrentEventResponse eventID attribute cannot be null." )
+    @NotNull( message = "GetCurrentEventGeoCodeResponse eventID attribute cannot be null." )
     private Boolean found;
 
     /**
-     * The found Event
+     * The found GeoCode
      */
-    @JsonProperty( "foundEvent" )
-    private Event foundEvent = null;
+    @JsonProperty( "foundGeoCode" )
+    private GeoCode foundGeoCode = null;
 
     /**
      * Default Constructor
      */
-    public GetCurrentEventResponse() {
+    public GetCurrentEventLevelResponse() {
 
     }
 
     /**
      *  Overloaded Constructor
      *
-     * @param found Determines if an Event was found or not
+     * @param found Determines if an GeoCode was found or not
      */
-    public GetCurrentEventResponse( Boolean found ) {
+    public GetCurrentEventLevelResponse( Boolean found ) {
 
         this.found = found;
 
         if ( !found ) {
 
-            this.foundEvent = null;
+            this.foundGeoCode = null;
         }
 
     }
@@ -54,13 +54,13 @@ public class GetCurrentEventResponse {
     /**
      *  Overloaded Constructor
      *
-     * @param found Determines if an Event was found or not
-     * @param foundEvent The found Event
+     * @param found Determines if an GeoCode was found or not
+     * @param foundGeoCode The found GeoCode
      */
-    public GetCurrentEventResponse( Boolean found, Event foundEvent ) {
+    public GetCurrentEventLevelResponse( Boolean found, GeoCode foundGeoCode ) {
 
         this.found = found;
-        this.foundEvent = foundEvent;
+        this.foundGeoCode = foundGeoCode;
     }
 
     /**
@@ -70,7 +70,7 @@ public class GetCurrentEventResponse {
      *
      * @return the request after the found has been changed
      */
-    public GetCurrentEventResponse found( Boolean found ) {
+    public GetCurrentEventLevelResponse found( Boolean found ) {
 
         this.found = found;
         return this;
@@ -97,37 +97,37 @@ public class GetCurrentEventResponse {
     }
 
     /**
-     * Sets the foundEvent attribute to the specified value
+     * Sets the foundGeoCode attribute to the specified value
      *
      * @param foundEvent the value the attribute should be set to
      *
-     * @return the request after the foundEvent has been changed
+     * @return the request after the foundGeoCode has been changed
      */
-    public GetCurrentEventResponse foundEvent( Event foundEvent ) {
+    public GetCurrentEventLevelResponse foundEvent( GeoCode foundEvent ) {
 
-        this.foundEvent = foundEvent;
+        this.foundGeoCode = foundEvent;
         return this;
     }
 
     /**
-     * Gets the saved foundEvent attribute
+     * Gets the saved foundGeoCode attribute
      *
-     * @return the stored foundEvent attribute
+     * @return the stored foundGeoCode attribute
      */
     @Valid
-    public Event getFoundEvent() {
+    public GeoCode getFoundGeoCode() {
 
-        return foundEvent;
+        return foundGeoCode;
     }
 
     /**
-     * Sets the foundEvent attribute to the specified value
+     * Sets the foundGeoCode attribute to the specified value
      *
-     * @param foundEvent the value the attribute should be set to
+     * @param foundGeoCode the value the attribute should be set to
      */
-    public void setFoundEvent( Event foundEvent ) {
+    public void setFoundGeoCode( GeoCode foundGeoCode ) {
 
-        this.foundEvent = foundEvent;
+        this.foundGeoCode = foundGeoCode;
     }
 
     /**
@@ -138,7 +138,7 @@ public class GetCurrentEventResponse {
      * @return if the object is the same or not
      */
     @Override
-    public boolean equals( java.lang.Object obj ) {
+    public boolean equals( Object obj ) {
 
         if ( this == obj ) {
 
@@ -149,9 +149,9 @@ public class GetCurrentEventResponse {
             return false;
         }
 
-        GetCurrentEventResponse getCurrentEventResponse = ( GetCurrentEventResponse ) obj;
+        GetCurrentEventLevelResponse getCurrentEventResponse = ( GetCurrentEventLevelResponse ) obj;
         return Objects.equals( this.found, getCurrentEventResponse.found ) &&
-                Objects.equals( this.foundEvent, getCurrentEventResponse.foundEvent );
+                Objects.equals( this.foundGeoCode, getCurrentEventResponse.foundGeoCode );
     }
 
     /**
@@ -162,7 +162,7 @@ public class GetCurrentEventResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( found, foundEvent );
+        return Objects.hash( found, foundGeoCode );
     }
 
     /**
@@ -173,9 +173,9 @@ public class GetCurrentEventResponse {
     @Override
     public String toString() {
 
-        return "class GetCurrentEventResponse {\n" +
+        return "class GetCurrentEventGeoCodeResponse {\n" +
                 "    found: " + toIndentedString( found ) + "\n" +
-                "    foundEvent: " + toIndentedString( foundEvent ) + "\n" +
+                "    foundGeoCode: " + toIndentedString( foundGeoCode ) + "\n" +
                 "}";
     }
 
@@ -183,7 +183,7 @@ public class GetCurrentEventResponse {
      * Convert the given object to string with each line indented by 4 spaces
      * (except the first line).
      */
-    private String toIndentedString( java.lang.Object o ) {
+    private String toIndentedString( Object o ) {
 
         if ( o == null ) {
 

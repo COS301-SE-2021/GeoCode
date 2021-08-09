@@ -151,7 +151,28 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* Create the response and give it a Collectable type */
             var collectableRequest = new CreateCollectableRequest();
-            collectableRequest.setCollectableTypeId( UUID.fromString( "f44306a6-accb-4e7f-9eb6-e9f6a90e17c0" ) );
+
+            /* Get all the stored Collectables */
+            var collectableTypes = collectableService.getCollectableTypes();
+            if ( collectableTypes != null ) {
+
+                /* Get first stored Collectable type */
+                var typeList = collectableTypes.getCollectableTypes().get( 0 );
+
+                if ( typeList != null ) {
+
+                    /* Get and set the collectable request with the type */
+                    collectableRequest.setCollectableTypeId( typeList.getId() );
+                } else {
+
+                    /* Exception thrown when trying to get Collectable */
+                    return new CreateGeoCodeResponse( false );
+                }
+            } else {
+
+                /* Exception thrown when trying to get Collectable */
+                return new CreateGeoCodeResponse( false );
+            }
 
             /* Get the response from the created request */
             CreateCollectableResponse collectableResponse = collectableService.createCollectable( collectableRequest );

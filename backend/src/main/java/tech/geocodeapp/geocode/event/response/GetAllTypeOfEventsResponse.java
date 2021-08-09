@@ -1,31 +1,37 @@
 package tech.geocodeapp.geocode.event.response;
 
-import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.validation.constraints.*;
-import javax.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 
 import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.model.TimeTrial;
 
-import java.util.Objects;
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * GetAllEventsResponse object returns all the Event objects in the system
  */
 @Validated
-public class GetAllEventsResponse {
+public class GetAllTypeOfEventsResponse {
 
     /**
-     * All the Event's stored inside the EventsRepository
+     * All the stored Events
      */
     @JsonProperty( "events" )
     private List< Event > events;
 
     /**
+     * All the stored TimeTrials
+     */
+    @JsonProperty( "timeTrials" )
+    private List< TimeTrial > timeTrials;
+
+    /**
      * Default Constructor
      */
-    public GetAllEventsResponse() {
+    public GetAllTypeOfEventsResponse() {
 
     }
 
@@ -33,10 +39,12 @@ public class GetAllEventsResponse {
      * Overloaded Constructor
      *
      * @param events the list of events to set the events attribute to
+     * @param timeTrials the list of timeTrials to set the timeTrials attribute to
      */
-    public GetAllEventsResponse( List< Event > events ) {
+    public GetAllTypeOfEventsResponse( List< Event > events, List< TimeTrial > timeTrials ) {
 
         this.events = events;
+        this.timeTrials = timeTrials;
     }
 
     /**
@@ -46,7 +54,7 @@ public class GetAllEventsResponse {
      *
      * @return the request after the events has been changed
      */
-    public GetAllEventsResponse events( List< Event > events ) {
+    public GetAllTypeOfEventsResponse events( List< Event > events ) {
 
         this.events = events;
         return this;
@@ -59,7 +67,7 @@ public class GetAllEventsResponse {
      *
      * @return the stored events attribute
      */
-    public GetAllEventsResponse addEventsItem( Event eventsItem ) {
+    public GetAllTypeOfEventsResponse addEventsItem( Event eventsItem ) {
 
         this.events.add( eventsItem );
         return this;
@@ -81,9 +89,56 @@ public class GetAllEventsResponse {
      *
      * @param events the value the attribute should be set to
      */
-    public void setEvents( @Valid List< Event > events ) {
+    public void setEvents( List< Event > events ) {
 
         this.events = events;
+    }
+
+    /**
+     * Sets the timeTrials attribute to the specified value
+     *
+     * @param timeTrials the value the attribute should be set to
+     *
+     * @return the request after the timeTrials has been changed
+     */
+    public GetAllTypeOfEventsResponse timeTrials( List< TimeTrial > timeTrials ) {
+
+        this.timeTrials = timeTrials;
+        return this;
+    }
+
+    /**
+     * Sets a single TimeTrial inside the timeTrials attribute to the specified value
+     *
+     * @param eventsItem the value the attribute should be set to
+     *
+     * @return the stored timeTrials attribute
+     */
+    public GetAllTypeOfEventsResponse addTimeTrialItem( TimeTrial eventsItem ) {
+
+        this.timeTrials.add( eventsItem );
+        return this;
+    }
+
+    /**
+     * Gets the saved timeTrials attribute
+     *
+     * @return the stored timeTrials attribute
+     */
+    @Valid
+    public List< TimeTrial > getTimeTrials() {
+
+        return timeTrials;
+    }
+
+    /**
+     * Sets the timeTrials attribute to the specified value
+     *
+     * @param timeTrials the value the attribute should be set to
+     */
+    public void setTimeTrials( List< TimeTrial > timeTrials ) {
+
+        this.timeTrials = timeTrials;
     }
 
     /**
@@ -94,7 +149,7 @@ public class GetAllEventsResponse {
      * @return if the object is the same or not
      */
     @Override
-    public boolean equals( java.lang.Object obj ) {
+    public boolean equals( Object obj ) {
 
         if ( this == obj ) {
 
@@ -105,7 +160,8 @@ public class GetAllEventsResponse {
             return false;
         }
 
-        return Objects.equals( this.events, ( ( GetAllEventsResponse ) obj ).events );
+        return Objects.equals( this.events, ( ( GetAllTypeOfEventsResponse ) obj ).events ) &&
+               Objects.equals( this.timeTrials, ( ( GetAllTypeOfEventsResponse ) obj ).timeTrials );
     }
 
     /**
@@ -116,7 +172,7 @@ public class GetAllEventsResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( events );
+        return Objects.hash( events, timeTrials );
     }
 
     /**
@@ -129,6 +185,7 @@ public class GetAllEventsResponse {
 
         return "class GetAllEventsResponse {\n" +
                 "    events: " + toIndentedString( events ) + "\n" +
+                "    timeTrials: " + toIndentedString( timeTrials ) + "\n" +
                 "}";
     }
 
@@ -136,7 +193,7 @@ public class GetAllEventsResponse {
      * Convert the given object to string with each line indented by 4 spaces
      * (except the first line).
      */
-    private String toIndentedString( java.lang.Object o ) {
+    private String toIndentedString( Object o ) {
 
         if ( o == null ) {
 
