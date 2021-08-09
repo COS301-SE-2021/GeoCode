@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
 import {NavigationExtras} from '@angular/router';
 import {NavController} from '@ionic/angular';
-import {EventService, GetAllEventsResponse} from "../../services/geocode-api";
+import {EventService, GetAllEventsResponse} from '../../services/geocode-api';
 
 @Component({
   selector: 'app-events',
@@ -80,12 +80,7 @@ export class EventsPage implements AfterViewInit {
   }
 
   goToEvent(event){
-    const navigationExtras: NavigationExtras = {
-      queryParams: {
-        event
-      }
-    };
-    this.navCtrl.navigateForward('/events/'+event.id,navigationExtras);
+    this.navCtrl.navigateForward('/events/'+event.id,{state: {event}});
   }
 
   goToLeaderBoard(event){
