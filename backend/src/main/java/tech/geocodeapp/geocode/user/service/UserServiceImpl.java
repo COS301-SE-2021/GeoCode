@@ -18,6 +18,7 @@ import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.request.GetEventRequest;
 import tech.geocodeapp.geocode.event.request.GetTimeLogRequest;
 import tech.geocodeapp.geocode.event.request.IsTimeTrialRequest;
+import tech.geocodeapp.geocode.event.request.NextStageRequest;
 import tech.geocodeapp.geocode.event.response.GetEventResponse;
 import tech.geocodeapp.geocode.event.response.GetTimeLogResponse;
 import tech.geocodeapp.geocode.event.response.IsTimeTrialResponse;
@@ -458,9 +459,8 @@ public class UserServiceImpl implements UserService {
                 } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
                     e.printStackTrace();
                 }
-
             }else{
-                GetEventRequest getEventByIDRequest = new GetEventRequest( eventID);
+                GetEventRequest getEventByIDRequest = new GetEventRequest( eventID );
                 GetEventResponse getEventByIDResponse;
 
                 try {
@@ -502,6 +502,16 @@ public class UserServiceImpl implements UserService {
                 if(!updatePointResponse.isSuccess()){
                     return new SwapCollectableResponse(false, "Point could not be updated", null);
                 }
+            }
+
+            //go to the next stage for the Event
+            NextStageRequest nextStageRequest = new NextStageRequest(eventID, userID);
+
+            try {
+                eventService.nextStage(nextStageRequest);
+            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+                e.printStackTrace();
+                return new SwapCollectableResponse(false, e.getMessage(), null);
             }
         }
 

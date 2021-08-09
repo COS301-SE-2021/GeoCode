@@ -846,4 +846,6 @@ public class UserServiceImplTest {
             Assertions.fail(e.getMessage());
         }
     }
+
+
 }
