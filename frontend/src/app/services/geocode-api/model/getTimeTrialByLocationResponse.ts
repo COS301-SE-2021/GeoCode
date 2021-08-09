@@ -9,13 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { TimeTrial } from './timeTrial';
 
-export type Rarity = 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
-
-export const Rarity = {
-    COMMON: 'COMMON' as Rarity,
-    UNCOMMON: 'UNCOMMON' as Rarity,
-    RARE: 'RARE' as Rarity,
-    EPIC: 'EPIC' as Rarity,
-    LEGENDARY: 'LEGENDARY' as Rarity
-};
+export interface GetTimeTrialByLocationResponse { 
+    timeTrials?: Array<TimeTrial>;
+}
