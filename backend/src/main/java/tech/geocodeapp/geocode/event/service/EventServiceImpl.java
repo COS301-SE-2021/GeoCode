@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 import tech.geocodeapp.geocode.event.model.*;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
+import tech.geocodeapp.geocode.event.repository.LevelRepository;
 import tech.geocodeapp.geocode.event.repository.TimeLogRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
@@ -51,6 +52,12 @@ public class EventServiceImpl implements EventService {
     private final TimeLogRepository timeLogRepo;
 
     /**
+     * The repository the Event class interacts with
+     */
+    @NotNull( message = "Level repository may not be null." )
+    private final LevelRepository levelRepo;
+
+    /**
      * The Leaderboard service to access the use cases and
      * Leaderboard repository
      */
@@ -70,7 +77,7 @@ public class EventServiceImpl implements EventService {
      * @param eventRepo          the repo the created response attributes should save to
      * @param leaderboardService access to the Leaderboard use cases and repository
      */
-    public EventServiceImpl( EventRepository< Event > eventRepo, EventRepository< TimeTrial > timeTrialRepo, TimeLogRepository timeLogRepo,
+    public EventServiceImpl( EventRepository< Event > eventRepo, EventRepository< TimeTrial > timeTrialRepo, TimeLogRepository timeLogRepo, LevelRepository levelRepo,
                              @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService ) throws RepoException {
 
         if ( ( eventRepo != null ) && ( timeLogRepo != null ) ) {
@@ -79,6 +86,7 @@ public class EventServiceImpl implements EventService {
             this.eventRepo = eventRepo;
             this.timeTrialRepo = timeTrialRepo;
             this.timeLogRepo = timeLogRepo;
+            this.levelRepo = levelRepo;
 
             this.leaderboardService = Objects.requireNonNull( leaderboardService, "EventService: Leaderboard service must not be null." );
         } else {
@@ -101,6 +109,8 @@ public class EventServiceImpl implements EventService {
     @Override
     public CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException {
 
+        System.out.println(request);
+        System.out.println(request.getBeginDate());
         /* Validate the request */
         if ( request == null ) {
 
@@ -166,7 +176,9 @@ public class EventServiceImpl implements EventService {
              * Create the Level with a random UUID
              * and add it to the list
              */
-            levels.add( new Level( geoCode ) );
+            Level level = new Level( geoCode );
+            levelRepo.save(level);
+            levels.add(level);
         }
 
         /* Create the new Event object with the specified attributes */

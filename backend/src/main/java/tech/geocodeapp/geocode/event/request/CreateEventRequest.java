@@ -59,7 +59,7 @@ public class CreateEventRequest {
     /**
      * The different GeoCodes to find during the Event
      */
-    @JsonProperty( "GeoCodesToFind" )
+    @JsonProperty( "geoCodesToFind" )
     private List< UUID > geoCodesToFind;
 
     /**
