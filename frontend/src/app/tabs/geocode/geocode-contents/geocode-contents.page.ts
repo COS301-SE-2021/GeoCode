@@ -6,7 +6,11 @@ import {
   GetHintsResponse,
   GetGeoCodeByQRCodeRequest,
   GetCollectablesRequest,
-  GetGeoCodeByQRCodeResponse, GetCollectablesResponse, SwapCollectablesRequest, SwapCollectablesResponse
+  GetGeoCodeByQRCodeResponse,
+  GetCollectablesResponse,
+  SwapCollectablesRequest,
+  SwapCollectablesResponse,
+  GetCollectablesInGeoCodeByQRCodeRequest, GetCollectablesInGeoCodeByQRCodeResponse, SwapCollectableRequest
 } from '../../../services/geocode-api';
 import {AlertController, NavController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
@@ -107,26 +111,28 @@ export class GeocodeContentsPage implements AfterViewInit {
   }
 
   found(code){
-    // const requestQR: GetGeoCodeByQRCodeRequest={
-    //  // QRCode: code.value
-    // };
-    // console.log(requestQR);
-    // this.geocodeApi.getGeoCodeByQRCode(requestQR).subscribe((response: GetGeoCodeByQRCodeResponse) =>{
-    //   console.log(response);
-    //
-    //   if(response.id == this.geocode.id){
-    //     this.isHidden=true;
-    //     const requestCollectables: GetCollectablesRequest={
-    //       //geoCodeID: response.id
-    //     };
-    //     this.geocodeApi.getGeoCodeCollectables(requestCollectables).subscribe((response2 :GetCollectablesResponse) =>{
-    //       console.log(response2);
-    //       this.collectables= response2.collectables;
-    //     });
-    //   }else{
-    //
-    //   }
-    // });
+    const requestQR: GetCollectablesInGeoCodeByQRCodeRequest={
+      qrCode: code.value,
+      geoCodeID:this.geocode.id
+    };
+    console.log(requestQR);
+    this.geocodeApi.getCollectablesInGeoCodeByQRCode(requestQR).subscribe((response: GetCollectablesInGeoCodeByQRCodeResponse) =>{
+      console.log(response);
+      this.collectables=response.storedCollectable;
+      this.isHidden=true;
+      // if(response.id == this.geocode.id){
+      //   this.isHidden=true;
+      //   const requestCollectables: GetCollectablesRequest={
+      //     id: response.id
+      //   };
+      //   this.geocodeApi.getGeoCodeCollectables(requestCollectables).subscribe((response2 :GetCollectablesResponse) =>{
+      //     console.log(response2);
+      //     this.collectables= response2.collectables;
+      //   });
+      // }else{
+      //
+      // }
+    });
 
   }
 
@@ -149,14 +155,14 @@ export class GeocodeContentsPage implements AfterViewInit {
           text: 'Swap',
           handler: data => {
             const request: SwapCollectablesRequest={
-              collectable:collectable.id,
-              geoCodeID:this.geocode.id
+              targetCollectableID:collectable.id,
+              targetGeoCodeID:this.geocode.id
             };
             console.log(request);
             this.geocodeApi.swapCollectables(request).subscribe((response: SwapCollectablesResponse) =>{
               console.log(response);
             });
-            this.navCtrl.navigateBack('/geocode');
+            this.navCtrl.navigateBack('/explore');
 
           }
         }
