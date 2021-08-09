@@ -64,6 +64,12 @@ class EventServiceImplTest {
     TimeLogMockRepository timelogRepo;
 
     /**
+     * The mock repository for the Event subsystem Level repoistory
+     * All the data will be saved here and is used to mock the JPA repository
+     */
+    LevelMockRepository levelRepo;
+
+    /**
      * The leaderboard service accessor
      */
     @Mock( name = "leaderboardServiceImpl" )
@@ -107,6 +113,7 @@ class EventServiceImplTest {
         eventRepo.deleteAll();
         timeTrialRepo.deleteAll();
         timelogRepo.deleteAll();
+        levelRepo.deleteAll();
 
         var leaderboardMockRepo = new LeaderboardMockRepository();
         var userRepository = new UserMockRepository();
@@ -118,7 +125,7 @@ class EventServiceImplTest {
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
-            eventService = new EventServiceImpl( eventRepo, timeTrialRepo, timelogRepo, leaderboardService );
+            eventService = new EventServiceImpl( eventRepo, timeTrialRepo, timelogRepo, levelRepo, leaderboardService );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
@@ -136,7 +143,7 @@ class EventServiceImplTest {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, null, null, leaderboardService ) )
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, null, null, null, leaderboardService ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }
