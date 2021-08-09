@@ -7,8 +7,7 @@
 
 }
 
-ion-col{
-  border-bottom-color:  var(--ion-color-purple);
+.col{
   border-bottom-width: .01em;
   border-bottom-style:solid; margin-bottom : -1px;
   height: 40px;
@@ -19,6 +18,10 @@ ion-col{
 
 #buttons{
   text-align: center;
+}
+
+.leaderBoardButton{
+  text-align: right;
 }
 
 #time-name{

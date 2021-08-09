@@ -24,9 +24,9 @@ public interface PointRepository extends JpaRepository<Point, UUID> {
     @Query(value = "SELECT * FROM point WHERE leaderboard_id = ?1", nativeQuery = true)
     List<Point> findAllByLeaderboardID(UUID leaderboardID);
 
-    @Query(value = "SELECT name, amount as points, rank FROM (" +
-            "SELECT leaderboards.name, amount, DENSE_RANK() OVER (PARTITION BY leaderboards.name ORDER BY amount DESC) AS rank, user_id" +
-            " FROM point JOIN leaderboards ON point.leaderboard_id = leaderboards.id" +
+    @Query(value = "SELECT event_id AS eventID, name, amount as points, rank FROM (" +
+            "SELECT event_id, leaderboards.name, amount, DENSE_RANK() OVER (PARTITION BY leaderboards.name ORDER BY amount DESC) AS rank, user_id" +
+            " FROM point JOIN leaderboards ON point.leaderboard_id = leaderboards.id LEFT JOIN event_leaderboards ON leaderboards.id = event_leaderboards.leaderboards_id" +
             " ORDER BY leaderboards.name" +
             ") AS all_ranks" +
             " WHERE user_id = ?1", nativeQuery = true)

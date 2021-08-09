@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GeoCode } from './geoCode';
 import { GeoPoint } from './geoPoint';
 import { OrderLevels } from './orderLevels';
 
@@ -20,6 +19,6 @@ export interface CreateTimeTrialRequest {
     location: GeoPoint;
     beginDate: string;
     endDate?: string;
-    geoCodesToFind: Array<GeoCode>;
+    geoCodesToFind: Array<string>;
     orderBy: OrderLevels;
 }

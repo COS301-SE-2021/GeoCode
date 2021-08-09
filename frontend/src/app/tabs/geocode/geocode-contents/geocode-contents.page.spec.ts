@@ -20,8 +20,10 @@ describe('GeocodeContentsPage', () => {
     description: '',
     hints: [],
     difficulty: 'EASY',
-    latitude: '-25.755918848126488',
-    longitude: '28.233110280499492',
+    location: {
+      latitude: -25.755918848126488,
+      longitude: 28.233110280499492
+    },
     qrCode: ''
   };
 

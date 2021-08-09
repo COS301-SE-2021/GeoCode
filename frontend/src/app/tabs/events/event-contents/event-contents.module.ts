@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EventTimetrialPageRoutingModule } from './event-timetrial-routing.module';
+import {EventContentsRoutingModule} from './event-contents-routing.module';
 
-import { EventTimetrialPage } from './event-timetrial.page';
+import { EventContentsPage } from './event-contents.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EventTimetrialPageRoutingModule
+    EventContentsRoutingModule
   ],
-  declarations: [EventTimetrialPage]
+  declarations: [EventContentsPage]
 })
-export class EventTimetrialPageModule {}
+export class EventContentsModule {}
