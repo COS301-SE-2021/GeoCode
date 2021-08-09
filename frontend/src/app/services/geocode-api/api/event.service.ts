@@ -246,62 +246,6 @@ export class EventService {
     }
 
     /**
-     * Retrieves all the Events within a specified radius
-     * Retrieves all the Events within a specified radius of a User
-     * @param body Request to all the Events near a specified location
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public eventsNearMe(body: EventsNearMeRequest, observe?: 'body', reportProgress?: boolean): Observable<EventsNearMeResponse>;
-    public eventsNearMe(body: EventsNearMeRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EventsNearMeResponse>>;
-    public eventsNearMe(body: EventsNearMeRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EventsNearMeResponse>>;
-    public eventsNearMe(body: EventsNearMeRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling eventsNearMe.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<EventsNearMeResponse>('post',`${this.basePath}/Event/eventsNearMe`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Returns all the Events
      * Returns all the Events in the system
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -335,7 +279,7 @@ export class EventService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<GetAllEventsResponse>('post',`${this.basePath}/Event/getAllEvents`,
+        return this.httpClient.request<GetAllEventsResponse>('get',`${this.basePath}/Event/getAllEvents`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -503,6 +447,62 @@ export class EventService {
         }
 
         return this.httpClient.request<GetEventsByLocationResponse>('post',`${this.basePath}/Event/getEventsByLocation`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Retrieves all the Events within a specified radius
+     * Retrieves all the Events within a specified radius of a User
+     * @param body Request to all the Events near a specified location
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEventsNearMe(body: EventsNearMeRequest, observe?: 'body', reportProgress?: boolean): Observable<EventsNearMeResponse>;
+    public getEventsNearMe(body: EventsNearMeRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EventsNearMeResponse>>;
+    public getEventsNearMe(body: EventsNearMeRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EventsNearMeResponse>>;
+    public getEventsNearMe(body: EventsNearMeRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getEventsNearMe.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<EventsNearMeResponse>('post',`${this.basePath}/Event/getEventsNearMe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

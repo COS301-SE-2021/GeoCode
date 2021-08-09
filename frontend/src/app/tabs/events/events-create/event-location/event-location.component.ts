@@ -14,7 +14,6 @@ export class EventLocationComponent implements AfterViewInit {
 
   marker = null;
   constructor(    private modalController: ModalController,
-                  navParams: NavParams,
                   private mapsLoader: GoogleMapsLoader) {}
 
   ngAfterViewInit() {

@@ -1,0 +1,34 @@
+ion-title{
+  font-size: xx-large;
+  text-align: center;
+  padding:0.5%;
+}
+
+ion-toolbar{
+  --background: var(--ion-color-teal);
+  color: white;
+}
+
+.map{
+  width: 100%;
+  height: 50%;
+  border-width: 0px;
+  padding: 0px;
+  background-color: white;
+  margin: auto;
+}
+
+ion-item{
+  --ion-color-dark: #3dc2ff;
+  --ion-color-light: purple;
+}
+
+.button{
+  width: 100%;
+}
+
+#button-container{
+  padding: 5px;
+  text-align: center;
+
+}
