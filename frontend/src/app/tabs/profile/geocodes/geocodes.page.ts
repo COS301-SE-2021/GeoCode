@@ -35,8 +35,7 @@ export class UserGeocodesPage implements OnInit {
     private geocodeService: GeoCodeService,
     private userService: UserService,
     keycloak: KeycloakService,
-    route: ActivatedRoute,
-    private modalController: ModalController
+    route: ActivatedRoute
   ) {
     this.userID = route.snapshot.paramMap.get('id');
     if (!this.userID) {
@@ -156,7 +155,7 @@ export class UserGeocodesPage implements OnInit {
 
   mapSizeMD() {
     if (this.detailedGeoCode) {
-      return 6;
+      return 8;
     } else {
       return 12;
     }
@@ -167,6 +166,15 @@ export class UserGeocodesPage implements OnInit {
       return 9;
     } else {
       return 12;
+    }
+  }
+
+  getClass() {
+    if (this.detailedGeoCode && !window.matchMedia('(min-width: 768px)').matches) {
+      // Only returns if the geocode details are being shown and the screen is small
+      return 'splitScreen';
+    } else {
+      return '';
     }
   }
 }

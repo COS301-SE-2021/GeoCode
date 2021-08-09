@@ -19,5 +19,11 @@ ion-col {
 }
 
 ion-card {
-  height: 100px;
+}
+
+#mapColumn.splitScreen {
+  height: calc(100% - 300px);
+}
+#geocodeColumn.splitScreen {
+  height: 300px;
 }

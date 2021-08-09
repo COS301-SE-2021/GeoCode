@@ -20,10 +20,10 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col class="mapColumn" [sizeMd]="mapSizeMD()" [sizeLg]="mapSizeLG()" size="12">
+      <ion-col #yeet id="mapColumn" [ngClass]="getClass()" [sizeMd]="mapSizeMD()" [sizeLg]="mapSizeLG()" size="12">
         <div #mapElement class="map"></div>
       </ion-col>
-      <ion-col class="geocodeColumn" size-md="6" size-lg="3" size="12" *ngIf="detailedGeoCode">
+      <ion-col id="geocodeColumn" [ngClass]="getClass()" size-md="4" size-lg="3" size="12" *ngIf="detailedGeoCode">
         <ion-button (click)="closeDetails()">
           <ion-icon name="close-outline"></ion-icon>
         </ion-button>
