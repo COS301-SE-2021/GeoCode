@@ -1348,7 +1348,7 @@ paths:
         - bearerAuth: []
 
   /Event/getAllEvents:
-    post:
+    get:
       tags:
         - "Event"
       summary: "Returns all the Events"
@@ -2691,10 +2691,14 @@ components:
     MyLeaderboardDetails:
       type: "object"
       required:
+        - eventID
         - name
         - points
         - rank
       properties:
+        eventID:
+          type: string
+          format: uuid
         name:
           type: string
           example: "Pretoria"
