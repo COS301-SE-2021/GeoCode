@@ -694,7 +694,7 @@ public class EventServiceImpl implements EventService {
                             levelRepo.save(newLevel);
 
                             /* The current Level contains the User so return the GeoCode */
-                            return new NextStageResponse( levels.get( x ).getTarget() );
+                            return new NextStageResponse( newLevel.getTarget() );
                         }
 
                         /* The user has completed the Event */
@@ -704,8 +704,10 @@ public class EventServiceImpl implements EventService {
                     /* Add the user to the first level and return the first GeoCode */
                     if (  x == levels.size() - 1 ) {
 
-                        levels.get( 0 ).putOnLevelItem( id );
-                        return new NextStageResponse( levels.get( 0 ).getTarget() );
+                        var level = levels.get( 0 );
+                        level.putOnLevelItem( id );
+                        levelRepo.save(level);
+                        return new NextStageResponse( level.getTarget() );
                     }
                 }
             }
