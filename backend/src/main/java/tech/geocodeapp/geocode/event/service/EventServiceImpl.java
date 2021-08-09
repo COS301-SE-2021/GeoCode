@@ -650,38 +650,20 @@ public class EventServiceImpl implements EventService {
 
         /* The location and radius the location needs to fall into */
         GeoPoint locate = request.getLocation();
-        var radius = request.getRadius();
+        var radius = request.getRadius()/111; // 111 km = 1 degree
 
         /* Go through each Event in the repository */
         for ( Event event : temp ) {
 
-            /* Calculate the range of the radius */
-            /* Get the latitude & longitude values for the current Event */
-            var latitude = event.getLocation().getLatitude();
-            var longitude = event.getLocation().getLongitude();
+            /* Calculate the distance from the given point to the Event using the distance formula */
+            /* This is not the most accurate method, but should be close as long as the radius is small */
+            var latitudeDifference = Math.pow(locate.getLatitude() - event.getLocation().getLatitude(), 2);
+            var longitudeDifference = Math.pow(locate.getLongitude() - event.getLocation().getLongitude(), 2);
+            var distance = Math.sqrt(longitudeDifference+latitudeDifference);
 
-            /* Set the max value */
-            GeoPoint min = new GeoPoint();
-            min.setLatitude( latitude - radius );
-            min.setLongitude( longitude - radius );
-
-            /* Set the max value */
-            GeoPoint max = new GeoPoint();
-            min.setLatitude( latitude + radius );
-            min.setLongitude( longitude + radius );
-
-            /* Check if the value is within the max radius */
-            if ( ( max.getLatitude() >= locate.getLatitude() ) && ( max.getLongitude() >= locate.getLongitude() ) ) {
-
-                /* Check if the value is within the min radius */
-                if ( ( min.getLatitude() <= locate.getLatitude() ) && ( min.getLongitude() <= locate.getLongitude() ) ) {
-
-                    /*
-                     * The current Event is within the radius
-                     * therefore add it to the found list
-                     */
-                    foundEvents.add( event );
-                }
+            /* Check if the event is close enough to the given point */
+            if ( distance <= radius ) {
+                foundEvents.add( event );
             }
         }
 
