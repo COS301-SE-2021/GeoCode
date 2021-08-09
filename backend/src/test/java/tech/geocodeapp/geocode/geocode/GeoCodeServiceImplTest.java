@@ -10,7 +10,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.util.Assert;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.event.EventMockRepository;
+import tech.geocodeapp.geocode.event.TimeLogMockRepository;
 import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.model.TimeTrial;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.event.service.EventServiceImpl;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
@@ -131,9 +133,11 @@ class GeoCodeServiceImplTest {
                                                          new CollectableSetMockRepository(),
                                                          typeMockRepo );
 
-        EventMockRepository eventRepo = new EventMockRepository();
+        EventMockRepository< Event > eventRepo = new EventMockRepository<>();
+        EventMockRepository< TimeTrial > timeTrialRepo = new EventMockRepository<>();
+        TimeLogMockRepository timelogRepo = new TimeLogMockRepository();
 
-        eventService = new EventServiceImpl( eventRepo, leaderboardService );
+        eventService = new EventServiceImpl( eventRepo, timeTrialRepo, timelogRepo, leaderboardService );
 
         /* Populate the Event repository with a known Event to find*/
         var event = new Event( eventID, "Test", "Test description", null,
@@ -258,7 +262,7 @@ class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the description created with the code
              */
-            Assertions.assertTrue( response.isIsSuccess() );
+            Assertions.assertTrue( response.isSuccess() );
 
         } catch ( InvalidRequestException e ) {
 

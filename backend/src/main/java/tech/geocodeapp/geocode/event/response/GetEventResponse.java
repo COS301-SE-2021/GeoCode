@@ -19,7 +19,7 @@ public class GetEventResponse {
      * Determines if an Event was found or not
      */
     @JsonProperty( "found" )
-    @NotNull( message = "GetEventResponse eventID attribute cannot be null." )
+    @NotNull( message = "GetEventResponse found attribute cannot be null." )
     private Boolean found;
 
     /**

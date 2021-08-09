@@ -19,7 +19,7 @@ import java.util.UUID;
  */
 @Entity
 @Validated
-@DiscriminatorValue( "1" )
+@DiscriminatorValue( "TimeTrial" )
 public class TimeTrial extends Event {
 
     /**
