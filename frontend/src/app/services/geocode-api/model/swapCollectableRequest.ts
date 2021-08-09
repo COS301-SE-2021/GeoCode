@@ -11,6 +11,6 @@
  */
 
 export interface SwapCollectableRequest { 
-    collectableID: string;
-    geoCodeID: string;
+    collectableID?: string;
+    geoCodeID?: string;
 }
