@@ -9,9 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { TimeTrial } from './timeTrial';
+import { TimeLog } from './timeLog';
 
 export interface GetTimeLogResponse { 
     found: boolean;
-    foundEvent?: TimeTrial;
+    foundTimeLog?: TimeLog;
 }

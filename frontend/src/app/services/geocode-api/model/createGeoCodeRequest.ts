@@ -18,5 +18,4 @@ export interface CreateGeoCodeRequest {
     hints: Array<string>;
     difficulty: Difficulty;
     available: boolean;
-    eventID?: string;
 }

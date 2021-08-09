@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 import tech.geocodeapp.geocode.event.model.*;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
+import tech.geocodeapp.geocode.event.repository.LevelRepository;
 import tech.geocodeapp.geocode.event.repository.TimeLogRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
@@ -51,6 +52,12 @@ public class EventServiceImpl implements EventService {
     private final TimeLogRepository timeLogRepo;
 
     /**
+     * The repository the Event class interacts with
+     */
+    @NotNull( message = "Level repository may not be null." )
+    private final LevelRepository levelRepo;
+
+    /**
      * The Leaderboard service to access the use cases and
      * Leaderboard repository
      */
@@ -70,7 +77,7 @@ public class EventServiceImpl implements EventService {
      * @param eventRepo          the repo the created response attributes should save to
      * @param leaderboardService access to the Leaderboard use cases and repository
      */
-    public EventServiceImpl( EventRepository< Event > eventRepo, EventRepository< TimeTrial > timeTrialRepo, TimeLogRepository timeLogRepo,
+    public EventServiceImpl( EventRepository< Event > eventRepo, EventRepository< TimeTrial > timeTrialRepo, TimeLogRepository timeLogRepo, LevelRepository levelRepo,
                              @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService ) throws RepoException {
 
         if ( ( eventRepo != null ) && ( timeLogRepo != null ) ) {
@@ -79,6 +86,7 @@ public class EventServiceImpl implements EventService {
             this.eventRepo = eventRepo;
             this.timeTrialRepo = timeTrialRepo;
             this.timeLogRepo = timeLogRepo;
+            this.levelRepo = levelRepo;
 
             this.leaderboardService = Objects.requireNonNull( leaderboardService, "EventService: Leaderboard service must not be null." );
         } else {
@@ -136,6 +144,8 @@ public class EventServiceImpl implements EventService {
         /* Store the list of GeoCode UUIDs to create a Level on */
         List< UUID > geoCodes = request.getGeoCodesToFind();
 
+        UUID eventID = UUID.randomUUID();
+
         /*
          * Determine which order to set the GeoCodes in
          * the default is OrderLevels.GIVEN
@@ -143,11 +153,11 @@ public class EventServiceImpl implements EventService {
         if ( request.getOrderBy().equals( OrderLevels.DIFFICULTY ) ) {
 
             /* Set the list to go from easiest to most difficult on finding the GeoCode */
-            geoCodes = sortByDifficulty( geoCodes );
+            geoCodes = sortByDifficulty( geoCodes, eventID );
         } else if ( request.getOrderBy().equals( OrderLevels.DISTANCE ) ) {
 
             /* Set the list to go from least to most distance with where the GeoCode is located */
-            geoCodes = sortByDistance( geoCodes );
+            geoCodes = sortByDistance( geoCodes, eventID );
         }
 
         /* Check if the GeoCodes are still valid after sorting */
@@ -164,11 +174,13 @@ public class EventServiceImpl implements EventService {
              * Create the Level with a random UUID
              * and add it to the list
              */
-            levels.add( new Level( geoCode ) );
+            Level level = new Level( geoCode );
+            levelRepo.save(level);
+            levels.add(level);
         }
 
         /* Create the new Event object with the specified attributes */
-        var event = new Event( UUID.randomUUID(), request.getName(), request.getDescription(),
+        var event = new Event( eventID, request.getName(), request.getDescription(),
                                request.getLocation(), levels, request.getBeginDate(), request.getEndDate(),
                                leaderboard );
 
@@ -616,38 +628,20 @@ public class EventServiceImpl implements EventService {
 
         /* The location and radius the location needs to fall into */
         GeoPoint locate = request.getLocation();
-        var radius = request.getRadius();
+        var radius = request.getRadius()/111; // 111 km = 1 degree
 
         /* Go through each Event in the repository */
         for ( Event event : temp ) {
 
-            /* Calculate the range of the radius */
-            /* Get the latitude & longitude values for the current Event */
-            var latitude = event.getLocation().getLatitude();
-            var longitude = event.getLocation().getLongitude();
+            /* Calculate the distance from the given point to the Event using the distance formula */
+            /* This is not the most accurate method, but should be close as long as the radius is small */
+            var latitudeDifference = Math.pow(locate.getLatitude() - event.getLocation().getLatitude(), 2);
+            var longitudeDifference = Math.pow(locate.getLongitude() - event.getLocation().getLongitude(), 2);
+            var distance = Math.sqrt(longitudeDifference+latitudeDifference);
 
-            /* Set the max value */
-            GeoPoint min = new GeoPoint();
-            min.setLatitude( latitude - radius );
-            min.setLongitude( longitude - radius );
-
-            /* Set the max value */
-            GeoPoint max = new GeoPoint();
-            min.setLatitude( latitude + radius );
-            min.setLongitude( longitude + radius );
-
-            /* Check if the value is within the max radius */
-            if ( ( max.getLatitude() >= locate.getLatitude() ) && ( max.getLongitude() >= locate.getLongitude() ) ) {
-
-                /* Check if the value is within the min radius */
-                if ( ( min.getLatitude() <= locate.getLatitude() ) && ( min.getLongitude() <= locate.getLongitude() ) ) {
-
-                    /*
-                     * The current Event is within the radius
-                     * therefore add it to the found list
-                     */
-                    foundEvents.add( event );
-                }
+            /* Check if the event is close enough to the given point */
+            if ( distance <= radius ) {
+                foundEvents.add( event );
             }
         }
 
@@ -816,7 +810,7 @@ public class EventServiceImpl implements EventService {
      *
      * @return the sorted GeoCode ID's in order of Difficulty
      */
-    private List< UUID > sortByDifficulty( List< UUID > geoCodes ) {
+    private List< UUID > sortByDifficulty( List< UUID > geoCodes, UUID eventID ) {
 
         List< UUID > hold = null;
 
@@ -881,6 +875,8 @@ public class EventServiceImpl implements EventService {
                 if ( geoCodeID != null ) {
 
                     hold.add( geoCodeID );
+                    geoCode.setEventID(eventID);
+                    geoCodeService.saveGeoCode(geoCode);
                 }
             }
 
@@ -926,7 +922,7 @@ public class EventServiceImpl implements EventService {
      *
      * @return the sorted GeoCode ID's in order of distance
      */
-    private List< UUID > sortByDistance( List< UUID > geoCodes ) {
+    private List< UUID > sortByDistance( List< UUID > geoCodes, UUID eventID ) {
 
         /* Holds the new order of the GeoCodes */
         List< UUID > hold = null;

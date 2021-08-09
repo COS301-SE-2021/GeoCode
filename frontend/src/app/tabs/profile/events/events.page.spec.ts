@@ -4,6 +4,9 @@ import { IonicModule } from '@ionic/angular';
 import { UserEventsPage } from './events.page';
 import {UrlSerializer} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
+import {UserService} from '../../../services/geocode-api';
+import {MockKeycloak} from '../../../mocks/MockKeycloak';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('UserEventsPage', () => {
   let component: UserEventsPage;
@@ -12,8 +15,8 @@ describe('UserEventsPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ UserEventsPage ],
-      providers: [],
-      imports: [IonicModule.forRoot(), RouterTestingModule]
+      providers: [UserService, MockKeycloak.provider()],
+      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(UserEventsPage);

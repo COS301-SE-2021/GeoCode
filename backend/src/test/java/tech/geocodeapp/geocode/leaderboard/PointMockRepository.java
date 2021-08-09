@@ -74,6 +74,9 @@ public class PointMockRepository implements PointRepository {
                 public int getRank() {
                     return rank;
                 }
+
+                @Override
+                public UUID getEventID() { return leaderboard.getId(); } // example ID
             });
         }
 

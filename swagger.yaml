@@ -1348,7 +1348,7 @@ paths:
         - bearerAuth: []
 
   /Event/getAllEvents:
-    post:
+    get:
       tags:
         - "Event"
       summary: "Returns all the Events"
@@ -1665,13 +1665,13 @@ paths:
       security:
         - bearerAuth: []
 
-  /Event/eventsNearMe:
+  /Event/getEventsNearMe:
     post:
       tags:
         - "Event"
       summary: "Retrieves all the Events within a specified radius"
       description: "Retrieves all the Events within a specified radius of a User"
-      operationId: "eventsNearMe"
+      operationId: "getEventsNearMe"
       requestBody:
         required: true
         description: "Request to all the Events near a specified location"
@@ -2062,10 +2062,6 @@ components:
         available:
           type: boolean
           example: "This describes the GeoCode to be created"
-        eventID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "CreateGeoCodeRequest"
 
@@ -2695,10 +2691,14 @@ components:
     MyLeaderboardDetails:
       type: "object"
       required:
+        - eventID
         - name
         - points
         - rank
       properties:
+        eventID:
+          type: string
+          format: uuid
         name:
           type: string
           example: "Pretoria"
