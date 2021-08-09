@@ -3273,11 +3273,11 @@ components:
         - targetCollectableID
         - targetGeoCodeID
       properties:
-        collectableID:
+        targetCollectableID:
           type: string
           format: UUID
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        geoCodeID:
+        targetGeoCodeID:
           type: string
           format: UUID
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
