@@ -1347,6 +1347,37 @@ paths:
       security:
         - bearerAuth: []
 
+  /Event/getAllTypeOfEvents:
+    post:
+      tags:
+        - "Event"
+      summary: "Returns all type of Events"
+      description: "Returns all type of Events in the system"
+      operationId: "getAllTypeOfEvents"
+      responses:
+        '200':
+          description: "Successfully returned all the Event's"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetAllTypeOfEventsResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetAllTypeOfEventsResponse"
+        '404':
+          description: "Unable to find any Events"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetAllTypeOfEventsResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetAllTypeOfEventsResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
   /Event/getAllEvents:
     post:
       tags:
@@ -1387,7 +1418,7 @@ paths:
       operationId: "getAllTimeTrials"
       responses:
         '200':
-          description: "Successfully returned all the TimeTrials's"
+          description: "Successfully returned all the TimeTrials"
           content:
             application/json:
               schema:
@@ -1737,6 +1768,47 @@ paths:
       security:
         - bearerAuth: []
 
+  /Event/getByLocation:
+    post:
+      tags:
+        - "Event"
+      summary: "Get an Event by its location"
+      description: "Get an Event and/or TimeTrial  by its location from the given co-ordinates"
+      operationId: "getByLocation"
+      requestBody:
+        required: true
+        description: "Request to get an Event and/or TimeTrial by its location"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetByLocationRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetByLocationRequest"
+      responses:
+        '200':
+          description: "Return the found Event and/or TimeTrial"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetByLocationResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetByLocationResponse"
+        '404':
+          description: "Return the Event and/or TimeTrial was not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetByLocationResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetByLocationResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
   /Event/getEventsByLocation:
     post:
       tags:
@@ -1765,7 +1837,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/GetEventsByLocationResponse"
         '404':
-          description: "Return the new Event was not found"
+          description: "Return the Event was not found"
           content:
             application/json:
               schema:
@@ -1773,6 +1845,47 @@ paths:
             application/xml:
               schema:
                 $ref: "#/components/schemas/GetEventsByLocationResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+
+  /Event/getTimeTrialByLocation:
+    post:
+      tags:
+        - "Event"
+      summary: "Get an TimeTrial by its location"
+      description: "Get an TimeTrial by its location from the given co-ordinates"
+      operationId: "getTimeTrialByLocation"
+      requestBody:
+        required: true
+        description: "Request to get an Event by its location"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetTimeTrialByLocationRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetTimeTrialByLocationRequest"
+      responses:
+        '200':
+          description: "Return the found TimeTrial"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTimeTrialByLocationResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetTimeTrialByLocationResponse"
+        '404':
+          description: "Return the TimeTrial was not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTimeTrialByLocationResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetTimeTrialByLocationResponse"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
       security:
@@ -3404,6 +3517,20 @@ components:
         - "DIFFICULTY"
         - "DISTANCE"
 
+    GetAllTypeOfEventsResponse:
+      type: "object"
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+        timeTrials:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeTrial"
+      xml:
+        name: "GetAllTypeOfEventsResponse"
+
     GetAllEventsResponse:
       type: "object"
       properties:
@@ -3708,6 +3835,30 @@ components:
       xml:
         name: "EventsNearMeResponse"
 
+    GetByLocationRequest:
+      type: "object"
+      required:
+        - location
+      properties:
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+      xml:
+        name: "GetByLocationRequest"
+
+    GetByLocationResponse:
+      type: "object"
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+        timeTrials:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeTrial"
+      xml:
+        name: "GetByLocationResponse"
+
     GetEventsByLocationRequest:
       type: "object"
       required:
@@ -3727,6 +3878,26 @@ components:
             $ref: "#/components/schemas/Event"
       xml:
         name: "GetEventsByLocationResponse"
+
+    GetTimeTrialByLocationRequest:
+      type: "object"
+      required:
+        - location
+      properties:
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+      xml:
+        name: "GetTimeTrialByLocationRequest"
+
+    GetTimeTrialByLocationResponse:
+      type: "object"
+      properties:
+        timeTrials:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeTrial"
+      xml:
+        name: "GetTimeTrialByLocationResponse"
 
     GetPointsByUserRequest:
       type: "object"

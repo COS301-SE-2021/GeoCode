@@ -3,21 +3,27 @@ package tech.geocodeapp.geocode.event.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 
+import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.TimeTrial;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * GetAllEventsResponse object returns all the TimeTrial objects in the system
+ * GetAllEventsResponse object returns all the Event objects in the system
  */
 @Validated
-public class GetAllTimeTrialsResponse {
+public class GetAllTypeOfEventsResponse {
 
     /**
-     * All the TimeTrial's stored inside the EventsRepository
+     * All the stored Events
+     */
+    @JsonProperty( "events" )
+    private List< Event > events;
+
+    /**
+     * All the stored TimeTrials
      */
     @JsonProperty( "timeTrials" )
     private List< TimeTrial > timeTrials;
@@ -25,18 +31,67 @@ public class GetAllTimeTrialsResponse {
     /**
      * Default Constructor
      */
-    public GetAllTimeTrialsResponse() {
+    public GetAllTypeOfEventsResponse() {
 
     }
 
     /**
      * Overloaded Constructor
      *
+     * @param events the list of events to set the events attribute to
      * @param timeTrials the list of timeTrials to set the timeTrials attribute to
      */
-    public GetAllTimeTrialsResponse( List< TimeTrial > timeTrials ) {
+    public GetAllTypeOfEventsResponse( List< Event > events, List< TimeTrial > timeTrials ) {
 
+        this.events = events;
         this.timeTrials = timeTrials;
+    }
+
+    /**
+     * Sets the events attribute to the specified value
+     *
+     * @param events the value the attribute should be set to
+     *
+     * @return the request after the events has been changed
+     */
+    public GetAllTypeOfEventsResponse events( List< Event > events ) {
+
+        this.events = events;
+        return this;
+    }
+
+    /**
+     * Sets a single event inside the events attribute to the specified value
+     *
+     * @param eventsItem the value the attribute should be set to
+     *
+     * @return the stored events attribute
+     */
+    public GetAllTypeOfEventsResponse addEventsItem( Event eventsItem ) {
+
+        this.events.add( eventsItem );
+        return this;
+    }
+
+    /**
+     * Gets the saved events attribute
+     *
+     * @return the stored events attribute
+     */
+    @Valid
+    public List< Event > getEvents() {
+
+        return events;
+    }
+
+    /**
+     * Sets the events attribute to the specified value
+     *
+     * @param events the value the attribute should be set to
+     */
+    public void setEvents( List< Event > events ) {
+
+        this.events = events;
     }
 
     /**
@@ -46,7 +101,7 @@ public class GetAllTimeTrialsResponse {
      *
      * @return the request after the timeTrials has been changed
      */
-    public GetAllTimeTrialsResponse timeTrials( List< TimeTrial > timeTrials ) {
+    public GetAllTypeOfEventsResponse timeTrials( List< TimeTrial > timeTrials ) {
 
         this.timeTrials = timeTrials;
         return this;
@@ -59,7 +114,7 @@ public class GetAllTimeTrialsResponse {
      *
      * @return the stored timeTrials attribute
      */
-    public GetAllTimeTrialsResponse addTimeTrialItem( TimeTrial eventsItem ) {
+    public GetAllTypeOfEventsResponse addTimeTrialItem( TimeTrial eventsItem ) {
 
         this.timeTrials.add( eventsItem );
         return this;
@@ -105,7 +160,8 @@ public class GetAllTimeTrialsResponse {
             return false;
         }
 
-        return Objects.equals( this.timeTrials, ( ( GetAllTimeTrialsResponse ) obj ).timeTrials );
+        return Objects.equals( this.events, ( ( GetAllTypeOfEventsResponse ) obj ).events ) &&
+               Objects.equals( this.timeTrials, ( ( GetAllTypeOfEventsResponse ) obj ).timeTrials );
     }
 
     /**
@@ -116,7 +172,7 @@ public class GetAllTimeTrialsResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( timeTrials );
+        return Objects.hash( events, timeTrials );
     }
 
     /**
@@ -128,6 +184,7 @@ public class GetAllTimeTrialsResponse {
     public String toString() {
 
         return "class GetAllEventsResponse {\n" +
+                "    events: " + toIndentedString( events ) + "\n" +
                 "    timeTrials: " + toIndentedString( timeTrials ) + "\n" +
                 "}";
     }

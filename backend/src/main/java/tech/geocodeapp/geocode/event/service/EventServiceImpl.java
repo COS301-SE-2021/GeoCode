@@ -691,6 +691,19 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
+     * Get all the stored Events and TimeTrials in the repository
+     *
+     * @return the newly created response instance
+     */
+    @Override
+    public GetAllTypeOfEventsResponse getAllTypeOfEvents() {
+
+        var temp = eventRepo.findAll();
+
+        return new GetAllTypeOfEventsResponse();
+    }
+
+    /**
      * Get all the stored Events in the repository
      *
      * @return the newly created response instance

@@ -113,6 +113,13 @@ public interface EventService {
     EventsNearMeResponse eventsNearMe( EventsNearMeRequest request ) throws InvalidRequestException;
 
     /**
+     * Get all the stored Events and TimeTrials in the repository
+     *
+     * @return the newly created response instance
+     */
+    public GetAllTypeOfEventsResponse getAllTypeOfEvents();
+
+    /**
      * Get all the stored Events in the repository
      *
      * @return the newly created response instance
