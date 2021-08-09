@@ -547,8 +547,8 @@ public class EventServiceImpl implements EventService {
                 /* Go through each found Level to check if the User's ID is present */
                 for ( Level level : levels ) {
 
-                    Map< String, UUID > onLevel = level.getOnLevel();
-                    if ( onLevel.containsValue( request.getUserID() ) ) {
+                    Collection< UUID > onLevel = level.getOnLevel();
+                    if ( onLevel.contains( request.getUserID() ) ) {
 
                         return new GetCurrentEventResponse( true, event );
                     }
@@ -562,6 +562,65 @@ public class EventServiceImpl implements EventService {
         }
 
         return new GetCurrentEventResponse( false );
+    }
+
+    /**
+     * Get a specific GeoCode to complete a Level for anEvent that a User is currently partaking in and the Event stored in the repository
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetCurrentEventLevelResponse
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetCurrentEventLevelResponse getCurrentEventLevel( GetCurrentEventLevelRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( ( request.getEventID() == null ) || ( request.getUserID() == null ) ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Get the Event object from the repository */
+        Optional< Event > temp = eventRepo.findById( request.getEventID() );
+
+        /* Check if the object was returned */
+        if ( temp.isPresent() ) {
+
+            /* Get the Event object's Levels to iterate through */
+            var levels = temp.get().getLevels();
+
+            /* Go through each level contained in the Event */
+            for ( Level level : levels ) {
+
+                /* Get the list of Users on the Level */
+                var users = level.getOnLevel();
+
+                /* Check if the user is contained on the level */
+                if ( users.contains( request.getUserID() ) ) {
+
+                    try {
+
+                        /*
+                         * Query the GeoCode subsystem for the targeted GeoCodeID for the level
+                         * Return the found GeoCode object
+                         */
+                        var hold = geoCodeService.getGeoCode( new GetGeoCodeRequest( level.getTarget() ) );
+                        return new GetCurrentEventLevelResponse( true, hold.getFoundGeoCode() );
+                    } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
+
+                        /* An exception was thrown therefore could not find the GeoCode */
+                        return new GetCurrentEventLevelResponse( false );
+                    }
+                }
+            }
+        }
+
+        return new GetCurrentEventLevelResponse( false );
     }
 
     /**
@@ -599,15 +658,34 @@ public class EventServiceImpl implements EventService {
                 /* Get the Levels for each Event */
                 List< Level > levels = currEvent.getLevels();
 
+                var id = request.getUserID();
+
                 /* Go through each found Level to check if the User's ID is present */
-                for ( Level level : levels ) {
+                for ( int x = 0; x < levels.size(); x++ ) {
 
                     /* Check if the current Level contains the User */
-                    Map< String, UUID > onLevel = level.getOnLevel();
-                    if ( onLevel.containsValue( request.getUserID() ) ) {
+                    Collection< UUID > onLevel = levels.get( x ).getOnLevel();
+                    if ( onLevel.contains( id ) ) {
 
-                        /* The current Level contains the User so return the GeoCode */
-                        return new NextStageResponse( level.getTarget() );
+                        /* Check if the user can move onto the next stage */
+                        if ( ( x + 1 ) < levels.size() ) {
+
+                            levels.get( x ).removeOnLevelItem( id );
+                            levels.get( x + 1 ).putOnLevelItem( id );
+
+                            /* The current Level contains the User so return the GeoCode */
+                            return new NextStageResponse( levels.get( x ).getTarget() );
+                        }
+
+                        /* The user has completed the Event */
+                        return new NextStageResponse( null );
+                    }
+
+                    /* Add the user to the first level and return the first GeoCode */
+                    if (  x == levels.size() - 1 ) {
+
+                        levels.get( 0 ).putOnLevelItem( id );
+                        return new NextStageResponse( levels.get( 0 ).getTarget() );
                     }
                 }
             }
@@ -967,7 +1045,6 @@ public class EventServiceImpl implements EventService {
 
         return x;
     }
-
 
     /**
      * Gets a list of GeoCode ID's and sorts them according to their distance from one another
