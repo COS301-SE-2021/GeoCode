@@ -27,7 +27,7 @@ describe('ProfilePage', () => {
       providers: [
         ModalController,
         UserService,
-        MockKeycloak.provider();
+        MockKeycloak.provider()
       ],
       imports: [IonicModule.forRoot(), RouterTestingModule.withRoutes([]), HttpClientTestingModule]
     }).compileComponents();
