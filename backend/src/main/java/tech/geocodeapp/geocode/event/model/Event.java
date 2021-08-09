@@ -16,13 +16,12 @@ import java.util.*;
 /**
  * The Event model that will be stored in as a table in the db
  */
-@Entity( name = "event" )
+@Entity
 @Validated
-//@Table( name = "event" )
+@Table( name = "event" )
 @Inheritance( strategy = InheritanceType.SINGLE_TABLE )
-@DiscriminatorColumn( name = "event_type",
-                      discriminatorType = DiscriminatorType.INTEGER )
-@DiscriminatorValue( "null" )
+@DiscriminatorColumn( name = "event_type", discriminatorType = DiscriminatorType.STRING )
+@DiscriminatorValue( value = "event" )
 public class Event {
 
     /**

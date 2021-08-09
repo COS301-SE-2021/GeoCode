@@ -4,6 +4,7 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.threeten.bp.OffsetDateTime;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -15,6 +16,7 @@ import java.util.UUID;
 /**
  * TimeLog object holds when each User starts and Event. It is to keep Track of TimeTrials
  */
+@Entity
 @Validated
 @Table( name = "timelog" )
 public class TimeLog {
