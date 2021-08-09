@@ -1665,13 +1665,13 @@ paths:
       security:
         - bearerAuth: []
 
-  /Event/eventsNearMe:
+  /Event/getEventsNearMe:
     post:
       tags:
         - "Event"
       summary: "Retrieves all the Events within a specified radius"
       description: "Retrieves all the Events within a specified radius of a User"
-      operationId: "eventsNearMe"
+      operationId: "getEventsNearMe"
       requestBody:
         required: true
         description: "Request to all the Events near a specified location"
