@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {
-  CreateEventRequest, CreateEventResponse,
+  CreateEventRequest, CreateEventResponse, CreateGeoCodeRequest,
   CreateGeoCodeResponse, CreateTimeTrialRequest, CreateTimeTrialResponse,
   EventService,
   GeoCode,
@@ -23,7 +23,7 @@ export class EventsCreatePage implements AfterViewInit  {
   map;
   mapMarker;
   markers= [];
-  geocodes: GeoCode[] = [];
+  geocodes= [];
   selected=[];
   type='event';
   timeHidden=true;
@@ -40,7 +40,7 @@ export class EventsCreatePage implements AfterViewInit  {
     location: {latitude: 0,longitude: 0},
     name: '',
     orderBy: 'GIVEN',
-    endDate:''
+    endDate:null
   };
   constructor(      private modalController: ModalController,
                     private navCtrl: NavController,
@@ -81,6 +81,8 @@ export class EventsCreatePage implements AfterViewInit  {
     await modal.present();
     const { data } = await modal.onDidDismiss();
     if (data != null) {
+      console.log(data);
+      this.geocodes.push(data);
       this.geocodeApi.createGeoCode(data)
         .subscribe(async (response: CreateGeoCodeResponse) =>{
             const toast =  await this.toastController.create({
@@ -88,7 +90,9 @@ export class EventsCreatePage implements AfterViewInit  {
               duration: 2000
             });
             await toast.present();
-
+            this.request.geoCodesToFind.push(response.geoCodeID);
+            console.log(response);
+            //create QR code image
         });
     }else{
       console.log('Null');
@@ -133,13 +137,17 @@ export class EventsCreatePage implements AfterViewInit  {
   }
 
   startDate($event){
-console.log($event);
-this.request.beginDate=$event.detail.value;
+const date = new Date($event.detail.value);
+//this.request.beginDate=date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+    this.request.beginDate=date.toISOString().split('T')[0];
+console.log(this.request.beginDate);
 this.minEndDate=$event.detail.value;
   }
 
   endDate($event){
-    this.request.endDate=$event.detail.value;
+    const date = new Date($event.detail.value);
+    //this.request.endDate=date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+    this.request.endDate=date.toISOString().split('T')[0];
   }
 
   showGeoCodes(){
@@ -149,7 +157,9 @@ this.minEndDate=$event.detail.value;
   createEvent(){
     // eslint-disable-next-line eqeqeq
     if(this.type=='event'){
+      console.log(this.request);
       this.eventApi.createEvent(this.request).subscribe((response: CreateEventResponse) =>{
+
         console.log(response);
       });
       // eslint-disable-next-line eqeqeq
@@ -159,7 +169,7 @@ this.minEndDate=$event.detail.value;
         beginDate: this.request.beginDate,
         description: this.request.description,
         endDate: this.request.endDate,
-       // geoCodesToFind: this.request.geoCodesToFind,
+        geoCodesToFind: this.request.geoCodesToFind,
         location: this.request.location,
         name: this.request.name,
         orderBy: this.request.orderBy,
@@ -173,6 +183,14 @@ this.minEndDate=$event.detail.value;
     //challenge wow factor demo 4
     }
 
+  }
+
+  setName($event){
+    this.request.name=$event.detail.value;
+  }
+
+  setDescription($event){
+    this.request.description=$event.detail.value;
   }
 
 }

@@ -8,13 +8,13 @@
   <ion-list>
     <ion-item>
       <ion-label>Name</ion-label>
-      <ion-input type="text" placeholder="Event Name"></ion-input>
+      <ion-input type="text" placeholder="Event Name" (ionChange)="setName($event)"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Description</ion-label>
     </ion-item>
     <ion-item>
-         <ion-textarea type="text" placeholder="Event description"></ion-textarea>
+         <ion-textarea type="text" placeholder="Event description" (ionChange)="setDescription($event)"></ion-textarea>
     </ion-item>
     <ion-item>
       <ion-label>Location</ion-label>

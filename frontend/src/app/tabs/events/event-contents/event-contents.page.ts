@@ -13,9 +13,7 @@ import {GeoCodeService} from '../../../services/geocode-api';
 export class EventContentsPage implements AfterViewInit {
   @ViewChild('mapElement',{static:false}) mapElement;
   selected=[{stage:1,description:'code',difficulty:'Easy',found:true}];
-  current='A';
-  route='a->b->c';
-
+  level="A";
   googleMaps;
   mapOptions;
   map;

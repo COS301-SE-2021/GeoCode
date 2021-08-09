@@ -6,18 +6,18 @@
 
 <ion-content>
   <br>
-  <ion-title id="time-name">TimeTrial Name</ion-title>
+  <ion-title id="time-name">Event</ion-title>
   <br>
   <div #mapElement class="map"></div>
   <br>
   <ion-button color="button" id="buttons">Leader Board</ion-button>
   <ion-button color="button" id="buttons">Find Next GeoCode</ion-button>
   <br>
-  <br>
-  <ion-label>Current GeoCode: {{current}}</ion-label>
-  <br>
-  <ion-label>Quickest Route: {{route}}</ion-label>
-  <br>
+  <ion-item>
+    <ion-label>Current Level</ion-label>
+    <ion-label>{{level}}</ion-label>
+  </ion-item>
+
   <div  id ="geoCodeDetails" [hidden]="isHidden">
 
     <ion-card *ngFor="let geocode of selected">
