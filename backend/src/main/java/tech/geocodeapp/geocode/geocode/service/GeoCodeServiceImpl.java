@@ -14,8 +14,6 @@ import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
-import tech.geocodeapp.geocode.event.request.GetEventRequest;
-import tech.geocodeapp.geocode.event.response.GetEventResponse;
 import tech.geocodeapp.geocode.event.service.EventService;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
