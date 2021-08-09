@@ -14,6 +14,7 @@ import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
+import tech.geocodeapp.geocode.event.request.NextStageRequest;
 import tech.geocodeapp.geocode.event.service.EventService;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
@@ -786,6 +787,16 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         userToGeocode.changeLocation( new GeoPoint( geocode.getLocation().getLatitude(), geocode.getLocation().getLongitude() ) );
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );
+
+        /* If this geocode is used in an event, send the user to the next geocode */
+        if ( geocode.getEventID() != null ) {
+            try {
+                NextStageRequest nextStageRequest = new NextStageRequest(geocode.getEventID(), userID);
+                eventService.nextStage(nextStageRequest);
+            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+                return new SwapCollectablesResponse( false );
+            }
+        }
 
         /* Update the table to contain the updated collectable */
         geoCodeRepo.save( geocode );
