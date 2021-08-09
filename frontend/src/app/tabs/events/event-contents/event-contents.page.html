@@ -1,21 +1,29 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Time Trial</ion-title>
+    <ion-title>Event</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <br>
-  <ion-title id="time-name">Event</ion-title>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">  <ion-title id="time-name">Event Name</ion-title></ion-col>
+      <ion-col size="6">  <ion-button color="button" class="leaderBoardButton">Leader Board</ion-button></ion-col>
+    </ion-row>
+
+  </ion-grid>
+
   <br>
+
   <div #mapElement class="map"></div>
   <br>
-  <ion-button color="button" id="buttons">Leader Board</ion-button>
-  <ion-button color="button" id="buttons">Find Next GeoCode</ion-button>
+
   <br>
   <ion-item>
     <ion-label>Current Level</ion-label>
     <ion-label>{{level}}</ion-label>
+
   </ion-item>
 
   <div  id ="geoCodeDetails" [hidden]="isHidden">
@@ -29,12 +37,12 @@
       </ion-header>
       <ion-card-content>
         <ion-row class="row">
-          <ion-col>Description</ion-col>
-          <ion-col>{{geocode.description}}</ion-col>
+          <ion-col class="col">Description</ion-col>
+          <ion-col class="col">{{geocode.description}}</ion-col>
         </ion-row>
         <ion-row class="row">
-          <ion-col>Difficulty</ion-col>
-          <ion-col>{{geocode.difficulty}}</ion-col>
+          <ion-col class="col">Difficulty</ion-col>
+          <ion-col class="col">{{geocode.difficulty}}</ion-col>
         </ion-row>
         <ion-button id="button" color="button" (click)="findGeoCode(geocode)"  >Find GeoCode</ion-button>
            </ion-card-content>
