@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.request.*;
 
@@ -47,7 +48,7 @@ public interface EventApi {
     @PostMapping( value = "/Event/createEvent",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity< CreateEventResponse > createEvent( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateEventRequest body );
+    ResponseEntity< CreateEventResponse > createEvent( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateEventRequest body ) throws InvalidRequestException;
 
 
     @Operation( summary = "Create a new Leaderboard for an Event", description = "Create a new Leaderboard for an Event", security = {
