@@ -565,6 +565,30 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
+     * Get a specific GeoCode to complete a Level for anEvent that a User is currently partaking in and the Event stored in the repository
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetCurrentEventLevelGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetCurrentEventLevelResponse getCurrentEventLevel( GetCurrentEventLevelRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getUserID() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        return null;
+    }
+
+    /**
      * Get the next GeoCode the User has to find for their current Event
      *
      * @param request the attributes the response should be created from
@@ -967,7 +991,6 @@ public class EventServiceImpl implements EventService {
 
         return x;
     }
-
 
     /**
      * Gets a list of GeoCode ID's and sorts them according to their distance from one another
