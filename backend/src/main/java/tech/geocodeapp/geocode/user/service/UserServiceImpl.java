@@ -310,7 +310,10 @@ public class UserServiceImpl implements UserService {
         User user = optionalUser.get();
         GeoCode geoCode = getGeoCodeResponse.getFoundGeoCode();
 
-        user.addOwnedGeocodesItem(geoCode);
+        if(!user.getOwnedGeocodes().contains(geoCode)){
+            user.addOwnedGeocodesItem(geoCode);
+        }
+
         userRepo.save(user);
 
         return new AddToOwnedGeoCodesResponse(true, "GeoCode added to the owned GeoCodes");
