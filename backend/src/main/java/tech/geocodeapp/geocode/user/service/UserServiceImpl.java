@@ -73,13 +73,12 @@ public class UserServiceImpl implements UserService {
     @NotNull(message = "Event Service Implementation may not be null.")
     private final EventService eventService;
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, @Qualifier("LeaderboardService") LeaderboardService leaderboardService, @Qualifier("GeoCodeService") GeoCodeService geoCodeService, @Qualifier("EventService") EventService eventService) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, @Qualifier("LeaderboardService") LeaderboardService leaderboardService, @Qualifier("EventService") EventService eventService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
         this.pointRepo = pointRepo;
         this.collectableService = collectableService;
         this.leaderboardService = leaderboardService;
-        this.geoCodeService = geoCodeService;
         this.eventService = eventService;
     }
 
