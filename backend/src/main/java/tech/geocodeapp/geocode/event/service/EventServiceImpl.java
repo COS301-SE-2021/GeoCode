@@ -178,6 +178,8 @@ public class EventServiceImpl implements EventService {
             Level level = new Level( geoCode );
             levelRepo.save(level);
             levels.add(level);
+
+
         }
 
         /* Create the new Event object with the specified attributes */
@@ -591,6 +593,7 @@ public class EventServiceImpl implements EventService {
 
         /* Check if the object was returned */
         if ( temp.isPresent() ) {
+            System.out.println(temp.get());
 
             /* Get the Event object's Levels to iterate through */
             var levels = temp.get().getLevels();
@@ -667,9 +670,11 @@ public class EventServiceImpl implements EventService {
             if ( temp.isPresent() ) {
 
                 Event currEvent = temp.get();
+                System.out.println(currEvent);
 
                 /* Get the Levels for each Event */
                 List< Level > levels = currEvent.getLevels();
+                System.out.println(levels);
 
                 var id = request.getUserID();
 
@@ -679,7 +684,8 @@ public class EventServiceImpl implements EventService {
                     /* Check if the current Level contains the User */
                     Collection< UUID > onLevel = levels.get( x ).getOnLevel();
                     if ( onLevel.contains( id ) ) {
-
+                        System.out.println("User is in level x");
+                        System.out.println(onLevel);
                         /* Check if the user can move onto the next stage */
                         if ( ( x + 1 ) < levels.size() ) {
 
@@ -700,6 +706,7 @@ public class EventServiceImpl implements EventService {
                         /* The user has completed the Event */
                         return new NextStageResponse( null );
                     }
+
 
                     /* Add the user to the first level and return the first GeoCode */
                     if (  x == levels.size() - 1 ) {
