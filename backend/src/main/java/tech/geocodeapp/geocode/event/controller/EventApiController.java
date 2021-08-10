@@ -65,6 +65,34 @@ public class EventApiController implements EventApi {
         return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
+    @Override
+    public ResponseEntity< GetCurrentEventResponse > getCurrentEvent( GetCurrentEventRequest body ) throws InvalidRequestException {
+
+        GetCurrentEventResponse response = eventService.getCurrentEvent( body );
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
+    }
+
+    @Override
+    public ResponseEntity< GetCurrentEventLevelResponse > getCurrentEventLevel( GetCurrentEventLevelRequest body ) throws InvalidRequestException {
+
+        GetCurrentEventLevelResponse response = eventService.getCurrentEventLevel( body );
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
+    }
+
     public ResponseEntity< GetAllEventsResponse > getAllEvents() {
       
         GetAllEventsResponse response = eventService.getAllEvents();
@@ -114,6 +142,19 @@ public class EventApiController implements EventApi {
     public ResponseEntity< EventsNearMeResponse > getEventsNearMe( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody EventsNearMeRequest body ) throws InvalidRequestException {
 
         EventsNearMeResponse response = eventService.eventsNearMe(body);
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
+    }
+
+    public ResponseEntity< GetEventResponse > getEvent( GetEventRequest body ) throws InvalidRequestException {
+
+        GetEventResponse response = eventService.getEvent( body );
 
         if ( ( response != null ) ) {
 

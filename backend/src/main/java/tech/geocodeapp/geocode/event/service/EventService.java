@@ -91,6 +91,17 @@ public interface EventService {
     GetCurrentEventResponse getCurrentEvent( GetCurrentEventRequest request ) throws InvalidRequestException;
 
     /**
+     * Get a specific GeoCode to complete a Level for anEvent that a User is currently partaking in and the Event stored in the repository
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetCurrentEventLevelGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetCurrentEventLevelResponse getCurrentEventLevel( GetCurrentEventLevelRequest request ) throws InvalidRequestException;
+
+    /**
      * Get the next GeoCode the User has to find for their current Event
      *
      * @param request the attributes the response should be created from
@@ -113,11 +124,25 @@ public interface EventService {
     EventsNearMeResponse eventsNearMe( EventsNearMeRequest request ) throws InvalidRequestException;
 
     /**
+     * Get all the stored Events and TimeTrials in the repository
+     *
+     * @return the newly created response instance
+     */
+    public GetAllTypeOfEventsResponse getAllTypeOfEvents();
+
+    /**
      * Get all the stored Events in the repository
      *
      * @return the newly created response instance
      */
     GetAllEventsResponse getAllEvents();
+
+    /**
+     * Get all the stored TimeTrials in the repository
+     *
+     * @return the newly created response instance
+     */
+    public GetAllTimeTrialsResponse getAllTimeTrials();
 
     /**
      * Change the availability of a specific Event object

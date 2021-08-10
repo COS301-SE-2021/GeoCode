@@ -10,7 +10,7 @@ import tech.geocodeapp.geocode.event.model.Event;
 import java.util.Objects;
 
 /**
- * GetCurrentEventGeoCodeResponse object to return the found Event
+ * GetCurrentEventResponse object to return the found Event
  */
 @Validated
 public class GetCurrentEventResponse {
@@ -19,7 +19,7 @@ public class GetCurrentEventResponse {
      * Determines if an Event was found or not
      */
     @JsonProperty( "found" )
-    @NotNull( message = "GetCurrentEventGeoCodeResponse eventID attribute cannot be null." )
+    @NotNull( message = "GetCurrentEventResponse eventID attribute cannot be null." )
     private Boolean found;
 
     /**
@@ -173,7 +173,7 @@ public class GetCurrentEventResponse {
     @Override
     public String toString() {
 
-        return "class GetCurrentEventGeoCodeResponse {\n" +
+        return "class GetCurrentEventResponse {\n" +
                 "    found: " + toIndentedString( found ) + "\n" +
                 "    foundEvent: " + toIndentedString( foundEvent ) + "\n" +
                 "}";

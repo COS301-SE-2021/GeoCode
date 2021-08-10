@@ -17,7 +17,7 @@ public class GetCollectablesInGeoCodeByQRCodeRequest {
     /**
      * The QRCode of a specific GeoCode used to locate it
      */
-    @JsonProperty( "QRCode" )
+    @JsonProperty( "qrCode" )
     private String qrCode = null;
 
     /**

@@ -1,12 +1,12 @@
 package tech.geocodeapp.geocode.event.request;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
 
+import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
@@ -69,6 +69,12 @@ public class CreateEventRequest {
     private OrderLevels orderBy;
 
     /**
+     * If the Event is active in the system for a user to participate
+     */
+    @JsonProperty( "available" )
+    private Boolean available;
+
+    /**
      * Default constructor
      */
     public CreateEventRequest() {
@@ -78,13 +84,13 @@ public class CreateEventRequest {
     /**
      * Overloaded Constructor
      *
-     * @param name           what the new Event should be called
-     * @param description    what the Event to be created is going to be about
-     * @param location       the Event will be held at in the real world's location
-     * @param beginDate      The starting Date of the Event
-     * @param endDate        The end Date of the Event
+     * @param name what the new Event should be called
+     * @param description what the Event to be created is going to be about
+     * @param location the Event will be held at in the real world's location
+     * @param beginDate The starting Date of the Event
+     * @param endDate The end Date of the Event
      * @param geoCodesToFind The different GeoCodes to find during the Event
-     * @param orderBy        The order in which the Users will complete the different Levels
+     * @param orderBy The order in which the Users will complete the different Levels
      */
     public CreateEventRequest( String name, String description, GeoPoint location,
                                LocalDate beginDate, LocalDate endDate,
@@ -97,6 +103,32 @@ public class CreateEventRequest {
         this.endDate = endDate;
         this.geoCodesToFind = geoCodesToFind;
         this.orderBy = orderBy;
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param name what the new Event should be called
+     * @param description what the Event to be created is going to be about
+     * @param location the Event will be held at in the real world's location
+     * @param beginDate The starting Date of the Event
+     * @param endDate The end Date of the Event
+     * @param geoCodesToFind The different GeoCodes to find during the Event
+     * @param orderBy The order in which the Users will complete the different Levels
+     * @param available If the Event is active in the system for a user to participate
+     */
+    public CreateEventRequest( String name, String description, GeoPoint location,
+                               LocalDate beginDate, LocalDate endDate, List< UUID > geoCodesToFind,
+                               OrderLevels orderBy, Boolean available ) {
+
+        this.name = name;
+        this.description = description;
+        this.location = location;
+        this.beginDate = beginDate;
+        this.endDate = endDate;
+        this.geoCodesToFind = geoCodesToFind;
+        this.orderBy = orderBy;
+        this.available = available;
     }
 
     /**
@@ -346,6 +378,40 @@ public class CreateEventRequest {
     }
 
     /**
+     * Sets the available attribute to the specified value
+     *
+     * @param available the value the attribute should be set to
+     *
+     * @return the model after the available has been changed
+     */
+    @Valid
+    public CreateEventRequest available( Boolean available ) {
+
+        this.available = available;
+        return this;
+    }
+
+    /**
+     * Gets the saved available attribute
+     *
+     * @return the stored available attribute
+     */
+    public Boolean isAvailable() {
+
+        return available;
+    }
+
+    /**
+     * Sets the available attribute to the specified value
+     *
+     * @param available the value the attribute should be set to
+     */
+    public void setAvailable( Boolean available ) {
+
+        this.available = available;
+    }
+
+    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -371,7 +437,8 @@ public class CreateEventRequest {
                 Objects.equals( this.beginDate, createEventRequest.beginDate ) &&
                 Objects.equals( this.endDate, createEventRequest.endDate ) &&
                 Objects.equals( this.geoCodesToFind, createEventRequest.geoCodesToFind ) &&
-                Objects.equals( this.orderBy, createEventRequest.orderBy );
+                Objects.equals( this.orderBy, createEventRequest.orderBy ) &&
+                Objects.equals( this.available, createEventRequest.available );
     }
 
     /**
@@ -382,7 +449,7 @@ public class CreateEventRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( name, description, location, beginDate, endDate, geoCodesToFind, orderBy );
+        return Objects.hash( name, description, location, beginDate, endDate, geoCodesToFind, orderBy, available );
     }
 
     /**
@@ -401,6 +468,7 @@ public class CreateEventRequest {
                 "    endDate: " + toIndentedString( endDate ) + "\n" +
                 "    geoCodesToFind: " + toIndentedString( geoCodesToFind ) + "\n" +
                 "    orderBy: " + toIndentedString( orderBy ) + "\n" +
+                "    available: " + toIndentedString( available ) + "\n" +
                 "}";
     }
 
