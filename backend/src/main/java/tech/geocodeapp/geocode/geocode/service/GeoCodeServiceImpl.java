@@ -14,8 +14,7 @@ import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
-import tech.geocodeapp.geocode.event.request.GetEventRequest;
-import tech.geocodeapp.geocode.event.response.GetEventResponse;
+import tech.geocodeapp.geocode.event.request.NextStageRequest;
 import tech.geocodeapp.geocode.event.service.EventService;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
@@ -105,8 +104,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* The subsystems service implementations  */
             this.collectableService = Objects.requireNonNull( collectableService, "GeoCodeService: Collectable service must not be null." );
-            this.userService = Objects.requireNonNull( userService, "GeoCodeService: User service must not be null." );
-            this.eventService = Objects.requireNonNull( eventService, "GeoCodeService: Event service must not be null." );
+            this.userService = userService;
+            this.eventService = eventService;
         } else {
 
             /* The repo does not exist throw an error */
@@ -116,7 +115,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
     @PostConstruct
     public void init() {
-
+        userService.setGeoCodeService( this );
         eventService.setGeoCodeService( this );
     }
 
@@ -778,7 +777,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Perform the swap */
         Collectable userToGeocode;
         try {
-            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( hold, geocode.getId() ) ).getCollectable();
+            userToGeocode = userService.swapCollectable( new SwapCollectableRequest(userID, hold, geocode.getId() ) ).getCollectable();
         } catch ( NullRequestParameterException error ) {
 
             /* Validate the Collectable returned */
@@ -788,6 +787,16 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         userToGeocode.changeLocation( new GeoPoint( geocode.getLocation().getLatitude(), geocode.getLocation().getLongitude() ) );
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );
+
+        /* If this geocode is used in an event, send the user to the next geocode */
+        if ( geocode.getEventID() != null ) {
+            try {
+                NextStageRequest nextStageRequest = new NextStageRequest(geocode.getEventID(), userID);
+                eventService.nextStage(nextStageRequest);
+            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+                return new SwapCollectablesResponse( false );
+            }
+        }
 
         /* Update the table to contain the updated collectable */
         geoCodeRepo.save( geocode );

@@ -16,7 +16,11 @@ import tech.geocodeapp.geocode.collectable.*;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
+import tech.geocodeapp.geocode.geocode.exceptions.RepoException;
 import tech.geocodeapp.geocode.geocode.model.*;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeServiceImpl;
 import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
 import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
@@ -30,6 +34,7 @@ import tech.geocodeapp.geocode.user.response.*;
 @ExtendWith( MockitoExtension.class )
 public class UserServiceImplTest {
     private UserService userService;
+    User validUser;
 
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
@@ -39,6 +44,13 @@ public class UserServiceImplTest {
     private final UUID secondGeoCodeID = UUID.fromString("8c3e3a65-118b-47ca-8cca-097134cd00d9");
     private final UUID thirdGeoCodeID = UUID.fromString("7b32fce8-44e4-422b-a80d-521d490e9ee3");
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
+
+    private final UUID geoCodeWithCollectablesID = UUID.fromString("fd8b4bed-89c9-4f76-872d-9124ca5061f6");
+    private final UUID fishCollectableID = UUID.fromString("cfb23fdb-7b9e-4f67-ad67-b2bab0e7541a");
+    private final UUID ballCollectableID = UUID.fromString("49b544b6-307c-4905-bc5e-f61c2afdd56b");
+
+    private final UUID invalidGeoCodeID = UUID.fromString("c6dab51d-7b2c-45df-940c-189821a36178");
+    private final UUID invalidCollectableID = UUID.fromString("4d2877ee-431e-4a46-b391-c9755291a0f6");
 
     private final String invalidUserIdMessage = "Invalid user id";
 
@@ -63,9 +75,20 @@ public class UserServiceImplTest {
         LeaderboardMockRepository leaderboardMockRepo = new LeaderboardMockRepository();
         PointMockRepository pointMockRepo = new PointMockRepository();
 
+        GeoCodeMockRepository geoCodeMockRepo = new GeoCodeMockRepository();
+
         UserMockRepository userMockRepo = new UserMockRepository();
         CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo);
-        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), new PointMockRepository(),collectableService, null, null, null);
+        GeoCodeService geoCodeService;
+
+        try {
+            geoCodeService = new GeoCodeServiceImpl(geoCodeMockRepo, collectableService, userService, null);
+        } catch (RepoException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), new PointMockRepository(), collectableService, null, geoCodeService, null);
 
         //save the valid trackable CollectableType
         CollectableType trackableCollectableType = new CollectableType();
@@ -94,8 +117,6 @@ public class UserServiceImplTest {
         CollectableType bunny = new CollectableType();
         bunny.setId(UUID.fromString("0998cf20-8256-4529-b144-d3c8aa4f0fb1"));
         collectableTypeMockRepo.save(bunny);
-
-        User validUser;
 
         //add to the User's found CollectableTypes
         try{
@@ -127,6 +148,9 @@ public class UserServiceImplTest {
         
         //add 3 to ownedGeoCodes
         validUser.addOwnedGeocodesItem(geoCode3);
+
+        //display the User's currentCollectableID
+        System.out.println("the User's currentCollectableID: "+validUser.getCurrentCollectable().getId());//here
 
         //update the User's details
         userMockRepo.save(validUser);
@@ -172,6 +196,26 @@ public class UserServiceImplTest {
         pointMockRepo.save(new Point(user2EasterPoints, user2, easterLeaderboard));
         pointMockRepo.save(new Point(user1ChristmasPoints, user1, christmasLeaderboard));
         pointMockRepo.save(new Point(user2ChristmasPoints, user2, christmasLeaderboard));
+
+        /* create a GeoCode with Collectables for the User to swap out */
+        GeoCode geoCodeWithCollectables = new GeoCode();
+        geoCodeWithCollectables.setId(geoCodeWithCollectablesID);
+
+        //save the Collectables
+        Collectable fishCollectable = new Collectable();
+        fishCollectable.setId(fishCollectableID);
+
+        Collectable ballCollectable = new Collectable();
+        ballCollectable.setId(ballCollectableID);
+
+        collectableMockRepo.save(fishCollectable);
+        collectableMockRepo.save(ballCollectable);
+
+        //add the Collectables to the GeoCode
+        geoCodeWithCollectables.addCollectablesItem(fishCollectableID);
+        geoCodeWithCollectables.addCollectablesItem(ballCollectableID);
+
+        geoCodeMockRepo.save(geoCodeWithCollectables);
     }
 
     @Test
@@ -689,6 +733,119 @@ public class UserServiceImplTest {
 
     @Test
     public void swapCollectableTestNullRequest(){
+        try {
+            SwapCollectableResponse response = userService.swapCollectable(null);
 
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The SwapCollectableRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getCollectable());
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
     }
+
+    @Test
+    public void swapCollectableTestNullParameter(){
+        SwapCollectableRequest request = new SwapCollectableRequest();
+        request.setCollectableID(null);
+
+        assertThatThrownBy(() -> userService.swapCollectable(request)).isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
+    public void swapCollectableTestCollectableInvalidUserID(){
+        try {
+            SwapCollectableRequest request = new SwapCollectableRequest(invalidUserId, fishCollectableID, geoCodeWithCollectablesID);
+            SwapCollectableResponse response = userService.swapCollectable(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The User was not found", response.getMessage());
+
+            Collectable collectable = response.getCollectable();
+            Assertions.assertNull(collectable);
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void swapCollectableTestCollectableInvalidGeoCodeID(){
+        try {
+            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, fishCollectableID, invalidGeoCodeID);
+            SwapCollectableResponse response = userService.swapCollectable(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Invalid ID given for the GeoCode", response.getMessage());
+
+            Collectable collectable = response.getCollectable();
+            Assertions.assertNull(collectable);
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void swapCollectableTestCollectableInvalidCollectableID(){
+        try {
+            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, invalidCollectableID, geoCodeWithCollectablesID);
+            SwapCollectableResponse response = userService.swapCollectable(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Invalid ID given for the Collectable", response.getMessage());
+
+            Collectable collectable = response.getCollectable();
+            Assertions.assertNull(collectable);
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void swapCollectableTestCollectableIsSwapped(){
+        try {
+            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, fishCollectableID, geoCodeWithCollectablesID);
+            SwapCollectableResponse response = userService.swapCollectable(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The User's Collectable was swapped with the Collectable in the GeoCode", response.getMessage());
+
+            Collectable collectable = response.getCollectable();
+            Assertions.assertNotNull(collectable);
+
+            //test that the User's Collectable is now the fishCollectable
+            Assertions.assertEquals(fishCollectableID, validUser.getCurrentCollectable().getId());
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void swapCollectableTestNoEvent(){
+        try {
+            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, fishCollectableID, geoCodeWithCollectablesID);
+            SwapCollectableResponse response = userService.swapCollectable(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The User's Collectable was swapped with the Collectable in the GeoCode", response.getMessage());
+
+            Collectable collectable = response.getCollectable();
+            Assertions.assertNotNull(collectable);
+
+            //test that the User's Collectable is now the fishCollectable
+            Assertions.assertEquals(fishCollectableID, validUser.getCurrentCollectable().getId());
+
+            //test that the User was not allocated any points
+            GetMyLeaderboardsRequest getMyLeaderboardsRequest = new GetMyLeaderboardsRequest();
+            getMyLeaderboardsRequest.setUserID(validUserId);
+
+            GetMyLeaderboardsResponse getMyLeaderboardResponse = userService.getMyLeaderboards(getMyLeaderboardsRequest);
+            List<MyLeaderboardDetails> leaderboards = getMyLeaderboardResponse.getLeaderboards();
+
+            Assertions.assertTrue(leaderboards.isEmpty());
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+
 }
