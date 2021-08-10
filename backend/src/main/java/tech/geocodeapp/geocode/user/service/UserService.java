@@ -37,6 +37,9 @@ public interface UserService {
     //U1.8 addToOwnedGeoCodes
     AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException;
 
+    //U1.9 addToFoundGeoCodes
+    AddToFoundGeoCodesResponse addToFoundGeoCodes(AddToFoundGeoCodesRequest request) throws NullRequestParameterException;
+
     //User helper functions
     GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullRequestParameterException;
 

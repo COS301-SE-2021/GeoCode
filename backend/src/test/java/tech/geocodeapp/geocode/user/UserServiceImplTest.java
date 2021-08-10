@@ -732,6 +732,44 @@ public class UserServiceImplTest {
     }
 
     @Test
+    public void AddToOwnedGeoCodesTestNullRequest(){
+        try {
+            AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(null);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The AddToOwnedGeoCodesRequest object passed was NULL", response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void AddToOwnedGeoCodesTestNullParameter(){
+        AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(null, null);
+
+        assertThatThrownBy(() -> userService.addToOwnedGeoCodes(request)).isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
+    public void AddToFoundGeoCodesTestNullRequest(){
+        try {
+            AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(null);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The AddToFoundGeoCodesRequest object passed was NULL", response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void AddToFoundGeoCodesTestNullParameter(){
+        AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(null, null);
+
+        assertThatThrownBy(() -> userService.addToFoundGeoCodes(request)).isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
     public void swapCollectableTestNullRequest(){
         try {
             SwapCollectableResponse response = userService.swapCollectable(null);
