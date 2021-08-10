@@ -34,13 +34,13 @@ public interface UserService {
     //U1.7 getMyLeaderboards
     GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullRequestParameterException;
 
-    //U1.8 addToOwnedGeoCodes
+    //User helper functions
     AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException;
 
-    //U1.9 addToFoundGeoCodes
     AddToFoundGeoCodesResponse addToFoundGeoCodes(AddToFoundGeoCodesRequest request) throws NullRequestParameterException;
 
-    //User helper functions
+    AddToFoundCollectableTypesResponse addToFoundCollectableTypes(AddToFoundCollectableTypesRequest request) throws NullRequestParameterException;
+
     GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullRequestParameterException;
 
     User getCurrentUser();

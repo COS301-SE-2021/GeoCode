@@ -64,6 +64,11 @@ public class UserMockService implements UserService {
     }
 
     @Override
+    public AddToFoundCollectableTypesResponse addToFoundCollectableTypes(AddToFoundCollectableTypesRequest request) throws NullRequestParameterException {
+        return null;
+    }
+
+    @Override
     public GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullRequestParameterException {
         Optional<User> foundUser = userRepo.findById(request.getUserID());
         if(foundUser.isEmpty()){
