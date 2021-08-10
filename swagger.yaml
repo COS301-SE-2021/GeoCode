@@ -2861,15 +2861,12 @@ components:
       required:
         - id
         - name
-        - event
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
-        event:
-          $ref: "#/components/schemas/Event"
       xml:
         name: "Leaderboard"
 
@@ -4041,8 +4038,15 @@ components:
     GetLeaderboardByIDResponse:
       type: "object"
       required:
+        - success
+        - message
         - leaderboard
       properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
         leaderboard:
           $ref: '#/components/schemas/Leaderboard'
 
