@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
@@ -61,13 +60,6 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        /* Leaderboards must have unique names - check if Leaderboard exists with given name */
-        Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findByName(request.getName());
-
-        if(optionalLeaderboard.isPresent()){
-            return new CreateLeaderboardResponse(false, "A Leaderboard already exists with that name", null);
-        }
-
         /* create the new Leaderboard */
         Leaderboard leaderboard = new Leaderboard(request.getName());
         leaderboardRepo.save(leaderboard);
@@ -98,7 +90,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }else if(request.getCount()<1) {
             message = "Count is lower than the minimum value allowed";
         }else{
-            Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
+            Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardID());
             if(leaderboard.isEmpty()){
                 message = "No leaderboard exists for the provided leaderboardId";
             }else{
