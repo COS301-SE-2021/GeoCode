@@ -401,9 +401,11 @@ public class UserServiceImpl implements UserService {
                     pointsAmount = 40;
                     break;
             }
-            Event event;
+
+            /*Event event;
             IsTimeTrialRequest timeTrialRequest = new IsTimeTrialRequest(eventID);
             IsTimeTrialResponse timeTrialResponse = null;
+
             try {
                 timeTrialResponse = eventService.isTimeTrial(timeTrialRequest);
             } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
@@ -455,6 +457,18 @@ public class UserServiceImpl implements UserService {
                     e.printStackTrace();
                     return new SwapCollectableResponse(false, e.getMessage(), null);
                 }
+            }*/
+
+            GetEventRequest getEventByIDRequest = new GetEventRequest( eventID);
+            GetEventResponse getEventByIDResponse;
+            Event event;
+
+            try {
+                getEventByIDResponse = eventService.getEvent(getEventByIDRequest);
+                event = getEventByIDResponse.getFoundEvent();
+            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+                e.printStackTrace();
+                return new SwapCollectableResponse(false, e.getMessage(), null);
             }
 
             //get the LeaderboardID of the Leaderboard for the Event
