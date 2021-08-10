@@ -78,45 +78,18 @@ public interface EventApi {
     ResponseEntity< CreatePointResponse > createPoint( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Point for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreatePointRequest body );
 
 
-    @Operation( summary = "Create a new Time Trial for an Event", description = "Create a new Time Trial with a specific timeframe for an Event", security = {
-            @SecurityRequirement( name = "bearerAuth" ) }, tags = { "Event" } )
-    @ApiResponses( value = {
-            @ApiResponse( responseCode = "200", description = "Return the Time Trial for the Event was successfully created", content = @Content( mediaType = "application/json", schema = @Schema( implementation = CreateTimeTrialResponse.class ) ) ),
-
-            @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
-
-            @ApiResponse( responseCode = "404", description = "Return the Time Trial for the Event was not successfully created", content = @Content( mediaType = "application/json", schema = @Schema( implementation = CreateTimeTrialResponse.class ) ) ) } )
-    @PostMapping( value = "/Event/createTimeTrial",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" } )
-    ResponseEntity< CreateTimeTrialResponse > createTimeTrial( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Time Trial for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateTimeTrialRequest body );
-
-    @Operation(summary = "Retrieves a specific stored Event that a user is involved in", description = "Get a stored Event in the system with the specified id that a user is busy with", security = {
+    @Operation(summary = "Retrieves the GeoCode that the user needs to find in an event", description = "Retrieves the GeoCode that the user needs to find in an event", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Event" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Return the Event was successfully found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentEventResponse.class))),
+            @ApiResponse(responseCode = "200", description = "The GeoCode was successfully found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentEventGeoCodeResponse.class))),
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
 
-            @ApiResponse(responseCode = "404", description = "Return the specified Event was not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentEventResponse.class))) })
-    @PostMapping(value = "/Event/getCurrentEvent",
+            @ApiResponse(responseCode = "404", description = "The GeoCode was not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentEventGeoCodeResponse.class))) })
+    @PostMapping(value = "/Event/getCurrentEventGeocode",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity<GetCurrentEventResponse> getCurrentEvent(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a specified Event a user is busy with", required=true, schema=@Schema()) @Valid @RequestBody GetCurrentEventRequest body) throws InvalidRequestException;
-
-
-    @Operation(summary = "Retrieves a specific stored GeoCode to complete a Level for an Event that a user is involved in", description = "Get a stored GeoCode to complete a Level for an Event in the system with the specified id that a user is busy with", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Event" })
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Return the GeoCode to complete a Level for an Event was successfully found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentEventLevelResponse.class))),
-
-            @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
-
-            @ApiResponse(responseCode = "404", description = "Return the specified GeoCode to complete a Level for an Event was not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentEventLevelResponse.class))) })
-    @PostMapping(value = "/Event/getCurrentEventLevel",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" } )
-    ResponseEntity<GetCurrentEventLevelResponse> getCurrentEventLevel(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get a specified GeoCode to complete a Level for an Event a user is busy with", required=true, schema=@Schema()) @Valid @RequestBody GetCurrentEventLevelRequest body) throws InvalidRequestException;
+    ResponseEntity<GetCurrentEventGeoCodeResponse> getCurrentEventGeocode(@Parameter(in = ParameterIn.DEFAULT, description = "Retrieves the GeoCode that the user needs to find in an event", required=true, schema=@Schema()) @Valid @RequestBody GetCurrentEventGeocodeRequest body) throws InvalidRequestException;
 
 
     @Operation( summary = "Returns all the Events", description = "Returns all the Events in the system", security = {
@@ -144,20 +117,6 @@ public interface EventApi {
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
     ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body ) throws InvalidRequestException;
-
-
-    @Operation( summary = "Get the Leaderboard for a TimeTrial", description = "Get the Leaderboard for a TimeTrial", security = {
-            @SecurityRequirement( name = "bearerAuth" ) }, tags = { "Event" } )
-    @ApiResponses( value = {
-            @ApiResponse( responseCode = "200", description = "Successfully return the Leaderboard", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetLeaderBoardByTimeTrialResponse.class ) ) ),
-
-            @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
-
-            @ApiResponse( responseCode = "404", description = "Return the Leaderboard was not successfully found", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetLeaderBoardByTimeTrialResponse.class ) ) ) } )
-    @PostMapping( value = "/Event/getLeaderBoardByTimeTrial",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" } )
-    ResponseEntity< GetLeaderBoardByTimeTrialResponse > getLeaderBoardByTimeTrial( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get the Leaderboard for a TimeTrial", required = true, schema = @Schema() ) @Valid @RequestBody GetLeaderBoardByTimeTrialRequest body );
 
 
     @Operation( summary = "Get the Points for an Event", description = "Get the Points for an Event", security = {

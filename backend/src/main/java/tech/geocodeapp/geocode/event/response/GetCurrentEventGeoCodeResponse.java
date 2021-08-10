@@ -13,7 +13,7 @@ import java.util.Objects;
  * GetCurrentEventGeoCodeResponse object to return the found GeoCode
  */
 @Validated
-public class GetCurrentEventLevelResponse {
+public class GetCurrentEventGeoCodeResponse {
 
     /**
      * Determines if an GeoCode was found or not
@@ -31,7 +31,7 @@ public class GetCurrentEventLevelResponse {
     /**
      * Default Constructor
      */
-    public GetCurrentEventLevelResponse() {
+    public GetCurrentEventGeoCodeResponse() {
 
     }
 
@@ -40,7 +40,7 @@ public class GetCurrentEventLevelResponse {
      *
      * @param found Determines if an GeoCode was found or not
      */
-    public GetCurrentEventLevelResponse( Boolean found ) {
+    public GetCurrentEventGeoCodeResponse(Boolean found ) {
 
         this.found = found;
 
@@ -57,7 +57,7 @@ public class GetCurrentEventLevelResponse {
      * @param found Determines if an GeoCode was found or not
      * @param foundGeoCode The found GeoCode
      */
-    public GetCurrentEventLevelResponse( Boolean found, GeoCode foundGeoCode ) {
+    public GetCurrentEventGeoCodeResponse(Boolean found, GeoCode foundGeoCode ) {
 
         this.found = found;
         this.foundGeoCode = foundGeoCode;
@@ -70,7 +70,7 @@ public class GetCurrentEventLevelResponse {
      *
      * @return the request after the found has been changed
      */
-    public GetCurrentEventLevelResponse found( Boolean found ) {
+    public GetCurrentEventGeoCodeResponse found(Boolean found ) {
 
         this.found = found;
         return this;
@@ -103,7 +103,7 @@ public class GetCurrentEventLevelResponse {
      *
      * @return the request after the foundGeoCode has been changed
      */
-    public GetCurrentEventLevelResponse foundEvent( GeoCode foundEvent ) {
+    public GetCurrentEventGeoCodeResponse foundEvent(GeoCode foundEvent ) {
 
         this.foundGeoCode = foundEvent;
         return this;
@@ -149,7 +149,7 @@ public class GetCurrentEventLevelResponse {
             return false;
         }
 
-        GetCurrentEventLevelResponse getCurrentEventResponse = ( GetCurrentEventLevelResponse ) obj;
+        GetCurrentEventGeoCodeResponse getCurrentEventResponse = (GetCurrentEventGeoCodeResponse) obj;
         return Objects.equals( this.found, getCurrentEventResponse.found ) &&
                 Objects.equals( this.foundGeoCode, getCurrentEventResponse.foundGeoCode );
     }

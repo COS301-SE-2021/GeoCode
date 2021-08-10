@@ -12,7 +12,7 @@ import java.util.UUID;
  * GetCurrentEventGeoCodeRequest object to specify what Event to retrieve
  */
 @Validated
-public class GetCurrentEventLevelRequest {
+public class GetCurrentEventGeocodeRequest {
 
     /**
      * The unique id of the event to get
@@ -31,7 +31,7 @@ public class GetCurrentEventLevelRequest {
     /**
      * Default Constructor
      */
-    public GetCurrentEventLevelRequest() {
+    public GetCurrentEventGeocodeRequest() {
 
     }
 
@@ -41,7 +41,7 @@ public class GetCurrentEventLevelRequest {
      * @param eventID The unique id of the event to get
      * @param userID The unique id of the user doing the event to get
      */
-    public GetCurrentEventLevelRequest( UUID eventID, UUID userID ) {
+    public GetCurrentEventGeocodeRequest(UUID eventID, UUID userID ) {
 
         this.eventID = eventID;
         this.userID = userID;
@@ -52,7 +52,7 @@ public class GetCurrentEventLevelRequest {
      *
      * @param userID The unique id of the user doing the event to get
      */
-    public GetCurrentEventLevelRequest( UUID userID ) {
+    public GetCurrentEventGeocodeRequest(UUID userID ) {
 
         this.userID = userID;
     }
@@ -64,7 +64,7 @@ public class GetCurrentEventLevelRequest {
      *
      * @return the request after the eventID has been changed
      */
-    public GetCurrentEventLevelRequest eventID( UUID eventID ) {
+    public GetCurrentEventGeocodeRequest eventID(UUID eventID ) {
 
         this.eventID = eventID;
         return this;
@@ -98,7 +98,7 @@ public class GetCurrentEventLevelRequest {
      *
      * @return the request after the userID has been changed
      */
-    public GetCurrentEventLevelRequest userID( UUID userID ) {
+    public GetCurrentEventGeocodeRequest userID(UUID userID ) {
 
         this.userID = userID;
         return this;
@@ -144,7 +144,7 @@ public class GetCurrentEventLevelRequest {
             return false;
         }
 
-        GetCurrentEventLevelRequest getCurrentEventRequest = ( GetCurrentEventLevelRequest ) obj;
+        GetCurrentEventGeocodeRequest getCurrentEventRequest = (GetCurrentEventGeocodeRequest) obj;
         return Objects.equals( this.eventID, getCurrentEventRequest.eventID ) &&
                 Objects.equals( this.userID, getCurrentEventRequest.userID );
 

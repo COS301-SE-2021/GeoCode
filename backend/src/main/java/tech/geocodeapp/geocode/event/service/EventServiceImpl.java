@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.event.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.annotation.Validated;
@@ -8,10 +7,10 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
+import org.threeten.bp.OffsetDateTime;
 import tech.geocodeapp.geocode.event.model.*;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
-import tech.geocodeapp.geocode.event.repository.LevelRepository;
-import tech.geocodeapp.geocode.event.repository.TimeLogRepository;
+import tech.geocodeapp.geocode.event.repository.ProgressLogRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
@@ -24,6 +23,7 @@ import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
+import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.*;
 
@@ -38,25 +38,14 @@ public class EventServiceImpl implements EventService {
      * The repository the Event class interacts with
      */
     @NotNull( message = "Events repository may not be null." )
-    private final EventRepository< Event > eventRepo;
-
-    /**
-     * The repository the Event class interacts with
-     */
-    @NotNull( message = "Events repository may not be null." )
-    private final EventRepository< TimeTrial > timeTrialRepo;
+    private final EventRepository eventRepo;
 
     /**
      * The repository the Event class interacts with
      */
     @NotNull( message = "TimeLog repository may not be null." )
-    private final TimeLogRepository timeLogRepo;
+    private final ProgressLogRepository progressLogRepo;
 
-    /**
-     * The repository the Event class interacts with
-     */
-    @NotNull( message = "Level repository may not be null." )
-    private final LevelRepository levelRepo;
 
     /**
      * The Leaderboard service to access the use cases and
@@ -73,21 +62,25 @@ public class EventServiceImpl implements EventService {
     private GeoCodeService geoCodeService;
 
     /**
+     * The User service to access the current user
+     */
+    @NotNull(message = "User Service Implementation may not be null.")
+    private UserService userService;
+
+    /**
      * Overloaded Constructor
      *
      * @param eventRepo          the repo the created response attributes should save to
      * @param leaderboardService access to the Leaderboard use cases and repository
      */
-    public EventServiceImpl( EventRepository< Event > eventRepo, EventRepository< TimeTrial > timeTrialRepo, TimeLogRepository timeLogRepo, LevelRepository levelRepo,
+    public EventServiceImpl( EventRepository eventRepo, ProgressLogRepository progressLogRepo,
                              @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService ) throws RepoException {
 
-        if ( ( eventRepo != null ) && ( timeLogRepo != null ) ) {
+        if ( ( eventRepo != null ) && ( progressLogRepo != null ) ) {
 
             /* The repo exists therefore it can be set for the class */
             this.eventRepo = eventRepo;
-            this.timeTrialRepo = timeTrialRepo;
-            this.timeLogRepo = timeLogRepo;
-            this.levelRepo = levelRepo;
+            this.progressLogRepo = progressLogRepo;
 
             this.leaderboardService = Objects.requireNonNull( leaderboardService, "EventService: Leaderboard service must not be null." );
         } else {
@@ -138,9 +131,6 @@ public class EventServiceImpl implements EventService {
             e.printStackTrace();
             return new CreateEventResponse( false );
         }
-
-        /* Hold each created Level object */
-        var levels = new ArrayList< Level >();
 
         /* Store the list of GeoCode UUIDs to create a Level on */
         List< UUID > geoCodeIDs = request.getGeoCodesToFind();
@@ -196,28 +186,11 @@ public class EventServiceImpl implements EventService {
             return new CreateEventResponse( false );
         }
 
-        /* Go through each UUID */
-        for ( UUID geoCode : geoCodeIDs ) {
-
-            /*
-             * Create the Level with a random UUID
-             * and add it to the list
-             */
-            Level level = new Level( geoCode );
-            levelRepo.save(level);
-            levels.add(level);
-
-
-        }
-        Level level = new Level( null );
-        levelRepo.save(level);
-        levels.add(level);
-
-
         /* Create the new Event object with the specified attributes */
-        var event = new Event( eventID, request.getName(), request.getDescription(),
-                               request.getLocation(), levels, request.getBeginDate(), request.getEndDate(),
-                               leaderboard );
+        var event = new Event(eventID, request.getName(), request.getDescription(),
+                request.getLocation(), geoCodeIDs, request.getBeginDate(), request.getEndDate(),
+                leaderboard, new HashMap<String, String>() {
+        });
 
         /* Check the availability of the Event */
         if ( request.isAvailable() == null ) {
@@ -238,116 +211,13 @@ public class EventServiceImpl implements EventService {
         try {
 
             /* Save the newly created entry to the repository */
-            var check = eventRepo.save( event );
-
-            /* Check if the Object was saved correctly */
-            if ( !event.equals( check ) ) {
-                System.out.println("Event not equal");
-                success = false;
-            }
+            System.out.println(event);
+            eventRepo.save( event );
         } catch ( IllegalArgumentException error ) {
             error.printStackTrace();
             success = false;
         }
-
         return new CreateEventResponse( success );
-    }
-
-    /**
-     * Create a new TimeTrial for an event, that will be active for a pre-determined
-     * amount of time
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    @Override
-    public CreateTimeTrialResponse createTimeTrial( CreateTimeTrialRequest request ) throws InvalidRequestException {
-
-        /* Validate the request */
-        if ( request == null ) {
-
-            throw new InvalidRequestException( true );
-        } else if ( ( request.getTimeLimit() != 0.0 ) || ( request.getDescription() == null ) ||
-                ( request.getLocation() == null ) || ( request.getName() == null ) ||
-                ( request.getBeginDate() == null ) || ( request.getEndDate() == null ) ||
-                ( request.getGeoCodesToFind() == null ) ) {
-
-            throw new InvalidRequestException();
-        }
-
-        /* Hold the created leaderboards */
-        var leaderboard = new ArrayList< Leaderboard >();
-        try {
-
-            /*
-             * Create the request to the leaderboard service
-             * and store the response
-             */
-            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() + " - Default" );
-            var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
-
-            leaderboard.add( hold );
-        } catch ( NullRequestParameterException e ) {
-
-            return new CreateTimeTrialResponse( false );
-        }
-
-        /* Hold each created Level object */
-        var levels = new ArrayList< Level >();
-
-        /* Store the list of GeoCOde UUIDs to create a Level on */
-        List< UUID > geoCodes = request.getGeoCodesToFind();
-
-        /* Go through each UUID */
-        for ( UUID geoCode : geoCodes ) {
-
-            /*
-             * Create the Level with a random UUID
-             * and add it to the list
-             */
-            levels.add( new Level( geoCode ) );
-        }
-
-        /* Create the new Event object with the specified attributes */
-        var timeTrial = new TimeTrial( UUID.randomUUID(), request.getName(), request.getDescription(),
-                                       request.getLocation(), levels, request.getBeginDate(), request.getEndDate(),
-                                       leaderboard, request.getTimeLimit() );
-
-        /* Check the availability of the Event */
-        if ( request.isAvailable() == null ) {
-
-            /* None is set so make it default available */
-            timeTrial.setAvailable( true );
-        } else {
-
-            /* Set to the given */
-            timeTrial.setAvailable( request.isAvailable() );
-        }
-
-        /*
-         * Save the newly create Event
-         * Validate if the Event was saved properly
-         */
-        var success = true;
-        try {
-
-            /* Save the newly created entry to the repository */
-            var check = timeTrialRepo.save( timeTrial );
-
-            /* Check if the Object was saved correctly */
-            if ( !timeTrial.equals( check ) ) {
-
-                success = false;
-            }
-        } catch ( IllegalArgumentException error ) {
-
-            success = false;
-        }
-
-        return new CreateTimeTrialResponse( success );
     }
 
     /**
@@ -399,204 +269,38 @@ public class EventServiceImpl implements EventService {
         return response;
     }
 
+
+
     /**
-     * Get a specified TimeTrial that is stored in the repository
+     * Get a specified ProgressLog entry that is stored in the repository
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly created response instance from the specified GetTimeTrialRequest
+     * @return the newly created response instance from the specified GetProgressLogRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public GetTimeTrialResponse getTimeTrial( GetTimeTrialRequest request ) throws InvalidRequestException {
+    public GetProgressLogResponse getProgressLog(GetProgressLogRequest request) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
-        } else if ( request.getEventID() == null ) {
-
-            throw new InvalidRequestException();
-        }
-
-        /* Create the response to return */
-        GetTimeTrialResponse response;
-        try {
-
-            /*
-             * Query the repository for the TimeTrial object
-             * and set the response to true with the found TimeTrial
-             */
-            Optional< TimeTrial > temp = timeTrialRepo.findById( request.getEventID() );
-            response = temp.map(
-
-                                    /* Indicate the TimeTrial was found and return it */
-                                    timeTrial -> new GetTimeTrialResponse( true, timeTrial )
-                               ).orElseGet(
-
-                                    /* Indicate the TimeTrial was not found */
-                                    () -> new GetTimeTrialResponse( false )
-                               );
-
-        } catch ( EntityNotFoundException error ) {
-
-            /* No TimeTrial found so set the response to false */
-            response = new GetTimeTrialResponse( false );
-        }
-
-        return response;
-    }
-
-    /**
-     * Determine if the given ID is for a TimeTrial or Event
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified IsTimeTrialRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    @Override
-    public IsTimeTrialResponse isTimeTrial( IsTimeTrialRequest request ) throws InvalidRequestException {
-
-        /* Validate the request */
-        if ( request == null ) {
-
-            throw new InvalidRequestException( true );
-        } else if ( request.getEventID() == null ) {
-
-            throw new InvalidRequestException();
-        }
-
-        /* Create the response to return */
-        IsTimeTrialResponse response;
-        try {
-
-            //ToDO come back to the repo and check how it is storing items
-            /*
-             * Query the repository for the TimeTrial object
-             * and set the response to true with the found TimeTrial
-             */
-            Optional< TimeTrial > temp = timeTrialRepo.findById( request.getEventID() );
-            response = temp.map(
-
-                                    /* Indicate the Event was found and return it */
-                                    timeTrial -> new IsTimeTrialResponse( true, timeTrial )
-                               ).orElseGet(
-
-                                    /* Indicate the Event was not found */
-                                    () -> new IsTimeTrialResponse( false )
-                              );
-
-        } catch ( EntityNotFoundException error ) {
-
-            /* No TimeTrial found so set the response to false */
-            response = new IsTimeTrialResponse( false );
-        }
-
-        return response;
-    }
-
-    /**
-     * Get a specified TimeLog entry that is stored in the repository
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified GetTimeLogRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    @Override
-    public GetTimeLogResponse getTimeLog( GetTimeLogRequest request ) throws InvalidRequestException {
-
-        /* Validate the request */
-        if ( request == null ) {
-
-            throw new InvalidRequestException( true );
-        } else if ( request.getEventID() == null ) {
+        } else if ( request.getEventID() == null || request.getUserID() == null ) {
 
             throw new InvalidRequestException();
         }
 
         try {
+            ProgressLog log = progressLogRepo.findProgressLogByEventIDAndUserID(request.getEventID(), request.getUserID());
+            return new GetProgressLogResponse( true, log );
 
-            /* Get all the entries to search them */
-            var temp = timeLogRepo.findAll();
-
-            /* Go through each entry */
-            for ( TimeLog timeLog : temp ) {
-
-                /* Check if current entry is what is needed */
-                if ( ( timeLog.getEventID().equals( request.getEventID() ) ) &&
-                        ( timeLog.getUserID().equals( request.getUserID() ) ) &&
-                        ( timeLog.getGeoCodeID().equals( request.getGeoCodeID() ) ) ) {
-
-                    /* Current is the desired therefore return it */
-                    return new GetTimeLogResponse( true, timeLog );
-                }
-            }
         } catch ( EntityNotFoundException error  ) {
-
-            return new GetTimeLogResponse( false );
+            /* return below */
         }
 
-        return new GetTimeLogResponse( false );
-    }
-
-    /**
-     * Get a specific Event that a User is currently partaking in and the Event stored in the repository
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified GetCurrentEventRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    @Override
-    public GetCurrentEventResponse getCurrentEvent( GetCurrentEventRequest request ) throws InvalidRequestException {
-
-        /* Validate the request */
-        if ( request == null ) {
-
-            throw new InvalidRequestException( true );
-        } else if ( request.getUserID() == null ) {
-
-            throw new InvalidRequestException();
-        }
-
-        try {
-
-            /*
-             * Query the repository for the Event object
-             * and set the response to true with the found Event
-             */
-            List< Event > temp = eventRepo.findAll();
-
-            /* Go through each available Event */
-            for ( Event event : temp ) {
-
-                /* Get the Levels for each Event */
-                List< Level > levels = event.getLevels();
-
-                /* Go through each found Level to check if the User's ID is present */
-                for ( Level level : levels ) {
-
-                    Collection< UUID > onLevel = level.getOnLevel();
-                    if ( onLevel.contains( request.getUserID() ) ) {
-
-                        return new GetCurrentEventResponse( true, event );
-                    }
-                }
-            }
-
-        } catch ( EntityNotFoundException error ) {
-
-            /* No Event found so set the response to false */
-            return new GetCurrentEventResponse( false );
-        }
-
-        return new GetCurrentEventResponse( false );
+        return new GetProgressLogResponse( false );
     }
 
     /**
@@ -609,7 +313,7 @@ public class EventServiceImpl implements EventService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public GetCurrentEventLevelResponse getCurrentEventLevel( GetCurrentEventLevelRequest request ) throws InvalidRequestException {
+    public GetCurrentEventGeoCodeResponse getCurrentEventGeocode(GetCurrentEventGeocodeRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -620,59 +324,33 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        /* Get the Event object from the repository */
-        Optional< Event > temp = eventRepo.findById( request.getEventID() );
+        UUID geocodeID = null;
 
-        /* Check if the object was returned */
-        if ( temp.isPresent() ) {
-            System.out.println(temp.get());
-
-            /* Get the Event object's Levels to iterate through */
-            var levels = temp.get().getLevels();
-
-            /* Go through each level contained in the Event */
-            for ( Level level : levels ) {
-                System.out.println("Checking level:");
-                System.out.println(level);
-
-                /* Get the list of Users on the Level */
-                var users = level.getOnLevel();
-
-                /* Check if the user is contained on the level */
-                if ( users.contains( request.getUserID() ) ) {
-                    System.out.println("Found user on that level");
-                    if (level.getTarget() == null) {
-                        /* Reached end level where the geocode is null. */
-                        return new GetCurrentEventLevelResponse(true, null);
-                    }
-                    try {
-                        /*
-                         * Query the GeoCode subsystem for the targeted GeoCodeID for the level
-                         * Return the found GeoCode object
-                         */
-                        var hold = geoCodeService.getGeoCode(new GetGeoCodeRequest(level.getTarget()));
-                        return new GetCurrentEventLevelResponse(true, hold.getFoundGeoCode());
-                    } catch (tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e) {
-
-                        /* An exception was thrown therefore could not find the GeoCode */
-                        return new GetCurrentEventLevelResponse(false);
-                    }
-                }
-            }
-
-            try {
-                /* User is not on any level, start at level 1 */
-                NextStageRequest nextStageRequest = new NextStageRequest( request.getEventID(), request.getUserID() );
-                NextStageResponse nextStageResponse = nextStage(nextStageRequest);
-                GetGeoCodeResponse hold = geoCodeService.getGeoCode( new GetGeoCodeRequest( nextStageResponse.getNextGeoCode() ) );
-                return new GetCurrentEventLevelResponse( true, hold.getFoundGeoCode() );
-            } catch (tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e) {
-                /* return false below */
-            }
-
+        /* Get the ProgressLog object from the repository */
+        ProgressLog log = progressLogRepo.findProgressLogByEventIDAndUserID(request.getEventID(), request.getUserID());
+        if (log != null) {
+            geocodeID = log.getGeocodeID();
+        } else {
+            /* User is not on any geocode, start at the first one */
+            NextStageRequest nextStageRequest = new NextStageRequest(request.getEventID(), request.getUserID());
+            NextStageResponse nextStageResponse = nextStage(nextStageRequest);
+            geocodeID = nextStageResponse.getNextGeoCode();
         }
 
-        return new GetCurrentEventLevelResponse( false );
+        if (geocodeID != null) {
+            try {
+                GetGeoCodeResponse getGeoCodeResponse = geoCodeService.getGeoCode( new GetGeoCodeRequest( geocodeID ) );
+                return new GetCurrentEventGeoCodeResponse( true, getGeoCodeResponse.getFoundGeoCode() );
+
+            } catch (tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            return new GetCurrentEventGeoCodeResponse( true, null );
+        }
+
+        return new GetCurrentEventGeoCodeResponse( false );
     }
 
     /**
@@ -686,74 +364,74 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public NextStageResponse nextStage( NextStageRequest request ) throws InvalidRequestException {
-
+        System.out.println("Moving to next stage");
         /* Validate the request */
         if ( request == null ) {
-
             throw new InvalidRequestException( true );
         } else if ( ( request.getEventID() == null ) || ( request.getUserID() == null ) ) {
-
             throw new InvalidRequestException();
         }
 
-        try {
+        System.out.println("Request valid");
+        System.out.println(request);
 
-            /*
-             * Query the repository for the Event object
-             * and set the response to true with the found Event
-             */
-            Optional< Event > temp = eventRepo.findById( request.getEventID() );
-            if ( temp.isPresent() ) {
+        /* Find the event with the provided id */
+        Optional< Event > temp = eventRepo.findById( request.getEventID() );
+        System.out.println(temp);
+        if ( temp.isPresent() ) {
 
-                Event currEvent = temp.get();
-                System.out.println(currEvent);
+            Event event = temp.get();
+            System.out.println(event);
 
-                /* Get the Levels for each Event */
-                List< Level > levels = currEvent.getLevels();
-                System.out.println(levels);
+            /* Get the ProgressLog object from the repository */
+            ProgressLog log = progressLogRepo.findProgressLogByEventIDAndUserID(request.getEventID(), request.getUserID());
+            System.out.println(log);
+            if (log != null) {
+                if (log.getGeocodeID() == null) {
+                    /* User has already finished this event */
+                    System.out.println("User has finished");
+                    return new NextStageResponse(null);
+                }
 
-                var id = request.getUserID();
-
-                /* Go through each found Level to check if the User's ID is present */
-                for ( int x = 0; x < levels.size(); x++ ) {
-
-                    /* Check if the current Level contains the User */
-                    Collection< UUID > onLevel = levels.get( x ).getOnLevel();
-                    if ( onLevel.contains( id ) ) {
-                        System.out.println("User is in level x");
-                        System.out.println(onLevel);
-                        /* Check if the user can move onto the next stage */
-                        if ( ( x + 1 ) < levels.size() ) {
-
-                            var oldLevel = levels.get( x );
-                            var newLevel = levels.get( x + 1 );
-                            
-                            oldLevel.removeOnLevelItem( id );
-                            newLevel.putOnLevelItem( id );
-
-                            /* Save the levels */
-                            levelRepo.save(oldLevel);
-                            levelRepo.save(newLevel);
-
-                            /* The current Level contains the User so return the GeoCode */
-                            return new NextStageResponse( newLevel.getTarget() );
+                /* Find the user's current geocode in the list */
+                List<UUID> ids = event.getGeocodeIDs();
+                for (int i = 0; i < ids.size(); i++) {
+                    System.out.println(ids.get(i));
+                    if (ids.get(i).equals(log.getGeocodeID())) {
+                        System.out.println("match");
+                        /* Set the next geocode id */
+                        UUID nextGeocodeID = null;
+                        if (i < ids.size() - 1) {
+                            /* This is not the last geocode */
+                            nextGeocodeID = ids.get(i + 1);
                         }
-
-                        /* The user has completed the Event */
-                        return new NextStageResponse( null );
+                        /* Else the nextGeocodeID will be null, which represents the end of the event */
+                        log.setGeocodeID(nextGeocodeID);
+                        progressLogRepo.save(log);
+                        System.out.println("Moving to next stage:");
+                        System.out.println(nextGeocodeID);
+                        return new NextStageResponse(nextGeocodeID);
+                    } else {
+                        System.out.println("no match");
                     }
                 }
 
+            } else {
+                /* User is not on any geocode, start at the first one by creating a new ProgressLog */
+                UUID nextGeocodeID = event.getGeocodeIDs().get(0);
+                log = new ProgressLog(UUID.randomUUID(), event.getId(), request.getUserID(), nextGeocodeID, OffsetDateTime.now());
+                progressLogRepo.save(log);
+                System.out.println("Starting first stage: "+nextGeocodeID.toString());
 
+                return new NextStageResponse(nextGeocodeID);
             }
-
-        } catch ( EntityNotFoundException error ) {
-
-            /* No Event found so set the response to false */
-            return new NextStageResponse( null );
         }
 
-        return new NextStageResponse( null );
+        /* This should only be hit if:
+         - the no event exists with the given ID, or
+         - the user's current geocode ID no longer exists in the event */
+        System.out.println("end null");
+        return new NextStageResponse(null);
     }
 
     /**
@@ -806,19 +484,6 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
-     * Get all the stored Events and TimeTrials in the repository
-     *
-     * @return the newly created response instance
-     */
-    @Override
-    public GetAllTypeOfEventsResponse getAllTypeOfEvents() {
-
-        var temp = eventRepo.findAll();
-
-        return new GetAllTypeOfEventsResponse();
-    }
-
-    /**
      * Get all the stored Events in the repository
      *
      * @return the newly created response instance
@@ -831,18 +496,7 @@ public class EventServiceImpl implements EventService {
         return new GetAllEventsResponse( temp );
     }
 
-    /**
-     * Get all the stored TimeTrials in the repository
-     *
-     * @return the newly created response instance
-     */
-    @Override
-    public GetAllTimeTrialsResponse getAllTimeTrials() {
 
-        var temp = timeTrialRepo.findAllTimeTrials();
-
-        return new GetAllTimeTrialsResponse( temp );
-    }
 
     /**
      * Change the availability of a specific Event object
@@ -975,7 +629,7 @@ public class EventServiceImpl implements EventService {
         return new CreateLeaderboardResponse( true );
     }
 
-    /*---------- Post Construct GeoCode service ----------*/
+    /*---------- Post Construct services ----------*/
 
     /**
      * Post construct the GeoCode service, this avoids a circular dependency

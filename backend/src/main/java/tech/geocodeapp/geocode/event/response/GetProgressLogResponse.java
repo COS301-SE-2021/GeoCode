@@ -2,65 +2,58 @@ package tech.geocodeapp.geocode.event.response;
 
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 
-import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.model.ProgressLog;
 
 import java.util.Objects;
 
 /**
- * GetCurrentEventResponse object to return the found Event
+ * GetTimeLogResponse object to hold the found TimeLog entry
  */
 @Validated
-public class GetCurrentEventResponse {
+public class GetProgressLogResponse {
 
     /**
-     * Determines if an Event was found or not
+     * Determines if an ProgressLog entry was found or not
      */
     @JsonProperty( "found" )
-    @NotNull( message = "GetCurrentEventResponse eventID attribute cannot be null." )
-    private Boolean found;
+    @NotNull( message = "GetProgressLogResponse found attribute cannot be null." )
+    private Boolean found = null;
 
     /**
-     * The found Event
+     * The found Timelog entry
      */
-    @JsonProperty( "foundEvent" )
-    private Event foundEvent = null;
+    @JsonProperty( "foundProgressLog" )
+    private ProgressLog foundLog = null;
 
     /**
      * Default Constructor
      */
-    public GetCurrentEventResponse() {
+    public GetProgressLogResponse() {
 
     }
 
     /**
      *  Overloaded Constructor
      *
-     * @param found Determines if an Event was found or not
+     * @param found Determines if an TimeLog entry was found or not
      */
-    public GetCurrentEventResponse( Boolean found ) {
+    public GetProgressLogResponse(Boolean found ) {
 
         this.found = found;
-
-        if ( !found ) {
-
-            this.foundEvent = null;
-        }
-
     }
 
     /**
      *  Overloaded Constructor
      *
-     * @param found Determines if an Event was found or not
-     * @param foundEvent The found Event
+     * @param found Determines if an ProgressLog entry was found or not
+     * @param foundLog The found ProgressLog entry
      */
-    public GetCurrentEventResponse( Boolean found, Event foundEvent ) {
+    public GetProgressLogResponse(Boolean found, ProgressLog foundLog ) {
 
         this.found = found;
-        this.foundEvent = foundEvent;
+        this.foundLog = foundLog;
     }
 
     /**
@@ -70,7 +63,7 @@ public class GetCurrentEventResponse {
      *
      * @return the request after the found has been changed
      */
-    public GetCurrentEventResponse found( Boolean found ) {
+    public GetProgressLogResponse found(Boolean found ) {
 
         this.found = found;
         return this;
@@ -97,37 +90,37 @@ public class GetCurrentEventResponse {
     }
 
     /**
-     * Sets the foundEvent attribute to the specified value
+     * Sets the foundLog attribute to the specified value
      *
-     * @param foundEvent the value the attribute should be set to
+     * @param foundLog the value the attribute should be set to
      *
-     * @return the request after the foundEvent has been changed
+     * @return the request after the foundLog has been changed
      */
-    public GetCurrentEventResponse foundEvent( Event foundEvent ) {
+    public GetProgressLogResponse foundLog(ProgressLog foundLog ) {
 
-        this.foundEvent = foundEvent;
+        this.foundLog = foundLog;
         return this;
     }
 
-    /**
-     * Gets the saved foundEvent attribute
-     *
-     * @return the stored foundEvent attribute
-     */
-    @Valid
-    public Event getFoundEvent() {
 
-        return foundEvent;
+    /**
+     * Gets the saved foundLog attribute
+     *
+     * @return the stored foundLog attribute
+     */
+    public ProgressLog foundLog() {
+
+        return foundLog;
     }
 
     /**
-     * Sets the foundEvent attribute to the specified value
+     * Sets the foundLog attribute to the specified value
      *
-     * @param foundEvent the value the attribute should be set to
+     * @param foundLog the value the attribute should be set to
      */
-    public void setFoundEvent( Event foundEvent ) {
+    public void setFoundLog( ProgressLog foundLog ) {
 
-        this.foundEvent = foundEvent;
+        this.foundLog = foundLog;
     }
 
     /**
@@ -149,9 +142,9 @@ public class GetCurrentEventResponse {
             return false;
         }
 
-        GetCurrentEventResponse getCurrentEventResponse = ( GetCurrentEventResponse ) obj;
-        return Objects.equals( this.found, getCurrentEventResponse.found ) &&
-                Objects.equals( this.foundEvent, getCurrentEventResponse.foundEvent );
+        GetProgressLogResponse getTimeLogResponse = (GetProgressLogResponse) obj;
+        return Objects.equals( this.found, getTimeLogResponse.found ) &&
+                Objects.equals( this.foundLog, getTimeLogResponse.foundLog );
     }
 
     /**
@@ -162,7 +155,7 @@ public class GetCurrentEventResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( found, foundEvent );
+        return Objects.hash( found, foundLog );
     }
 
     /**
@@ -173,9 +166,9 @@ public class GetCurrentEventResponse {
     @Override
     public String toString() {
 
-        return "class GetCurrentEventResponse {\n" +
+        return "class GetTimeLogResponse {\n" +
                 "    found: " + toIndentedString( found ) + "\n" +
-                "    foundEvent: " + toIndentedString( foundEvent ) + "\n" +
+                "    foundLog: " + toIndentedString( foundLog ) + "\n" +
                 "}";
     }
 

@@ -2,29 +2,36 @@ package tech.geocodeapp.geocode.event.request;
 
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.validation.constraints.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import java.util.Objects;
 import java.util.UUID;
 
 /**
- * IsTimeTrialRequest object to get the ID of an Event to determine its instantiation
+ * GetTimeLogRequest object retrieves the specified TimeLog entry
  */
 @Validated
-public class IsTimeTrialRequest {
+public class GetProgressLogRequest {
 
     /**
      * The unique id of the event to get
      */
     @JsonProperty( "eventID" )
-    @NotNull( message = "IsTimeTrialRequest eventID attribute cannot be null." )
-    private UUID eventID = null;
+    @NotNull( message = "GetTimeLogRequest eventID attribute cannot be null." )
+    private UUID eventID;
+
+    /**
+     * The unique id of the user to get
+     */
+    @JsonProperty( "userID" )
+    @NotNull( message = "GetTimeLogRequest userID attribute cannot be null." )
+    private UUID userID;
 
     /**
      * Default Constructor
      */
-    public IsTimeTrialRequest() {
+    public GetProgressLogRequest() {
 
     }
 
@@ -32,10 +39,12 @@ public class IsTimeTrialRequest {
      * Overloaded Constructor
      *
      * @param eventID The unique id of the event to get
+     * @param userID The unique id of the user to get
      */
-    public IsTimeTrialRequest( UUID eventID ) {
+    public GetProgressLogRequest(UUID eventID, UUID userID ) {
 
         this.eventID = eventID;
+        this.userID = userID;
     }
 
     /**
@@ -45,7 +54,7 @@ public class IsTimeTrialRequest {
      *
      * @return the request after the eventID has been changed
      */
-    public IsTimeTrialRequest eventID( UUID eventID ) {
+    public GetProgressLogRequest eventID(UUID eventID ) {
 
         this.eventID = eventID;
         return this;
@@ -73,6 +82,38 @@ public class IsTimeTrialRequest {
     }
 
     /**
+     * Sets the userID attribute to the specified value
+     *
+     * @param userID the value the attribute should be set to
+     */
+    public GetProgressLogRequest userID(UUID userID ) {
+
+        this.userID = userID;
+        return this;
+    }
+
+    /**
+     * Gets the saved userID attribute
+     *
+     * @return the stored userID attribute
+     */
+    @Valid
+    public UUID getUserID() {
+
+        return userID;
+    }
+
+    /**
+     * Sets the userID attribute to the specified value
+     *
+     * @param userID the value the attribute should be set to
+     */
+    public void setUserID( UUID userID ) {
+
+        this.userID = userID;
+    }
+
+    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -91,7 +132,9 @@ public class IsTimeTrialRequest {
             return false;
         }
 
-        return Objects.equals( this.eventID, ( ( IsTimeTrialRequest ) obj ).eventID );
+        GetProgressLogRequest getTimeLogRequest = (GetProgressLogRequest) obj;
+        return Objects.equals( this.eventID, getTimeLogRequest.eventID ) &&
+                Objects.equals( this.userID, getTimeLogRequest.userID );
     }
 
     /**
@@ -102,7 +145,7 @@ public class IsTimeTrialRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( eventID );
+        return Objects.hash( eventID, userID );
     }
 
     /**
@@ -113,8 +156,9 @@ public class IsTimeTrialRequest {
     @Override
     public String toString() {
 
-        return "class IsTimeTrialRequest {\n" +
+        return "class GetTimeLogRequest {\n" +
                 "    eventID: " + toIndentedString( eventID ) + "\n" +
+                "    userID: " + toIndentedString( userID ) + "\n" +
                 "}";
     }
 
