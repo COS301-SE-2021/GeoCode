@@ -61,13 +61,6 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        /* Leaderboards must have unique names - check if Leaderboard exists with given name */
-        Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findByName(request.getName());
-
-        if(optionalLeaderboard.isPresent()){
-            return new CreateLeaderboardResponse(false, "A Leaderboard already exists with that name", null);
-        }
-
         /* create the new Leaderboard */
         Leaderboard leaderboard = new Leaderboard(request.getName());
         leaderboardRepo.save(leaderboard);
