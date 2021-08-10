@@ -66,6 +66,7 @@ public class UserServiceImpl implements UserService {
 
     private final String invalidUserIdMessage = "Invalid User id";
     private final String invalidGeoCodeIdMessage = "Invalid GeoCode id";
+    private final String invalidCollectableTypeIDMessage = "Invalid CollectableType ID";
 
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
@@ -379,7 +380,7 @@ public class UserServiceImpl implements UserService {
      */
     public AddToFoundCollectableTypesResponse addToFoundCollectableTypes(AddToFoundCollectableTypesRequest request) throws NullRequestParameterException{
         if(request == null){
-            return new AddToFoundCollectableTypesResponse(false, "The AddToFoundCollectableTypesRequest passed was NULL");
+            return new AddToFoundCollectableTypesResponse(false, "The AddToFoundCollectableTypesRequest object passed was NULL");
         }
 
         checkNullRequestParameters.checkRequestParameters(request);
@@ -397,7 +398,7 @@ public class UserServiceImpl implements UserService {
         CollectableType collectableType = getCollectableTypeByIDResponse.getCollectableType();
 
         if(collectableType == null){
-            return new AddToFoundCollectableTypesResponse(false, "Invalid CollectableType ID");
+            return new AddToFoundCollectableTypesResponse(false, invalidCollectableTypeIDMessage);
         }
 
         User user = optionalUser.get();

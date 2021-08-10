@@ -55,9 +55,18 @@ public class UserServiceImplTest {
 
     private final UUID invalidGeoCodeID = UUID.fromString("c6dab51d-7b2c-45df-940c-189821a36178");
     private final UUID invalidCollectableID = UUID.fromString("4d2877ee-431e-4a46-b391-c9755291a0f6");
+    private final UUID invalidCollectableTypeID = UUID.fromString("1c39987b-f7b6-478f-b99c-2c57928481af");
+
+    private final UUID fishCollectableTypeID = UUID.fromString("91216b44-b123-486c-8ba7-1c2da7d0feef");
+    private final UUID ballCollectableTypeID = UUID.fromString("f85ebdce-a569-4d47-9274-d4b0245c4713");
+    
+    private final UUID eggCollectableTypeID = UUID.fromString("650e77b0-ccf4-43ab-9279-864d9c659010");
+    private final UUID chocolateBarCollectableTypeID = UUID.fromString("8f9b8919-2c02-4458-9d80-80b06710eb08");
+    private final UUID bunnyCollectableTypeID = UUID.fromString("0998cf20-8256-4529-b144-d3c8aa4f0fb1");
 
     private final String invalidUserIdMessage = "Invalid User id";
     private final String invalidGeoCodeIdMessage = "Invalid GeoCode id";
+    private final String invalidCollectableTypeIDMessage = "Invalid CollectableType ID";
 
     private final String hatfieldEaster = "Hatfield Easter Hunt 2021";
     private final String menloParkChristmas = "Christmas 2021 market";
@@ -69,6 +78,9 @@ public class UserServiceImplTest {
 
     private int numberOfOwnedGeoCodesBefore;
     private int numberOfFoundGeoCodesBefore;
+    private int numberOfFoundCollectableTypesBefore;
+
+    private CollectableType fishType;
 
     UserServiceImplTest() {
 
@@ -116,15 +128,15 @@ public class UserServiceImplTest {
 
         //make 3 CollectableTypes for Easter
         CollectableType egg = new CollectableType();
-        egg.setId(UUID.fromString("650e77b0-ccf4-43ab-9279-864d9c659010"));
+        egg.setId(eggCollectableTypeID);
         collectableTypeMockRepo.save(egg);
 
         CollectableType chocolateBar = new CollectableType();
-        chocolateBar.setId(UUID.fromString("8f9b8919-2c02-4458-9d80-80b06710eb08"));
+        chocolateBar.setId(chocolateBarCollectableTypeID);
         collectableTypeMockRepo.save(chocolateBar);
 
         CollectableType bunny = new CollectableType();
-        bunny.setId(UUID.fromString("0998cf20-8256-4529-b144-d3c8aa4f0fb1"));
+        bunny.setId(bunnyCollectableTypeID);
         collectableTypeMockRepo.save(bunny);
 
         //add to the User's found CollectableTypes
@@ -164,6 +176,7 @@ public class UserServiceImplTest {
 
         numberOfOwnedGeoCodesBefore = validUser.getOwnedGeocodes().size();
         numberOfFoundGeoCodesBefore = validUser.getFoundGeocodes().size();
+        numberOfFoundCollectableTypesBefore = validUser.getFoundCollectableTypes().size();
 
         //display the User's currentCollectableID
         //System.out.println("the User's currentCollectableID: "+validUser.getCurrentCollectable().getId());//here
@@ -221,7 +234,8 @@ public class UserServiceImplTest {
         CollectableSet collectableSet = new CollectableSet("Test Set", "CollectableSet for testing");
         collectableSetMockRepo.save(collectableSet);
 
-        CollectableType fishType = new CollectableType("fish", "fish_image", Rarity.COMMON, collectableSet, new HashMap<String,String>());
+        fishType = new CollectableType("fish", "fish_image", Rarity.COMMON, collectableSet, new HashMap<String,String>());
+        fishType.setId(fishCollectableTypeID);
         collectableTypeMockRepo.save(fishType);
 
         Collectable fishCollectable = new Collectable(fishType);
@@ -229,6 +243,7 @@ public class UserServiceImplTest {
         collectableMockRepo.save(fishCollectable);
 
         CollectableType ballType = new CollectableType("ball", "ball_image", Rarity.UNCOMMON, collectableSet, new HashMap<String,String>());
+        ballType.setId(ballCollectableTypeID);
         collectableTypeMockRepo.save(ballType);
 
         Collectable ballCollectable = new Collectable();
@@ -901,7 +916,83 @@ public class UserServiceImplTest {
             Assertions.assertEquals("GeoCode added to the owned GeoCodes", response.getMessage());
 
             Assertions.assertEquals(numberOfFoundGeoCodesBefore+1, validUser.getFoundGeocodes().size());
-            Assertions.assertTrue(validUser.getOwnedGeocodes().contains(geoCode3));
+            Assertions.assertTrue(validUser.getFoundGeocodes().contains(geoCode3));
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void AddToFoundCollectableTypesTestNullRequest(){
+        try {
+            AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(null);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The AddToFoundCollectableTypesRequest object passed was NULL", response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void AddToFoundCollectableTypesTestNullParameter(){
+        AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(null, null);
+
+        assertThatThrownBy(() -> userService.addToFoundCollectableTypes(request)).isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
+    public void AddToFoundCollectableTypesTestInvalidUserID(){
+        try {
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(invalidUserId, fishCollectableTypeID);
+            AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void AddToFoundCollectableTypesTestInvalidCollectableTypeID(){
+        try {
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUserId, invalidCollectableTypeID);
+            AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidCollectableTypeIDMessage, response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void AddToFoundCollectableTypesTestNotAddDuplicate(){
+        try {
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUserId, eggCollectableTypeID);
+            AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The CollectableType was added successfully", response.getMessage());
+
+            Assertions.assertEquals(numberOfFoundCollectableTypesBefore, validUser.getFoundCollectableTypes().size());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void AddToFoundCollectableTypesTestAddNew(){
+        try {
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUserId, fishCollectableTypeID);
+            AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The CollectableType was added successfully", response.getMessage());
+
+            Assertions.assertEquals(numberOfFoundCollectableTypesBefore+1, validUser.getFoundCollectableTypes().size());
+            Assertions.assertTrue(validUser.getFoundCollectableTypes().contains(fishType));
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
