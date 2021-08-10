@@ -135,7 +135,7 @@ public class EventServiceImpl implements EventService {
 
             leaderboard.add( hold );
         } catch ( NullRequestParameterException e ) {
-
+            e.printStackTrace();
             return new CreateEventResponse( false );
         }
 
@@ -143,9 +143,36 @@ public class EventServiceImpl implements EventService {
         var levels = new ArrayList< Level >();
 
         /* Store the list of GeoCode UUIDs to create a Level on */
-        List< UUID > geoCodes = request.getGeoCodesToFind();
+        List< UUID > geoCodeIDs = request.getGeoCodesToFind();
 
         UUID eventID = UUID.randomUUID();
+
+        List<GeoCode> geoCodes = new ArrayList<>();
+        /*
+         * Go through each GeoCode ID
+         * and get the GeoCode object
+         */
+        for ( UUID id : geoCodeIDs ) {
+            try {
+                /*
+                 * Call the GeoCode service to get the GeoCode Object
+                 * add the found object to the list
+                 * */
+                var found = geoCodeService.getGeoCode( new GetGeoCodeRequest( id ) ).getFoundGeoCode();
+                geoCodes.add( found );
+
+                /* Set the geocode's event ID */
+                if (found.getEventID() != null) {
+                    System.out.println("Attempted to link a geocode that is already linked to an event");
+                    return new CreateEventResponse(false);
+                }
+                found.setEventID(eventID);
+                geoCodeService.saveGeoCode(found);
+            } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
+                System.out.println("Failed to find geocode with id "+id.toString());
+                return new CreateEventResponse(false);
+            }
+        }
 
         /*
          * Determine which order to set the GeoCodes in
@@ -154,22 +181,23 @@ public class EventServiceImpl implements EventService {
         if ( request.getOrderBy().equals( OrderLevels.DIFFICULTY ) ) {
 
             /* Set the list to go from easiest to most difficult on finding the GeoCode */
-            geoCodes = sortByDifficulty( geoCodes, eventID );
+            geoCodeIDs = sortByDifficulty( geoCodes );
         } else if ( request.getOrderBy().equals( OrderLevels.DISTANCE ) ) {
 
             /* Set the list to go from least to most distance with where the GeoCode is located */
-            geoCodes = sortByDistance( geoCodes, eventID );
+            geoCodeIDs = sortByDistance( geoCodes );
         }
 
         /* Check if the GeoCodes are still valid after sorting */
-        if ( geoCodes == null ) {
+        if ( geoCodeIDs == null ) {
 
             /* The GeoCodes are no longer valid so stop */
+            System.out.println("Sorting failed");
             return new CreateEventResponse( false );
         }
 
         /* Go through each UUID */
-        for ( UUID geoCode : geoCodes ) {
+        for ( UUID geoCode : geoCodeIDs ) {
 
             /*
              * Create the Level with a random UUID
@@ -181,6 +209,10 @@ public class EventServiceImpl implements EventService {
 
 
         }
+        Level level = new Level( null );
+        levelRepo.save(level);
+        levels.add(level);
+
 
         /* Create the new Event object with the specified attributes */
         var event = new Event( eventID, request.getName(), request.getDescription(),
@@ -210,11 +242,11 @@ public class EventServiceImpl implements EventService {
 
             /* Check if the Object was saved correctly */
             if ( !event.equals( check ) ) {
-
+                System.out.println("Event not equal");
                 success = false;
             }
         } catch ( IllegalArgumentException error ) {
-
+            error.printStackTrace();
             success = false;
         }
 
@@ -600,13 +632,20 @@ public class EventServiceImpl implements EventService {
 
             /* Go through each level contained in the Event */
             for ( Level level : levels ) {
+                System.out.println("Checking level:");
+                System.out.println(level);
+
                 /* Get the list of Users on the Level */
                 var users = level.getOnLevel();
 
                 /* Check if the user is contained on the level */
                 if ( users.contains( request.getUserID() ) ) {
+                    System.out.println("Found user on that level");
+                    if (level.getTarget() == null) {
+                        /* Reached end level where the geocode is null. */
+                        return new GetCurrentEventLevelResponse(true, null);
+                    }
                     try {
-
                         /*
                          * Query the GeoCode subsystem for the targeted GeoCodeID for the level
                          * Return the found GeoCode object
@@ -703,16 +742,9 @@ public class EventServiceImpl implements EventService {
                         /* The user has completed the Event */
                         return new NextStageResponse( null );
                     }
-
-
-                    /* Add the user to the first level and return the first GeoCode */
-                    if (  x == levels.size() - 1 ) {
-                        var level = levels.get( 0 );
-                        level.putOnLevelItem( id );
-                        levelRepo.save(level);
-                        return new NextStageResponse( level.getTarget() );
-                    }
                 }
+
+
             }
 
         } catch ( EntityNotFoundException error ) {
@@ -967,55 +999,32 @@ public class EventServiceImpl implements EventService {
      *
      * @return the sorted GeoCode ID's in order of Difficulty
      */
-    private List< UUID > sortByDifficulty( List< UUID > geoCodes, UUID eventID ) {
+    private List< UUID > sortByDifficulty( List< GeoCode > geoCodes ) {
 
         List< UUID > hold = null;
 
         if ( geoCodes != null ) {
 
-            /* Hold all the found GeoCode Objects */
-            List< GeoCode > temp = new ArrayList<>();
-
-            /*
-             * Go through each GeoCode ID
-             * and get the GeoCode object
-             */
-            for ( UUID geoCode : geoCodes ) {
-
-                try {
-
-                    /*
-                     * Call the GeoCode service to get the GeoCode Object
-                     * add the found object to the list
-                     * */
-                    var found = geoCodeService.getGeoCode( new GetGeoCodeRequest( geoCode ) ).getFoundGeoCode();
-                    temp.add( found );
-                } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
-
-                    return null;
-                }
-            }
-
             /* Apply Bubble sorting algorithm to get the objects in the correct order */
 
             /* Size of the list to sort */
-            int n = temp.size();
+            int n = geoCodes.size();
 
             for ( int i = 0; i < n - 1; i++ ) {
 
                 for ( int j = 0; j < n - i - 1; j++ ) {
 
                     /* Hold the index of Difficulties */
-                    var checkOne = getDifficultyIndex( temp.get( j ).getDifficulty() );
-                    var checkTwo = getDifficultyIndex( temp.get( j + 1 ).getDifficulty() );
+                    var checkOne = getDifficultyIndex( geoCodes.get( j ).getDifficulty() );
+                    var checkTwo = getDifficultyIndex( geoCodes.get( j + 1 ).getDifficulty() );
 
                     /* Check if the two positions needs to be swapped */
                     if ( checkOne > checkTwo ) {
 
                         /* Perform the swap */
-                        var tempSwap = temp.get( j );
-                        temp.set( j, temp.get( j + 1 ) );
-                        temp.set( j + 1, tempSwap );
+                        var tempSwap = geoCodes.get( j );
+                        geoCodes.set( j, geoCodes.get( j + 1 ) );
+                        geoCodes.set( j + 1, tempSwap );
                     }
                 }
             }
@@ -1023,7 +1032,7 @@ public class EventServiceImpl implements EventService {
             hold = new ArrayList<>();
 
             /* Add the sorted GeoCode Objects ID's to the return list */
-            for ( GeoCode geoCode : temp ) {
+            for ( GeoCode geoCode : geoCodes ) {
 
                 /* Get the ID from the current object */
                 var geoCodeID = geoCode.getId();
@@ -1032,8 +1041,6 @@ public class EventServiceImpl implements EventService {
                 if ( geoCodeID != null ) {
 
                     hold.add( geoCodeID );
-                    geoCode.setEventID(eventID);
-                    geoCodeService.saveGeoCode(geoCode);
                 }
             }
 
@@ -1078,7 +1085,7 @@ public class EventServiceImpl implements EventService {
      *
      * @return the sorted GeoCode ID's in order of distance
      */
-    private List< UUID > sortByDistance( List< UUID > geoCodes, UUID eventID ) {
+    private List< UUID > sortByDistance( List< GeoCode > geoCodes ) {
 
         /* Holds the new order of the GeoCodes */
         List< UUID > hold = null;
