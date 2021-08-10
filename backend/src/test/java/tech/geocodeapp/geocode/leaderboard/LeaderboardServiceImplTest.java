@@ -82,22 +82,7 @@ public class LeaderboardServiceImplTest {
     }
 
     @Test
-    public void createLeaderboardTestExistingName(){
-        CreateLeaderboardRequest request = new CreateLeaderboardRequest(hatfieldEaster);
-
-        try {
-            CreateLeaderboardResponse response = leaderboardService.createLeaderboard(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("A Leaderboard already exists with that name", response.getMessage());
-            Assertions.assertNull(response.getLeaderboard());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void createLeaderboardTestNewName(){
+    public void createLeaderboardTestNew(){
         CreateLeaderboardRequest request = new CreateLeaderboardRequest(menloParkChristmas);
 
         try {
