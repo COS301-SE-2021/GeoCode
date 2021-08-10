@@ -276,6 +276,88 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Adds the given GeoCode to the User's list of Owned GeoCodes
+     * @param request AddToOwnedGeoCodesRequest object
+     * @return AddToOwnedGeoCodesResponse object
+     */
+    @Transactional
+    public AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException{
+        if(request == null){
+            return new AddToOwnedGeoCodesResponse(false, "The AddToOwnedGeoCodesRequest object passed was NULL");
+        }
+
+        checkNullRequestParameters.checkRequestParameters(request);
+
+        //check if the UserID is invalid
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+
+        if(optionalUser.isEmpty()){
+            return new AddToOwnedGeoCodesResponse(false, "Invalid User ID");
+        }
+
+        //check if the GeoCodeID is invalid
+        GetGeoCodeRequest getGeoCodeRequest = new GetGeoCodeRequest(request.getGeoCodeID());
+        GetGeoCodeResponse getGeoCodeResponse;
+
+        try {
+            getGeoCodeResponse = geoCodeService.getGeoCode(getGeoCodeRequest);
+        } catch (InvalidRequestException e) {
+            e.printStackTrace();
+            return new AddToOwnedGeoCodesResponse(false, e.getMessage());
+        }
+
+        //add the GeoCodeID to the User's list of owned GeoCodes
+        User user = optionalUser.get();
+        GeoCode geoCode = getGeoCodeResponse.getFoundGeoCode();
+
+        user.addOwnedGeocodesItem(geoCode);
+        userRepo.save(user);
+
+        return new AddToOwnedGeoCodesResponse(true, "GeoCode added to the owned GeoCodes");
+    }
+
+    /**
+     * Adds the given GeoCode to the User's list of Found GeoCodes
+     * @param request AddToFoundGeoCodesRequest object
+     * @return AddToFoundGeoCodesResponse object
+     */
+    @Transactional
+    public AddToFoundGeoCodesResponse addToFoundGeoCodes(AddToFoundGeoCodesRequest request) throws NullRequestParameterException{
+        if(request == null){
+            return new AddToFoundGeoCodesResponse(false, "The AddToFoundGeoCodesRequest object passed was NULL");
+        }
+
+        checkNullRequestParameters.checkRequestParameters(request);
+
+        //check if the UserID is invalid
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+
+        if(optionalUser.isEmpty()){
+            return new AddToFoundGeoCodesResponse(false, "Invalid User ID");
+        }
+
+        //check if the GeoCodeID is invalid
+        GetGeoCodeRequest getGeoCodeRequest = new GetGeoCodeRequest(request.getGeoCodeID());
+        GetGeoCodeResponse getGeoCodeResponse;
+
+        try {
+            getGeoCodeResponse = geoCodeService.getGeoCode(getGeoCodeRequest);
+        } catch (InvalidRequestException e) {
+            e.printStackTrace();
+            return new AddToFoundGeoCodesResponse(false, e.getMessage());
+        }
+
+        //add the GeoCodeID to the User's list of owned GeoCodes
+        User user = optionalUser.get();
+        GeoCode geoCode = getGeoCodeResponse.getFoundGeoCode();
+
+        user.addFoundGeocodesItem(geoCode);
+        userRepo.save(user);
+
+        return new AddToFoundGeoCodesResponse(true, "GeoCode added to the owned GeoCodes");
+    }
+
+    /**
      * Gets the User for the given id if they exist
      * @param request The GetUserByIdRequest object
      * @return The User if they exist, else NULL contained in a GetUserByIdResponse object

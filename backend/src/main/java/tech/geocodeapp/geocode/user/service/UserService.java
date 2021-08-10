@@ -34,6 +34,9 @@ public interface UserService {
     //U1.7 getMyLeaderboards
     GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullRequestParameterException;
 
+    //U1.8 addToOwnedGeoCodes
+    AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException;
+
     //User helper functions
     GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullRequestParameterException;
 
