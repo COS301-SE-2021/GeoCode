@@ -486,36 +486,36 @@ public class UserServiceImpl implements UserService {
             }
 
             //get the LeaderboardID of the Leaderboard for the Event
-            UUID leaderboardID = event.getLeaderboards().get( 0 ).getId();
-
-            //get the ID of the current User
+//            UUID leaderboardID = event.getLeaderboards().get( 0 ).getId();
+//
+//            //get the ID of the current User
             UUID userID = getCurrentUser().getId();
-
-            //check if the User does not already have points for the Leaderboard
-            GetPointForUserRequest getPointForUserRequest = new GetPointForUserRequest(userID, leaderboardID);
-            PointResponse getPointForUserResponse = leaderboardService.getPointForUser(getPointForUserRequest);
-
-            //add new Point entry if first time User is scoring on the Leaderboard
-            if(!getPointForUserResponse.isSuccess()){
-                CreatePointRequest createPointRequest = new CreatePointRequest(pointsAmount, userID, leaderboardID);
-                PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
-
-                //check if the Point was not created successfully
-                if(!pointResponse.isSuccess()){
-                    return new SwapCollectableResponse(false, "Point could not be created", null);
-                }
-            }else{
-                //update Point entry if already has scored on the Leaderboard
-                Point point = getPointForUserResponse.getPoint();
-
-                UpdatePointRequest updatePointRequest = new UpdatePointRequest(point.getId(), point.getAmount()+pointsAmount);
-                PointResponse updatePointResponse = leaderboardService.updatePoint(updatePointRequest);
-
-                //check if the Point was not successfully updated
-                if(!updatePointResponse.isSuccess()){
-                    return new SwapCollectableResponse(false, "Point could not be updated", null);
-                }
-            }
+//
+//            //check if the User does not already have points for the Leaderboard
+//            GetPointForUserRequest getPointForUserRequest = new GetPointForUserRequest(userID, leaderboardID);
+//            PointResponse getPointForUserResponse = leaderboardService.getPointForUser(getPointForUserRequest);
+//
+//            //add new Point entry if first time User is scoring on the Leaderboard
+//            if(!getPointForUserResponse.isSuccess()){
+//                CreatePointRequest createPointRequest = new CreatePointRequest(pointsAmount, userID, leaderboardID);
+//                PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
+//
+//                //check if the Point was not created successfully
+//                if(!pointResponse.isSuccess()){
+//                    return new SwapCollectableResponse(false, "Point could not be created", null);
+//                }
+//            }else{
+//                //update Point entry if already has scored on the Leaderboard
+//                Point point = getPointForUserResponse.getPoint();
+//
+//                UpdatePointRequest updatePointRequest = new UpdatePointRequest(point.getId(), point.getAmount()+pointsAmount);
+//                PointResponse updatePointResponse = leaderboardService.updatePoint(updatePointRequest);
+//
+//                //check if the Point was not successfully updated
+//                if(!updatePointResponse.isSuccess()){
+//                    return new SwapCollectableResponse(false, "Point could not be updated", null);
+//                }
+//            }
 
             //go to the next stage for the Event
             NextStageRequest nextStageRequest = new NextStageRequest(eventID, userID);
