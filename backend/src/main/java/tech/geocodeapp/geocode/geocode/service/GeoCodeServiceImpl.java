@@ -873,7 +873,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             req.setCollectableID( uuid );
 
             /* Find the collectable specified in the request and add it to the list */
-            storedCollectable.add( collectableService.getCollectableByID( req ).getCollectable() );
+            try {
+                storedCollectable.add( collectableService.getCollectableByID( req ).getCollectable() );
+            } catch (NullRequestParameterException e) {
+                e.printStackTrace();
+            }
         }
 
         /* return all the found collectables */

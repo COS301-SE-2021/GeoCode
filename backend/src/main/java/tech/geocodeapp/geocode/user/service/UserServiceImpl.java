@@ -668,10 +668,16 @@ public class UserServiceImpl implements UserService {
         //currentCollectable to swap out
         Collectable oldCurrentCollectable = currentUser.getCurrentCollectable();
 
+        //System.out.println("collectable id: "+request.getCollectableID());
+
         //swap in newCurrentCollectable
         GetCollectableByIDRequest getCollectableByIDRequest = new GetCollectableByIDRequest( request.getCollectableID() );
         GetCollectableByIDResponse getCollectableByIDResponse = collectableService.getCollectableByID( getCollectableByIDRequest );
         currentUser.setCurrentCollectable( getCollectableByIDResponse.getCollectable() );
+
+        /*if(!getCollectableByIDResponse.isSuccess()){
+            System.out.println("getCollectableByIDResponse failed: "+getCollectableByIDResponse.getMessage());
+        }*/
 
         //add the GeoCode to the User's found GeoCodes
         AddToFoundGeoCodesRequest addToFoundGeoCodesRequest = new AddToFoundGeoCodesRequest(request.getUserID(), request.getGeoCodeID());
@@ -680,6 +686,8 @@ public class UserServiceImpl implements UserService {
         //add the CollectableType to the User's found CollectableTypes
         CollectableType collectableType = getCollectableByIDResponse.getCollectable().getType();
         UUID collectableTypeID = collectableType.getId();
+
+        //System.out.println("type: "+collectableType.getName());
 
         AddToFoundCollectableTypesRequest addToFoundCollectableTypesRequest = new AddToFoundCollectableTypesRequest(request.getUserID(), collectableTypeID);
         this.addToFoundCollectableTypes(addToFoundCollectableTypesRequest);

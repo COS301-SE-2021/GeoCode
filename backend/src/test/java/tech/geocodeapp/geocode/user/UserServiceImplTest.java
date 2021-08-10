@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,7 +96,7 @@ public class UserServiceImplTest {
             return;
         }
 
-        userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), new PointMockRepository(), collectableService, null, null);
+        userService = new UserServiceImpl(userMockRepo, collectableMockRepo, new PointMockRepository(), collectableService, null, null);
         userService.setGeoCodeService(geoCodeService);
 
         //save the valid trackable CollectableType
@@ -165,7 +166,7 @@ public class UserServiceImplTest {
         numberOfFoundGeoCodesBefore = validUser.getFoundGeocodes().size();
 
         //display the User's currentCollectableID
-        System.out.println("the User's currentCollectableID: "+validUser.getCurrentCollectable().getId());//here
+        //System.out.println("the User's currentCollectableID: "+validUser.getCurrentCollectable().getId());//here
 
         //update the User's details
         userMockRepo.save(validUser);
@@ -217,13 +218,21 @@ public class UserServiceImplTest {
         geoCodeWithCollectables.setId(geoCodeWithCollectablesID);
 
         //save the Collectables
-        Collectable fishCollectable = new Collectable();
+        CollectableSet collectableSet = new CollectableSet("Test Set", "CollectableSet for testing");
+        collectableSetMockRepo.save(collectableSet);
+
+        CollectableType fishType = new CollectableType("fish", "fish_image", Rarity.COMMON, collectableSet, new HashMap<String,String>());
+        collectableTypeMockRepo.save(fishType);
+
+        Collectable fishCollectable = new Collectable(fishType);
         fishCollectable.setId(fishCollectableID);
+        collectableMockRepo.save(fishCollectable);
+
+        CollectableType ballType = new CollectableType("ball", "ball_image", Rarity.UNCOMMON, collectableSet, new HashMap<String,String>());
+        collectableTypeMockRepo.save(ballType);
 
         Collectable ballCollectable = new Collectable();
         ballCollectable.setId(ballCollectableID);
-
-        collectableMockRepo.save(fishCollectable);
         collectableMockRepo.save(ballCollectable);
 
         //add the Collectables to the GeoCode
@@ -970,6 +979,8 @@ public class UserServiceImplTest {
     @Test
     public void swapCollectableTestCollectableIsSwapped(){
         try {
+            //System.out.println("fishCollectableID: "+fishCollectableID);
+
             SwapCollectableRequest request = new SwapCollectableRequest(validUserId, fishCollectableID, geoCodeWithCollectablesID);
             SwapCollectableResponse response = userService.swapCollectable(request);
 
