@@ -18,6 +18,7 @@ import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.request.GetEventRequest;
 import tech.geocodeapp.geocode.event.request.GetTimeLogRequest;
 import tech.geocodeapp.geocode.event.request.IsTimeTrialRequest;
+import tech.geocodeapp.geocode.event.request.NextStageRequest;
 import tech.geocodeapp.geocode.event.response.GetEventResponse;
 import tech.geocodeapp.geocode.event.response.GetTimeLogResponse;
 import tech.geocodeapp.geocode.event.response.IsTimeTrialResponse;
@@ -67,18 +68,17 @@ public class UserServiceImpl implements UserService {
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
     @NotNull(message = "GeoCode Service Implementation may not be null.")
-    private final GeoCodeService geoCodeService;
+    private GeoCodeService geoCodeService;
 
     @NotNull(message = "Event Service Implementation may not be null.")
     private final EventService eventService;
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, @Qualifier("LeaderboardService") LeaderboardService leaderboardService, @Qualifier("GeoCodeService") GeoCodeService geoCodeService, @Qualifier("EventService") EventService eventService) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, @Qualifier("LeaderboardService") LeaderboardService leaderboardService, @Qualifier("EventService") EventService eventService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
         this.pointRepo = pointRepo;
         this.collectableService = collectableService;
         this.leaderboardService = leaderboardService;
-        this.geoCodeService = geoCodeService;
         this.eventService = eventService;
     }
 
@@ -357,6 +357,16 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
+        /* check if UserID is invalid */
+        GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(request.getUserID());
+        GetUserByIdResponse getUserByIdResponse = this.getUserById(getUserByIdRequest);
+
+        if(!getUserByIdResponse.isSuccess()){
+            return new SwapCollectableResponse(false, getUserByIdResponse.getMessage(), null);
+        }
+
+        User currentUser = getUserByIdResponse.getUser();
+
         /* assign points to the User for finding the GeoCode */
 
         //get the GeoCode
@@ -370,12 +380,17 @@ public class UserServiceImpl implements UserService {
             return new SwapCollectableResponse(false, e.getMessage(), null);
         }
 
-        //check if the ID passed is valid
-//        if(!getGeoCodeByIDResponse.success()){
-//            return new SwapCollectableResponse(false, "Invalid ID given for the GeoCode", null);
-//        }
-
         GeoCode geoCode = getGeoCodeByIDResponse.getFoundGeoCode();
+
+        //check if GeoCodeID is invalid
+        if(geoCode == null){
+            return new SwapCollectableResponse(false, "Invalid ID given for the GeoCode", null);
+        }
+
+        //check if the GeoCode contains the given Collectable
+        if(!geoCode.getCollectables().contains(request.getCollectableID())){
+            return new SwapCollectableResponse(false, "Invalid ID given for the Collectable", null);
+        }
 
         //check if the GeoCode is part of an Event
         UUID eventID = geoCode.getEventID();
@@ -401,9 +416,11 @@ public class UserServiceImpl implements UserService {
                     pointsAmount = 40;
                     break;
             }
-            Event event;
+
+            /*Event event;
             IsTimeTrialRequest timeTrialRequest = new IsTimeTrialRequest(eventID);
             IsTimeTrialResponse timeTrialResponse = null;
+
             try {
                 timeTrialResponse = eventService.isTimeTrial(timeTrialRequest);
             } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
@@ -443,9 +460,8 @@ public class UserServiceImpl implements UserService {
                 } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
                     e.printStackTrace();
                 }
-
             }else{
-                GetEventRequest getEventByIDRequest = new GetEventRequest( eventID);
+                GetEventRequest getEventByIDRequest = new GetEventRequest( eventID );
                 GetEventResponse getEventByIDResponse;
 
                 try {
@@ -455,44 +471,65 @@ public class UserServiceImpl implements UserService {
                     e.printStackTrace();
                     return new SwapCollectableResponse(false, e.getMessage(), null);
                 }
+            }*/
+
+            GetEventRequest getEventByIDRequest = new GetEventRequest( eventID);
+            GetEventResponse getEventByIDResponse;
+            Event event;
+
+            try {
+                getEventByIDResponse = eventService.getEvent(getEventByIDRequest);
+                event = getEventByIDResponse.getFoundEvent();
+            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+                e.printStackTrace();
+                return new SwapCollectableResponse(false, e.getMessage(), null);
             }
 
             //get the LeaderboardID of the Leaderboard for the Event
-            UUID leaderboardID = event.getLeaderboards().get( 0 ).getId();
-
-            //get the ID of the current User
+//            UUID leaderboardID = event.getLeaderboards().get( 0 ).getId();
+//
+//            //get the ID of the current User
             UUID userID = getCurrentUser().getId();
+//
+//            //check if the User does not already have points for the Leaderboard
+//            GetPointForUserRequest getPointForUserRequest = new GetPointForUserRequest(userID, leaderboardID);
+//            PointResponse getPointForUserResponse = leaderboardService.getPointForUser(getPointForUserRequest);
+//
+//            //add new Point entry if first time User is scoring on the Leaderboard
+//            if(!getPointForUserResponse.isSuccess()){
+//                CreatePointRequest createPointRequest = new CreatePointRequest(pointsAmount, userID, leaderboardID);
+//                PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
+//
+//                //check if the Point was not created successfully
+//                if(!pointResponse.isSuccess()){
+//                    return new SwapCollectableResponse(false, "Point could not be created", null);
+//                }
+//            }else{
+//                //update Point entry if already has scored on the Leaderboard
+//                Point point = getPointForUserResponse.getPoint();
+//
+//                UpdatePointRequest updatePointRequest = new UpdatePointRequest(point.getId(), point.getAmount()+pointsAmount);
+//                PointResponse updatePointResponse = leaderboardService.updatePoint(updatePointRequest);
+//
+//                //check if the Point was not successfully updated
+//                if(!updatePointResponse.isSuccess()){
+//                    return new SwapCollectableResponse(false, "Point could not be updated", null);
+//                }
+//            }
 
-            //check if the User does not already have points for the Leaderboard
-            GetPointForUserRequest getPointForUserRequest = new GetPointForUserRequest(userID, leaderboardID);
-            PointResponse getPointForUserResponse = leaderboardService.getPointForUser(getPointForUserRequest);
+            //go to the next stage for the Event
+            NextStageRequest nextStageRequest = new NextStageRequest(eventID, userID);
 
-            //add new Point entry if first time User is scoring on the Leaderboard
-            if(!getPointForUserResponse.isSuccess()){
-                CreatePointRequest createPointRequest = new CreatePointRequest(pointsAmount, userID, leaderboardID);
-                PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
-
-                //check if the Point was not created successfully
-                if(!pointResponse.isSuccess()){
-                    return new SwapCollectableResponse(false, "Point could not be created", null);
-                }
-            }else{
-                //update Point entry if already has scored on the Leaderboard
-                Point point = getPointForUserResponse.getPoint();
-
-                UpdatePointRequest updatePointRequest = new UpdatePointRequest(point.getId(), point.getAmount()+pointsAmount);
-                PointResponse updatePointResponse = leaderboardService.updatePoint(updatePointRequest);
-
-                //check if the Point was not successfully updated
-                if(!updatePointResponse.isSuccess()){
-                    return new SwapCollectableResponse(false, "Point could not be updated", null);
-                }
+            try {
+                eventService.nextStage(nextStageRequest);
+            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+                e.printStackTrace();
+                return new SwapCollectableResponse(false, e.getMessage(), null);
             }
         }
 
         /* only swap the Collectables if no errors have occurred before now */
         //currentCollectable to swap out
-        User currentUser = getCurrentUser();
         Collectable oldCurrentCollectable = currentUser.getCurrentCollectable();
 
         //swap in newCurrentCollectable
@@ -502,5 +539,14 @@ public class UserServiceImpl implements UserService {
         userRepo.save(currentUser);
 
         return new SwapCollectableResponse(true, "The User's Collectable was swapped with the Collectable in the GeoCode", oldCurrentCollectable );
+    }
+
+    /**
+     * Post construct the GeoCode service, this avoids a circular dependency
+     *
+     * @param geoCodeService the service to be set
+     */
+    public void setGeoCodeService( GeoCodeService geoCodeService ){
+        this.geoCodeService = geoCodeService;
     }
 }

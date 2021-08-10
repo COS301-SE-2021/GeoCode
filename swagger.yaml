@@ -2495,11 +2495,11 @@ components:
         - targetGeoCodeID
         - targetCollectableID
       properties:
-        collectable:
+        targetGeoCodeID:
           type: string
           format: uuid
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        geoCodeID:
+        targetCollectableID:
           type: string
           format: uuid
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
@@ -3270,14 +3270,14 @@ components:
     SwapCollectableRequest:
       type: "object"
       required:
-        - collectableID
-        - geoCodeID
+        - targetCollectableID
+        - targetGeoCodeID
       properties:
-        collectableID:
+        targetCollectableID:
           type: string
           format: UUID
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        geoCodeID:
+        targetGeoCodeID:
           type: string
           format: UUID
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
@@ -3455,7 +3455,7 @@ components:
         - name
         - description
         - location
-        - leaderboards
+        - leaderboard
       properties:
         id:
           type: string
@@ -3483,11 +3483,11 @@ components:
           format: date
           pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
           example: "2017-01-01"
-        leaderboards:
+        leaderboard:
           type: array
           items:
             $ref: "#/components/schemas/Leaderboard"
-        avaialble:
+        available:
           type: boolean
           example: "True"
       xml:

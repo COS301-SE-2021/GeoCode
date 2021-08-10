@@ -69,7 +69,7 @@ public class EventServiceImpl implements EventService {
      * The GeoCode service to access the use cases and
      * GeoCode repository
      */
-    @Autowired
+    @NotNull(message = "GeoCode Service Implementation may not be null.")
     private GeoCodeService geoCodeService;
 
     /**
@@ -600,29 +600,26 @@ public class EventServiceImpl implements EventService {
 
             /* Go through each level contained in the Event */
             for ( Level level : levels ) {
-
                 /* Get the list of Users on the Level */
                 var users = level.getOnLevel();
 
                 /* Check if the user is contained on the level */
                 if ( users.contains( request.getUserID() ) ) {
-
                     try {
 
                         /*
                          * Query the GeoCode subsystem for the targeted GeoCodeID for the level
                          * Return the found GeoCode object
                          */
-                        var hold = geoCodeService.getGeoCode( new GetGeoCodeRequest( level.getTarget() ) );
-                        return new GetCurrentEventLevelResponse( true, hold.getFoundGeoCode() );
-                    } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
+                        var hold = geoCodeService.getGeoCode(new GetGeoCodeRequest(level.getTarget()));
+                        return new GetCurrentEventLevelResponse(true, hold.getFoundGeoCode());
+                    } catch (tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e) {
 
                         /* An exception was thrown therefore could not find the GeoCode */
-                        return new GetCurrentEventLevelResponse( false );
+                        return new GetCurrentEventLevelResponse(false);
                     }
                 }
             }
-
 
             try {
                 /* User is not on any level, start at level 1 */
@@ -710,7 +707,6 @@ public class EventServiceImpl implements EventService {
 
                     /* Add the user to the first level and return the first GeoCode */
                     if (  x == levels.size() - 1 ) {
-
                         var level = levels.get( 0 );
                         level.putOnLevelItem( id );
                         levelRepo.save(level);
