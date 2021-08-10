@@ -4,15 +4,20 @@ import {IonicModule, ModalController} from '@ionic/angular';
 import { ProfilePage } from './profile.page';
 import {UserService} from '../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {KeycloakService} from 'keycloak-angular';
+import {RouterTestingModule} from '@angular/router/testing';
+import {MockKeycloak} from '../../mocks/MockKeycloak';
 
 describe('ProfilePage', () => {
   let component: ProfilePage;
   let fixture: ComponentFixture<ProfilePage>;
 
-  const mockKeycloak = {
-    getKeycloakInstance: () => ({
-      subject: 'uuid'
+  const mockRouter = {
+    navigate: (args) => new Promise((resolve, reject) => {
+      resolve({
+        subscribe: () => new Promise((x, y) => {
+          x(null);
+        })
+      });
     })
   };
 
@@ -22,9 +27,9 @@ describe('ProfilePage', () => {
       providers: [
         ModalController,
         UserService,
-        { provide: KeycloakService, useValue: mockKeycloak }
+        MockKeycloak.provider()
       ],
-      imports: [IonicModule.forRoot(), HttpClientTestingModule]
+      imports: [IonicModule.forRoot(), RouterTestingModule.withRoutes([]), HttpClientTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProfilePage);

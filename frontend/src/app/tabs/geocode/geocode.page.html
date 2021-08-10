@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar >
-    <ion-title id="page-title">Geocode</ion-title>
+    <ion-title id="page-title">Explore</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,21 +11,17 @@
       <ion-col id="button-col"><ion-button id="button"  color="button" (click)="getAllMap()">Get all GeoCodes</ion-button></ion-col>
       <ion-col id="button-col"><ion-button id="button"  color="button" (click)="easyMap()">Easy</ion-button></ion-col>
       <ion-col id="button-col"><ion-button id="button"  color="button" (click)="mediumMap()">Medium </ion-button></ion-col>
-      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="difficultMap()">Difficult</ion-button></ion-col>
+      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="hardMap()">Difficult</ion-button></ion-col>
       <ion-col id="button-col"><ion-button id="button"  color="button" (click)="insaneMap()">Insane</ion-button></ion-col>
     </div>
   </div>
-
-
-  <ion-row>
-
-  </ion-row>
-
-
-
   <div #mapElement [style.height]="height" class="map"></div>
 
-
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button color="button" [routerLink]="['create-geocode']">
+      <ion-icon  name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
   <div  id ="geoCodeDetails" [hidden]="isHidden">
 
@@ -46,24 +42,13 @@
             <ion-col>Difficulty</ion-col>
             <ion-col>{{geocode.difficulty}}</ion-col>
           </ion-row>
-          <ion-row class="row">
-            <ion-col>Latitude</ion-col>
-            <ion-col>{{geocode.latitude}} </ion-col>
-          </ion-row>
-          <ion-row class="row" >
-            <ion-col>Longitude</ion-col>
-            <ion-col>{{geocode.longitude}} </ion-col>
-          </ion-row>
-          <ion-button id="button" color="button" (click)="findGeoCode(geocode)"  >Find GeoCode</ion-button>
+          <ion-button id="button" color="button" (click)="findGeoCode(geocode)"  >Open GeoCode</ion-button>
+          <ion-button color="button" (click)="openInMaps(geocode)">Open Location in Google Maps</ion-button>
 
       </ion-card-content>
     </ion-card>
 </div>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="button">
-      <ion-icon  name="add-outline"(click)="createGeoCode()"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+
 
 </ion-content>
