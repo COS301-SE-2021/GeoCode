@@ -69,7 +69,7 @@ public class EventServiceImpl implements EventService {
      * The GeoCode service to access the use cases and
      * GeoCode repository
      */
-    @Autowired
+    @NotNull(message = "GeoCode Service Implementation may not be null.")
     private GeoCodeService geoCodeService;
 
     /**
@@ -670,6 +670,7 @@ public class EventServiceImpl implements EventService {
 
                 /* Get the Levels for each Event */
                 List< Level > levels = currEvent.getLevels();
+                System.out.println(levels);
 
                 var id = request.getUserID();
 
