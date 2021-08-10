@@ -623,6 +623,10 @@ public class UserServiceImpl implements UserService {
         currentUser.setCurrentCollectable( newCurrentCollectable.getCollectable() );
         userRepo.save(currentUser);
 
+        //add the GeoCode to the User's found GeoCodes
+        AddToFoundGeoCodesRequest addToFoundGeoCodesRequest = new AddToFoundGeoCodesRequest(request.getUserID(), request.getGeoCodeID());
+        this.addToFoundGeoCodes(addToFoundGeoCodesRequest);
+
         return new SwapCollectableResponse(true, "The User's Collectable was swapped with the Collectable in the GeoCode", oldCurrentCollectable );
     }
 
