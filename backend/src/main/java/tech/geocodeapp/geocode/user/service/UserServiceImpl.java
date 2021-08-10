@@ -64,7 +64,9 @@ public class UserServiceImpl implements UserService {
     @NotNull(message = "Leaderboard Service Implementation may not be null.")
     private final LeaderboardService leaderboardService;
 
-    private final String invalidUserIdMessage = "Invalid user id";
+    private final String invalidUserIdMessage = "Invalid User id";
+    private final String invalidGeoCodeIdMessage = "Invalid GeoCode id";
+
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
     @NotNull(message = "GeoCode Service Implementation may not be null.")
@@ -291,7 +293,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
-            return new AddToOwnedGeoCodesResponse(false, "Invalid User ID");
+            return new AddToOwnedGeoCodesResponse(false, invalidUserIdMessage);
         }
 
         //check if the GeoCodeID is invalid
@@ -305,9 +307,14 @@ public class UserServiceImpl implements UserService {
             return new AddToOwnedGeoCodesResponse(false, e.getMessage());
         }
 
+        GeoCode geoCode = getGeoCodeResponse.getFoundGeoCode();
+
+        if(geoCode == null){
+            return new AddToOwnedGeoCodesResponse(false, invalidGeoCodeIdMessage);
+        }
+
         //add the GeoCodeID to the User's list of owned GeoCodes
         User user = optionalUser.get();
-        GeoCode geoCode = getGeoCodeResponse.getFoundGeoCode();
 
         if(!user.getOwnedGeocodes().contains(geoCode)){
             user.addOwnedGeocodesItem(geoCode);
@@ -334,7 +341,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
-            return new AddToFoundGeoCodesResponse(false, "Invalid User ID");
+            return new AddToFoundGeoCodesResponse(false, invalidUserIdMessage);
         }
 
         //check if the GeoCodeID is invalid
@@ -348,9 +355,14 @@ public class UserServiceImpl implements UserService {
             return new AddToFoundGeoCodesResponse(false, e.getMessage());
         }
 
+        GeoCode geoCode = getGeoCodeResponse.getFoundGeoCode();
+
+        if(geoCode == null){
+            return new AddToFoundGeoCodesResponse(false, invalidGeoCodeIdMessage);
+        }
+
         //add the GeoCodeID to the User's list of owned GeoCodes
         User user = optionalUser.get();
-        GeoCode geoCode = getGeoCodeResponse.getFoundGeoCode();
 
         if(!user.getFoundGeocodes().contains(geoCode)){
             user.addFoundGeocodesItem(geoCode);
@@ -376,7 +388,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
-            return new AddToFoundCollectableTypesResponse(false, "Invalid User ID");
+            return new AddToFoundCollectableTypesResponse(false, invalidUserIdMessage);
         }
 
         //check if the CollectionTypeID is invalid
