@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.event.model;
 
+import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
@@ -7,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import javax.persistence.*;
 import javax.validation.Valid;
 
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
@@ -19,10 +19,7 @@ import java.util.*;
  */
 @Entity
 @Validated
-@Table( name = "event" )
-@Inheritance( strategy = InheritanceType.SINGLE_TABLE )
-@DiscriminatorColumn( name = "event_type", discriminatorType = DiscriminatorType.STRING )
-@DiscriminatorValue( value = "event" )
+@Table( name = "event2" )
 public class Event {
 
     /**
@@ -55,14 +52,13 @@ public class Event {
     protected GeoPoint location;
 
     /**
-     * The different Levels with what GeoCode to find and which Users
-     * are searching are on the different Levels
+     * The different GeoCodes to find
      */
     @Valid
-    @ManyToMany
-    @JsonProperty( "levels" )
+    @JsonProperty( "geocodeIDs" )
+    @ElementCollection( fetch = FetchType.EAGER )
     @NotNull( message = "Event's location cannot be null." )
-    protected List< Level > levels;
+    protected List< UUID > geocodeIDs;
 
     /**
      * The starting Date of the Event
@@ -95,6 +91,18 @@ public class Event {
     private Boolean available;
 
     /**
+     * Shows the type of event
+     */
+    @JsonProperty( "properties" )
+    @NotNull( message = "Event's properties cannot be null." )
+    @ElementCollection
+    private Map<String, String> properties;
+
+
+
+
+
+    /**
      * Default constructor
      */
     public Event() {
@@ -108,22 +116,25 @@ public class Event {
      * @param name What the Event is called
      * @param description A brief description on what the Event is about
      * @param location The location of the Event
-     * @param levels The different Levels with what GeoCode to find and which Users are searching are on the different Levels
+     * @param geocodeIDs The GeoCodes to find
      * @param beginDate The starting Date of the Event
      * @param endDate The end Date of the Event
      * @param leaderboards The different rankings of the users partaking in the Event
+     * @param properties The properties of the Event
      */
-    public Event( UUID id, String name, String description, GeoPoint location, List< Level > levels,
-                  LocalDate beginDate, LocalDate endDate, List< Leaderboard > leaderboards ) {
+    public Event( UUID id, String name, String description, GeoPoint location, List< UUID > geocodeIDs,
+                  LocalDate beginDate, LocalDate endDate, List< Leaderboard > leaderboards, Map<String, String> properties) {
 
         this.id = id;
         this.name = name;
         this.description = description;
         this.location = location;
-        this.levels = levels;
+        this.geocodeIDs = geocodeIDs;
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.leaderboards = leaderboards;
+        this.available = true;
+        this.properties = properties;
     }
 
     /**
@@ -133,24 +144,26 @@ public class Event {
      * @param name What the Event is called
      * @param description A brief description on what the Event is about
      * @param location The location of the Event
-     * @param levels The different Levels with what GeoCode to find and which Users are searching are on the different Levels
+     * @param geocodeIDs The GeoCodes to find
      * @param beginDate The starting Date of the Event
      * @param endDate The end Date of the Event
      * @param leaderboards The different rankings of the users partaking in the Event
      * @param available If the Event is active in the system for a user to participate
+     * @param properties The properties of the Event
      */
-    public Event( UUID id, String name, String description, GeoPoint location, List< Level > levels,
-                  LocalDate beginDate, LocalDate endDate, List< Leaderboard > leaderboards, Boolean available ) {
+    public Event( UUID id, String name, String description, GeoPoint location, List< UUID > geocodeIDs, LocalDate beginDate,
+                  LocalDate endDate, List< Leaderboard > leaderboards, Boolean available, Map<String, String> properties ) {
 
         this.id = id;
         this.name = name;
         this.description = description;
         this.location = location;
-        this.levels = levels;
+        this.geocodeIDs = geocodeIDs;
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.leaderboards = leaderboards;
         this.available = available;
+        this.properties = properties;
     }
 
     /**
@@ -291,57 +304,57 @@ public class Event {
     }
 
     /**
-     * Sets the levels attribute to the specified value
+     * Sets the geocodeIDs attribute to the specified value
      *
-     * @param levels the unique levels to set the Event to
+     * @param geocodeIDs the unique levels to set the Event to
      *
      * @return the model after changing the levels
      */
     @Valid
-    public Event levels( List< Level > levels ) {
+    public Event geocodeIDs( List< UUID > geocodeIDs ) {
 
-        this.levels = levels;
+        this.geocodeIDs = geocodeIDs;
         return this;
     }
 
     /**
-     *  A single item to the levels list
+     *  A single item to the geocodes list
      *
-     * @param levelsItem the item to add to the levels list
+     * @param geocode the item to add to the geocodes list
      *
-     * @return the model after appending to levels
+     * @return the model after appending to geocodeIDs
      */
     @Valid
-    public Event addLevelsItem( Level levelsItem ) {
+    public Event addGeocode( UUID geocode ) {
 
-        if ( this.levels == null ) {
+        if ( this.geocodeIDs == null ) {
 
-            this.levels = new ArrayList<>();
+            this.geocodeIDs = new ArrayList<>();
         }
 
-        this.levels.add( levelsItem );
+        this.geocodeIDs.add( geocode );
         return this;
     }
 
     /**
-     * Gets the saved levels attribute
+     * Gets the saved geocodeIDs attribute
      *
-     * @return the stored levels attribute
+     * @return the stored geocodeIDs attribute
      */
     @Valid
-    public List< Level > getLevels() {
+    public List< UUID > getGeocodeIDs() {
 
-        return levels;
+        return geocodeIDs;
     }
 
     /**
-     * Sets the levels attribute to the specified value
+     * Sets the geocodeIDs attribute to the specified value
      *
-     * @param levels the value the levels should be set to
+     * @param  geocodeIDs the value the levels should be set to
      */
-    public void setLevels( List< Level > levels ) {
+    public void setGeocodeIDs( List< UUID > geocodeIDs ) {
 
-        this.levels = levels;
+        this.geocodeIDs = geocodeIDs;
     }
 
     /**
@@ -496,6 +509,40 @@ public class Event {
     }
 
     /**
+     * Sets the properties attribute to the specified value
+     *
+     * @param properties the value the attribute should be set to
+     *
+     * @return the model after the properties has been changed
+     */
+    @Valid
+    public Event properties( Map<String, String> properties ) {
+
+        this.properties = properties;
+        return this;
+    }
+
+    /**
+     * Gets the saved properties attribute
+     *
+     * @return the stored properties attribute
+     */
+    public Map<String, String> getProperties() {
+
+        return properties;
+    }
+
+    /**
+     * Sets the type properties to the specified value
+     *
+     * @param properties map of event types
+     */
+    public void setProperties( Map<String, String> properties ) {
+
+        this.properties = properties;
+    }
+
+    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -519,11 +566,12 @@ public class Event {
                 Objects.equals( this.name, event.name ) &&
                 Objects.equals( this.description, event.description ) &&
                 Objects.equals( this.location, event.location ) &&
-                Objects.equals( this.levels, event.levels ) &&
+                Objects.equals( this.geocodeIDs, event.geocodeIDs ) &&
                 Objects.equals( this.beginDate, event.beginDate ) &&
                 Objects.equals( this.endDate, event.endDate ) &&
                 Objects.equals( this.leaderboards, event.leaderboards ) &&
-                Objects.equals( this.available, event.available );
+                Objects.equals( this.available, event.available ) &&
+                Objects.equals( this.properties, event.properties );
     }
 
     /**
@@ -534,7 +582,7 @@ public class Event {
     @Override
     public int hashCode() {
 
-        return Objects.hash( id, name, description, location, levels, beginDate, endDate, leaderboards,available );
+        return Objects.hash( id, name, description, location, geocodeIDs, beginDate, endDate, leaderboards,available );
     }
 
     /**
@@ -550,7 +598,7 @@ public class Event {
                 "    name: " + toIndentedString( name ) + "\n" +
                 "    description: " + toIndentedString( description ) + "\n" +
                 "    location: " + toIndentedString( location ) + "\n" +
-                "    levels: " + toIndentedString( levels ) + "\n" +
+                "    geocodeIDs: " + toIndentedString( geocodeIDs ) + "\n" +
                 "    begin: " + toIndentedString( beginDate ) + "\n" +
                 "    end: " + toIndentedString( endDate ) + "\n" +
                 "    leaderboards: " + toIndentedString( leaderboards ) + "\n" +

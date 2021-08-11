@@ -10,10 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.util.Assert;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.event.EventMockRepository;
-import tech.geocodeapp.geocode.event.LevelMockRepository;
-import tech.geocodeapp.geocode.event.TimeLogMockRepository;
+import tech.geocodeapp.geocode.event.UserEventStatusMockRepository;
 import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.model.TimeTrial;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.event.service.EventServiceImpl;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
@@ -31,6 +29,7 @@ import tech.geocodeapp.geocode.user.service.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -134,17 +133,15 @@ class GeoCodeServiceImplTest {
                                                          new CollectableSetMockRepository(),
                                                          typeMockRepo );
 
-        EventMockRepository< Event > eventRepo = new EventMockRepository<>();
-        EventMockRepository< TimeTrial > timeTrialRepo = new EventMockRepository<>();
-        TimeLogMockRepository timelogRepo = new TimeLogMockRepository();
-        LevelMockRepository levelRepo = new LevelMockRepository();
+        EventMockRepository eventRepo = new EventMockRepository();
+        UserEventStatusMockRepository progressLogRepo = new UserEventStatusMockRepository();
 
-        eventService = new EventServiceImpl( eventRepo, timeTrialRepo, timelogRepo, levelRepo, leaderboardService );
+        eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService );
 
         /* Populate the Event repository with a known Event to find*/
         var event = new Event( eventID, "Test", "Test description", null,
                                null, LocalDate.parse( "2020-01-08" ),
-                               LocalDate.parse("2020-01-08"), null);
+                               LocalDate.parse("2020-01-08"), null, new HashMap<String, String>());
 
         eventRepo.save( event );
 

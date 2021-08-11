@@ -2,74 +2,64 @@ package tech.geocodeapp.geocode.event.response;
 
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.event.model.UserEventStatus;
+import tech.geocodeapp.geocode.general.response.Response;
 
 import java.util.Objects;
-import java.util.UUID;
 
 /**
- * NextStageResponse object to return the next GeoCode the user needs to search for
+ * NextStageResponse object to return the new status of the user in an event after changing stages
  */
 @Validated
-public class NextStageResponse {
-
+public class NextStageResponse extends Response {
     /**
-     * The next GeoCode the User needs to search for
+     * The status of the User in this Event so far. Includes the id of the next GeoCode they are searching for
      */
-    @JsonProperty( "nextGeoCode" )
-    private UUID nextGeoCode;
-
-    /**
-     * Default Constructor
-     */
-    public NextStageResponse() {
-
-    }
+    @JsonProperty( "status" )
+    private UserEventStatus status;
 
     /**
      * Overloaded Constructor
      *
-     * @param nextGeoCode The next GeoCode the User needs to search for
+     * @param status The progress of the User in this Event so far
      */
-    public NextStageResponse( UUID nextGeoCode ) {
-
-        this.nextGeoCode = nextGeoCode;
+    public NextStageResponse( boolean success, String message, UserEventStatus status ) {
+        super(success, message);
+        this.status = status;
     }
 
     /**
-     * Sets the nextGeoCode attribute to the specified value
+     * Sets the status attribute to the specified value
      *
-     * @param nextGeoCode the value the attribute should be set to
+     * @param status the value the attribute should be set to
      *
-     * @return the request after the nextGeoCode has been changed
+     * @return the request after the status has been changed
      */
-    public NextStageResponse nextGeoCode( UUID nextGeoCode ) {
+    public NextStageResponse status( UserEventStatus status ) {
 
-        this.nextGeoCode = nextGeoCode;
+        this.status = status;
         return this;
     }
 
     /**
-     * Gets the saved nextGeoCode attribute
+     * Gets the saved status attribute
      *
-     * @return the stored nextGeoCode attribute
+     * @return the stored status attribute
      */
-    public UUID getNextGeoCode() {
+    public UserEventStatus getStatus() {
 
-        return nextGeoCode;
+        return status;
     }
 
     /**
-     * Sets the nextGeoCode attribute to the specified value
+     * Sets the progress attribute to the specified value
      *
-     * @param nextGeoCode the value the attribute should be set to
+     * @param status the value the attribute should be set to
      */
-    public void setNextGeoCode( UUID nextGeoCode ) {
+    public void setStatus(UserEventStatus status) {
 
-        this.nextGeoCode = nextGeoCode;
+        this.status = status;
     }
 
     /**
@@ -91,7 +81,7 @@ public class NextStageResponse {
             return false;
         }
 
-        return Objects.equals( this.nextGeoCode, ( ( NextStageResponse ) obj ).nextGeoCode );
+        return Objects.equals( this.status, ( ( NextStageResponse ) obj ).status);
     }
 
     /**
@@ -102,7 +92,7 @@ public class NextStageResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( nextGeoCode );
+        return Objects.hash(status);
     }
 
     /**
@@ -114,7 +104,7 @@ public class NextStageResponse {
     public String toString() {
 
         return "class NextStageResponse {\n" +
-                "    nextGeoCode: " + toIndentedString( nextGeoCode ) + "\n" +
+                "    status: " + toIndentedString(status) + "\n" +
                 "}";
     }
 
