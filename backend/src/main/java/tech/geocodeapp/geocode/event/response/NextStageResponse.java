@@ -4,6 +4,7 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
+import tech.geocodeapp.geocode.general.response.Response;
 
 import java.util.Objects;
 
@@ -11,8 +12,7 @@ import java.util.Objects;
  * NextStageResponse object to return the new status of the user in an event after changing stages
  */
 @Validated
-public class NextStageResponse {
-
+public class NextStageResponse extends Response {
     /**
      * The status of the User in this Event so far. Includes the id of the next GeoCode they are searching for
      */
@@ -20,19 +20,12 @@ public class NextStageResponse {
     private UserEventStatus status;
 
     /**
-     * Default Constructor
-     */
-    public NextStageResponse() {
-
-    }
-
-    /**
      * Overloaded Constructor
      *
      * @param status The progress of the User in this Event so far
      */
-    public NextStageResponse( UserEventStatus status ) {
-
+    public NextStageResponse( boolean success, String message, UserEventStatus status ) {
+        super(success, message);
         this.status = status;
     }
 

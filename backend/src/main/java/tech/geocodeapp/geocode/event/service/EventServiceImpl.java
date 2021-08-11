@@ -66,6 +66,8 @@ public class EventServiceImpl implements EventService {
     @NotNull(message = "User Service Implementation may not be null.")
     private UserService userService;
 
+    private final String eventNotFoundMessage = "Event not found";
+
     /**
      * Overloaded Constructor
      *
@@ -128,7 +130,7 @@ public class EventServiceImpl implements EventService {
             leaderboard.add( hold );
         } catch ( NullRequestParameterException e ) {
             e.printStackTrace();
-            return new CreateEventResponse( false );
+            return new CreateEventResponse( false, e.getMessage() );
         }
 
         /* Store the list of GeoCode UUIDs to create a Level on */
@@ -153,13 +155,13 @@ public class EventServiceImpl implements EventService {
                 /* Set the geocode's event ID */
                 if (found.getEventID() != null) {
                     System.out.println("Attempted to link a geocode that is already linked to an event");
-                    return new CreateEventResponse(false);
+                    return new CreateEventResponse(false, "Attempted to link a geocode that is already linked to an event");
                 }
                 found.setEventID(eventID);
                 geoCodeService.saveGeoCode(found);
             } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
                 System.out.println("Failed to find geocode with id "+id.toString());
-                return new CreateEventResponse(false);
+                return new CreateEventResponse(false, "Failed to find geocode with id "+id.toString());
             }
         }
 
@@ -182,7 +184,7 @@ public class EventServiceImpl implements EventService {
 
             /* The GeoCodes are no longer valid so stop */
             System.out.println("Sorting failed");
-            return new CreateEventResponse( false );
+            return new CreateEventResponse( false, "Sorting failed" );
         }
 
         /* Create the new Event object with the specified attributes */
@@ -206,17 +208,16 @@ public class EventServiceImpl implements EventService {
          * Save the newly create Event
          * Validate if the Event was saved properly
          */
-        var success = true;
         try {
 
             /* Save the newly created entry to the repository */
             System.out.println(event);
             eventRepo.save( event );
+            return new CreateEventResponse( true, "Event created" );
         } catch ( IllegalArgumentException error ) {
             error.printStackTrace();
-            success = false;
+            return new CreateEventResponse( false, error.getMessage() );
         }
-        return new CreateEventResponse( success );
     }
 
     /**
@@ -252,17 +253,17 @@ public class EventServiceImpl implements EventService {
             response = temp.map(
 
                                     /* Indicate the Event was found and return it */
-                                    event -> new GetEventResponse( true, event )
+                                    event -> new GetEventResponse( true, "Event found",event )
                                ).orElseGet(
 
                                     /* Indicate the Event was not found */
-                                    () -> new GetEventResponse( false )
+                                    () -> new GetEventResponse( false, eventNotFoundMessage, null )
                                );
 
         } catch ( EntityNotFoundException error ) {
 
             /* No Event found so set the response to false */
-            response = new GetEventResponse( false );
+            response = new GetEventResponse( false, eventNotFoundMessage, null );
         }
 
         return response;
@@ -303,17 +304,16 @@ public class EventServiceImpl implements EventService {
         if (geocodeID != null) {
             try {
                 GetGeoCodeResponse getGeoCodeResponse = geoCodeService.getGeoCode( new GetGeoCodeRequest( geocodeID ) );
-                return new GetCurrentEventStatusResponse( true, status, getGeoCodeResponse.getFoundGeoCode() );
+                return new GetCurrentEventStatusResponse( true, "Status returned", status, getGeoCodeResponse.getFoundGeoCode() );
 
             } catch (tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e) {
                 e.printStackTrace();
+                return new GetCurrentEventStatusResponse( false, e.getMessage(), null, null );
             }
 
         } else {
-            return new GetCurrentEventStatusResponse( true, status, null );
+            return new GetCurrentEventStatusResponse( true, "Status returned", status, null );
         }
-
-        return new GetCurrentEventStatusResponse( false );
     }
 
     /**
@@ -353,7 +353,7 @@ public class EventServiceImpl implements EventService {
                 if (log.getGeocodeID() == null) {
                     /* User has already finished this event */
                     System.out.println("User has finished");
-                    return new NextStageResponse(null);
+                    return new NextStageResponse(false, "User has finished", null);
                 }
 
                 /* Find the user's current geocode in the list */
@@ -373,7 +373,7 @@ public class EventServiceImpl implements EventService {
                         userEventStatusRepo.save(log);
                         System.out.println("Moving to next stage:");
                         System.out.println(nextGeocodeID);
-                        return new NextStageResponse(log);
+                        return new NextStageResponse(true, "Moving to next stage", log);
                     } else {
                         System.out.println("no match");
                     }
@@ -388,7 +388,7 @@ public class EventServiceImpl implements EventService {
                 System.out.println("Starting first stage:");
                 System.out.println(nextGeocodeID);
 
-                return new NextStageResponse(log);
+                return new NextStageResponse(true, "Starting first stage", log);
             }
         }
 
@@ -396,7 +396,7 @@ public class EventServiceImpl implements EventService {
          - the no event exists with the given ID, or
          - the user's current geocode ID no longer exists in the event */
         System.out.println("end null");
-        return new NextStageResponse(null);
+        return new NextStageResponse(false, "end null", null);
     }
 
     /**
@@ -445,7 +445,7 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        return new EventsNearMeResponse( foundEvents );
+        return new EventsNearMeResponse(true, "Events returned", foundEvents );
     }
 
     /**
@@ -458,7 +458,7 @@ public class EventServiceImpl implements EventService {
 
         var temp = eventRepo.findAll();
 
-        return new GetAllEventsResponse( temp );
+        return new GetAllEventsResponse(true, "All Events returned", temp );
     }
 
 
@@ -538,7 +538,7 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        return new GetEventsByLocationResponse( foundEvents );
+        return new GetEventsByLocationResponse( true, "Events returned", foundEvents );
     }
 
     /**

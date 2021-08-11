@@ -6,6 +6,7 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 
 import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.general.response.Response;
 
 import java.util.Objects;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  * GetAllEventsResponse object returns all the Event objects in the system
  */
 @Validated
-public class GetAllEventsResponse {
+public class GetAllEventsResponse extends Response {
 
     /**
      * All the Event's stored inside the EventsRepository
@@ -23,19 +24,12 @@ public class GetAllEventsResponse {
     private List< Event > events;
 
     /**
-     * Default Constructor
-     */
-    public GetAllEventsResponse() {
-
-    }
-
-    /**
      * Overloaded Constructor
      *
      * @param events the list of events to set the events attribute to
      */
-    public GetAllEventsResponse( List< Event > events ) {
-
+    public GetAllEventsResponse( boolean success, String message, List< Event > events ) {
+        super(success, message);
         this.events = events;
     }
 
