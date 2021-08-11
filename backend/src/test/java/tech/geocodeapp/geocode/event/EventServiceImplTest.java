@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
+import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.service.*;
@@ -54,10 +55,10 @@ class EventServiceImplTest {
     EventMockRepository eventRepo;
 
     /**
-     * The mock repository for the Event subsystem ProgressLog repoistory
+     * The mock repository for the Event subsystem UserEventStatus repository
      * All the data will be saved here and is used to mock the JPA repository
      */
-    ProgressLogMockRepository progressLogRepo;
+    UserEventStatusRepository userEventStatusRepo;
 
     /**
      * The leaderboard service accessor
@@ -66,7 +67,7 @@ class EventServiceImplTest {
     LeaderboardService leaderboardService;
 
     /**
-     * The mock repository for the GeoCode subsystem repoistory
+     * The mock repository for the GeoCode subsystem repository
      * All the data will be saved here and is used to mock the JPA repository
      */
     GeoCodeRepository geoCodeMockRepo;
@@ -104,10 +105,10 @@ class EventServiceImplTest {
 
         /* Create a new repository instance and make sure there is no data in it */
         eventRepo = new EventMockRepository();
-        progressLogRepo = new ProgressLogMockRepository();
+        userEventStatusRepo = new UserEventStatusMockRepository();
         geoCodeMockRepo = new GeoCodeMockRepository();
         eventRepo.deleteAll();
-        progressLogRepo.deleteAll();
+        userEventStatusRepo.deleteAll();
         geoCodeMockRepo.deleteAll();
 
         var leaderboardMockRepo = new LeaderboardMockRepository();
@@ -121,7 +122,7 @@ class EventServiceImplTest {
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
-            eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService );
+            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService );
             eventService.setGeoCodeService(geoCodeService);
         } catch ( RepoException e ) {
 

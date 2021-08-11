@@ -7,10 +7,9 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
-import org.threeten.bp.OffsetDateTime;
 import tech.geocodeapp.geocode.event.model.*;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
-import tech.geocodeapp.geocode.event.repository.ProgressLogRepository;
+import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
@@ -44,7 +43,7 @@ public class EventServiceImpl implements EventService {
      * The repository the Event class interacts with
      */
     @NotNull( message = "TimeLog repository may not be null." )
-    private final ProgressLogRepository progressLogRepo;
+    private final UserEventStatusRepository userEventStatusRepo;
 
 
     /**
@@ -73,14 +72,14 @@ public class EventServiceImpl implements EventService {
      * @param eventRepo          the repo the created response attributes should save to
      * @param leaderboardService access to the Leaderboard use cases and repository
      */
-    public EventServiceImpl( EventRepository eventRepo, ProgressLogRepository progressLogRepo,
+    public EventServiceImpl( EventRepository eventRepo, UserEventStatusRepository userEventStatusRepo,
                              @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService ) throws RepoException {
 
-        if ( ( eventRepo != null ) && ( progressLogRepo != null ) ) {
+        if ( ( eventRepo != null ) && ( userEventStatusRepo != null ) ) {
 
             /* The repo exists therefore it can be set for the class */
             this.eventRepo = eventRepo;
-            this.progressLogRepo = progressLogRepo;
+            this.userEventStatusRepo = userEventStatusRepo;
 
             this.leaderboardService = Objects.requireNonNull( leaderboardService, "EventService: Leaderboard service must not be null." );
         } else {
@@ -269,51 +268,17 @@ public class EventServiceImpl implements EventService {
         return response;
     }
 
-
-
     /**
-     * Get a specified ProgressLog entry that is stored in the repository
+     * Get the current status of a User participating in an event, as well as the target GeoCode that they need to locate
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly created response instance from the specified GetProgressLogRequest
+     * @return the newly created response instance from the specified GetCurrentEventStatusResponse
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public GetProgressLogResponse getProgressLog(GetProgressLogRequest request) throws InvalidRequestException {
-
-        /* Validate the request */
-        if ( request == null ) {
-
-            throw new InvalidRequestException( true );
-        } else if ( request.getEventID() == null || request.getUserID() == null ) {
-
-            throw new InvalidRequestException();
-        }
-
-        try {
-            ProgressLog log = progressLogRepo.findProgressLogByEventIDAndUserID(request.getEventID(), request.getUserID());
-            return new GetProgressLogResponse( true, log );
-
-        } catch ( EntityNotFoundException error  ) {
-            /* return below */
-        }
-
-        return new GetProgressLogResponse( false );
-    }
-
-    /**
-     * Get a specific GeoCode to complete a Level for anEvent that a User is currently partaking in and the Event stored in the repository
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified GetCurrentEventLevelResponse
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    @Override
-    public GetCurrentEventGeoCodeResponse getCurrentEventGeocode(GetCurrentEventGeocodeRequest request ) throws InvalidRequestException {
+    public GetCurrentEventStatusResponse getCurrentEventStatus(GetCurrentEventStatusRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -324,31 +289,31 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        /* Get the ProgressLog object from the repository */
-        ProgressLog log = progressLogRepo.findProgressLogByEventIDAndUserID(request.getEventID(), request.getUserID());
-        if (log == null) {
+        /* Get the UserEventStatus object from the repository */
+        UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID(request.getEventID(), request.getUserID());
+        if (status == null) {
             /* User is not in the event. Enter the event with nextStage */
             NextStageRequest nextStageRequest = new NextStageRequest(request.getEventID(), request.getUserID());
             NextStageResponse nextStageResponse = nextStage(nextStageRequest);
-            /* Returns a new progress log with the geocodeID set to the first geocode */
-            log = nextStageResponse.getProgress();
+            /* Returns a new status object with the geocodeID set to the first geocode */
+            status = nextStageResponse.getStatus();
         }
 
-        UUID geocodeID = log.getGeocodeID();
+        UUID geocodeID = status.getGeocodeID();
         if (geocodeID != null) {
             try {
                 GetGeoCodeResponse getGeoCodeResponse = geoCodeService.getGeoCode( new GetGeoCodeRequest( geocodeID ) );
-                return new GetCurrentEventGeoCodeResponse( true, log, getGeoCodeResponse.getFoundGeoCode() );
+                return new GetCurrentEventStatusResponse( true, status, getGeoCodeResponse.getFoundGeoCode() );
 
             } catch (tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e) {
                 e.printStackTrace();
             }
 
         } else {
-            return new GetCurrentEventGeoCodeResponse( true, log, null );
+            return new GetCurrentEventStatusResponse( true, status, null );
         }
 
-        return new GetCurrentEventGeoCodeResponse( false );
+        return new GetCurrentEventStatusResponse( false );
     }
 
     /**
@@ -382,7 +347,7 @@ public class EventServiceImpl implements EventService {
             System.out.println(event);
 
             /* Get the ProgressLog object from the repository */
-            ProgressLog log = progressLogRepo.findProgressLogByEventIDAndUserID(request.getEventID(), request.getUserID());
+            UserEventStatus log = userEventStatusRepo.findStatusByEventIDAndUserID(request.getEventID(), request.getUserID());
             System.out.println(log);
             if (log != null) {
                 if (log.getGeocodeID() == null) {
@@ -405,7 +370,7 @@ public class EventServiceImpl implements EventService {
                         }
                         /* Else the nextGeocodeID will be null, which represents the end of the event */
                         log.setGeocodeID(nextGeocodeID);
-                        progressLogRepo.save(log);
+                        userEventStatusRepo.save(log);
                         System.out.println("Moving to next stage:");
                         System.out.println(nextGeocodeID);
                         return new NextStageResponse(log);
@@ -418,8 +383,8 @@ public class EventServiceImpl implements EventService {
                 /* User is not on any geocode, start at the first one by creating a new ProgressLog */
                 UUID nextGeocodeID = event.getGeocodeIDs().get(0);
                 Map<String, String> eventDetails = new HashMap<String, String>();
-                log = new ProgressLog(UUID.randomUUID(), event.getId(), request.getUserID(), nextGeocodeID, eventDetails);
-                progressLogRepo.save(log);
+                log = new UserEventStatus(UUID.randomUUID(), event.getId(), request.getUserID(), nextGeocodeID, eventDetails);
+                userEventStatusRepo.save(log);
                 System.out.println("Starting first stage:");
                 System.out.println(nextGeocodeID);
 

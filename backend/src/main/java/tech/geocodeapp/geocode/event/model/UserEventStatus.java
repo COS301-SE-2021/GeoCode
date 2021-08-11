@@ -2,7 +2,6 @@ package tech.geocodeapp.geocode.event.model;
 
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.threeten.bp.OffsetDateTime;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -20,29 +19,28 @@ import java.util.UUID;
  */
 @Entity
 @Validated
-@Table( name = "progresslog" )
-public class ProgressLog {
+public class UserEventStatus {
 
     /**
      * The unique identifier for the Event
      */
     @Id
     @JsonProperty( "id" )
-    @NotNull( message = "ProgressLog's id cannot be null." )
+    @NotNull( message = "UserEventStatus id cannot be null." )
     protected UUID id;
 
     /**
      * The unique id of the event to get the next stage from
      */
     @JsonProperty( "eventID" )
-    @NotNull( message = "ProgressLog's eventID attribute cannot be null." )
+    @NotNull( message = "UserEventStatus eventID attribute cannot be null." )
     private UUID eventID;
     
     /**
      * The unique id of the user participating in the event
      */
     @JsonProperty( "userID" )
-    @NotNull( message = "ProgressLog's userID attribute cannot be null." )
+    @NotNull( message = "UserEventStatus userID attribute cannot be null." )
     private UUID userID;
 
 
@@ -50,21 +48,21 @@ public class ProgressLog {
      * The unique identifier of the geocode that the user is searching for
      */
     @JsonProperty( "geocodeID" )
-    @NotNull( message = "ProgressLog's geocodeID attribute cannot be null." )
+    @NotNull( message = "UserEventStatus geocodeID attribute cannot be null." )
     private UUID geocodeID;
 
     /**
      * Miscellaneous recorded details for a user's participation in an event
      */
     @JsonProperty( "details" )
-    @NotNull( message = "ProgressLog's startTime attribute cannot be null." )
+    @NotNull( message = "UserEventStatus details attribute cannot be null." )
     @ElementCollection
     private Map<String, String> details;
 
     /**
      * Default Constructor
      */
-    public ProgressLog() {
+    public UserEventStatus() {
 
     }
 
@@ -77,7 +75,7 @@ public class ProgressLog {
      * @param levelID The unique identifier of a specific GeoCode
      * @param details Miscellaneous recorded details for a user's participation in an event
      */
-    public ProgressLog(UUID id, UUID eventID, UUID userID, UUID levelID, Map<String, String> details ) {
+    public UserEventStatus(UUID id, UUID eventID, UUID userID, UUID levelID, Map<String, String> details ) {
 
         this.id = id;
         this.eventID = eventID;
@@ -94,7 +92,7 @@ public class ProgressLog {
      * @return the model after changing the id
      */
     @Valid
-    public ProgressLog id(UUID id ) {
+    public UserEventStatus id(UUID id ) {
 
         this.id = id;
         return this;
@@ -127,7 +125,7 @@ public class ProgressLog {
      *
      * @return the request after the eventID has been changed
      */
-    public ProgressLog eventID(UUID eventID ) {
+    public UserEventStatus eventID(UUID eventID ) {
 
         this.eventID = eventID;
         return this;
@@ -161,7 +159,7 @@ public class ProgressLog {
      *
      * @return the request after the userID has been changed
      */
-    public ProgressLog userID(UUID userID ) {
+    public UserEventStatus userID(UUID userID ) {
 
         this.userID = userID;
         return this;
@@ -195,7 +193,7 @@ public class ProgressLog {
      *
      * @return the request after the geocodeID has been changed
      */
-    public ProgressLog geocodeID(UUID geocodeID ) {
+    public UserEventStatus geocodeID(UUID geocodeID ) {
 
         this.geocodeID = geocodeID;
         return this;
@@ -229,7 +227,7 @@ public class ProgressLog {
      *
      * @return the request after the details has been changed
      */
-    public ProgressLog details(Map<String, String> details ) {
+    public UserEventStatus details(Map<String, String> details ) {
 
         this.details = details;
         return this;
@@ -275,7 +273,7 @@ public class ProgressLog {
             return false;
         }
 
-        ProgressLog timeLog = (ProgressLog) obj;
+        UserEventStatus timeLog = (UserEventStatus) obj;
         return Objects.equals( this.userID, timeLog.userID ) &&
                 Objects.equals( this.geocodeID, timeLog.geocodeID ) &&
                 Objects.equals( this.details, timeLog.details );
@@ -300,7 +298,7 @@ public class ProgressLog {
     @Override
     public String toString() {
 
-        return "class ProgressLog {\n" +
+        return "class UserEventStatus {\n" +
                 "    id: " + toIndentedString( id ) + "\n" +
                 "    eventID: " + toIndentedString( eventID ) + "\n" +
                 "    userID: " + toIndentedString( userID ) + "\n" +

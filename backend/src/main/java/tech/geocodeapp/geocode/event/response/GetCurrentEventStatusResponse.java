@@ -3,7 +3,7 @@ package tech.geocodeapp.geocode.event.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 
-import tech.geocodeapp.geocode.event.model.ProgressLog;
+import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 
 import javax.validation.Valid;
@@ -14,7 +14,7 @@ import java.util.Objects;
  * GetCurrentEventGeoCodeResponse object to return a User's current progress and target in an Event
  */
 @Validated
-public class GetCurrentEventGeoCodeResponse {
+public class GetCurrentEventStatusResponse {
 
     /**
      * Determines if an GeoCode was found or not
@@ -24,10 +24,10 @@ public class GetCurrentEventGeoCodeResponse {
     private Boolean found;
 
     /**
-     * The progress of the User in this Event so far
+     * The status of the User in this Event so far
      */
-    @JsonProperty( "progress" )
-    private ProgressLog progress = null;
+    @JsonProperty( "status" )
+    private UserEventStatus status = null;
 
     /**
      * The found GeoCode
@@ -38,7 +38,7 @@ public class GetCurrentEventGeoCodeResponse {
     /**
      * Default Constructor
      */
-    public GetCurrentEventGeoCodeResponse() {
+    public GetCurrentEventStatusResponse() {
 
     }
 
@@ -47,7 +47,7 @@ public class GetCurrentEventGeoCodeResponse {
      *
      * @param found Determines if an GeoCode was found or not
      */
-    public GetCurrentEventGeoCodeResponse(Boolean found ) {
+    public GetCurrentEventStatusResponse(Boolean found ) {
 
         this.found = found;
 
@@ -57,12 +57,13 @@ public class GetCurrentEventGeoCodeResponse {
      *  Overloaded Constructor
      *
      * @param found Determines if an GeoCode was found or not
+     * @param status The status of the User in this Event so far
      * @param targetGeocode The target GeoCode
      */
-    public GetCurrentEventGeoCodeResponse(Boolean found, ProgressLog progress, GeoCode targetGeocode ) {
+    public GetCurrentEventStatusResponse(Boolean found, UserEventStatus status, GeoCode targetGeocode ) {
 
         this.found = found;
-        this.progress = progress;
+        this.status = status;
         this.targetGeocode = targetGeocode;
     }
 
@@ -73,7 +74,7 @@ public class GetCurrentEventGeoCodeResponse {
      *
      * @return the request after the found has been changed
      */
-    public GetCurrentEventGeoCodeResponse found(Boolean found ) {
+    public GetCurrentEventStatusResponse found(Boolean found ) {
 
         this.found = found;
         return this;
@@ -100,37 +101,37 @@ public class GetCurrentEventGeoCodeResponse {
     }
 
     /**
-     * Sets the progress attribute to the specified value
+     * Sets the status attribute to the specified value
      *
-     * @param progress the value the attribute should be set to
+     * @param status the value the attribute should be set to
      *
-     * @return the request after the progress has been changed
+     * @return the request after the status has been changed
      */
-    public GetCurrentEventGeoCodeResponse progress(ProgressLog progress ) {
+    public GetCurrentEventStatusResponse status(UserEventStatus status ) {
 
-        this.progress = progress;
+        this.status = status;
         return this;
     }
 
     /**
-     * Gets the saved progress attribute
+     * Gets the saved status attribute
      *
-     * @return the stored progress attribute
+     * @return the stored status attribute
      */
     @Valid
-    public ProgressLog getProgress() {
+    public UserEventStatus getStatus() {
 
-        return progress;
+        return status;
     }
 
     /**
-     * Sets the progress attribute to the specified value
+     * Sets the status attribute to the specified value
      *
-     * @param progress the value the attribute should be set to
+     * @param status the value the attribute should be set to
      */
-    public void setProgress( ProgressLog progress ) {
+    public void setStatus( UserEventStatus status ) {
 
-        this.progress = progress;
+        this.status = status;
     }
 
     /**
@@ -140,7 +141,7 @@ public class GetCurrentEventGeoCodeResponse {
      *
      * @return the request after the targetGeocode has been changed
      */
-    public GetCurrentEventGeoCodeResponse targetGeocode(GeoCode targetGeocode ) {
+    public GetCurrentEventStatusResponse targetGeocode(GeoCode targetGeocode ) {
 
         this.targetGeocode = targetGeocode;
         return this;
@@ -186,9 +187,9 @@ public class GetCurrentEventGeoCodeResponse {
             return false;
         }
 
-        GetCurrentEventGeoCodeResponse getCurrentEventResponse = (GetCurrentEventGeoCodeResponse) obj;
+        GetCurrentEventStatusResponse getCurrentEventResponse = (GetCurrentEventStatusResponse) obj;
         return Objects.equals( this.found, getCurrentEventResponse.found ) &&
-                Objects.equals( this.progress, getCurrentEventResponse.progress ) &&
+                Objects.equals( this.status, getCurrentEventResponse.status ) &&
                 Objects.equals( this.targetGeocode, getCurrentEventResponse.targetGeocode );
     }
 
@@ -200,7 +201,7 @@ public class GetCurrentEventGeoCodeResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( found, progress, targetGeocode );
+        return Objects.hash( found, status, targetGeocode );
     }
 
     /**
@@ -213,7 +214,7 @@ public class GetCurrentEventGeoCodeResponse {
 
         return "class GetCurrentEventGeoCodeResponse {\n" +
                 "    found: " + toIndentedString( found ) + "\n" +
-                "    progress: " + toIndentedString( progress ) + "\n" +
+                "    status: " + toIndentedString( status ) + "\n" +
                 "    targetGeoCode: " + toIndentedString( targetGeocode ) + "\n" +
                 "}";
     }

@@ -4,7 +4,6 @@ import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
-import tech.geocodeapp.geocode.user.service.UserService;
 
 /**
  * This is the main interface is for the Event subsystem,
@@ -39,18 +38,7 @@ public interface EventService {
 
 
     /**
-     * Get a specified ProgressLog entry that is stored in the repository
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified GetProgressLogRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    GetProgressLogResponse getProgressLog(GetProgressLogRequest request ) throws InvalidRequestException;
-
-    /**
-     * Get a specific GeoCode for an Event that a User is currently partaking in
+     * Get the current status of a User participating in an event, as well as the target GeoCode that they need to locate
      *
      * @param request the attributes the response should be created from
      *
@@ -58,7 +46,7 @@ public interface EventService {
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    GetCurrentEventGeoCodeResponse getCurrentEventGeocode(GetCurrentEventGeocodeRequest request ) throws InvalidRequestException;
+    GetCurrentEventStatusResponse getCurrentEventStatus(GetCurrentEventStatusRequest request ) throws InvalidRequestException;
 
     /**
      * Get the next GeoCode the User has to find for their current Event

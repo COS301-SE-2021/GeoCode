@@ -12,7 +12,7 @@ import java.util.UUID;
  * GetCurrentEventGeoCodeRequest object to specify what Event to retrieve
  */
 @Validated
-public class GetCurrentEventGeocodeRequest {
+public class GetCurrentEventStatusRequest {
 
     /**
      * The unique id of the event to get
@@ -31,7 +31,7 @@ public class GetCurrentEventGeocodeRequest {
     /**
      * Default Constructor
      */
-    public GetCurrentEventGeocodeRequest() {
+    public GetCurrentEventStatusRequest() {
 
     }
 
@@ -41,7 +41,7 @@ public class GetCurrentEventGeocodeRequest {
      * @param eventID The unique id of the event to get
      * @param userID The unique id of the user doing the event to get
      */
-    public GetCurrentEventGeocodeRequest(UUID eventID, UUID userID ) {
+    public GetCurrentEventStatusRequest(UUID eventID, UUID userID ) {
 
         this.eventID = eventID;
         this.userID = userID;
@@ -52,7 +52,7 @@ public class GetCurrentEventGeocodeRequest {
      *
      * @param userID The unique id of the user doing the event to get
      */
-    public GetCurrentEventGeocodeRequest(UUID userID ) {
+    public GetCurrentEventStatusRequest(UUID userID ) {
 
         this.userID = userID;
     }
@@ -64,7 +64,7 @@ public class GetCurrentEventGeocodeRequest {
      *
      * @return the request after the eventID has been changed
      */
-    public GetCurrentEventGeocodeRequest eventID(UUID eventID ) {
+    public GetCurrentEventStatusRequest eventID(UUID eventID ) {
 
         this.eventID = eventID;
         return this;
@@ -98,7 +98,7 @@ public class GetCurrentEventGeocodeRequest {
      *
      * @return the request after the userID has been changed
      */
-    public GetCurrentEventGeocodeRequest userID(UUID userID ) {
+    public GetCurrentEventStatusRequest userID(UUID userID ) {
 
         this.userID = userID;
         return this;
@@ -144,7 +144,7 @@ public class GetCurrentEventGeocodeRequest {
             return false;
         }
 
-        GetCurrentEventGeocodeRequest getCurrentEventRequest = (GetCurrentEventGeocodeRequest) obj;
+        GetCurrentEventStatusRequest getCurrentEventRequest = (GetCurrentEventStatusRequest) obj;
         return Objects.equals( this.eventID, getCurrentEventRequest.eventID ) &&
                 Objects.equals( this.userID, getCurrentEventRequest.userID );
 

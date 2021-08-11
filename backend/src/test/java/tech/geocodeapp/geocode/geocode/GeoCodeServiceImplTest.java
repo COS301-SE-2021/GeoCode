@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.util.Assert;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.event.EventMockRepository;
-import tech.geocodeapp.geocode.event.ProgressLogMockRepository;
+import tech.geocodeapp.geocode.event.UserEventStatusMockRepository;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.event.service.EventServiceImpl;
@@ -134,7 +134,7 @@ class GeoCodeServiceImplTest {
                                                          typeMockRepo );
 
         EventMockRepository eventRepo = new EventMockRepository();
-        ProgressLogMockRepository progressLogRepo = new ProgressLogMockRepository();
+        UserEventStatusMockRepository progressLogRepo = new UserEventStatusMockRepository();
 
         eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService );
 

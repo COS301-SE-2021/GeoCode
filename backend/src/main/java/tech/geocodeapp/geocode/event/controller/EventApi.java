@@ -78,18 +78,18 @@ public interface EventApi {
     ResponseEntity< CreatePointResponse > createPoint( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Point for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreatePointRequest body );
 
 
-    @Operation(summary = "Retrieves the GeoCode that the user needs to find in an event", description = "Retrieves the GeoCode that the user needs to find in an event", security = {
+    @Operation(summary = "Get the current status of a User participating in an event, as well as the target GeoCode that they need to locate", description = "Get the current status of a User participating in an event, as well as the target GeoCode that they need to locate", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Event" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "The GeoCode was successfully found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentEventGeoCodeResponse.class))),
+            @ApiResponse(responseCode = "200", description = "The user's event status was successfully found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentEventStatusResponse.class))),
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
 
-            @ApiResponse(responseCode = "404", description = "The GeoCode was not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentEventGeoCodeResponse.class))) })
-    @PostMapping(value = "/Event/getCurrentEventGeocode",
+            @ApiResponse(responseCode = "404", description = "The user's event status was not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentEventStatusResponse.class))) })
+    @PostMapping(value = "/Event/getCurrentEventStatus",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity<GetCurrentEventGeoCodeResponse> getCurrentEventGeocode(@Parameter(in = ParameterIn.DEFAULT, description = "Retrieves the GeoCode that the user needs to find in an event", required=true, schema=@Schema()) @Valid @RequestBody GetCurrentEventGeocodeRequest body) throws InvalidRequestException;
+    ResponseEntity<GetCurrentEventStatusResponse> getCurrentEventStatus(@Parameter(in = ParameterIn.DEFAULT, description = "Get the current status of a User participating in an event, as well as the target GeoCode that they need to locate", required=true, schema=@Schema()) @Valid @RequestBody GetCurrentEventStatusRequest body) throws InvalidRequestException;
 
 
     @Operation( summary = "Returns all the Events", description = "Returns all the Events in the system", security = {

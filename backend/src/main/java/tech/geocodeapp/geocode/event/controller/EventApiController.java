@@ -55,9 +55,9 @@ public class EventApiController implements EventApi {
     }
 
     @Override
-    public ResponseEntity<GetCurrentEventGeoCodeResponse> getCurrentEventGeocode(GetCurrentEventGeocodeRequest body ) throws InvalidRequestException {
+    public ResponseEntity<GetCurrentEventStatusResponse> getCurrentEventStatus(GetCurrentEventStatusRequest body ) throws InvalidRequestException {
 
-        GetCurrentEventGeoCodeResponse response = eventService.getCurrentEventGeocode( body );
+        GetCurrentEventStatusResponse response = eventService.getCurrentEventStatus( body );
 
         if ( ( response != null ) ) {
 

@@ -2,26 +2,22 @@ package tech.geocodeapp.geocode.event.response;
 
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 
-import tech.geocodeapp.geocode.event.model.ProgressLog;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.event.model.UserEventStatus;
 
 import java.util.Objects;
-import java.util.UUID;
 
 /**
- * NextStageResponse object to return the next GeoCode the user needs to search for
+ * NextStageResponse object to return the new status of the user in an event after changing stages
  */
 @Validated
 public class NextStageResponse {
 
     /**
-     * The progress of the User in this Event so far. Includes the id of the next GeoCode they are searching for
+     * The status of the User in this Event so far. Includes the id of the next GeoCode they are searching for
      */
-    @JsonProperty( "progress" )
-    private ProgressLog progress;
+    @JsonProperty( "status" )
+    private UserEventStatus status;
 
     /**
      * Default Constructor
@@ -33,44 +29,44 @@ public class NextStageResponse {
     /**
      * Overloaded Constructor
      *
-     * @param progress The progress of the User in this Event so far
+     * @param status The progress of the User in this Event so far
      */
-    public NextStageResponse( ProgressLog progress ) {
+    public NextStageResponse( UserEventStatus status ) {
 
-        this.progress = progress;
+        this.status = status;
     }
 
     /**
-     * Sets the progress attribute to the specified value
+     * Sets the status attribute to the specified value
      *
-     * @param progress the value the attribute should be set to
+     * @param status the value the attribute should be set to
      *
-     * @return the request after the progress has been changed
+     * @return the request after the status has been changed
      */
-    public NextStageResponse progress( ProgressLog progress ) {
+    public NextStageResponse status( UserEventStatus status ) {
 
-        this.progress = progress;
+        this.status = status;
         return this;
     }
 
     /**
-     * Gets the saved progress attribute
+     * Gets the saved status attribute
      *
-     * @return the stored progress attribute
+     * @return the stored status attribute
      */
-    public ProgressLog getProgress() {
+    public UserEventStatus getStatus() {
 
-        return progress;
+        return status;
     }
 
     /**
      * Sets the progress attribute to the specified value
      *
-     * @param progress the value the attribute should be set to
+     * @param status the value the attribute should be set to
      */
-    public void setProgress( ProgressLog progress ) {
+    public void setStatus(UserEventStatus status) {
 
-        this.progress = progress;
+        this.status = status;
     }
 
     /**
@@ -92,7 +88,7 @@ public class NextStageResponse {
             return false;
         }
 
-        return Objects.equals( this.progress, ( ( NextStageResponse ) obj ).progress );
+        return Objects.equals( this.status, ( ( NextStageResponse ) obj ).status);
     }
 
     /**
@@ -103,7 +99,7 @@ public class NextStageResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( progress );
+        return Objects.hash(status);
     }
 
     /**
@@ -115,7 +111,7 @@ public class NextStageResponse {
     public String toString() {
 
         return "class NextStageResponse {\n" +
-                "    progress: " + toIndentedString( progress ) + "\n" +
+                "    status: " + toIndentedString(status) + "\n" +
                 "}";
     }
 
