@@ -324,30 +324,28 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        UUID geocodeID = null;
-
         /* Get the ProgressLog object from the repository */
         ProgressLog log = progressLogRepo.findProgressLogByEventIDAndUserID(request.getEventID(), request.getUserID());
-        if (log != null) {
-            geocodeID = log.getGeocodeID();
-        } else {
-            /* User is not on any geocode, start at the first one */
+        if (log == null) {
+            /* User is not in the event. Enter the event with nextStage */
             NextStageRequest nextStageRequest = new NextStageRequest(request.getEventID(), request.getUserID());
             NextStageResponse nextStageResponse = nextStage(nextStageRequest);
-            geocodeID = nextStageResponse.getNextGeoCode();
+            /* Returns a new progress log with the geocodeID set to the first geocode */
+            log = nextStageResponse.getProgress();
         }
 
+        UUID geocodeID = log.getGeocodeID();
         if (geocodeID != null) {
             try {
                 GetGeoCodeResponse getGeoCodeResponse = geoCodeService.getGeoCode( new GetGeoCodeRequest( geocodeID ) );
-                return new GetCurrentEventGeoCodeResponse( true, getGeoCodeResponse.getFoundGeoCode() );
+                return new GetCurrentEventGeoCodeResponse( true, log, getGeoCodeResponse.getFoundGeoCode() );
 
             } catch (tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e) {
                 e.printStackTrace();
             }
 
         } else {
-            return new GetCurrentEventGeoCodeResponse( true, null );
+            return new GetCurrentEventGeoCodeResponse( true, log, null );
         }
 
         return new GetCurrentEventGeoCodeResponse( false );
@@ -410,7 +408,7 @@ public class EventServiceImpl implements EventService {
                         progressLogRepo.save(log);
                         System.out.println("Moving to next stage:");
                         System.out.println(nextGeocodeID);
-                        return new NextStageResponse(nextGeocodeID);
+                        return new NextStageResponse(log);
                     } else {
                         System.out.println("no match");
                     }
@@ -419,11 +417,13 @@ public class EventServiceImpl implements EventService {
             } else {
                 /* User is not on any geocode, start at the first one by creating a new ProgressLog */
                 UUID nextGeocodeID = event.getGeocodeIDs().get(0);
-                log = new ProgressLog(UUID.randomUUID(), event.getId(), request.getUserID(), nextGeocodeID, OffsetDateTime.now());
+                Map<String, String> eventDetails = new HashMap<String, String>();
+                log = new ProgressLog(UUID.randomUUID(), event.getId(), request.getUserID(), nextGeocodeID, eventDetails);
                 progressLogRepo.save(log);
-                System.out.println("Starting first stage: "+nextGeocodeID.toString());
+                System.out.println("Starting first stage:");
+                System.out.println(nextGeocodeID);
 
-                return new NextStageResponse(nextGeocodeID);
+                return new NextStageResponse(log);
             }
         }
 

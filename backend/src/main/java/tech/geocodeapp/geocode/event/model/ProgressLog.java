@@ -4,17 +4,19 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.threeten.bp.OffsetDateTime;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
- * ProgressLog object holds when each User starts and Event. It is to keep Track of TimeTrials
+ * ProgressLog object holds a user's current progress in an Event.
  */
 @Entity
 @Validated
@@ -33,14 +35,14 @@ public class ProgressLog {
      * The unique id of the event to get the next stage from
      */
     @JsonProperty( "eventID" )
-    @NotNull( message = "TimeLog's eventID attribute cannot be null." )
+    @NotNull( message = "ProgressLog's eventID attribute cannot be null." )
     private UUID eventID;
     
     /**
      * The unique id of the user participating in the event
      */
     @JsonProperty( "userID" )
-    @NotNull( message = "TimeLog's userID attribute cannot be null." )
+    @NotNull( message = "ProgressLog's userID attribute cannot be null." )
     private UUID userID;
 
 
@@ -48,15 +50,16 @@ public class ProgressLog {
      * The unique identifier of the geocode that the user is searching for
      */
     @JsonProperty( "geocodeID" )
-    @NotNull( message = "TimeLog's geocodeID attribute cannot be null." )
+    @NotNull( message = "ProgressLog's geocodeID attribute cannot be null." )
     private UUID geocodeID;
 
     /**
-     * The time when a user started the Event
+     * Miscellaneous recorded details for a user's participation in an event
      */
-    @JsonProperty( "startTime" )
-    @NotNull( message = "TimeLog's startTime attribute cannot be null." )
-    private OffsetDateTime startTime;
+    @JsonProperty( "details" )
+    @NotNull( message = "ProgressLog's startTime attribute cannot be null." )
+    @ElementCollection
+    private Map<String, String> details;
 
     /**
      * Default Constructor
@@ -72,15 +75,15 @@ public class ProgressLog {
      * @param eventID The unique id of the event to get the next stage from
      * @param userID The unique id of the user competing in the event
      * @param levelID The unique identifier of a specific GeoCode
-     * @param startTime The time when a user started a Level of an Event
+     * @param details Miscellaneous recorded details for a user's participation in an event
      */
-    public ProgressLog(UUID id, UUID eventID, UUID userID, UUID levelID, OffsetDateTime startTime ) {
+    public ProgressLog(UUID id, UUID eventID, UUID userID, UUID levelID, Map<String, String> details ) {
 
         this.id = id;
         this.eventID = eventID;
         this.userID = userID;
         this.geocodeID = levelID;
-        this.startTime = startTime;
+        this.details = details;
     }
 
     /**
@@ -220,37 +223,37 @@ public class ProgressLog {
     }
 
     /**
-     * Sets the startTime attribute to the specified value
+     * Sets the details attribute to the specified value
      *
-     * @param startTime the value the attribute should be set to
+     * @param details the value the attribute should be set to
      *
-     * @return the request after the startTime has been changed
+     * @return the request after the details has been changed
      */
-    public ProgressLog startTime(OffsetDateTime startTime ) {
+    public ProgressLog details(Map<String, String> details ) {
 
-        this.startTime = startTime;
+        this.details = details;
         return this;
     }
 
     /**
-     * Gets the saved startTime attribute
+     * Gets the saved details attribute
      *
-     * @return the stored startTime attribute
+     * @return the stored details attribute
      */
     @Valid
-    public OffsetDateTime getStartTime() {
+    public Map<String, String> getDetails() {
 
-        return startTime;
+        return details;
     }
 
     /**
-     * Sets the startTime attribute to the specified value
+     * Sets the details attribute to the specified value
      *
-     * @param startTime the value the attribute should be set to
+     * @param details the value the attribute should be set to
      */
-    public void setStartTime( OffsetDateTime startTime ) {
+    public void setDetails( Map<String, String> details ) {
 
-        this.startTime = startTime;
+        this.details = details;
     }
 
     /**
@@ -275,7 +278,7 @@ public class ProgressLog {
         ProgressLog timeLog = (ProgressLog) obj;
         return Objects.equals( this.userID, timeLog.userID ) &&
                 Objects.equals( this.geocodeID, timeLog.geocodeID ) &&
-                Objects.equals( this.startTime, timeLog.startTime );
+                Objects.equals( this.details, timeLog.details );
     }
 
     /**
@@ -286,7 +289,7 @@ public class ProgressLog {
     @Override
     public int hashCode() {
 
-        return Objects.hash( userID, geocodeID, startTime );
+        return Objects.hash( id, eventID, userID, geocodeID, details );
     }
 
     /**
@@ -298,10 +301,10 @@ public class ProgressLog {
     public String toString() {
 
         return "class ProgressLog {\n" +
+                "    id: " + toIndentedString( id ) + "\n" +
                 "    eventID: " + toIndentedString( eventID ) + "\n" +
                 "    userID: " + toIndentedString( userID ) + "\n" +
                 "    geocodeID: " + toIndentedString( geocodeID) + "\n" +
-                "    startTime: " + toIndentedString( startTime ) + "\n" +
                 "}";
     }
 

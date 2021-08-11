@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.event.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 
+import tech.geocodeapp.geocode.event.model.ProgressLog;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 
 import javax.validation.Valid;
@@ -10,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
- * GetCurrentEventGeoCodeResponse object to return the found GeoCode
+ * GetCurrentEventGeoCodeResponse object to return a User's current progress and target in an Event
  */
 @Validated
 public class GetCurrentEventGeoCodeResponse {
@@ -23,10 +24,16 @@ public class GetCurrentEventGeoCodeResponse {
     private Boolean found;
 
     /**
+     * The progress of the User in this Event so far
+     */
+    @JsonProperty( "progress" )
+    private ProgressLog progress = null;
+
+    /**
      * The found GeoCode
      */
-    @JsonProperty( "foundGeoCode" )
-    private GeoCode foundGeoCode = null;
+    @JsonProperty( "targetGeocode" )
+    private GeoCode targetGeocode = null;
 
     /**
      * Default Constructor
@@ -44,23 +51,19 @@ public class GetCurrentEventGeoCodeResponse {
 
         this.found = found;
 
-        if ( !found ) {
-
-            this.foundGeoCode = null;
-        }
-
     }
 
     /**
      *  Overloaded Constructor
      *
      * @param found Determines if an GeoCode was found or not
-     * @param foundGeoCode The found GeoCode
+     * @param targetGeocode The target GeoCode
      */
-    public GetCurrentEventGeoCodeResponse(Boolean found, GeoCode foundGeoCode ) {
+    public GetCurrentEventGeoCodeResponse(Boolean found, ProgressLog progress, GeoCode targetGeocode ) {
 
         this.found = found;
-        this.foundGeoCode = foundGeoCode;
+        this.progress = progress;
+        this.targetGeocode = targetGeocode;
     }
 
     /**
@@ -97,37 +100,71 @@ public class GetCurrentEventGeoCodeResponse {
     }
 
     /**
-     * Sets the foundGeoCode attribute to the specified value
+     * Sets the progress attribute to the specified value
      *
-     * @param foundEvent the value the attribute should be set to
+     * @param progress the value the attribute should be set to
      *
-     * @return the request after the foundGeoCode has been changed
+     * @return the request after the progress has been changed
      */
-    public GetCurrentEventGeoCodeResponse foundEvent(GeoCode foundEvent ) {
+    public GetCurrentEventGeoCodeResponse progress(ProgressLog progress ) {
 
-        this.foundGeoCode = foundEvent;
+        this.progress = progress;
         return this;
     }
 
     /**
-     * Gets the saved foundGeoCode attribute
+     * Gets the saved progress attribute
      *
-     * @return the stored foundGeoCode attribute
+     * @return the stored progress attribute
      */
     @Valid
-    public GeoCode getFoundGeoCode() {
+    public ProgressLog getProgress() {
 
-        return foundGeoCode;
+        return progress;
     }
 
     /**
-     * Sets the foundGeoCode attribute to the specified value
+     * Sets the progress attribute to the specified value
      *
-     * @param foundGeoCode the value the attribute should be set to
+     * @param progress the value the attribute should be set to
      */
-    public void setFoundGeoCode( GeoCode foundGeoCode ) {
+    public void setProgress( ProgressLog progress ) {
 
-        this.foundGeoCode = foundGeoCode;
+        this.progress = progress;
+    }
+
+    /**
+     * Sets the targetGeocode attribute to the specified value
+     *
+     * @param targetGeocode the value the attribute should be set to
+     *
+     * @return the request after the targetGeocode has been changed
+     */
+    public GetCurrentEventGeoCodeResponse targetGeocode(GeoCode targetGeocode ) {
+
+        this.targetGeocode = targetGeocode;
+        return this;
+    }
+
+    /**
+     * Gets the saved targetGeocode attribute
+     *
+     * @return the stored targetGeocode attribute
+     */
+    @Valid
+    public GeoCode getTargetGeocode() {
+
+        return targetGeocode;
+    }
+
+    /**
+     * Sets the targetGeocode attribute to the specified value
+     *
+     * @param targetGeocode the value the attribute should be set to
+     */
+    public void setTargetGeocode( GeoCode targetGeocode ) {
+
+        this.targetGeocode = targetGeocode;
     }
 
     /**
@@ -151,7 +188,8 @@ public class GetCurrentEventGeoCodeResponse {
 
         GetCurrentEventGeoCodeResponse getCurrentEventResponse = (GetCurrentEventGeoCodeResponse) obj;
         return Objects.equals( this.found, getCurrentEventResponse.found ) &&
-                Objects.equals( this.foundGeoCode, getCurrentEventResponse.foundGeoCode );
+                Objects.equals( this.progress, getCurrentEventResponse.progress ) &&
+                Objects.equals( this.targetGeocode, getCurrentEventResponse.targetGeocode );
     }
 
     /**
@@ -162,7 +200,7 @@ public class GetCurrentEventGeoCodeResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( found, foundGeoCode );
+        return Objects.hash( found, progress, targetGeocode );
     }
 
     /**
@@ -175,7 +213,8 @@ public class GetCurrentEventGeoCodeResponse {
 
         return "class GetCurrentEventGeoCodeResponse {\n" +
                 "    found: " + toIndentedString( found ) + "\n" +
-                "    foundGeoCode: " + toIndentedString( foundGeoCode ) + "\n" +
+                "    progress: " + toIndentedString( progress ) + "\n" +
+                "    targetGeoCode: " + toIndentedString( targetGeocode ) + "\n" +
                 "}";
     }
 

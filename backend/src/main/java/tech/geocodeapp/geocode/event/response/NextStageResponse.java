@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
+import tech.geocodeapp.geocode.event.model.ProgressLog;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 
 import java.util.Objects;
@@ -17,10 +18,10 @@ import java.util.UUID;
 public class NextStageResponse {
 
     /**
-     * The next GeoCode the User needs to search for
+     * The progress of the User in this Event so far. Includes the id of the next GeoCode they are searching for
      */
-    @JsonProperty( "nextGeoCode" )
-    private UUID nextGeoCode;
+    @JsonProperty( "progress" )
+    private ProgressLog progress;
 
     /**
      * Default Constructor
@@ -32,44 +33,44 @@ public class NextStageResponse {
     /**
      * Overloaded Constructor
      *
-     * @param nextGeoCode The next GeoCode the User needs to search for
+     * @param progress The progress of the User in this Event so far
      */
-    public NextStageResponse( UUID nextGeoCode ) {
+    public NextStageResponse( ProgressLog progress ) {
 
-        this.nextGeoCode = nextGeoCode;
+        this.progress = progress;
     }
 
     /**
-     * Sets the nextGeoCode attribute to the specified value
+     * Sets the progress attribute to the specified value
      *
-     * @param nextGeoCode the value the attribute should be set to
+     * @param progress the value the attribute should be set to
      *
-     * @return the request after the nextGeoCode has been changed
+     * @return the request after the progress has been changed
      */
-    public NextStageResponse nextGeoCode( UUID nextGeoCode ) {
+    public NextStageResponse progress( ProgressLog progress ) {
 
-        this.nextGeoCode = nextGeoCode;
+        this.progress = progress;
         return this;
     }
 
     /**
-     * Gets the saved nextGeoCode attribute
+     * Gets the saved progress attribute
      *
-     * @return the stored nextGeoCode attribute
+     * @return the stored progress attribute
      */
-    public UUID getNextGeoCode() {
+    public ProgressLog getProgress() {
 
-        return nextGeoCode;
+        return progress;
     }
 
     /**
-     * Sets the nextGeoCode attribute to the specified value
+     * Sets the progress attribute to the specified value
      *
-     * @param nextGeoCode the value the attribute should be set to
+     * @param progress the value the attribute should be set to
      */
-    public void setNextGeoCode( UUID nextGeoCode ) {
+    public void setProgress( ProgressLog progress ) {
 
-        this.nextGeoCode = nextGeoCode;
+        this.progress = progress;
     }
 
     /**
@@ -91,7 +92,7 @@ public class NextStageResponse {
             return false;
         }
 
-        return Objects.equals( this.nextGeoCode, ( ( NextStageResponse ) obj ).nextGeoCode );
+        return Objects.equals( this.progress, ( ( NextStageResponse ) obj ).progress );
     }
 
     /**
@@ -102,7 +103,7 @@ public class NextStageResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( nextGeoCode );
+        return Objects.hash( progress );
     }
 
     /**
@@ -114,7 +115,7 @@ public class NextStageResponse {
     public String toString() {
 
         return "class NextStageResponse {\n" +
-                "    nextGeoCode: " + toIndentedString( nextGeoCode ) + "\n" +
+                "    progress: " + toIndentedString( progress ) + "\n" +
                 "}";
     }
 
