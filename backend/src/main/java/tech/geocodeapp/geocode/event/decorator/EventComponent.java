@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.event.decorator;
 
 import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
@@ -61,5 +62,20 @@ public interface EventComponent {
      * Setter for time trials used to set the timeLimit variable from {@link TimeTrialEventDecorator}
      */
     void setTimeLimit(Integer limit);
+
+    /**
+     * Function to record information in the status object when the user starts an event
+     */
+    void handleEventStart(UserEventStatus status);
+
+    /**
+     * Function to record information in the status object when the user completes a stage
+     */
+    void handleStageCompletion(int stageNumber, UserEventStatus status);
+
+    /**
+     * Function to record information in the status object when the user finishes an event
+     */
+    void handleEventEnd(UserEventStatus status);
 
 }
