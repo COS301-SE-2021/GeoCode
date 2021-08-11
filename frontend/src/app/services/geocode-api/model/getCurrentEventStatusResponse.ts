@@ -9,18 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Difficulty } from './difficulty';
-import { GeoPoint } from './geoPoint';
+import { GeoCode } from './geoCode';
+import { ModelObject } from './modelObject';
+import { Response } from './response';
+import { UserEventStatus } from './userEventStatus';
 
-export interface GeoCode { 
-    id: string;
-    difficulty: Difficulty;
-    available: boolean;
-    description: string;
-    hints: Array<string>;
-    collectables?: Array<string>;
-    qrCode: string;
-    location: GeoPoint;
-    createdBy?: string;
-    eventID?: string;
+export interface GetCurrentEventStatusResponse extends Response { 
+    message?: ModelObject;
+    status?: UserEventStatus;
+    targetGeocode?: GeoCode;
 }

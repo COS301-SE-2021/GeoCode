@@ -9,18 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Difficulty } from './difficulty';
-import { GeoPoint } from './geoPoint';
 
-export interface GeoCode { 
-    id: string;
-    difficulty: Difficulty;
-    available: boolean;
-    description: string;
-    hints: Array<string>;
-    collectables?: Array<string>;
-    qrCode: string;
-    location: GeoPoint;
-    createdBy?: string;
-    eventID?: string;
+export interface Response { 
+    success: boolean;
+    message: string;
 }
