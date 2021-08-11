@@ -999,6 +999,55 @@ public class UserServiceImplTest {
     }
 
     @Test
+    public void getUserByIdTestNullRequest(){
+        try {
+            GetUserByIdResponse response = userService.getUserById(null);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The GetUserByIdRequest object passed was NULL", response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getUserByIdTestNullUserParameter(){
+        GetUserByIdRequest request = new GetUserByIdRequest(null);
+
+        assertThatThrownBy(() -> userService.getUserById(request)).isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
+    public void getUserByIdTestInvalidUserId(){
+        try {
+            GetUserByIdRequest request = new GetUserByIdRequest(invalidUserId);
+            GetUserByIdResponse response = userService.getUserById(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getUserByIdTestValidUserId(){
+        try {
+            GetUserByIdRequest request = new GetUserByIdRequest(validUserId);
+            GetUserByIdResponse response = userService.getUserById(request);
+            User user = response.getUser();
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The User was found", response.getMessage());
+
+            Assertions.assertEquals(validUserId, user.getId());
+            Assertions.assertEquals("john_smith", user.getUsername());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void swapCollectableTestNullRequest(){
         try {
             SwapCollectableResponse response = userService.swapCollectable(null);

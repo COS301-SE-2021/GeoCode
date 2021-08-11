@@ -428,7 +428,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(id);
 
         return optionalUser.map(user -> new GetUserByIdResponse(true, "The User was found", user)).orElseGet(
-                () -> new GetUserByIdResponse(false, "The User was not found", null));
+                () -> new GetUserByIdResponse(false, invalidUserIdMessage, null));
     }
 
     /**
