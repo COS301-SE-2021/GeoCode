@@ -12,5 +12,7 @@
 import { Leaderboard } from './leaderboard';
 
 export interface GetLeaderboardByIDResponse { 
+    success: boolean;
+    message: string;
     leaderboard: Leaderboard;
 }

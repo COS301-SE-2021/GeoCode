@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.event.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 
+import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 
 import javax.validation.Valid;
@@ -10,10 +11,10 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
- * GetCurrentEventGeoCodeResponse object to return the found GeoCode
+ * GetCurrentEventGeoCodeResponse object to return a User's current progress and target in an Event
  */
 @Validated
-public class GetCurrentEventLevelResponse {
+public class GetCurrentEventStatusResponse {
 
     /**
      * Determines if an GeoCode was found or not
@@ -23,15 +24,21 @@ public class GetCurrentEventLevelResponse {
     private Boolean found;
 
     /**
+     * The status of the User in this Event so far
+     */
+    @JsonProperty( "status" )
+    private UserEventStatus status = null;
+
+    /**
      * The found GeoCode
      */
-    @JsonProperty( "foundGeoCode" )
-    private GeoCode foundGeoCode = null;
+    @JsonProperty( "targetGeocode" )
+    private GeoCode targetGeocode = null;
 
     /**
      * Default Constructor
      */
-    public GetCurrentEventLevelResponse() {
+    public GetCurrentEventStatusResponse() {
 
     }
 
@@ -40,14 +47,9 @@ public class GetCurrentEventLevelResponse {
      *
      * @param found Determines if an GeoCode was found or not
      */
-    public GetCurrentEventLevelResponse( Boolean found ) {
+    public GetCurrentEventStatusResponse(Boolean found ) {
 
         this.found = found;
-
-        if ( !found ) {
-
-            this.foundGeoCode = null;
-        }
 
     }
 
@@ -55,12 +57,14 @@ public class GetCurrentEventLevelResponse {
      *  Overloaded Constructor
      *
      * @param found Determines if an GeoCode was found or not
-     * @param foundGeoCode The found GeoCode
+     * @param status The status of the User in this Event so far
+     * @param targetGeocode The target GeoCode
      */
-    public GetCurrentEventLevelResponse( Boolean found, GeoCode foundGeoCode ) {
+    public GetCurrentEventStatusResponse(Boolean found, UserEventStatus status, GeoCode targetGeocode ) {
 
         this.found = found;
-        this.foundGeoCode = foundGeoCode;
+        this.status = status;
+        this.targetGeocode = targetGeocode;
     }
 
     /**
@@ -70,7 +74,7 @@ public class GetCurrentEventLevelResponse {
      *
      * @return the request after the found has been changed
      */
-    public GetCurrentEventLevelResponse found( Boolean found ) {
+    public GetCurrentEventStatusResponse found(Boolean found ) {
 
         this.found = found;
         return this;
@@ -97,37 +101,71 @@ public class GetCurrentEventLevelResponse {
     }
 
     /**
-     * Sets the foundGeoCode attribute to the specified value
+     * Sets the status attribute to the specified value
      *
-     * @param foundEvent the value the attribute should be set to
+     * @param status the value the attribute should be set to
      *
-     * @return the request after the foundGeoCode has been changed
+     * @return the request after the status has been changed
      */
-    public GetCurrentEventLevelResponse foundEvent( GeoCode foundEvent ) {
+    public GetCurrentEventStatusResponse status(UserEventStatus status ) {
 
-        this.foundGeoCode = foundEvent;
+        this.status = status;
         return this;
     }
 
     /**
-     * Gets the saved foundGeoCode attribute
+     * Gets the saved status attribute
      *
-     * @return the stored foundGeoCode attribute
+     * @return the stored status attribute
      */
     @Valid
-    public GeoCode getFoundGeoCode() {
+    public UserEventStatus getStatus() {
 
-        return foundGeoCode;
+        return status;
     }
 
     /**
-     * Sets the foundGeoCode attribute to the specified value
+     * Sets the status attribute to the specified value
      *
-     * @param foundGeoCode the value the attribute should be set to
+     * @param status the value the attribute should be set to
      */
-    public void setFoundGeoCode( GeoCode foundGeoCode ) {
+    public void setStatus( UserEventStatus status ) {
 
-        this.foundGeoCode = foundGeoCode;
+        this.status = status;
+    }
+
+    /**
+     * Sets the targetGeocode attribute to the specified value
+     *
+     * @param targetGeocode the value the attribute should be set to
+     *
+     * @return the request after the targetGeocode has been changed
+     */
+    public GetCurrentEventStatusResponse targetGeocode(GeoCode targetGeocode ) {
+
+        this.targetGeocode = targetGeocode;
+        return this;
+    }
+
+    /**
+     * Gets the saved targetGeocode attribute
+     *
+     * @return the stored targetGeocode attribute
+     */
+    @Valid
+    public GeoCode getTargetGeocode() {
+
+        return targetGeocode;
+    }
+
+    /**
+     * Sets the targetGeocode attribute to the specified value
+     *
+     * @param targetGeocode the value the attribute should be set to
+     */
+    public void setTargetGeocode( GeoCode targetGeocode ) {
+
+        this.targetGeocode = targetGeocode;
     }
 
     /**
@@ -149,9 +187,10 @@ public class GetCurrentEventLevelResponse {
             return false;
         }
 
-        GetCurrentEventLevelResponse getCurrentEventResponse = ( GetCurrentEventLevelResponse ) obj;
+        GetCurrentEventStatusResponse getCurrentEventResponse = (GetCurrentEventStatusResponse) obj;
         return Objects.equals( this.found, getCurrentEventResponse.found ) &&
-                Objects.equals( this.foundGeoCode, getCurrentEventResponse.foundGeoCode );
+                Objects.equals( this.status, getCurrentEventResponse.status ) &&
+                Objects.equals( this.targetGeocode, getCurrentEventResponse.targetGeocode );
     }
 
     /**
@@ -162,7 +201,7 @@ public class GetCurrentEventLevelResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( found, foundGeoCode );
+        return Objects.hash( found, status, targetGeocode );
     }
 
     /**
@@ -175,7 +214,8 @@ public class GetCurrentEventLevelResponse {
 
         return "class GetCurrentEventGeoCodeResponse {\n" +
                 "    found: " + toIndentedString( found ) + "\n" +
-                "    foundGeoCode: " + toIndentedString( foundGeoCode ) + "\n" +
+                "    status: " + toIndentedString( status ) + "\n" +
+                "    targetGeoCode: " + toIndentedString( targetGeocode ) + "\n" +
                 "}";
     }
 
