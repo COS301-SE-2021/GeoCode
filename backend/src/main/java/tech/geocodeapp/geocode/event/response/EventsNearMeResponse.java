@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.general.response.Response;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +15,7 @@ import java.util.Objects;
  * EventsNearMeResponse object to hold the list of found Events
  */
 @Validated
-public class EventsNearMeResponse {
+public class EventsNearMeResponse extends Response {
 
     /**
      * The list of Events found within the locations radius
@@ -25,19 +26,12 @@ public class EventsNearMeResponse {
     private List< Event > foundEvents;
 
     /**
-     * Default Constructor
-     */
-    public EventsNearMeResponse() {
-
-    }
-
-    /**
      *  Overloaded Constructor
      *
      * @param foundEvents The list of Events found within the locations radius
      */
-    public EventsNearMeResponse( List< Event > foundEvents ) {
-
+    public EventsNearMeResponse( boolean success, String message, List< Event > foundEvents ) {
+        super(success, message);
         this.foundEvents = foundEvents;
     }
 
