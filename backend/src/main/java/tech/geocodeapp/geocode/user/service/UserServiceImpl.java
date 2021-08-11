@@ -68,6 +68,8 @@ public class UserServiceImpl implements UserService {
     private final String invalidGeoCodeIdMessage = "Invalid GeoCode id";
     private final String invalidCollectableTypeIDMessage = "Invalid CollectableType ID";
 
+    private final String existingUserIdMessage = "User ID already exists";
+
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
     @NotNull(message = "GeoCode Service Implementation may not be null.")
@@ -462,6 +464,13 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
+        //check if the User already exists
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+
+        if(optionalUser.isPresent()){
+            return new RegisterNewUserResponse(false, existingUserIdMessage);
+        }
+
         User newUser = new User();
         newUser.setId(request.getUserID());
         newUser.setUsername(request.getUsername());
@@ -469,9 +478,9 @@ public class UserServiceImpl implements UserService {
         //get the CollectableType object for trackables
         GetCollectableTypeByIDRequest getCollectableTypeByIDRequest = new GetCollectableTypeByIDRequest(trackableUUID);
         GetCollectableTypeByIDResponse getCollectableTypeByIDResponse = collectableService.getCollectableTypeByID( getCollectableTypeByIDRequest );
-        CollectableType optionalCollectableType = getCollectableTypeByIDResponse.getCollectableType();
+        CollectableType collectableType = getCollectableTypeByIDResponse.getCollectableType();
 
-        Collectable trackableObject = new Collectable( optionalCollectableType );
+        Collectable trackableObject = new Collectable( collectableType );
         newUser.setTrackableObject(trackableObject);
         newUser.setCurrentCollectable(trackableObject);
         userRepo.save(newUser);
