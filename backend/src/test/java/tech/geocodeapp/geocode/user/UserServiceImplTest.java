@@ -895,7 +895,7 @@ public class UserServiceImplTest {
             AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("GeoCode added to the owned GeoCodes", response.getMessage());
+            Assertions.assertEquals("GeoCode added to the found GeoCodes", response.getMessage());
 
             Assertions.assertEquals(numberOfOwnedGeoCodesBefore, validUser.getOwnedGeocodes().size());
         } catch (NullRequestParameterException e) {
@@ -910,7 +910,7 @@ public class UserServiceImplTest {
             AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("GeoCode added to the owned GeoCodes", response.getMessage());
+            Assertions.assertEquals("GeoCode added to the found GeoCodes", response.getMessage());
 
             Assertions.assertEquals(numberOfFoundGeoCodesBefore+1, validUser.getFoundGeocodes().size());
             Assertions.assertTrue(validUser.getFoundGeocodes().contains(geoCode3));
