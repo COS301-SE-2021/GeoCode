@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.request.*;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.DeletePointResponse;
@@ -881,5 +882,15 @@ public class LeaderboardServiceImplTest {
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Test that when a point with null values is passed that the correct exception is thrown
+     */
+    @Test
+    public void savePointNullValues() {
+        Point point = new Point(null, null, null);
+        assertThatThrownBy(() -> leaderboardService.savePoint(point))
+                .isInstanceOf(NullRequestParameterException.class);
     }
 }
