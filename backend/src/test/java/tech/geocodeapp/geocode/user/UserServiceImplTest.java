@@ -395,8 +395,7 @@ public class UserServiceImplTest {
 
     @Test
     void getFoundCollectableTypesTestNullId(){
-        GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
-        request.setUserID(null);
+        GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest(null);
 
         assertThatThrownBy(() -> userService.getFoundCollectableTypes(request))
                 .isInstanceOf(NullRequestParameterException.class);
@@ -409,8 +408,7 @@ public class UserServiceImplTest {
             Create a request object
             and assign values to it
             */
-            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
-            request.setUserID(invalidUserId);
+            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest(invalidUserId);
 
             GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
             Assertions.assertFalse(response.isSuccess());
@@ -428,8 +426,7 @@ public class UserServiceImplTest {
              Create a request object
              and assign values to it
            */
-            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest();
-            request.setUserID(validUserId);
+            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest(validUserId);
 
             GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
             Assertions.assertTrue(response.isSuccess());
@@ -457,8 +454,7 @@ public class UserServiceImplTest {
 
     @Test
     void getFoundGeoCodesTestNullId(){
-        GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
-        request.setUserID(null);
+        GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest(null);
 
         assertThatThrownBy(() -> userService.getFoundGeoCodes(request))
                 .isInstanceOf(NullRequestParameterException.class);
@@ -471,8 +467,7 @@ public class UserServiceImplTest {
             Create a request object
             and assign values to it
             */
-            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
-            request.setUserID(invalidUserId);
+            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest(invalidUserId);
 
             GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
             Assertions.assertFalse(response.isSuccess());
@@ -490,8 +485,7 @@ public class UserServiceImplTest {
              Create a request object
              and assign values to it
            */
-            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
-            request.setUserID(validUserId);
+            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest(validUserId);
 
             GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
             Assertions.assertTrue(response.isSuccess());
@@ -977,7 +971,7 @@ public class UserServiceImplTest {
             AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
 
             Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("The CollectableType was added successfully", response.getMessage());
+            Assertions.assertEquals("CollectableType added to the found CollectableTypes", response.getMessage());
 
             Assertions.assertEquals(numberOfFoundCollectableTypesBefore, validUser.getFoundCollectableTypes().size());
         } catch (NullRequestParameterException e) {
@@ -992,7 +986,7 @@ public class UserServiceImplTest {
             AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
 
             Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("The CollectableType was added successfully", response.getMessage());
+            Assertions.assertEquals("CollectableType added to the found CollectableTypes", response.getMessage());
 
             Assertions.assertEquals(numberOfFoundCollectableTypesBefore+1, validUser.getFoundCollectableTypes().size());
             Assertions.assertTrue(validUser.getFoundCollectableTypes().contains(fishType));

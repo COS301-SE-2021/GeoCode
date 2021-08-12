@@ -347,7 +347,7 @@ public class UserServiceImpl implements UserService {
             userRepo.save(user);
         }
 
-        return new AddToFoundGeoCodesResponse(true, "GeoCode added to the owned GeoCodes");
+        return new AddToFoundGeoCodesResponse(true, "GeoCode added to the found GeoCodes");
     }
 
     /**
@@ -355,6 +355,7 @@ public class UserServiceImpl implements UserService {
      * @param request AddToFoundCollectableTypesRequest object
      * @return AddToFoundCollectableTypesResponse object
      */
+    @Transactional
     public AddToFoundCollectableTypesResponse addToFoundCollectableTypes(AddToFoundCollectableTypesRequest request) throws NullRequestParameterException{
         if(request == null){
             return new AddToFoundCollectableTypesResponse(false, "The AddToFoundCollectableTypesRequest object passed was NULL");
@@ -385,7 +386,7 @@ public class UserServiceImpl implements UserService {
             userRepo.save(user);
         }
 
-        return new AddToFoundCollectableTypesResponse(true, "The CollectableType was added successfully");
+        return new AddToFoundCollectableTypesResponse(true, "CollectableType added to the found CollectableTypes");
     }
 
     /**
