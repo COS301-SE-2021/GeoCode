@@ -276,6 +276,15 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Gets the User's Missions
+     * @param request GetMyMissionsRequest object
+     * @return GetMyMissionsResponse object
+     */
+    public GetMyMissionsResponse getMyMissions(GetMyMissionsRequest request) throws NullRequestParameterException {
+        return null;
+    }
+
+    /**
      * Gets the User for the given id if they exist
      * @param request The GetUserByIdRequest object
      * @return The User if they exist, else NULL contained in a GetUserByIdResponse object
