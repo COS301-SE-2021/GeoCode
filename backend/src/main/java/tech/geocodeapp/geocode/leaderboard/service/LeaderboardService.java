@@ -2,6 +2,8 @@ package tech.geocodeapp.geocode.leaderboard.service;
 
 import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.request.*;
 import tech.geocodeapp.geocode.leaderboard.response.*;
 
@@ -31,4 +33,6 @@ public interface LeaderboardService {
     DeletePointResponse deletePoint(DeletePointRequest request) throws NullRequestParameterException;
 
     PointResponse updatePoint(UpdatePointRequest request) throws NullRequestParameterException;
+
+    Response savePoint(Point point) throws NullRequestParameterException;
 }
