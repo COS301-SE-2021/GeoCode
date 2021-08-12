@@ -486,7 +486,7 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        /* check if UserID is invalid */
+        /* check if the UserID is invalid */
         GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(request.getUserID());
         GetUserByIdResponse getUserByIdResponse = this.getUserById(getUserByIdRequest);
 
