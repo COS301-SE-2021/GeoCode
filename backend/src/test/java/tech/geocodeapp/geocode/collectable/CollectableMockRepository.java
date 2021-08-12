@@ -70,7 +70,7 @@ public class CollectableMockRepository implements CollectableRepository {
 
     @Override
     public Optional<Collectable> findById(UUID uuid) {
-        return Optional.empty();
+        return Optional.ofNullable(map.get(uuid));
     }
 
     @Override

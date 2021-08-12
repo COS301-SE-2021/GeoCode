@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.user;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.*;
@@ -12,6 +13,7 @@ import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
+import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
@@ -24,10 +26,14 @@ public class UserServiceImplIT {
 
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
+    private final UUID noPointsUserId = UUID.fromString("cdc0f9a0-65da-43c6-8d17-505d61c27965");
     private final UUID userWithPoints1 = UUID.fromString("a98e8a41-0d6f-454f-a5d9-df809d2c1040");
     private final UUID userWithPoints2 = UUID.fromString("960b6fd8-7283-43e8-9e18-2e6bef38fbb8");
 
-    private final String invalidUserIdMessage = "Invalid user id";
+    private final String invalidUserIdMessage = "Invalid User id";
+    private final String invalidGeoCodeIdMessage = "Invalid GeoCode id";
+    private final String invalidCollectableTypeIDMessage = "Invalid CollectableType ID";
+
     private final UUID firstGeoCodeID = UUID.fromString("537689d1-a0d8-4740-bec6-6a40bb69748e");
     private final UUID secondGeoCodeID = UUID.fromString("5d709c49-326b-470a-8d9d-e7f7bf77ef6e");
     private final UUID thirdGeoCodeID = UUID.fromString("92e3e6d5-5457-48f7-adb1-7c2f67ee836b");
@@ -39,6 +45,18 @@ public class UserServiceImplIT {
     private final int user2EasterPoints = 5;
     private final int user1ChristmasPoints = 10;
     private final int user2ChristmasPoints = 5;
+
+    private int numberOfOwnedGeoCodesBefore;
+    private int numberOfFoundGeoCodesBefore;
+    private int numberOfFoundCollectableTypesBefore;
+
+    private final UUID invalidGeoCodeID = UUID.fromString("c6dab51d-7b2c-45df-940c-189821a36178");
+    private final UUID invalidCollectableID = UUID.fromString("4d2877ee-431e-4a46-b391-c9755291a0f6");
+    private final UUID invalidCollectableTypeID = UUID.fromString("1c39987b-f7b6-478f-b99c-2c57928481af");
+
+    private final UUID noPointsFirstGeoCodeID = UUID.fromString("c8c60a6d-9bfd-4a1c-a864-6140935a4296");
+    private final UUID noPointsNewGeoCodeID = UUID.fromString("1589fcd5-aac5-4434-a435-d4d03df05703");
+
 
     @Test
     public void getCurrentCollectableTestInvalidUser() {
@@ -313,14 +331,22 @@ public class UserServiceImplIT {
     @Test
     void getMyLeaderboardsTestUserWithNoPoints(){
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
-        request.setUserID(validUserId);
+        request.setUserID(noPointsUserId);
 
         try {
             GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
+
+            System.out.println("printing the details for the leaderboards:");
+
+            for(MyLeaderboardDetails details : response.getLeaderboards()){
+                System.out.println(details.getName()+", "+details.getPoints()+", "+details.getRank());
+            }
+
             Assertions.assertTrue(response.getLeaderboards().isEmpty());
+
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
@@ -395,6 +421,77 @@ public class UserServiceImplIT {
             ));
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void AddToOwnedGeoCodesTestInvalidUserID(){
+        try {
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(invalidUserId, firstGeoCodeID);
+            AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void AddToOwnedGeoCodesTestInvalidGeoCodeID(){
+        try {
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUserId, invalidGeoCodeID);
+            AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidGeoCodeIdMessage, response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void AddToOwnedGeoCodesTestNotAddDuplicate(){
+        try {
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(noPointsUserId, noPointsFirstGeoCodeID);
+            AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("GeoCode added to the owned GeoCodes", response.getMessage());
+
+            GetOwnedGeoCodesRequest getOwnedGeoCodesRequest = new GetOwnedGeoCodesRequest(noPointsUserId);
+            GetOwnedGeoCodesResponse getOwnedGeoCodesResponse = userService.getOwnedGeoCodes(getOwnedGeoCodesRequest);
+
+            Assertions.assertTrue(getOwnedGeoCodesResponse.isSuccess());
+
+            List<UUID> ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
+
+            Assertions.assertEquals(2, ownedGeoCodeIDs.size());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void AddToOwnedGeoCodesTestAddNew(){
+        try {
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(noPointsUserId, noPointsNewGeoCodeID);
+            AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("GeoCode added to the owned GeoCodes", response.getMessage());
+
+            GetOwnedGeoCodesRequest getOwnedGeoCodesRequest = new GetOwnedGeoCodesRequest(noPointsUserId);
+            GetOwnedGeoCodesResponse getOwnedGeoCodesResponse = userService.getOwnedGeoCodes(getOwnedGeoCodesRequest);
+
+            Assertions.assertTrue(getOwnedGeoCodesResponse.isSuccess());
+
+            List<UUID> ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
+
+            Assertions.assertEquals(3, ownedGeoCodeIDs.size());
+            Assertions.assertTrue(ownedGeoCodeIDs.contains(noPointsNewGeoCodeID));
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
         }
     }
 }
