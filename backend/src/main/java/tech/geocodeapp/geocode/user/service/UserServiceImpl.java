@@ -496,6 +496,29 @@ public class UserServiceImpl implements UserService {
 
         User currentUser = getUserByIdResponse.getUser();
 
+        //get the GeoCode
+        GetGeoCodeRequest getGeoCodeByIDRequest = new GetGeoCodeRequest(request.getGeoCodeID());
+        GetGeoCodeResponse getGeoCodeByIDResponse;
+
+        try {
+            getGeoCodeByIDResponse = geoCodeService.getGeoCode(getGeoCodeByIDRequest);
+        } catch (InvalidRequestException e) {
+            e.printStackTrace();
+            return new SwapCollectableResponse(false, e.getMessage(), null);
+        }
+
+        GeoCode geoCode = getGeoCodeByIDResponse.getFoundGeoCode();
+
+        //check if GeoCodeID is invalid
+        if(geoCode == null){
+            return new SwapCollectableResponse(false, "Invalid ID given for the GeoCode", null);
+        }
+
+        //check if the GeoCode contains the given Collectable
+        if(!geoCode.getCollectables().contains(request.getCollectableID())){
+            return new SwapCollectableResponse(false, "Invalid ID given for the Collectable", null);
+        }
+
         /* only swap the Collectables if no errors have occurred before now */
         //currentCollectable to swap out
         Collectable oldCurrentCollectable = currentUser.getCurrentCollectable();
