@@ -30,6 +30,7 @@
     "jsqr": "^1.4.0",
     "keycloak-angular": "^8.2.0",
     "keycloak-js": "13.0.1",
+    "qrcode-with-logos": "^1.0.3",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
