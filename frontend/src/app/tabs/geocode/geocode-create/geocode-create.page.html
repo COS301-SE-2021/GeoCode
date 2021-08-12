@@ -29,7 +29,7 @@
     <ion-select  placeholder="Select One" #Diff (ionChange)="updateDifficulty(Diff.value)">
       <ion-select-option value="EASY">Easy</ion-select-option>
       <ion-select-option value="MEDIUM">Medium</ion-select-option>
-      <ion-select-option value="DIFFICULTY">Hard</ion-select-option>
+      <ion-select-option value="HARD">Hard</ion-select-option>
       <ion-select-option value="INSANE">Insane</ion-select-option>
     </ion-select>
   </ion-item>
@@ -43,6 +43,10 @@
   <div id="button-container">
     <ion-button class="button" color="danger" (click)="createGeoCode()">Create GeoCode</ion-button>
   </div>
+
+  <canvas id="canvas"></canvas>
+  <img src="" alt="" id="image"/>
+  <img id="image" alt="">
 
 
 </ion-content>
