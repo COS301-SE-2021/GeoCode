@@ -457,8 +457,7 @@ public class UserServiceImplTest {
 
     @Test
     void getFoundGeoCodesTestNullId(){
-        GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
-        request.setUserID(null);
+        GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest(null);
 
         assertThatThrownBy(() -> userService.getFoundGeoCodes(request))
                 .isInstanceOf(NullRequestParameterException.class);
@@ -471,8 +470,7 @@ public class UserServiceImplTest {
             Create a request object
             and assign values to it
             */
-            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
-            request.setUserID(invalidUserId);
+            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest(invalidUserId);
 
             GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
             Assertions.assertFalse(response.isSuccess());
@@ -490,8 +488,7 @@ public class UserServiceImplTest {
              Create a request object
              and assign values to it
            */
-            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest();
-            request.setUserID(validUserId);
+            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest(validUserId);
 
             GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
             Assertions.assertTrue(response.isSuccess());

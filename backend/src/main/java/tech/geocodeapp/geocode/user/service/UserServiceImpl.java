@@ -363,7 +363,7 @@ public class UserServiceImpl implements UserService {
             userRepo.save(user);
         }
 
-        return new AddToFoundGeoCodesResponse(true, "GeoCode added to the owned GeoCodes");
+        return new AddToFoundGeoCodesResponse(true, "GeoCode added to the found GeoCodes");
     }
 
     /**
