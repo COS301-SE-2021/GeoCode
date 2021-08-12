@@ -15,4 +15,8 @@ public interface MissionComponent {
      * @param id the id
      */
     void setId(UUID id);
+
+    Integer getAmount();
+
+    void setAmount(Integer amount);
 }
