@@ -69,6 +69,8 @@ public class UserServiceImplIT {
     private final UUID testCollectableType2ID = UUID.fromString("cad9d680-6e0e-4c9f-9d05-45fb4b430fdd");
     private final UUID noPointsNewFoundCollectableTypeID = UUID.fromString("08603f0d-3262-4b71-a50b-4a4605f36bea");
 
+    private final UUID collectableInFirstGeoCodeID = UUID.fromString("bf98dbf9-90b5-43ab-91b3-396d8f6ff216");
+
     private final String existingUserIdMessage = "User ID already exists";
 
     @Test
@@ -741,6 +743,83 @@ public class UserServiceImplIT {
             Assertions.assertEquals(trackableUUID, user.getCurrentCollectable().getType().getId());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void swapCollectableTestCollectableInvalidUserID(){
+        try {
+            SwapCollectableRequest request = new SwapCollectableRequest(invalidUserId, collectableInFirstGeoCodeID, firstGeoCodeID);
+            SwapCollectableResponse response = userService.swapCollectable(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+
+            Collectable collectable = response.getCollectable();
+            Assertions.assertNull(collectable);
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void swapCollectableTestCollectableInvalidGeoCodeID(){
+        try {
+            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, collectableInFirstGeoCodeID, invalidGeoCodeID);
+            SwapCollectableResponse response = userService.swapCollectable(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Invalid ID given for the GeoCode", response.getMessage());
+
+            Collectable collectable = response.getCollectable();
+            Assertions.assertNull(collectable);
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void swapCollectableTestCollectableInvalidCollectableID(){
+        try {
+            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, invalidCollectableID, firstGeoCodeID);
+            SwapCollectableResponse response = userService.swapCollectable(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Invalid ID given for the Collectable", response.getMessage());
+
+            Collectable collectable = response.getCollectable();
+            Assertions.assertNull(collectable);
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void swapCollectableTestCollectableIsSwapped(){
+        try {
+            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, collectableInFirstGeoCodeID, firstGeoCodeID);
+            SwapCollectableResponse response = userService.swapCollectable(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The User's Collectable was swapped with the Collectable in the GeoCode", response.getMessage());
+
+            Collectable collectable = response.getCollectable();
+            Assertions.assertNotNull(collectable);
+
+            System.out.println("collectable that comes out: "+collectable.getId());
+
+            GetCurrentCollectableRequest getCurrentCollectableRequest = new GetCurrentCollectableRequest();
+            getCurrentCollectableRequest.setUserID(validUserId);
+
+            GetCurrentCollectableResponse getCurrentCollectableResponse = userService.getCurrentCollectable(getCurrentCollectableRequest);
+
+            Assertions.assertTrue(getCurrentCollectableResponse.isSuccess());
+
+            //test that the User's Collectable is now the swapped out Collectable
+            Collectable currentCollectable = getCurrentCollectableResponse.getCollectable();
+            Assertions.assertEquals(collectableInFirstGeoCodeID, currentCollectable.getId());
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
         }
     }
 }
