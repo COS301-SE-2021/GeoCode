@@ -374,6 +374,38 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
+        
+  /User/getMyMissions:
+    post:
+      tags:
+        - "User"
+      summary: "Gets the Missions for a User"
+      description: "Gets the Missions that a User has been involved in the past"
+      operationId: "getMyMissions"
+      requestBody:
+        required: true
+        description: "Request to get the User's Missions"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetMyMissionsRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetMyMissionsRequest'
+      responses:
+        '200':
+          description: "The User's Missions were returned"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMyMissionsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetMyMissionsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
 
   /GeoCode/createGeoCode:
     post:
@@ -2219,7 +2251,68 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
+        
+  /Mission/getMissionById:
+    post:
+      tags:
+        - "Mission"
+      summary: "Gets a Mission"
+      description: "Gets a Mission specified by the given ID"
+      operationId: "getMissionById"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetMissionByIdRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetMissionByIdRequest'
+      responses:
+        '200':
+          description: "Mission returned"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMissionByIdResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetMissionByIdResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
 
+  /Mission/getProgress:
+    post:
+      tags:
+        - "Mission"
+      summary: "Gets the progress for a Mission"
+      description: "Gets the progress for a Mission specified by the given ID"
+      operationId: "getProgress"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetProgressRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetProgressRequest'
+      responses:
+        '200':
+          description: "Mission returned"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProgressResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetProgressResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
 
 components:
   responses:
@@ -2710,6 +2803,7 @@ components:
         - id
         - type
         - pastLocations
+        - mission
       properties:
         id:
           type: string
@@ -2720,6 +2814,9 @@ components:
           type: array
           items:
             type: string
+        mission:
+          type: string
+          format: uuid
       xml:
         name: "Collectable"
 
@@ -3042,6 +3139,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GeoCode'
+        pastMissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Mission'
 
     GetCurrentCollectableRequest:
       type: "object"
@@ -3342,7 +3443,32 @@ components:
               $ref: '#/components/schemas/Collectable'
           xml:
             name: "SwapCollectableResponse"
-
+            
+    GetMyMissionsRequest:
+      type: "object"
+      required:
+        - userID
+      properties:
+        userID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetMyMissionsRequest"
+    
+    GetMyMissionsResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "User Missions returned"
+            missions:
+              type: array
+              items: 
+                $ref: "#/components/schemas/Mission"
+          xml:
+            name: "GetMyMissionsResponse"
+    
     GetEventLeaderboardRequest:
       type: "object"
       required:
@@ -4235,3 +4361,81 @@ components:
                 $ref: "#/components/schemas/Leaderboard"
           xml:
             name: "GetLeaderBoardByTimeTrialResponse"
+            
+    Mission:
+      type: "object"
+      required:
+        - id
+        - type
+        - amount
+        - location
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: "#/components/schemas/MissionType"
+        amount:
+          type: number
+          example: 1
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+      xml:
+        name: "Mission"
+      
+    MissionType:
+      type: string
+      description: "The types of Missions"
+      enum:
+        - "Circumference"
+        - "GeoCode"
+        - "Swap"
+        - "Random"
+        
+    GetMissionByIdRequest:
+      type: "object"
+      required:
+        - missionID
+      properties:
+        missionID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetMissionByIdRequest"
+        
+    GetMissionByIdResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "Mission returned"
+            mission:
+              $ref: "#/components/schemas/Mission"
+          xml:
+            name: "GetMissionByIdResponse"
+            
+    GetProgressRequest:
+      type: "object"
+      required:
+        - missionID
+      properties:
+        missionID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetProgressRequest"
+    
+    GetProgressResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "Mission progress returned"
+            progress:
+              type: number
+              example: 85
+          xml:
+            name: "GetProgressResponse"
+      
