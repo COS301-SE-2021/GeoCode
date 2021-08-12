@@ -111,7 +111,7 @@ public class UserServiceImplTest {
             return;
         }
 
-        userService = new UserServiceImpl(userMockRepo, collectableMockRepo, new PointMockRepository(), collectableService, null, null);
+        userService = new UserServiceImpl(userMockRepo, collectableMockRepo, new PointMockRepository(), collectableService);
         userService.setGeoCodeService(geoCodeService);
 
         //save the valid trackable CollectableType

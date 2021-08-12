@@ -126,7 +126,12 @@ public class ConcreteEvent implements EventComponent {
      */
     @Override
     public int calculatePoints(GeoCode foundGeocode, UserEventStatus status) {
-        //TODO determine base points from the geocode
-        return 0;
+        switch(foundGeocode.getDifficulty()){
+            case EASY: return 10;
+            case MEDIUM: return 20;
+            case HARD: return 30;
+            case INSANE: return 40;
+            default: return 0;
+        }
     }
 }

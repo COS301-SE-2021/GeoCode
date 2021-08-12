@@ -13,28 +13,20 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest
 import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
-import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.request.GetEventRequest;
-import tech.geocodeapp.geocode.event.request.NextStageRequest;
-import tech.geocodeapp.geocode.event.response.GetEventResponse;
-import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
-import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 
@@ -52,9 +44,6 @@ public class UserServiceImpl implements UserService {
     @NotNull(message = "Collectable Service Implementation may not be null.")
     private final CollectableService collectableService;
 
-    @NotNull(message = "Leaderboard Service Implementation may not be null.")
-    private final LeaderboardService leaderboardService;
-
     private final String invalidUserIdMessage = "Invalid User id";
     private final String invalidGeoCodeIdMessage = "Invalid GeoCode id";
     private final String invalidCollectableTypeIDMessage = "Invalid CollectableType ID";
@@ -66,16 +55,11 @@ public class UserServiceImpl implements UserService {
     @NotNull(message = "GeoCode Service Implementation may not be null.")
     private GeoCodeService geoCodeService;
 
-    @NotNull(message = "Event Service Implementation may not be null.")
-    private final EventService eventService;
-
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, @Qualifier("LeaderboardService") LeaderboardService leaderboardService, @Qualifier("EventService") EventService eventService) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
         this.pointRepo = pointRepo;
         this.collectableService = collectableService;
-        this.leaderboardService = leaderboardService;
-        this.eventService = eventService;
     }
 
     /**
@@ -430,10 +414,8 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     public User getCurrentUser(){
-        String uuid = SecurityContextHolder.getContext().getAuthentication().getName();
-
         /* make request to get the current User*/
-        GetUserByIdRequest request = new GetUserByIdRequest(UUID.fromString(uuid));
+        GetUserByIdRequest request = new GetUserByIdRequest(getCurrentUserID());
 
         try{
             return getUserById(request).getUser();
@@ -441,6 +423,15 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     *  Gets the current user ID using the Keycloak details
+     * @return The current user ID
+     */
+    public UUID getCurrentUserID(){
+        String uuid = SecurityContextHolder.getContext().getAuthentication().getName();
+        return UUID.fromString(uuid);
     }
 
     /**
@@ -503,167 +494,6 @@ public class UserServiceImpl implements UserService {
         }
 
         User currentUser = getUserByIdResponse.getUser();
-
-        /* assign points to the User for finding the GeoCode */
-
-        //get the GeoCode
-        GetGeoCodeRequest getGeoCodeByIDRequest = new GetGeoCodeRequest(request.getGeoCodeID());
-        GetGeoCodeResponse getGeoCodeByIDResponse;
-
-        try {
-            getGeoCodeByIDResponse = geoCodeService.getGeoCode(getGeoCodeByIDRequest);
-        } catch (InvalidRequestException e) {
-            e.printStackTrace();
-            return new SwapCollectableResponse(false, e.getMessage(), null);
-        }
-
-        GeoCode geoCode = getGeoCodeByIDResponse.getFoundGeoCode();
-
-        //check if GeoCodeID is invalid
-        if(geoCode == null){
-            return new SwapCollectableResponse(false, "Invalid ID given for the GeoCode", null);
-        }
-
-        //check if the GeoCode contains the given Collectable
-        if(!geoCode.getCollectables().contains(request.getCollectableID())){
-            return new SwapCollectableResponse(false, "Invalid ID given for the Collectable", null);
-        }
-
-        //check if the GeoCode is part of an Event
-        UUID eventID = geoCode.getEventID();
-
-        if(eventID != null){
-            //get the difficulty of the GeoCode
-            Difficulty geocodeDifficulty = geoCode.getDifficulty();
-
-            //determine how many points the User should get
-            int pointsAmount = 0;
-
-            switch(geocodeDifficulty){
-                case EASY:
-                    pointsAmount = 10;
-                    break;
-                case MEDIUM:
-                    pointsAmount = 20;
-                    break;
-                case HARD:
-                    pointsAmount = 30;
-                    break;
-                case INSANE:
-                    pointsAmount = 40;
-                    break;
-            }
-
-            /*Event event;
-            IsTimeTrialRequest timeTrialRequest = new IsTimeTrialRequest(eventID);
-            IsTimeTrialResponse timeTrialResponse = null;
-
-            try {
-                timeTrialResponse = eventService.isTimeTrial(timeTrialRequest);
-            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-                e.printStackTrace();
-            }
-
-            //check if the event is a time trial or not
-            if(timeTrialResponse != null && timeTrialResponse.isFound()){
-                event = timeTrialResponse.getFoundEvent();
-                double timeLimit = timeTrialResponse.getFoundEvent().getTimeLimit();
-                //get the timelog to see starting time
-                GetTimeLogRequest timeLogRequest= new GetTimeLogRequest(eventID, getCurrentUser().getId(), request.getGeoCodeID());
-                double timeTaken;
-                try {
-                    GetTimeLogResponse timeLogResponse = eventService.getTimeLog(timeLogRequest);
-                    OffsetDateTime now = OffsetDateTime.now();
-                    if(timeLogResponse.isFound()){
-                       timeTaken = now.getHour() - timeLogResponse.getFoundTimeLog().getStartTime().getHour();
-                       timeTaken = timeTaken * 60;
-                       double minutes = now.getMinute() - timeLogResponse.getFoundTimeLog().getStartTime().getMinute();
-                       timeTaken += minutes;
-
-                       //check if timeTaken is greater than the allowed time
-                        if(timeTaken > timeLimit){
-                            double percentage;
-                            percentage = (timeTaken - timeLimit) / timeLimit;
-                            if(percentage == 1) {
-                                pointsAmount = 0;
-                            }else {
-                               int difference = (int) Math.round(pointsAmount * percentage);
-                               pointsAmount = pointsAmount - difference;
-                            }
-                        }
-                    }else{
-                        return new SwapCollectableResponse(false, "Timelog does not exist", null);
-                    }
-                } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-                    e.printStackTrace();
-                }
-            }else{
-                GetEventRequest getEventByIDRequest = new GetEventRequest( eventID );
-                GetEventResponse getEventByIDResponse;
-
-                try {
-                    getEventByIDResponse = eventService.getEvent(getEventByIDRequest);
-                    event = getEventByIDResponse.getFoundEvent();
-                } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-                    e.printStackTrace();
-                    return new SwapCollectableResponse(false, e.getMessage(), null);
-                }
-            }*/
-
-            GetEventRequest getEventByIDRequest = new GetEventRequest( eventID);
-            GetEventResponse getEventByIDResponse;
-            Event event;
-
-            try {
-                getEventByIDResponse = eventService.getEvent(getEventByIDRequest);
-                event = getEventByIDResponse.getFoundEvent();
-            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-                e.printStackTrace();
-                return new SwapCollectableResponse(false, e.getMessage(), null);
-            }
-
-            //get the LeaderboardID of the Leaderboard for the Event
-//            UUID leaderboardID = event.getLeaderboards().get( 0 ).getId();
-//
-//            //get the ID of the current User
-            UUID userID = getCurrentUser().getId();
-//
-//            //check if the User does not already have points for the Leaderboard
-//            GetPointForUserRequest getPointForUserRequest = new GetPointForUserRequest(userID, leaderboardID);
-//            PointResponse getPointForUserResponse = leaderboardService.getPointForUser(getPointForUserRequest);
-//
-//            //add new Point entry if first time User is scoring on the Leaderboard
-//            if(!getPointForUserResponse.isSuccess()){
-//                CreatePointRequest createPointRequest = new CreatePointRequest(pointsAmount, userID, leaderboardID);
-//                PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
-//
-//                //check if the Point was not created successfully
-//                if(!pointResponse.isSuccess()){
-//                    return new SwapCollectableResponse(false, "Point could not be created", null);
-//                }
-//            }else{
-//                //update Point entry if already has scored on the Leaderboard
-//                Point point = getPointForUserResponse.getPoint();
-//
-//                UpdatePointRequest updatePointRequest = new UpdatePointRequest(point.getId(), point.getAmount()+pointsAmount);
-//                PointResponse updatePointResponse = leaderboardService.updatePoint(updatePointRequest);
-//
-//                //check if the Point was not successfully updated
-//                if(!updatePointResponse.isSuccess()){
-//                    return new SwapCollectableResponse(false, "Point could not be updated", null);
-//                }
-//            }
-
-            //go to the next stage for the Event
-            NextStageRequest nextStageRequest = new NextStageRequest(eventID, userID);
-
-            try {
-                eventService.nextStage(nextStageRequest);
-            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-                e.printStackTrace();
-                return new SwapCollectableResponse(false, e.getMessage(), null);
-            }
-        }
 
         /* only swap the Collectables if no errors have occurred before now */
         //currentCollectable to swap out

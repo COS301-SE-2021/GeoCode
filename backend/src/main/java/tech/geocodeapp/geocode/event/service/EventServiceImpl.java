@@ -23,6 +23,12 @@ import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
+import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
+import tech.geocodeapp.geocode.leaderboard.request.GetLeaderboardByIDRequest;
+import tech.geocodeapp.geocode.leaderboard.request.GetPointForUserRequest;
+import tech.geocodeapp.geocode.leaderboard.response.GetLeaderboardByIDResponse;
+import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.service.UserService;
 
@@ -76,8 +82,10 @@ public class EventServiceImpl implements EventService {
      * @param eventRepo          the repo the created response attributes should save to
      * @param leaderboardService access to the Leaderboard use cases and repository
      */
-    public EventServiceImpl( EventRepository eventRepo, UserEventStatusRepository userEventStatusRepo,
-                             @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService ) throws RepoException {
+    public EventServiceImpl( EventRepository eventRepo,
+                             UserEventStatusRepository userEventStatusRepo,
+                             @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService,
+                             @Qualifier("UserService") UserService userService ) throws RepoException {
 
         if ( ( eventRepo != null ) && ( userEventStatusRepo != null ) ) {
 
@@ -86,6 +94,7 @@ public class EventServiceImpl implements EventService {
             this.userEventStatusRepo = userEventStatusRepo;
 
             this.leaderboardService = Objects.requireNonNull( leaderboardService, "EventService: Leaderboard service must not be null." );
+            this.userService = Objects.requireNonNull( userService, "EventService: User service must not be null." );
         } else {
 
             /* The repo does not exist throw an error */
@@ -289,6 +298,15 @@ public class EventServiceImpl implements EventService {
 
         /* Get the UserEventStatus object from the repository */
         UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID(request.getEventID(), request.getUserID());
+
+        /* Check whether the current user is requesting for themselves */
+        UUID currentUserID = userService.getCurrentUserID();
+        if (!currentUserID.equals(request.getUserID())) {
+            /* The userID passed in does not match the current user ID. Just return the passed-in user's status */
+            return new GetCurrentEventStatusResponse(true, "Status returned for another user", status, null);
+        }
+        /* from this point the currentUserID is the same as the request user ID */
+
         if (status == null) {
             /* User is not participating in an event with the provided id. Enter them into it. */
 
@@ -304,15 +322,31 @@ public class EventServiceImpl implements EventService {
 
                 /* Create a new status object with the geocodeID set to the first geocode */
                 Map<String, String> details = new HashMap<String, String>();
-                status = new UserEventStatus(UUID.randomUUID(), event.getID(), request.getUserID(), nextGeocodeID, details);
+                status = new UserEventStatus(UUID.randomUUID(), event.getID(), currentUserID, nextGeocodeID, details);
                 event.handleEventStart(status);
-                userEventStatusRepo.save(status);
 
-                //TODO create a blank Point object and save it
+                /* Create the user's points if the event has a leaderboard */
+                if (event.getLeaderboards().size() > 0) {
+                    try {
+                        UUID leaderboardID = event.getLeaderboards().get(0).getId();
+                        CreatePointRequest pointRequest = new CreatePointRequest(0, currentUserID, leaderboardID);
+                        PointResponse pointResponse = leaderboardService.createPoint(pointRequest);
+
+                        if (!pointResponse.isSuccess()) {
+                            return new GetCurrentEventStatusResponse(false, pointResponse.getMessage(), null, null);
+                        }
+
+                    } catch (NullRequestParameterException ignored) {
+                        return new GetCurrentEventStatusResponse(false, "Failed to create Point", null, null);
+                    }
+                }
+
+                /* Save the event status in the repo once points have been made */
+                userEventStatusRepo.save(status);
 
             } else {
                 /* An event with the provided id was not found */
-                return new GetCurrentEventStatusResponse(false, "Event " + request.getEventID() + " was not found", null, null);
+                return new GetCurrentEventStatusResponse(false, eventNotFoundMessage, null, null);
             }
         }
 
@@ -355,7 +389,7 @@ public class EventServiceImpl implements EventService {
         Optional<Event> temp = eventRepo.findById(eventID);
         if (temp.isEmpty()) {
             /* An event with the provided id was not found */
-            throw new NotFoundException("Event " + eventID + " was not found");
+            throw new NotFoundException(eventNotFoundMessage);
         }
 
         /* Create the decorated event */
@@ -395,11 +429,28 @@ public class EventServiceImpl implements EventService {
                     UUID nextGeocodeID = ids.get(i + 1);
                     status.setGeocodeID(nextGeocodeID);
                 }
+
+                /* Update the user's points if the event has a leaderboard */
+                if (event.getLeaderboards().size() > 0) {
+                    try {
+                        UUID leaderboardID = event.getLeaderboards().get(0).getId();
+                        GetPointForUserRequest userPointRequest = new GetPointForUserRequest(userID, leaderboardID);
+                        PointResponse userPointResponse = leaderboardService.getPointForUser(userPointRequest);
+                        Point point = userPointResponse.getPoint();
+
+                        if (point != null) {
+                            int pointsAchieved = event.calculatePoints(foundGeocode, status);
+                            point.setAmount(point.getAmount() + pointsAchieved);
+                            leaderboardService.savePoint(point);
+                        }
+
+                    } catch (NullRequestParameterException ignored) {
+                        throw new NotFoundException("Failed to find the user's points");
+                    }
+                }
+
+                /* Save the event status in the repo once points have been edited */
                 userEventStatusRepo.save(status);
-
-                int pointsAchieved = event.calculatePoints(foundGeocode, status);
-                //TODO update the user's Point object here
-
                 return;
             }
         }
