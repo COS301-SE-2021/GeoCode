@@ -14,5 +14,5 @@ export interface UpdatePointRequest {
     pointId: string;
     amount?: number;
     userId?: string;
-    leaderboardId?: string;
+    leaderboardID?: string;
 }

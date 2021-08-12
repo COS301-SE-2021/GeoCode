@@ -12,6 +12,7 @@ import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -75,6 +76,12 @@ public class CreateEventRequest {
     private Boolean available;
 
     /**
+     * Properties of the Event
+     */
+    @JsonProperty( "properties" )
+    private Map<String, String> properties;
+
+    /**
      * Default constructor
      */
     public CreateEventRequest() {
@@ -91,10 +98,11 @@ public class CreateEventRequest {
      * @param endDate The end Date of the Event
      * @param geoCodesToFind The different GeoCodes to find during the Event
      * @param orderBy The order in which the Users will complete the different Levels
+     * @param properties Properties of the Event
      */
     public CreateEventRequest( String name, String description, GeoPoint location,
                                LocalDate beginDate, LocalDate endDate,
-                               List< UUID > geoCodesToFind, OrderLevels orderBy ) {
+                               List< UUID > geoCodesToFind, OrderLevels orderBy, Map<String, String> properties ) {
 
         this.name = name;
         this.description = description;
@@ -103,6 +111,7 @@ public class CreateEventRequest {
         this.endDate = endDate;
         this.geoCodesToFind = geoCodesToFind;
         this.orderBy = orderBy;
+        this.properties = properties;
     }
 
     /**
@@ -116,10 +125,11 @@ public class CreateEventRequest {
      * @param geoCodesToFind The different GeoCodes to find during the Event
      * @param orderBy The order in which the Users will complete the different Levels
      * @param available If the Event is active in the system for a user to participate
+     * @param properties Properties of the Event
      */
     public CreateEventRequest( String name, String description, GeoPoint location,
                                LocalDate beginDate, LocalDate endDate, List< UUID > geoCodesToFind,
-                               OrderLevels orderBy, Boolean available ) {
+                               OrderLevels orderBy, Boolean available, Map<String, String> properties ) {
 
         this.name = name;
         this.description = description;
@@ -412,6 +422,40 @@ public class CreateEventRequest {
     }
 
     /**
+     * Sets the properties attribute to the specified value
+     *
+     * @param properties the value the attribute should be set to
+     *
+     * @return the model after the properties has been changed
+     */
+    @Valid
+    public CreateEventRequest properties( Map<String, String> properties ) {
+
+        this.properties = properties;
+        return this;
+    }
+
+    /**
+     * Gets the saved properties attribute
+     *
+     * @return the stored properties attribute
+     */
+    public Map<String, String> getProperties() {
+
+        return properties;
+    }
+
+    /**
+     * Sets the properties attribute to the specified value
+     *
+     * @param properties the value the attribute should be set to
+     */
+    public void setProperties( Map<String, String> properties ) {
+
+        this.properties = properties;
+    }
+
+    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -438,7 +482,8 @@ public class CreateEventRequest {
                 Objects.equals( this.endDate, createEventRequest.endDate ) &&
                 Objects.equals( this.geoCodesToFind, createEventRequest.geoCodesToFind ) &&
                 Objects.equals( this.orderBy, createEventRequest.orderBy ) &&
-                Objects.equals( this.available, createEventRequest.available );
+                Objects.equals( this.available, createEventRequest.available ) &&
+                Objects.equals( this.properties, createEventRequest.properties );
     }
 
     /**
@@ -449,7 +494,7 @@ public class CreateEventRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( name, description, location, beginDate, endDate, geoCodesToFind, orderBy, available );
+        return Objects.hash( name, description, location, beginDate, endDate, geoCodesToFind, orderBy, available, properties );
     }
 
     /**

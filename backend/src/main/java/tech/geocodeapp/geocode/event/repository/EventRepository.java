@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.model.TimeTrial;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,8 +13,6 @@ import java.util.UUID;
  * This class implements the repository for the Event Subsystem
  */
 @Repository( "EventRepository" )
-public interface EventRepository< T extends Event > extends JpaRepository< T, UUID> {
+public interface EventRepository extends JpaRepository< Event, UUID> {
 
-    @Query( value =  "FROM TimeTrial")
-    List< TimeTrial > findAllTimeTrials();
 }

@@ -23,17 +23,6 @@ public interface EventService {
      */
     CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException;
 
-    /**
-     * Create a new TimeTrial for an event, that will be active for a pre-determined
-     * amount of time
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    CreateTimeTrialResponse createTimeTrial( CreateTimeTrialRequest request ) throws InvalidRequestException;
 
     /**
      * Get a specified Event that is stored in the repository
@@ -46,52 +35,10 @@ public interface EventService {
      */
     GetEventResponse getEvent( GetEventRequest request ) throws InvalidRequestException;
 
-    /**
-     * Get a specified TimeTrial that is stored in the repository
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified GetTimeTrialRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    GetTimeTrialResponse getTimeTrial( GetTimeTrialRequest request ) throws InvalidRequestException;
+
 
     /**
-     * Determine if the given ID is for a TimeTrial or Event
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified IsTimeTrialRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    IsTimeTrialResponse isTimeTrial( IsTimeTrialRequest request ) throws InvalidRequestException;
-
-    /**
-     *  Get a specified TimeLog entry that is stored in the repository
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified GetTimeLogRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    GetTimeLogResponse getTimeLog( GetTimeLogRequest request ) throws InvalidRequestException;
-
-    /**
-     * Get a specific Event that a User is currently partaking in and the Event stored in the repository
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified GetCurrentEventRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    GetCurrentEventResponse getCurrentEvent( GetCurrentEventRequest request ) throws InvalidRequestException;
-
-    /**
-     * Get a specific GeoCode to complete a Level for anEvent that a User is currently partaking in and the Event stored in the repository
+     * Get the current status of a User participating in an event, as well as the target GeoCode that they need to locate
      *
      * @param request the attributes the response should be created from
      *
@@ -99,7 +46,7 @@ public interface EventService {
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    GetCurrentEventLevelResponse getCurrentEventLevel( GetCurrentEventLevelRequest request ) throws InvalidRequestException;
+    GetCurrentEventStatusResponse getCurrentEventStatus(GetCurrentEventStatusRequest request ) throws InvalidRequestException;
 
     /**
      * Get the next GeoCode the User has to find for their current Event
@@ -124,25 +71,11 @@ public interface EventService {
     EventsNearMeResponse eventsNearMe( EventsNearMeRequest request ) throws InvalidRequestException;
 
     /**
-     * Get all the stored Events and TimeTrials in the repository
-     *
-     * @return the newly created response instance
-     */
-    public GetAllTypeOfEventsResponse getAllTypeOfEvents();
-
-    /**
      * Get all the stored Events in the repository
      *
      * @return the newly created response instance
      */
     GetAllEventsResponse getAllEvents();
-
-    /**
-     * Get all the stored TimeTrials in the repository
-     *
-     * @return the newly created response instance
-     */
-    public GetAllTimeTrialsResponse getAllTimeTrials();
 
     /**
      * Change the availability of a specific Event object

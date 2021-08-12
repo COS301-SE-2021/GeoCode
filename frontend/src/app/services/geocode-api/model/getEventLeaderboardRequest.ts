@@ -11,7 +11,7 @@
  */
 
 export interface GetEventLeaderboardRequest { 
-    leaderboardId: string;
+    leaderboardID: string;
     starting: number;
     count: number;
 }
