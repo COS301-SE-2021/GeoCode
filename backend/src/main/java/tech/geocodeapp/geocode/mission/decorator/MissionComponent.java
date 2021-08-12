@@ -1,5 +1,7 @@
 package tech.geocodeapp.geocode.mission.decorator;
 
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+
 import java.util.UUID;
 
 public interface MissionComponent {
@@ -19,4 +21,8 @@ public interface MissionComponent {
     Integer getAmount();
 
     void setAmount(Integer amount);
+
+    GeoPoint getLocation();
+
+    void setLocation(GeoPoint location);
 }
