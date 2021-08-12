@@ -4,8 +4,10 @@ import org.apache.tomcat.jni.Local;
 import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
 
 import java.time.LocalDate;
 import java.util.GregorianCalendar;
@@ -188,4 +190,17 @@ public abstract class EventDecorator implements EventComponent {
      */
     @Override
     public void handleEventEnd(UserEventStatus status) { decoratedType.handleEventEnd(status); }
+
+    /**
+     * Function to calculate the number of points a user should receive for finding the provided geocode.
+     *
+     * @param foundGeocode The geocode that was just found
+     * @param status The user's current status in an event
+     *
+     * @return The updated number of points they have earned after going through this decorator
+     */
+    @Override
+    public int calculatePoints(GeoCode foundGeocode, UserEventStatus status) {
+        return decoratedType.calculatePoints(foundGeocode, status);
+    }
 }
