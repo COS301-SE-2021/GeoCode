@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.request.*;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
@@ -863,6 +864,20 @@ public class LeaderboardServiceImplTest {
             Assertions.assertEquals(1, response.getLeaderboard().get(0).getRank());
             Assertions.assertEquals(6, response.getLeaderboard().get(1).getPoints());
             Assertions.assertEquals(2, response.getLeaderboard().get(1).getRank());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Tests that when the point received is null that the correct response is returned
+     */
+    @Test
+    public void savePointNullTest() {
+        try {
+            Response response = leaderboardService.savePoint(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Point provided is null", response.getMessage());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
