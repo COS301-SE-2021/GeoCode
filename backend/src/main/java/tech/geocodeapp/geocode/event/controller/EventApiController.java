@@ -1,11 +1,8 @@
 package tech.geocodeapp.geocode.event.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,11 +13,8 @@ import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.service.EventService;
-import tech.geocodeapp.geocode.geocode.response.GetGeoCodeByQRCodeResponse;
 
 import javax.validation.Valid;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @RestController
 @Validated
@@ -60,29 +54,10 @@ public class EventApiController implements EventApi {
         return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
-    public ResponseEntity< CreateTimeTrialResponse > createTimeTrial( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Time Trial for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateTimeTrialRequest body ) {
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
-    }
-
     @Override
-    public ResponseEntity< GetCurrentEventResponse > getCurrentEvent( GetCurrentEventRequest body ) throws InvalidRequestException {
+    public ResponseEntity<GetCurrentEventStatusResponse> getCurrentEventStatus(GetCurrentEventStatusRequest body ) throws InvalidRequestException {
 
-        GetCurrentEventResponse response = eventService.getCurrentEvent( body );
-
-        if ( ( response != null ) ) {
-
-            return new ResponseEntity<>( response, HttpStatus.OK );
-        } else {
-
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
-        }
-    }
-
-    @Override
-    public ResponseEntity< GetCurrentEventLevelResponse > getCurrentEventLevel( GetCurrentEventLevelRequest body ) throws InvalidRequestException {
-
-        GetCurrentEventLevelResponse response = eventService.getCurrentEventLevel( body );
+        GetCurrentEventStatusResponse response = eventService.getCurrentEventStatus( body );
 
         if ( ( response != null ) ) {
 
@@ -117,11 +92,6 @@ public class EventApiController implements EventApi {
 
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
         }
-    }
-
-    public ResponseEntity< GetLeaderBoardByTimeTrialResponse > getLeaderBoardByTimeTrial( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get the Leaderboard for a TimeTrial", required = true, schema = @Schema() ) @Valid @RequestBody GetLeaderBoardByTimeTrialRequest body ) {
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
     public ResponseEntity< GetPointsResponse > getPoints() {
