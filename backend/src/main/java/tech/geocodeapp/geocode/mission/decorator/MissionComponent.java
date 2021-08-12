@@ -25,4 +25,8 @@ public interface MissionComponent {
     GeoPoint getLocation();
 
     void setLocation(GeoPoint location);
+
+    GeoPoint getPreviousLocation();
+
+    void setPreviousLocation(GeoPoint previousLocation);
 }
