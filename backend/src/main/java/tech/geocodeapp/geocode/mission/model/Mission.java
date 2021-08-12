@@ -8,6 +8,9 @@ import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -17,8 +20,10 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-12T09:55:42.563Z[GMT]")
 
-
-public class Mission   {
+@Entity
+@Table(name="mission")
+public class Mission {
+  @Id
   @JsonProperty("id")
   private UUID id = null;
 
