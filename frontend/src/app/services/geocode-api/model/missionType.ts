@@ -9,11 +9,15 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { CollectableType } from './collectableType';
 
-export interface Collectable { 
-    id: string;
-    type: CollectableType;
-    pastLocations: Array<string>;
-    mission: string;
-}
+/**
+ * The types of Missions
+ */
+export type MissionType = 'Circumference' | 'GeoCode' | 'Swap' | 'Random';
+
+export const MissionType = {
+    Circumference: 'Circumference' as MissionType,
+    GeoCode: 'GeoCode' as MissionType,
+    Swap: 'Swap' as MissionType,
+    Random: 'Random' as MissionType
+};

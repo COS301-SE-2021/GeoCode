@@ -9,11 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { CollectableType } from './collectableType';
+import { Mission } from './mission';
+import { ModelObject } from './modelObject';
+import { Response } from './response';
 
-export interface Collectable { 
-    id: string;
-    type: CollectableType;
-    pastLocations: Array<string>;
-    mission: string;
+export interface GetMissionByIdResponse extends Response { 
+    message?: ModelObject;
+    mission?: Mission;
 }

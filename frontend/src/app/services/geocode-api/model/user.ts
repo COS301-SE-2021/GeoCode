@@ -12,6 +12,7 @@
 import { Collectable } from './collectable';
 import { CollectableType } from './collectableType';
 import { GeoCode } from './geoCode';
+import { Mission } from './mission';
 import { Point } from './point';
 
 export interface User { 
@@ -23,4 +24,5 @@ export interface User {
     foundCollectableTypes?: Array<CollectableType>;
     foundGeocodes?: Array<GeoCode>;
     ownedGeocodes?: Array<GeoCode>;
+    pastMissions?: Array<Mission>;
 }

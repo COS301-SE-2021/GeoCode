@@ -9,11 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { CollectableType } from './collectableType';
+import { GeoPoint } from './geoPoint';
+import { MissionType } from './missionType';
 
-export interface Collectable { 
+export interface Mission { 
     id: string;
-    type: CollectableType;
-    pastLocations: Array<string>;
-    mission: string;
+    type: MissionType;
+    amount: number;
+    location: GeoPoint;
 }

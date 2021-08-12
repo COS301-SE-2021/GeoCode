@@ -25,6 +25,8 @@ import { GetFoundGeoCodesRequest } from '../model/getFoundGeoCodesRequest';
 import { GetFoundGeoCodesResponse } from '../model/getFoundGeoCodesResponse';
 import { GetMyLeaderboardsRequest } from '../model/getMyLeaderboardsRequest';
 import { GetMyLeaderboardsResponse } from '../model/getMyLeaderboardsResponse';
+import { GetMyMissionsRequest } from '../model/getMyMissionsRequest';
+import { GetMyMissionsResponse } from '../model/getMyMissionsResponse';
 import { GetOwnedGeoCodesRequest } from '../model/getOwnedGeoCodesRequest';
 import { GetOwnedGeoCodesResponse } from '../model/getOwnedGeoCodesResponse';
 import { GetUserByIdRequest } from '../model/getUserByIdRequest';
@@ -290,6 +292,62 @@ export class UserService {
         }
 
         return this.httpClient.request<GetMyLeaderboardsResponse>('post',`${this.basePath}/User/getMyLeaderboards`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Gets the Missions for a User
+     * Gets the Missions that a User has been involved in the past
+     * @param body Request to get the User&#x27;s Missions
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getMyMissions(body: GetMyMissionsRequest, observe?: 'body', reportProgress?: boolean): Observable<GetMyMissionsResponse>;
+    public getMyMissions(body: GetMyMissionsRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetMyMissionsResponse>>;
+    public getMyMissions(body: GetMyMissionsRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetMyMissionsResponse>>;
+    public getMyMissions(body: GetMyMissionsRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getMyMissions.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GetMyMissionsResponse>('post',`${this.basePath}/User/getMyMissions`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
