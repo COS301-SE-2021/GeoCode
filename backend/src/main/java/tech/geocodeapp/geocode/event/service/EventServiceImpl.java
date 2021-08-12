@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
+import tech.geocodeapp.geocode.event.decorator.EventComponent;
+import tech.geocodeapp.geocode.event.manager.EventManager;
 import tech.geocodeapp.geocode.event.model.*;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
@@ -154,13 +156,11 @@ public class EventServiceImpl implements EventService {
 
                 /* Set the geocode's event ID */
                 if (found.getEventID() != null) {
-                    System.out.println("Attempted to link a geocode that is already linked to an event");
                     return new CreateEventResponse(false, "Attempted to link a geocode that is already linked to an event");
                 }
                 found.setEventID(eventID);
                 geoCodeService.saveGeoCode(found);
             } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
-                System.out.println("Failed to find geocode with id "+id.toString());
                 return new CreateEventResponse(false, "Failed to find geocode with id "+id.toString());
             }
         }
@@ -183,7 +183,6 @@ public class EventServiceImpl implements EventService {
         if ( geoCodeIDs == null ) {
 
             /* The GeoCodes are no longer valid so stop */
-            System.out.println("Sorting failed");
             return new CreateEventResponse( false, "Sorting failed" );
         }
 
@@ -209,9 +208,7 @@ public class EventServiceImpl implements EventService {
          * Validate if the Event was saved properly
          */
         try {
-
             /* Save the newly created entry to the repository */
-            System.out.println(event);
             eventRepo.save( event );
             return new CreateEventResponse( true, "Event created" );
         } catch ( IllegalArgumentException error ) {
@@ -327,55 +324,48 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public NextStageResponse nextStage( NextStageRequest request ) throws InvalidRequestException {
-        System.out.println("Moving to next stage");
         /* Validate the request */
-        if ( request == null ) {
-            throw new InvalidRequestException( true );
-        } else if ( ( request.getEventID() == null ) || ( request.getUserID() == null ) ) {
+        if (request == null) {
+            throw new InvalidRequestException(true);
+        } else if ((request.getEventID() == null) || (request.getUserID() == null)) {
             throw new InvalidRequestException();
         }
 
-        System.out.println("Request valid");
-        System.out.println(request);
-
         /* Find the event with the provided id */
-        Optional< Event > temp = eventRepo.findById( request.getEventID() );
-        System.out.println(temp);
-        if ( temp.isPresent() ) {
+        Optional<Event> temp = eventRepo.findById(request.getEventID());
+        if (temp.isPresent()) {
 
-            Event event = temp.get();
-            System.out.println(event);
+            EventManager manager = new EventManager();
+            EventComponent event = manager.buildEvent(temp.get());
 
             /* Get the ProgressLog object from the repository */
-            UserEventStatus log = userEventStatusRepo.findStatusByEventIDAndUserID(request.getEventID(), request.getUserID());
-            System.out.println(log);
+            UserEventStatus log = userEventStatusRepo.findStatusByEventIDAndUserID(event.getID(), request.getUserID());
             if (log != null) {
                 if (log.getGeocodeID() == null) {
                     /* User has already finished this event */
-                    System.out.println("User has finished");
                     return new NextStageResponse(false, "User has finished", null);
                 }
 
                 /* Find the user's current geocode in the list */
                 List<UUID> ids = event.getGeocodeIDs();
                 for (int i = 0; i < ids.size(); i++) {
-                    System.out.println(ids.get(i));
                     if (ids.get(i).equals(log.getGeocodeID())) {
-                        System.out.println("match");
+
+                        /* Edit the status using the event decorator */
+                        event.handleStageCompletion(i + 1, log);
+
                         /* Set the next geocode id */
-                        UUID nextGeocodeID = null;
-                        if (i < ids.size() - 1) {
-                            /* This is not the last geocode */
-                            nextGeocodeID = ids.get(i + 1);
+                        if (i == ids.size() - 1) {
+                            /* User has just completed the final stage, end the event */
+                            event.handleEventEnd(log);
+                            log.setGeocodeID(null);
+                        } else {
+                            /* Send the user to the next geocode */
+                            UUID nextGeocodeID = ids.get(i + 1);
+                            log.setGeocodeID(nextGeocodeID);
                         }
-                        /* Else the nextGeocodeID will be null, which represents the end of the event */
-                        log.setGeocodeID(nextGeocodeID);
                         userEventStatusRepo.save(log);
-                        System.out.println("Moving to next stage:");
-                        System.out.println(nextGeocodeID);
                         return new NextStageResponse(true, "Moving to next stage", log);
-                    } else {
-                        System.out.println("no match");
                     }
                 }
 
@@ -383,10 +373,9 @@ public class EventServiceImpl implements EventService {
                 /* User is not on any geocode, start at the first one by creating a new ProgressLog */
                 UUID nextGeocodeID = event.getGeocodeIDs().get(0);
                 Map<String, String> eventDetails = new HashMap<String, String>();
-                log = new UserEventStatus(UUID.randomUUID(), event.getId(), request.getUserID(), nextGeocodeID, eventDetails);
+                log = new UserEventStatus(UUID.randomUUID(), event.getID(), request.getUserID(), nextGeocodeID, eventDetails);
+                event.handleEventStart(log);
                 userEventStatusRepo.save(log);
-                System.out.println("Starting first stage:");
-                System.out.println(nextGeocodeID);
 
                 return new NextStageResponse(true, "Starting first stage", log);
             }
@@ -395,7 +384,6 @@ public class EventServiceImpl implements EventService {
         /* This should only be hit if:
          - the no event exists with the given ID, or
          - the user's current geocode ID no longer exists in the event */
-        System.out.println("end null");
         return new NextStageResponse(false, "end null", null);
     }
 
