@@ -893,4 +893,25 @@ public class LeaderboardServiceImplTest {
         assertThatThrownBy(() -> leaderboardService.savePoint(point))
                 .isInstanceOf(NullRequestParameterException.class);
     }
+
+    /**
+     * Test that when a valid point object is received that the correct response is returned
+     */
+    @Test
+    public void savePointValid() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("testValid");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            UUID userId = UUID.randomUUID();
+            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
+            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
+            GetUserByIdRequest user = new GetUserByIdRequest(userId);
+            Point point = new Point(1, userService.getUserById(user).getUser(), leaderboardResponse.getLeaderboard());
+            Response response = leaderboardService.savePoint(point);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Saved point successfully", response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
