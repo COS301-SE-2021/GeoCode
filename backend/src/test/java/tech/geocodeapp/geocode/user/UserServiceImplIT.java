@@ -13,6 +13,7 @@ import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
+import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
@@ -668,4 +669,36 @@ public class UserServiceImplIT {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void getUserByIdTestInvalidUserId(){
+        try {
+            GetUserByIdRequest request = new GetUserByIdRequest(invalidUserId);
+            GetUserByIdResponse response = userService.getUserById(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getUserByIdTestValidUserId(){
+        try {
+            GetUserByIdRequest request = new GetUserByIdRequest(validUserId);
+            GetUserByIdResponse response = userService.getUserById(request);
+            User user = response.getUser();
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The User was found", response.getMessage());
+
+            Assertions.assertEquals(validUserId, user.getId());
+            Assertions.assertEquals("michael", user.getUsername());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
