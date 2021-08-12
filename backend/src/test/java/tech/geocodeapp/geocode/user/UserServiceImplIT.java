@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.user;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.*;
@@ -26,6 +27,8 @@ public class UserServiceImplIT {
 
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
     private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
+    private final UUID newUserId = UUID.fromString("e03bd781-cca9-43bf-a168-0f0563fca591");
+
     private final UUID noPointsUserId = UUID.fromString("cdc0f9a0-65da-43c6-8d17-505d61c27965");
     private final UUID userWithPoints1 = UUID.fromString("a98e8a41-0d6f-454f-a5d9-df809d2c1040");
     private final UUID userWithPoints2 = UUID.fromString("960b6fd8-7283-43e8-9e18-2e6bef38fbb8");
@@ -37,6 +40,7 @@ public class UserServiceImplIT {
     private final UUID firstGeoCodeID = UUID.fromString("537689d1-a0d8-4740-bec6-6a40bb69748e");
     private final UUID secondGeoCodeID = UUID.fromString("5d709c49-326b-470a-8d9d-e7f7bf77ef6e");
     private final UUID thirdGeoCodeID = UUID.fromString("92e3e6d5-5457-48f7-adb1-7c2f67ee836b");
+    private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
     private final String hatfieldEaster = "Hatfield Easter Hunt 2021";
     private final String menloParkChristmas = "Christmas 2021 market";
@@ -64,6 +68,8 @@ public class UserServiceImplIT {
     private final UUID testCollectableType1ID = UUID.fromString("5350f61f-1052-42d0-8dea-9a7580cfd908");
     private final UUID testCollectableType2ID = UUID.fromString("cad9d680-6e0e-4c9f-9d05-45fb4b430fdd");
     private final UUID noPointsNewFoundCollectableTypeID = UUID.fromString("08603f0d-3262-4b71-a50b-4a4605f36bea");
+
+    private final String existingUserIdMessage = "User ID already exists";
 
     @Test
     public void getCurrentCollectableTestInvalidUser() {
@@ -700,5 +706,41 @@ public class UserServiceImplIT {
         }
     }
 
+    @Test
+    public void registerNewUserTestExistingUserId(){
+        try {
+            RegisterNewUserRequest request = new RegisterNewUserRequest(validUserId, "john");
+            RegisterNewUserResponse response = userService.registerNewUser(request);
 
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(existingUserIdMessage, response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    @Transactional
+    public void registerNewUserTestNewUserId(){
+        try {
+            String newUsername = "bob";
+            RegisterNewUserRequest request = new RegisterNewUserRequest(newUserId, newUsername);
+            RegisterNewUserResponse response = userService.registerNewUser(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("New User registered", response.getMessage());
+
+            GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(newUserId);
+            GetUserByIdResponse getUserByIdResponse = userService.getUserById(getUserByIdRequest);
+
+            Assertions.assertTrue(getUserByIdResponse.isSuccess());
+
+            User user = getUserByIdResponse.getUser();
+
+            Assertions.assertEquals(trackableUUID, user.getTrackableObject().getType().getId());
+            Assertions.assertEquals(trackableUUID, user.getCurrentCollectable().getType().getId());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
