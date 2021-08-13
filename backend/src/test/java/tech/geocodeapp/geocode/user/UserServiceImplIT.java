@@ -1,9 +1,6 @@
 package tech.geocodeapp.geocode.user;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +11,8 @@ import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
+import tech.geocodeapp.geocode.mission.model.Mission;
+import tech.geocodeapp.geocode.mission.model.MissionType;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.user.request.*;
@@ -70,6 +69,9 @@ public class UserServiceImplIT {
     private final UUID noPointsNewFoundCollectableTypeID = UUID.fromString("08603f0d-3262-4b71-a50b-4a4605f36bea");
 
     private final UUID collectableInFirstGeoCodeID = UUID.fromString("bf98dbf9-90b5-43ab-91b3-396d8f6ff216");
+
+    private final UUID swapMissionID = UUID.fromString("4507f78a-2c0c-4073-9af0-7f50ffe2fa0f");
+    private final UUID circumferenceMissionID = UUID.fromString("46e8e512-68ca-40d7-89ce-11ae91c58bbc");
 
     private final String existingUserIdMessage = "User ID already exists";
 
@@ -819,6 +821,42 @@ public class UserServiceImplIT {
             //test that the User's Collectable is now the swapped out Collectable
             Collectable currentCollectable = getCurrentCollectableResponse.getCollectable();
             Assertions.assertEquals(collectableInFirstGeoCodeID, currentCollectable.getId());
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMyMissionsTestInvalidUser(){
+        GetMyMissionsRequest request = new GetMyMissionsRequest(invalidUserId);
+
+        try {
+            GetMyMissionsResponse response = userService.getMyMissions(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertNull(response.getMissions());
+        } catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    @Transactional
+    void getMyMissionsTestValidUser(){
+        GetMyMissionsRequest request = new GetMyMissionsRequest(validUserId);
+
+        try {
+            GetMyMissionsResponse response = userService.getMyMissions(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("User Missions returned", response.getMessage());
+
+            Set<Mission> missions = response.getMissions();
+            Assertions.assertNotNull(missions);
+
+            Assertions.assertTrue(missions.stream().anyMatch(mission -> mission.getId().equals(swapMissionID) && mission.getType().equals(MissionType.SWAP)));
+            Assertions.assertTrue(missions.stream().anyMatch(mission -> mission.getId().equals(circumferenceMissionID) && mission.getType().equals(MissionType.CIRCUMFERENCE)));
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
