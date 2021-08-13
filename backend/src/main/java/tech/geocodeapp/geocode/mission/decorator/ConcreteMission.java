@@ -70,9 +70,13 @@ public class ConcreteMission implements MissionComponent{
         this.location = location;
     }
 
+    /**
+     * returns the completion progress of a mission
+     * @return the completion progress of the mission
+     */
     @Override
     public Integer getCompletion() {
-        return null;
+        return completion;
     }
 
     @Override
