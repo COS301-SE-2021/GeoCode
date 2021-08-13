@@ -18,4 +18,13 @@ public class GeoCodeMission extends MissionDecorator{
             decoratedMission.setCompletion(100);
         }
     }
+
+    /**
+     * check if completion is 100 or not
+     * @return true if completion is 100 and false if not
+     */
+    @Override
+    public boolean checkIfFinished() {
+        return decoratedMission.getCompletion().equals(100);
+    }
 }
