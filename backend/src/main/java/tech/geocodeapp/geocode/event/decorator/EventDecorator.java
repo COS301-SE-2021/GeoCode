@@ -3,8 +3,11 @@ package tech.geocodeapp.geocode.event.decorator;
 import org.apache.tomcat.jni.Local;
 import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.event.model.UserEventStatus;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
 
 import java.time.LocalDate;
 import java.util.GregorianCalendar;
@@ -165,4 +168,39 @@ public abstract class EventDecorator implements EventComponent {
      * @param limit the time limit for the event
      */
     public void setTimeLimit(Integer limit) { decoratedType.setTimeLimit(limit); }
+
+    /**
+     * Function to record information in the status object when the user starts in an event
+     * @param status The user's current status in an event
+     */
+    @Override
+    public void handleEventStart(UserEventStatus status) { decoratedType.handleEventStart(status); }
+
+    /**
+     * Function to record information in the status object when the user completes a stage
+     * @param stageNumber The index of the stage that was just completed
+     * @param status The user's current status in an event
+     */
+    @Override
+    public void handleStageCompletion(int stageNumber, UserEventStatus status) { decoratedType.handleStageCompletion(stageNumber, status); }
+
+    /**
+     * Function to record information in the status object when the user finishes an event
+     * @param status The user's current status in an event
+     */
+    @Override
+    public void handleEventEnd(UserEventStatus status) { decoratedType.handleEventEnd(status); }
+
+    /**
+     * Function to calculate the number of points a user should receive for finding the provided geocode.
+     *
+     * @param foundGeocode The geocode that was just found
+     * @param status The user's current status in an event
+     *
+     * @return The updated number of points they have earned after going through this decorator
+     */
+    @Override
+    public int calculatePoints(GeoCode foundGeocode, UserEventStatus status) {
+        return decoratedType.calculatePoints(foundGeocode, status);
+    }
 }

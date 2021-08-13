@@ -14,7 +14,8 @@ import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
-import tech.geocodeapp.geocode.event.request.NextStageRequest;
+import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
+import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
 import tech.geocodeapp.geocode.event.service.EventService;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
@@ -790,6 +791,22 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /* Update the table to contain the updated collectable */
         geoCodeRepo.save( geocode );
+
+        if (geocode.getEventID() != null) {
+            try {
+                eventService.nextStage(geocode, userID);
+            } catch (NotFoundException e) {
+                /* There is no event matching the geocode's eventID */
+                return new SwapCollectablesResponse( false );
+            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+                /* A parameter (or the geocode's event ID) is null */
+                return new SwapCollectablesResponse( false );
+            } catch (MismatchedParametersException e) {
+                /* The user is not currently targeting this geocode */
+                return new SwapCollectablesResponse( false );
+            }
+
+        }
 
         /*
          * Create and return a 'success' response

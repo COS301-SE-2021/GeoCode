@@ -136,7 +136,7 @@ class GeoCodeServiceImplTest {
         EventMockRepository eventRepo = new EventMockRepository();
         UserEventStatusMockRepository progressLogRepo = new UserEventStatusMockRepository();
 
-        eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService );
+        eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService, userService );
 
         /* Populate the Event repository with a known Event to find*/
         var event = new Event( eventID, "Test", "Test description", null,

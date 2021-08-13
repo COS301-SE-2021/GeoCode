@@ -22,6 +22,8 @@ import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
 import tech.geocodeapp.geocode.leaderboard.UserMockRepository;
 import tech.geocodeapp.geocode.leaderboard.UserMockService;
 import tech.geocodeapp.geocode.leaderboard.service.*;
+import tech.geocodeapp.geocode.user.repository.UserRepository;
+import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -73,10 +75,22 @@ class EventServiceImplTest {
     GeoCodeRepository geoCodeMockRepo;
 
     /**
+     * The mock repository for the User subsystem repository
+     * All the data will be saved here and is used to mock the JPA repository
+     */
+    UserRepository userMockRepo;
+
+    /**
      * The GeoCode service accessor
      */
     @Mock( name = "geoCodeServiceImpl" )
     GeoCodeService geoCodeService;
+
+    /**
+     * The User service accessor
+     */
+    @Mock( name = "userServiceImpl" )
+    UserService userService;
 
     /**
      * The expected exception message for if the given request has invalid attributes
@@ -118,11 +132,12 @@ class EventServiceImplTest {
 
         leaderboardService = new LeaderboardServiceImpl(leaderboardMockRepo, pointMockRepository, null, userService);
         geoCodeService = new GeoCodeMockService(geoCodeMockRepo);
+        userService = new UserMockService(userMockRepo);
 
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
-            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService );
+            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, userService );
             eventService.setGeoCodeService(geoCodeService);
         } catch ( RepoException e ) {
 
@@ -141,7 +156,7 @@ class EventServiceImplTest {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, null, leaderboardService ) )
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, null, leaderboardService, userService ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }

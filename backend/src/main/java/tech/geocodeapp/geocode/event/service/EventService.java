@@ -3,7 +3,10 @@ package tech.geocodeapp.geocode.event.service;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
+
+import java.util.UUID;
 
 /**
  * This is the main interface is for the Event subsystem,
@@ -49,15 +52,15 @@ public interface EventService {
     GetCurrentEventStatusResponse getCurrentEventStatus(GetCurrentEventStatusRequest request ) throws InvalidRequestException;
 
     /**
-     * Get the next GeoCode the User has to find for their current Event
+     * A function that moves a user to the next stage of an event.
+     * This function will be called by other subsystems when an event geocode is found.
      *
-     * @param request the attributes the response should be created from
+     * @param foundGeocode the geocode that was just found, triggering the stage change. It should include an event ID.
+     * @param userID the unique ID of the user entering the event
      *
-     * @return the newly created response instance from the specified NextStageRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     * @throws InvalidRequestException any of the provided parameters are null
      */
-    NextStageResponse nextStage( NextStageRequest request ) throws InvalidRequestException;
+    void nextStage( GeoCode foundGeocode, UUID userID ) throws InvalidRequestException, NotFoundException, MismatchedParametersException;
 
     /**
      * Retrieve a list of Events around a certain radius of a location

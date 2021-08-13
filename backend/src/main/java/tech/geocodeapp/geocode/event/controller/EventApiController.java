@@ -49,11 +49,6 @@ public class EventApiController implements EventApi {
         return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
-    public ResponseEntity< CreatePointResponse > createPoint( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Point for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreatePointRequest body ) {
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
-    }
-
     @Override
     public ResponseEntity<GetCurrentEventStatusResponse> getCurrentEventStatus(GetCurrentEventStatusRequest body ) throws InvalidRequestException {
 
@@ -92,21 +87,6 @@ public class EventApiController implements EventApi {
 
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
         }
-    }
-
-    public ResponseEntity< GetPointsResponse > getPoints() {
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
-    }
-
-    public ResponseEntity< GetPointsByLeaderBoardResponse > getPointsByLeaderBoard( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get Points for a Leaderboard of the specified Event", required = true, schema = @Schema() ) @Valid @RequestBody GetPointsByLeaderBoardRequest body ) {
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
-    }
-
-    public ResponseEntity< GetPointsByUserResponse > getPointsByUser( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get the Points for an Event", required = true, schema = @Schema() ) @Valid @RequestBody GetPointsByUserRequest body ) {
-        
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
     public ResponseEntity< EventsNearMeResponse > getEventsNearMe( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody EventsNearMeRequest body ) throws InvalidRequestException {

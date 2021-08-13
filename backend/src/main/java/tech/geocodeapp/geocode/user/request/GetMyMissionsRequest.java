@@ -19,6 +19,10 @@ public class GetMyMissionsRequest   {
   @JsonProperty("userID")
   private UUID userID = null;
 
+  public GetMyMissionsRequest(UUID userID) {
+    this.userID = userID;
+  }
+
   public GetMyMissionsRequest userID(UUID userID) {
     this.userID = userID;
     return this;
