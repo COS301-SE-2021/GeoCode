@@ -20,9 +20,13 @@ public abstract class MissionDecorator implements MissionComponent{
         return decoratedMission.getId();
     }
 
+    /**
+     * Sets the decoratedMission's id
+     * @param id the id of the mission
+     */
     @Override
     public void setId(UUID id) {
-
+        decoratedMission.setId(id);
     }
 
     @Override
