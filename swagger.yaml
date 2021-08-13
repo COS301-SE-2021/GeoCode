@@ -2012,7 +2012,7 @@ components:
       type: object
       required:
         - success
-        - message
+        #- message # Set to not required because it was causing an issue with TypeScript. If required here, it needs to be required in all child classes if they define it on their own.
       properties:
         success:
           type: boolean

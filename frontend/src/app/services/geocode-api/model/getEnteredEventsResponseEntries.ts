@@ -9,8 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Event } from './event';
+import { UserEventStatus } from './userEventStatus';
 
-export interface Response { 
-    success: boolean;
-    message?: string;
+export interface GetEnteredEventsResponseEntries { 
+    event?: Event;
+    status?: UserEventStatus;
 }

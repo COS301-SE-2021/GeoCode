@@ -21,6 +21,9 @@ jobs:
           
       - name: Fix error in generated api.module.ts
         run: "sudo sed -i 's/: ModuleWithProviders {/: ModuleWithProviders<ApiModule> {/g' frontend/src/app/services/geocode-api/api.module.ts"
+        
+      - name: Add missing modelObject.ts required by some response models
+        run: echo "export interface ModelObject { any; }" | sudo tee frontend/src/app/services/geocode-api/model/modelObject.ts
           
       - name: Commit changes
         run: |

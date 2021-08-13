@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface Response { 
-    success: boolean;
-    message?: string;
+export interface GetEnteredEventsRequest { 
+    userID: string;
 }
