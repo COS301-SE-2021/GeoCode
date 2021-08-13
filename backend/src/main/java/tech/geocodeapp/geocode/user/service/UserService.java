@@ -38,6 +38,12 @@ public interface UserService {
     GetMyMissionsResponse getMyMissions(GetMyMissionsRequest request) throws NullRequestParameterException;
 
     //User helper functions
+    AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException;
+
+    AddToFoundGeoCodesResponse addToFoundGeoCodes(AddToFoundGeoCodesRequest request) throws NullRequestParameterException;
+
+    AddToFoundCollectableTypesResponse addToFoundCollectableTypes(AddToFoundCollectableTypesRequest request) throws NullRequestParameterException;
+
     GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullRequestParameterException;
 
     User getCurrentUser();

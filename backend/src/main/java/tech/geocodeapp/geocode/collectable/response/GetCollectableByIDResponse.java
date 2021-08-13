@@ -23,7 +23,7 @@ public class GetCollectableByIDResponse extends Response {
      * @param collectable The collectable from the specified collectable
      */
     public GetCollectableByIDResponse(boolean success, String message, Collectable collectable ) {
-        super(success, message)
+        super(success, message);
         this.collectable = collectable;
     }
 
