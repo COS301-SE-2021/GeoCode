@@ -33,7 +33,7 @@ public interface MissionComponent {
     /**
      * Calculates the distance traveled from the last location
      */
-    void calculateDistance();
+    void calculateDistance(GeoPoint newLocation);
 
     /**
      * Checks if the mission is complete
