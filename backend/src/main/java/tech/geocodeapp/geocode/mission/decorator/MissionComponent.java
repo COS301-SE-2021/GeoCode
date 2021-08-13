@@ -26,4 +26,7 @@ public interface MissionComponent {
 
     void setLocation(GeoPoint location);
 
+    Integer getCompletion();
+
+    void setCompletion(Integer completion);
 }
