@@ -1,11 +1,10 @@
 package tech.geocodeapp.geocode.event.decorator;
 
+import org.springframework.security.core.parameters.P;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.leaderboard.model.Point;
 
 import java.util.Date;
-import java.util.Map;
 
 public class TimeTrialEventDecorator extends EventDecorator {
 
@@ -41,8 +40,8 @@ public class TimeTrialEventDecorator extends EventDecorator {
         /* Let other decorators manipulate the status */
         super.handleEventStart(status);
 
-        /* Record the start time */
-        status.getDetails().put("startTime", getCurrentTimestamp());
+        /* Record the start time as the first timeSplit */
+        status.getDetails().put("timeSplit_0", ""+getCurrentTimestamp());
     }
 
     /**
@@ -56,25 +55,51 @@ public class TimeTrialEventDecorator extends EventDecorator {
         super.handleStageCompletion(stageNumber, status);
 
         /* Record the new timeSplit with the stage number */
-        status.getDetails().put("timeSplit_"+(stageNumber), getCurrentTimestamp());
+        status.getDetails().put("timeSplit_"+stageNumber, ""+getCurrentTimestamp());
     }
 
     /**
      * Function to calculate the number of points a user should receive for finding the provided geocode.
      *
-     * @param foundGeocode The index of the stage that was just completed
+     * @param foundGeocode The geocode that was just found
+     * @param stageNumber The index of the stage that was just completed
      * @param status The user's current status in an event
      *
      * @return The number of points earned, adjusted to account for time taken
      */
     @Override
-    public int calculatePoints(GeoCode foundGeocode, UserEventStatus status) {
-        int basePointsAmount = super.calculatePoints(foundGeocode, status);
+    public int calculatePoints(GeoCode foundGeocode, int stageNumber, UserEventStatus status) {
+        int basePointsAmount = super.calculatePoints(foundGeocode, stageNumber, status);
 
-        //TODO change the newPointsAmount based on time taken
         int newPointsAmount = basePointsAmount;
 
-        return newPointsAmount;
+        /* Get the time the user finished the previous and current stages */
+        String startTimeStr = status.getDetails().get("timeSplit_0");
+        if (startTimeStr != null) {
+            try {
+                long startTime = Long.parseLong(startTimeStr);
+                long currentTime = getCurrentTimestamp();
+
+                long timeTakenSeconds = currentTime - startTime;
+                double timeTakenMinutes = timeTakenSeconds / 60.0;
+
+                /* Calculate bonus points from the base points and the number of minutes the user has remaining */
+                double timeRemainingMinutes = timeLimit - timeTakenMinutes;
+                double percentageTimeRemaining = timeRemainingMinutes / timeLimit;
+
+                /* If the user is over the time limit, the pointsBonus will be negative */
+                int pointsBonus = (int) Math.round(basePointsAmount * percentageTimeRemaining);
+                newPointsAmount = basePointsAmount + pointsBonus;
+
+                if (newPointsAmount >= 0) {
+                    /* Only return the newPointsAmount if it is zero or positive. */
+                    return newPointsAmount;
+                }
+                /* If the newPointsAmount is negative, return 0 below */
+
+            } catch (NumberFormatException e) {}
+        }
+        return 0;
     }
 
 
@@ -83,11 +108,10 @@ public class TimeTrialEventDecorator extends EventDecorator {
 
     /**
      * Returns the current time as a Unix timestamp (number of seconds since 1 Jan 1970 00:00)
-     * @return The timestamp as a String
+     * @return The timestamp
      */
-    private String getCurrentTimestamp() {
+    private long getCurrentTimestamp() {
         Date startTime = new Date();
-        long timestamp = startTime.getTime()/1000;
-        return ""+timestamp;
+        return startTime.getTime()/1000;
     }
 }

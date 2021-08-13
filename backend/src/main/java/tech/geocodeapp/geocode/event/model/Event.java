@@ -19,7 +19,6 @@ import java.util.*;
  */
 @Entity
 @Validated
-@Table( name = "event2" )
 public class Event {
 
     /**
