@@ -37,9 +37,14 @@ public abstract class MissionDecorator implements MissionComponent{
         return decoratedMission.getAmount();
     }
 
+
+    /**
+     * sets the decoratedMission's amount
+     * @param amount the amount of the mission
+     */
     @Override
     public void setAmount(Integer amount) {
-
+        decoratedMission.setAmount(amount);
     }
 
     @Override
