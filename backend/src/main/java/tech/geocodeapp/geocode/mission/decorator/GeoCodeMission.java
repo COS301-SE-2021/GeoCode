@@ -5,5 +5,4 @@ public class GeoCodeMission extends MissionDecorator{
     public GeoCodeMission(MissionComponent decoratedMission) {
         super(decoratedMission);
     }
-
 }
