@@ -92,8 +92,7 @@ public class ConcreteMission implements MissionComponent{
      * not used in concreteMission
      */
     @Override
-    public void calculateDistance() {
-
+    public void calculateDistance(GeoPoint newLocation) {
     }
 
     /**
