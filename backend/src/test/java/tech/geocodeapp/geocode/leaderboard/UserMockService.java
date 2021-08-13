@@ -9,7 +9,6 @@ import tech.geocodeapp.geocode.user.response.*;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public class UserMockService implements UserService {
 
@@ -55,17 +54,7 @@ public class UserMockService implements UserService {
     }
 
     @Override
-    public AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException {
-        return null;
-    }
-
-    @Override
-    public AddToFoundGeoCodesResponse addToFoundGeoCodes(AddToFoundGeoCodesRequest request) throws NullRequestParameterException {
-        return null;
-    }
-
-    @Override
-    public AddToFoundCollectableTypesResponse addToFoundCollectableTypes(AddToFoundCollectableTypesRequest request) throws NullRequestParameterException {
+    public GetMyMissionsResponse getMyMissions(GetMyMissionsRequest request) throws NullRequestParameterException {
         return null;
     }
 
@@ -83,9 +72,6 @@ public class UserMockService implements UserService {
     public User getCurrentUser() {
         return null;
     }
-
-    @Override
-    public UUID getCurrentUserID() { return null; }
 
     /**
      * Only set userId and username for the purpose of this mock as nothing else is required by the leaderboard subsystems unit tests
