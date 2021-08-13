@@ -120,12 +120,13 @@ public class ConcreteEvent implements EventComponent {
      * Function to calculate the number of points a user should receive for finding the provided geocode.
      *
      * @param foundGeocode The index of the stage that was just completed
+     * @param stageNumber The index of the stage that was just completed
      * @param status The user's current status in an event
      *
      * @return The number of points that the geocode earns the user
      */
     @Override
-    public int calculatePoints(GeoCode foundGeocode, UserEventStatus status) {
+    public int calculatePoints(GeoCode foundGeocode, int stageNumber, UserEventStatus status) {
         switch(foundGeocode.getDifficulty()){
             case EASY: return 10;
             case MEDIUM: return 20;

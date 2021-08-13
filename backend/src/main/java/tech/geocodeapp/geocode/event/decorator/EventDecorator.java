@@ -195,12 +195,13 @@ public abstract class EventDecorator implements EventComponent {
      * Function to calculate the number of points a user should receive for finding the provided geocode.
      *
      * @param foundGeocode The geocode that was just found
+     * @param stageNumber The index of the stage that was just completed
      * @param status The user's current status in an event
      *
      * @return The updated number of points they have earned after going through this decorator
      */
     @Override
-    public int calculatePoints(GeoCode foundGeocode, UserEventStatus status) {
-        return decoratedType.calculatePoints(foundGeocode, status);
+    public int calculatePoints(GeoCode foundGeocode, int stageNumber, UserEventStatus status) {
+        return decoratedType.calculatePoints(foundGeocode, stageNumber, status);
     }
 }
