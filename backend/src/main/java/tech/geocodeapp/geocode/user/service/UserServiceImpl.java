@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
+import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
+import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
@@ -487,7 +490,23 @@ public class UserServiceImpl implements UserService {
         GetCollectableTypeByIDResponse getCollectableTypeByIDResponse = collectableService.getCollectableTypeByID( getCollectableTypeByIDRequest );
         CollectableType collectableType = getCollectableTypeByIDResponse.getCollectableType();
 
-        Collectable trackableObject = new Collectable( collectableType );
+        //create the trackable object
+        CreateCollectableRequest createCollectableRequest = new CreateCollectableRequest();
+        createCollectableRequest.setCollectableTypeId(collectableType.getId());
+
+        CreateCollectableResponse createCollectableResponse = collectableService.createCollectable(createCollectableRequest);
+
+        if(!createCollectableResponse.isSuccess()){
+            return new RegisterNewUserResponse(false, createCollectableResponse.getMessage());
+        }
+
+        CollectableResponse collectableResponse = createCollectableResponse.getCollectable();
+
+        GetCollectableByIDRequest getCollectableIdRequest = new GetCollectableByIDRequest(collectableResponse.getId());
+        GetCollectableByIDResponse getCollectableByIDResponse = collectableService.getCollectableByID(getCollectableIdRequest);
+
+        Collectable trackableObject = getCollectableByIDResponse.getCollectable();
+
         newUser.setTrackableObject(trackableObject);
         newUser.setCurrentCollectable(trackableObject);
         userRepo.save(newUser);

@@ -122,6 +122,7 @@ public class UserServiceImplTest {
         //save the valid trackable CollectableType
         CollectableType trackableCollectableType = new CollectableType();
         trackableCollectableType.setId(trackableUUID);
+        trackableCollectableType.setRarity(Rarity.COMMON);
         collectableTypeMockRepo.save(trackableCollectableType);
 
         //save the valid user to the MockRepo
