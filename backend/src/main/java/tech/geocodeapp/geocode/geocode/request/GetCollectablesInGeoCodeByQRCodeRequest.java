@@ -3,7 +3,9 @@ package tech.geocodeapp.geocode.geocode.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * GetCollectablesInGeoCodeByQRCodeRequest used to specify the attributes needed to locate a specific GeoCode
@@ -15,8 +17,14 @@ public class GetCollectablesInGeoCodeByQRCodeRequest {
     /**
      * The QRCode of a specific GeoCode used to locate it
      */
-    @JsonProperty( "QRCode" )
+    @JsonProperty( "qrCode" )
     private String qrCode = null;
+
+    /**
+     * The unique identifier of a specific GeoCode
+     */
+    @JsonProperty( "geoCodeID" )
+    private UUID geoCodeID = null;
 
     /**
      * Default constructor
@@ -29,10 +37,12 @@ public class GetCollectablesInGeoCodeByQRCodeRequest {
      * Overloaded Constructor
      *
      * @param qrCode The QRCode of a specific GeoCode used to locate it
+     * @param geoCodeID The unique identifier of a specific GeoCode
      */
-    public GetCollectablesInGeoCodeByQRCodeRequest( String qrCode ) {
+    public GetCollectablesInGeoCodeByQRCodeRequest( String qrCode, UUID geoCodeID ) {
 
         this.qrCode = qrCode;
+        this.geoCodeID = geoCodeID;
     }
 
     /**
@@ -69,6 +79,40 @@ public class GetCollectablesInGeoCodeByQRCodeRequest {
     }
 
     /**
+     * Sets the geoCodeID attribute to the specified value
+     *
+     * @param geoCodeID the value the attribute should be set to
+     *
+     * @return the request after the geoCodeID has been changed
+     */
+    public GetCollectablesInGeoCodeByQRCodeRequest geoCodeID( UUID geoCodeID ) {
+
+        this.geoCodeID = geoCodeID;
+        return this;
+    }
+
+    /**
+     * Gets the saved geoCodeID attribute
+     *
+     * @return the stored geoCodeID attribute
+     */
+    @Valid
+    public UUID getGeoCodeID() {
+
+        return geoCodeID;
+    }
+
+    /**
+     * Sets the geoCodeID attribute to the specified value
+     *
+     * @param geoCodeID the value the attribute should be set to
+     */
+    public void setGeoCodeID( UUID geoCodeID ) {
+
+        this.geoCodeID = geoCodeID;
+    }
+
+    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -87,7 +131,9 @@ public class GetCollectablesInGeoCodeByQRCodeRequest {
             return false;
         }
 
-        return Objects.equals( this.qrCode, ( ( GetCollectablesInGeoCodeByQRCodeRequest ) obj ).qrCode );
+        var getCollectablesInGeoCodeByQRCodeRequest = ( GetCollectablesInGeoCodeByQRCodeRequest ) obj;
+        return Objects.equals( this.qrCode, getCollectablesInGeoCodeByQRCodeRequest.qrCode ) &&
+               Objects.equals( this.geoCodeID, getCollectablesInGeoCodeByQRCodeRequest.geoCodeID );
     }
 
     /**
@@ -98,7 +144,7 @@ public class GetCollectablesInGeoCodeByQRCodeRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( qrCode );
+        return Objects.hash( qrCode, geoCodeID );
     }
 
     /**
@@ -111,6 +157,7 @@ public class GetCollectablesInGeoCodeByQRCodeRequest {
 
         return "class GetCollectablesInGeoCodeByQRCodeRequest {\n" +
                 "    qrCode: " + toIndentedString( qrCode ) + "\n" +
+                "    geoCodeID: " + toIndentedString( geoCodeID ) + "\n" +
                 "}";
     }
 
@@ -124,6 +171,7 @@ public class GetCollectablesInGeoCodeByQRCodeRequest {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 

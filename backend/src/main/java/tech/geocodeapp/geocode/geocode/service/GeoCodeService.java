@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.geocode.service;
 
 import tech.geocodeapp.geocode.geocode.exceptions.*;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
 
@@ -20,6 +21,17 @@ public interface GeoCodeService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     CreateGeoCodeResponse createGeoCode( CreateGeoCodeRequest request ) throws InvalidRequestException;
+
+    /**
+     * Get the GeoCode associated with the given ID
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    public GetGeoCodeResponse getGeoCode( GetGeoCodeRequest request ) throws InvalidRequestException;
 
     /**
      * Get all the stored GeoCodes in the repository
@@ -49,6 +61,17 @@ public interface GeoCodeService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     GetGeoCodesByDifficultyResponse getGeoCodesByDifficulty( GetGeoCodesByDifficultyRequest request ) throws InvalidRequestException;
+
+    /**
+     * Get all the GeoCodes with a certain level of difficulty that can be a list of items
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetGeoCodesByDifficultyListRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetGeoCodesByDifficultyListResponse getGeoCodesByDifficultyList( GetGeoCodesByDifficultyListRequest request ) throws InvalidRequestException;
 
     /**
      * Get the hints of how to locate a GeoCode in the real world
@@ -127,4 +150,10 @@ public interface GeoCodeService {
      */
     UpdateAvailabilityResponse updateAvailability( UpdateAvailabilityRequest request ) throws InvalidRequestException;
 
+    /**
+     * Helper function that saves the given geocode into the repository
+     *
+     * @param geocode the GeoCode object to save
+     */
+    void saveGeoCode( GeoCode geocode );
 }

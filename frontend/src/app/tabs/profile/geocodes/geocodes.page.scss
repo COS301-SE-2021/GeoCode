@@ -1,0 +1,29 @@
+.map {
+  width: 100%;
+  height: 100%;
+  border-width: 0px;
+  padding: 0px;
+}
+
+ion-grid {
+  height: 100%;
+  padding: 0px;
+}
+
+ion-row {
+  height: 100%;
+}
+
+ion-col {
+  padding: 0px;
+}
+
+ion-card {
+}
+
+#mapColumn.splitScreen {
+  height: calc(100% - 300px);
+}
+#geocodeColumn.splitScreen {
+  height: 300px;
+}

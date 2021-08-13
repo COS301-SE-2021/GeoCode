@@ -3,7 +3,7 @@ import {IonicModule, ModalController, NavParams} from '@ionic/angular';
 
 import { TrackableLocationsComponent } from './trackable-locations.component';
 import {Collectable} from '../../../services/geocode-api';
-import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
+import {MockGoogleMapsLoader} from '../../../mocks/MockGoogleMapsLoader';
 
 describe('TrackableLocationsComponent', () => {
   let component: TrackableLocationsComponent;
@@ -18,7 +18,7 @@ describe('TrackableLocationsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ TrackableLocationsComponent ],
-      providers: [ModalController, { provide: NavParams, useValue: navParams }, GoogleMapsLoader],
+      providers: [ModalController, { provide: NavParams, useValue: navParams }, MockGoogleMapsLoader.provider()],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

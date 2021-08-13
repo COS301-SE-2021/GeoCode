@@ -16,13 +16,20 @@
     "@angular/common": "~12.0.1",
     "@angular/core": "~12.0.1",
     "@angular/forms": "~12.0.1",
-    "@angular/google-maps": "^12.0.4",
     "@angular/platform-browser": "~12.0.1",
     "@angular/platform-browser-dynamic": "~12.0.1",
     "@angular/router": "~12.0.1",
-    "@ionic-native/qr-scanner": "^5.34.0",
+    "@capacitor/app": "1.0.2",
+    "@capacitor/camera": "^1.0.3",
+    "@capacitor/core": "3.1.1",
+    "@capacitor/haptics": "1.0.2",
+    "@capacitor/keyboard": "1.0.2",
+    "@capacitor/status-bar": "1.0.2",
     "@ionic/angular": "^5.5.2",
-    "jwt-decode": "^3.1.2",
+    "@ionic/pwa-elements": "^3.0.2",
+    "jsqr": "^1.4.0",
+    "keycloak-angular": "^8.2.0",
+    "keycloak-js": "13.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
@@ -37,6 +44,7 @@
     "@angular/compiler": "~12.0.1",
     "@angular/compiler-cli": "~12.0.1",
     "@angular/language-service": "~12.0.1",
+    "@capacitor/cli": "3.1.1",
     "@ionic/angular-toolkit": "^4.0.0",
     "@ionic/lab": "3.2.10",
     "@types/jasmine": "~3.6.0",
@@ -44,8 +52,6 @@
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "4.16.1",
     "@typescript-eslint/parser": "4.16.1",
-    "cordova-plugin-camera": "^5.0.2",
-    "cordova-plugin-qrscanner": "^3.0.1",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsdoc": "30.7.6",
@@ -67,7 +73,12 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-camera": {},
-      "cordova-plugin-qrscanner": {}
+      "cordova-plugin-qrscanner": {},
+      "ionic-plugin-deeplinks": {
+        "URL_SCHEME": "geocode",
+        "DEEPLINK_HOST": "geocodeapp.tech"
+      },
+      "cordova-plugin-browsertab": {}
     }
   }
 }

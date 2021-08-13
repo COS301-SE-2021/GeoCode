@@ -6,6 +6,7 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * CreateLeaderboardRequest object to specify what Leaderboard to be created
@@ -16,6 +17,20 @@ public class CreateLeaderboardRequest {
     @JsonProperty( "name" )
     @NotEmpty( message = "CreateLeaderboardRequest name attribute cannot be empty." )
     private String name;
+
+    /**
+     * The unique id of the event to get
+     */
+    @JsonProperty( "eventID" )
+    @NotNull( message = "CreateLeaderboardRequest eventID attribute cannot be null." )
+    private UUID eventID;
+
+    /**
+     * Default Constructor
+     */
+    public CreateLeaderboardRequest() {
+
+    }
 
     /**
      * Overloaded Constructor
@@ -62,6 +77,40 @@ public class CreateLeaderboardRequest {
     }
 
     /**
+     * Sets the eventID attribute to the specified value
+     *
+     * @param eventID the value the attribute should be set to
+     *
+     * @return the request after the eventID has been changed
+     */
+    public CreateLeaderboardRequest eventID( UUID eventID ) {
+
+        this.eventID = eventID;
+        return this;
+    }
+
+    /**
+     * Gets the saved eventID attribute
+     *
+     * @return the stored eventID attribute
+     */
+    @Valid
+    public UUID getEventID() {
+
+        return eventID;
+    }
+
+    /**
+     * Sets the eventID attribute to the specified value
+     *
+     * @param eventID the value the attribute should be set to
+     */
+    public void setEventID( UUID eventID ) {
+
+        this.eventID = eventID;
+    }
+    
+    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -80,7 +129,11 @@ public class CreateLeaderboardRequest {
             return false;
         }
 
-        return Objects.equals( this.name, ( ( CreateLeaderboardRequest ) obj ).name );
+        CreateLeaderboardRequest createLeaderboardRequest = ( CreateLeaderboardRequest ) obj;
+        return  Objects.equals( this.name, createLeaderboardRequest.name ) &&
+                Objects.equals( this.eventID, createLeaderboardRequest.eventID );
+
+
     }
 
     /**
@@ -91,7 +144,7 @@ public class CreateLeaderboardRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( name );
+        return Objects.hash( name, eventID );
     }
 
     /**
@@ -104,6 +157,7 @@ public class CreateLeaderboardRequest {
 
         return "class CreateLeaderboardRequest {\n" +
                 "    name: " + toIndentedString( name ) + "\n" +
+                "    eventID: " + toIndentedString( eventID ) + "\n" +
                 "}";
     }
 

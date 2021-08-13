@@ -1,83 +1,119 @@
 package tech.geocodeapp.geocode.event.response;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
-import tech.geocodeapp.geocode.event.model.TimeTrial;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 /**
- * CreateTimeTrialResponse
+ * CreateTimeTrialResponse object that determines if the TimeTrial was created successfully
  */
 @Validated
 public class CreateTimeTrialResponse {
 
-    @JsonProperty( "timeTrial" )
-    @Valid
-    private List< TimeTrial > timeTrial = new ArrayList<>();
+    /**
+     * If the TimeTrial was successfully created or not
+     */
+    @JsonProperty( "success" )
+    @NotNull( message = "CreateTimeTrialResponse success attribute cannot be null." )
+    private Boolean success;
 
-    public CreateTimeTrialResponse timeTrial( List< TimeTrial > timeTrial ) {
+    /**
+     * Default constructor
+     */
+    public CreateTimeTrialResponse() {
 
-        this.timeTrial = timeTrial;
-        return this;
     }
 
-    public CreateTimeTrialResponse addTimeTrialItem( TimeTrial timeTrialItem ) {
+    /**
+     * Overloaded Constructor
+     *
+     * @param success the status of the TimeTrial created
+     */
+    public CreateTimeTrialResponse( Boolean success ) {
 
-        this.timeTrial.add( timeTrialItem );
+        this.success = success;
+    }
+
+    /**
+     * Sets the success attribute to the specified value
+     *
+     * @param success the value the attribute should be set to
+     *
+     * @return the request after the success has been changed
+     */
+    public CreateTimeTrialResponse success( Boolean success ) {
+
+        this.success = success;
         return this;
     }
 
     /**
-     * Get timeTrial
+     * Gets the saved success attribute
      *
-     * @return timeTrial
-     **/
-    @Schema( required = true, description = "" )
-    @NotNull
+     * @return the stored success attribute
+     */
     @Valid
-    public List< TimeTrial > getTimeTrial() {
+    public Boolean isSuccess() {
 
-        return timeTrial;
+        return success;
     }
 
-    public void setTimeTrial( List< TimeTrial > timeTrial ) {
+    /**
+     * Sets the success attribute to the specified value
+     *
+     * @param success the value the attribute should be set to
+     */
+    public void setSuccess( Boolean success ) {
 
-        this.timeTrial = timeTrial;
+        this.success = success;
     }
 
-
+    /**
+     * Determines if the specified object is the same as the current object
+     *
+     * @param obj the object we want to compare with the specific attributes of this class
+     *
+     * @return if the object is the same or not
+     */
     @Override
-    public boolean equals( java.lang.Object o ) {
+    public boolean equals( java.lang.Object obj ) {
 
-        if ( this == o ) {
+        if ( this == obj ) {
 
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if ( obj == null || getClass() != obj.getClass() ) {
 
             return false;
         }
-        CreateTimeTrialResponse createTimeTrialResponse = ( CreateTimeTrialResponse ) o;
-        return Objects.equals( this.timeTrial, createTimeTrialResponse.timeTrial );
+
+        return Objects.equals( this.success, ( ( CreateTimeTrialResponse ) obj ).success );
     }
 
+    /**
+     * Creates a hash code from the attributes in the class
+     *
+     * @return the created has code
+     */
     @Override
     public int hashCode() {
 
-        return Objects.hash( timeTrial );
+        return Objects.hash( success );
     }
 
+    /**
+     * Creates a string from all the attributes in the class
+     *
+     * @return the created string
+     */
     @Override
     public String toString() {
 
         return "class CreateTimeTrialResponse {\n" +
-                "    timeTrial: " + toIndentedString( timeTrial ) + "\n" +
+                "    success: " + toIndentedString( success ) + "\n" +
                 "}";
     }
 

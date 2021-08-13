@@ -10,6 +10,7 @@ import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * CreateGeoCodeRequest used to specify the attributes needed to create a new GeoCode object
@@ -59,11 +60,11 @@ public class CreateGeoCodeRequest {
     /**
      * Overloaded Constructor
      *
-     * @param description  The description of where the GeoCode is and what it involves
-     * @param location The location of the GeoCode in the real world
-     * @param hints The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
-     * @param difficulty The level of difficulty to find a GeoCode in the real world
-     * @param available If the GeoCode is active in the system
+     * @param description The description of where the GeoCode is and what it involves
+     * @param location    The location of the GeoCode in the real world
+     * @param hints       The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
+     * @param difficulty  The level of difficulty to find a GeoCode in the real world
+     * @param available   If the GeoCode is active in the system
      */
     public CreateGeoCodeRequest( String description, GeoPoint location, List< String > hints, Difficulty difficulty, Boolean available ) {
 

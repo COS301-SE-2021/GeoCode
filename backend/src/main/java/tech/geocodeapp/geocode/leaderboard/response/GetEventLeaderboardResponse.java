@@ -2,10 +2,10 @@ package tech.geocodeapp.geocode.leaderboard.response;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.EventLeaderboardDetails;
 
 import javax.validation.Valid;
@@ -18,61 +18,18 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-05T09:14:58.803Z[GMT]")
 
 
-public class GetEventLeaderboardResponse   {
-  @JsonProperty("success")
-  private Boolean success = null;
-
-  @JsonProperty("message")
-  private String message = null;
+public class GetEventLeaderboardResponse extends Response {
 
   @JsonProperty("leaderboard")
   @Valid
   private List<EventLeaderboardDetails> leaderboard = new ArrayList<EventLeaderboardDetails>();
 
+  public GetEventLeaderboardResponse() {
+  }
+
   public GetEventLeaderboardResponse(boolean success, String message, List<EventLeaderboardDetails> leaderboard){
-    this.success = success;
-    this.message = message;
+    super(success, message);
     this.leaderboard = leaderboard;
-  }
-
-  public GetEventLeaderboardResponse success(Boolean success) {
-    this.success = success;
-    return this;
-  }
-
-  /**
-   * Get success
-   * @return success
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public Boolean isSuccess() {
-    return success;
-  }
-
-  public void setSuccess(Boolean success) {
-    this.success = success;
-  }
-
-  public GetEventLeaderboardResponse message(String message) {
-    this.message = message;
-    return this;
-  }
-
-  /**
-   * Get message
-   * @return message
-   **/
-  @Schema(example = "The details for the Event's Leaderboard were successfully returned", required = true, description = "")
-      @NotNull
-
-    public String getMessage() {
-    return message;
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
   }
 
   public GetEventLeaderboardResponse leaderboard(List<EventLeaderboardDetails> leaderboard) {
@@ -98,38 +55,6 @@ public class GetEventLeaderboardResponse   {
 
   public void setLeaderboard(List<EventLeaderboardDetails> leaderboard) {
     this.leaderboard = leaderboard;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    GetEventLeaderboardResponse getEventLeaderboardResponse = (GetEventLeaderboardResponse) o;
-    return Objects.equals(this.success, getEventLeaderboardResponse.success) &&
-        Objects.equals(this.message, getEventLeaderboardResponse.message) &&
-        Objects.equals(this.leaderboard, getEventLeaderboardResponse.leaderboard);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(success, message, leaderboard);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class GetEventLeaderboardResponse {\n");
-    
-    sb.append("    success: ").append(toIndentedString(success)).append("\n");
-    sb.append("    message: ").append(toIndentedString(message)).append("\n");
-    sb.append("    leaderboard: ").append(toIndentedString(leaderboard)).append("\n");
-    sb.append("}");
-    return sb.toString();
   }
 
   /**

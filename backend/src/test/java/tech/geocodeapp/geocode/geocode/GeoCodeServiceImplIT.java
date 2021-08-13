@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
+import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
@@ -15,7 +16,6 @@ import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCodeApplication;
-import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.user.service.*;
 
@@ -58,6 +58,12 @@ class GeoCodeServiceImplIT {
     UserService userService;
 
     /**
+     * This is used to access the Event subsystem in some use cases
+     */
+    @Autowired
+    EventService eventService;
+
+    /**
      * The expected exception message for if the given request has invalid attributes
      */
     String reqParamError = "The given request is missing parameter/s.";
@@ -83,7 +89,7 @@ class GeoCodeServiceImplIT {
         try {
 
             /* Create a new GeoCodeServiceImpl instance to access the different use cases */
-            geoCodeService = new GeoCodeServiceImpl( repo, collectableService, userService );
+            geoCodeService = new GeoCodeServiceImpl( repo, collectableService, userService, eventService);
         } catch ( RepoException e ) {
 
             e.printStackTrace();
@@ -100,7 +106,7 @@ class GeoCodeServiceImplIT {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService ) )
+        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService, eventService ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }
@@ -178,7 +184,7 @@ class GeoCodeServiceImplIT {
              * Check if the GeoCode was created correctly
              * through checking the description created with the code
              */
-            Assertions.assertTrue( response.isIsSuccess() );
+            Assertions.assertTrue( response.isSuccess() );
 
         } catch ( InvalidRequestException e ) {
 
@@ -546,18 +552,18 @@ class GeoCodeServiceImplIT {
         try {
 
             /* Create the request with the ID of the GeoCode we want */
-//            GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
-//            request.setLocation( temp.get( 0 ).getlocation() );
+            GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
+            request.setLocation( temp.get( 0 ).getLocation() );
 
 
             /* Get the response by calling the updateAvailability use case */
-//            GetGeoCodeByLocationResponse response = geoCodeService.getGeoCodesByLocation( request );
+            GetGeoCodeByLocationResponse response = geoCodeService.getGeoCodesByLocation( request );
 
             /*
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-//            Assertions.assertEquals( "The DIFFICULTY GeoCode is stored at location 1", response.getDescription() );
+            Assertions.assertEquals( "The DIFFICULTY GeoCode is stored at location 1", response.getDescription() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -764,7 +770,7 @@ class GeoCodeServiceImplIT {
                 CreateGeoCodeRequest request = new CreateGeoCodeRequest();
                 request.setAvailable( true );
                 request.setDescription( "The DIFFICULTY GeoCode is stored at location " + x );
-                request.setDifficulty( Difficulty.DIFFICULTY );
+                request.setDifficulty( Difficulty.HARD);
                 List< String > hints = new ArrayList<>();
                 hints.add( "Hint one for: " + x );
                 hints.add( "Hint two for: " + x );

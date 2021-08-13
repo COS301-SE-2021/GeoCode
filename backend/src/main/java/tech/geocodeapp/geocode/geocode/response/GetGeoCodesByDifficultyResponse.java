@@ -55,7 +55,7 @@ public class GetGeoCodesByDifficultyResponse {
     }
 
     /**
-     * Sets a single hint inside of the hints attribute to the specified value
+     * Sets a single hint inside the hints attribute to the specified value
      *
      * @param geocodesItem the value the attribute should be set to
      *

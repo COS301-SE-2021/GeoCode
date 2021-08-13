@@ -3,6 +3,9 @@ package tech.geocodeapp.geocode.geocode.model;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The GeoCode's real world locating difficulty
  */
@@ -10,7 +13,7 @@ public enum Difficulty {
 
     EASY( "EASY" ),
     MEDIUM( "MEDIUM" ),
-    DIFFICULTY( "DIFFICULTY" ),
+    HARD( "HARD" ),
     INSANE( "INSANE" );
 
     /**
@@ -27,6 +30,17 @@ public enum Difficulty {
 
         this.value = value;
     }
+
+    /**
+     * Get all the values in the enum
+     *
+     * @return the values the enum can take on
+     */
+    public static List< Difficulty > getDifficultyOrder() {
+
+        return Arrays.asList( Difficulty.values() );
+    }
+
 
     /**
      * Get the enum stored as a string
@@ -57,6 +71,7 @@ public enum Difficulty {
                 return b;
             }
         }
+
         return null;
     }
 }

@@ -1,18 +1,31 @@
 package tech.geocodeapp.geocode.event.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.stereotype.Service;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
-import javax.validation.Valid;
 
-import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.model.*;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
+import tech.geocodeapp.geocode.event.repository.LevelRepository;
+import tech.geocodeapp.geocode.event.repository.TimeLogRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
+import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
+import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 
-
-import java.util.List;
+import java.util.*;
 
 /**
  * This class implements the EventService interface
@@ -22,19 +35,66 @@ import java.util.List;
 public class EventServiceImpl implements EventService {
 
     /**
-     * The repository the GeoCode class interacts with
+     * The repository the Event class interacts with
      */
     @NotNull( message = "Events repository may not be null." )
-    private final EventRepository eventRepo;
+    private final EventRepository< Event > eventRepo;
+
+    /**
+     * The repository the Event class interacts with
+     */
+    @NotNull( message = "Events repository may not be null." )
+    private final EventRepository< TimeTrial > timeTrialRepo;
+
+    /**
+     * The repository the Event class interacts with
+     */
+    @NotNull( message = "TimeLog repository may not be null." )
+    private final TimeLogRepository timeLogRepo;
+
+    /**
+     * The repository the Event class interacts with
+     */
+    @NotNull( message = "Level repository may not be null." )
+    private final LevelRepository levelRepo;
+
+    /**
+     * The Leaderboard service to access the use cases and
+     * Leaderboard repository
+     */
+    @NotNull( message = "GeoCodeService: Leaderboard Service Implementation may not be null." )
+    private final LeaderboardService leaderboardService;
+
+    /**
+     * The GeoCode service to access the use cases and
+     * GeoCode repository
+     */
+    @Autowired
+    private GeoCodeService geoCodeService;
 
     /**
      * Overloaded Constructor
      *
-     * @param eventRepo the repo the created response attributes should save to
+     * @param eventRepo          the repo the created response attributes should save to
+     * @param leaderboardService access to the Leaderboard use cases and repository
      */
-    public EventServiceImpl( @Valid EventRepository eventRepo ) {
+    public EventServiceImpl( EventRepository< Event > eventRepo, EventRepository< TimeTrial > timeTrialRepo, TimeLogRepository timeLogRepo, LevelRepository levelRepo,
+                             @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService ) throws RepoException {
 
-        this.eventRepo = eventRepo;
+        if ( ( eventRepo != null ) && ( timeLogRepo != null ) ) {
+
+            /* The repo exists therefore it can be set for the class */
+            this.eventRepo = eventRepo;
+            this.timeTrialRepo = timeTrialRepo;
+            this.timeLogRepo = timeLogRepo;
+            this.levelRepo = levelRepo;
+
+            this.leaderboardService = Objects.requireNonNull( leaderboardService, "EventService: Leaderboard service must not be null." );
+        } else {
+
+            /* The repo does not exist throw an error */
+            throw new RepoException();
+        }
     }
 
     /**
@@ -45,7 +105,7 @@ public class EventServiceImpl implements EventService {
      *
      * @return the newly created response instance from the specified CreateEventRequest
      *
-     * @throws InvalidRequestException  the provided request was invalid and resulted in an error being thrown
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException {
@@ -55,12 +115,672 @@ public class EventServiceImpl implements EventService {
 
             throw new InvalidRequestException( true );
         } else if ( ( request.getDescription() == null ) || ( request.getLocation() == null ) ||
-                    ( request.getName() == null ) ) {
+                ( request.getName() == null ) || ( request.getBeginDate() == null ) ||
+                ( request.getEndDate() == null ) || ( request.getGeoCodesToFind() == null ) ||
+                ( request.getOrderBy() == null ) ) {
 
             throw new InvalidRequestException();
         }
 
-        return null;
+        /* Hold the created leaderboards */
+        var leaderboard = new ArrayList< Leaderboard >();
+        try {
+
+            /*
+             * Create the request to the leaderboard service
+             * and store the response
+             */
+            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() + " - Default" );
+            var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
+
+            leaderboard.add( hold );
+        } catch ( NullRequestParameterException e ) {
+
+            return new CreateEventResponse( false );
+        }
+
+        /* Hold each created Level object */
+        var levels = new ArrayList< Level >();
+
+        /* Store the list of GeoCode UUIDs to create a Level on */
+        List< UUID > geoCodes = request.getGeoCodesToFind();
+
+        UUID eventID = UUID.randomUUID();
+
+        /*
+         * Determine which order to set the GeoCodes in
+         * the default is OrderLevels.GIVEN
+         */
+        if ( request.getOrderBy().equals( OrderLevels.DIFFICULTY ) ) {
+
+            /* Set the list to go from easiest to most difficult on finding the GeoCode */
+            geoCodes = sortByDifficulty( geoCodes, eventID );
+        } else if ( request.getOrderBy().equals( OrderLevels.DISTANCE ) ) {
+
+            /* Set the list to go from least to most distance with where the GeoCode is located */
+            geoCodes = sortByDistance( geoCodes, eventID );
+        }
+
+        /* Check if the GeoCodes are still valid after sorting */
+        if ( geoCodes == null ) {
+
+            /* The GeoCodes are no longer valid so stop */
+            return new CreateEventResponse( false );
+        }
+
+        /* Go through each UUID */
+        for ( UUID geoCode : geoCodes ) {
+
+            /*
+             * Create the Level with a random UUID
+             * and add it to the list
+             */
+            Level level = new Level( geoCode );
+            levelRepo.save(level);
+            levels.add(level);
+        }
+
+        /* Create the new Event object with the specified attributes */
+        var event = new Event( eventID, request.getName(), request.getDescription(),
+                               request.getLocation(), levels, request.getBeginDate(), request.getEndDate(),
+                               leaderboard );
+
+        /* Check the availability of the Event */
+        if ( request.isAvailable() == null ) {
+
+            /* None is set so make it default available */
+            event.setAvailable( true );
+        } else {
+
+            /* Set to the given */
+            event.setAvailable( request.isAvailable() );
+        }
+
+        /*
+         * Save the newly create Event
+         * Validate if the Event was saved properly
+         */
+        var success = true;
+        try {
+
+            /* Save the newly created entry to the repository */
+            var check = eventRepo.save( event );
+
+            /* Check if the Object was saved correctly */
+            if ( !event.equals( check ) ) {
+
+                success = false;
+            }
+        } catch ( IllegalArgumentException error ) {
+
+            success = false;
+        }
+
+        return new CreateEventResponse( success );
+    }
+
+    /**
+     * Create a new TimeTrial for an event, that will be active for a pre-determined
+     * amount of time
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public CreateTimeTrialResponse createTimeTrial( CreateTimeTrialRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( ( request.getTimeLimit() != 0.0 ) || ( request.getDescription() == null ) ||
+                ( request.getLocation() == null ) || ( request.getName() == null ) ||
+                ( request.getBeginDate() == null ) || ( request.getEndDate() == null ) ||
+                ( request.getGeoCodesToFind() == null ) ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Hold the created leaderboards */
+        var leaderboard = new ArrayList< Leaderboard >();
+        try {
+
+            /*
+             * Create the request to the leaderboard service
+             * and store the response
+             */
+            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() + " - Default" );
+            var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
+
+            leaderboard.add( hold );
+        } catch ( NullRequestParameterException e ) {
+
+            return new CreateTimeTrialResponse( false );
+        }
+
+        /* Hold each created Level object */
+        var levels = new ArrayList< Level >();
+
+        /* Store the list of GeoCOde UUIDs to create a Level on */
+        List< UUID > geoCodes = request.getGeoCodesToFind();
+
+        /* Go through each UUID */
+        for ( UUID geoCode : geoCodes ) {
+
+            /*
+             * Create the Level with a random UUID
+             * and add it to the list
+             */
+            levels.add( new Level( geoCode ) );
+        }
+
+        /* Create the new Event object with the specified attributes */
+        var timeTrial = new TimeTrial( UUID.randomUUID(), request.getName(), request.getDescription(),
+                                       request.getLocation(), levels, request.getBeginDate(), request.getEndDate(),
+                                       leaderboard, request.getTimeLimit() );
+
+        /* Check the availability of the Event */
+        if ( request.isAvailable() == null ) {
+
+            /* None is set so make it default available */
+            timeTrial.setAvailable( true );
+        } else {
+
+            /* Set to the given */
+            timeTrial.setAvailable( request.isAvailable() );
+        }
+
+        /*
+         * Save the newly create Event
+         * Validate if the Event was saved properly
+         */
+        var success = true;
+        try {
+
+            /* Save the newly created entry to the repository */
+            var check = timeTrialRepo.save( timeTrial );
+
+            /* Check if the Object was saved correctly */
+            if ( !timeTrial.equals( check ) ) {
+
+                success = false;
+            }
+        } catch ( IllegalArgumentException error ) {
+
+            success = false;
+        }
+
+        return new CreateTimeTrialResponse( success );
+    }
+
+    /**
+     * Get a specified Event that is stored in the repository
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetEventRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetEventResponse getEvent( GetEventRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getEventID() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Create the response to return */
+        GetEventResponse response;
+        try {
+
+            /*
+             * Query the repository for the Event object
+             * and set the response to true with the found Event
+             */
+            Optional< Event > temp = eventRepo.findById( request.getEventID() );
+            response = temp.map(
+
+                                    /* Indicate the Event was found and return it */
+                                    event -> new GetEventResponse( true, event )
+                               ).orElseGet(
+
+                                    /* Indicate the Event was not found */
+                                    () -> new GetEventResponse( false )
+                               );
+
+        } catch ( EntityNotFoundException error ) {
+
+            /* No Event found so set the response to false */
+            response = new GetEventResponse( false );
+        }
+
+        return response;
+    }
+
+    /**
+     * Get a specified TimeTrial that is stored in the repository
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetTimeTrialRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetTimeTrialResponse getTimeTrial( GetTimeTrialRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getEventID() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Create the response to return */
+        GetTimeTrialResponse response;
+        try {
+
+            /*
+             * Query the repository for the TimeTrial object
+             * and set the response to true with the found TimeTrial
+             */
+            Optional< TimeTrial > temp = timeTrialRepo.findById( request.getEventID() );
+            response = temp.map(
+
+                                    /* Indicate the TimeTrial was found and return it */
+                                    timeTrial -> new GetTimeTrialResponse( true, timeTrial )
+                               ).orElseGet(
+
+                                    /* Indicate the TimeTrial was not found */
+                                    () -> new GetTimeTrialResponse( false )
+                               );
+
+        } catch ( EntityNotFoundException error ) {
+
+            /* No TimeTrial found so set the response to false */
+            response = new GetTimeTrialResponse( false );
+        }
+
+        return response;
+    }
+
+    /**
+     * Determine if the given ID is for a TimeTrial or Event
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified IsTimeTrialRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public IsTimeTrialResponse isTimeTrial( IsTimeTrialRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getEventID() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Create the response to return */
+        IsTimeTrialResponse response;
+        try {
+
+            //ToDO come back to the repo and check how it is storing items
+            /*
+             * Query the repository for the TimeTrial object
+             * and set the response to true with the found TimeTrial
+             */
+            Optional< TimeTrial > temp = timeTrialRepo.findById( request.getEventID() );
+            response = temp.map(
+
+                                    /* Indicate the Event was found and return it */
+                                    timeTrial -> new IsTimeTrialResponse( true, timeTrial )
+                               ).orElseGet(
+
+                                    /* Indicate the Event was not found */
+                                    () -> new IsTimeTrialResponse( false )
+                              );
+
+        } catch ( EntityNotFoundException error ) {
+
+            /* No TimeTrial found so set the response to false */
+            response = new IsTimeTrialResponse( false );
+        }
+
+        return response;
+    }
+
+    /**
+     * Get a specified TimeLog entry that is stored in the repository
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetTimeLogRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetTimeLogResponse getTimeLog( GetTimeLogRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getEventID() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        try {
+
+            /* Get all the entries to search them */
+            var temp = timeLogRepo.findAll();
+
+            /* Go through each entry */
+            for ( TimeLog timeLog : temp ) {
+
+                /* Check if current entry is what is needed */
+                if ( ( timeLog.getEventID().equals( request.getEventID() ) ) &&
+                        ( timeLog.getUserID().equals( request.getUserID() ) ) &&
+                        ( timeLog.getGeoCodeID().equals( request.getGeoCodeID() ) ) ) {
+
+                    /* Current is the desired therefore return it */
+                    return new GetTimeLogResponse( true, timeLog );
+                }
+            }
+        } catch ( EntityNotFoundException error  ) {
+
+            return new GetTimeLogResponse( false );
+        }
+
+        return new GetTimeLogResponse( false );
+    }
+
+    /**
+     * Get a specific Event that a User is currently partaking in and the Event stored in the repository
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetCurrentEventRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetCurrentEventResponse getCurrentEvent( GetCurrentEventRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getUserID() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        try {
+
+            /*
+             * Query the repository for the Event object
+             * and set the response to true with the found Event
+             */
+            List< Event > temp = eventRepo.findAll();
+
+            /* Go through each available Event */
+            for ( Event event : temp ) {
+
+                /* Get the Levels for each Event */
+                List< Level > levels = event.getLevels();
+
+                /* Go through each found Level to check if the User's ID is present */
+                for ( Level level : levels ) {
+
+                    Collection< UUID > onLevel = level.getOnLevel();
+                    if ( onLevel.contains( request.getUserID() ) ) {
+
+                        return new GetCurrentEventResponse( true, event );
+                    }
+                }
+            }
+
+        } catch ( EntityNotFoundException error ) {
+
+            /* No Event found so set the response to false */
+            return new GetCurrentEventResponse( false );
+        }
+
+        return new GetCurrentEventResponse( false );
+    }
+
+    /**
+     * Get a specific GeoCode to complete a Level for anEvent that a User is currently partaking in and the Event stored in the repository
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetCurrentEventLevelResponse
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetCurrentEventLevelResponse getCurrentEventLevel( GetCurrentEventLevelRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( ( request.getEventID() == null ) || ( request.getUserID() == null ) ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* Get the Event object from the repository */
+        Optional< Event > temp = eventRepo.findById( request.getEventID() );
+
+        /* Check if the object was returned */
+        if ( temp.isPresent() ) {
+
+            /* Get the Event object's Levels to iterate through */
+            var levels = temp.get().getLevels();
+
+            /* Go through each level contained in the Event */
+            for ( Level level : levels ) {
+
+                /* Get the list of Users on the Level */
+                var users = level.getOnLevel();
+
+                /* Check if the user is contained on the level */
+                if ( users.contains( request.getUserID() ) ) {
+
+                    try {
+
+                        /*
+                         * Query the GeoCode subsystem for the targeted GeoCodeID for the level
+                         * Return the found GeoCode object
+                         */
+                        var hold = geoCodeService.getGeoCode( new GetGeoCodeRequest( level.getTarget() ) );
+                        return new GetCurrentEventLevelResponse( true, hold.getFoundGeoCode() );
+                    } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
+
+                        /* An exception was thrown therefore could not find the GeoCode */
+                        return new GetCurrentEventLevelResponse( false );
+                    }
+                }
+            }
+
+
+            try {
+                /* User is not on any level, start at level 1 */
+                NextStageRequest nextStageRequest = new NextStageRequest( request.getEventID(), request.getUserID() );
+                NextStageResponse nextStageResponse = nextStage(nextStageRequest);
+                GetGeoCodeResponse hold = geoCodeService.getGeoCode( new GetGeoCodeRequest( nextStageResponse.getNextGeoCode() ) );
+                return new GetCurrentEventLevelResponse( true, hold.getFoundGeoCode() );
+            } catch (tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e) {
+                /* return false below */
+            }
+
+        }
+
+        return new GetCurrentEventLevelResponse( false );
+    }
+
+    /**
+     * Get the next GeoCode the User has to find for their current Event
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified NextStageRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public NextStageResponse nextStage( NextStageRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( ( request.getEventID() == null ) || ( request.getUserID() == null ) ) {
+
+            throw new InvalidRequestException();
+        }
+
+        try {
+
+            /*
+             * Query the repository for the Event object
+             * and set the response to true with the found Event
+             */
+            Optional< Event > temp = eventRepo.findById( request.getEventID() );
+            if ( temp.isPresent() ) {
+
+                Event currEvent = temp.get();
+
+                /* Get the Levels for each Event */
+                List< Level > levels = currEvent.getLevels();
+
+                var id = request.getUserID();
+
+                /* Go through each found Level to check if the User's ID is present */
+                for ( int x = 0; x < levels.size(); x++ ) {
+
+                    /* Check if the current Level contains the User */
+                    Collection< UUID > onLevel = levels.get( x ).getOnLevel();
+                    if ( onLevel.contains( id ) ) {
+
+                        /* Check if the user can move onto the next stage */
+                        if ( ( x + 1 ) < levels.size() ) {
+
+                            var oldLevel = levels.get( x );
+                            var newLevel = levels.get( x + 1 );
+                            
+                            oldLevel.removeOnLevelItem( id );
+                            newLevel.putOnLevelItem( id );
+
+                            /* Save the levels */
+                            levelRepo.save(oldLevel);
+                            levelRepo.save(newLevel);
+
+                            /* The current Level contains the User so return the GeoCode */
+                            return new NextStageResponse( newLevel.getTarget() );
+                        }
+
+                        /* The user has completed the Event */
+                        return new NextStageResponse( null );
+                    }
+
+                    /* Add the user to the first level and return the first GeoCode */
+                    if (  x == levels.size() - 1 ) {
+
+                        var level = levels.get( 0 );
+                        level.putOnLevelItem( id );
+                        levelRepo.save(level);
+                        return new NextStageResponse( level.getTarget() );
+                    }
+                }
+            }
+
+        } catch ( EntityNotFoundException error ) {
+
+            /* No Event found so set the response to false */
+            return new NextStageResponse( null );
+        }
+
+        return new NextStageResponse( null );
+    }
+
+    /**
+     * Retrieve a list of Events around a certain radius of a location
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified EventsNearMeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public EventsNearMeResponse eventsNearMe( EventsNearMeRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getLocation() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        /* The list of Events within the radius */
+        var foundEvents = new ArrayList< Event >();
+
+        /* All the Events in the repository */
+        var temp = eventRepo.findAll();
+
+        /* The location and radius the location needs to fall into */
+        GeoPoint locate = request.getLocation();
+        var radius = request.getRadius()/111; // 111 km = 1 degree
+
+        /* Go through each Event in the repository */
+        for ( Event event : temp ) {
+
+            /* Calculate the distance from the given point to the Event using the distance formula */
+            /* This is not the most accurate method, but should be close as long as the radius is small */
+            var latitudeDifference = Math.pow(locate.getLatitude() - event.getLocation().getLatitude(), 2);
+            var longitudeDifference = Math.pow(locate.getLongitude() - event.getLocation().getLongitude(), 2);
+            var distance = Math.sqrt(longitudeDifference+latitudeDifference);
+
+            /* Check if the event is close enough to the given point */
+            if ( distance <= radius ) {
+                foundEvents.add( event );
+            }
+        }
+
+        return new EventsNearMeResponse( foundEvents );
+    }
+
+    /**
+     * Get all the stored Events and TimeTrials in the repository
+     *
+     * @return the newly created response instance
+     */
+    @Override
+    public GetAllTypeOfEventsResponse getAllTypeOfEvents() {
+
+        var temp = eventRepo.findAll();
+
+        return new GetAllTypeOfEventsResponse();
     }
 
     /**
@@ -71,9 +791,22 @@ public class EventServiceImpl implements EventService {
     @Override
     public GetAllEventsResponse getAllEvents() {
 
-        List< Event > temp = eventRepo.findAll();
+        var temp = eventRepo.findAll();
 
         return new GetAllEventsResponse( temp );
+    }
+
+    /**
+     * Get all the stored TimeTrials in the repository
+     *
+     * @return the newly created response instance
+     */
+    @Override
+    public GetAllTimeTrialsResponse getAllTimeTrials() {
+
+        var temp = timeTrialRepo.findAllTimeTrials();
+
+        return new GetAllTimeTrialsResponse( temp );
     }
 
     /**
@@ -82,9 +815,17 @@ public class EventServiceImpl implements EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified ChangeAvailabilityRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public ChangeAvailabilityResponse changeAvailability( ChangeAvailabilityRequest request ) throws InvalidRequestException {
+
+        /*
+
+            ToDo maybe this should be called check Availability instead where it checks the date to the current
+
+         */
 
         /* Validate the request */
         if ( request == null ) {
@@ -104,6 +845,8 @@ public class EventServiceImpl implements EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public GetEventsByLocationResponse getEventsByLocation( GetEventsByLocationRequest request ) throws InvalidRequestException {
@@ -117,7 +860,31 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        return null;
+        /* The list of Events within the radius */
+        var foundEvents = new ArrayList< Event >();
+
+        /* All the Events in the repository */
+        var temp = eventRepo.findAll();
+
+
+        /* The location to look for */
+        GeoPoint locate = request.getLocation();
+
+        /* Go through each Event in the repository */
+        for ( Event event : temp ) {
+
+            /* Check if the value is within the max radius */
+            if ( locate.equals( event.getLocation() ) ) {
+
+                /*
+                 * The current Event is the same
+                 * therefore add it to the list
+                 */
+                foundEvents.add( event );
+            }
+        }
+
+        return new GetEventsByLocationResponse( foundEvents );
     }
 
     /**
@@ -126,6 +893,8 @@ public class EventServiceImpl implements EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
     public CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) throws InvalidRequestException {
@@ -139,120 +908,217 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        return null;
-    }
+        try {
 
-    /**
-     * Create a new point for a leaderboard
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
-     */
-    @Override
-    public CreatePointResponse createPoint( CreatePointRequest request ) throws InvalidRequestException {
+            /*
+             * Create the request to the leaderboard service
+             * and store the response
+             */
+            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() );
+            var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
 
-        /* Validate the request */
-        if ( request == null ) {
+            /* Find the Event object with the given ID */
+            var event = eventRepo.findById( request.getEventID() );
+            if ( event.isPresent() ) {
 
-            throw new InvalidRequestException( true );
-        } else if ( request.getAmount() == null ) {
+                /* Get the actual Event and append to its leaderboards */
+                var currEvent = event.get();
+                currEvent.addLeaderboardsItem( hold );
+            } else {
 
-            throw new InvalidRequestException();
+                /* The object was not found */
+                return new CreateLeaderboardResponse( false );
+            }
+
+        } catch ( NullRequestParameterException error ) {
+
+            /* An error occurred and the leaderboard could not be created */
+            return new CreateLeaderboardResponse( false );
         }
 
-        return null;
+        /* The new leaderboard was successfully made */
+        return new CreateLeaderboardResponse( true );
     }
 
-    /**
-     * Create a new TimeTrial for an event, that will be active for a pre-determined
-     * amount of time
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
-     */
-    @Override
-    public CreateTimeTrialResponse createTimeTrial( CreateTimeTrialRequest request ) {
+    /*---------- Post Construct GeoCode service ----------*/
 
-        return null;
+    /**
+     * Post construct the GeoCode service, this avoids a circular dependency
+     *
+     * @param geoCodeService the service to be set
+     */
+    public void setGeoCodeService( GeoCodeService geoCodeService ) {
+
+        this.geoCodeService = geoCodeService;
     }
 
+    /*-------------------------------------*/
+
+
+    /*---------- Helper Functions for creating an Event ----------*/
+
     /**
-     * Get the points for a specific event that a user has gotten
+     * Gets a list of GeoCode ID's and sorts them according to their Difficulty
      *
-     * @param request the attributes the response should be created from
+     * @param geoCodes the list of GeoCode ID's to sort
      *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     * @return the sorted GeoCode ID's in order of Difficulty
      */
-    @Override
-    public GetPointsByUserResponse getPointsByUser( GetPointsByUserRequest request ) throws InvalidRequestException {
+    private List< UUID > sortByDifficulty( List< UUID > geoCodes, UUID eventID ) {
 
-        /* Validate the request */
-        if ( request == null ) {
+        List< UUID > hold = null;
 
-            throw new InvalidRequestException( true );
-        } else if ( request.getUserID() == null ) {
+        if ( geoCodes != null ) {
 
-            throw new InvalidRequestException();
+            /* Hold all the found GeoCode Objects */
+            List< GeoCode > temp = new ArrayList<>();
+
+            /*
+             * Go through each GeoCode ID
+             * and get the GeoCode object
+             */
+            for ( UUID geoCode : geoCodes ) {
+
+                try {
+
+                    /*
+                     * Call the GeoCode service to get the GeoCode Object
+                     * add the found object to the list
+                     * */
+                    var found = geoCodeService.getGeoCode( new GetGeoCodeRequest( geoCode ) ).getFoundGeoCode();
+                    temp.add( found );
+                } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
+
+                    return null;
+                }
+            }
+
+            /* Apply Bubble sorting algorithm to get the objects in the correct order */
+
+            /* Size of the list to sort */
+            int n = temp.size();
+
+            for ( int i = 0; i < n - 1; i++ ) {
+
+                for ( int j = 0; j < n - i - 1; j++ ) {
+
+                    /* Hold the index of Difficulties */
+                    var checkOne = getDifficultyIndex( temp.get( j ).getDifficulty() );
+                    var checkTwo = getDifficultyIndex( temp.get( j + 1 ).getDifficulty() );
+
+                    /* Check if the two positions needs to be swapped */
+                    if ( checkOne > checkTwo ) {
+
+                        /* Perform the swap */
+                        var tempSwap = temp.get( j );
+                        temp.set( j, temp.get( j + 1 ) );
+                        temp.set( j + 1, tempSwap );
+                    }
+                }
+            }
+
+            hold = new ArrayList<>();
+
+            /* Add the sorted GeoCode Objects ID's to the return list */
+            for ( GeoCode geoCode : temp ) {
+
+                /* Get the ID from the current object */
+                var geoCodeID = geoCode.getId();
+
+                /* Valid the ID */
+                if ( geoCodeID != null ) {
+
+                    hold.add( geoCodeID );
+                    geoCode.setEventID(eventID);
+                    geoCodeService.saveGeoCode(geoCode);
+                }
+            }
+
         }
 
-        return null;
+        return hold;
     }
 
     /**
-     * Get the points for a specific leaderboard
+     * Determines the index of importance of a Difficulty
      *
-     * @param request the attributes the response should be created from
+     * @param difficulty the Difficulty to search for
      *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     * @return the index of the Difficulty in the List
      */
-    @Override
-    public GetPointsByLeaderBoardResponse getPointsByLeaderboard( GetPointsByLeaderBoardRequest request ) throws InvalidRequestException {
+    private int getDifficultyIndex( Difficulty difficulty ) {
 
-        /* Validate the request */
-        if ( request == null ) {
+        /* Current index */
+        int x = 0;
 
-            throw new InvalidRequestException( true );
-        } else if ( request.getLeaderboardID() == null ) {
+        /* Get the order of difficulties */
+        List< Difficulty > difficultyOrder = Difficulty.getDifficultyOrder();
 
-            throw new InvalidRequestException();
+        /* Go through each object in the list */
+        for ( ; x < difficultyOrder.size(); x++ ) {
+
+            /* Check if the current object matches the required one */
+            if ( difficulty.equals( difficultyOrder.get( x ) ) ) {
+
+                /* The current object is the index wanted */
+                return x;
+            }
         }
 
-        return null;
+        return x;
     }
 
     /**
-     * Get the points of a specific Event
+     * Gets a list of GeoCode ID's and sorts them according to their distance from one another
      *
-     * @return the newly created response instance
+     * @param geoCodes the list of GeoCode ID's to sort
+     *
+     * @return the sorted GeoCode ID's in order of distance
      */
-    @Override
-    public GetPointsResponse getPoints() {
+    private List< UUID > sortByDistance( List< UUID > geoCodes, UUID eventID ) {
 
-        return null;
-    }
+        /* Holds the new order of the GeoCodes */
+        List< UUID > hold = null;
 
-    /**
-     * Get the Leaderboard of a TimeTrial
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
-     */
-    @Override
-    public GetLeaderBoardByTimeTrialResponse getLeaderBoardByTimeTrial( GetLeaderBoardByTimeTrialRequest request ) throws InvalidRequestException {
+        if ( geoCodes != null ) {
 
-        /* Validate the request */
-        if ( request == null ) {
+            /*
 
-            throw new InvalidRequestException( true );
-        } else if ( request.getTimeTrialID() == null ) {
+                Use this to calculate the distance of each GeoPoint to One Another
 
-            throw new InvalidRequestException();
+
+                 // The math module contains a function
+                // named toRadians which converts from
+                // degrees to radians.
+                double lon1 = Math.toRadians(lon1);
+                double lon2 = Math.toRadians(lon2);
+                double lat1 = Math.toRadians(lat1);
+                double lat2 = Math.toRadians(lat2);
+
+                // Haversine formula
+                double dlon = lon2 - lon1;
+                double dlat = lat2 - lat1;
+                double a = Math.pow(Math.sin(dlat / 2), 2)
+                         + Math.cos(lat1) * Math.cos(lat2)
+                         * Math.pow(Math.sin(dlon / 2),2);
+
+                double c = 2 * Math.asin(Math.sqrt(a));
+
+                // Radius of earth in kilometers. Use 3956
+                // for miles
+                double r = 6371;
+
+                // calculate the result
+                return(c * r);
+
+            */
+
         }
 
-        return null;
+        return hold;
     }
+
+    /*-------------------------------------*/
+
 
 }

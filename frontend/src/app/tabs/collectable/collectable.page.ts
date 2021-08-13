@@ -9,7 +9,7 @@ import {
   GetCollectableSetsResponse,
   GetCollectableTypesResponse
 } from '../../services/geocode-api';
-import {UserInformationService} from '../../services/UserInformationService';
+import {KeycloakService} from 'keycloak-angular';
 
 @Component({
   selector: 'app-collectable',
@@ -26,7 +26,7 @@ export class CollectablePage implements OnInit {
   constructor(
     private modalController: ModalController,
     private collectableService: CollectableService,
-    private userDetails: UserInformationService
+    private keycloak: KeycloakService
   ) {
     this.collectableService.getCollectableSets().subscribe(async (response: GetCollectableSetsResponse) => {
       console.log(response);
@@ -51,7 +51,7 @@ export class CollectablePage implements OnInit {
   }
 
   isAdmin() {
-    return this.userDetails.isAdmin();
+    return this.keycloak.isUserInRole('Admin');
   }
 
   async addType(selectedSetID) {

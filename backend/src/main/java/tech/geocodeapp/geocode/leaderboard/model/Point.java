@@ -30,15 +30,24 @@ public class Point   {
   private Integer amount = null;
 
   @JsonProperty("user")
-  @OneToOne
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  @ManyToOne
   private User user = null;
 
-  /*@JsonProperty("leaderboard")
-  @OneToOne
-  @ElementCollection( fetch = FetchType.EAGER )
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Leaderboard leaderboard = null;*/
+  @JsonProperty("leaderboard")
+  @ManyToOne
+  private Leaderboard leaderboard = null;
+
+  public Point() {
+    id = UUID.randomUUID();
+  }
+
+  //constructor to use when creating a point when values are already known
+  public Point(Integer amount, User user, Leaderboard leaderboard) {
+    id = UUID.randomUUID();
+    this.amount = amount;
+    this.user = user;
+    this.leaderboard = leaderboard;
+  }
 
   public Point id(UUID id) {
     this.id = id;
@@ -103,12 +112,15 @@ public class Point   {
     this.user = user;
   }
 
-  /*public Point leaderboard(Leaderboard leaderboard) {
+  public Point leaderboard(Leaderboard leaderboard) {
     this.leaderboard = leaderboard;
     return this;
   }
 
-
+  /**
+   * Get leaderboard
+   * @return leaderboard
+   **/
   @Schema(description = "")
   
     @Valid
@@ -118,7 +130,7 @@ public class Point   {
 
   public void setLeaderBoard(Leaderboard leaderboard) {
     this.leaderboard = leaderboard;
-  }*/
+  }
 
 
   @Override
@@ -132,13 +144,13 @@ public class Point   {
     Point point = (Point) o;
     return Objects.equals(this.id, point.id) &&
         Objects.equals(this.amount, point.amount) &&
-        Objects.equals(this.user, point.user) /*&&
-        Objects.equals(this.leaderboard, point.leaderboard)*/;
+        Objects.equals(this.user, point.user) &&
+        Objects.equals(this.leaderboard, point.leaderboard);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, amount, user/*, leaderboard*/);
+    return Objects.hash(id, amount, user, leaderboard);
   }
 
   @Override
@@ -149,7 +161,7 @@ public class Point   {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("    user: ").append(toIndentedString(user)).append("\n");
-    /*sb.append("    leaderboard: ").append(toIndentedString(leaderboard)).append("\n")*/;
+    sb.append("    leaderboard: ").append(toIndentedString(leaderboard)).append("\n");
     sb.append("}");
     return sb.toString();
   }
