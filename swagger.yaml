@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.8"
+  version: "1.5.9"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -10,7 +10,7 @@ info:
     name: "Apache 2.0"
     url: "https://www.apache.org/licenses/LICENSE-2.0.html"
 servers:
-  - url: "http://geocodeapp.tech:8080/api"
+  - url: "https://geocodeapp.tech:8080/api"
 tags:
   - name: "User"
     description: "Everything about the users of the platform"
@@ -338,38 +338,6 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/RegisterNewUserResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-      security:
-        - bearerAuth: []
-
-  /User/swapCollectable:
-    post:
-      tags:
-        - "User"
-      summary: "Swaps the User's current Collectable for a Collectable inside a GeoCode"
-      description: "Swaps the User's current Collectable for a Collectable inside a GeoCode"
-      operationId: "swapCollectable"
-      requestBody:
-        required: true
-        description: "Request to swap the User's current Collectable"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SwapCollectableRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/SwapCollectableRequest'
-      responses:
-        '200':
-          description: "Response for containing the User's current Collectable before swapping it"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapCollectableResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/SwapCollectableResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -1460,37 +1428,6 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
-        
-  /Event/getAllTypeOfEvents:
-    get:
-      tags:
-        - "Event"
-      summary: "Returns all type of Events"
-      description: "Returns all type of Events in the system"
-      operationId: "getAllTypeOfEvents"
-      responses:
-        '200':
-          description: "Successfully returned all the Event's"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetAllTypeOfEventsResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetAllTypeOfEventsResponse"
-        '404':
-          description: "Unable to find any Events"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetAllTypeOfEventsResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetAllTypeOfEventsResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
 
   /Event/getAllEvents:
     get:
@@ -1518,37 +1455,6 @@ paths:
             application/xml:
               schema:
                 $ref: "#/components/schemas/GetAllEventsResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
-
-  /Event/getAllTimeTrials:
-    get:
-      tags:
-        - "Event"
-      summary: "Returns all the TimeTrials"
-      description: "Returns all the TimeTrials in the system"
-      operationId: "getAllTimeTrials"
-      responses:
-        '200':
-          description: "Successfully returned all the TimeTrials"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetAllTimeTrialsResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetAllTimeTrialsResponse"
-        '404':
-          description: "Unable to find any TimeTrials"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetAllTimeTrialsResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetAllTimeTrialsResponse"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
       security:
@@ -1636,252 +1542,6 @@ paths:
       security:
         - bearerAuth: []
 
-  /Event/getTimeTrial:
-    post:
-      tags:
-        - "Event"
-      summary: "Retrieves a specific stored TimeTrial"
-      description: "Get a stored Event in the system with the specified id"
-      operationId: "getTimeTrial"
-      requestBody:
-        required: true
-        description: "Request to get a TimeTrial"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GetTimeTrialRequest"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/GetTimeTrialRequest"
-      responses:
-        '200':
-          description: "Return the TimeTrial was successfully found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetTimeTrialResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetTimeTrialResponse"
-        '404':
-          description: "Return the specified TimeTrial was not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetTimeTrialResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetTimeTrialResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
-
-  /Event/isTimeTrial:
-    post:
-      tags:
-        - "Event"
-      summary: "Determines if the given object is an Event or TimeTrial"
-      description: "Determines if the given object is an Event or TimeTrial"
-      operationId: "isTimeTrial"
-      requestBody:
-        required: true
-        description: "Request to determine if an ID is for a TimeTrial"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/IsTimeTrialRequest"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/IsTimeTrialRequest"
-      responses:
-        '200':
-          description: "Return if TimeTrial or not successfully"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/IsTimeTrialResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/IsTimeTrialResponse"
-        '404':
-          description: "Return the specified ID was not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/IsTimeTrialResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/IsTimeTrialResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
-
-  /Event/getTimeLog:
-    post:
-      tags:
-        - "Event"
-      summary: "Retrieves a specific stored TimeLog entry"
-      description: "Get a stored Event in the system with the specified id"
-      operationId: "getTimeLog"
-      requestBody:
-        required: true
-        description: "Request to get a TimeLog entry"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GetTimeLogRequest"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/GetTimeLogRequest"
-      responses:
-        '200':
-          description: "Return the TimeLog entry was successfully found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetTimeLogResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetTimeLogResponse"
-        '404':
-          description: "Return the specified TimeLog entry was not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetTimeLogResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetTimeLogResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
-
-  /Event/getCurrentEvent:
-    post:
-      tags:
-        - "Event"
-      summary: "Retrieves a specific stored Event that a user is involved in"
-      description: "Get a stored Event in the system with the specified id that a user is busy with"
-      operationId: "getCurrentEvent"
-      requestBody:
-        required: true
-        description: "Request to get a specified Event a user is busy with"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GetCurrentEventRequest"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/GetCurrentEventRequest"
-      responses:
-        '200':
-          description: "Return the Event was successfully found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetCurrentEventResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetCurrentEventResponse"
-        '404':
-          description: "Return the specified Event was not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetCurrentEventResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetCurrentEventResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
-
-  /Event/getCurrentEventLevel:
-    post:
-      tags:
-        - "Event"
-      summary: "Retrieves a specific stored GeoCode to complete a Level for an Event that a user is involved in"
-      description: "Get a stored GeoCode to complete a Level for an Event in the system with the specified id that a user is busy with"
-      operationId: "getCurrentEventLevel"
-      requestBody:
-        required: true
-        description: "Request to get a specified GeoCode to complete a Level for an Event a user is busy with"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GetCurrentEventLevelRequest"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/GetCurrentEventLevelRequest"
-      responses:
-        '200':
-          description: "Return the GeoCode to complete a Level for an Event was successfully found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetCurrentEventLevelResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetCurrentEventLevelResponse"
-        '404':
-          description: "Return the specified GeoCode to complete a Level for an Event was not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetCurrentEventLevelResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetCurrentEventLevelResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
-
-  /Event/nextStage:
-    post:
-      tags:
-        - "Event"
-      summary: "Retrieves the next GeoCode to find to complete an Event"
-      description: "Retrieves the next GeoCode a User has to find to complete an Event"
-      operationId: "nextStage"
-      requestBody:
-        required: true
-        description: "Request to get a specified GeoCode for an Event a user is busy with"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/NextStageRequest"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/NextStageRequest"
-      responses:
-        '200':
-          description: "Return the GeoCode for the specified Event was successfully found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NextStageResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/NextStageResponse"
-        '404':
-          description: "Return the GeoCode for the specified Event was not successfully found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NextStageResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/NextStageResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
-
   /Event/getEventsNearMe:
     post:
       tags:
@@ -1923,47 +1583,6 @@ paths:
       security:
         - bearerAuth: []
 
-  /Event/getByLocation:
-    post:
-      tags:
-        - "Event"
-      summary: "Get an Event by its location"
-      description: "Get an Event and/or TimeTrial  by its location from the given co-ordinates"
-      operationId: "getByLocation"
-      requestBody:
-        required: true
-        description: "Request to get an Event and/or TimeTrial by its location"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GetByLocationRequest"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/GetByLocationRequest"
-      responses:
-        '200':
-          description: "Return the found Event and/or TimeTrial"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetByLocationResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetByLocationResponse"
-        '404':
-          description: "Return the Event and/or TimeTrial was not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetByLocationResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetByLocationResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
-
   /Event/getEventsByLocation:
     post:
       tags:
@@ -2000,88 +1619,6 @@ paths:
             application/xml:
               schema:
                 $ref: "#/components/schemas/GetEventsByLocationResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
-
-  /Event/getTimeTrialByLocation:
-    post:
-      tags:
-        - "Event"
-      summary: "Get an TimeTrial by its location"
-      description: "Get an TimeTrial by its location from the given co-ordinates"
-      operationId: "getTimeTrialByLocation"
-      requestBody:
-        required: true
-        description: "Request to get an Event by its location"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GetTimeTrialByLocationRequest"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/GetTimeTrialByLocationRequest"
-      responses:
-        '200':
-          description: "Return the found TimeTrial"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetTimeTrialByLocationResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetTimeTrialByLocationResponse"
-        '404':
-          description: "Return the TimeTrial was not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetTimeTrialByLocationResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/GetTimeTrialByLocationResponse"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-      security:
-        - bearerAuth: []
-
-  /Event/createTimeTrial:
-    post:
-      tags:
-        - "Event"
-      summary: "Create a new Time Trial for an Event"
-      description: "Create a new Time Trial with a specific timeframe for an Event"
-      operationId: "createTimeTrial"
-      requestBody:
-        required: true
-        description: "Request to create a new Time Trial for an Event"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateTimeTrialRequest"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/CreateTimeTrialRequest"
-      responses:
-        '200':
-          description: "Return the Time Trial for the Event was successfully created"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CreateTimeTrialResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/CreateTimeTrialResponse"
-        '404':
-          description: "Return the Time Trial for the Event was not successfully created"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CreateTimeTrialResponse"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/CreateTimeTrialResponse"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
       security:
@@ -3445,35 +2982,6 @@ components:
               example: "New User registered"
           xml:
             name: "RegisterNewUserResponse"
-
-    SwapCollectableRequest:
-      type: "object"
-      required:
-        - targetCollectableID
-        - targetGeoCodeID
-      properties:
-        targetCollectableID:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        targetGeoCodeID:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "RegisterNewUserRequest"
-
-    SwapCollectableResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "The User's Collectable was swapped with the Collectable in the GeoCode"
-            collectable:
-              $ref: '#/components/schemas/Collectable'
-          xml:
-            name: "SwapCollectableResponse"
             
     GetMyMissionsRequest:
       type: "object"
@@ -3727,81 +3235,6 @@ components:
         - "DIFFICULTY"
         - "DISTANCE"
         
-    TimeTrial:
-      type: "object"
-      allOf:
-        -   $ref: "#/components/schemas/Event"
-      required:
-        - timeLimit
-      properties:
-        timeLimit:
-          type: number
-          example: "60.0"
-      xml:
-        name: "TimeTrial"
-    Level:
-      type: "object"
-      required:
-        - id
-        - target
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        target:
-          $ref: "#/components/schemas/GeoCode"
-        onLevel:
-          type: object
-          additionalProperties:
-            type: string
-            format: uuid
-            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "Level"
-    TimeLog:
-      type: "object"
-      required:
-        - eventID
-        - userID
-        - geoCodeID
-        - startTime
-      properties:
-        eventID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        userID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        geoCodeID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        startTime:
-          type: string
-          format: date-time
-      xml:
-        name: "TimeLog"
-
-    GetAllTypeOfEventsResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "All Event types returned"
-            events:
-              type: array
-              items:
-                $ref: "#/components/schemas/Event"
-            timeTrials:
-              type: array
-              items:
-                $ref: "#/components/schemas/TimeTrial"
-          xml:
-            name: "GetAllTypeOfEventsResponse"
 
     GetAllEventsResponse:
       allOf:
@@ -3817,20 +3250,6 @@ components:
           xml:
             name: "GetAllEventsResponse"
 
-    GetAllTimeTrialsResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "All TimeTrials returned"
-            events:
-              type: array
-              items:
-                $ref: "#/components/schemas/TimeTrial"
-          xml:
-            name: "GetAllTimeTrialsResponse"
-
     CreateEventRequest:
       type: "object"
       required:
@@ -3838,6 +3257,7 @@ components:
         - description
         - location
         - beginDate
+        - endDate
         - geoCodesToFind
         - orderBy
         - available
@@ -3889,59 +3309,6 @@ components:
       xml:
         name: "CreateEventResponse"
 
-    CreateTimeTrialRequest:
-      type: "object"
-      required:
-        - timeLimit
-        - name
-        - description
-        - location
-        - beginDate
-        - GeoCodesToFind
-        - orderBy
-      properties:
-        timeLimit:
-          type: number
-          example: "10.0"
-        name:
-          type: string
-          example: "My Event"
-        description:
-          type: string
-          example: "There are 4 GeoCodes to find in this Event."
-        location:
-          $ref: "#/components/schemas/GeoPoint"
-        beginDate:
-          type: string
-          format: date
-          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
-          example: "2017-01-01"
-        endDate:
-          type: string
-          format: date
-          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
-          example: "2017-01-01"
-        GeoCodesToFind:
-          type: array
-          items:
-            type: string
-            format: uuid
-            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        orderBy:
-          $ref: "#/components/schemas/OrderLevels"
-      xml:
-        name: "CreateTimeTrialRequest"
-
-    CreateTimeTrialResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "TimeTrial created"
-          xml:
-            name: "CreateTimeTrialResponse"
-
     GetEventRequest:
       type: "object"
       properties:
@@ -3990,6 +3357,9 @@ components:
     
     GetCurrentEventStatusRequest:
       type: "object"
+      required:
+        - eventID
+        - userID
       properties:
         eventID:
           type: string
@@ -4015,166 +3385,6 @@ components:
               $ref: "#/components/schemas/GeoCode"
           xml:
             name: "GetCurrentEventStatusResponse"
-    
-    GetTimeTrialRequest:
-      type: "object"
-      properties:
-        eventID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "GetEventRequest"
-
-    GetTimeTrialResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "TimeTrial returned"
-            foundEvent:
-              $ref: "#/components/schemas/TimeTrial"
-          xml:
-            name: "GetEventResponse"
-
-    IsTimeTrialRequest:
-      type: "object"
-      properties:
-        eventID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "GetEventRequest"
-
-    IsTimeTrialResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "TimeTrial status returned"
-            foundEvent:
-              $ref: "#/components/schemas/TimeTrial"
-          xml:
-            name: "GetEventResponse"
-
-    GetTimeLogRequest:
-      type: "object"
-      required:
-        - eventID
-        - userID
-        - geoCodeID
-      properties:
-        eventID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        userID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        geoCodeID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "GetEventRequest"
-
-    GetTimeLogResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "TimeLog returned"
-            foundTimeLog:
-              $ref: "#/components/schemas/TimeLog"
-          xml:
-            name: "GetEventResponse"
-
-    GetCurrentEventRequest:
-      type: "object"
-      required:
-        - userID
-      properties:
-        userID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "GetCurrentEventRequest"
-
-    GetCurrentEventResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "Current Event returned"
-            foundEvent:
-              $ref: "#/components/schemas/Event"
-          xml:
-            name: "GetCurrentEventResponse"
-
-    GetCurrentEventLevelRequest:
-      type: "object"
-      required:
-        - userID
-        - eventID
-      properties:
-        userID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        eventID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "GetCurrentEventLevelRequest"
-
-    GetCurrentEventLevelResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "Current Event Level returned"
-            foundGeoCode:
-              $ref: "#/components/schemas/GeoCode"
-          xml:
-            name: "GetCurrentEventLevelResponse"
-
-    NextStageRequest:
-      type: "object"
-      required:
-        - eventID
-        - userID
-      properties:
-        eventID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        userID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-      xml:
-        name: "NextStageRequest"
-
-    NextStageResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "Moved to the next stage"
-            status:
-              $ref: "#/components/schemas/UserEventStatus"
-          xml:
-            name: "NextStageResponse"
 
     EventsNearMeRequest:
       type: "object"
@@ -4206,34 +3416,6 @@ components:
           xml:
             name: "EventsNearMeResponse"
 
-    GetByLocationRequest:
-      type: "object"
-      required:
-        - location
-      properties:
-        location:
-          $ref: "#/components/schemas/GeoPoint"
-      xml:
-        name: "GetByLocationRequest"
-
-    GetByLocationResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "Events returned"
-            events:
-              type: array
-              items:
-                $ref: "#/components/schemas/Event"
-            timeTrials:
-              type: array
-              items:
-                $ref: "#/components/schemas/TimeTrial"
-          xml:
-            name: "GetByLocationResponse"
-
     GetEventsByLocationRequest:
       type: "object"
       required:
@@ -4258,94 +3440,6 @@ components:
           xml:
             name: "GetEventsByLocationResponse"
 
-    GetTimeTrialByLocationRequest:
-      type: "object"
-      required:
-        - location
-      properties:
-        location:
-          $ref: "#/components/schemas/GeoPoint"
-      xml:
-        name: "GetTimeTrialByLocationRequest"
-
-    GetTimeTrialByLocationResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "TimeTrials returned"
-            timeTrials:
-              type: array
-              items:
-                $ref: "#/components/schemas/TimeTrial"
-          xml:
-            name: "GetTimeTrialByLocationResponse"
-
-    GetPointsByUserRequest:
-      type: "object"
-      required:
-        - userID
-      properties:
-        userID:
-          type: string
-          format: uuid
-      xml:
-        name: "GetPointsByUserRequest"
-
-    GetPointsByUserResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "Points for the User returned"
-            points:
-              type: array
-              items:
-                $ref: "#/components/schemas/Point"
-          xml:
-            name: "GetPointsByUserResponse"
-
-    GetPointsByLeaderBoardRequest:
-      type: "object"
-      required:
-        - leaderboardID
-      properties:
-        leaderboardID:
-          type: string
-          format: uuid
-      xml:
-        name: "GetPointsByLeaderBoardRequest"
-
-    GetPointsByLeaderBoardResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "Points for the Leaderboard returned"
-            points:
-              type: array
-              items:
-                $ref: "#/components/schemas/Point"
-          xml:
-            name: "GetPointsByLeaderBoardResponse"
-
-    GetPointsResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "Points returned"
-            points:
-              type: array
-              items:
-                $ref: "#/components/schemas/Point"
-          xml:
-            name: "GetPointsResponse"
-
     GetLeaderboardByIDRequest:
       type: "object"
       required:
@@ -4367,31 +3461,6 @@ components:
               $ref: '#/components/schemas/Leaderboard'
           xml:
             name: "GetLeaderboardByIDResponse"
-
-    GetLeaderBoardByTimeTrialRequest:
-      type: "object"
-      required:
-        - timeTrialID
-      properties:
-        timeTrialID:
-          type: string
-          format: uuid
-      xml:
-        name: "GetLeaderBoardByTimeTrialRequest"
-
-    GetLeaderBoardByTimeTrialResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "Leaderboard returned"
-            leaderboard:
-              type: array
-              items:
-                $ref: "#/components/schemas/Leaderboard"
-          xml:
-            name: "GetLeaderBoardByTimeTrialResponse"
             
     Mission:
       type: "object"
