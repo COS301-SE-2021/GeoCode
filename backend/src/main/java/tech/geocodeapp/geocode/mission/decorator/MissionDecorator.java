@@ -96,4 +96,12 @@ public abstract class MissionDecorator implements MissionComponent{
     public boolean checkIfFinished() {
         return decoratedMission.checkIfFinished();
     }
+
+    /**
+     * calls the decoratedMission's checkLocation()
+     */
+    @Override
+    public void checkLocation(GeoPoint newLocation) {
+        decoratedMission.checkLocation(newLocation);
+    }
 }
