@@ -2,8 +2,12 @@ package tech.geocodeapp.geocode.event.decorator;
 
 import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.event.model.UserEventStatus;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
 
 import java.time.LocalDate;
 import java.util.GregorianCalendar;
@@ -90,4 +94,44 @@ public class ConcreteEvent implements EventComponent {
      */
     @Override
     public void setTimeLimit(Integer limit) { }
+
+    /**
+     * Do nothing in a concrete event
+     */
+    @Override
+    public void handleEventStart(UserEventStatus status) { }
+
+    /**
+     * Do nothing in a concrete event
+     * @param stageNumber The index of the stage that was just completed
+     * @param status The user's current status in an event
+     */
+    @Override
+    public void handleStageCompletion(int stageNumber, UserEventStatus status) { }
+
+    /**
+     * Do nothing in a concrete event
+     * @param status The user's current status in an event
+     */
+    @Override
+    public void handleEventEnd(UserEventStatus status) { }
+
+    /**
+     * Function to calculate the number of points a user should receive for finding the provided geocode.
+     *
+     * @param foundGeocode The index of the stage that was just completed
+     * @param status The user's current status in an event
+     *
+     * @return The number of points that the geocode earns the user
+     */
+    @Override
+    public int calculatePoints(GeoCode foundGeocode, UserEventStatus status) {
+        switch(foundGeocode.getDifficulty()){
+            case EASY: return 10;
+            case MEDIUM: return 20;
+            case HARD: return 30;
+            case INSANE: return 40;
+            default: return 0;
+        }
+    }
 }

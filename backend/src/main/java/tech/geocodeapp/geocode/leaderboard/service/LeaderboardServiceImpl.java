@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.EventLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
@@ -325,5 +326,16 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         pointRepo.save(point.get());
         return new PointResponse(true, "Updated point successfully", point.get());
+    }
+
+    @Override
+    public Response savePoint(Point point) throws NullRequestParameterException {
+        if(point == null) {
+            return new Response(false, "Point provided is null");
+        }
+        checkNullRequestParameters.checkRequestParameters(point);
+
+        pointRepo.save(point);
+        return new Response(true, "Saved point successfully");
     }
 }

@@ -13,10 +13,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
-import tech.geocodeapp.geocode.mission.request.GetProgressRequest;
-import tech.geocodeapp.geocode.mission.response.GetMissionByIdResponse;
-import tech.geocodeapp.geocode.mission.response.GetProgressResponse;
+import tech.geocodeapp.geocode.mission.request.*;
+import tech.geocodeapp.geocode.mission.response.*;
 
 import javax.validation.Valid;
 
@@ -49,5 +47,16 @@ public interface MissionApi {
         method = RequestMethod.POST)
     ResponseEntity<GetProgressResponse> getProgress(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody GetProgressRequest body);
 
+    @Operation(summary = "Creates a Mission", description = "Creates the Mission for a Collectable that has the Mission Type of the Collectable's Collectable Type", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Mission" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Mission returned", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateMissionResponse.class))),
+
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/Mission/createMission",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" },
+            method = RequestMethod.POST)
+    ResponseEntity<CreateMissionResponse> setMission(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateMissionRequest body);
 }
 
