@@ -74,16 +74,19 @@ public abstract class MissionDecorator implements MissionComponent{
 
     /**
      * sets the completion of the decoratedMission
-     * @param completion
+     * @param completion the completion of the mission
      */
     @Override
     public void setCompletion(Integer completion) {
         decoratedMission.setCompletion(completion);
     }
 
+    /**
+     * calls the decoratedMission's calculateDistance
+     */
     @Override
     public void calculateDistance() {
-
+        decoratedMission.calculateDistance();
     }
 
     @Override
