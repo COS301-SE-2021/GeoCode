@@ -40,4 +40,9 @@ public interface MissionComponent {
      * @return true if the mission is complete and false if it isn't
      */
     boolean checkIfFinished();
+
+    /**
+     * checks if the newLocation finishes the mission
+     */
+    void checkLocation(GeoPoint newLocation);
 }
