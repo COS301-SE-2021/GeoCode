@@ -45,6 +45,8 @@ public interface UserService {
 
     User getCurrentUser();
 
+    UUID getCurrentUserID();
+
     RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException;
 
     //GeoCode helper functions

@@ -2,65 +2,67 @@ package tech.geocodeapp.geocode.event.model;
 
 import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.threeten.bp.OffsetDateTime;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
- * TimeLog object holds when each User starts and Event. It is to keep Track of TimeTrials
+ * ProgressLog object holds a user's current progress in an Event.
  */
 @Entity
 @Validated
-@Table( name = "timelog" )
-public class TimeLog {
+public class UserEventStatus {
 
     /**
      * The unique identifier for the Event
      */
     @Id
     @JsonProperty( "id" )
-    @NotNull( message = "TimeLog's id cannot be null." )
+    @NotNull( message = "UserEventStatus id cannot be null." )
     protected UUID id;
 
     /**
      * The unique id of the event to get the next stage from
      */
     @JsonProperty( "eventID" )
-    @NotNull( message = "TimeLog's eventID attribute cannot be null." )
+    @NotNull( message = "UserEventStatus eventID attribute cannot be null." )
     private UUID eventID;
     
     /**
-     * The unique id of the user competing in the event
+     * The unique id of the user participating in the event
      */
     @JsonProperty( "userID" )
-    @NotNull( message = "TimeLog's userID attribute cannot be null." )
+    @NotNull( message = "UserEventStatus userID attribute cannot be null." )
     private UUID userID;
 
-    /**
-     * The unique identifier of a specific GeoCode
-     */
-    @JsonProperty( "geoCodeID" )
-    @NotNull( message = "TimeLog's geoCodeID attribute cannot be null." )
-    private UUID geoCodeID;
 
     /**
-     * The time when a user started a Level of an Event
+     * The unique identifier of the geocode that the user is searching for
      */
-    @JsonProperty( "startTime" )
-    @NotNull( message = "TimeLog's startTime attribute cannot be null." )
-    private OffsetDateTime startTime;
+    @JsonProperty( "geocodeID" )
+    @NotNull( message = "UserEventStatus geocodeID attribute cannot be null." )
+    private UUID geocodeID;
+
+    /**
+     * Miscellaneous recorded details for a user's participation in an event
+     */
+    @JsonProperty( "details" )
+    @NotNull( message = "UserEventStatus details attribute cannot be null." )
+    @ElementCollection
+    private Map<String, String> details;
 
     /**
      * Default Constructor
      */
-    public TimeLog() {
+    public UserEventStatus() {
 
     }
 
@@ -70,16 +72,16 @@ public class TimeLog {
      * @param id The unique identifier for the Event
      * @param eventID The unique id of the event to get the next stage from
      * @param userID The unique id of the user competing in the event
-     * @param geoCodeID The unique identifier of a specific GeoCode
-     * @param startTime The time when a user started a Level of an Event
+     * @param levelID The unique identifier of a specific GeoCode
+     * @param details Miscellaneous recorded details for a user's participation in an event
      */
-    public TimeLog( UUID id, UUID eventID, UUID userID, UUID geoCodeID, OffsetDateTime startTime ) {
+    public UserEventStatus(UUID id, UUID eventID, UUID userID, UUID levelID, Map<String, String> details ) {
 
         this.id = id;
         this.eventID = eventID;
         this.userID = userID;
-        this.geoCodeID = geoCodeID;
-        this.startTime = startTime;
+        this.geocodeID = levelID;
+        this.details = details;
     }
 
     /**
@@ -90,7 +92,7 @@ public class TimeLog {
      * @return the model after changing the id
      */
     @Valid
-    public TimeLog id( UUID id ) {
+    public UserEventStatus id(UUID id ) {
 
         this.id = id;
         return this;
@@ -123,7 +125,7 @@ public class TimeLog {
      *
      * @return the request after the eventID has been changed
      */
-    public TimeLog eventID( UUID eventID ) {
+    public UserEventStatus eventID(UUID eventID ) {
 
         this.eventID = eventID;
         return this;
@@ -157,7 +159,7 @@ public class TimeLog {
      *
      * @return the request after the userID has been changed
      */
-    public TimeLog userID( UUID userID ) {
+    public UserEventStatus userID(UUID userID ) {
 
         this.userID = userID;
         return this;
@@ -185,71 +187,71 @@ public class TimeLog {
     }
 
     /**
-     * Sets the geoCodeID attribute to the specified value
+     * Sets the geocodeID attribute to the specified value
      *
-     * @param geoCodeID the value the attribute should be set to
+     * @param geocodeID the value the attribute should be set to
      *
-     * @return the request after the geoCodeID has been changed
+     * @return the request after the geocodeID has been changed
      */
-    public TimeLog geoCodeID( UUID geoCodeID ) {
+    public UserEventStatus geocodeID(UUID geocodeID ) {
 
-        this.geoCodeID = geoCodeID;
+        this.geocodeID = geocodeID;
         return this;
     }
 
     /**
-     * Gets the saved geoCodeID attribute
+     * Gets the saved geocodeID attribute
      *
-     * @return the stored geoCodeID attribute
+     * @return the stored geocodeID attribute
      */
     @Valid
-    public UUID getGeoCodeID() {
+    public UUID getGeocodeID() {
 
-        return geoCodeID;
+        return geocodeID;
     }
 
     /**
-     * Sets the geoCodeID attribute to the specified value
+     * Sets the geocodeID attribute to the specified value
      *
-     * @param geoCodeID the value the attribute should be set to
+     * @param geocodeID the value the attribute should be set to
      */
-    public void setGeoCodeID( UUID geoCodeID ) {
+    public void setGeocodeID( UUID geocodeID ) {
 
-        this.geoCodeID = geoCodeID;
+        this.geocodeID = geocodeID;
     }
 
     /**
-     * Sets the startTime attribute to the specified value
+     * Sets the details attribute to the specified value
      *
-     * @param startTime the value the attribute should be set to
+     * @param details the value the attribute should be set to
      *
-     * @return the request after the startTime has been changed
+     * @return the request after the details has been changed
      */
-    public TimeLog startTime( OffsetDateTime startTime ) {
+    public UserEventStatus details(Map<String, String> details ) {
 
-        this.startTime = startTime;
+        this.details = details;
         return this;
     }
 
     /**
-     * Gets the saved startTime attribute
+     * Gets the saved details attribute
      *
-     * @return the stored startTime attribute
+     * @return the stored details attribute
      */
     @Valid
-    public OffsetDateTime getStartTime() {
+    public Map<String, String> getDetails() {
 
-        return startTime;
+        return details;
     }
 
     /**
-     * Sets the startTime attribute to the specified value
+     * Sets the details attribute to the specified value
      *
-     * @param startTime the value the attribute should be set to
+     * @param details the value the attribute should be set to
      */
-    public void setStartTime( OffsetDateTime startTime ) {
+    public void setDetails( Map<String, String> details ) {
 
-        this.startTime = startTime;
+        this.details = details;
     }
 
     /**
@@ -271,10 +273,10 @@ public class TimeLog {
             return false;
         }
 
-        TimeLog timeLog = ( TimeLog ) obj;
+        UserEventStatus timeLog = (UserEventStatus) obj;
         return Objects.equals( this.userID, timeLog.userID ) &&
-                Objects.equals( this.geoCodeID, timeLog.geoCodeID ) &&
-                Objects.equals( this.startTime, timeLog.startTime );
+                Objects.equals( this.geocodeID, timeLog.geocodeID ) &&
+                Objects.equals( this.details, timeLog.details );
     }
 
     /**
@@ -285,7 +287,7 @@ public class TimeLog {
     @Override
     public int hashCode() {
 
-        return Objects.hash( userID, geoCodeID, startTime );
+        return Objects.hash( id, eventID, userID, geocodeID, details );
     }
 
     /**
@@ -296,10 +298,11 @@ public class TimeLog {
     @Override
     public String toString() {
 
-        return "class TimeLog {\n" +
+        return "class UserEventStatus {\n" +
+                "    id: " + toIndentedString( id ) + "\n" +
+                "    eventID: " + toIndentedString( eventID ) + "\n" +
                 "    userID: " + toIndentedString( userID ) + "\n" +
-                "    geoCodeID: " + toIndentedString( geoCodeID ) + "\n" +
-                "    startTime: " + toIndentedString( startTime ) + "\n" +
+                "    geocodeID: " + toIndentedString( geocodeID) + "\n" +
                 "}";
     }
 

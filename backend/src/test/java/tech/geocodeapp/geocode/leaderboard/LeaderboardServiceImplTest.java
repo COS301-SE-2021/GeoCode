@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.request.*;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.DeletePointResponse;
@@ -863,6 +865,51 @@ public class LeaderboardServiceImplTest {
             Assertions.assertEquals(1, response.getLeaderboard().get(0).getRank());
             Assertions.assertEquals(6, response.getLeaderboard().get(1).getPoints());
             Assertions.assertEquals(2, response.getLeaderboard().get(1).getRank());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Tests that when the point received is null that the correct response is returned
+     */
+    @Test
+    public void savePointNullTest() {
+        try {
+            Response response = leaderboardService.savePoint(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Point provided is null", response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test that when a point with null values is passed that the correct exception is thrown
+     */
+    @Test
+    public void savePointNullValues() {
+        Point point = new Point(null, null, null);
+        assertThatThrownBy(() -> leaderboardService.savePoint(point))
+                .isInstanceOf(NullRequestParameterException.class);
+    }
+
+    /**
+     * Test that when a valid point object is received that the correct response is returned
+     */
+    @Test
+    public void savePointValid() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("testValid");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            UUID userId = UUID.randomUUID();
+            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
+            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
+            GetUserByIdRequest user = new GetUserByIdRequest(userId);
+            Point point = new Point(1, userService.getUserById(user).getUser(), leaderboardResponse.getLeaderboard());
+            Response response = leaderboardService.savePoint(point);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Saved point successfully", response.getMessage());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }

@@ -2861,15 +2861,12 @@ components:
       required:
         - id
         - name
-        - event
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
-        event:
-          $ref: "#/components/schemas/Event"
       xml:
         name: "Leaderboard"
 
@@ -3303,11 +3300,11 @@ components:
     GetEventLeaderboardRequest:
       type: "object"
       required:
-        - leaderboardId
+        - leaderboardID
         - starting
         - count
       properties:
-        leaderboardId:
+        leaderboardID:
           type: string
           format: UUID
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
@@ -3375,7 +3372,7 @@ components:
           type: string
           format: UUID
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        leaderboardId:
+        leaderboardID:
           type: string
           format: UUID
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
@@ -4041,8 +4038,15 @@ components:
     GetLeaderboardByIDResponse:
       type: "object"
       required:
+        - success
+        - message
         - leaderboard
       properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
         leaderboard:
           $ref: '#/components/schemas/Leaderboard'
 
