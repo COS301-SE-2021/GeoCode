@@ -43,9 +43,13 @@ public class ConcreteMission implements MissionComponent{
         return amount;
     }
 
+    /**
+     * sets the mission's amount to a provided value
+     * @param amount the amount to set the mission's amount to
+     */
     @Override
     public void setAmount(Integer amount) {
-
+        this.amount = amount;
     }
 
     @Override
