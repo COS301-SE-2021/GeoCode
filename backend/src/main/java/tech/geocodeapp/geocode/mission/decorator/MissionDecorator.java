@@ -6,7 +6,11 @@ import java.util.UUID;
 
 public abstract class MissionDecorator implements MissionComponent{
     //the decorated mission
-    protected MissionComponent missionComponent;
+    protected MissionComponent decoratedMission;
+
+    public MissionDecorator(MissionComponent decoratedMission) {
+        this.decoratedMission = decoratedMission;
+    }
 
     @Override
     public UUID getId() {
