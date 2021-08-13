@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import tech.geocodeapp.geocode.event.pathfinder.Graph;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
@@ -333,6 +334,7 @@ class EventServiceImplTest {
     }
 
     @Test
+    @Order( 8 )
     @DisplayName( "check Difficulty" )
     void checkDifficulty() {
 
@@ -341,6 +343,35 @@ class EventServiceImplTest {
         List< Difficulty > difficultyOrder = Difficulty.getDifficultyOrder();
 
         System.out.println( difficultyOrder );
+    }
+
+    @Test
+    @Order( 9 )
+    @DisplayName( "check sorting order of GeoCodes by distance" )
+    void orderGeoCodes() {
+
+        GeoCode gc1 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(5, 0)); //3rd
+        GeoCode gc2 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(2, 1)); //2nd
+        GeoCode gc3 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(10, -1)); //4th
+        GeoCode gc4 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(0, 0)); //1st
+
+        List<GeoCode> geoCodes = new ArrayList<GeoCode>();
+        geoCodes.add(gc1);
+        geoCodes.add(gc2);
+        geoCodes.add(gc3);
+        geoCodes.add(gc4);
+        GeoPoint start = new GeoPoint(0, 0);
+
+        List<UUID> result = Graph.getOptimalGeocodeIDOrder(geoCodes, start);
+
+        List<UUID> expected = new ArrayList<UUID>();
+        expected.add(gc4.getId()); //1st
+        expected.add(gc2.getId()); //2nd
+        expected.add(gc1.getId()); //3rd
+        expected.add(gc3.getId()); //4th
+
+        Assertions.assertEquals(expected, result);
+
     }
 
     ////////////////Helper functions////////////////
