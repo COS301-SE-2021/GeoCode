@@ -14,12 +14,19 @@ public class TimeTrialEventFactory extends AbstractEventFactory {
      */
     @Override
     public EventComponent decorateEvent(Event event, EventComponent eventComponent) {
-        TimeTrialEventDecorator toReturn = new TimeTrialEventDecorator(eventComponent);
+        try {
+            String timeLimitString = event.getProperties().get("timeLimit");
+            TimeTrialEventDecorator toReturn = new TimeTrialEventDecorator(eventComponent);
+            Integer timeLimit = Integer.parseInt(timeLimitString);
 
-        String timeLimitString = event.getProperties().get("timeLimit");
-        Integer timeLimit = Integer.parseInt(timeLimitString);
-        toReturn.setTimeLimit(timeLimit);
+            if (timeLimit > 0) {
+                toReturn.setTimeLimit(timeLimit);
+                return toReturn;
+            }
 
-        return toReturn;
+        } catch (NumberFormatException e) {}
+
+        /* Do not decorate if timeLimit is invalid */
+        return eventComponent;
     }
 }
