@@ -53,7 +53,7 @@ public class ConcreteMission implements MissionComponent{
     }
 
     /**
-     * the location the mission was last at
+     * the location the mission was last at or needs to go to
      * @return the last location of the mission
      */
     @Override
