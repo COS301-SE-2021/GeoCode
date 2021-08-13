@@ -48,7 +48,7 @@ public abstract class MissionDecorator implements MissionComponent{
     }
 
     /**
-     * @return the value returned by the decoratedMission's getLocation method
+     * @return the value returned by the decoratedMission's getLocation() method
      */
     @Override
     public GeoPoint getLocation() {
@@ -64,9 +64,12 @@ public abstract class MissionDecorator implements MissionComponent{
         decoratedMission.setLocation(location);
     }
 
+    /**
+     * @return the value of the decoratedMission's getCompletion() method
+     */
     @Override
     public Integer getCompletion() {
-        return null;
+        return decoratedMission.getCompletion();
     }
 
     @Override
