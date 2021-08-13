@@ -1,7 +1,7 @@
 name: SonarCloud Backend
 on:
   push:
-    branches: [ master, development ]
+    branches: [ master, development, dev/Config-jacoco ]
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:

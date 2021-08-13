@@ -1,7 +1,7 @@
 name: SonarCloud Frontend
 on:
   push:
-    branches: [ master, development, dev/Configuration ]
+    branches: [ master, development ]
   pull_request:
       types: [opened, synchronize, reopened]
 jobs:
