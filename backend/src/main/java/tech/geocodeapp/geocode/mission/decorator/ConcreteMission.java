@@ -6,6 +6,11 @@ import java.util.UUID;
 
 public class ConcreteMission implements MissionComponent{
 
+    private UUID id;
+    private Integer amount;
+    private GeoPoint location;
+    private Integer completion;
+
     @Override
     public UUID getId() {
         return null;
