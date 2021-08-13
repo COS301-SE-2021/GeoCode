@@ -16,14 +16,22 @@ public class ConcreteMission implements MissionComponent{
     public ConcreteMission() {
     }
 
+    /**
+     * get the identifying id of the mission
+     * @return the id of the mission
+     */
     @Override
     public UUID getId() {
         return id;
     }
 
+    /**
+     * set the mission id
+     * @param id the id to set the mission id to
+     */
     @Override
     public void setId(UUID id) {
-
+        this.id = id;
     }
 
     @Override
