@@ -72,9 +72,13 @@ public abstract class MissionDecorator implements MissionComponent{
         return decoratedMission.getCompletion();
     }
 
+    /**
+     * sets the completion of the decoratedMission
+     * @param completion
+     */
     @Override
     public void setCompletion(Integer completion) {
-
+        decoratedMission.setCompletion(completion);
     }
 
     @Override
