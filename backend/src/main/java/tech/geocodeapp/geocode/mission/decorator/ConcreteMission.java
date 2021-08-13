@@ -61,9 +61,13 @@ public class ConcreteMission implements MissionComponent{
         return location;
     }
 
+    /**
+     * sets the location of a mission to a provided value
+     * @param location the location to set it to
+     */
     @Override
     public void setLocation(GeoPoint location) {
-
+        this.location = location;
     }
 
     @Override
