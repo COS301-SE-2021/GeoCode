@@ -34,4 +34,10 @@ public interface MissionComponent {
      * Calculates the distance traveled from the last location
      */
     void calculateDistance();
+
+    /**
+     * Checks if the mission is complete
+     * @return true if the mission is complete and false if it isn't
+     */
+    boolean checkIfFinished();
 }
