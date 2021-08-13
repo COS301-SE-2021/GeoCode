@@ -13,6 +13,9 @@ public class ConcreteMission implements MissionComponent{
     //stores the value to compare to amount to track progress
     private Integer completion;
 
+    public ConcreteMission() {
+    }
+
     @Override
     public UUID getId() {
         return null;
