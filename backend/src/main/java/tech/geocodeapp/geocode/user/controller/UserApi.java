@@ -123,6 +123,16 @@ public interface UserApi {
             method = RequestMethod.POST)
     ResponseEntity<GetMyLeaderboardsResponse> getMyLeaderboards(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the name, points and ranking for all of the Leaderboards that a User is on", required=true, schema=@Schema()) @Valid @RequestBody GetMyLeaderboardsRequest body);
 
+    @Operation(summary = "Gets the Missions for a User", description = "Gets the Missions that a User has been involved in the past", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The User's Missions were returned", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetMyMissionsResponse.class))),
 
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/getMyMissions",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" },
+            method = RequestMethod.POST)
+    ResponseEntity<GetMyMissionsResponse> getMyMissions(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the User's Missions", required=true, schema=@Schema()) @Valid @RequestBody GetMyMissionsRequest body);
 }
 
