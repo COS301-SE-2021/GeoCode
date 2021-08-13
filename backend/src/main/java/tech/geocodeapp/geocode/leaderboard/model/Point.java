@@ -31,12 +31,10 @@ public class Point   {
 
   @JsonProperty("user")
   @ManyToOne
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private User user = null;
 
   @JsonProperty("leaderboard")
   @ManyToOne
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Leaderboard leaderboard = null;
 
   public Point() {
