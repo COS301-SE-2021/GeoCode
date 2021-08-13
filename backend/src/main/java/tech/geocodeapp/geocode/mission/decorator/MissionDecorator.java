@@ -85,8 +85,8 @@ public abstract class MissionDecorator implements MissionComponent{
      * calls the decoratedMission's calculateDistance()
      */
     @Override
-    public void calculateDistance() {
-        decoratedMission.calculateDistance();
+    public void calculateDistance(GeoPoint newLocation) {
+        decoratedMission.calculateDistance(newLocation);
     }
 
     /**
