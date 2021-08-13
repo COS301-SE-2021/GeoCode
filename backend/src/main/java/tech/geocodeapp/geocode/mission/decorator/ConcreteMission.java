@@ -88,11 +88,18 @@ public class ConcreteMission implements MissionComponent{
         this.completion = completion;
     }
 
+    /**
+     * not used in concreteMission
+     */
     @Override
     public void calculateDistance() {
 
     }
 
+    /**
+     * set to false in concrete mission
+     * @return false
+     */
     @Override
     public boolean checkIfFinished() {
         return false;
