@@ -29,4 +29,9 @@ public interface MissionComponent {
     Integer getCompletion();
 
     void setCompletion(Integer completion);
+
+    /**
+     * Calculates the distance traveled from the last location
+     */
+    void calculateDistance();
 }
