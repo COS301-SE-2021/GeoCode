@@ -9,7 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Mission } from './mission';
+import { ModelObject } from './modelObject';
+import { Response } from './response';
 
-export interface GetTimeTrialRequest { 
-    eventID?: string;
+export interface CreateMissionResponse extends Response { 
+    message?: ModelObject;
+    mission?: Mission;
 }

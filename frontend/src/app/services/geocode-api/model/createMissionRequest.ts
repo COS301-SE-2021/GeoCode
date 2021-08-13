@@ -10,6 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface GetTimeTrialRequest { 
-    eventID?: string;
+export interface CreateMissionRequest { 
+    collectableTypeID: string;
 }
