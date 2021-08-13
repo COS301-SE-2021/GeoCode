@@ -7,8 +7,10 @@ import java.util.UUID;
 public class ConcreteMission implements MissionComponent{
 
     private UUID id;
+    //stores the value required for finishing a mission when it is not a location
     private Integer amount;
     private GeoPoint location;
+    //stores the value to compare to amount to track progress
     private Integer completion;
 
     @Override
