@@ -26,11 +26,4 @@ public interface MissionComponent {
 
     void setLocation(GeoPoint location);
 
-    GeoPoint getPreviousLocation();
-
-    void setPreviousLocation(GeoPoint previousLocation);
-
-    Integer getDistanceTraveled();
-
-    void setDistanceTraveled();
 }
