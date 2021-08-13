@@ -11,6 +11,7 @@ import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.mission.model.Mission;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -65,6 +66,12 @@ public class User   {
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Set<GeoCode> ownedGeocodes = null;
+
+  @JsonProperty("missions")
+  @Valid
+  @ManyToMany
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private Set<Mission> missions = null;
 
   public User id(UUID id) {
     this.id = id;
@@ -252,47 +259,14 @@ public class User   {
     this.ownedGeocodes = ownedGeocodes;
   }
 
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    User user = (User) o;
-    return Objects.equals(this.id, user.id) &&
-        Objects.equals(this.username, user.username) &&
-        Objects.equals(this.trackableObject, user.trackableObject) &&
-        Objects.equals(this.points, user.points) &&
-        Objects.equals(this.currentCollectable, user.currentCollectable) &&
-        Objects.equals(this.foundCollectableTypes, user.foundCollectableTypes) &&
-        Objects.equals(this.foundGeocodes, user.foundGeocodes) &&
-        Objects.equals(this.ownedGeocodes, user.ownedGeocodes);
+  public Set<Mission> getMissions() {
+    return this.missions;
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, username, trackableObject, points, currentCollectable, foundCollectableTypes, foundGeocodes, ownedGeocodes);
+  public void setMissions(Set<Mission> missions) {
+    this.missions = missions;
   }
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class User {\n");
-    
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
-    sb.append("    trackableObject: ").append(toIndentedString(trackableObject)).append("\n");
-    sb.append("    points: ").append(toIndentedString(points)).append("\n");
-    sb.append("    currentCollectable: ").append(toIndentedString(currentCollectable)).append("\n");
-    sb.append("    foundCollectableTypes: ").append(toIndentedString(foundCollectableTypes)).append("\n");
-    sb.append("    foundGeocodes: ").append(toIndentedString(foundGeocodes)).append("\n");
-    sb.append("    ownedGeocodes: ").append(toIndentedString(ownedGeocodes)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
 
   /**
    * Convert the given object to string with each line indented by 4 spaces

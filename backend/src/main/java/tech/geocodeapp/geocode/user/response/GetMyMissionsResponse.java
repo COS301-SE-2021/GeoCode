@@ -1,8 +1,7 @@
 package tech.geocodeapp.geocode.user.response;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -20,22 +19,19 @@ import javax.validation.Valid;
 public class GetMyMissionsResponse extends Response {
   @JsonProperty("missions")
   @Valid
-  private List<Mission> missions = null;
+  private Set<Mission> missions = new HashSet<Mission>();
 
-  public GetMyMissionsResponse(boolean success, String message, List<Mission> missions) {
+  public GetMyMissionsResponse(boolean success, String message, Set<Mission> missions) {
     super(success, message);
     this.missions = missions;
   }
 
-  public GetMyMissionsResponse missions(List<Mission> missions) {
+  public GetMyMissionsResponse missions(Set<Mission> missions) {
     this.missions = missions;
     return this;
   }
 
   public GetMyMissionsResponse addMissionsItem(Mission missionsItem) {
-    if (this.missions == null) {
-      this.missions = new ArrayList<Mission>();
-    }
     this.missions.add(missionsItem);
     return this;
   }
@@ -46,11 +42,11 @@ public class GetMyMissionsResponse extends Response {
    **/
   @Schema(description = "")
   @Valid
-  public List<Mission> getMissions() {
+  public Set<Mission> getMissions() {
     return missions;
   }
 
-  public void setMissions(List<Mission> missions) {
+  public void setMissions(Set<Mission> missions) {
     this.missions = missions;
   }
 }
