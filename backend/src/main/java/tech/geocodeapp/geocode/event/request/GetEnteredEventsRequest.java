@@ -2,49 +2,30 @@ package tech.geocodeapp.geocode.event.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.util.Objects;
 import java.util.UUID;
 
 /**
- * GetCurrentEventStatusRequest object to specify what Event to retrieve
+ * GetEnteredEventsRequest object to specify what User's events to retrieve
  */
 @Validated
-public class GetCurrentEventStatusRequest {
-
-    /**
-     * The unique id of the event to get
-     */
-    @JsonProperty( "eventID" )
-    @NotNull( message = "GetCurrentEventStatusRequest eventID attribute cannot be null." )
-    private UUID eventID ;
+public class GetEnteredEventsRequest {
 
     /**
      * The unique id of the user doing the event to get
      */
     @JsonProperty( "userID" )
-    @NotNull( message = "GetCurrentEventStatusRequest userID attribute cannot be null." )
+    @NotNull( message = "GetCurrentEventLevelRequest userID attribute cannot be null." )
     private UUID userID;
 
     /**
      * Default Constructor
      */
-    public GetCurrentEventStatusRequest() {
+    public GetEnteredEventsRequest() {
 
-    }
-
-    /**
-     * Overloaded Constructor
-     *
-     * @param eventID The unique id of the event to get
-     * @param userID The unique id of the user doing the event to get
-     */
-    public GetCurrentEventStatusRequest(UUID eventID, UUID userID ) {
-
-        this.eventID = eventID;
-        this.userID = userID;
     }
 
     /**
@@ -52,43 +33,9 @@ public class GetCurrentEventStatusRequest {
      *
      * @param userID The unique id of the user doing the event to get
      */
-    public GetCurrentEventStatusRequest(UUID userID ) {
+    public GetEnteredEventsRequest(UUID userID ) {
 
         this.userID = userID;
-    }
-
-    /**
-     * Sets the eventID attribute to the specified value
-     *
-     * @param eventID the value the attribute should be set to
-     *
-     * @return the request after the eventID has been changed
-     */
-    public GetCurrentEventStatusRequest eventID(UUID eventID ) {
-
-        this.eventID = eventID;
-        return this;
-    }
-
-    /**
-     * Gets the saved eventID attribute
-     *
-     * @return the stored eventID attribute
-     */
-    @Valid
-    public UUID getEventID() {
-
-        return eventID;
-    }
-
-    /**
-     * Sets the eventID attribute to the specified value
-     *
-     * @param eventID the value the attribute should be set to
-     */
-    public void setEventID( UUID eventID ) {
-
-        this.eventID = eventID;
     }
 
     /**
@@ -98,7 +45,7 @@ public class GetCurrentEventStatusRequest {
      *
      * @return the request after the userID has been changed
      */
-    public GetCurrentEventStatusRequest userID(UUID userID ) {
+    public GetEnteredEventsRequest userID(UUID userID ) {
 
         this.userID = userID;
         return this;
@@ -144,9 +91,8 @@ public class GetCurrentEventStatusRequest {
             return false;
         }
 
-        GetCurrentEventStatusRequest getCurrentEventRequest = (GetCurrentEventStatusRequest) obj;
-        return Objects.equals( this.eventID, getCurrentEventRequest.eventID ) &&
-                Objects.equals( this.userID, getCurrentEventRequest.userID );
+        GetEnteredEventsRequest getCurrentEventRequest = (GetEnteredEventsRequest) obj;
+        return Objects.equals( this.userID, getCurrentEventRequest.userID );
 
     }
 
@@ -158,7 +104,7 @@ public class GetCurrentEventStatusRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( eventID, userID );
+        return Objects.hash( userID );
     }
 
     /**
@@ -169,8 +115,7 @@ public class GetCurrentEventStatusRequest {
     @Override
     public String toString() {
 
-        return "class GetCurrentEventStatusRequest {\n" +
-                "    eventID: " + toIndentedString( eventID ) + "\n" +
+        return "class GetEnteredEventsRequest {\n" +
                 "    userID: " + toIndentedString( userID ) + "\n" +
                 "}";
     }
