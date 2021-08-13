@@ -18,7 +18,7 @@ public class ConcreteMission implements MissionComponent{
 
     @Override
     public UUID getId() {
-        return null;
+        return id;
     }
 
     @Override
