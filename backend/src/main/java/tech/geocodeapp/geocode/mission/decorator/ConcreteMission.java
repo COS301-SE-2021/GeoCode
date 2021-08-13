@@ -52,9 +52,13 @@ public class ConcreteMission implements MissionComponent{
         this.amount = amount;
     }
 
+    /**
+     * the location the mission was last at
+     * @return the last location of the mission
+     */
     @Override
     public GeoPoint getLocation() {
-        return null;
+        return location;
     }
 
     @Override
