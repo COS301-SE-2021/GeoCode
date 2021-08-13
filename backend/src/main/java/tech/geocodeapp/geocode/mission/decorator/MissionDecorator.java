@@ -55,9 +55,13 @@ public abstract class MissionDecorator implements MissionComponent{
         return decoratedMission.getLocation();
     }
 
+    /**
+     * sets the location of the decoratedMission
+     * @param location the location of the mission
+     */
     @Override
     public void setLocation(GeoPoint location) {
-
+        decoratedMission.setLocation(location);
     }
 
     @Override
