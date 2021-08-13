@@ -29,9 +29,12 @@ public abstract class MissionDecorator implements MissionComponent{
         decoratedMission.setId(id);
     }
 
+    /**
+     * @return the value returned by the decoratedMission's getAmount() method
+     */
     @Override
     public Integer getAmount() {
-        return null;
+        return decoratedMission.getAmount();
     }
 
     @Override
