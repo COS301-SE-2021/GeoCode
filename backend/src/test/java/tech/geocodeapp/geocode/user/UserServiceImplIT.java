@@ -795,6 +795,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void swapCollectableTestCollectableIsSwapped(){
         try {
             SwapCollectableRequest request = new SwapCollectableRequest(validUserId, collectableInFirstGeoCodeID, firstGeoCodeID);

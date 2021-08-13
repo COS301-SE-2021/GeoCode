@@ -267,6 +267,14 @@ public class User   {
     this.missions = missions;
   }
 
+  public User addMissionsItem(Mission missionsItem) {
+    if (this.missions == null) {
+      this.missions = new HashSet<Mission>();
+    }
+    this.missions.add(missionsItem);
+    return this;
+  }
+
 
   /**
    * Convert the given object to string with each line indented by 4 spaces
