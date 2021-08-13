@@ -3,7 +3,6 @@ package tech.geocodeapp.geocode.mission.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.math.BigDecimal;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
@@ -31,7 +30,7 @@ public class Mission {
   private MissionType type = null;
 
   @JsonProperty("amount")
-  private BigDecimal amount = null;
+  private Integer amount = null;
 
   @JsonProperty("location")
   private GeoPoint location = null;
@@ -78,7 +77,7 @@ public class Mission {
     this.type = type;
   }
 
-  public Mission amount(BigDecimal amount) {
+  public Mission amount(Integer amount) {
     this.amount = amount;
     return this;
   }
@@ -91,11 +90,11 @@ public class Mission {
       @NotNull
 
     @Valid
-    public BigDecimal getAmount() {
+    public Integer getAmount() {
     return amount;
   }
 
-  public void setAmount(BigDecimal amount) {
+  public void setAmount(Integer amount) {
     this.amount = amount;
   }
 

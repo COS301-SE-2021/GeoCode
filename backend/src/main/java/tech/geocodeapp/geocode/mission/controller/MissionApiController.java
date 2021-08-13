@@ -12,8 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.mission.request.CreateMissionRequest;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
 import tech.geocodeapp.geocode.mission.request.GetProgressRequest;
+import tech.geocodeapp.geocode.mission.response.CreateMissionResponse;
 import tech.geocodeapp.geocode.mission.response.GetMissionByIdResponse;
 import tech.geocodeapp.geocode.mission.response.GetProgressResponse;
 import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
@@ -66,6 +68,21 @@ public class MissionApiController implements MissionApi {
             }
         }catch (NullRequestParameterException e){
             GetProgressResponse response = new GetProgressResponse(false, e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<CreateMissionResponse> setMission(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateMissionRequest body) {
+        try{
+            CreateMissionResponse response = missionService.createMission(body);
+
+            if(response.isSuccess()){
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (NullRequestParameterException e){
+            CreateMissionResponse response = new CreateMissionResponse(false, e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
