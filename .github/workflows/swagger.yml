@@ -25,7 +25,7 @@ jobs:
       - name: Work around ModelObject inclusion in some response models
         run: |
             echo "export interface ModelObject { }" | sudo tee frontend/src/app/services/geocode-api/model/modelObject.ts
-            for f in frontend/src/app/services/geocode-api/model/*
+            for f in frontend/src/app/services/geocode-api/model/*;
             do
                 "sudo sed -i 's/: ModelObject;/: any;/g' f"
             done
