@@ -34,9 +34,13 @@ public class ConcreteMission implements MissionComponent{
         this.id = id;
     }
 
+    /**
+     * get the stored amount from the mission
+     * @return the amount of the mission
+     */
     @Override
     public Integer getAmount() {
-        return null;
+        return amount;
     }
 
     @Override
