@@ -1428,6 +1428,47 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
+        
+  /Event/getEnteredEvents:
+    post:
+      tags:
+        - "Event"
+      summary: "Get all entered Events and their statuses for a User"
+      description: "Get all entered Events and their statuses for a User"
+      operationId: "getEnteredEvents"
+      requestBody:
+        required: true
+        description: "Request get the Events for a User"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetEnteredEventsRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetEnteredEventsRequest"
+      responses:
+        '200':
+          description: "The Events were returned"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetEnteredEventsResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetEnteredEventsResponse"
+        '404':
+          description: "The Events could not be returned"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetEnteredEventsResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetEnteredEventsResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
 
   /Event/getAllEvents:
     get:
@@ -3381,6 +3422,38 @@ components:
               example: "Current Event status returned"
             status:
               $ref: "#/components/schemas/UserEventStatus"
+            targetGeocode:
+              $ref: "#/components/schemas/GeoCode"
+          xml:
+            name: "GetCurrentEventStatusResponse"
+            
+    GetEnteredEventsRequest:
+      type: "object"
+      required:
+        - userID
+      properties:
+        userID:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+      xml:
+        name: "GetCurrentEventStatusRequest"
+        
+    GetEnteredEventsResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "Current Event status returned"
+            entries:
+              type: array
+              items:
+                properties:
+                  event:
+                    $ref: "#/components/schemas/Event"
+                  status:
+                    $ref: "#/components/schemas/UserEventStatus"
             targetGeocode:
               $ref: "#/components/schemas/GeoCode"
           xml:
