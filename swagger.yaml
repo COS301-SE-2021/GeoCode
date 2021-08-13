@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.7"
+  version: "1.5.8"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -2313,6 +2313,37 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
+        
+  /Mission/createMission:
+    post:
+      tags:
+        - "Mission"
+      summary: "Creates a Mission"
+      description: "Creates the Mission for a Collectable that has the Mission Type of the Collectable's Collectable Type"
+      operationId: "setMission"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMissionRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateMissionRequest'
+      responses:
+        '200':
+          description: "Mission returned"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateMissionResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateMissionResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
 
 components:
   responses:
@@ -4438,4 +4469,26 @@ components:
               example: 85
           xml:
             name: "GetProgressResponse"
-      
+            
+    CreateMissionRequest:
+      type: "object"
+      required:
+        - collectableTypeID
+      properties:
+        collectableTypeID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetProgressRequest"
+    
+    CreateMissionResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "Mission created"
+            mission:
+              $ref: "#/components/schemas/Mission"
+          xml:
+            name: "CreateMissionResponse"
