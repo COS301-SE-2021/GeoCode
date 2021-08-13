@@ -89,18 +89,26 @@ public class ConcreteMission implements MissionComponent{
     }
 
     /**
-     * not used in concreteMission
+     * not used in ConcreteMission
      */
     @Override
     public void calculateDistance(GeoPoint newLocation) {
     }
 
     /**
-     * set to false in concrete mission
+     * set to false in ConcreteMission
      * @return false
      */
     @Override
     public boolean checkIfFinished() {
         return false;
+    }
+
+    /**
+     * not used in ConcreteMission
+     */
+    @Override
+    public void checkLocation(GeoPoint newLocation) {
+
     }
 }
