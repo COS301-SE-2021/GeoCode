@@ -5,6 +5,9 @@ import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import java.util.UUID;
 
 public abstract class MissionDecorator implements MissionComponent{
+    //the decorated mission
+    protected MissionComponent missionComponent;
+
     @Override
     public UUID getId() {
         return null;
