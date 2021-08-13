@@ -14,7 +14,8 @@ import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
-import tech.geocodeapp.geocode.event.request.NextStageRequest;
+import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
+import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
 import tech.geocodeapp.geocode.event.service.EventService;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
@@ -788,18 +789,24 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );
 
-        /* If this geocode is used in an event, send the user to the next geocode */
-        if ( geocode.getEventID() != null ) {
-            try {
-                NextStageRequest nextStageRequest = new NextStageRequest(geocode.getEventID(), userID);
-                eventService.nextStage(nextStageRequest);
-            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-                return new SwapCollectablesResponse( false );
-            }
-        }
-
         /* Update the table to contain the updated collectable */
         geoCodeRepo.save( geocode );
+
+        if (geocode.getEventID() != null) {
+            try {
+                eventService.nextStage(geocode, userID);
+            } catch (NotFoundException e) {
+                /* There is no event matching the geocode's eventID */
+                return new SwapCollectablesResponse( false );
+            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+                /* A parameter (or the geocode's event ID) is null */
+                return new SwapCollectablesResponse( false );
+            } catch (MismatchedParametersException e) {
+                /* The user is not currently targeting this geocode */
+                return new SwapCollectablesResponse( false );
+            }
+
+        }
 
         /*
          * Create and return a 'success' response
@@ -873,7 +880,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             req.setCollectableID( uuid );
 
             /* Find the collectable specified in the request and add it to the list */
-            storedCollectable.add( collectableService.getCollectableByID( req ).getCollectable() );
+            try {
+                storedCollectable.add( collectableService.getCollectableByID( req ).getCollectable() );
+            } catch (NullRequestParameterException e) {
+                e.printStackTrace();
+            }
         }
 
         /* return all the found collectables */
