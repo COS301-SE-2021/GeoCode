@@ -82,15 +82,18 @@ public abstract class MissionDecorator implements MissionComponent{
     }
 
     /**
-     * calls the decoratedMission's calculateDistance
+     * calls the decoratedMission's calculateDistance()
      */
     @Override
     public void calculateDistance() {
         decoratedMission.calculateDistance();
     }
 
+    /**
+     * @return the value of the decoratedMission's checkIfFinished()
+     */
     @Override
     public boolean checkIfFinished() {
-        return false;
+        return decoratedMission.checkIfFinished();
     }
 }
