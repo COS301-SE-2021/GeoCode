@@ -47,9 +47,12 @@ public abstract class MissionDecorator implements MissionComponent{
         decoratedMission.setAmount(amount);
     }
 
+    /**
+     * @return the value returned by the decoratedMission's getLocation method
+     */
     @Override
     public GeoPoint getLocation() {
-        return null;
+        return decoratedMission.getLocation();
     }
 
     @Override
