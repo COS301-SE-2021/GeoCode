@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import org.threeten.bp.OffsetDateTime;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
@@ -14,30 +13,15 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest
 import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
-import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.request.GetEventRequest;
-import tech.geocodeapp.geocode.event.request.GetTimeLogRequest;
-import tech.geocodeapp.geocode.event.request.IsTimeTrialRequest;
-import tech.geocodeapp.geocode.event.response.GetEventResponse;
-import tech.geocodeapp.geocode.event.response.GetTimeLogResponse;
-import tech.geocodeapp.geocode.event.response.IsTimeTrialResponse;
-import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
-import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
-import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
-import tech.geocodeapp.geocode.leaderboard.request.GetPointForUserRequest;
-import tech.geocodeapp.geocode.leaderboard.request.UpdatePointRequest;
-import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
-import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.*;
@@ -60,26 +44,22 @@ public class UserServiceImpl implements UserService {
     @NotNull(message = "Collectable Service Implementation may not be null.")
     private final CollectableService collectableService;
 
-    @NotNull(message = "Leaderboard Service Implementation may not be null.")
-    private final LeaderboardService leaderboardService;
+    private final String invalidUserIdMessage = "Invalid User id";
+    private final String invalidGeoCodeIdMessage = "Invalid GeoCode id";
+    private final String invalidCollectableTypeIDMessage = "Invalid CollectableType ID";
 
-    private final String invalidUserIdMessage = "Invalid user id";
+    private final String existingUserIdMessage = "User ID already exists";
+
     private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
 
     @NotNull(message = "GeoCode Service Implementation may not be null.")
-    private final GeoCodeService geoCodeService;
+    private GeoCodeService geoCodeService;
 
-    @NotNull(message = "Event Service Implementation may not be null.")
-    private final EventService eventService;
-
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, @Qualifier("LeaderboardService") LeaderboardService leaderboardService, @Qualifier("GeoCodeService") GeoCodeService geoCodeService, @Qualifier("EventService") EventService eventService) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
         this.pointRepo = pointRepo;
         this.collectableService = collectableService;
-        this.leaderboardService = leaderboardService;
-        this.geoCodeService = geoCodeService;
-        this.eventService = eventService;
     }
 
     /**
@@ -275,6 +255,141 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Adds the given GeoCode to the User's list of Owned GeoCodes
+     * @param request AddToOwnedGeoCodesRequest object
+     * @return AddToOwnedGeoCodesResponse object
+     */
+    @Transactional
+    public AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException{
+        if(request == null){
+            return new AddToOwnedGeoCodesResponse(false, "The AddToOwnedGeoCodesRequest object passed was NULL");
+        }
+
+        checkNullRequestParameters.checkRequestParameters(request);
+
+        //check if the UserID is invalid
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+
+        if(optionalUser.isEmpty()){
+            return new AddToOwnedGeoCodesResponse(false, invalidUserIdMessage);
+        }
+
+        //check if the GeoCodeID is invalid
+        GetGeoCodeRequest getGeoCodeRequest = new GetGeoCodeRequest(request.getGeoCodeID());
+        GetGeoCodeResponse getGeoCodeResponse;
+
+        try {
+            getGeoCodeResponse = geoCodeService.getGeoCode(getGeoCodeRequest);
+        } catch (InvalidRequestException e) {
+            e.printStackTrace();
+            return new AddToOwnedGeoCodesResponse(false, e.getMessage());
+        }
+
+        GeoCode geoCode = getGeoCodeResponse.getFoundGeoCode();
+
+        if(geoCode == null){
+            return new AddToOwnedGeoCodesResponse(false, invalidGeoCodeIdMessage);
+        }
+
+        //add the GeoCodeID to the User's list of owned GeoCodes
+        User user = optionalUser.get();
+
+        if(!user.getOwnedGeocodes().contains(geoCode)){
+            user.addOwnedGeocodesItem(geoCode);
+            userRepo.save(user);
+        }
+
+        return new AddToOwnedGeoCodesResponse(true, "GeoCode added to the owned GeoCodes");
+    }
+
+    /**
+     * Adds the given GeoCode to the User's list of Found GeoCodes
+     * @param request AddToFoundGeoCodesRequest object
+     * @return AddToFoundGeoCodesResponse object
+     */
+    @Transactional
+    public AddToFoundGeoCodesResponse addToFoundGeoCodes(AddToFoundGeoCodesRequest request) throws NullRequestParameterException{
+        if(request == null){
+            return new AddToFoundGeoCodesResponse(false, "The AddToFoundGeoCodesRequest object passed was NULL");
+        }
+
+        checkNullRequestParameters.checkRequestParameters(request);
+
+        //check if the UserID is invalid
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+
+        if(optionalUser.isEmpty()){
+            return new AddToFoundGeoCodesResponse(false, invalidUserIdMessage);
+        }
+
+        //check if the GeoCodeID is invalid
+        GetGeoCodeRequest getGeoCodeRequest = new GetGeoCodeRequest(request.getGeoCodeID());
+        GetGeoCodeResponse getGeoCodeResponse;
+
+        try {
+            getGeoCodeResponse = geoCodeService.getGeoCode(getGeoCodeRequest);
+        } catch (InvalidRequestException e) {
+            e.printStackTrace();
+            return new AddToFoundGeoCodesResponse(false, e.getMessage());
+        }
+
+        GeoCode geoCode = getGeoCodeResponse.getFoundGeoCode();
+
+        if(geoCode == null){
+            return new AddToFoundGeoCodesResponse(false, invalidGeoCodeIdMessage);
+        }
+
+        //add the GeoCodeID to the User's list of owned GeoCodes
+        User user = optionalUser.get();
+
+        if(!user.getFoundGeocodes().contains(geoCode)){
+            user.addFoundGeocodesItem(geoCode);
+            userRepo.save(user);
+        }
+
+        return new AddToFoundGeoCodesResponse(true, "GeoCode added to the found GeoCodes");
+    }
+
+    /**
+     * Adds the CollectableType to the User's found CollectableTypes list
+     * @param request AddToFoundCollectableTypesRequest object
+     * @return AddToFoundCollectableTypesResponse object
+     */
+    @Transactional
+    public AddToFoundCollectableTypesResponse addToFoundCollectableTypes(AddToFoundCollectableTypesRequest request) throws NullRequestParameterException{
+        if(request == null){
+            return new AddToFoundCollectableTypesResponse(false, "The AddToFoundCollectableTypesRequest object passed was NULL");
+        }
+
+        checkNullRequestParameters.checkRequestParameters(request);
+
+        //check if the UserID is invalid
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+
+        if(optionalUser.isEmpty()){
+            return new AddToFoundCollectableTypesResponse(false, invalidUserIdMessage);
+        }
+
+        //check if the CollectionTypeID is invalid
+        GetCollectableTypeByIDRequest getCollectableTypeByIDRequest = new GetCollectableTypeByIDRequest(request.getCollectableTypeID());
+        GetCollectableTypeByIDResponse getCollectableTypeByIDResponse = collectableService.getCollectableTypeByID(getCollectableTypeByIDRequest);
+        CollectableType collectableType = getCollectableTypeByIDResponse.getCollectableType();
+
+        if(collectableType == null){
+            return new AddToFoundCollectableTypesResponse(false, invalidCollectableTypeIDMessage);
+        }
+
+        User user = optionalUser.get();
+
+        if(!user.getFoundCollectableTypes().contains(collectableType)){
+            user.addFoundCollectableTypesItem(collectableType);
+            userRepo.save(user);
+        }
+
+        return new AddToFoundCollectableTypesResponse(true, "CollectableType added to the found CollectableTypes");
+    }
+
+    /**
      * Gets the User for the given id if they exist
      * @param request The GetUserByIdRequest object
      * @return The User if they exist, else NULL contained in a GetUserByIdResponse object
@@ -291,7 +406,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(id);
 
         return optionalUser.map(user -> new GetUserByIdResponse(true, "The User was found", user)).orElseGet(
-                () -> new GetUserByIdResponse(false, "The User was not found", null));
+                () -> new GetUserByIdResponse(false, invalidUserIdMessage, null));
     }
 
     /**
@@ -300,10 +415,8 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     public User getCurrentUser(){
-        String uuid = SecurityContextHolder.getContext().getAuthentication().getName();
-
         /* make request to get the current User*/
-        GetUserByIdRequest request = new GetUserByIdRequest(UUID.fromString(uuid));
+        GetUserByIdRequest request = new GetUserByIdRequest(getCurrentUserID());
 
         try{
             return getUserById(request).getUser();
@@ -311,6 +424,15 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     *  Gets the current user ID using the Keycloak details
+     * @return The current user ID
+     */
+    public UUID getCurrentUserID(){
+        String uuid = SecurityContextHolder.getContext().getAuthentication().getName();
+        return UUID.fromString(uuid);
     }
 
     /**
@@ -325,6 +447,13 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
+        //check if the User already exists
+        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+
+        if(optionalUser.isPresent()){
+            return new RegisterNewUserResponse(false, existingUserIdMessage);
+        }
+
         User newUser = new User();
         newUser.setId(request.getUserID());
         newUser.setUsername(request.getUsername());
@@ -332,9 +461,9 @@ public class UserServiceImpl implements UserService {
         //get the CollectableType object for trackables
         GetCollectableTypeByIDRequest getCollectableTypeByIDRequest = new GetCollectableTypeByIDRequest(trackableUUID);
         GetCollectableTypeByIDResponse getCollectableTypeByIDResponse = collectableService.getCollectableTypeByID( getCollectableTypeByIDRequest );
-        CollectableType optionalCollectableType = getCollectableTypeByIDResponse.getCollectableType();
+        CollectableType collectableType = getCollectableTypeByIDResponse.getCollectableType();
 
-        Collectable trackableObject = new Collectable( optionalCollectableType );
+        Collectable trackableObject = new Collectable( collectableType );
         newUser.setTrackableObject(trackableObject);
         newUser.setCurrentCollectable(trackableObject);
         userRepo.save(newUser);
@@ -357,7 +486,15 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        /* assign points to the User for finding the GeoCode */
+        /* check if the UserID is invalid */
+        GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(request.getUserID());
+        GetUserByIdResponse getUserByIdResponse = this.getUserById(getUserByIdRequest);
+
+        if(!getUserByIdResponse.isSuccess()){
+            return new SwapCollectableResponse(false, getUserByIdResponse.getMessage(), null);
+        }
+
+        User currentUser = getUserByIdResponse.getUser();
 
         //get the GeoCode
         GetGeoCodeRequest getGeoCodeByIDRequest = new GetGeoCodeRequest(request.getGeoCodeID());
@@ -370,137 +507,57 @@ public class UserServiceImpl implements UserService {
             return new SwapCollectableResponse(false, e.getMessage(), null);
         }
 
-        //check if the ID passed is valid
-//        if(!getGeoCodeByIDResponse.success()){
-//            return new SwapCollectableResponse(false, "Invalid ID given for the GeoCode", null);
-//        }
-
         GeoCode geoCode = getGeoCodeByIDResponse.getFoundGeoCode();
 
-        //check if the GeoCode is part of an Event
-        UUID eventID = geoCode.getEventID();
+        //check if GeoCodeID is invalid
+        if(geoCode == null){
+            return new SwapCollectableResponse(false, "Invalid ID given for the GeoCode", null);
+        }
 
-        if(eventID != null){
-            //get the difficulty of the GeoCode
-            Difficulty geocodeDifficulty = geoCode.getDifficulty();
-
-            //determine how many points the User should get
-            int pointsAmount = 0;
-
-            switch(geocodeDifficulty){
-                case EASY:
-                    pointsAmount = 10;
-                    break;
-                case MEDIUM:
-                    pointsAmount = 20;
-                    break;
-                case HARD:
-                    pointsAmount = 30;
-                    break;
-                case INSANE:
-                    pointsAmount = 40;
-                    break;
-            }
-            Event event;
-            IsTimeTrialRequest timeTrialRequest = new IsTimeTrialRequest(eventID);
-            IsTimeTrialResponse timeTrialResponse = null;
-            try {
-                timeTrialResponse = eventService.isTimeTrial(timeTrialRequest);
-            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-                e.printStackTrace();
-            }
-
-            //check if the event is a time trial or not
-            if(timeTrialResponse != null && timeTrialResponse.isFound()){
-                event = timeTrialResponse.getFoundEvent();
-                double timeLimit = timeTrialResponse.getFoundEvent().getTimeLimit();
-                //get the timelog to see starting time
-                GetTimeLogRequest timeLogRequest= new GetTimeLogRequest(eventID, getCurrentUser().getId(), request.getGeoCodeID());
-                double timeTaken;
-                try {
-                    GetTimeLogResponse timeLogResponse = eventService.getTimeLog(timeLogRequest);
-                    OffsetDateTime now = OffsetDateTime.now();
-                    if(timeLogResponse.isFound()){
-                       timeTaken = now.getHour() - timeLogResponse.getFoundTimeLog().getStartTime().getHour();
-                       timeTaken = timeTaken * 60;
-                       double minutes = now.getMinute() - timeLogResponse.getFoundTimeLog().getStartTime().getMinute();
-                       timeTaken += minutes;
-
-                       //check if timeTaken is greater than the allowed time
-                        if(timeTaken > timeLimit){
-                            double percentage;
-                            percentage = (timeTaken - timeLimit) / timeLimit;
-                            if(percentage == 1) {
-                                pointsAmount = 0;
-                            }else {
-                               int difference = (int) Math.round(pointsAmount * percentage);
-                               pointsAmount = pointsAmount - difference;
-                            }
-                        }
-                    }else{
-                        return new SwapCollectableResponse(false, "Timelog does not exist", null);
-                    }
-                } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-                    e.printStackTrace();
-                }
-
-            }else{
-                GetEventRequest getEventByIDRequest = new GetEventRequest( eventID);
-                GetEventResponse getEventByIDResponse;
-
-                try {
-                    getEventByIDResponse = eventService.getEvent(getEventByIDRequest);
-                    event = getEventByIDResponse.getFoundEvent();
-                } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-                    e.printStackTrace();
-                    return new SwapCollectableResponse(false, e.getMessage(), null);
-                }
-            }
-
-            //get the LeaderboardID of the Leaderboard for the Event
-            UUID leaderboardID = event.getLeaderboards().get( 0 ).getId();
-
-            //get the ID of the current User
-            UUID userID = getCurrentUser().getId();
-
-            //check if the User does not already have points for the Leaderboard
-            GetPointForUserRequest getPointForUserRequest = new GetPointForUserRequest(userID, leaderboardID);
-            PointResponse getPointForUserResponse = leaderboardService.getPointForUser(getPointForUserRequest);
-
-            //add new Point entry if first time User is scoring on the Leaderboard
-            if(!getPointForUserResponse.isSuccess()){
-                CreatePointRequest createPointRequest = new CreatePointRequest(pointsAmount, userID, leaderboardID);
-                PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
-
-                //check if the Point was not created successfully
-                if(!pointResponse.isSuccess()){
-                    return new SwapCollectableResponse(false, "Point could not be created", null);
-                }
-            }else{
-                //update Point entry if already has scored on the Leaderboard
-                Point point = getPointForUserResponse.getPoint();
-
-                UpdatePointRequest updatePointRequest = new UpdatePointRequest(point.getId(), point.getAmount()+pointsAmount);
-                PointResponse updatePointResponse = leaderboardService.updatePoint(updatePointRequest);
-
-                //check if the Point was not successfully updated
-                if(!updatePointResponse.isSuccess()){
-                    return new SwapCollectableResponse(false, "Point could not be updated", null);
-                }
-            }
+        //check if the GeoCode contains the given Collectable
+        if(!geoCode.getCollectables().contains(request.getCollectableID())){
+            return new SwapCollectableResponse(false, "Invalid ID given for the Collectable", null);
         }
 
         /* only swap the Collectables if no errors have occurred before now */
         //currentCollectable to swap out
-        User currentUser = getCurrentUser();
         Collectable oldCurrentCollectable = currentUser.getCurrentCollectable();
 
+        //System.out.println("collectable id: "+request.getCollectableID());
+
         //swap in newCurrentCollectable
-        GetCollectableByIDRequest req = new GetCollectableByIDRequest( request.getCollectableID() );
-        GetCollectableByIDResponse newCurrentCollectable = collectableService.getCollectableByID( req );
-        currentUser.setCurrentCollectable( newCurrentCollectable.getCollectable() );
+        GetCollectableByIDRequest getCollectableByIDRequest = new GetCollectableByIDRequest( request.getCollectableID() );
+        GetCollectableByIDResponse getCollectableByIDResponse = collectableService.getCollectableByID( getCollectableByIDRequest );
+        currentUser.setCurrentCollectable( getCollectableByIDResponse.getCollectable() );
+
+        /*if(!getCollectableByIDResponse.isSuccess()){
+            System.out.println("getCollectableByIDResponse failed: "+getCollectableByIDResponse.getMessage());
+        }*/
+
+        //add the GeoCode to the User's found GeoCodes
+        AddToFoundGeoCodesRequest addToFoundGeoCodesRequest = new AddToFoundGeoCodesRequest(request.getUserID(), request.getGeoCodeID());
+        this.addToFoundGeoCodes(addToFoundGeoCodesRequest);
+
+        //add the CollectableType to the User's found CollectableTypes
+        CollectableType collectableType = getCollectableByIDResponse.getCollectable().getType();
+        UUID collectableTypeID = collectableType.getId();
+
+        //System.out.println("type: "+collectableType.getName());
+
+        AddToFoundCollectableTypesRequest addToFoundCollectableTypesRequest = new AddToFoundCollectableTypesRequest(request.getUserID(), collectableTypeID);
+        this.addToFoundCollectableTypes(addToFoundCollectableTypesRequest);
+
         userRepo.save(currentUser);
 
         return new SwapCollectableResponse(true, "The User's Collectable was swapped with the Collectable in the GeoCode", oldCurrentCollectable );
+    }
+
+    /**
+     * Post construct the GeoCode service, this avoids a circular dependency
+     *
+     * @param geoCodeService the service to be set
+     */
+    public void setGeoCodeService( GeoCodeService geoCodeService ){
+        this.geoCodeService = geoCodeService;
     }
 }

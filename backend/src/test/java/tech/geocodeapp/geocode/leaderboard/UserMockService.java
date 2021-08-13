@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.leaderboard;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.*;
@@ -8,6 +9,7 @@ import tech.geocodeapp.geocode.user.response.*;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class UserMockService implements UserService {
 
@@ -53,6 +55,21 @@ public class UserMockService implements UserService {
     }
 
     @Override
+    public AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException {
+        return null;
+    }
+
+    @Override
+    public AddToFoundGeoCodesResponse addToFoundGeoCodes(AddToFoundGeoCodesRequest request) throws NullRequestParameterException {
+        return null;
+    }
+
+    @Override
+    public AddToFoundCollectableTypesResponse addToFoundCollectableTypes(AddToFoundCollectableTypesRequest request) throws NullRequestParameterException {
+        return null;
+    }
+
+    @Override
     public GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullRequestParameterException {
         Optional<User> foundUser = userRepo.findById(request.getUserID());
         if(foundUser.isEmpty()){
@@ -66,6 +83,9 @@ public class UserMockService implements UserService {
     public User getCurrentUser() {
         return null;
     }
+
+    @Override
+    public UUID getCurrentUserID() { return null; }
 
     /**
      * Only set userId and username for the purpose of this mock as nothing else is required by the leaderboard subsystems unit tests
@@ -85,5 +105,15 @@ public class UserMockService implements UserService {
     @Override
     public SwapCollectableResponse swapCollectable(SwapCollectableRequest request) throws NullRequestParameterException {
         return null;
+    }
+
+    /**
+     * Post construct the GeoCode service, this avoids a circular dependency
+     *
+     * @param geoCodeService the service to be set
+     */
+    @Override
+    public void setGeoCodeService(GeoCodeService geoCodeService) {
+
     }
 }

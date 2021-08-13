@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.user.service;
 
 import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
@@ -34,12 +35,27 @@ public interface UserService {
     GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullRequestParameterException;
 
     //User helper functions
+    AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException;
+
+    AddToFoundGeoCodesResponse addToFoundGeoCodes(AddToFoundGeoCodesRequest request) throws NullRequestParameterException;
+
+    AddToFoundCollectableTypesResponse addToFoundCollectableTypes(AddToFoundCollectableTypesRequest request) throws NullRequestParameterException;
+
     GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullRequestParameterException;
 
     User getCurrentUser();
+
+    UUID getCurrentUserID();
 
     RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException;
 
     //GeoCode helper functions
     SwapCollectableResponse swapCollectable(SwapCollectableRequest request) throws NullRequestParameterException;
+
+    /**
+     * Post construct the GeoCode service, this avoids a circular dependency
+     *
+     * @param geoCodeService the service to be set
+     */
+    void setGeoCodeService( GeoCodeService geoCodeService );
 }
