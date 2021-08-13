@@ -18,4 +18,13 @@ public class DistanceMission extends MissionDecorator{
         double distance = decoratedMission.getLocation().distanceTo(newLocation);
         decoratedMission.setAmount(decoratedMission.getAmount() + ((int) distance));
     }
+
+    /**
+     * checks if the mission is complete
+     * @return the value returned by the .equals method
+     */
+    @Override
+    public boolean checkIfFinished() {
+        return decoratedMission.getAmount().equals(decoratedMission.getCompletion());
+    }
 }
