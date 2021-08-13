@@ -12,9 +12,12 @@ public abstract class MissionDecorator implements MissionComponent{
         this.decoratedMission = decoratedMission;
     }
 
+    /**
+     * @return the value returned by the decoratedMission's getId() method
+     */
     @Override
     public UUID getId() {
-        return null;
+        return decoratedMission.getId();
     }
 
     @Override
