@@ -79,9 +79,13 @@ public class ConcreteMission implements MissionComponent{
         return completion;
     }
 
+    /**
+     * sets the completion progress of a mission to a provided value
+     * @param completion - the value to set the completion progress to
+     */
     @Override
     public void setCompletion(Integer completion) {
-
+        this.completion = completion;
     }
 
     @Override
