@@ -83,7 +83,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     private static final int QR_SIZE = 8;
 
     /**
-     * Constructor
+     * Overloaded Constructor
      *
      * @param geoCodeRepo the repo the created response attributes should save to
      * @param collectableService access to the collectable use cases and repository
@@ -114,8 +114,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
     }
 
+    /**
+     * Once the GeoCode service object has been created
+     * insert it into the User and Event subsystem
+     * <p>
+     * This is to avoid circular dependencies as each subsystem requires one another
+     */
     @PostConstruct
     public void init() {
+
         userService.setGeoCodeService( this );
         eventService.setGeoCodeService( this );
     }
@@ -227,7 +234,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* Check if the Object was saved correctly */
             if ( !newGeoCode.equals( check ) ) {
-              
+
                 /* Saved GeoCode not the same therefore creation failed */
                 return new CreateGeoCodeResponse( false );
             }
@@ -431,7 +438,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     public GetGeoCodesByDifficultyListResponse getGeoCodesByDifficultyList( GetGeoCodesByDifficultyListRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
-            if ( request == null ) {
+        if ( request == null ) {
 
             throw new InvalidRequestException( true );
         } else if ( request.getDifficulty() == null ) {
@@ -778,7 +785,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Perform the swap */
         Collectable userToGeocode;
         try {
-            userToGeocode = userService.swapCollectable( new SwapCollectableRequest(userID, hold, geocode.getId() ) ).getCollectable();
+            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( userID, hold, geocode.getId() ) ).getCollectable();
         } catch ( NullRequestParameterException error ) {
 
             /* Validate the Collectable returned */
@@ -792,17 +799,16 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Update the table to contain the updated collectable */
         geoCodeRepo.save( geocode );
 
-        if (geocode.getEventID() != null) {
+        if ( geocode.getEventID() != null ) {
+
             try {
-                eventService.nextStage(geocode, userID);
-            } catch (NotFoundException e) {
-                /* There is no event matching the geocode's eventID */
-                return new SwapCollectablesResponse( false );
-            } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
-                /* A parameter (or the geocode's event ID) is null */
-                return new SwapCollectablesResponse( false );
-            } catch (MismatchedParametersException e) {
-                /* The user is not currently targeting this geocode */
+
+                eventService.nextStage( geocode, userID );
+            } catch ( NotFoundException | tech.geocodeapp.geocode.event.exceptions.InvalidRequestException | MismatchedParametersException e ) {
+
+                /* A parameter (or the geocode's event ID) is null
+                 * The user is not currently targeting this geocode
+                 * There is no event matching the geocode's eventID */
                 return new SwapCollectablesResponse( false );
             }
 
@@ -881,8 +887,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* Find the collectable specified in the request and add it to the list */
             try {
+
                 storedCollectable.add( collectableService.getCollectableByID( req ).getCollectable() );
-            } catch (NullRequestParameterException e) {
+            } catch ( NullRequestParameterException e ) {
+
+                //ToDo remove this stack trace print and throw exception
                 e.printStackTrace();
             }
         }
@@ -897,7 +906,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @param geocode the GeoCode object to save
      */
     public void saveGeoCode( GeoCode geocode ) {
-        geoCodeRepo.save(geocode);
+
+        geoCodeRepo.save( geocode );
     }
 
 }

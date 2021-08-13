@@ -31,7 +31,7 @@ public interface GeoCodeService {
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    public GetGeoCodeResponse getGeoCode( GetGeoCodeRequest request ) throws InvalidRequestException;
+    GetGeoCodeResponse getGeoCode( GetGeoCodeRequest request ) throws InvalidRequestException;
 
     /**
      * Get all the stored GeoCodes in the repository
