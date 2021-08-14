@@ -4,8 +4,8 @@ import {AlertController, NavController, ToastController} from '@ionic/angular';
 import {
   EventService, GeoCode,
   GeoCodeService,
-  GetCurrentEventLevelRequest,
-  GetCurrentEventLevelResponse
+  GetCurrentEventStatusRequest,
+  GetCurrentEventStatusResponse
 } from '../../../services/geocode-api';
 import {ActivatedRoute, Router} from "@angular/router";
 import {KeycloakService} from "keycloak-angular";
@@ -59,17 +59,17 @@ export class EventContentsPage implements AfterViewInit {
     if(this.event== null){
     console.log('error');
     }else{
-      const levelReq: GetCurrentEventLevelRequest ={
+      const levelReq: GetCurrentEventStatusRequest ={
         eventID:this.event.id,
         userID:this.keycloak.getKeycloakInstance().subject
       };
-      this.eventApi.getCurrentEventLevel(levelReq).subscribe((response: GetCurrentEventLevelResponse) =>{
+      this.eventApi.getCurrentEventStatus(levelReq).subscribe((response: GetCurrentEventStatusResponse) =>{
         console.log(response);
-        if(response.found){
-          if(response.foundGeoCode==null){
+        if(response.success){
+          if(response.targetGeocode==null){
           this.presentAlert();
           }else{
-            this.geocodes.push(response.foundGeoCode);
+            this.geocodes.push(response.targetGeocode);
             this.mapsLoader.load().then(handle => {
               this.googleMaps = handle;
               this.loadMap();
