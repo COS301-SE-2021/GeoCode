@@ -25,6 +25,7 @@ public class DistanceMission extends MissionDecorator{
      */
     @Override
     public boolean checkIfFinished() {
-        return decoratedMission.getAmount().equals(decoratedMission.getCompletion());
+        finished = decoratedMission.getAmount().equals(decoratedMission.getCompletion());
+        return finished;
     }
 }
