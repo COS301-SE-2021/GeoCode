@@ -165,20 +165,20 @@ this.minEndDate=$event.detail.value;
       // eslint-disable-next-line eqeqeq
     }else if(this.type =='timetrial'){
       // @ts-ignore
-      const timeRequest: CreateTimeTrialRequest={
-        beginDate: this.request.beginDate,
-        description: this.request.description,
-        endDate: this.request.endDate,
-        geoCodesToFind: this.request.geoCodesToFind,
-        location: this.request.location,
-        name: this.request.name,
-        orderBy: this.request.orderBy,
-        timeLimit: this.timeLimit
-
-      };
-      this.eventApi.createTimeTrial(timeRequest).subscribe((response: CreateTimeTrialResponse) =>{
-        console.log(response);
-      });
+      // const timeRequest: CreateTimeTrialRequest={
+      //   beginDate: this.request.beginDate,
+      //   description: this.request.description,
+      //   endDate: this.request.endDate,
+      //   geoCodesToFind: this.request.geoCodesToFind,
+      //   location: this.request.location,
+      //   name: this.request.name,
+      //   orderBy: this.request.orderBy,
+      //   timeLimit: this.timeLimit
+      //
+      // };
+      // this.eventApi.createTimeTrial(timeRequest).subscribe((response: CreateTimeTrialResponse) =>{
+      //   console.log(response);
+      // });
     }else{
     //challenge wow factor demo 4
     }
