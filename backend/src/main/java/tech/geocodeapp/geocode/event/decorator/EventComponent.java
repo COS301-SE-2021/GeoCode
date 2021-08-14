@@ -83,6 +83,6 @@ public interface EventComponent {
     /**
      * Function to calculate the number of points a user should receive for finding the provided geocode.
      */
-    int calculatePoints(GeoCode foundGeocode, UserEventStatus status);
+    int calculatePoints(GeoCode foundGeocode, int stageNumber, UserEventStatus status);
 
 }

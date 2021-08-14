@@ -8,6 +8,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
 import tech.geocodeapp.geocode.event.decorator.EventComponent;
+import tech.geocodeapp.geocode.event.pathfinder.Graph;
 import tech.geocodeapp.geocode.event.manager.EventManager;
 import tech.geocodeapp.geocode.event.model.*;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
@@ -25,9 +26,7 @@ import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
-import tech.geocodeapp.geocode.leaderboard.request.GetLeaderboardByIDRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetPointForUserRequest;
-import tech.geocodeapp.geocode.leaderboard.response.GetLeaderboardByIDResponse;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.service.UserService;
@@ -185,7 +184,7 @@ public class EventServiceImpl implements EventService {
         } else if ( request.getOrderBy().equals( OrderLevels.DISTANCE ) ) {
 
             /* Set the list to go from least to most distance with where the GeoCode is located */
-            geoCodeIDs = sortByDistance( geoCodes );
+            geoCodeIDs = sortByDistance( geoCodes, request.getLocation() );
         }
 
         /* Check if the GeoCodes are still valid after sorting */
@@ -439,7 +438,7 @@ public class EventServiceImpl implements EventService {
                         Point point = userPointResponse.getPoint();
 
                         if (point != null) {
-                            int pointsAchieved = event.calculatePoints(foundGeocode, status);
+                            int pointsAchieved = event.calculatePoints(foundGeocode, i+1, status);
                             point.setAmount(point.getAmount() + pointsAchieved);
                             leaderboardService.savePoint(point);
                         }
@@ -484,21 +483,14 @@ public class EventServiceImpl implements EventService {
         /* All the Events in the repository */
         var temp = eventRepo.findAll();
 
-        /* The location and radius the location needs to fall into */
-        GeoPoint locate = request.getLocation();
-        var radius = request.getRadius()/111; // 111 km = 1 degree
-
         /* Go through each Event in the repository */
         for ( Event event : temp ) {
 
-            /* Calculate the distance from the given point to the Event using the distance formula */
-            /* This is not the most accurate method, but should be close as long as the radius is small */
-            var latitudeDifference = Math.pow(locate.getLatitude() - event.getLocation().getLatitude(), 2);
-            var longitudeDifference = Math.pow(locate.getLongitude() - event.getLocation().getLongitude(), 2);
-            var distance = Math.sqrt(longitudeDifference+latitudeDifference);
+            /* Calculate the distance from the given point to the Event using the Haversine formula */
+            var distance = request.getLocation().distanceTo(event.getLocation());
 
             /* Check if the event is close enough to the given point */
-            if ( distance <= radius ) {
+            if ( distance <= request.getRadius() ) {
                 foundEvents.add( event );
             }
         }
@@ -662,6 +654,16 @@ public class EventServiceImpl implements EventService {
     public void setGeoCodeService( GeoCodeService geoCodeService ) {
 
         this.geoCodeService = geoCodeService;
+
+
+
+//        GetGeoCodesResponse r = geoCodeService.getAllGeoCodes();
+//        GeoPoint start = new GeoPoint(25, 25);
+//        for (GeoCode g: r.getGeocodes()) {
+//            System.out.println(g.getDescription()+", "+g.getLocation().getLatitude()+", "+g.getLocation().getLongitude());
+//        }
+//        List<UUID> output = Graph.getOptimalGeocodeIDOrder(r.getGeocodes(), start);
+//        System.out.println(output);
     }
 
     /*-------------------------------------*/
@@ -670,11 +672,11 @@ public class EventServiceImpl implements EventService {
     /*---------- Helper Functions for creating an Event ----------*/
 
     /**
-     * Gets a list of GeoCode ID's and sorts them according to their Difficulty
+     * Gets a list of GeoCodes and sorts them according to their Difficulty
      *
-     * @param geoCodes the list of GeoCode ID's to sort
+     * @param geoCodes the list of GeoCodes to sort
      *
-     * @return the sorted GeoCode ID's in order of Difficulty
+     * @return the sorted IDs of the provided GeoCodes in order of Difficulty
      */
     private List< UUID > sortByDifficulty( List< GeoCode > geoCodes ) {
 
@@ -756,53 +758,19 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
-     * Gets a list of GeoCode ID's and sorts them according to their distance from one another
+     * Gets a list of GeoCodes and sorts them according to their distance from one another
      *
      * @param geoCodes the list of GeoCode ID's to sort
+     * @param startLocation the start location of the event
      *
-     * @return the sorted GeoCode ID's in order of distance
+     * @return the IDs of the provided GeoCodes, in the order that minimises the distance to travel between them
      */
-    private List< UUID > sortByDistance( List< GeoCode > geoCodes ) {
-
-        /* Holds the new order of the GeoCodes */
-        List< UUID > hold = null;
-
+    private List< UUID > sortByDistance( List< GeoCode > geoCodes, GeoPoint startLocation ) {
         if ( geoCodes != null ) {
-
-            /*
-
-                Use this to calculate the distance of each GeoPoint to One Another
-
-
-                 // The math module contains a function
-                // named toRadians which converts from
-                // degrees to radians.
-                double lon1 = Math.toRadians(lon1);
-                double lon2 = Math.toRadians(lon2);
-                double lat1 = Math.toRadians(lat1);
-                double lat2 = Math.toRadians(lat2);
-
-                // Haversine formula
-                double dlon = lon2 - lon1;
-                double dlat = lat2 - lat1;
-                double a = Math.pow(Math.sin(dlat / 2), 2)
-                         + Math.cos(lat1) * Math.cos(lat2)
-                         * Math.pow(Math.sin(dlon / 2),2);
-
-                double c = 2 * Math.asin(Math.sqrt(a));
-
-                // Radius of earth in kilometers. Use 3956
-                // for miles
-                double r = 6371;
-
-                // calculate the result
-                return(c * r);
-
-            */
-
+            return Graph.getOptimalGeocodeIDOrder(geoCodes, startLocation);
+        } else {
+            return null;
         }
-
-        return hold;
     }
 
     /*-------------------------------------*/
