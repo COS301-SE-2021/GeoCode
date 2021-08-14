@@ -8,6 +8,8 @@ public abstract class MissionDecorator implements MissionComponent{
     //the decorated mission
     protected MissionComponent decoratedMission;
 
+    protected boolean finished;
+
     public MissionDecorator(MissionComponent decoratedMission) {
         this.decoratedMission = decoratedMission;
     }
