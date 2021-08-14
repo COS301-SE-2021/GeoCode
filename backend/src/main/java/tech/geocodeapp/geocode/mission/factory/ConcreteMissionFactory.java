@@ -10,8 +10,8 @@ public class ConcreteMissionFactory extends AbstractMissionFactory{
     /**
      * sets all of the shared variables of a mission
      * @param mission the {@link Mission} to build the {@link MissionComponent}
-     * @param missionComponent the {@link MissionComponent} to decorate
-     * @return
+     * @param missionComponent the {@link MissionComponent} to decorate which is not used in the {@link ConcreteMissionFactory}
+     * @return the created {@link MissionComponent}
      */
     @Override
     public MissionComponent decorateMission(Mission mission, MissionComponent missionComponent) {
