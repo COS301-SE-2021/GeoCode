@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import tech.geocodeapp.geocode.mission.model.Mission;
 import tech.geocodeapp.geocode.mission.repository.MissionRepository;
-import tech.geocodeapp.geocode.user.model.User;
 
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +62,8 @@ public class MissionMockRepository implements MissionRepository {
 
     @Override
     public <S extends Mission> S save(S s) {
-        return null;
+        map.put(s.getId(), s);
+        return s;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class MissionMockRepository implements MissionRepository {
 
     @Override
     public Optional<Mission> findById(UUID uuid) {
-        return Optional.empty();
+        return Optional.ofNullable(map.get(uuid));
     }
 
     @Override
