@@ -35,6 +35,9 @@ public class Mission {
   @JsonProperty("location")
   private GeoPoint location = null;
 
+  @JsonProperty("completion")
+  private Integer completion = null;
+
   public Mission id(UUID id) {
     this.id = id;
     return this;
