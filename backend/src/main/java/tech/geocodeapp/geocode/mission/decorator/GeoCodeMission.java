@@ -25,6 +25,7 @@ public class GeoCodeMission extends MissionDecorator{
      */
     @Override
     public boolean checkIfFinished() {
-        return decoratedMission.getCompletion().equals(100);
+        finished = decoratedMission.getCompletion().equals(100);
+        return finished;
     }
 }
