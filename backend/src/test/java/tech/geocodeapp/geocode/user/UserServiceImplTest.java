@@ -24,8 +24,11 @@ import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
+import tech.geocodeapp.geocode.mission.MissionMockRepository;
 import tech.geocodeapp.geocode.mission.model.Mission;
 import tech.geocodeapp.geocode.mission.model.MissionType;
+import tech.geocodeapp.geocode.mission.service.MissionService;
+import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.user.request.*;
@@ -116,7 +119,10 @@ public class UserServiceImplTest {
             return;
         }
 
-        userService = new UserServiceImpl(userMockRepo, collectableMockRepo, new PointMockRepository(), collectableService);
+        MissionMockRepository missionMockRepo = new MissionMockRepository();
+        MissionService missionService = new MissionServiceImpl(missionMockRepo, collectableService);
+
+        userService = new UserServiceImpl(userMockRepo, collectableMockRepo, new PointMockRepository(), collectableService, missionService);
         userService.setGeoCodeService(geoCodeService);
 
         //save the valid trackable CollectableType
