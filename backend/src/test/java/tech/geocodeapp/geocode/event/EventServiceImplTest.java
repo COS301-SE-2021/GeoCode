@@ -6,23 +6,29 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import tech.geocodeapp.geocode.event.pathfinder.Graph;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
-import tech.geocodeapp.geocode.event.model.TimeTrial;
+import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.service.*;
+import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
 import tech.geocodeapp.geocode.geocode.model.*;
+import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
 import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
 import tech.geocodeapp.geocode.leaderboard.UserMockRepository;
 import tech.geocodeapp.geocode.leaderboard.UserMockService;
 import tech.geocodeapp.geocode.leaderboard.service.*;
+import tech.geocodeapp.geocode.user.repository.UserRepository;
+import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,25 +55,13 @@ class EventServiceImplTest {
      * The mock repository for the Event subsystem
      * All the data will be saved here and is used to mock the JPA repository
      */
-    EventMockRepository<Event> eventRepo;
+    EventMockRepository eventRepo;
 
     /**
-     * The mock repository for the Event subsystem for TimeTrials
+     * The mock repository for the Event subsystem UserEventStatus repository
      * All the data will be saved here and is used to mock the JPA repository
      */
-    EventMockRepository< TimeTrial > timeTrialRepo;
-
-    /**
-     * The mock repository for the Event subsystem TimeLog repoistory
-     * All the data will be saved here and is used to mock the JPA repository
-     */
-    TimeLogMockRepository timelogRepo;
-
-    /**
-     * The mock repository for the Event subsystem Level repoistory
-     * All the data will be saved here and is used to mock the JPA repository
-     */
-    LevelMockRepository levelRepo;
+    UserEventStatusRepository userEventStatusRepo;
 
     /**
      * The leaderboard service accessor
@@ -76,10 +70,28 @@ class EventServiceImplTest {
     LeaderboardService leaderboardService;
 
     /**
+     * The mock repository for the GeoCode subsystem repository
+     * All the data will be saved here and is used to mock the JPA repository
+     */
+    GeoCodeRepository geoCodeMockRepo;
+
+    /**
+     * The mock repository for the User subsystem repository
+     * All the data will be saved here and is used to mock the JPA repository
+     */
+    UserRepository userMockRepo;
+
+    /**
      * The GeoCode service accessor
      */
     @Mock( name = "geoCodeServiceImpl" )
     GeoCodeService geoCodeService;
+
+    /**
+     * The User service accessor
+     */
+    @Mock( name = "userServiceImpl" )
+    UserService userService;
 
     /**
      * The expected exception message for if the given request has invalid attributes
@@ -107,14 +119,12 @@ class EventServiceImplTest {
     void setup() {
 
         /* Create a new repository instance and make sure there is no data in it */
-        eventRepo = new EventMockRepository<>();
-        timeTrialRepo = new EventMockRepository<>();
-        timelogRepo = new TimeLogMockRepository();
-        levelRepo = new LevelMockRepository();
+        eventRepo = new EventMockRepository();
+        userEventStatusRepo = new UserEventStatusMockRepository();
+        geoCodeMockRepo = new GeoCodeMockRepository();
         eventRepo.deleteAll();
-        timeTrialRepo.deleteAll();
-        timelogRepo.deleteAll();
-        levelRepo.deleteAll();
+        userEventStatusRepo.deleteAll();
+        geoCodeMockRepo.deleteAll();
 
         var leaderboardMockRepo = new LeaderboardMockRepository();
         var userRepository = new UserMockRepository();
@@ -122,11 +132,14 @@ class EventServiceImplTest {
         var pointMockRepository = new PointMockRepository();
 
         leaderboardService = new LeaderboardServiceImpl(leaderboardMockRepo, pointMockRepository, null, userService);
+        geoCodeService = new GeoCodeMockService(geoCodeMockRepo);
+        userService = new UserMockService(userMockRepo);
 
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
-            eventService = new EventServiceImpl( eventRepo, timeTrialRepo, timelogRepo, levelRepo, leaderboardService );
+            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, userService );
+            eventService.setGeoCodeService(geoCodeService);
         } catch ( RepoException e ) {
 
             e.printStackTrace();
@@ -144,7 +157,7 @@ class EventServiceImplTest {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, null, null, null, leaderboardService ) )
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, null, leaderboardService, userService ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }
@@ -155,7 +168,7 @@ class EventServiceImplTest {
     @Test
     @Order( 2 )
     @DisplayName( "Null repository handling - createEvent" )
-    void createGeoCodeNullRequestTest() {
+    void createEventNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> eventService.createEvent( null ) )
@@ -198,11 +211,20 @@ class EventServiceImplTest {
     void createEventTest() {
 
         try {
+            /* Create mock geocodes to add to the event */
+            GeoCode gc1 = new GeoCode().id(UUID.randomUUID());
+            GeoCode gc2 = new GeoCode().id(UUID.randomUUID());
+            GeoCode gc3 = new GeoCode().id(UUID.randomUUID());
+            geoCodeMockRepo.save(gc1);
+            geoCodeMockRepo.save(gc2);
+            geoCodeMockRepo.save(gc3);
 
             /*
              * Create a request object
              * and assign values to it
              */
+
+
             CreateEventRequest request = new CreateEventRequest();
             request.setDescription( "Try get as many as possible" );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
@@ -210,11 +232,12 @@ class EventServiceImplTest {
             request.setBeginDate( LocalDate.parse("2020-01-08") );
             request.setEndDate(  LocalDate.parse("2020-05-21") );
                 List< UUID > geoCodesToFind = new ArrayList<>();
-                geoCodesToFind.add( UUID.randomUUID() );
-                geoCodesToFind.add( UUID.randomUUID() );
-                geoCodesToFind.add( UUID.randomUUID() );
+                geoCodesToFind.add( gc1.getId() );
+                geoCodesToFind.add( gc2.getId() );
+                geoCodesToFind.add( gc3.getId() );
             request.setGeoCodesToFind( geoCodesToFind );
             request.setOrderBy( OrderLevels.GIVEN );
+            request.setProperties( new HashMap<String, String>() );
 
             CreateEventResponse response = eventService.createEvent( request );
 
@@ -283,7 +306,7 @@ class EventServiceImplTest {
             /* Populate with a known Event to find*/
             var event = new Event( eventID, "Test", "Test description", null,
                                    null, LocalDate.parse("2020-01-08"),
-                                   LocalDate.parse("2020-01-08"), null);
+                                   LocalDate.parse("2020-01-08"), null, new HashMap<String, String>());
             eventRepo.save( event );
 
             /*
@@ -311,6 +334,7 @@ class EventServiceImplTest {
     }
 
     @Test
+    @Order( 8 )
     @DisplayName( "check Difficulty" )
     void checkDifficulty() {
 
@@ -319,6 +343,35 @@ class EventServiceImplTest {
         List< Difficulty > difficultyOrder = Difficulty.getDifficultyOrder();
 
         System.out.println( difficultyOrder );
+    }
+
+    @Test
+    @Order( 9 )
+    @DisplayName( "check sorting order of GeoCodes by distance" )
+    void orderGeoCodes() {
+
+        GeoCode gc1 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(5, 0)); //3rd
+        GeoCode gc2 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(2, 1)); //2nd
+        GeoCode gc3 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(10, -1)); //4th
+        GeoCode gc4 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(0, 0)); //1st
+
+        List<GeoCode> geoCodes = new ArrayList<GeoCode>();
+        geoCodes.add(gc1);
+        geoCodes.add(gc2);
+        geoCodes.add(gc3);
+        geoCodes.add(gc4);
+        GeoPoint start = new GeoPoint(0, 0);
+
+        List<UUID> result = Graph.getOptimalGeocodeIDOrder(geoCodes, start);
+
+        List<UUID> expected = new ArrayList<UUID>();
+        expected.add(gc4.getId()); //1st
+        expected.add(gc2.getId()); //2nd
+        expected.add(gc1.getId()); //3rd
+        expected.add(gc3.getId()); //4th
+
+        Assertions.assertEquals(expected, result);
+
     }
 
     ////////////////Helper functions////////////////
@@ -332,6 +385,13 @@ class EventServiceImplTest {
     private void populate( int size ) {
 
         try {
+            /* Create mock geocodes */
+            GeoCode gc1 = new GeoCode().id(UUID.randomUUID());
+            GeoCode gc2 = new GeoCode().id(UUID.randomUUID());
+            GeoCode gc3 = new GeoCode().id(UUID.randomUUID());
+            geoCodeMockRepo.save(gc1);
+            geoCodeMockRepo.save(gc2);
+            geoCodeMockRepo.save(gc3);
 
 
             CreateEventRequest request = new CreateEventRequest();
@@ -341,9 +401,9 @@ class EventServiceImplTest {
             request.setBeginDate( LocalDate.parse("2020-01-08") );
             request.setEndDate(  LocalDate.parse("2020-05-21") );
             List< UUID > geoCodesToFind = new ArrayList<>();
-            geoCodesToFind.add( UUID.randomUUID() );
-            geoCodesToFind.add( UUID.randomUUID() );
-            geoCodesToFind.add( UUID.randomUUID() );
+            geoCodesToFind.add( gc1.getId() );
+            geoCodesToFind.add( gc2.getId() );
+            geoCodesToFind.add( gc3.getId() );
             request.setGeoCodesToFind( geoCodesToFind );
             request.setOrderBy( OrderLevels.GIVEN );
 
