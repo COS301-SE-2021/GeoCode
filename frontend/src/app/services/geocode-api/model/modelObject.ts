@@ -1,1 +1,1 @@
-export interface ModelObject { any; }
+export interface ModelObject { }

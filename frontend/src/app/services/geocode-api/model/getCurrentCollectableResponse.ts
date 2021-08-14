@@ -14,6 +14,6 @@ import { ModelObject } from './modelObject';
 import { Response } from './response';
 
 export interface GetCurrentCollectableResponse extends Response { 
-    message?: ModelObject;
+    message?: any;
     collectable?: Collectable;
 }

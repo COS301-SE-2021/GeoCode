@@ -13,6 +13,6 @@ import { ModelObject } from './modelObject';
 import { Response } from './response';
 
 export interface GetProgressResponse extends Response { 
-    message?: ModelObject;
+    message?: any;
     progress?: number;
 }

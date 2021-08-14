@@ -14,6 +14,6 @@ import { Response } from './response';
 import { User } from './user';
 
 export interface GetUserByIdResponse extends Response { 
-    message?: ModelObject;
+    message?: any;
     user?: User;
 }

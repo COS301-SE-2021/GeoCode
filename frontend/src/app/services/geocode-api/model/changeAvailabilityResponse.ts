@@ -13,5 +13,5 @@ import { ModelObject } from './modelObject';
 import { Response } from './response';
 
 export interface ChangeAvailabilityResponse extends Response { 
-    message?: ModelObject;
+    message?: any;
 }

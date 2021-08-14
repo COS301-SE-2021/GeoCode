@@ -15,7 +15,7 @@ import { Response } from './response';
 import { UserEventStatus } from './userEventStatus';
 
 export interface GetCurrentEventStatusResponse extends Response { 
-    message?: ModelObject;
+    message?: any;
     status?: UserEventStatus;
     targetGeocode?: GeoCode;
 }
