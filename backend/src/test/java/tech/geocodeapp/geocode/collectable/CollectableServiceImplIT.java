@@ -33,15 +33,15 @@ public class CollectableServiceImplIT {
         typeRequest.setRarity(Rarity.RARE);
         typeRequest.setId(validSetId);
 
-        HashMap<String, String> properties = new HashMap<String, String>();
-        properties.put("missionType", "Swap");
-        typeRequest.setProperties(properties);
-        System.out.println("validSetId: "+validSetId);
+//        HashMap<String, String> properties = new HashMap<String, String>();
+//        properties.put("missionType", "Swap");
+//        typeRequest.setProperties(properties);
+        //System.out.println("validSetId: "+validSetId);
 
         CreateCollectableTypeResponse typeResponse = collectableService.createCollectableType(typeRequest);
         validTypeId = typeResponse.getCollectableType().getId();
 
-        System.out.println("validTypeId: "+validTypeId);
+        //System.out.println("validTypeId: "+validTypeId);
     }
 
 
