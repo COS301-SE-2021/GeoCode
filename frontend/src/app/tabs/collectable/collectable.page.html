@@ -7,7 +7,7 @@
 <ion-content>
   <ng-template [ngIf]="isAdmin()">
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button (click)="addSet()">
+      <ion-fab-button (click)="addSet()" color="button">
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>
@@ -25,7 +25,7 @@
         </div>
         <ng-template [ngIf]="isAdmin()">
           <div class="add">
-            <ion-button size="small" (click)="addType(set.id)">
+            <ion-button size="small" (click)="addType(set.id)" color="button">
               <ion-icon name="add-outline"></ion-icon>
               <ion-label>Add to Set</ion-label>
             </ion-button>
