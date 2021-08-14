@@ -38,6 +38,10 @@ public class Mission {
   @JsonProperty("completion")
   private Integer completion = null;
 
+  public Mission(){
+    this.id = UUID.randomUUID();
+  }
+
   public Mission id(UUID id) {
     this.id = id;
     return this;

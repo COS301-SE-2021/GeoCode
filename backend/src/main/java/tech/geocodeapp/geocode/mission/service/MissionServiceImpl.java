@@ -32,6 +32,7 @@ public class MissionServiceImpl implements MissionService{
 
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
     private final String invalidMissionIdMessage = "Invalid Mission Id";
+    private final String collectableHasMissionMessage = "Collectable already has a Mission";
 
     public MissionServiceImpl(MissionRepository missionRepo, CollectableService collectableService) {
         this.missionRepo = missionRepo;
@@ -84,6 +85,12 @@ public class MissionServiceImpl implements MissionService{
         }
 
         Collectable collectable = getCollectableByIDResponse.getCollectable();
+
+        //check if the Collectable already has a Mission
+        if(collectable.getMissionID() != null){
+            return new CreateMissionResponse(false, collectableHasMissionMessage, null);
+        }
+
         CollectableType collectableType = collectable.getType();
 
         //get the MissionType
