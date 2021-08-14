@@ -7,25 +7,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.model.TimeTrial;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
-public class EventMockRepository< T extends Event > implements EventRepository< T > {
+public class EventMockRepository implements EventRepository {
 
-    private HashMap< UUID, T > map = new HashMap<>();
+    private HashMap< UUID, Event > map = new HashMap<>();
 
     @Override
-    public List< T > findAll() {
+    public List< Event > findAll() {
 
-        return new ArrayList< T >( map.values() );
+        return new ArrayList< Event >( map.values() );
     }
 
     @Override
-    public List< T > findAll( Sort sort ) {
+    public List< Event > findAll( Sort sort ) {
 
         return null;
     }
@@ -38,13 +37,13 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
      * @return a page of entities
      */
     @Override
-    public Page< T > findAll( Pageable pageable ) {
+    public Page< Event > findAll( Pageable pageable ) {
 
         return null;
     }
 
     @Override
-    public List< T > findAllById( Iterable< UUID > uuids ) {
+    public List< Event > findAllById( Iterable< UUID > uuids ) {
 
         return null;
     }
@@ -80,7 +79,7 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
      * @throws IllegalArgumentException in case the given entity is {@literal null}.
      */
     @Override
-    public void delete( T entity ) {
+    public void delete( Event entity ) {
 
     }
 
@@ -92,7 +91,7 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
      * @throws IllegalArgumentException in case the given {@literal entities} or one of its entities is {@literal null}.
      */
     @Override
-    public void deleteAll( Iterable< ? extends T > entities ) {
+    public void deleteAll( Iterable< ? extends Event > entities ) {
 
     }
 
@@ -116,14 +115,14 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
      * @throws IllegalArgumentException in case the given {@literal entity} is {@literal null}.
      */
     @Override
-    public < S extends T > S save( S entity ) {
+    public < S extends Event > S save( S entity ) {
 
         map.put( entity.getId(), entity );
         return entity;
     }
 
     @Override
-    public < S extends T > List< S > saveAll( Iterable< S > entities ) {
+    public < S extends Event > List< S > saveAll( Iterable< S > entities ) {
 
         return null;
     }
@@ -138,9 +137,9 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
      * @throws IllegalArgumentException if {@literal id} is {@literal null}.
      */
     @Override
-    public Optional< T > findById( UUID uuid ) {
+    public Optional< Event > findById( UUID uuid ) {
 
-        Optional< T > hold = Optional.empty();
+        Optional< Event > hold = Optional.empty();
 
         for ( int x = 0; x < map.size(); x++ ) {
 
@@ -184,7 +183,7 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
      * @return the saved entity
      */
     @Override
-    public < S extends T > S saveAndFlush( S entity ) {
+    public < S extends Event > S saveAndFlush( S entity ) {
 
         return null;
     }
@@ -196,7 +195,7 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
      * @param entities
      */
     @Override
-    public void deleteInBatch( Iterable< T > entities ) {
+    public void deleteInBatch( Iterable< Event > entities ) {
 
     }
 
@@ -221,7 +220,7 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
      * @see EntityManager#getReference(Class, Object) for details on when an exception is thrown.
      */
     @Override
-    public T getOne( UUID uuid ) {
+    public Event getOne( UUID uuid ) {
 
         return null;
     }
@@ -236,19 +235,19 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
      * @throws IncorrectResultSizeDataAccessException if the Example yields more than one result.
      */
     @Override
-    public < S extends T > Optional< S > findOne( Example< S > example ) {
+    public < S extends Event > Optional< S > findOne( Example< S > example ) {
 
         return Optional.empty();
     }
 
     @Override
-    public < S extends T > List< S > findAll( Example< S > example ) {
+    public < S extends Event > List< S > findAll( Example< S > example ) {
 
         return null;
     }
 
     @Override
-    public < S extends T > List< S > findAll( Example< S > example, Sort sort ) {
+    public < S extends Event > List< S > findAll( Example< S > example, Sort sort ) {
 
         return null;
     }
@@ -263,7 +262,7 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
      * @return a {@link Page} of entities matching the given {@link Example}.
      */
     @Override
-    public < S extends T > Page< S > findAll( Example< S > example, Pageable pageable ) {
+    public < S extends Event > Page< S > findAll( Example< S > example, Pageable pageable ) {
 
         return null;
     }
@@ -276,7 +275,7 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
      * @return the number of instances matching the {@link Example}.
      */
     @Override
-    public < S extends T > long count( Example< S > example ) {
+    public < S extends Event > long count( Example< S > example ) {
 
         return 0;
     }
@@ -289,25 +288,9 @@ public class EventMockRepository< T extends Event > implements EventRepository< 
      * @return {@literal true} if the data store contains elements that match the given {@link Example}.
      */
     @Override
-    public < S extends T > boolean exists( Example< S > example ) {
+    public < S extends Event > boolean exists( Example< S > example ) {
 
         return false;
-    }
-
-    @Override
-    public List< TimeTrial > findAllTimeTrials() {
-
-        List< TimeTrial > hold = new ArrayList<>();
-
-        for ( Map.Entry< UUID, T > entry : map.entrySet()) {
-
-            if ( entry instanceof TimeTrial ) {
-
-                hold.add( ( TimeTrial ) entry );
-            }
-        }
-
-        return hold;
     }
 
 }

@@ -15,6 +15,26 @@ import java.util.UUID;
 public class CollectableServiceImplIT {
     @Autowired
     private CollectableServiceImpl collectableService;
+    private UUID validSetId;
+    private UUID validTypeId;
+
+    @BeforeEach
+     void build() {
+        CreateCollectableSetRequest request = new CreateCollectableSetRequest();
+        request.setName("Test Set");
+        request.setDescription("A set for tests");
+        CreateCollectableSetResponse response = collectableService.createCollectableSet(request);
+        validSetId = response.getCollectableSet().getId();
+
+        CreateCollectableTypeRequest typeRequest = new CreateCollectableTypeRequest();
+        typeRequest.setName("Test Type");
+        typeRequest.setImage("dgergergnhtfhjhg");
+        typeRequest.setRarity(Rarity.RARE);
+        typeRequest.setId(validSetId);
+        CreateCollectableTypeResponse typeResponse = collectableService.createCollectableType(typeRequest);
+        validTypeId = typeResponse.getCollectableType().getId();
+    }
+
 
     @Test
     public void createCollectableSetTest(){
@@ -66,7 +86,7 @@ public class CollectableServiceImplIT {
         request.setName("Santa");
         request.setImage("dgergergnhtfhjhg");
         request.setRarity(Rarity.RARE);
-        request.setId(UUID.fromString("09a25dd7-00d8-422e-bf9f-07ee5c4dc5f1"));
+        request.setId(validSetId);
 
         CreateCollectableTypeResponse response = collectableService.createCollectableType(request);
 
@@ -108,7 +128,7 @@ public class CollectableServiceImplIT {
 
         //create the Collectable
         CreateCollectableRequest collectableRequest = new CreateCollectableRequest();
-        collectableRequest.setCollectableTypeId(UUID.fromString("333599b9-94c7-403d-8389-83ed48387d13"));
+        collectableRequest.setCollectableTypeId(validTypeId);
 
         CreateCollectableResponse collectableResponse = collectableService.createCollectable(collectableRequest);
         Assertions.assertTrue(collectableResponse.isSuccess());
@@ -145,7 +165,7 @@ public class CollectableServiceImplIT {
 
         //create the request
         GetCollectableTypesBySetRequest typesBySetRequest = new GetCollectableTypesBySetRequest();
-        typesBySetRequest.setSetId(UUID.fromString("09a25dd7-00d8-422e-bf9f-07ee5c4dc5f1"));
+        typesBySetRequest.setSetId(UUID.fromString("f5d7b724-14c1-4344-b190-77071e019b4c"));
 
         GetCollectableTypesResponse response = collectableService.getCollectableTypesBySet(typesBySetRequest);
         Assertions.assertTrue(!response.getCollectableTypes().isEmpty());

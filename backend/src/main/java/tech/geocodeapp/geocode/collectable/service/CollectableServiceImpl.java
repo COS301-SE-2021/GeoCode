@@ -11,6 +11,8 @@ import tech.geocodeapp.geocode.collectable.repository.CollectableSetRepository;
 import tech.geocodeapp.geocode.collectable.repository.CollectableTypeRepository;
 import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
+import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -28,6 +30,10 @@ public class CollectableServiceImpl implements CollectableService {
     private final CollectableSetRepository collectableSetRepo;
 
     private final CollectableTypeRepository collectableTypeRepo;
+
+    private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
+    private final String invalidCollectableIdMessage = "Invalid Collectable ID";
+    private String invalidCollectableTypeIdMessage = "Invalid CollectableType ID";
 
     public CollectableServiceImpl(CollectableRepository collectableRepo, CollectableSetRepository collectableSetRepo, CollectableTypeRepository collectableTypeRepo) {
         this.collectableRepo = collectableRepo;
@@ -163,43 +169,39 @@ public class CollectableServiceImpl implements CollectableService {
     }
 
     @Transactional
-    public GetCollectableByIDResponse getCollectableByID( GetCollectableByIDRequest request ) {
-
-        /* Find all the collectables stored in the system */
-        List< Collectable > collectables = collectableRepo.findAll();
-
-        /* Search for collectable with the specified ID */
-        Collectable hold = null;
-        for ( Collectable collectable : collectables ) {
-
-            /* Determine if the current collectable is the correct one */
-            if ( collectable.getId().equals( request.getCollectableID() ) ) {
-
-                hold = collectable;
-            }
+    public GetCollectableByIDResponse getCollectableByID( GetCollectableByIDRequest request ) throws NullRequestParameterException {
+        if(request == null){
+            return new GetCollectableByIDResponse(false, "The GetCollectableByIDRequest object passed was NULL", null);
         }
 
-        return new GetCollectableByIDResponse( hold );
+        checkNullRequestParameters.checkRequestParameters(request);
+
+        //check if the CollectableID is invalid
+        Optional<Collectable> optionalCollectable = collectableRepo.findById(request.getCollectableID());
+
+        if(optionalCollectable.isEmpty()){
+            return new GetCollectableByIDResponse(false, invalidCollectableIdMessage, null);
+        }
+
+        return new GetCollectableByIDResponse(true, "Collectable found", optionalCollectable.get());
     }
 
     @Transactional
-    public GetCollectableTypeByIDResponse getCollectableTypeByID( GetCollectableTypeByIDRequest request ) {
-
-        /* Find all the collectableTypes stored in the system */
-        List<CollectableType> collectableTypes = new ArrayList<>(collectableTypeRepo.findAll());
-
-        /* Search for collectable with the specified ID */
-        CollectableType hold = null;
-        for ( CollectableType type : collectableTypes ) {
-
-            /* Determine if the current collectable is the correct one */
-            if ( type.getId().equals( request.getCollectableTypeID() ) ) {
-
-                hold = type;
-            }
+    public GetCollectableTypeByIDResponse getCollectableTypeByID( GetCollectableTypeByIDRequest request ) throws NullRequestParameterException {
+        if(request == null){
+            return new GetCollectableTypeByIDResponse(false, "The GetCollectableTypeByIDRequest object passed was NULL", null);
         }
 
-        return new GetCollectableTypeByIDResponse( hold );
+        checkNullRequestParameters.checkRequestParameters(request);
+
+        //check if the CollectableID is invalid
+        Optional<CollectableType> optionalCollectableType = collectableTypeRepo.findById(request.getCollectableTypeID());
+
+        if(optionalCollectableType.isEmpty()){
+            return new GetCollectableTypeByIDResponse(false, invalidCollectableTypeIdMessage, null);
+        }
+
+        return new GetCollectableTypeByIDResponse(true, "CollectableType found", optionalCollectableType.get());
     }
 
     @Transactional
