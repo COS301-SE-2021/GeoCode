@@ -14,6 +14,6 @@ import { MyLeaderboardDetails } from './myLeaderboardDetails';
 import { Response } from './response';
 
 export interface GetMyLeaderboardsResponse extends Response { 
-    message?: ModelObject;
+    message?: any;
     leaderboards?: Array<MyLeaderboardDetails>;
 }
