@@ -197,7 +197,7 @@ public class UserServiceImplTest {
 
         Mission circumferenceMission = new Mission();
         circumferenceMission.setId(circumferenceMissionID);
-        circumferenceMission.setType(MissionType.CIRCUMFERENCE);
+        circumferenceMission.setType(MissionType.DISTANCE);
 
         validUser.addMissionsItem(swapMission);
         validUser.addMissionsItem(circumferenceMission);
@@ -1259,7 +1259,7 @@ public class UserServiceImplTest {
             Assertions.assertNotNull(missions);
 
             Assertions.assertTrue(missions.stream().anyMatch(mission -> mission.getId().equals(swapMissionID) && mission.getType().equals(MissionType.SWAP)));
-            Assertions.assertTrue(missions.stream().anyMatch(mission -> mission.getId().equals(circumferenceMissionID) && mission.getType().equals(MissionType.CIRCUMFERENCE)));
+            Assertions.assertTrue(missions.stream().anyMatch(mission -> mission.getId().equals(circumferenceMissionID) && mission.getType().equals(MissionType.DISTANCE)));
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }

@@ -855,7 +855,7 @@ public class UserServiceImplIT {
             Assertions.assertNotNull(missions);
 
             Assertions.assertTrue(missions.stream().anyMatch(mission -> mission.getId().equals(swapMissionID) && mission.getType().equals(MissionType.SWAP)));
-            Assertions.assertTrue(missions.stream().anyMatch(mission -> mission.getId().equals(circumferenceMissionID) && mission.getType().equals(MissionType.CIRCUMFERENCE)));
+            Assertions.assertTrue(missions.stream().anyMatch(mission -> mission.getId().equals(circumferenceMissionID) && mission.getType().equals(MissionType.DISTANCE)));
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }

@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  * The types of Missions
  */
 public enum MissionType {
-  CIRCUMFERENCE("Distance"),
+  DISTANCE("Distance"),
     GEOCODE("GeoCode"),
     SWAP("Swap"),
     RANDOM("Random");
