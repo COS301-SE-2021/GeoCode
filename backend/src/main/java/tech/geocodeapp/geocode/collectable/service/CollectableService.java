@@ -20,7 +20,7 @@ public interface CollectableService {
     GetCollectableSetsResponse getCollectableSets();
     GetCollectableTypesResponse getCollectableTypesBySet(GetCollectableTypesBySetRequest request);
     GetCollectableByIDResponse getCollectableByID( GetCollectableByIDRequest request ) throws NullRequestParameterException;
-    GetCollectableTypeByIDResponse getCollectableTypeByID( GetCollectableTypeByIDRequest request );
+    GetCollectableTypeByIDResponse getCollectableTypeByID( GetCollectableTypeByIDRequest request ) throws NullRequestParameterException;
 
     //Deletes
     void deleteCollectables();
