@@ -24,6 +24,10 @@ import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
+import tech.geocodeapp.geocode.mission.model.Mission;
+import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
+import tech.geocodeapp.geocode.mission.response.GetMissionByIdResponse;
+import tech.geocodeapp.geocode.mission.service.MissionService;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.*;
@@ -46,6 +50,9 @@ public class UserServiceImpl implements UserService {
     @NotNull(message = "Collectable Service Implementation may not be null.")
     private final CollectableService collectableService;
 
+    @NotNull(message = "Mission Service Implementation may not be null.")
+    private final MissionService missionService;
+
     private final String invalidUserIdMessage = "Invalid User id";
     private final String invalidGeoCodeIdMessage = "Invalid GeoCode id";
     private final String invalidCollectableTypeIDMessage = "Invalid CollectableType ID";
@@ -57,11 +64,12 @@ public class UserServiceImpl implements UserService {
     @NotNull(message = "GeoCode Service Implementation may not be null.")
     private GeoCodeService geoCodeService;
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, MissionService missionService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
         this.pointRepo = pointRepo;
         this.collectableService = collectableService;
+        this.missionService = missionService;
     }
 
     /**
@@ -582,13 +590,25 @@ public class UserServiceImpl implements UserService {
         this.addToFoundGeoCodes(addToFoundGeoCodesRequest);
 
         //add the CollectableType to the User's found CollectableTypes
-        CollectableType collectableType = getCollectableByIDResponse.getCollectable().getType();
+        Collectable collectable = getCollectableByIDResponse.getCollectable();
+        CollectableType collectableType = collectable.getType();
         UUID collectableTypeID = collectableType.getId();
 
         //System.out.println("type: "+collectableType.getName());
 
         AddToFoundCollectableTypesRequest addToFoundCollectableTypesRequest = new AddToFoundCollectableTypesRequest(request.getUserID(), collectableTypeID);
         this.addToFoundCollectableTypes(addToFoundCollectableTypesRequest);
+        
+        //add the Collectable's Mission to the User's Missions
+        UUID missionID = collectable.getMissionID();
+        
+        if(missionID != null){
+            GetMissionByIdRequest getMissionByIdRequest = new GetMissionByIdRequest(missionID);
+            GetMissionByIdResponse getMissionByIdResponse = missionService.getMissionById(getMissionByIdRequest);
+
+            Mission mission = getMissionByIdResponse.getMission();
+            currentUser.addMissionsItem(mission);
+        }
 
         userRepo.save(currentUser);
 

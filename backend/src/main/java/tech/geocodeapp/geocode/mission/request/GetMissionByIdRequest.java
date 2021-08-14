@@ -20,6 +20,10 @@ public class GetMissionByIdRequest   {
   @JsonProperty("missionID")
   private UUID missionID = null;
 
+  public GetMissionByIdRequest(UUID missionID) {
+    this.missionID = missionID;
+  }
+
   public GetMissionByIdRequest missionID(UUID missionID) {
     this.missionID = missionID;
     return this;
