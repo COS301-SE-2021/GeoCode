@@ -31,6 +31,7 @@ public class MissionServiceImpl implements MissionService{
     private final CollectableService collectableService;
 
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
+    private final String invalidMissionIdMessage = "Invalid Mission Id";
 
     public MissionServiceImpl(MissionRepository missionRepo, CollectableService collectableService) {
         this.missionRepo = missionRepo;
@@ -52,8 +53,8 @@ public class MissionServiceImpl implements MissionService{
 
         Optional<Mission> optionalMission = missionRepo.findById(request.getMissionID());
 
-        return optionalMission.map(mission -> new GetMissionByIdResponse(true, "Mission found", mission)).orElseGet(
-                () -> new GetMissionByIdResponse(false, "Mission not found", null));
+        return optionalMission.map(mission -> new GetMissionByIdResponse(true, "The Mission was found", mission)).orElseGet(
+                () -> new GetMissionByIdResponse(false, invalidMissionIdMessage, null));
     }
 
     @Transactional
