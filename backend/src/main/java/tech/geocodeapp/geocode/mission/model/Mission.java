@@ -43,6 +43,14 @@ public class Mission {
     return this;
   }
 
+  public Integer getCompletion() {
+    return completion;
+  }
+
+  public void setCompletion(Integer completion) {
+    this.completion = completion;
+  }
+
   /**
    * Get id
    * @return id
