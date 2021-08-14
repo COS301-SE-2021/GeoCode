@@ -1,4 +1,20 @@
 package tech.geocodeapp.geocode.mission.factory;
 
-public class DistanceMissionFactory {
+import tech.geocodeapp.geocode.mission.decorator.DistanceMission;
+import tech.geocodeapp.geocode.mission.decorator.MissionComponent;
+import tech.geocodeapp.geocode.mission.model.Mission;
+
+public class DistanceMissionFactory extends AbstractMissionFactory{
+    /**
+     * @param mission the {@link Mission} to build the {@link MissionComponent}
+     * @param missionComponent the {@link MissionComponent} to decorate
+     * @return the created {@link tech.geocodeapp.geocode.mission.decorator.DistanceMission}
+     */
+    @Override
+    public MissionComponent decorateMission(Mission mission, MissionComponent missionComponent) {
+        MissionComponent toReturn = new DistanceMission(missionComponent);
+        toReturn.checkIfFinished();
+
+        return toReturn;
+    }
 }
