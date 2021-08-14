@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {
   CreateEventRequest, CreateEventResponse, CreateGeoCodeRequest,
-  CreateGeoCodeResponse, CreateTimeTrialRequest, CreateTimeTrialResponse,
+  CreateGeoCodeResponse,
   EventService,
   GeoCode,
   GeoCodeService
