@@ -26,6 +26,7 @@ import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.mission.model.Mission;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
+import tech.geocodeapp.geocode.mission.request.UpdateCompletionRequest;
 import tech.geocodeapp.geocode.mission.response.GetMissionByIdResponse;
 import tech.geocodeapp.geocode.mission.service.MissionService;
 import tech.geocodeapp.geocode.user.model.User;
@@ -608,6 +609,10 @@ public class UserServiceImpl implements UserService {
 
             Mission mission = getMissionByIdResponse.getMission();
             currentUser.addMissionsItem(mission);
+
+            //update the completion for the Collectable's Mission
+            UpdateCompletionRequest updateCompletionRequest = new UpdateCompletionRequest(mission, geoCode.getLocation());
+            UpdateCompletionResponse updateCompletionResponse = missionService.updateCompletion(updateCompletionRequest);
         }
 
         userRepo.save(currentUser);
