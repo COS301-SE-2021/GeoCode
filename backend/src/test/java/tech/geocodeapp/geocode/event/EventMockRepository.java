@@ -293,4 +293,8 @@ public class EventMockRepository implements EventRepository {
         return false;
     }
 
+    @Override
+    public List<Object[]> findEnteredEvents(UUID userID) {
+        return null;
+    }
 }

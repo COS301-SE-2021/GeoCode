@@ -457,6 +457,39 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
+     * Retrieve a list of Events that a user is participating in
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetEnteredEventsRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    public GetEnteredEventsResponse getEnteredEvents(GetEnteredEventsRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getUserID() == null ) {
+
+            throw new InvalidRequestException();
+        }
+
+        List<Object[]> entries = eventRepo.findEnteredEvents(request.getUserID());
+
+        List<Map<String, Object>> formattedEntries = new ArrayList<>();
+        for (Object[] entry: entries) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("event", entry[0]);
+            map.put("status", entry[1]);
+            formattedEntries.add(map);
+        }
+
+        return new GetEnteredEventsResponse(true, "All entered Events returned", formattedEntries);
+    }
+
+    /**
      * Retrieve a list of Events around a certain radius of a location
      *
      * @param request the attributes the response should be created from

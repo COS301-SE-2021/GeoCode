@@ -91,18 +91,18 @@ public interface EventApi {
     ResponseEntity< GetAllEventsResponse > getAllEvents();
 
 
-    @Operation( summary = "Get an Event by its location", description = "Get an Event by its location from the given co-ordinates", security = {
-            @SecurityRequirement( name = "bearerAuth" ) }, tags = { "Event" } )
-    @ApiResponses( value = {
-            @ApiResponse( responseCode = "200", description = "Return the found Event", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetEventsByLocationResponse.class ) ) ),
+    @Operation(summary = "Returns all the Events that a User is participating in", description = "Returns all the Events that a User is participating in", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Event" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The events were successfully found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetEnteredEventsResponse.class))),
 
-            @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
 
-            @ApiResponse( responseCode = "404", description = "Return the new Event was not found", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetEventsByLocationResponse.class ) ) ) } )
-    @PostMapping( value = "/Event/getEventsByLocation",
+            @ApiResponse(responseCode = "404", description = "The user was not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetEnteredEventsResponse.class))) })
+    @PostMapping(value = "/Event/getEnteredEvents",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body ) throws InvalidRequestException;
+    ResponseEntity<GetEnteredEventsResponse> getEnteredEvents(@Parameter(in = ParameterIn.DEFAULT, description = "Returns all the Events that a User is participating in", required=true, schema=@Schema()) @Valid @RequestBody GetEnteredEventsRequest body) throws InvalidRequestException;
 
 
     @Operation( summary = "Retrieve a list of Events around a certain radius of a location", description = "Retrieve a list of Events around a certain radius of a location", security = {

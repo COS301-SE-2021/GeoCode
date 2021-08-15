@@ -27,10 +27,10 @@ export class EventsPage implements AfterViewInit {
   }
 
   //Create map and add mapmarkers of geocodes
-  loadMap(){
+  loadMap(latitude, longitude){
     this.markers= [];
     this.mapOptions = {
-      center: {lat: -25.75625115327836, lng: 28.235629260918344},
+      center: {lat: latitude, lng: longitude},
       zoom: 15,
     };
     this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
@@ -41,7 +41,11 @@ export class EventsPage implements AfterViewInit {
 
     this.mapsLoader.load().then(handle => {
       this.googleMaps = handle;
-      this.loadMap();
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.loadMap(position.coords.latitude, position.coords.longitude);
+      }, (positionError) => {
+        this.loadMap(-25.75625115327836, 28.235629260918344);
+      });
     }).catch();
     this.eventApi.getAllEvents().subscribe((response: GetAllEventsResponse) =>{
       console.log(response);

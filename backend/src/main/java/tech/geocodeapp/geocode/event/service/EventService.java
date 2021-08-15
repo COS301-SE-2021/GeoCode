@@ -45,7 +45,7 @@ public interface EventService {
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly created response instance from the specified GetCurrentEventLevelGeoCodeRequest
+     * @return the newly created response instance from the specified GetCurrentEventStatusRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
@@ -61,6 +61,17 @@ public interface EventService {
      * @throws InvalidRequestException any of the provided parameters are null
      */
     void nextStage( GeoCode foundGeocode, UUID userID ) throws InvalidRequestException, NotFoundException, MismatchedParametersException;
+
+    /**
+     * Retrieve a list of Events that a user is participating in
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetEnteredEventsRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetEnteredEventsResponse getEnteredEvents(GetEnteredEventsRequest request ) throws InvalidRequestException;
 
     /**
      * Retrieve a list of Events around a certain radius of a location

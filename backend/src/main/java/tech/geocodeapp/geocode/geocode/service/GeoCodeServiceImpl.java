@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
-import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
@@ -88,10 +87,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     /**
      * Overloaded Constructor
      *
-     * @param geoCodeRepo        the repo the created response attributes should save to
+     * @param geoCodeRepo the repo the created response attributes should save to
      * @param collectableService access to the collectable use cases and repository
-     * @param userService        access to the user use cases and repository
-     * @param eventService       access to the Event use cases and repository
+     * @param userService access to the user use cases and repository
+     * @param eventService access to the Event use cases and repository
      *
      * @throws RepoException the GeoCode repository was invalid
      */
@@ -922,7 +921,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * <p>
      * NOTE: a collectable of Type Rarity is a user Trackable and will not be considered
      */
-    private CollectableTypeComponent calculateCollectableType( List< CollectableTypeComponent > items ) {
+    public CollectableTypeComponent calculateCollectableType( List< CollectableTypeComponent > items ) {
 
         /* The total sample size */
         double total = 1000;

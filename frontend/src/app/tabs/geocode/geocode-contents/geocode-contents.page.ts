@@ -4,13 +4,9 @@ import {
   GeoCodeService,
   GetHintsRequest,
   GetHintsResponse,
-  GetGeoCodeByQRCodeRequest,
-  GetCollectablesRequest,
-  GetGeoCodeByQRCodeResponse,
-  GetCollectablesResponse,
   SwapCollectablesRequest,
   SwapCollectablesResponse,
-  GetCollectablesInGeoCodeByQRCodeRequest, GetCollectablesInGeoCodeByQRCodeResponse, SwapCollectableRequest
+  GetCollectablesInGeoCodeByQRCodeRequest, GetCollectablesInGeoCodeByQRCodeResponse
 } from '../../../services/geocode-api';
 import {AlertController, NavController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';

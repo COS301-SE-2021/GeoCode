@@ -149,4 +149,19 @@ public class UserApiController implements UserApi {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
+
+    public ResponseEntity<GetMyMissionsResponse> getMyMissions(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the User's Missions", required=true, schema=@Schema()) @Valid @RequestBody GetMyMissionsRequest body) {
+        try{
+            GetMyMissionsResponse response = userService.getMyMissions(body);
+
+            if(response.isSuccess()){
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (NullRequestParameterException e){
+            GetMyMissionsResponse response = new GetMyMissionsResponse(false, e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
