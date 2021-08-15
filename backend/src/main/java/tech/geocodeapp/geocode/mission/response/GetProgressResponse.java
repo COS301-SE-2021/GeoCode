@@ -16,9 +16,9 @@ import javax.validation.Valid;
 
 public class GetProgressResponse extends Response {
   @JsonProperty("progress")
-  private Integer progress = null;
+  private Double progress = null;
 
-  public GetProgressResponse(boolean success, String message, Integer progress){
+  public GetProgressResponse(boolean success, String message,Double progress){
     super(success, message);
     this.progress = progress;
   }
@@ -30,11 +30,11 @@ public class GetProgressResponse extends Response {
   @Schema(example = "85", description = "")
   
     @Valid
-    public Integer getProgress() {
+    public Double getProgress() {
     return progress;
   }
 
-  public void setProgress(Integer progress) {
+  public void setProgress(double progress) {
     this.progress = progress;
   }
 }
