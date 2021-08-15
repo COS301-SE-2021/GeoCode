@@ -167,6 +167,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             if ( collectableTypes != null ) {
 
                 /* Get first stored Collectable type */
+
                 var typeList = calculateCollectableType( collectableTypes.getCollectableTypes() );
 
                 if ( typeList != null ) {

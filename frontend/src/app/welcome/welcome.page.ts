@@ -25,4 +25,10 @@ export class WelcomePage {
     });
   }
 
+  async register(){
+    await this.keycloak.register({
+      redirectUri: environment.baseRedirectURI+'/explore'
+    });
+  }
+
 }

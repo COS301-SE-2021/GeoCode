@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * GetCurrentEventGeoCodeRequest object to specify what Event to retrieve
+ * GetCurrentEventStatusRequest object to specify what Event to retrieve
  */
 @Validated
 public class GetCurrentEventStatusRequest {
@@ -18,14 +18,14 @@ public class GetCurrentEventStatusRequest {
      * The unique id of the event to get
      */
     @JsonProperty( "eventID" )
-    @NotNull( message = "GetCurrentEventLevelRequest eventID attribute cannot be null." )
+    @NotNull( message = "GetCurrentEventStatusRequest eventID attribute cannot be null." )
     private UUID eventID ;
 
     /**
      * The unique id of the user doing the event to get
      */
     @JsonProperty( "userID" )
-    @NotNull( message = "GetCurrentEventLevelRequest userID attribute cannot be null." )
+    @NotNull( message = "GetCurrentEventStatusRequest userID attribute cannot be null." )
     private UUID userID;
 
     /**
@@ -169,7 +169,7 @@ public class GetCurrentEventStatusRequest {
     @Override
     public String toString() {
 
-        return "class GetCurrentEventGeoCodeRequest {\n" +
+        return "class GetCurrentEventStatusRequest {\n" +
                 "    eventID: " + toIndentedString( eventID ) + "\n" +
                 "    userID: " + toIndentedString( userID ) + "\n" +
                 "}";

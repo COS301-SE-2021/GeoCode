@@ -76,9 +76,10 @@ public class EventApiController implements EventApi {
         }
     }
 
-    public ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body ) throws InvalidRequestException {
-      
-        GetEventsByLocationResponse response = eventService.getEventsByLocation(body);
+    @Override
+    public ResponseEntity<GetEnteredEventsResponse> getEnteredEvents(GetEnteredEventsRequest body ) throws InvalidRequestException {
+
+        GetEnteredEventsResponse response = eventService.getEnteredEvents( body );
 
         if ( ( response != null ) ) {
 

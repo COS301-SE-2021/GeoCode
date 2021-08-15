@@ -1,0 +1,42 @@
+ion-content{
+ // --ion-background-color: var(--ion-color-accent);
+ // --ion-background-color: white;
+
+}
+h1{
+  font-size: xx-large;
+ // display: table-cell;
+  //width: 100%; // As large as its parent to center the text horizontally
+  text-align: center;
+  vertical-align: middle; // Vertically align this element on its parent
+}
+h2{
+  font-size: x-large;
+  color: var(--ion-color-accent);
+  //display: table-cell;
+  //width: 100%; // As large as its parent to center the text horizontally
+  text-align: center;
+  vertical-align: middle; // Vertically align this element on its parent
+}
+#welcome{
+  font-size: medium;
+  background-color: var(--ion-color-card);
+
+}
+
+p{
+  text-align: center;
+}
+
+#headings{
+  //display:table;
+ // display: flex;
+  align-items: center;
+  //ext-align: center;
+  //justify-content: center;
+}
+
+
+.buttons{
+  text-align: center;
+}
