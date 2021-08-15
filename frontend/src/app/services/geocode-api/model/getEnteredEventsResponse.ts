@@ -9,10 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GeoCode } from './geoCode';
+import { GetEnteredEventsResponseEntries } from './getEnteredEventsResponseEntries';
 import { ModelObject } from './modelObject';
 import { Response } from './response';
 
-export interface GetProgressResponse extends Response { 
+export interface GetEnteredEventsResponse extends Response { 
     message?: any;
-    progress?: number;
+    entries?: Array<GetEnteredEventsResponseEntries>;
+    targetGeocode?: GeoCode;
 }

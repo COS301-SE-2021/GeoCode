@@ -11,7 +11,8 @@ describe('TrackableLocationsComponent', () => {
   const trackable: Collectable = {
     pastLocations: ['-25.755918848126488 28.233110280499492'],
     type: null,
-    id: null
+    id: null,
+    mission:null
   };
   const navParams = new NavParams({ trackable });
 

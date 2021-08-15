@@ -13,6 +13,6 @@ import { ModelObject } from './modelObject';
 import { Response } from './response';
 
 export interface GetOwnedGeoCodesResponse extends Response { 
-    message?: ModelObject;
+    message?: any;
     geocodeIDs?: Array<string>;
 }

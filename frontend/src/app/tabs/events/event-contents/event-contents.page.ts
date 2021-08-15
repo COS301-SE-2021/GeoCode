@@ -1,11 +1,11 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
-import {NavController} from '@ionic/angular';
+import {AlertController, NavController, ToastController} from '@ionic/angular';
 import {
   EventService, GeoCode,
   GeoCodeService,
-  GetCurrentEventLevelRequest,
-  GetCurrentEventLevelResponse
+  GetCurrentEventStatusRequest,
+  GetCurrentEventStatusResponse
 } from '../../../services/geocode-api';
 import {ActivatedRoute, Router} from "@angular/router";
 import {KeycloakService} from "keycloak-angular";
@@ -32,11 +32,13 @@ export class EventContentsPage implements AfterViewInit {
 
   constructor(    route: ActivatedRoute,
                   router: Router,
+                  private toastController: ToastController,
                   private navCtrl: NavController,
                   private geocodeApi: GeoCodeService,
                   private mapsLoader: GoogleMapsLoader,
                   private eventApi: EventService,
-                  private keycloak: KeycloakService,) {
+                  private keycloak: KeycloakService,
+                  private alertController: AlertController) {
     //Get passed in param from routing
     const state = router.getCurrentNavigation().extras.state;
     console.log(state);
@@ -57,26 +59,49 @@ export class EventContentsPage implements AfterViewInit {
     if(this.event== null){
     console.log('error');
     }else{
-      const levelReq: GetCurrentEventLevelRequest ={
+      const levelReq: GetCurrentEventStatusRequest ={
         eventID:this.event.id,
         userID:this.keycloak.getKeycloakInstance().subject
       };
-      this.eventApi.getCurrentEventLevel(levelReq).subscribe((response: GetCurrentEventLevelResponse) =>{
+      this.eventApi.getCurrentEventStatus(levelReq).subscribe((response: GetCurrentEventStatusResponse) =>{
         console.log(response);
-        if(response.found){
-          this.geocodes.push(response.foundGeoCode);
-          this.mapsLoader.load().then(handle => {
-            this.googleMaps = handle;
-            this.loadMap();
-          }).catch();
+        if(response.success){
+          if(response.targetGeocode==null){
+          this.presentAlert();
+          }else{
+            this.geocodes.push(response.targetGeocode);
+            this.mapsLoader.load().then(handle => {
+              this.googleMaps = handle;
+              this.loadMap();
+            }).catch();
+          }
+        }else{
+          this.navCtrl.back();
+          this.presentToast();
         }
-
       });
-
     }
+  }
+async presentToast(){
+  const toast =  await this.toastController.create({
+    message: 'Error loading Event GeoCode not found',
+    duration: 2000
+  });
+  await toast.present();
+}
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Alert',
+      subHeader: 'Subtitle',
+      message: 'Congratulation you completed the event',
+      buttons: ['OK']
+    });
 
+    await alert.present();
 
-
+    const { role } = await alert.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
   }
 
   //Create map and add mapmarkers of geocodes

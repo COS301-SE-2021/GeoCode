@@ -14,6 +14,6 @@ import { ModelObject } from './modelObject';
 import { Response } from './response';
 
 export interface EventsNearMeResponse extends Response { 
-    message?: ModelObject;
+    message?: any;
     foundEvents: Array<Event>;
 }

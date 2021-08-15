@@ -7,6 +7,36 @@
 </ion-header>
 
 <ion-content>
-  <h1>Welcome to GeoCode</h1>
-  <ion-button (click)="login()">Log in</ion-button>
+  <ion-grid>
+    <ion-row>
+      <ion-col size-sm="6" size-md="2" >
+        <img src="./assets/images/logo.png" width="auto" height="auto"alt="Geo Code">
+      </ion-col>
+      <ion-col size-sm="6" size-md="10"id="headings">
+        <h1>Welcome to GeoCode</h1>
+        <h2>The adventure awaits</h2>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-card id="welcome">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+         <p>Bored, tired of doing the same activities due to the risk of COVID-19.<br> Introducing GeoCode, a treasure hunting game for
+             all ages. All you need is a phone and your brain to solve clues to find GeoCodes.
+         </p>
+          <ul>
+            <li>Fill collectable sets by finding all the collectables.</li>
+            <li>Work together with other players around the world to complete missions.</li>
+            <li>  Race against friends and the clock in time trials.</li>
+          </ul>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+  <div class="buttons">
+    <ion-button color="button" (click)="login()">Log in</ion-button>
+    <ion-button color="button" (click)="register()">Sign up</ion-button>
+  </div>
+
 </ion-content>

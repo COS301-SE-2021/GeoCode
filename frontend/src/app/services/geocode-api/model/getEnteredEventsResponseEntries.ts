@@ -9,10 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ModelObject } from './modelObject';
-import { Response } from './response';
+import { Event } from './event';
+import { UserEventStatus } from './userEventStatus';
 
-export interface GetProgressResponse extends Response { 
-    message?: any;
-    progress?: number;
+export interface GetEnteredEventsResponseEntries { 
+    event?: Event;
+    status?: UserEventStatus;
 }

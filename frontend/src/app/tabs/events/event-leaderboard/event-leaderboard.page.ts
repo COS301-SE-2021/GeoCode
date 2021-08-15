@@ -49,9 +49,9 @@ export class EventLeaderboardPage implements OnInit {
   }
 
   async loadLeaderboard() {
-    if (this.event.leaderboard.length > 0) {
+    if (this.event.leaderboards.length > 0) {
       const data = await this.leaderboardService.getEventLeaderboard({
-        leaderboardId: this.event.leaderboard[0].id,
+        leaderboardID: this.event.leaderboards[0].id,
         count: this.numToFetch,
         starting: this.leaderboardIndex
       }).toPromise();

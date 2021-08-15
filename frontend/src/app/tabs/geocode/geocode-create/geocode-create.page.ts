@@ -2,8 +2,9 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {GeoCodeService, CreateGeoCodeRequest, CreateGeoCodeResponse} from '../../../services/geocode-api';
 import {NavController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
+import {QRGenerator} from '../../../services/QRGenerator';
 import {GeoPoint} from '../../../services/geocode-api';
-
+import IQrCodeWithLogo, {BaseOptions} from 'qrcode-with-logos';
 let map;
 @Component({
   selector: 'app-geocode-create',
@@ -30,7 +31,7 @@ request: CreateGeoCodeRequest= {
 
 };
 
-  constructor(public geocodeAPI: GeoCodeService,public navCtrl: NavController, private mapsLoader: GoogleMapsLoader) {}
+  constructor(public geocodeAPI: GeoCodeService,public navCtrl: NavController, private mapsLoader: GoogleMapsLoader, private qr: QRGenerator) {}
 
   //create map
   initMap() {
@@ -77,9 +78,9 @@ request: CreateGeoCodeRequest= {
         this.hints=[];
         this.locations=[];
         this.difficulty=[];
+        this.qr.generate(response.qrCode);
         this.navCtrl.navigateBack('/explore').then().catch();
       });
-
   }
 
   //update difficulty field for request

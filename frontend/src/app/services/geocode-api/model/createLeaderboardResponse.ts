@@ -14,6 +14,6 @@ import { ModelObject } from './modelObject';
 import { Response } from './response';
 
 export interface CreateLeaderboardResponse extends Response { 
-    message?: ModelObject;
+    message?: any;
     leaderboard?: Leaderboard;
 }

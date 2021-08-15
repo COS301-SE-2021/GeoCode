@@ -14,6 +14,6 @@ import { Point } from './point';
 import { Response } from './response';
 
 export interface PointResponse extends Response { 
-    message?: ModelObject;
+    message?: any;
     point?: Point;
 }
