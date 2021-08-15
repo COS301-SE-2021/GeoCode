@@ -6,6 +6,7 @@ import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
+import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.repository.CollectableSetRepository;
 import tech.geocodeapp.geocode.collectable.repository.CollectableTypeRepository;
@@ -15,10 +16,7 @@ import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This class implements the CollectableService interface
@@ -39,6 +37,8 @@ public class CollectableServiceImpl implements CollectableService {
         this.collectableRepo = collectableRepo;
         this.collectableSetRepo = collectableSetRepo;
         this.collectableTypeRepo = collectableTypeRepo;
+
+        initialiseUserTrackables();
     }
 
     @Transactional
@@ -217,5 +217,41 @@ public class CollectableServiceImpl implements CollectableService {
     @Transactional
     public void deleteCollectableSets() {
         collectableSetRepo.deleteAll();
+    }
+
+    private void initialiseUserTrackables() {
+        /*
+         * The "User Trackables" set and type are required to exist before users can enter the system.
+         * Create them on application load if they do not exist.
+         */
+        UUID userTrackableID = new UUID(0, 0);
+
+        Optional<CollectableSet> temp = collectableSetRepo.findById(userTrackableID);
+        CollectableSet userTrackableSet = null;
+        if (temp.isPresent()) {
+            userTrackableSet = temp.get();
+        } else {
+            /* Create the User Trackable set */
+            userTrackableSet = new CollectableSet();
+            userTrackableSet.setId(userTrackableID);
+            userTrackableSet.setName("User Trackables");
+            userTrackableSet.setDescription("User Trackables");
+            collectableSetRepo.save(userTrackableSet);
+        }
+
+        if (!collectableTypeRepo.existsById(userTrackableID)) {
+            HashMap<String, String> properties = new HashMap<>();
+            properties.put("trackable", "true");
+
+            /* Create the User Trackable type */
+            CollectableType userTrackableType = new CollectableType();
+            userTrackableType.setId(userTrackableID);
+            userTrackableType.setName("User Trackables");
+            userTrackableType.setImage("https://via.placeholder.com/100");
+            userTrackableType.setRarity(Rarity.UNIQUE);
+            userTrackableType.setSet(userTrackableSet);
+            userTrackableType.setProperties(properties);
+            collectableTypeRepo.save(userTrackableType);
+        }
     }
 }
