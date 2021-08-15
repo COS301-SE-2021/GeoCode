@@ -2454,7 +2454,7 @@ components:
         pastLocations:
           type: array
           items:
-            type: string
+            $ref: "#/components/schemas/GeoPoint"
         mission:
           type: string
           format: uuid

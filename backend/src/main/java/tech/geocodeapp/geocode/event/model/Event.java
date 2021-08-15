@@ -78,7 +78,7 @@ public class Event {
      */
     @Valid
     @ManyToMany
-    @JsonProperty( "leaderboard" )
+    @JsonProperty( "leaderboards" )
     @NotNull( message = "Event's location cannot be null." )
     protected List< Leaderboard > leaderboards;
 

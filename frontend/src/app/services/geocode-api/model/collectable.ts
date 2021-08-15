@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { CollectableType } from './collectableType';
+import { GeoPoint } from './geoPoint';
 
 export interface Collectable { 
     id: string;
     type: CollectableType;
-    pastLocations: Array<string>;
+    pastLocations: Array<GeoPoint>;
     mission: string;
 }
