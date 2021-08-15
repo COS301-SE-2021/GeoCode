@@ -197,7 +197,7 @@ class GeoCodeServiceImplTest {
     }
 
     /**
-     * Check how the constructor handles the repository the findGeoCodeWithDifficulty query
+     * Check for GeoCodes with the Difficulty Hard using the custom query
      */
     @Test
     @Order( 1 )
@@ -270,7 +270,7 @@ class GeoCodeServiceImplTest {
     }
 
     /**
-     * Check how the constructor handles the repository the findGeoCodeWithDifficulty query
+     * Check for GeoCodes with the Difficulty Insane using the custom query
      */
     @Test
     @Order( 1 )
@@ -343,7 +343,7 @@ class GeoCodeServiceImplTest {
     }
 
     /**
-     * Check how the constructor handles the repository the findGeoCodeWithDifficulty query
+     * Check for GeoCodes with the Difficulty Medium using the custom query
      */
     @Test
     @Order( 1 )
@@ -411,7 +411,7 @@ class GeoCodeServiceImplTest {
     }
 
     /**
-     * Check how the constructor handles the repository the findGeoCodeWithQRCode query
+     * Check for GeoCodes with a certain qrCode using the custom query
      */
     @Test
     @Order( 1 )
@@ -464,7 +464,7 @@ class GeoCodeServiceImplTest {
     }
 
     /**
-     * Check how the constructor handles the repository the findGeoCodeWithDifficulty query
+     * Check for GeoCodes at a certain Location using the custom query
      */
     @Test
     @Order( 1 )
