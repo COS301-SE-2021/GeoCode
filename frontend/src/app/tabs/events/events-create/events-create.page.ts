@@ -68,8 +68,6 @@ export class EventsCreatePage implements AfterViewInit  {
   async ngAfterViewInit() {
     this.googleMaps = await this.mapsLoader.load();
     this.loadMap();
-    const date= new Date();
-
     this.minDate= new Date().toISOString();
     this.minEndDate= new Date().toISOString();
 
