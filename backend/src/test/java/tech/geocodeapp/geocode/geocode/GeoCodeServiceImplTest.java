@@ -471,12 +471,50 @@ class GeoCodeServiceImplTest {
     @DisplayName( "Custom query repository handling - findGeoCodeAtLocation" )
     void findGeoCodeAtLocationTest() {
 
-        //ToDo implement
+        var geoCodeID = UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
+        var locate = new GeoPoint( 10.2587 , 40.336981 );
 
-        /* Null request check */
-        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService, eventService ) )
-                .isInstanceOf( RepoException.class )
-                .hasMessageContaining( "The given repository does not exist." );
+        /* Create the GeoCode to locate */
+        var geoCode = new GeoCode();
+        geoCode.setId( geoCodeID );
+        geoCode.setAvailable( true );
+        geoCode.setDescription( "The EASY GeoCode is stored at location Search" );
+        geoCode.setDifficulty( Difficulty.EASY );
+        List< String > hints = new ArrayList<>();
+        hints.add( "Hint one for: Search" );
+        hints.add( "Hint two for: Search" );
+        hints.add( "Hint three for: Search" );
+        geoCode.setHints( hints );
+        geoCode.setLocation( locate );
+        geoCode.setQrCode( "9ae5vc2n" );
+
+        repo.save( geoCode );
+
+        /* Create random GeoCodes */
+        for ( int x = 0; x < 4; x++ ) {
+
+            /* Create the request with the following mock data */
+            geoCode = new GeoCode();
+            geoCode.setId( UUID.randomUUID() );
+            geoCode.setAvailable( true );
+            geoCode.setDescription( "The EASY GeoCode is stored at location " + x );
+            geoCode.setDifficulty( Difficulty.EASY );
+            hints = new ArrayList<>();
+            hints.add( "Hint one for: " + x );
+            hints.add( "Hint two for: " + x );
+            hints.add( "Hint three for: " + x );
+            geoCode.setHints( hints );
+            geoCode.setLocation( new GeoPoint( 12.2587 + x, 42.336981 + x ) );
+
+            repo.save( geoCode );
+        }
+
+        var test = repo.findGeoCodeAtLocation( locate );
+
+        /* Check the correct GeoCode got returned */
+        Assertions.assertEquals( locate, test.getLocation() );
+        Assertions.assertEquals( "9ae5vc2n", test.getQrCode() );
+        Assertions.assertEquals( geoCodeID, test.getId() );
     }
 
     /**
