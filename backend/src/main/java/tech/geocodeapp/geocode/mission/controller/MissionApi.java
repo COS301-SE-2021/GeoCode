@@ -57,6 +57,6 @@ public interface MissionApi {
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" },
             method = RequestMethod.POST)
-    ResponseEntity<CreateMissionResponse> setMission(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateMissionRequest body);
+    ResponseEntity<CreateMissionResponse> createMission(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateMissionRequest body);
 }
 

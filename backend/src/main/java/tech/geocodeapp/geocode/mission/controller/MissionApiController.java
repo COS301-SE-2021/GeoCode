@@ -72,7 +72,7 @@ public class MissionApiController implements MissionApi {
         }
     }
 
-    public ResponseEntity<CreateMissionResponse> setMission(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateMissionRequest body) {
+    public ResponseEntity<CreateMissionResponse> createMission(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateMissionRequest body) {
         try{
             CreateMissionResponse response = missionService.createMission(body);
 
