@@ -9,11 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ModelObject } from './modelObject';
-import { Point } from './point';
-import { Response } from './response';
+import { GeoPoint } from './geoPoint';
+import { Mission } from './mission';
 
-export interface PointResponse extends Response { 
-    message?: any;
-    point?: Point;
+export interface UpdateCompletionRequest { 
+    mission: Mission;
+    location: GeoPoint;
 }
