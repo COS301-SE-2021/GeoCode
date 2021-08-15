@@ -127,6 +127,14 @@ class GeoCodeServiceImplTest {
             type.setSet( new CollectableSet() );
 
             typeMockRepo.save( type );
+            CollectableType type2 = new CollectableType();
+            type2.setId( UUID.fromString( "f44306a6-acce-4e7f-9eb6-e9f6a90e17c0" ) );
+            type2.setName( "name" );
+            type2.setImage( "Image" );
+            type2.setRarity( Rarity.RARE );
+            type2.setSet( new CollectableSet() );
+
+            typeMockRepo.save( type2 );
 
         /* Create a new Collectable Service implementation with the relevant repositories */
         collectableService = new CollectableServiceImpl( new CollectableMockRepository(),
