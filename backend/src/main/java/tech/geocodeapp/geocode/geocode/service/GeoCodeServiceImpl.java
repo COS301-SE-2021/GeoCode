@@ -119,7 +119,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     /**
      * Once the GeoCode service object has been created
      * insert it into the User and Event subsystem
-     * <p>
+     *
      * This is to avoid circular dependencies as each subsystem requires one another
      */
     @PostConstruct
@@ -164,10 +164,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             /* Create the response and give it a Collectable type */
             var collectableRequest = new CreateCollectableRequest();
 
+            CollectableTypeComponent typeList;
             if ( collectableTypes != null ) {
 
                 /* Get first stored Collectable type */
-                var typeList = calculateCollectableType( collectableTypes.getCollectableTypes() );
+                typeList = calculateCollectableType( collectableTypes.getCollectableTypes() );
 
                 if ( typeList != null ) {
 
@@ -190,11 +191,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             /* Building a collectable from a collectable response */
             var temp = new Collectable();
             temp.setId( collectableResponse.getCollectable().getId() );
-            CollectableTypeComponent type = collectableResponse.getCollectable().getType();
+            //CollectableTypeComponent type = collectableResponse.getCollectable().getType();
 
             CollectableTypeManager manager = new CollectableTypeManager();
 
-            temp.setType( manager.convertToCollectableType( type ) );
+            // temp.setType( manager.convertToCollectableType( type ) );
+            temp.setType( manager.convertToCollectableType( typeList ) );
 
             /* Adding the created Collectable to the list */
             collectable.add( temp.getId() );
@@ -369,8 +371,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /*
-         * Create the new response and return all
-         * of the collectable ID's for the found GeoCode
+         * Create the new response and return all the
+         * collectable ID's for the found GeoCode
          */
         return new GetCollectablesResponse( new ArrayList<>( hold.getCollectables() ) );
     }
