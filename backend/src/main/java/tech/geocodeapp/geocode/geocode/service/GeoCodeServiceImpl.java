@@ -155,14 +155,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Hold the created Collectables */
         List< UUID > collectable = new ArrayList<>();
 
+        /* Get all the stored Collectables */
+        var collectableTypes = collectableService.getCollectableTypes();
+
         /* Create the specified amount of new collectables */
         for ( var x = 0; x < NUM_COLLECTABLES; x++ ) {
 
             /* Create the response and give it a Collectable type */
             var collectableRequest = new CreateCollectableRequest();
 
-            /* Get all the stored Collectables */
-            var collectableTypes = collectableService.getCollectableTypes();
             if ( collectableTypes != null ) {
 
                 /* Get first stored Collectable type */
@@ -917,8 +918,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     }
 
     /**
+     * ToDo make a unit test for this
+     *
      * Determines what type of collectable to create
-     * <p>
+     *
      * NOTE: a collectable of Type Rarity is a user Trackable and will not be considered
      */
     public CollectableTypeComponent calculateCollectableType( List< CollectableTypeComponent > items ) {
@@ -964,7 +967,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             probability.add( value );
         }
 
-        /* Create a random number between 0 and 6 */
+        /* Create a random number between 0 and 1.0 */
         var random = ( new SecureRandom() ).nextDouble();
         var cumulativeProbability = 0.0;
 
