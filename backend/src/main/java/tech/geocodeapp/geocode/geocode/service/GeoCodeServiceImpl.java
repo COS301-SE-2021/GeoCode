@@ -3,12 +3,12 @@ package tech.geocodeapp.geocode.geocode.service;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
-import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
@@ -88,10 +88,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     /**
      * Overloaded Constructor
      *
-     * @param geoCodeRepo        the repo the created response attributes should save to
+     * @param geoCodeRepo the repo the created response attributes should save to
      * @param collectableService access to the collectable use cases and repository
-     * @param userService        access to the user use cases and repository
-     * @param eventService       access to the Event use cases and repository
+     * @param userService access to the user use cases and repository
+     * @param eventService access to the Event use cases and repository
      *
      * @throws RepoException the GeoCode repository was invalid
      */
@@ -120,7 +120,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     /**
      * Once the GeoCode service object has been created
      * insert it into the User and Event subsystem
-     * <p>
+     *
      * This is to avoid circular dependencies as each subsystem requires one another
      */
     @PostConstruct
@@ -156,19 +156,20 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Hold the created Collectables */
         List< UUID > collectable = new ArrayList<>();
 
+        /* Get all the stored Collectables */
+        var collectableTypes = collectableService.getCollectableTypes();
+
         /* Create the specified amount of new collectables */
         for ( var x = 0; x < NUM_COLLECTABLES; x++ ) {
 
             /* Create the response and give it a Collectable type */
             var collectableRequest = new CreateCollectableRequest();
 
-            /* Get all the stored Collectables */
-            var collectableTypes = collectableService.getCollectableTypes();
+            CollectableTypeComponent typeList;
             if ( collectableTypes != null ) {
 
                 /* Get first stored Collectable type */
-
-                var typeList = calculateCollectableType( collectableTypes.getCollectableTypes() );
+                typeList = calculateCollectableType( collectableTypes.getCollectableTypes() );
 
                 if ( typeList != null ) {
 
@@ -191,11 +192,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             /* Building a collectable from a collectable response */
             var temp = new Collectable();
             temp.setId( collectableResponse.getCollectable().getId() );
-            CollectableTypeComponent type = collectableResponse.getCollectable().getType();
+            //CollectableTypeComponent type = collectableResponse.getCollectable().getType();
 
             CollectableTypeManager manager = new CollectableTypeManager();
 
-            temp.setType( manager.convertToCollectableType( type ) );
+            // temp.setType( manager.convertToCollectableType( type ) );
+            temp.setType( manager.convertToCollectableType( typeList ) );
 
             /* Adding the created Collectable to the list */
             collectable.add( temp.getId() );
@@ -370,8 +372,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /*
-         * Create the new response and return all
-         * of the collectable ID's for the found GeoCode
+         * Create the new response and return all the
+         * collectable ID's for the found GeoCode
          */
         return new GetCollectablesResponse( new ArrayList<>( hold.getCollectables() ) );
     }
@@ -496,7 +498,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    @Override
+    @Transactional
+//    @Override
     public GetHintsResponse getHints( GetHintsRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
@@ -919,11 +922,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     }
 
     /**
+     * ToDo make a unit test for this
+     *
      * Determines what type of collectable to create
-     * <p>
+     *
      * NOTE: a collectable of Type Rarity is a user Trackable and will not be considered
      */
-    private CollectableTypeComponent calculateCollectableType( List< CollectableTypeComponent > items ) {
+    public CollectableTypeComponent calculateCollectableType( List< CollectableTypeComponent > items ) {
 
         /* The total sample size */
         double total = 1000;
@@ -966,7 +971,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             probability.add( value );
         }
 
-        /* Create a random number between 0 and 6 */
+        /* Create a random number between 0 and 1.0 */
         var random = ( new SecureRandom() ).nextDouble();
         var cumulativeProbability = 0.0;
 
