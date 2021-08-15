@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.appglobal.swaggerui;
+package tech.geocodeapp.geocode.general.swaggerui;
 
 import com.fasterxml.jackson.datatype.threetenbp.ThreeTenModule;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

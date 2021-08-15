@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.geocode;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.mockito.Mock;
@@ -12,26 +13,20 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest
 import tech.geocodeapp.geocode.event.EventMockRepository;
 import tech.geocodeapp.geocode.event.UserEventStatusMockRepository;
 import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.service.EventService;
-import tech.geocodeapp.geocode.event.service.EventServiceImpl;
+import tech.geocodeapp.geocode.event.service.*;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
-import tech.geocodeapp.geocode.geocode.model.Difficulty;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.service.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.collectable.*;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
-import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
+import tech.geocodeapp.geocode.leaderboard.service.*;
 import tech.geocodeapp.geocode.user.service.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This is the unit testing class for the GeoCode subsystem
@@ -110,7 +105,7 @@ class GeoCodeServiceImplTest {
      * by some other test or data.
      */
     @BeforeEach
-    void setup() throws RepoException, tech.geocodeapp.geocode.event.exceptions.RepoException {
+    void setup() {
 
         /* Create a new repository instance and make sure there is no data in it */
         repo = new GeoCodeMockRepository();
@@ -144,7 +139,13 @@ class GeoCodeServiceImplTest {
         EventMockRepository eventRepo = new EventMockRepository();
         UserEventStatusMockRepository progressLogRepo = new UserEventStatusMockRepository();
 
-        eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService, userService );
+        try {
+
+            eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService, userService );
+        } catch ( tech.geocodeapp.geocode.event.exceptions.RepoException e ) {
+
+            e.printStackTrace();
+        }
 
         /* Populate the Event repository with a known Event to find*/
         var event = new Event( eventID, "Test", "Test description", null,
@@ -196,6 +197,257 @@ class GeoCodeServiceImplTest {
     }
 
     /**
+     * Check how the constructor handles the repository the findGeoCodeWithDifficulty query
+     */
+    @Test
+    @Order( 1 )
+    @Tag( "Tests" )
+    @DisplayName( "Custom query repository for Hard difficulty - findGeoCodeWithDifficulty" )
+    void findGeoCodeWithHardDifficultyTest() {
+
+        for ( int x = 0; x < 2; x++ ) {
+
+            /* Create the request with the following mock data */
+            var geoCode = new GeoCode();
+                geoCode.setId( UUID.randomUUID() );
+                geoCode.setAvailable( true );
+                geoCode.setDescription( "The EASY GeoCode is stored at location " + x );
+                geoCode.setDifficulty( Difficulty.EASY );
+                List< String > hints = new ArrayList<>();
+                    hints.add( "Hint one for: " + x );
+                    hints.add( "Hint two for: " + x );
+                    hints.add( "Hint three for: " + x );
+                geoCode.setHints( hints );
+                geoCode.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+            repo.save( geoCode );
+        }
+
+        for ( int x = 0; x < 2; x++ ) {
+
+            /* Create the request with the following mock data */
+            var geoCode = new GeoCode();
+            geoCode.setId( UUID.randomUUID() );
+            geoCode.setAvailable( true );
+            geoCode.setDescription( "The HARD GeoCode is stored at location " + x );
+            geoCode.setDifficulty( Difficulty.HARD );
+            List< String > hints = new ArrayList<>();
+                hints.add( "Hint one for: " + x );
+                hints.add( "Hint two for: " + x );
+                hints.add( "Hint three for: " + x );
+            geoCode.setHints( hints );
+            geoCode.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+            repo.save( geoCode );
+        }
+
+        for ( int x = 0; x < 3; x++ ) {
+
+            /* Create the request with the following mock data */
+            var geoCode = new GeoCode();
+            geoCode.setId( UUID.randomUUID() );
+            geoCode.setAvailable( true );
+            geoCode.setDescription( "The INSANE GeoCode is stored at location " + x );
+            geoCode.setDifficulty( Difficulty.INSANE );
+            List< String > hints = new ArrayList<>();
+                hints.add( "Hint one for: " + x );
+                hints.add( "Hint two for: " + x );
+                hints.add( "Hint three for: " + x );
+            geoCode.setHints( hints );
+            geoCode.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+            repo.save( geoCode );
+        }
+
+        /* Call the custom query to find GeoCodes of a certain Difficulty */
+        var test = repo.findGeoCodeWithDifficulty( Difficulty.HARD );
+
+        /* Go through each returned GeoCode */
+        for ( GeoCode temp: test ) {
+
+            /* Check */
+            Assertions.assertEquals( Difficulty.HARD, temp.getDifficulty() );
+        }
+    }
+
+    /**
+     * Check how the constructor handles the repository the findGeoCodeWithDifficulty query
+     */
+    @Test
+    @Order( 1 )
+    @Tag( "Tests" )
+    @DisplayName( "Custom query repository for Insane difficulty - findGeoCodeWithDifficulty" )
+    void findGeoCodeWithInsaneDifficultyTest() {
+
+        for ( int x = 0; x < 2; x++ ) {
+
+            /* Create the request with the following mock data */
+            var geoCode = new GeoCode();
+                geoCode.setId( UUID.randomUUID() );
+                geoCode.setAvailable( true );
+                geoCode.setDescription( "The EASY GeoCode is stored at location " + x );
+                geoCode.setDifficulty( Difficulty.EASY );
+                List< String > hints = new ArrayList<>();
+                    hints.add( "Hint one for: " + x );
+                    hints.add( "Hint two for: " + x );
+                    hints.add( "Hint three for: " + x );
+                geoCode.setHints( hints );
+                geoCode.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+            repo.save( geoCode );
+        }
+
+        for ( int x = 0; x < 2; x++ ) {
+
+            /* Create the request with the following mock data */
+            var geoCode = new GeoCode();
+            geoCode.setId( UUID.randomUUID() );
+            geoCode.setAvailable( true );
+            geoCode.setDescription( "The HARD GeoCode is stored at location " + x );
+            geoCode.setDifficulty( Difficulty.HARD );
+            List< String > hints = new ArrayList<>();
+                hints.add( "Hint one for: " + x );
+                hints.add( "Hint two for: " + x );
+                hints.add( "Hint three for: " + x );
+            geoCode.setHints( hints );
+            geoCode.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+            repo.save( geoCode );
+        }
+
+        for ( int x = 0; x < 3; x++ ) {
+
+            /* Create the request with the following mock data */
+            var geoCode = new GeoCode();
+            geoCode.setId( UUID.randomUUID() );
+            geoCode.setAvailable( true );
+            geoCode.setDescription( "The INSANE GeoCode is stored at location " + x );
+            geoCode.setDifficulty( Difficulty.INSANE );
+            List< String > hints = new ArrayList<>();
+                hints.add( "Hint one for: " + x );
+                hints.add( "Hint two for: " + x );
+                hints.add( "Hint three for: " + x );
+            geoCode.setHints( hints );
+            geoCode.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+            repo.save( geoCode );
+        }
+
+        /* Call the custom query to find GeoCodes of a certain Difficulty */
+        var test = repo.findGeoCodeWithDifficulty( Difficulty.INSANE );
+
+        /* Go through each returned GeoCode */
+        for ( GeoCode temp: test ) {
+
+            /* Check */
+            Assertions.assertEquals( Difficulty.INSANE, temp.getDifficulty() );
+        }
+    }
+
+    /**
+     * Check how the constructor handles the repository the findGeoCodeWithDifficulty query
+     */
+    @Test
+    @Order( 1 )
+    @Tag( "Tests" )
+    @DisplayName( "Custom query repository where not found - findGeoCodeWithDifficulty" )
+    void findGeoCodeWithEmptyDifficultyTest() {
+
+        for ( int x = 0; x < 2; x++ ) {
+
+            /* Create the request with the following mock data */
+            var geoCode = new GeoCode();
+            geoCode.setId( UUID.randomUUID() );
+            geoCode.setAvailable( true );
+            geoCode.setDescription( "The EASY GeoCode is stored at location " + x );
+            geoCode.setDifficulty( Difficulty.EASY );
+            List< String > hints = new ArrayList<>();
+            hints.add( "Hint one for: " + x );
+            hints.add( "Hint two for: " + x );
+            hints.add( "Hint three for: " + x );
+            geoCode.setHints( hints );
+            geoCode.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+            repo.save( geoCode );
+        }
+
+        for ( int x = 0; x < 2; x++ ) {
+
+            /* Create the request with the following mock data */
+            var geoCode = new GeoCode();
+            geoCode.setId( UUID.randomUUID() );
+            geoCode.setAvailable( true );
+            geoCode.setDescription( "The HARD GeoCode is stored at location " + x );
+            geoCode.setDifficulty( Difficulty.HARD );
+            List< String > hints = new ArrayList<>();
+            hints.add( "Hint one for: " + x );
+            hints.add( "Hint two for: " + x );
+            hints.add( "Hint three for: " + x );
+            geoCode.setHints( hints );
+            geoCode.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+            repo.save( geoCode );
+        }
+
+        for ( int x = 0; x < 3; x++ ) {
+
+            /* Create the request with the following mock data */
+            var geoCode = new GeoCode();
+            geoCode.setId( UUID.randomUUID() );
+            geoCode.setAvailable( true );
+            geoCode.setDescription( "The INSANE GeoCode is stored at location " + x );
+            geoCode.setDifficulty( Difficulty.INSANE );
+            List< String > hints = new ArrayList<>();
+            hints.add( "Hint one for: " + x );
+            hints.add( "Hint two for: " + x );
+            hints.add( "Hint three for: " + x );
+            geoCode.setHints( hints );
+            geoCode.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+            repo.save( geoCode );
+        }
+
+        /* Call the custom query to find GeoCodes of a certain Difficulty */
+        var test = repo.findGeoCodeWithDifficulty( Difficulty.MEDIUM );
+
+        Assertions.assertTrue( test.isEmpty() );
+    }
+
+    /**
+     * Check how the constructor handles the repository the findGeoCodeWithQRCode query
+     */
+    @Test
+    @Order( 1 )
+    @Tag( "Tests" )
+    @DisplayName( "Custom query repository handling - findGeoCodeWithQRCode" )
+    void findGeoCodeWithQRCodeTest() {
+
+        //ToDo implement
+
+        /* Null request check */
+        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService, eventService ) )
+                .isInstanceOf( RepoException.class )
+                .hasMessageContaining( "The given repository does not exist." );
+    }
+
+    /**
+     * Check how the constructor handles the repository the findGeoCodeWithDifficulty query
+     */
+    @Test
+    @Order( 1 )
+    @Tag( "Tests" )
+    @DisplayName( "Custom query repository handling - findGeoCodeAtLocation" )
+    void findGeoCodeAtLocationTest() {
+
+        //ToDo implement
+
+        /* Null request check */
+        assertThatThrownBy( () -> geoCodeService = new GeoCodeServiceImpl( null, collectableService, userService, eventService ) )
+                .isInstanceOf( RepoException.class )
+                .hasMessageContaining( "The given repository does not exist." );
+    }
+
+    /**
      * Check how the use case handles the request being null
      */
     @Test
@@ -227,6 +479,31 @@ class GeoCodeServiceImplTest {
         request.setDifficulty( Difficulty.INSANE );
         request.setHints( null );
         request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.createGeoCode( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 10 )
+    @DisplayName( "All invalid repository attribute handling - createGeoCode" )
+    void createGeoCodeAllInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         * */
+        CreateGeoCodeRequest request = new CreateGeoCodeRequest();
+        request.setAvailable( null );
+        request.setDescription( null );
+        request.setDifficulty( null );
+        request.setHints( null );
+        request.setLocation( null );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.createGeoCode( request ) )
@@ -612,6 +889,29 @@ class GeoCodeServiceImplTest {
          * and assign values to it
          * */
         SwapCollectablesRequest request = new SwapCollectablesRequest();
+        request.setTargetCollectableID( UUID.randomUUID() );
+        request.setTargetGeoCodeID( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.swapCollectables( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 13 )
+    @DisplayName( "All invalid repository attribute handling - swapCollectables" )
+    void swapCollectablesAllInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         * */
+        SwapCollectablesRequest request = new SwapCollectablesRequest();
         request.setTargetCollectableID( null );
         request.setTargetGeoCodeID( null );
 
@@ -900,6 +1200,25 @@ class GeoCodeServiceImplTest {
 
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check the logic used when create a collectable type
+     */
+    @Disabled
+    @Test
+    @Order( 26 )
+    @DisplayName( "Valid request - calculateCollectableType" )
+    void collectableTypeTest() {
+
+        var count = new ArrayList<>();
+
+        var iterations = 1000000;
+        for ( var x = 0; x < iterations; x++ ) {
+
+            var name = geoCodeService.calculateCollectableType( null );
+
         }
     }
 

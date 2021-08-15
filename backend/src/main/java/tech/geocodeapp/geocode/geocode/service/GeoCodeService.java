@@ -1,9 +1,12 @@
 package tech.geocodeapp.geocode.geocode.service;
 
+import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
+
+import java.util.List;
 
 /**
  * This is the main interface is for the GeoCode subsystem,
@@ -38,7 +41,7 @@ public interface GeoCodeService {
      *
      * @return the newly created response instance
      */
-    GetGeoCodesResponse getAllGeoCodes( );
+    GetGeoCodesResponse getAllGeoCodes();
 
     /**
      * Get the stored Collectables inside of a GeoCode
@@ -156,4 +159,12 @@ public interface GeoCodeService {
      * @param geocode the GeoCode object to save
      */
     void saveGeoCode( GeoCode geocode );
+
+    /**
+     * Determines what type of collectable to create
+     * <p>
+     * NOTE: a collectable of Type Rarity is a user Trackable and will not be considered
+     */
+    CollectableTypeComponent calculateCollectableType( List< CollectableTypeComponent > items );
+
 }
