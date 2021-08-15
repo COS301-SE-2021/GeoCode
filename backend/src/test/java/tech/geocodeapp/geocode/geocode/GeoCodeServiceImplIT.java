@@ -76,6 +76,11 @@ class GeoCodeServiceImplIT {
     String reqEmptyError = "The given request is empty.";
 
     /**
+     * This is used to have a static known UUID
+     */
+    UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
+
+    /**
      * Create the GeoCodeServiceImpl with the relevant repositories.
      *
      * This is done to ensure a repository with no data is created each time
@@ -436,6 +441,64 @@ class GeoCodeServiceImplIT {
         Assertions.assertEquals( locate, test.getLocation() );
         Assertions.assertEquals( "9ae5vc2n", test.getQrCode() );
         Assertions.assertEquals( geoCodeID, test.getId() );
+    }
+
+    /**
+     * Check for GeoCodes that are not contained in an Event custom query
+     */
+    @Test
+    @Order( 1 )
+    @DisplayName( "Custom query repository handling - findGeoCode" )
+    void findGeoCodeWithoutEventIDTest() {
+
+        var geoCodeID = UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
+        var locate = new GeoPoint( 10.2587 , 40.336981 );
+
+        /* Create the GeoCode to locate */
+        var geoCode = new GeoCode();
+        geoCode.setId( geoCodeID );
+        geoCode.setAvailable( true );
+        geoCode.setDescription( "The EASY GeoCode is stored at location Search" );
+        geoCode.setDifficulty( Difficulty.EASY );
+        List< String > hints = new ArrayList<>();
+        hints.add( "Hint one for: Search" );
+        hints.add( "Hint two for: Search" );
+        hints.add( "Hint three for: Search" );
+        geoCode.setHints( hints );
+        geoCode.setLocation( locate );
+        geoCode.setQrCode( "9ae5vc2n" );
+
+        repo.save( geoCode );
+
+        /* Create random GeoCodes */
+        for ( int x = 0; x < 4; x++ ) {
+
+            /* Create the request with the following mock data */
+            geoCode = new GeoCode();
+            geoCode.setId( UUID.randomUUID() );
+            geoCode.setAvailable( true );
+            geoCode.setDescription( "The EASY GeoCode is stored at location " + x );
+            geoCode.setDifficulty( Difficulty.EASY );
+            hints = new ArrayList<>();
+            hints.add( "Hint one for: " + x );
+            hints.add( "Hint two for: " + x );
+            hints.add( "Hint three for: " + x );
+            geoCode.setHints( hints );
+            geoCode.setLocation( new GeoPoint( 12.2587 + x, 42.336981 + x ) );
+            geoCode.setEventID( eventID );
+
+            repo.save( geoCode );
+        }
+
+        var test = repo.findGeoCode();
+
+        /* Go through each returned GeoCode */
+        for ( GeoCode temp: test ) {
+
+            /* Check */
+            Assertions.assertNull( temp.getEventID() );
+            Assertions.assertEquals( geoCodeID, temp.getId() );
+        }
     }
 
     /**
