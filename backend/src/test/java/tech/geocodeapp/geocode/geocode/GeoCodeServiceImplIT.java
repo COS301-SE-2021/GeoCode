@@ -331,6 +331,60 @@ class GeoCodeServiceImplIT {
     }
 
     /**
+     * Check how the constructor handles the repository the findGeoCodeWithQRCode query
+     */
+    @Test
+    @Order( 1 )
+    @Tag( "Tests" )
+    @DisplayName( "Custom query repository handling - findGeoCodeWithQRCode" )
+    void findGeoCodeWithQRCodeTest() {
+
+        var geoCodeID = UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
+
+
+        /* Create the GeoCode to locate */
+        var geoCode = new GeoCode();
+        geoCode.setId( geoCodeID );
+        geoCode.setAvailable( true );
+        geoCode.setDescription( "The EASY GeoCode is stored at location Search" );
+        geoCode.setDifficulty( Difficulty.EASY );
+        List< String > hints = new ArrayList<>();
+        hints.add( "Hint one for: Search" );
+        hints.add( "Hint two for: Search" );
+        hints.add( "Hint three for: Search" );
+        geoCode.setHints( hints );
+        geoCode.setLocation( new GeoPoint( 10.2587 , 40.336981 ) );
+        geoCode.setQrCode( "9ae5vc2n" );
+
+        repo.save( geoCode );
+
+        /* Create random GeoCodes */
+        for ( int x = 0; x < 4; x++ ) {
+
+            /* Create the request with the following mock data */
+            geoCode = new GeoCode();
+            geoCode.setId( UUID.randomUUID() );
+            geoCode.setAvailable( true );
+            geoCode.setDescription( "The EASY GeoCode is stored at location " + x );
+            geoCode.setDifficulty( Difficulty.EASY );
+            hints = new ArrayList<>();
+            hints.add( "Hint one for: " + x );
+            hints.add( "Hint two for: " + x );
+            hints.add( "Hint three for: " + x );
+            geoCode.setHints( hints );
+            geoCode.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+            repo.save( geoCode );
+        }
+
+        var test = repo.findGeoCodeWithQRCode( "9ae5vc2n" );
+
+        /* Check the correct GeoCode got returned */
+        Assertions.assertEquals( "9ae5vc2n", test.getQrCode() );
+        Assertions.assertEquals( geoCodeID, test.getId() );
+    }
+
+    /**
      * Check how the use case handles the request being null
      */
     @Test

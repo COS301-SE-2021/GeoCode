@@ -186,7 +186,7 @@ class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 1 )
-    @Tag( "Tests" )
+    //@Tag( "Tests" )
     @DisplayName( "Null repository handling - GeoCodeServiceImpl" )
     void RepositoryNullTest() {
 
@@ -201,7 +201,6 @@ class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 1 )
-    @Tag( "Tests" )
     @DisplayName( "Custom query repository for Hard difficulty - findGeoCodeWithDifficulty" )
     void findGeoCodeWithHardDifficultyTest() {
 
@@ -275,7 +274,6 @@ class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 1 )
-    @Tag( "Tests" )
     @DisplayName( "Custom query repository for Insane difficulty - findGeoCodeWithDifficulty" )
     void findGeoCodeWithInsaneDifficultyTest() {
 
@@ -349,7 +347,6 @@ class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 1 )
-    @Tag( "Tests" )
     @DisplayName( "Custom query repository where not found - findGeoCodeWithDifficulty" )
     void findGeoCodeWithEmptyDifficultyTest() {
 
@@ -418,7 +415,6 @@ class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 1 )
-    @Tag( "Tests" )
     @DisplayName( "Custom query repository handling - findGeoCodeWithQRCode" )
     void findGeoCodeWithQRCodeTest() {
 
@@ -472,7 +468,6 @@ class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 1 )
-    @Tag( "Tests" )
     @DisplayName( "Custom query repository handling - findGeoCodeAtLocation" )
     void findGeoCodeAtLocationTest() {
 
