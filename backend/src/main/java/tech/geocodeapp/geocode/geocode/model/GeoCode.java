@@ -78,6 +78,7 @@ public class GeoCode {
     /**
      * The longitude and latitude of the GeoCode in the real world
      */
+    @Embedded
     @JsonProperty( "location" )
     @NotNull( message = "GeoCode's location cannot be null." )
     private GeoPoint location;
@@ -106,16 +107,16 @@ public class GeoCode {
     /**
      * Overloaded Constructor
      *
-     * @param id           The unique identifier for the GeoCode
-     * @param difficulty   The description of how difficult it is to locate the GeoCode in the real world
-     * @param available    If the GeoCode is active in the system
-     * @param description  The description of where the GeoCode is and what it involves
-     * @param hints        The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
+     * @param id The unique identifier for the GeoCode
+     * @param difficulty The description of how difficult it is to locate the GeoCode in the real world
+     * @param available If the GeoCode is active in the system
+     * @param description The description of where the GeoCode is and what it involves
+     * @param hints The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
      * @param collectables The list of collectables stored inside the GeoCode
-     * @param qrCode       A short unique identifier to find the GeoCode in the system by the user from the real world
-     * @param location     The longitude and latitude of the GeoCode in the real world
-     * @param createdBy    The user's ID who created the GeoCode
-     * @param eventID      The ID of the Event that this GeoCode is part of. Is NULL if this GeoCode is not part of an Event
+     * @param qrCode A short unique identifier to find the GeoCode in the system by the user from the real world
+     * @param location The longitude and latitude of the GeoCode in the real world
+     * @param createdBy The user's ID who created the GeoCode
+     * @param eventID The ID of the Event that this GeoCode is part of. Is NULL if this GeoCode is not part of an Event
      */
     public GeoCode( UUID id, Difficulty difficulty, Boolean available, String description, Collection< String > hints,
                     Collection< UUID > collectables, String qrCode, GeoPoint location, UUID createdBy, UUID eventID ) {
