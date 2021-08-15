@@ -42,6 +42,7 @@ public class CollectableServiceImplIT {
         validTypeId = typeResponse.getCollectableType().getId();
 
         //System.out.println("validTypeId: "+validTypeId);
+
     }
 
 
