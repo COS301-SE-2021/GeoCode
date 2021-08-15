@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.appglobal;
+package tech.geocodeapp.geocode.general;
 
 import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
