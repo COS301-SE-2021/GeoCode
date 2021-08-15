@@ -96,7 +96,9 @@ export class EventsCreatePage implements AfterViewInit  {
             this.request.geoCodesToFind.push(response.geoCodeID);
             console.log(response);
             //create QR code image
-
+          if(response.success){
+            this.qrGenerator.generate(response.qrCode);
+          }
         });
     }
   }
