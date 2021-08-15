@@ -25,7 +25,6 @@ import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.leaderboard.service.*;
 import tech.geocodeapp.geocode.user.service.*;
 
-import javax.lang.model.element.Element;
 import java.time.LocalDate;
 import java.util.*;
 
