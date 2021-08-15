@@ -210,7 +210,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @return A responses informing of success or failure and containing the created Point.
      * @throws NullRequestParameterException an exception for when a null value is provided for a parameter of the request
      */
-    @Override
+    @Transactional
     public PointResponse createPoint(CreatePointRequest request) throws NullRequestParameterException{
         if(request == null){
             return new PointResponse(false, "The CreatePointRequest passed was NULL", null);
@@ -256,7 +256,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @return A response object informing of success or failure and the reason for failure in the event of it
      * @throws NullRequestParameterException an exception for when the request parameter is null
      */
-    @Override
+    @Transactional
     public DeletePointResponse deletePoint(DeletePointRequest request) throws NullRequestParameterException {
         if(request == null){
             return new DeletePointResponse(false, "The DeletePointRequest passed was NULL");
@@ -280,7 +280,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @return A response object informing of success or failure and the reason as well as the updated Point object
      * @throws NullRequestParameterException an exception for when the provided parameters are all null or pointId is null.
      */
-    @Override
+    @Transactional
     public PointResponse updatePoint(UpdatePointRequest request) throws NullRequestParameterException {
         if(request == null){
             return new PointResponse(false,"The UpdatePointRequest passed was NULL", null);
@@ -327,6 +327,11 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         //update amount if it was provided
         if(request.getAmount() != null){
+            //check if the amount is invalid
+            if(request.getAmount() <= 0){
+                return new PointResponse(false, "The amount for a Point must be positive", null);
+            }
+
             point.get().setAmount(request.getAmount());
         }
 
@@ -334,7 +339,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         return new PointResponse(true, "Updated point successfully", point.get());
     }
 
-    @Override
+    @Transactional
     public Response savePoint(Point point) throws NullRequestParameterException {
         if(point == null) {
             return new Response(false, "Point provided is null");
