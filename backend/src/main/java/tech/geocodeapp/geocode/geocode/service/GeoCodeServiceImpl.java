@@ -224,10 +224,16 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         var id = UUID.randomUUID();
 
+        /*
+         * Get the user who is creating the GeoCode
+         */
+//        var createdBy = userService.getCurrentUserID();
+        UUID createdBy = null;
+
         /* Create the GeoCode Object */
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
-                                      qr.toString(), request.getLocation(), UUID.randomUUID(), null );
+                                      qr.toString(), request.getLocation(), createdBy );
 
         /*
          * Save the newly created GeoCode
@@ -553,8 +559,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /*
-         * Get all of the stored GeoCodes
+         * Get all the stored GeoCodes
          * and find the GeoCode with the specified qrCode
+         *
+         * ToDo use custom query
          */
         List< GeoCode > temp = geoCodeRepo.findAll();
         var x = 0;
@@ -743,7 +751,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * if the user created the GeoCode do not allow the swap as it will be unfair
          * else continue as the user found the GeoCode fairly
          */
-        var userID = userService.getCurrentUser().getId();
+        var userID = userService.getCurrentUserID();
         if ( ( userID == null ) || ( geocode.getCreatedBy().equals( userID ) ) ) {
 
             return new SwapCollectablesResponse( false );
