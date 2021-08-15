@@ -19,7 +19,7 @@ import java.util.UUID;
 public interface GeoCodeRepository extends JpaRepository< GeoCode, UUID> {
 
     /**
-     * Finds all of the GeoCode's with a certain level of difficulty
+     * Finds all the GeoCode's with a certain level of difficulty
      *
      * @param difficulty the level of difficulty assigned to a GeoCode
      *
