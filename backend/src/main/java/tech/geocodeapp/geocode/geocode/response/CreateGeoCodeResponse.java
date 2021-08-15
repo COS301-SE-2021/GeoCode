@@ -30,7 +30,7 @@ public class CreateGeoCodeResponse {
     /**
      * The QRCode of the created GeoCode
      */
-    @JsonProperty( "QRCode" )
+    @JsonProperty( "qrCode" )
     private String qrCode;
 
     /**
