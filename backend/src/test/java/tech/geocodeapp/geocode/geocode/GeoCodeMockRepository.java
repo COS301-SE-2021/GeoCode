@@ -166,7 +166,27 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
     }
 
     /**
-     * Finds all of the GeoCode's with a certain level of difficulty
+     * Finds all the GeoCode's that are not in an event
+     *
+     * @return all the GeoCode's without an eventID
+     */
+    @Override
+    public Collection< GeoCode > findGeoCode() {
+
+        Collection< GeoCode > found = new ArrayList<>();
+        map.forEach( ( key, value ) -> {
+
+            if ( value.getEventID() == null) {
+
+                found.add( value );
+            }
+        } );
+
+        return found;
+    }
+
+    /**
+     * Finds all the GeoCode's with a certain level of difficulty
      *
      * @param difficulty the level of difficulty assigned to a GeoCode
      *
