@@ -239,6 +239,12 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+
+        //check if the amount is invalid
+        if(request.getAmount() <= 0){
+            return new PointResponse(false, "The amount for a Point must be positive", null);
+        }
+
         Point point= new Point(request.getAmount(), foundUser, leaderboard.get());
         pointRepo.save(point);
         return new PointResponse(true, "The Point was successfully created.", point);
