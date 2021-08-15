@@ -33,6 +33,9 @@ export class EventsCreatePage implements AfterViewInit  {
   minDate;
   minEndDate;
   timeLimit=0;
+  timeday =0;
+  timehours =0;
+  timeMin =0;
   // @ts-ignore
   request: CreateEventRequest = {
     beginDate: '',
@@ -95,7 +98,8 @@ export class EventsCreatePage implements AfterViewInit  {
             console.log(response);
             //create QR code image
           if(response.success){
-            this.qrGenerator.generate(response.qrCode);
+            console.log('success');
+            //this.qrGenerator.generate(response.qrCode);
           }
         });
     }
@@ -161,9 +165,9 @@ export class EventsCreatePage implements AfterViewInit  {
       this.request.properties.timeLimit=this.timeLimit +'';
     }
     console.log(this.request);
-    this.eventApi.createEvent(this.request).subscribe((response: CreateEventResponse) =>{
-      console.log(response);
-    });
+    // this.eventApi.createEvent(this.request).subscribe((response: CreateEventResponse) =>{
+    //   console.log(response);
+    // });
 
   }
 
@@ -173,6 +177,17 @@ export class EventsCreatePage implements AfterViewInit  {
 
   setDescription($event){
     this.request.description=$event.detail.value;
+  }
+
+  setTime($event){
+    console.log($event.detail.value);
+    const time = new Date($event.detail.value);
+    const day = time.getDate();
+    const hour = time.getHours();
+    const min = time.getMinutes();
+
+    this.timeLimit = day*24*60+hour*60+min;
+    console.log(this.timeLimit);
   }
 
 }
