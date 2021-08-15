@@ -12,7 +12,7 @@
 import { GeoPoint } from './geoPoint';
 import { Leaderboard } from './leaderboard';
 
-export interface Event { 
+export interface Event {
     id: string;
     name: string;
     description: string;
@@ -20,7 +20,7 @@ export interface Event {
     geocodeIDs: Array<string>;
     beginDate: string;
     endDate: string;
-    leaderboards: Array<Leaderboard>;
+    leaderboard: Array<Leaderboard>;
     available: boolean;
     properties: { [key: string]: string; };
 }
