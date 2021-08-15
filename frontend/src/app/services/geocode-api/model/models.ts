@@ -105,6 +105,8 @@ export * from './swapCollectablesRequest';
 export * from './swapCollectablesResponse';
 export * from './updateAvailabilityRequest';
 export * from './updateAvailabilityResponse';
+export * from './updateCompletionRequest';
+export * from './updateCompletionResponse';
 export * from './updateLocationRequest';
 export * from './updateLocationResponse';
 export * from './updatePointRequest';
