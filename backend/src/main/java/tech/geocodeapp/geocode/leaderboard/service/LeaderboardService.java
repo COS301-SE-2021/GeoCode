@@ -21,20 +21,23 @@ public interface LeaderboardService {
     //U5.3 GetPointForUser
     PointResponse getPointForUser(GetPointForUserRequest request) throws NullRequestParameterException;
 
-    //helper functions
+    //U5.4 getLeaderboardByID
     GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullRequestParameterException;
 
+    //helper functions
     GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullRequestParameterException;
-
-
 
     GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullRequestParameterException;
 
+    //U5.5 createPoint
     PointResponse createPoint(CreatePointRequest request) throws NullRequestParameterException;
 
+    //U5.6 deletePoint
     DeletePointResponse deletePoint(DeletePointRequest request) throws NullRequestParameterException;
 
+    //U5.7 updatePoint
     PointResponse updatePoint(UpdatePointRequest request) throws NullRequestParameterException;
 
+    //helper functions
     Response savePoint(Point point) throws NullRequestParameterException;
 }
