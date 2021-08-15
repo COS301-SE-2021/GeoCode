@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.appglobal.security;
+package tech.geocodeapp.geocode.general.security;
 
 import org.keycloak.KeycloakSecurityContext;
 import org.springframework.stereotype.Component;
@@ -36,12 +36,8 @@ public class NewUserInterceptor extends GenericFilterBean {
             String username = ctx.getToken().getPreferredUsername();
 
             try{
-                GetUserByIdResponse getUserByIdResponse = userService.getUserById(new GetUserByIdRequest(uuid));
-
-                if (getUserByIdResponse.getUser() == null) {
-                    RegisterNewUserRequest registerNewUserRequest = new RegisterNewUserRequest(uuid, username);
-                    userService.registerNewUser(registerNewUserRequest);
-                }
+                RegisterNewUserRequest registerNewUserRequest = new RegisterNewUserRequest(uuid, username);
+                userService.registerNewUser(registerNewUserRequest);
             }catch(NullRequestParameterException e){
                 e.printStackTrace();
                 return;

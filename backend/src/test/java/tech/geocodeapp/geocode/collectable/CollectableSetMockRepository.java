@@ -77,7 +77,7 @@ public class CollectableSetMockRepository implements CollectableSetRepository {
 
     @Override
     public boolean existsById(UUID uuid) {
-        return false;
+        return map.containsKey(uuid);
     }
 
     @Override

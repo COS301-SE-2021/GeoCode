@@ -53,7 +53,7 @@ public class UserServiceImplTest {
     private final UUID firstGeoCodeID = UUID.fromString("0998cf20-8256-4529-b144-d3c8aa4f0fb1");
     private final UUID secondGeoCodeID = UUID.fromString("8c3e3a65-118b-47ca-8cca-097134cd00d9");
     private final UUID thirdGeoCodeID = UUID.fromString("7b32fce8-44e4-422b-a80d-521d490e9ee3");
-    private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
+    private final UUID trackableUUID = new UUID(0, 0);
 
     private final UUID geoCodeWithCollectablesID = UUID.fromString("fd8b4bed-89c9-4f76-872d-9124ca5061f6");
     private final UUID fishCollectableID = UUID.fromString("cfb23fdb-7b9e-4f67-ad67-b2bab0e7541a");

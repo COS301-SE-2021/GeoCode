@@ -79,7 +79,7 @@ public class UserMockRepository implements UserRepository {
 
     @Override
     public boolean existsById(UUID uuid) {
-        return false;
+        return map.containsKey(uuid);
     }
 
     @Override
