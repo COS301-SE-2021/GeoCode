@@ -5,6 +5,7 @@ import tech.geocodeapp.geocode.collectable.context.CollectableTypeContext;
 import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.collectable.factory.AbstractCollectableTypeFactory;
 import tech.geocodeapp.geocode.collectable.strategy.BasicCollectableTypeStrategy;
+import tech.geocodeapp.geocode.mission.model.MissionType;
 
 import java.util.HashMap;
 
@@ -37,6 +38,11 @@ public class CollectableTypeManager {
         //check if no additional properties exist
         if(type.getProperties()==null || type.getProperties().isEmpty()) {
             return builtType;
+        }
+
+        //check if the type has a mission associated with it
+        if(type.getProperties().containsKey("missionType")) {
+            builtType.setMissionType(MissionType.fromValue(type.getProperties().get("missionType")));
         }
 
         //check if expiring property exists and decorate if it does
