@@ -725,6 +725,28 @@ class EventServiceImplTest {
                 .hasMessageContaining( reqParamError );
     }
 
+    /**
+     * Using valid data does the createLeaderBoard use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - createLeaderBoard" )
+    void createLeaderBoardTest() {
+
+        try {
+
+            CreateLeaderboardRequest request = new CreateLeaderboardRequest();
+            request.setEventID( null );
+
+            var event = eventService.createLeaderBoard( request  );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
     @Test
     @Order( 8 )
     @DisplayName( "check Difficulty" )
