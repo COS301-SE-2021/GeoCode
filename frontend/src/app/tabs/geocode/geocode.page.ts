@@ -10,6 +10,7 @@ import {
   GetGeoCodesByDifficultyRequest, GeoCode
 } from '../../services/geocode-api';
 import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-geocode',
@@ -34,7 +35,8 @@ export class GeocodePage implements AfterViewInit  {
   constructor(
     private navCtrl: NavController,
     private geocodeApi: GeoCodeService,
-    private mapsLoader: GoogleMapsLoader
+    private mapsLoader: GoogleMapsLoader,
+    private keycloak: KeycloakService
   ) {
     this.geocodes = [];
     this.selected= this.geocodes;
@@ -206,6 +208,10 @@ export class GeocodePage implements AfterViewInit  {
 
   openInMaps(geocode: GeoCode) {
     window.open('https://www.google.com/maps/search/?api=1&query='+geocode.location.latitude+'%2C'+geocode.location.longitude);
+  }
+
+  isAdmin() {
+    return this.keycloak.isUserInRole('Admin');
   }
 
 }
