@@ -20,7 +20,7 @@ export interface Event {
     geocodeIDs: Array<string>;
     beginDate: string;
     endDate: string;
-    leaderboard: Array<Leaderboard>;
+    leaderboards: Array<Leaderboard>;
     available: boolean;
     properties: { [key: string]: string; };
 }
