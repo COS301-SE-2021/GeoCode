@@ -40,6 +40,7 @@ export class EventLeaderboardPage implements OnInit {
         starting:this.leaderboardIndex
       };
       this.leaderboardService.getEventLeaderboard(req).subscribe((response: GetEventLeaderboardResponse) =>{
+        console.log(response);
         for (const point of response.leaderboard) {
           this.users.push(point);
         }
