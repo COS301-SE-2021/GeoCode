@@ -173,8 +173,15 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
                 if ( typeList != null ) {
 
-                    /* Get and set the collectable request with the type */
-                    collectableRequest.setCollectableTypeId( typeList.getId() );
+                    if ( typeList.getMissionType() == null ) {
+
+                        /* Get and set the collectable request with the type */
+                        collectableRequest.setCollectableTypeId( typeList.getId() );
+                    } else {
+
+                        /* Create the request with a mission type */
+                        collectableRequest = new CreateCollectableRequest( typeList.getId(), true );
+                    }
                 } else {
 
                     /* Exception thrown when trying to get Collectable */
