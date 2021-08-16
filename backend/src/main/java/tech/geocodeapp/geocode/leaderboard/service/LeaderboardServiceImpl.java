@@ -100,7 +100,8 @@ public class LeaderboardServiceImpl implements LeaderboardService {
                 }else{
                      List<Point> points = pointRepo.findPointsByLeaderboardBetween(leaderboard.get().getId(), request.getStarting()-1, request.getCount());
                      for(int i = 0; i<points.size(); i++) {
-                         EventLeaderboardDetails details = new EventLeaderboardDetails(points.get(i).getUser().getUsername(), points.get(i).getAmount(), request.getStarting()+i);
+                         User user = points.get(i).getUser();
+                         EventLeaderboardDetails details = new EventLeaderboardDetails(user.getId(), user.getUsername(), points.get(i).getAmount(), request.getStarting()+i);
                          leaderboardDetails.add(details);
                     }
                      success = true;
