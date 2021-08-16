@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.collectable.decorator;
 
 import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.mission.model.MissionType;
 
 import java.util.GregorianCalendar;
 import java.util.UUID;
@@ -56,4 +57,13 @@ public interface CollectableTypeComponent {
      */
     void setArea(String area);
 
+    /**
+     * the getter for the missionType variable
+     */
+    MissionType getMissionType();
+
+    /**
+     * Setter for the missionType
+     */
+    void setMissionType(MissionType missionType);
 }
