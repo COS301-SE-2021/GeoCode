@@ -347,7 +347,27 @@ class EventServiceImplTest {
                 .hasMessageContaining( reqEmptyError );
     }
 
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - getCurrentEventStatus" )
+    void getCurrentEventStatusInvalidRequestTest() {
 
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetCurrentEventStatusRequest request = new GetCurrentEventStatusRequest();
+        request.setEventID( null );
+        request.setUserID( UUID.randomUUID() );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.getCurrentEventStatus( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
 
     @Test
     @Order( 8 )
