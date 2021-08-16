@@ -588,6 +588,28 @@ class EventServiceImplTest {
                 .hasMessageContaining( reqEmptyError );
     }
 
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - changeAvailability" )
+    void changeAvailabilityInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        ChangeAvailabilityRequest request = new ChangeAvailabilityRequest();
+        request.setAvailability( null );
+        request.setEventID( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.changeAvailability( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
     @Test
     @Order( 8 )
     @DisplayName( "check Difficulty" )
