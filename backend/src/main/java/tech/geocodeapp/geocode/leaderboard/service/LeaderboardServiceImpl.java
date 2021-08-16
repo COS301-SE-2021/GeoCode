@@ -25,6 +25,7 @@ import tech.geocodeapp.geocode.user.service.UserService;
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * This class implements the LeaderboardService interface
@@ -162,21 +163,22 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
     @Transactional
-    public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullRequestParameterException{
+    public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetPointsByLeaderboardRequest request) throws NullRequestParameterException{
         if(request == null){
-            return new GetPointsByLeaderboardResponse(false, "The GetMyRankRequest passed was NULL", null);
+            return new GetPointsByLeaderboardResponse(false, "The GetPointsByLeaderboardRequest passed was NULL", null);
         }
 
         checkNullRequestParameters.checkRequestParameters(request);
 
         /* check if leaderboard is invalid */
-        Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboard().getId());
+        UUID leaderboardID = request.getLeaderboard().getId();
+        Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(leaderboardID);
 
         if(optionalLeaderboard.isEmpty()){
             return new GetPointsByLeaderboardResponse(false, "Invalid leaderboard ID", null);
         }
 
-        List<Point> points = pointRepo.findAllByLeaderboardID(request.getLeaderboard().getId());
+        List<Point> points = pointRepo.findAllByLeaderboardID(leaderboardID);
         return new GetPointsByLeaderboardResponse(true, "Leaderboard points returned", points);
     }
 

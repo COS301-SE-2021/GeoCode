@@ -25,7 +25,7 @@ public interface LeaderboardService {
     GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullRequestParameterException;
 
     //helper functions
-    GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullRequestParameterException;
+    GetPointsByLeaderboardResponse getPointsByLeaderboard(GetPointsByLeaderboardRequest request) throws NullRequestParameterException;
 
     GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullRequestParameterException;
 
