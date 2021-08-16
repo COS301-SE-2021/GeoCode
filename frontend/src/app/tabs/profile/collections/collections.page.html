@@ -8,7 +8,8 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let set of collections">
+  <ng-template *ngFor="let set of collections" [ngIf]="foundSet(set.types)">
+  <ion-card  class="card">
     <ion-card-content>
       <div class="header">
         <div class="details">
@@ -22,16 +23,30 @@
       </div>
       <div class="horizontalscroll">
         <div class="items">
-          <div class="collectable" *ngFor="let type of set.types">
-            <div class="image">
-              <img src="https://via.placeholder.com/100">
+          <ng-template *ngFor="let type of set.types" [ngIf]="foundID(type.id)">
+            <div class="collectable">
+              <div class="image">
+                <img src="https://via.placeholder.com/100">
+              </div>
+              <div class="found">
+                {{type.name}}
+              </div>
             </div>
-            <div class="name">
-              {{type.name}}
+          </ng-template>
+          <ng-template *ngFor="let type of set.types" [ngIf]="!foundID(type.id)" class="notfound">
+            <div class="collectable">
+              <div class="image">
+                <img src="https://via.placeholder.com/100">
+              </div>
+              <div class="name">
+                {{type.name}}
+              </div>
             </div>
-          </div>
+          </ng-template>
         </div>
       </div>
     </ion-card-content>
   </ion-card>
+  </ng-template>
+
 </ion-content>
