@@ -14,6 +14,9 @@ import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.mission.request.CreateMissionRequest;
+import tech.geocodeapp.geocode.mission.response.CreateMissionResponse;
+import tech.geocodeapp.geocode.mission.service.MissionService;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -29,14 +32,17 @@ public class CollectableServiceImpl implements CollectableService {
 
     private final CollectableTypeRepository collectableTypeRepo;
 
+    private final MissionService missionService;
+
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
     private final String invalidCollectableIdMessage = "Invalid Collectable ID";
     private String invalidCollectableTypeIdMessage = "Invalid CollectableType ID";
 
-    public CollectableServiceImpl(CollectableRepository collectableRepo, CollectableSetRepository collectableSetRepo, CollectableTypeRepository collectableTypeRepo) {
+    public CollectableServiceImpl(CollectableRepository collectableRepo, CollectableSetRepository collectableSetRepo, CollectableTypeRepository collectableTypeRepo, MissionService missionService) {
         this.collectableRepo = collectableRepo;
         this.collectableSetRepo = collectableSetRepo;
         this.collectableTypeRepo = collectableTypeRepo;
+        this.missionService = missionService;
 
         initialiseUserTrackables();
     }
@@ -86,13 +92,24 @@ public class CollectableServiceImpl implements CollectableService {
         if(collectableTypeOptional.isPresent()){
             Collectable collectable = new Collectable(collectableTypeOptional.get());
             Collectable savedCollectable = collectableRepo.save(collectable);
-
+            if(request.isCreateMission()) {
+                CreateMissionRequest createMissionRequest = new CreateMissionRequest(savedCollectable.getId());
+                try {
+                   CreateMissionResponse missionResponse = missionService.createMission(createMissionRequest);
+                   if(missionResponse.isSuccess()) {
+                       savedCollectable.setMissionID(missionResponse.getMission().getId());
+                       collectableRepo.save(savedCollectable);
+                   }
+                } catch (NullRequestParameterException e) {
+                    e.printStackTrace();
+                }
+            }
             /*
              * Create CollectableResponse from collectable
              * Use CollectableTypeManager to convert the CollectableType to a CollectableTypeComponent
              */
             CollectableTypeManager manager = new CollectableTypeManager();
-            CollectableResponse collectableResponse = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()), collectable.getPastLocations());
+            CollectableResponse collectableResponse = new CollectableResponse(savedCollectable.getId(), manager.buildCollectableType(savedCollectable.getType()), savedCollectable.getPastLocations(), savedCollectable.getMissionID());
 
             return new CreateCollectableResponse(true, "The Collectable was successfully created", collectableResponse);
         }else{
@@ -113,7 +130,7 @@ public class CollectableServiceImpl implements CollectableService {
         //get all Collectables and build collectableResponses from them
         List<Collectable> collectables = collectableRepo.findAll();
         for (Collectable collectable : collectables) {
-            CollectableResponse temp = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()), collectable.getPastLocations());
+            CollectableResponse temp = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()), collectable.getPastLocations(), collectable.getMissionID());
             collectableResponses.add(temp);
         }
 

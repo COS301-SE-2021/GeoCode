@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.mission.service;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
@@ -36,7 +37,7 @@ public class MissionServiceImpl implements MissionService{
     private final String invalidMissionIdMessage = "Invalid Mission Id";
     private final String collectableHasMissionMessage = "Collectable already has a Mission";
 
-    public MissionServiceImpl(MissionRepository missionRepo, CollectableService collectableService) {
+    public MissionServiceImpl(MissionRepository missionRepo, @Lazy CollectableService collectableService) {
         this.missionRepo = missionRepo;
         this.collectableService = collectableService;
     }
