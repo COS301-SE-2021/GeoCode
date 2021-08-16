@@ -505,6 +505,20 @@ class EventServiceImplTest {
     }
 
     /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - eventsNearMe" )
+    void eventsNearMeNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.eventsNearMe( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    /**
      * Check how the use case handles an invalid request
      */
     @Test
