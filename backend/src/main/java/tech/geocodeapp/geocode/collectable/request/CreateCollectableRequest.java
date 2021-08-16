@@ -37,7 +37,13 @@ public class CreateCollectableRequest   {
     this.createMission = createMission;
   }
 
+  public boolean isCreateMission() {
+    return createMission;
+  }
 
+  public void setCreateMission(boolean createMission) {
+    this.createMission = createMission;
+  }
 
   /**
    * Get collectableTypeId
