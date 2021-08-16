@@ -2539,7 +2539,7 @@ components:
         - name
         - rarity
         - id
-        - set
+        - collectableSet
       properties:
         name:
           type: string
@@ -2547,16 +2547,20 @@ components:
           $ref: "#/components/schemas/Rarity"
         id:
           type: string
+        image:
+          type: string
           format: uuid
-        set:
+        collectableSet:
           $ref: "#/components/schemas/CollectableSet"
-        expiraryDate:
+        expiryDate:
           type: string
           format: date-time
         area:
           type: string
         trackable:
           type: boolean
+        missionType:
+          $ref: "#/components/schemas/MissionType"
       xml:
         name: "CollectableTypeComponent"
 
