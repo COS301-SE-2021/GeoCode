@@ -417,7 +417,7 @@ public class UserServiceImpl implements UserService {
 
         User user = optionalUser.get();
 
-        if(!user.getFoundCollectableTypes().contains(collectableType)){
+        if(!user.getFoundCollectableTypes().contains(collectableType)){//TODO: no need to check this
             user.addFoundCollectableTypesItem(collectableType);
             userRepo.save(user);
         }
