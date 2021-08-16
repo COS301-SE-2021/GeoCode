@@ -39,15 +39,15 @@ export class EventLeaderboardPage implements OnInit {
     console.log(state);
     if (state) {
       this.event = state.event;
-      this.leaderBoardName = this.event.leaderboard[0].name;
+      this.leaderBoardName = this.event.leaderboards[0].name;
     }
     this.loadLeaderboard();
   }
 
   async loadLeaderboard() {
-    if (this.event.leaderboard.length > 0) {
+    if (this.event.leaderboards.length > 0) {
       const req: GetEventLeaderboardRequest ={
-        leaderboardID:this.event.leaderboard[0].id,
+        leaderboardID:this.event.leaderboards[0].id,
         count:this.numToFetch,
         starting:this.leaderboardIndex
       };
