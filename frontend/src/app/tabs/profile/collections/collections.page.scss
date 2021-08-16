@@ -6,6 +6,17 @@
   height: auto;
 }
 
+.image {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image img {
+  max-height: 100px;
+}
+
 .items {
   width: auto;
   white-space: nowrap;

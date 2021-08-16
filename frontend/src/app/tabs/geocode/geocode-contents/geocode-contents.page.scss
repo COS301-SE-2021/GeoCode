@@ -60,3 +60,14 @@ ion-toolbar{
   text-align: center;
   margin: 5px;
 }
+
+.image {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image img {
+  max-height: 100px;
+}
