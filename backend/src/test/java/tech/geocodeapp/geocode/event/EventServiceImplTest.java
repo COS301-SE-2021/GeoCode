@@ -647,6 +647,27 @@ class EventServiceImplTest {
                 .hasMessageContaining( reqEmptyError );
     }
 
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - getEventsByLocation" )
+    void getEventsByLocationInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetEventsByLocationRequest request = new GetEventsByLocationRequest();
+        request.setLocation( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.getEventsByLocation( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
     @Test
     @Order( 8 )
     @DisplayName( "check Difficulty" )
