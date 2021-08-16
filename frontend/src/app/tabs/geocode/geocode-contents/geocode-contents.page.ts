@@ -108,7 +108,7 @@ export class GeocodeContentsPage implements AfterViewInit {
 
   found(code){
     const requestQR: GetCollectablesInGeoCodeByQRCodeRequest={
-      qrCode: code.value,
+      qrCode: code,
       geoCodeID:this.geocode.id
     };
     console.log(requestQR);
@@ -170,6 +170,8 @@ export class GeocodeContentsPage implements AfterViewInit {
 
     async scan() {
       const data = await this.qrScanner.scan();
-      console.log(data);
+      if (data) {
+        this.found(data);
+      }
     }
 }

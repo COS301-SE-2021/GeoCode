@@ -23,10 +23,6 @@ const routes: Routes = [
   {
     path: 'geocodes',
     loadChildren: () => import('./geocodes/geocodes.module').then( m => m.GeocodesPageModule)
-  },
-  {
-    path: 'settings',
-    loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
   }
 
 ];
