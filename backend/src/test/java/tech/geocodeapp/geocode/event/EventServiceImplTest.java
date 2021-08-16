@@ -369,7 +369,6 @@ class EventServiceImplTest {
                 .hasMessageContaining( reqParamError );
     }
 
-
     /**
      * Using valid data does the getCurrentEventStatus use case test
      * complete successfully
@@ -405,6 +404,47 @@ class EventServiceImplTest {
         assertThatThrownBy( () -> eventService.nextStage( null, null ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqEmptyError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - nextStage" )
+    void nextStageInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+//        GetCurrentEventStatusRequest request = new GetCurrentEventStatusRequest();
+//        request.setEventID( null );
+//        request.setUserID( UUID.randomUUID() );
+//
+//        /* Null parameter request check */
+//        assertThatThrownBy( () -> eventService.nextStage( request ) )
+//                .isInstanceOf( InvalidRequestException.class )
+//                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Using valid data does the nextStage use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - nextStage" )
+    void nextStageTest() {
+
+        try {
+
+            var event = eventService.nextStage( null, null  );
+        } catch ( InvalidRequestException | NotFoundException | MismatchedParametersException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
     }
 
     @Test
