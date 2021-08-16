@@ -333,6 +333,22 @@ class EventServiceImplTest {
         }
     }
 
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - getCurrentEventStatus" )
+    void getCurrentEventStatusNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.getCurrentEventStatus( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+
+
     @Test
     @Order( 8 )
     @DisplayName( "check Difficulty" )
