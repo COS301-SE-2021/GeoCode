@@ -75,10 +75,8 @@ request: CreateGeoCodeRequest= {
     //Call geocode api to send request to controller
     this.geocodeAPI.createGeoCode(this.request)
       .subscribe((response: CreateGeoCodeResponse) =>{
-        this.hints=[];
-        this.locations=[];
-        this.difficulty=[];
-        this.qr.generate(response.qrCode);
+        console.log(response);
+     //   this.qr.generate(response.qrCode);
         this.navCtrl.navigateBack('/explore').then().catch();
       });
   }

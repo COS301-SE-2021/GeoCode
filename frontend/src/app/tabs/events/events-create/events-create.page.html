@@ -36,12 +36,12 @@
       <ion-select value="event" (ionChange)="eventType($event)" >
         <ion-select-option value="event">Event</ion-select-option>
         <ion-select-option value="timetrial">Time Trial</ion-select-option>
-        <ion-select-option value="challenge">Coding Challenge</ion-select-option>
+<!--        <ion-select-option value="challenge">Coding Challenge</ion-select-option>-->
       </ion-select>
     </ion-item>
     <ion-item [hidden]="timeHidden">
       <ion-label>Time Limit(days:hours:minutes)</ion-label>
-      <ion-datetime displayFormat="D:HH:mm"></ion-datetime>
+      <ion-datetime displayFormat="D:HH:mm" (ionChange)="setTime($event)" ></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Order GeoCodes By</ion-label>
@@ -56,12 +56,10 @@
       <ion-button color="button"  (click)="createGeoCode()" >Create +</ion-button>
     </ion-item>
   </ion-list>
-  <ion-item>
-    <ion-label>Created GeoCodes</ion-label>
-    <ion-button color="button"  (click)="showGeoCodes()">Show</ion-button>
-  </ion-item>
+<!--  <ion-item>-->
+<!--    <ion-label>Created GeoCodes</ion-label>-->
+<!--    <ion-button color="button"  (click)="showGeoCodes()">Show</ion-button>-->
+<!--  </ion-item>-->
   <ion-button color="button"  (click)="createEvent()">Create Event</ion-button>
   <div #mapElement [style.height]="height" class="map"></div>
-
-
 </ion-content>
