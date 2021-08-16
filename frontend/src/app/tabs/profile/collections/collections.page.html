@@ -26,7 +26,7 @@
           <ng-template *ngFor="let type of set.types" [ngIf]="foundID(type.id)">
             <div class="collectable">
               <div class="image">
-                <img src="https://via.placeholder.com/100">
+                <img src="{{type.image}}">
               </div>
               <div class="found">
                 {{type.name}}

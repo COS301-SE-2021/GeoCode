@@ -76,7 +76,7 @@ request: CreateGeoCodeRequest= {
     this.geocodeAPI.createGeoCode(this.request)
       .subscribe((response: CreateGeoCodeResponse) =>{
         console.log(response);
-     //   this.qr.generate(response.qrCode);
+        this.qr.generate(response.qrCode);
         this.navCtrl.navigateBack('/explore').then().catch();
       });
   }
