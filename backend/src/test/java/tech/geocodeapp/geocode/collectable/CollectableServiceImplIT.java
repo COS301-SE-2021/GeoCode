@@ -175,7 +175,7 @@ public class CollectableServiceImplIT {
 
         //create the request
         GetCollectableTypesBySetRequest typesBySetRequest = new GetCollectableTypesBySetRequest();
-        typesBySetRequest.setSetId(UUID.fromString("f5d7b724-14c1-4344-b190-77071e019b4c"));
+        typesBySetRequest.setSetId(validSetId);
 
         GetCollectableTypesResponse response = collectableService.getCollectableTypesBySet(typesBySetRequest);
         Assertions.assertTrue(!response.getCollectableTypes().isEmpty());
