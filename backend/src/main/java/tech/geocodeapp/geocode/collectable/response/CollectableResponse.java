@@ -33,6 +33,14 @@ public class CollectableResponse {
         this.missionId = missionId;
     }
 
+    public UUID getMissionId() {
+        return missionId;
+    }
+
+    public void setMissionId(UUID missionId) {
+        this.missionId = missionId;
+    }
+
     public UUID getId() {
         return id;
     }
