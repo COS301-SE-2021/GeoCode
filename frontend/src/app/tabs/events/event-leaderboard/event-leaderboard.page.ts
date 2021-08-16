@@ -14,20 +14,8 @@ import {
   styleUrls: ['./event-leaderboard.page.scss'],
 })
 export class EventLeaderboardPage implements OnInit {
-
-
   event: Event = null;
   users: EventLeaderboardDetails[] = [];
-  // users: EventLeaderboardDetails[] = [
-  //   {username: 'danielle', points: 123, rank: 1},
-  //   {username: 'samuel', points: 99, rank: 2},
-  //   {username: 'joshua', points: 87, rank: 3},
-  //   {username: 'mandisa', points: 79, rank: 4},
-  //   {username: 'ben', points: 77, rank: 5},
-  //   {username: 'samkele', points: 65, rank: 6},
-  //   {username: 'willem', points: 62, rank: 7},
-  //   {username: 'matthew', points: 59, rank: 8}
-  // ];
   leaderboardIndex = 1;
   numToFetch = 20;
   leaderBoardName='';
@@ -60,9 +48,8 @@ export class EventLeaderboardPage implements OnInit {
       },error => {
         console.error(error);
       });
-
-
     }
+    return false;
   }
 
   ngOnInit() {
@@ -81,7 +68,8 @@ export class EventLeaderboardPage implements OnInit {
   }
 
   async loadData(event) {
-    const moreLoaded = await this.loadFakeLeaderboard();
+    this.leaderboardIndex=this.leaderboardIndex+this.numToFetch;
+    const moreLoaded = await this.loadLeaderboard();
     if (!moreLoaded) {
       event.target.disabled = true;
     }
