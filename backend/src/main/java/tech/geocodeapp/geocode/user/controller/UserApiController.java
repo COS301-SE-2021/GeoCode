@@ -41,6 +41,21 @@ public class UserApiController implements UserApi {
         this.request = request;
     }
 
+    public ResponseEntity<GetUserByIdResponse> getUserById(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user", required=true, schema=@Schema()) @Valid @RequestBody GetUserByIdRequest body) {
+        try{
+            GetUserByIdResponse response = userService.getUserById(body);
+
+            if(response.isSuccess()){
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (NullRequestParameterException e){
+            GetUserByIdResponse response = new GetUserByIdResponse(false, e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
     public ResponseEntity<GetCurrentCollectableResponse> getCurrentCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's current Collectable", required=true, schema=@Schema()) @Valid @RequestBody GetCurrentCollectableRequest body) {
         try{
             GetCurrentCollectableResponse response = userService.getCurrentCollectable(body);
