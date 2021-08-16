@@ -18,11 +18,26 @@ import javax.validation.constraints.*;
 public class CreateCollectableRequest   {
   @JsonProperty("collectableTypeId")
   private UUID collectableTypeId = null;
+  @JsonProperty("createMission")
+  private boolean createMission = false;
+
+  public CreateCollectableRequest() {
+    createMission = false;
+    collectableTypeId = null;
+  }
 
   public CreateCollectableRequest collectableTypeId(UUID collectableTypeId) {
     this.collectableTypeId = collectableTypeId;
+    createMission = false;
     return this;
   }
+
+  public CreateCollectableRequest(UUID collectableTypeId, boolean createMission) {
+    this.collectableTypeId = collectableTypeId;
+    this.createMission = createMission;
+  }
+
+
 
   /**
    * Get collectableTypeId
