@@ -171,10 +171,19 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 /* Get first stored Collectable type */
                 typeList = calculateCollectableType( collectableTypes.getCollectableTypes() );
 
+                /* Check if the Collectable Type was found */
                 if ( typeList != null ) {
 
-                    /* Get and set the collectable request with the type */
-                    collectableRequest.setCollectableTypeId( typeList.getId() );
+                    /* Check if the CollectableType is a mission or not */
+                    if ( typeList.getMissionType() == null ) {
+
+                        /* Get and set the collectable request with the type */
+                        collectableRequest.setCollectableTypeId( typeList.getId() );
+                    } else {
+
+                        /* Create the request with a mission type */
+                        collectableRequest = new CreateCollectableRequest( typeList.getId(), true );
+                    }
                 } else {
 
                     /* Exception thrown when trying to get Collectable */
@@ -224,10 +233,16 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         var id = UUID.randomUUID();
 
+        /*
+         * Get the user who is creating the GeoCode
+         */
+//        var createdBy = userService.getCurrentUserID();
+        UUID createdBy = null;
+
         /* Create the GeoCode Object */
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
-                                      qr.toString(), request.getLocation(), UUID.randomUUID(), null );
+                                      qr.toString(), request.getLocation(), createdBy );
 
         /*
          * Save the newly created GeoCode
@@ -324,9 +339,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     public GetGeoCodesResponse getAllGeoCodes() {
 
         /* Retrieve all the stored GeoCodes from the repository */
-        List< GeoCode > temp = geoCodeRepo.findAll();
-
-        //ToDo make a custom query to only select fields wanted
+        List< GeoCode > temp = new ArrayList<>( geoCodeRepo.findGeoCode() );
 
         /* Go through each GeoCode found and hide the sensitive data */
         for ( GeoCode geoCode : temp ) {
@@ -403,26 +416,26 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Sort through the stored GeoCodes and
          * find all the GeoCodes with the specified difficulty
          */
-        List< GeoCode > hold = new ArrayList<>();
-        for ( GeoCode code : geoCodeRepo.findAll() ) {
-
-            /* Check if the current GeoCode has the Difficulty wanted */
-            if ( code.getDifficulty().equals( request.getDifficulty() ) ) {
-
-                /*
-                 * Ensure only the relevant data is shown
-                 */
-                code.setHints( null );
-                code.setQrCode( null );
-                code.setCollectables( null );
-
-                /*
-                 * The current GeoCode has the valid GeoCode
-                 * add it to the list
-                 */
-                hold.add( code );
-            }
-        }
+        List< GeoCode > hold = new ArrayList<>( geoCodeRepo.findGeoCodeWithDifficulty( request.getDifficulty() ) );
+//        for ( GeoCode code : geoCodeRepo.findAll() ) {
+//
+//            /* Check if the current GeoCode has the Difficulty wanted */
+//            if ( code.getDifficulty().equals( request.getDifficulty() ) ) {
+//
+//                /*
+//                 * Ensure only the relevant data is shown
+//                 */
+//                code.setHints( null );
+//                code.setQrCode( null );
+//                code.setCollectables( null );
+//
+//                /*
+//                 * The current GeoCode has the valid GeoCode
+//                 * add it to the list
+//                 */
+//                hold.add( code );
+//            }
+//        }
 
         /*
          * Create the new response
@@ -555,8 +568,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /*
-         * Get all of the stored GeoCodes
+         * Get all the stored GeoCodes
          * and find the GeoCode with the specified qrCode
+         *
+         * ToDo use custom query
          */
         List< GeoCode > temp = geoCodeRepo.findAll();
         var x = 0;
@@ -745,7 +760,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * if the user created the GeoCode do not allow the swap as it will be unfair
          * else continue as the user found the GeoCode fairly
          */
-        var userID = userService.getCurrentUser().getId();
+        var userID = userService.getCurrentUserID();
         if ( ( userID == null ) || ( geocode.getCreatedBy().equals( userID ) ) ) {
 
             return new SwapCollectablesResponse( false );
