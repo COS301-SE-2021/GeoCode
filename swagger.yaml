@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.11"
+  version: "1.5.12"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -2739,10 +2739,14 @@ components:
     EventLeaderboardDetails:
       type: "object"
       required:
+        - userID
         - username
         - points
         - rank
       properties:
+        userID:
+          type: string
+          format: uuid
         username:
           type: string
           example: "john_smith"
