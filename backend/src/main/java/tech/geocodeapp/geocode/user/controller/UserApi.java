@@ -25,6 +25,19 @@ import javax.validation.Valid;
 @Validated
 @CrossOrigin(origins = "${web_referrer}", maxAge = 3600)
 public interface UserApi {
+
+    @Operation(summary = "Get the User with the specified ID", description = "Get the User with the specified ID", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Create GeoCode Response", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetUserByIdResponse.class))),
+
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/getUserById",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" },
+            method = RequestMethod.POST)
+    ResponseEntity<GetUserByIdResponse> getUserById(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user", required=true, schema=@Schema()) @Valid @RequestBody GetUserByIdRequest body);
+
     @Operation(summary = "Get the Collectable the User is currently holding", description = "Get the user's current Collectable", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
     @ApiResponses(value = {
