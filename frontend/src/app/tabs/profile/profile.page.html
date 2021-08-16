@@ -8,9 +8,9 @@
 </ion-header>
 
 <ion-content>
-  <ion-card>
+  <ion-card >
     <ion-card-header>
-      <ion-card-title>{{username}}</ion-card-title>
+      <ion-card-title class="userDetails">{{username}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       User stats
@@ -21,9 +21,9 @@
     <ion-grid>
       <ion-row>
         <ion-col size-md="6" size="12">
-          <ion-card>
+          <ion-card class="card">
             <ion-card-header>
-              <ion-card-title>My Current Collectable</ion-card-title>
+              <ion-card-title class="cardHeadings">My Current Collectable</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <table><tr>
@@ -39,9 +39,9 @@
           </ion-card>
         </ion-col>
         <ion-col size-md="6" size="12">
-          <ion-card button (click)="showTrackableLocations()">
+          <ion-card button (click)="showTrackableLocations()" class="card">
             <ion-card-header>
-              <ion-card-title>My Personal Trackable</ion-card-title>
+              <ion-card-title class="cardHeadings">My Personal Trackable</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <table><tr>
