@@ -21,6 +21,7 @@ export class ProfilePage implements OnInit {
   showBackButton = true;
   currentCollectable: Collectable = null;
   trackable: Collectable = null;
+  username='Username';
 
   constructor(
     private modalController: ModalController,
@@ -30,6 +31,7 @@ export class ProfilePage implements OnInit {
   ) {
     let id = route.snapshot.paramMap.get('id');
     if (!id) {
+      console.log('test');
       this.showBackButton = false;
       id = keycloak.getKeycloakInstance().subject;
     }
@@ -41,9 +43,13 @@ export class ProfilePage implements OnInit {
       console.log(response);
       this.currentCollectable = response.collectable;
     });
+
+     // @ts-ignore
+    this.username=keycloak.getKeycloakInstance().idTokenParsed.preferred_username;
   }
 
   ngOnInit() {
+
   }
 
   async showTrackableLocations() {
