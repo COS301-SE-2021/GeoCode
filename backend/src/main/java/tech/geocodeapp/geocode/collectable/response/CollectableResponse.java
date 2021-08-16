@@ -15,6 +15,7 @@ public class CollectableResponse {
     UUID id;
     CollectableTypeComponent type;
     Collection<GeoPoint> pastLocations = new ArrayList<>();
+    UUID missionId;
 
     public CollectableResponse() {
     }
@@ -23,6 +24,13 @@ public class CollectableResponse {
         this.id = id;
         this.type = type;
         this.pastLocations = pastLocations;
+    }
+
+    public CollectableResponse(UUID id, CollectableTypeComponent type, Collection<GeoPoint> pastLocations, UUID missionId) {
+        this.id = id;
+        this.type = type;
+        this.pastLocations = pastLocations;
+        this.missionId = missionId;
     }
 
     public UUID getId() {
