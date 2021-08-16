@@ -96,6 +96,9 @@ public class CollectableTypeManager {
         if(type.getArea()!=null){
             properties.put("geofenced", type.getArea());
         }
+        if(type.getMissionType()!=null){
+            properties.put("missionType", type.getMissionType().toString());
+        }
         if(!properties.isEmpty()){
             convertedType.setProperties(properties);
         }
