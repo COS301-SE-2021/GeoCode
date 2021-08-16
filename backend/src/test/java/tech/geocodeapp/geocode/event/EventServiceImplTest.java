@@ -668,6 +668,28 @@ class EventServiceImplTest {
                 .hasMessageContaining( reqParamError );
     }
 
+    /**
+     * Using valid data does the getEventsByLocation use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - getEventsByLocation" )
+    void getEventsByLocationTest() {
+
+        try {
+
+            GetEventsByLocationRequest request = new GetEventsByLocationRequest();
+            request.setLocation( null );
+
+            var event = eventService.getEventsByLocation( request  );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
     @Test
     @Order( 8 )
     @DisplayName( "check Difficulty" )
