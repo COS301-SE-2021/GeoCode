@@ -369,6 +369,30 @@ class EventServiceImplTest {
                 .hasMessageContaining( reqParamError );
     }
 
+
+    /**
+     * Using valid data does the getCurrentEventStatus use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - getCurrentEventStatus" )
+    void getCurrentEventStatusTest() {
+
+        try {
+
+            GetCurrentEventStatusRequest request = new GetCurrentEventStatusRequest();
+            request.setEventID( null );
+            request.setUserID( null );
+
+            var event = eventService.getCurrentEventStatus( request  );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
     @Test
     @Order( 8 )
     @DisplayName( "check Difficulty" )
