@@ -690,6 +690,22 @@ class EventServiceImplTest {
         }
     }
 
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - createLeaderBoard" )
+    void createLeaderBoardNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.createLeaderBoard( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+
+
     @Test
     @Order( 8 )
     @DisplayName( "check Difficulty" )
