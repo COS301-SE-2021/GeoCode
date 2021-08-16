@@ -47,16 +47,17 @@
       <ion-label>Trackable</ion-label>
       <ion-checkbox [(ngModel)]="trackable"></ion-checkbox>
     </ion-item>
-    <ion-item *ngIf="trackable">
+    <ion-item>
       <ion-label position="floating">Mission</ion-label>
-      <ion-select value="NONE" interface="popover" (ionBlur)="null">
-        <ion-select-option value="NONE">None</ion-select-option>
+      <ion-select value="None" interface="popover" (ionBlur)="updateMission($event)">
+        <ion-select-option value="None">None</ion-select-option>
+        <ion-select-option value="Circumference">Circumference</ion-select-option>
+        <ion-select-option value="Geocode">Geocode</ion-select-option>
+        <ion-select-option value="Swap">Swap</ion-select-option>
+        <ion-select-option value="Random">Random</ion-select-option>
       </ion-select>
     </ion-item>
 
-    <ion-item #mapContainer class="mapContainer">
-      <div #mapElement class="map"></div>
-    </ion-item>
   </ion-list>
 
 

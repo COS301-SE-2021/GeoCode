@@ -1,22 +1,16 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ModalController, NavParams, ToastController} from '@ionic/angular';
 import {
   CollectableService, CollectableTypeComponent,
-  CreateCollectableTypeRequest,
+  CreateCollectableTypeRequest, MissionType,
 } from '../../../services/geocode-api';
 
-declare let google;
 @Component({
   selector: 'app-add-type',
   templateUrl: './add-type.component.html',
   styleUrls: ['./add-type.component.scss'],
 })
 export class AddTypeComponent implements OnInit {
-  @ViewChild('mapContainer') mapContainer;
-  @ViewChild('mapElement',{static:false}) mapElement;
-  mapOptions;
-  map;
-  mapMarker;
 
   request: CreateCollectableTypeRequest = {
     name: '',
@@ -26,13 +20,7 @@ export class AddTypeComponent implements OnInit {
     setId: ''
   };
   trackable = false;
-
-  showMap = false;
-  mapLoaded = false;
-  location;
-
-  showDatePicker = false;
-  date: Date = null;
+  mission: MissionType = null;
 
   loading = false;
 
@@ -50,8 +38,7 @@ export class AddTypeComponent implements OnInit {
   validate() {
     const name = (this.request.name.length > 0);
     const rarity = (this.request.rarity != null);
-    const date = (!this.showDatePicker || this.date != null);
-    return (name && rarity && date);
+    return (name && rarity);
   }
 
   async proceed() {
@@ -61,8 +48,7 @@ export class AddTypeComponent implements OnInit {
     }
     this.loading = true;
     if (this.trackable) { this.request.properties.trackable = 'true'; }
-    if (this.showMap) { this.request.properties.geofenced = this.location.getPosition().lat()+' '+this.location.getPosition().lng(); }
-    if (this.showDatePicker) { this.request.properties.expiring = this.getDate(); }
+    if (this.mission) { this.request.properties.missionType = this.mission; }
     const response = await this.collectableService.createCollectableType(this.request).toPromise();
     console.log(response);
     await this.dismiss(response.collectableType);
@@ -76,41 +62,12 @@ export class AddTypeComponent implements OnInit {
     this.request[field] = event.target.value;
   }
 
-  setDate(event) {
-    this.date = new Date(event.target.value);
-  }
-
-  getDate() {
-    return [
-      this.date.getFullYear(),
-      ('0' + (this.date.getMonth()+1)).slice(-2),
-      ('0' + this.date.getDate()).slice(-2)
-    ].join('/');
-  }
-
-  loadMap() {
-    if (this.showMap) {
-      this.mapContainer.el.style = 'height: auto;';
+  updateMission(event) {
+    if (event.target.value === 'None') {
+      this.mission = null;
     } else {
-      this.mapContainer.el.style = 'height: 0px;';
+      this.mission = event.target.value;
     }
-    if (this.mapLoaded) { return; }
-    this.mapLoaded = true;
-    this.mapOptions = {
-      center: {lat: -25.75625115327836, lng: 28.235629260918344},
-      title: 'Drag the marker below',
-      zoom: 15,
-    };
-    this.map = new google.maps.Map(this.mapElement.nativeElement,this.mapOptions);
-    this.location = new google.maps.Marker({
-      position: {lat: -25.75625115327836, lng: 28.235629260918344},
-      draggable: true,
-      map: this.map,
-      title: 'Move this marker to set the location'
-    });
-    google.maps.event.addListener(this.map, 'click', (event) => {
-      this.location.position = event.latLng;
-    });
   }
 
 }
