@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.10"
+  version: "1.5.11"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -2514,6 +2514,10 @@ components:
         collectableTypeId:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        createMission:
+          type: boolean
+          example: false
       xml:
         name: "CreateCollectableRequest"
 
@@ -2598,13 +2602,17 @@ components:
         id:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         type:
           $ref: "#/components/schemas/CollectableTypeComponent"
         pastLocations:
           type: array
           items:
             type: string
-
+        missionId:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "CollectableResponse"
 
