@@ -32,18 +32,36 @@ export class CreateGeocodeComponent implements AfterViewInit {
 
   //create map
   initMap() {
-    // Create a map after the view is ready and the native platform is ready.
-    this.mapOptions = {
-      center: {lat: -25.75625115327836, lng: 28.235629260918344},
-      zoom: 15,
-    };
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.mapOptions = {
+        center: {lat: position.coords.latitude, lng: position.coords.longitude},
+        zoom: 15,
+      };
+      // Create a map after the view is ready and the native platform is ready.
 
-    map = new this.googleMaps.Map(this.mapElement.nativeElement, this.mapOptions);
 
-    //Add event listeners to map
-    this.googleMaps.event.addListener(map, 'click', (event)=>{
-      this.placeMarker(event.latLng);
+      map = new this.googleMaps.Map(this.mapElement.nativeElement, this.mapOptions);
+
+      //Add event listeners to map
+      this.googleMaps.event.addListener(map, 'click', (event)=>{
+        this.placeMarker(event.latLng);
+      });
+    }, (positionError) => {
+      this.mapOptions = {
+        center: {lat: -25.75625115327836, lng: 28.235629260918344},
+        zoom: 15,
+      };
+      // Create a map after the view is ready and the native platform is ready.
+
+
+      map = new this.googleMaps.Map(this.mapElement.nativeElement, this.mapOptions);
+
+      //Add event listeners to map
+      this.googleMaps.event.addListener(map, 'click', (event)=>{
+        this.placeMarker(event.latLng);
+      });
     });
+
 
 
   };
@@ -93,7 +111,7 @@ export class CreateGeocodeComponent implements AfterViewInit {
         position: location
       }
     );
-    map.setCenter(location);
+   // map.setCenter(location);
   }
 
 }
