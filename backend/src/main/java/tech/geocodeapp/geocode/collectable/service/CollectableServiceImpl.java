@@ -14,6 +14,8 @@ import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.mission.request.CreateMissionRequest;
+import tech.geocodeapp.geocode.mission.response.CreateMissionResponse;
 import tech.geocodeapp.geocode.mission.service.MissionService;
 
 import javax.transaction.Transactional;
@@ -91,14 +93,23 @@ public class CollectableServiceImpl implements CollectableService {
             Collectable collectable = new Collectable(collectableTypeOptional.get());
             Collectable savedCollectable = collectableRepo.save(collectable);
             if(request.isCreateMission()) {
-
+                CreateMissionRequest createMissionRequest = new CreateMissionRequest(savedCollectable.getId());
+                try {
+                   CreateMissionResponse missionResponse = missionService.createMission(createMissionRequest);
+                   if(missionResponse.isSuccess()) {
+                       savedCollectable.setMissionID(missionResponse.getMission().getId());
+                       collectableRepo.save(savedCollectable);
+                   }
+                } catch (NullRequestParameterException e) {
+                    e.printStackTrace();
+                }
             }
             /*
              * Create CollectableResponse from collectable
              * Use CollectableTypeManager to convert the CollectableType to a CollectableTypeComponent
              */
             CollectableTypeManager manager = new CollectableTypeManager();
-            CollectableResponse collectableResponse = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()), collectable.getPastLocations());
+            CollectableResponse collectableResponse = new CollectableResponse(savedCollectable.getId(), manager.buildCollectableType(savedCollectable.getType()), savedCollectable.getPastLocations());
 
             return new CreateCollectableResponse(true, "The Collectable was successfully created", collectableResponse);
         }else{
