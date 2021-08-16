@@ -24,6 +24,7 @@ public class CollectableResponse {
         this.id = id;
         this.type = type;
         this.pastLocations = pastLocations;
+        missionId = null;
     }
 
     public CollectableResponse(UUID id, CollectableTypeComponent type, Collection<GeoPoint> pastLocations, UUID missionId) {
