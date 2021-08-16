@@ -130,7 +130,7 @@ public class CollectableServiceImpl implements CollectableService {
         //get all Collectables and build collectableResponses from them
         List<Collectable> collectables = collectableRepo.findAll();
         for (Collectable collectable : collectables) {
-            CollectableResponse temp = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()), collectable.getPastLocations());
+            CollectableResponse temp = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()), collectable.getPastLocations(), collectable.getMissionID());
             collectableResponses.add(temp);
         }
 
