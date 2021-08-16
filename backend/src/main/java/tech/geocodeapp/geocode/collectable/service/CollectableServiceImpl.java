@@ -252,7 +252,7 @@ public class CollectableServiceImpl implements CollectableService {
             userTrackableSet = new CollectableSet();
             userTrackableSet.setId(userTrackableID);
             userTrackableSet.setName("User Trackables");
-            userTrackableSet.setDescription("User Trackables");
+            userTrackableSet.setDescription("Trackables created when a user makes an account");
             collectableSetRepo.save(userTrackableSet);
         }
 
@@ -263,8 +263,8 @@ public class CollectableServiceImpl implements CollectableService {
             /* Create the User Trackable type */
             CollectableType userTrackableType = new CollectableType();
             userTrackableType.setId(userTrackableID);
-            userTrackableType.setName("User Trackables");
-            userTrackableType.setImage("https://via.placeholder.com/100");
+            userTrackableType.setName("Anonymous User Trackable");
+            userTrackableType.setImage("https://upload.wikimedia.org/wikipedia/commons/9/9a/Folding_Map_Flat_Icon_Vector.svg");
             userTrackableType.setRarity(Rarity.UNIQUE);
             userTrackableType.setSet(userTrackableSet);
             userTrackableType.setProperties(properties);

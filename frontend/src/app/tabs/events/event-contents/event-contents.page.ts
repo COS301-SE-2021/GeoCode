@@ -125,8 +125,8 @@ async presentToast(){
   }
 
   async openLeaderBoard() {
-    const e = this.event;
-    await this.navCtrl.navigateForward('/events/' + this.event.id+'/leaderboard', {state: {e}});
+    const event = this.event;
+    await this.navCtrl.navigateForward('/events/' + this.event.id+'/leaderboard', {state: {event}});
   }
 
 

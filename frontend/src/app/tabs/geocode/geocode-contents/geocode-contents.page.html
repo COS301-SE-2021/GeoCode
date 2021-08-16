@@ -20,7 +20,7 @@
     <ion-item class="barcode" [hidden]="isHidden">
       <ion-label>GeoCode</ion-label>
       <ion-input #QR class="barcode-input" type="text"></ion-input>
-      <ion-button color="danger" (click)="found(QR)">Found</ion-button>
+      <ion-button color="danger" (click)="found(QR.value)">Found</ion-button>
     </ion-item>
 
     <div class="hints" [hidden]="isHidden">

@@ -10,14 +10,17 @@
  * Do not edit the class manually.
  */
 import { CollectableSet } from './collectableSet';
+import { MissionType } from './missionType';
 import { Rarity } from './rarity';
 
 export interface CollectableTypeComponent { 
     name: string;
     rarity: Rarity;
     id: string;
-    set: CollectableSet;
-    expiraryDate?: Date;
+    image?: string;
+    collectableSet: CollectableSet;
+    expiryDate?: Date;
     area?: string;
     trackable?: boolean;
+    missionType?: MissionType;
 }

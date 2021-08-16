@@ -40,6 +40,7 @@ export class EventLeaderboardPage implements OnInit {
         starting:this.leaderboardIndex
       };
       this.leaderboardService.getEventLeaderboard(req).subscribe((response: GetEventLeaderboardResponse) =>{
+        console.log(response);
         for (const point of response.leaderboard) {
           this.users.push(point);
         }
@@ -53,18 +54,6 @@ export class EventLeaderboardPage implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  async loadFakeLeaderboard() {
-    this.users.push({username: 'tristan', points: 53, rank: 9});
-    this.users.push({username: 'kayleigh', points: 51, rank: 10});
-    this.users.push({username: 'amber', points: 34, rank: 11});
-    this.users.push({username: 'nicholas', points: 32, rank: 12});
-    this.users.push({username: 'rachel', points: 29, rank: 13});
-    this.users.push({username: 'emma', points: 25, rank: 14});
-    this.users.push({username: 'victoria', points: 20, rank: 15});
-    this.users.push({username: 'joseph', points: 12, rank: 16});
-    return false;
   }
 
   async loadData(event) {

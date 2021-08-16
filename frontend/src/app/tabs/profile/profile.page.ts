@@ -18,7 +18,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class ProfilePage implements OnInit {
 
-  showBackButton = true;
+  isOwnProfile = true;
   currentCollectable: Collectable = null;
   trackable: Collectable = null;
   username='Username';
@@ -26,14 +26,14 @@ export class ProfilePage implements OnInit {
   constructor(
     private modalController: ModalController,
     private userService: UserService,
-    keycloak: KeycloakService,
+    private keycloak: KeycloakService,
     route: ActivatedRoute
   ) {
     let id = route.snapshot.paramMap.get('id');
     if (!id) {
-      console.log('test');
-      this.showBackButton = false;
       id = keycloak.getKeycloakInstance().subject;
+      this.isOwnProfile = true;
+      id = this.keycloak.getKeycloakInstance().subject;
     }
     this.userService.getUserTrackable({userID: id}).subscribe((response: GetUserTrackableResponse) => {
       console.log(response);
@@ -44,7 +44,7 @@ export class ProfilePage implements OnInit {
       this.currentCollectable = response.collectable;
     });
 
-     // @ts-ignore
+    // @ts-ignore
     this.username=keycloak.getKeycloakInstance().idTokenParsed.preferred_username;
   }
 
@@ -61,6 +61,14 @@ export class ProfilePage implements OnInit {
       }
     });
     await modal.present();
+  }
+
+  async logout() {
+    await this.keycloak.logout(environment.baseRedirectURI+'/welcome');
+  }
+
+  async manage() {
+    await this.keycloak.getKeycloakInstance().accountManagement();
   }
 
 }
