@@ -109,7 +109,7 @@ public class CollectableServiceImpl implements CollectableService {
              * Use CollectableTypeManager to convert the CollectableType to a CollectableTypeComponent
              */
             CollectableTypeManager manager = new CollectableTypeManager();
-            CollectableResponse collectableResponse = new CollectableResponse(savedCollectable.getId(), manager.buildCollectableType(savedCollectable.getType()), savedCollectable.getPastLocations());
+            CollectableResponse collectableResponse = new CollectableResponse(savedCollectable.getId(), manager.buildCollectableType(savedCollectable.getType()), savedCollectable.getPastLocations(), savedCollectable.getMissionID());
 
             return new CreateCollectableResponse(true, "The Collectable was successfully created", collectableResponse);
         }else{
