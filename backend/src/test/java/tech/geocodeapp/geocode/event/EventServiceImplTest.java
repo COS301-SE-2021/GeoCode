@@ -439,12 +439,26 @@ class EventServiceImplTest {
 
         try {
 
-            var event = eventService.nextStage( null, null  );
+            eventService.nextStage( null, null  );
         } catch ( InvalidRequestException | NotFoundException | MismatchedParametersException e ) {
 
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - getEnteredEvents" )
+    void getEnteredEventsNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.getEnteredEvents( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
     }
 
     @Test
