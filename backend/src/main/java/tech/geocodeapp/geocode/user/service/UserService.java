@@ -38,21 +38,31 @@ public interface UserService {
     GetMyMissionsResponse getMyMissions(GetMyMissionsRequest request) throws NullRequestParameterException;
 
     //User helper functions
+
+    //U1.9 addToOwnedGeoCodes
     AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException;
 
+    //U1.10 addToFoundGeoCodes
     AddToFoundGeoCodesResponse addToFoundGeoCodes(AddToFoundGeoCodesRequest request) throws NullRequestParameterException;
 
+    //U1.11 addToFoundCollectableTypes
     AddToFoundCollectableTypesResponse addToFoundCollectableTypes(AddToFoundCollectableTypesRequest request) throws NullRequestParameterException;
 
+    //U1.12 getUserById
     GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullRequestParameterException;
 
+    //U1.13 getCurrentUser
     User getCurrentUser();
 
+    //U1.14 getCurrentUserID
     UUID getCurrentUserID();
 
+    //U1.15 registerNewUser
     RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException;
 
     //GeoCode helper functions
+
+    //U1.16 swapCollectable
     SwapCollectableResponse swapCollectable(SwapCollectableRequest request) throws NullRequestParameterException;
 
     /**
