@@ -23,6 +23,7 @@ import tech.geocodeapp.geocode.collectable.*;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.leaderboard.service.*;
+import tech.geocodeapp.geocode.mission.service.MissionService;
 import tech.geocodeapp.geocode.user.service.*;
 
 import java.time.LocalDate;
@@ -96,6 +97,7 @@ class GeoCodeServiceImplTest {
      */
     UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
 
+    MissionService missionService;
 
     /**
      * Create the GeoCodeServiceImpl with the relevant repositories.
@@ -134,7 +136,7 @@ class GeoCodeServiceImplTest {
         /* Create a new Collectable Service implementation with the relevant repositories */
         collectableService = new CollectableServiceImpl( new CollectableMockRepository(),
                                                          new CollectableSetMockRepository(),
-                                                         typeMockRepo );
+                                                         typeMockRepo, missionService);
 
         EventMockRepository eventRepo = new EventMockRepository();
         UserEventStatusMockRepository progressLogRepo = new UserEventStatusMockRepository();
