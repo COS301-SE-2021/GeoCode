@@ -165,4 +165,83 @@ class EventServiceImplIT {
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqEmptyError );
     }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 3 )
+    @DisplayName( "Invalid repository attribute handling - createEvent" )
+    void createEventInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        CreateEventRequest request = new CreateEventRequest();
+        request.setDescription( "Try get as many as possible" );
+        request.setLocation( null );
+        request.setName( "Super Sport" );
+        request.setBeginDate( LocalDate.parse("2020-01-08") );
+        request.setEndDate( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.createEvent( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+
+    /**
+     * Using valid data does the createEvent use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 4 )
+    @DisplayName( "Valid request - createEvent" )
+    void createEventTest() {
+
+        try {
+            /* Create mock geocodes to add to the event */
+            GeoCode gc1 = new GeoCode().id(UUID.randomUUID());
+            GeoCode gc2 = new GeoCode().id(UUID.randomUUID());
+            GeoCode gc3 = new GeoCode().id(UUID.randomUUID());
+            geoCodeMockRepo.save(gc1);
+            geoCodeMockRepo.save(gc2);
+            geoCodeMockRepo.save(gc3);
+
+            /*
+             * Create a request object
+             * and assign values to it
+             */
+
+
+            CreateEventRequest request = new CreateEventRequest();
+            request.setDescription( "Try get as many as possible" );
+            request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
+            request.setName( "Super Sport" );
+            request.setBeginDate( LocalDate.parse("2020-01-08") );
+            request.setEndDate(  LocalDate.parse("2020-05-21") );
+            List< UUID > geoCodesToFind = new ArrayList<>();
+            geoCodesToFind.add( gc1.getId() );
+            geoCodesToFind.add( gc2.getId() );
+            geoCodesToFind.add( gc3.getId() );
+            request.setGeoCodesToFind( geoCodesToFind );
+            request.setOrderBy( OrderLevels.GIVEN );
+            request.setProperties( new HashMap<String, String>() );
+
+            CreateEventResponse response = eventService.createEvent( request );
+
+            /*
+             * Check if the Event was created correctly
+             * through checking the response
+             */
+            Assertions.assertTrue( response.isSuccess() );
+
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
 }
