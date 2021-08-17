@@ -1,37 +1,26 @@
 package tech.geocodeapp.geocode.event;
 
 import org.junit.jupiter.api.*;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import tech.geocodeapp.geocode.GeoCodeApplication;
-import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
-import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
-import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
-import tech.geocodeapp.geocode.event.exceptions.RepoException;
+
+import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
-import tech.geocodeapp.geocode.event.pathfinder.Graph;
-import tech.geocodeapp.geocode.event.repository.EventRepository;
-import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
+import tech.geocodeapp.geocode.event.repository.*;
 import tech.geocodeapp.geocode.event.request.*;
-import tech.geocodeapp.geocode.event.response.CreateEventResponse;
-import tech.geocodeapp.geocode.event.response.GetEventResponse;
-import tech.geocodeapp.geocode.event.service.EventService;
-import tech.geocodeapp.geocode.event.service.EventServiceImpl;
-import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
-import tech.geocodeapp.geocode.geocode.model.Difficulty;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+import tech.geocodeapp.geocode.event.response.*;
+import tech.geocodeapp.geocode.event.service.*;
+
+import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
-import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
-import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
-import tech.geocodeapp.geocode.leaderboard.UserMockRepository;
-import tech.geocodeapp.geocode.leaderboard.UserMockService;
+
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
-import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
+
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.service.UserService;
 
@@ -40,8 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest( classes = GeoCodeApplication.class,
                  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT )
@@ -297,7 +284,7 @@ class EventServiceImplIT {
             /* Populate with a known Event to find*/
             var event = new Event( eventID, "Test", "Test description", null,
                                    null, LocalDate.parse("2020-01-08"),
-                                   LocalDate.parse("2020-01-08"), null, new HashMap<String, String>());
+                                   LocalDate.parse("2020-01-08"), null, new HashMap<>());
             eventRepo.save( event );
 
             /*
