@@ -203,6 +203,11 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             return new GetMyRankResponse(false, "Invalid leaderboard ID", null);
         }
 
+        //check if amount is invalid
+        if(request.getAmount() < 0){
+            return new GetMyRankResponse(false, "The amount must be positive", null);
+        }
+
         int rank = pointRepo.getMyRank(request.getLeaderboard().getId(), request.getAmount());
         return new GetMyRankResponse(true, "Point rank returned", rank);
     }
@@ -244,7 +249,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }
 
         //check if the amount is invalid
-        if(request.getAmount() <= 0){
+        if(request.getAmount() < 0){
             return new PointResponse(false, "The amount for a Point must be positive", null);
         }
 
