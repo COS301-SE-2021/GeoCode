@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   Event,
-  EventLeaderboardDetails,
+  EventLeaderboardDetails, EventService,
   GetEventLeaderboardRequest, GetEventLeaderboardResponse,
   LeaderboardService,
   Point
@@ -14,6 +14,7 @@ import {
   styleUrls: ['./event-leaderboard.page.scss'],
 })
 export class EventLeaderboardPage implements OnInit {
+  eventID: string = null;
   event: Event = null;
   users: EventLeaderboardDetails[] = [];
   leaderboardIndex = 1;
@@ -21,18 +22,28 @@ export class EventLeaderboardPage implements OnInit {
   leaderBoardName='';
   constructor(
     router: Router,
-    private leaderboardService: LeaderboardService
+    private leaderboardService: LeaderboardService,
+    private eventService: EventService,
+    route: ActivatedRoute
   ) {
     const state = router.getCurrentNavigation().extras.state;
     console.log(state);
     if (state) {
       this.event = state.event;
       this.leaderBoardName = this.event.leaderboards[0].name;
+    } else {
+      this.event = null;
+      this.eventID = route.snapshot.paramMap.get('id');
+      console.log(this.eventID);
     }
     this.loadLeaderboard();
   }
 
   async loadLeaderboard() {
+    if (this.event == null) {
+      this.event = (await this.eventService.getEvent({eventID: this.eventID}).toPromise()).foundEvent;
+      this.leaderBoardName = this.event.leaderboards[0].name;
+    }
     if (this.event.leaderboards.length > 0) {
       const req: GetEventLeaderboardRequest ={
         leaderboardID:this.event.leaderboards[0].id,
