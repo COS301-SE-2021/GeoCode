@@ -244,4 +244,18 @@ class EventServiceImplIT {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - getEvent" )
+    void getEventCodeNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.getEvent( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
 }
