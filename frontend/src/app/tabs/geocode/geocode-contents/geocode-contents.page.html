@@ -45,7 +45,7 @@
         <div class="items">
           <div class="collectable" *ngFor="let collectable of collectables">
             <div class="image" (click)="swapCollectable(collectable)">
-              <img src="https://via.placeholder.com/100">
+              <img src="{{collectable.type.image}}">
             </div>
             <div class="name">
               {{collectable.type.name}}

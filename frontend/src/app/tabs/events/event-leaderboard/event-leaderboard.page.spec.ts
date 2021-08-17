@@ -3,7 +3,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { EventLeaderboardPage } from './event-leaderboard.page';
 import {RouterTestingModule} from '@angular/router/testing';
-import {Event, LeaderboardService} from '../../../services/geocode-api';
+import {Event, EventService, LeaderboardService} from '../../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {Router} from '@angular/router';
 
@@ -33,7 +33,7 @@ describe('EventLeaderboardPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ EventLeaderboardPage ],
-      providers: [ LeaderboardService ],
+      providers: [ LeaderboardService, EventService ],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
     }).compileComponents();
 
