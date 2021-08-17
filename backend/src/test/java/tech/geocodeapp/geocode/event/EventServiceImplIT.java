@@ -419,7 +419,24 @@ class EventServiceImplIT {
         //                .hasMessageContaining( reqParamError );
     }
 
+    /**
+     * Using valid data does the nextStage use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - nextStage" )
+    void nextStageTest() {
 
+        try {
+
+            eventService.nextStage( null, null  );
+        } catch ( InvalidRequestException | NotFoundException | MismatchedParametersException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
 
 
     ////////////////Helper functions////////////////
