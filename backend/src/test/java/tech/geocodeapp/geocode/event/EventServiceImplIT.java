@@ -280,5 +280,47 @@ class EventServiceImplIT {
                 .hasMessageContaining( reqParamError );
     }
 
+    /**
+     * Using valid data does the getEvent use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - getEvent" )
+    void getEventTest() {
 
+        try {
+
+            /* Insert different random Events into the repository */
+            populate( 3 );
+
+            /* Populate with a known Event to find*/
+            var event = new Event( eventID, "Test", "Test description", null,
+                                   null, LocalDate.parse("2020-01-08"),
+                                   LocalDate.parse("2020-01-08"), null, new HashMap<String, String>());
+            eventRepo.save( event );
+
+            /*
+             * Create a request object
+             * and assign values to it
+             */
+            GetEventRequest request = new GetEventRequest();
+            request.setEventID( eventID );
+
+            GetEventResponse response = eventService.getEvent( request );
+
+            /*
+             * Check if the Event was created correctly found
+             */
+            Assertions.assertEquals( event, response.getFoundEvent() );
+            Assertions.assertEquals( event.getDescription(), response.getFoundEvent().getDescription() );
+
+            /* Check if the name is not the same as one of the random populated names */
+            Assertions.assertNotEquals( "Super Sport", response.getFoundEvent().getName() );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
 }
