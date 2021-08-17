@@ -49,7 +49,7 @@ class EventServiceImplTest {
 
     /**
      * The service for the Event subsystem
-     * <p>
+     *
      * This is used to access the different use cases
      * needed for functionality
      */
@@ -108,13 +108,13 @@ class EventServiceImplTest {
     String reqEmptyError = "The given request is empty.";
 
     /**
-     * This is used to have a static known UUID
+     * This is used to have a static known UUID for Event objects
      */
     UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
 
     /**
      * Create the EventServiceImpl with the relevant repositories.
-     * <p>
+     *
      * This is done to ensure a repository with no data is created each time
      * and the service implementation contains fresh code that has not been affected
      * by some other test or data.
@@ -126,16 +126,20 @@ class EventServiceImplTest {
         eventRepo = new EventMockRepository();
         userEventStatusRepo = new UserEventStatusMockRepository();
         geoCodeMockRepo = new GeoCodeMockRepository();
+
+        /* Clear all the repository data */
         eventRepo.deleteAll();
         userEventStatusRepo.deleteAll();
         geoCodeMockRepo.deleteAll();
 
+        /* Create the leaderboard service with all the relevant repositories */
         var leaderboardMockRepo = new LeaderboardMockRepository();
         var userRepository = new UserMockRepository();
         var userService = new UserMockService( userRepository );
         var pointMockRepository = new PointMockRepository();
-
         leaderboardService = new LeaderboardServiceImpl( leaderboardMockRepo, pointMockRepository, null, userService );
+
+        /* Create the GeoCode and User service */
         geoCodeService = new GeoCodeMockService( geoCodeMockRepo );
         userService = new UserMockService( userMockRepo );
 
@@ -146,6 +150,7 @@ class EventServiceImplTest {
             eventService.setGeoCodeService( geoCodeService );
         } catch ( RepoException e ) {
 
+            /* An error occurred so print the stack trace */
             e.printStackTrace();
         }
 

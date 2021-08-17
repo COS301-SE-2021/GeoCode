@@ -30,6 +30,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This is the integration testing class for the Event subsystem
+ *
+ * Testing for if the requests, request attributes
+ * and the repository are working in valid order
+ * and what exceptions are thrown if not.
+ */
 @SpringBootTest( classes = GeoCodeApplication.class,
                  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT )
 @TestMethodOrder( MethodOrderer.OrderAnnotation.class )
@@ -37,7 +44,7 @@ class EventServiceImplIT {
 
     /**
      * The service for the Event subsystem
-     * <p>
+     *
      * This is used to access the different use cases
      * needed for functionality
      */
@@ -102,7 +109,7 @@ class EventServiceImplIT {
 
     /**
      * Create the EventServiceImpl with the relevant repositories.
-     * <p>
+     *
      * This is done to ensure a repository with no data is created each time
      * and the service implementation contains fresh code that has not been affected
      * by some other test or data.
@@ -110,6 +117,7 @@ class EventServiceImplIT {
     @BeforeEach
     void setup() {
 
+        /* Clear all the repository data */
         eventRepo.deleteAll();
 
         try {
@@ -119,6 +127,7 @@ class EventServiceImplIT {
             eventService.setGeoCodeService( geoCodeService );
         } catch ( RepoException e ) {
 
+            /* An error occurred so print the stack trace */
             e.printStackTrace();
         }
 
