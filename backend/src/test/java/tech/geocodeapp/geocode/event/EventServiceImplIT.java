@@ -551,7 +551,19 @@ class EventServiceImplIT {
         var event = eventService.getAllEvents();
     }
 
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - changeAvailability" )
+    void changeAvailabilityNullRequestTest() {
 
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.changeAvailability( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
 
 
 
