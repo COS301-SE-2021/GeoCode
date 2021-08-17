@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.event;
 
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import tech.geocodeapp.geocode.GeoCodeApplication;
@@ -12,6 +13,7 @@ import tech.geocodeapp.geocode.event.exceptions.RepoException;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.event.pathfinder.Graph;
+import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.CreateEventResponse;
@@ -58,7 +60,7 @@ class EventServiceImplIT {
      * The mock repository for the Event subsystem
      * All the data will be saved here and is used to mock the JPA repository
      */
-    EventMockRepository eventRepo;
+    EventRepository eventRepo;
 
     /**
      * The mock repository for the Event subsystem UserEventStatus repository
@@ -69,7 +71,7 @@ class EventServiceImplIT {
     /**
      * The leaderboard service accessor
      */
-    @Mock( name = "leaderboardServiceImpl" )
+    @Autowired
     LeaderboardService leaderboardService;
 
     /**
@@ -87,13 +89,13 @@ class EventServiceImplIT {
     /**
      * The GeoCode service accessor
      */
-    @Mock( name = "geoCodeServiceImpl" )
+    @Autowired
     GeoCodeService geoCodeService;
 
     /**
      * The User service accessor
      */
-    @Mock( name = "userServiceImpl" )
+    @Autowired
     UserService userService;
 
     /**
@@ -110,5 +112,28 @@ class EventServiceImplIT {
      * This is used to have a static known UUID
      */
     UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
-    
+
+    /**
+     * Create the EventServiceImpl with the relevant repositories.
+     *
+     * This is done to ensure a repository with no data is created each time
+     * and the service implementation contains fresh code that has not been affected
+     * by some other test or data.
+     */
+    @BeforeEach
+    void setup() {
+
+        eventRepo.deleteAll();
+
+        try {
+
+            /* Create a new EventServiceImpl instance to access the different use cases */
+            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, userService );
+            eventService.setGeoCodeService(geoCodeService);
+        } catch ( RepoException e ) {
+
+            e.printStackTrace();
+        }
+
+    }
 }

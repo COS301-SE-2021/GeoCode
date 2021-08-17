@@ -10,6 +10,7 @@ import tech.geocodeapp.geocode.event.pathfinder.Graph;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
+import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
@@ -55,7 +56,7 @@ class EventServiceImplTest {
      * The mock repository for the Event subsystem
      * All the data will be saved here and is used to mock the JPA repository
      */
-    EventMockRepository eventRepo;
+    EventRepository eventRepo;
 
     /**
      * The mock repository for the Event subsystem UserEventStatus repository
