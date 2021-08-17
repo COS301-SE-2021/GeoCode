@@ -20,6 +20,8 @@ public class GetProgressRequest   {
   @JsonProperty("missionID")
   private UUID missionID = null;
 
+  public GetProgressRequest() {}
+
   public GetProgressRequest missionID(UUID missionID) {
     this.missionID = missionID;
     return this;
