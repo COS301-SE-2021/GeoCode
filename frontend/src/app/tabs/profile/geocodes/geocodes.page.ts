@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {
   GeoCode,
   GeoCodeService,
@@ -6,23 +6,25 @@ import {
   GetOwnedGeoCodesResponse,
   UserService
 } from '../../../services/geocode-api';
-import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {KeycloakService} from 'keycloak-angular';
 import {ActivatedRoute} from '@angular/router';
-import {ModalController} from '@ionic/angular';
+import {zip} from 'rxjs';
+import {MapAndInfoComponent} from '../../../components/map-and-info/map-and-info.component';
 
 @Component({
   selector: 'app-geocodes',
   templateUrl: './geocodes.page.html',
   styleUrls: ['./geocodes.page.scss'],
 })
-export class UserGeocodesPage implements OnInit {
+export class UserGeocodesPage implements AfterViewInit {
 
-  @ViewChild('mapElement',{static:false}) mapElement;
-  googleMaps;
+  @ViewChild('mapAndInfo', {static: false}) mapAndInfo: MapAndInfoComponent;
+
   map;
+  googleMaps;
 
   userID;
+  loggedInUserID;
   createdIDs: string[] = [];
   created: GeoCode[] = null;
   foundIDs: string[] = [];
@@ -31,65 +33,37 @@ export class UserGeocodesPage implements OnInit {
   detailedGeoCode: GeoCode = null;
 
   constructor(
-    private mapsLoader: GoogleMapsLoader,
     private geocodeService: GeoCodeService,
     private userService: UserService,
     keycloak: KeycloakService,
     route: ActivatedRoute
   ) {
     this.userID = route.snapshot.paramMap.get('id');
+    this.loggedInUserID = keycloak.getKeycloakInstance().subject;
     if (!this.userID) {
-      this.userID = keycloak.getKeycloakInstance().subject;
+      this.userID = this.loggedInUserID;
     }
   }
 
-  loadInitialData() {
-    return new Promise(resolve => {
-      //Only resolve promise when completed === 3
-      let completed = 0;
+  async ngAfterViewInit() {
+    zip(
+      this.mapAndInfo.loadedState$,
+      this.userService.getFoundGeoCodes({ userID: this.userID }),
+      this.userService.getOwnedGeoCodes({ userID: this.userID })
 
-      // Load Maps
-      this.mapsLoader.load()
-        .then(handle => {
-          this.googleMaps = handle;
-          completed++;
-          if (completed === 3) { resolve(null); }
-        }).catch();
+    ).subscribe(async responses => {
+      console.log(responses);
 
-      // Get found geocode IDs
-      this.userService.getFoundGeoCodes({ userID: this.userID }).subscribe((response: GetFoundGeoCodesResponse) => {
-        console.log(response);
-        this.foundIDs = response.geocodeIDs;
-        completed++;
-        if (completed === 3) { resolve(null); }
-      });
+      this.map = this.mapAndInfo.getMap();
+      this.googleMaps = this.mapAndInfo.getGoogleMaps();
 
-      // Get created geocode IDs
-      this.userService.getOwnedGeoCodes({ userID: this.userID }).subscribe((response: GetOwnedGeoCodesResponse) => {
-        console.log(response);
-        this.createdIDs = response.geocodeIDs;
-        completed++;
-        if (completed === 3) { resolve(null); }
-      });
+      this.foundIDs = responses[1].geocodeIDs;
+      if (this.userID === this.loggedInUserID) {
+        this.createdIDs = responses[2].geocodeIDs;
+      }
+
+      await this.loadFound();
     });
-  }
-
-  async ngOnInit() {
-    await this.loadInitialData();
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      await this.loadMap(position.coords.latitude, position.coords.longitude);
-    }, async (positionError) => {
-      await this.loadMap(0, 0);
-    });
-  }
-
-  async loadMap(centreLat, centreLong) {
-    const mapOptions = {
-      center: {lat: centreLat, lng: centreLong},
-      zoom: 5,
-    };
-    this.map = new this.googleMaps.Map(this.mapElement.nativeElement, mapOptions);
-    await this.loadFound();
   }
 
   async segmentChanged(event) {
@@ -143,38 +117,14 @@ export class UserGeocodesPage implements OnInit {
         }
       });
       marker.addListener('click' , (event) => {
-        this.detailedGeoCode = g;
+        this.showDetails(g);
       });
       this.markers.push(marker);
     }
   }
 
-  closeDetails() {
-    this.detailedGeoCode = null;
-  }
-
-  mapSizeMD() {
-    if (this.detailedGeoCode) {
-      return 8;
-    } else {
-      return 12;
-    }
-  }
-
-  mapSizeLG() {
-    if (this.detailedGeoCode) {
-      return 9;
-    } else {
-      return 12;
-    }
-  }
-
-  getClass() {
-    if (this.detailedGeoCode && !window.matchMedia('(min-width: 768px)').matches) {
-      // Only returns if the geocode details are being shown and the screen is small
-      return 'splitScreen';
-    } else {
-      return '';
-    }
+  showDetails(g: GeoCode) {
+    this.detailedGeoCode = g;
+    this.mapAndInfo.setInfoVisible(g != null);
   }
 }

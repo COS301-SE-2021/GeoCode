@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { UserGeocodesPageRoutingModule } from './geocodes-routing.module';
 
 import { UserGeocodesPage } from './geocodes.page';
+import {CustomComponentsModule} from '../../../components/components.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    UserGeocodesPageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        UserGeocodesPageRoutingModule,
+        CustomComponentsModule
+    ],
   declarations: [UserGeocodesPage]
 })
 export class GeocodesPageModule {}
