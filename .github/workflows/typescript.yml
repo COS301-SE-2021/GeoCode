@@ -20,7 +20,7 @@ jobs:
             cp environments/environment.prod.ts environments/environment.ts
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2.1.5
+        uses: actions/setup-node@v2.4.0
         with:
           node-version: 'lts/fermium'
           
@@ -51,7 +51,7 @@ jobs:
             cp environments/environment.prod.ts environments/environment.ts
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2.1.5
+        uses: actions/setup-node@v2.4.0
         with:
           node-version: 'lts/fermium'
 
