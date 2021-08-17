@@ -38,6 +38,7 @@ import tech.geocodeapp.geocode.user.response.*;
 public class UserServiceImplTest {
     private UserService userService;
     private UserMockRepository userMockRepo;
+    private MissionService missionService;
 
     private User validUser;
     private GeoCode geoCode1;
@@ -109,7 +110,7 @@ public class UserServiceImplTest {
         GeoCodeMockRepository geoCodeMockRepo = new GeoCodeMockRepository();
 
         userMockRepo = new UserMockRepository();
-        CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo);
+        CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo, missionService);
         GeoCodeService geoCodeService;
 
         try {

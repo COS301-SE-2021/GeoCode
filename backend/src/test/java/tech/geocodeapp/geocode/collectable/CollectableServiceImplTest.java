@@ -9,6 +9,7 @@ import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.mission.service.MissionService;
 
 import java.util.UUID;
 
@@ -16,6 +17,8 @@ import java.util.UUID;
 public class CollectableServiceImplTest {
 
     private CollectableService collectableService;
+    private MissionService missionService;
+    //ToDo intialize mission service
 
     CollectableServiceImplTest (){
 
@@ -23,7 +26,7 @@ public class CollectableServiceImplTest {
 
     @BeforeEach
     void setup() {
-        collectableService = new CollectableServiceImpl(new CollectableMockRepository(), new CollectableSetMockRepository(), new CollectableTypeMockRepository());
+        collectableService = new CollectableServiceImpl(new CollectableMockRepository(), new CollectableSetMockRepository(), new CollectableTypeMockRepository(), missionService);
             collectableService.deleteCollectableSets();
             collectableService.deleteCollectables();
             collectableService.deleteCollectableTypes();

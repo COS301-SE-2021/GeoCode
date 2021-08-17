@@ -63,7 +63,7 @@ public class MissionServiceImplTest {
         CollectableTypeMockRepository collectableTypeMockRepo = new CollectableTypeMockRepository();
         CollectableMockRepository collectableMockRepo = new CollectableMockRepository();
         CollectableSetMockRepository collectableSetMockRepo = new CollectableSetMockRepository();
-        CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo);
+        CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo, missionService);
 
         missionMockRepo = new MissionMockRepository();
         missionService = new MissionServiceImpl(missionMockRepo, collectableService);
