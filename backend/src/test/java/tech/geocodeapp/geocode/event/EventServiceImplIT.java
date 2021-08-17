@@ -681,7 +681,26 @@ class EventServiceImplIT {
                 .hasMessageContaining( reqEmptyError );
     }
 
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - createLeaderBoard" )
+    void createLeaderBoardInvalidRequestTest() {
 
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        CreateLeaderboardRequest request = new CreateLeaderboardRequest();
+        request.setEventID( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.createLeaderBoard( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
 
 
 
