@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { CreateGeocodeComponent } from './create-geocode.component';
 import {MockGoogleMapsLoader} from '../../../../mocks/MockGoogleMapsLoader';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('CreateGeocodeComponent', () => {
   let component: CreateGeocodeComponent;
@@ -12,7 +13,7 @@ describe('CreateGeocodeComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ CreateGeocodeComponent ],
       providers: [ MockGoogleMapsLoader.provider() ],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot(), RouterTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreateGeocodeComponent);
