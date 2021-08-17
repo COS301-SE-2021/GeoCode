@@ -517,7 +517,28 @@ class EventServiceImplIT {
                 .hasMessageContaining( reqParamError );
     }
 
+    /**
+     * Using valid data does the getCurrentEventStatus use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - eventsNearMe" )
+    void eventsNearMeTest() {
 
+        try {
+
+            EventsNearMeRequest request = new EventsNearMeRequest();
+            request.setLocation( null );
+            request.setRadius( 0.0 );
+
+            var event = eventService.eventsNearMe( request  );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
 
 
 
