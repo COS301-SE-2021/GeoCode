@@ -403,7 +403,7 @@ class EventServiceImplTest {
         /* Null request check */
         assertThatThrownBy( () -> eventService.nextStage( null, null ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( reqEmptyError );
+                .hasMessageContaining( reqParamError );
     }
 
     /**
