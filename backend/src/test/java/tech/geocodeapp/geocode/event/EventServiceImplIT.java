@@ -587,7 +587,28 @@ class EventServiceImplIT {
                 .hasMessageContaining( reqParamError );
     }
 
+    /**
+     * Using valid data does the changeAvailability use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - changeAvailability" )
+    void changeAvailabilityTest() {
 
+        try {
+
+            ChangeAvailabilityRequest request = new ChangeAvailabilityRequest();
+            request.setAvailability( null );
+            request.setEventID( null );
+
+            var event = eventService.changeAvailability( request  );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
 
 
     ////////////////Helper functions////////////////
