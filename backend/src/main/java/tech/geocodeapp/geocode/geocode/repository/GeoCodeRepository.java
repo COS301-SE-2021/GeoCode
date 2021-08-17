@@ -19,7 +19,15 @@ import java.util.UUID;
 public interface GeoCodeRepository extends JpaRepository< GeoCode, UUID> {
 
     /**
-     * Finds all of the GeoCode's with a certain level of difficulty
+     * Finds all the GeoCode's that are not in an event
+     *
+     * @return all the GeoCode's without an eventID
+     */
+    @Query( value = "SELECT r FROM GeoCode r WHERE r.eventID is null" )
+    Collection< GeoCode > findGeoCode();
+
+    /**
+     * Finds all the GeoCode's with a certain level of difficulty
      *
      * @param difficulty the level of difficulty assigned to a GeoCode
      *

@@ -16,15 +16,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.CookieValue;
 import tech.geocodeapp.geocode.leaderboard.request.*;
 import tech.geocodeapp.geocode.leaderboard.response.*;
 
@@ -35,6 +28,7 @@ import java.util.Map;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-05T10:13:51.670Z[GMT]")
 @Validated
+@CrossOrigin(origins = "${web_referrer}", maxAge = 3600)
 public interface LeaderboardApi {
 
     @Operation(summary = "Create a new Leaderboard", description = "Creates a new Leaderboard with the provided name", security = {

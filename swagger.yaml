@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.9"
+  version: "1.5.11"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -1922,6 +1922,38 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
+        
+  /Mission/updateCompletion:
+    post:
+      tags:
+      - "Mission"
+      summary: "Updates the completion of a mission"
+      description: "Checks if the mission completion has changed and updates it accordingly"
+      operationId: "updateCompletion"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCompletionRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UpdateCompletionRequest'
+      responses:
+        '200':
+          description: "Updated Completion"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateCompletionResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UpdateCompletionResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+        
 
 components:
   responses:
@@ -2012,7 +2044,7 @@ components:
       type: object
       required:
         - success
-        - message
+        #- message # Set to not required because it was causing an issue with TypeScript. If required here, it needs to be required in all child classes if they define it on their own.
       properties:
         success:
           type: boolean
@@ -2422,7 +2454,7 @@ components:
         pastLocations:
           type: array
           items:
-            type: string
+            $ref: "#/components/schemas/GeoPoint"
         mission:
           type: string
           format: uuid
@@ -2482,6 +2514,10 @@ components:
         collectableTypeId:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        createMission:
+          type: boolean
+          example: false
       xml:
         name: "CreateCollectableRequest"
 
@@ -2566,13 +2602,17 @@ components:
         id:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         type:
           $ref: "#/components/schemas/CollectableTypeComponent"
         pastLocations:
           type: array
           items:
             type: string
-
+        missionId:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "CollectableResponse"
 
@@ -3634,3 +3674,31 @@ components:
               $ref: "#/components/schemas/Mission"
           xml:
             name: "CreateMissionResponse"
+            
+    UpdateCompletionRequest:
+      type: "object"
+      required:
+        - mission
+        - location
+      properties:
+        mission:
+          $ref: "#/components/schemas/Mission"
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+      xml:
+        name: "UpdateCompletionRequest"
+        
+    UpdateCompletionResponse:
+      type: "object"
+      required:
+        - success
+        - message
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Completion Updated"
+      xml:
+        name: "UpdateCompletionResponse"

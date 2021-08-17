@@ -55,6 +55,11 @@ public class UserMockService implements UserService {
     }
 
     @Override
+    public GetMyMissionsResponse getMyMissions(GetMyMissionsRequest request) throws NullRequestParameterException {
+        return null;
+    }
+
+    @Override
     public AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException {
         return null;
     }
@@ -85,7 +90,9 @@ public class UserMockService implements UserService {
     }
 
     @Override
-    public UUID getCurrentUserID() { return null; }
+    public UUID getCurrentUserID() {
+        return null;
+    }
 
     /**
      * Only set userId and username for the purpose of this mock as nothing else is required by the leaderboard subsystems unit tests

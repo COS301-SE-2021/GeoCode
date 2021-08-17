@@ -6,6 +6,7 @@ import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
+import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.repository.CollectableSetRepository;
 import tech.geocodeapp.geocode.collectable.repository.CollectableTypeRepository;
@@ -13,12 +14,12 @@ import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.mission.request.CreateMissionRequest;
+import tech.geocodeapp.geocode.mission.response.CreateMissionResponse;
+import tech.geocodeapp.geocode.mission.service.MissionService;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This class implements the CollectableService interface
@@ -31,13 +32,19 @@ public class CollectableServiceImpl implements CollectableService {
 
     private final CollectableTypeRepository collectableTypeRepo;
 
+    private final MissionService missionService;
+
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
     private final String invalidCollectableIdMessage = "Invalid Collectable ID";
+    private String invalidCollectableTypeIdMessage = "Invalid CollectableType ID";
 
-    public CollectableServiceImpl(CollectableRepository collectableRepo, CollectableSetRepository collectableSetRepo, CollectableTypeRepository collectableTypeRepo) {
+    public CollectableServiceImpl(CollectableRepository collectableRepo, CollectableSetRepository collectableSetRepo, CollectableTypeRepository collectableTypeRepo, MissionService missionService) {
         this.collectableRepo = collectableRepo;
         this.collectableSetRepo = collectableSetRepo;
         this.collectableTypeRepo = collectableTypeRepo;
+        this.missionService = missionService;
+
+        initialiseUserTrackables();
     }
 
     @Transactional
@@ -85,13 +92,24 @@ public class CollectableServiceImpl implements CollectableService {
         if(collectableTypeOptional.isPresent()){
             Collectable collectable = new Collectable(collectableTypeOptional.get());
             Collectable savedCollectable = collectableRepo.save(collectable);
-
+            if(request.isCreateMission()) {
+                CreateMissionRequest createMissionRequest = new CreateMissionRequest(savedCollectable.getId());
+                try {
+                   CreateMissionResponse missionResponse = missionService.createMission(createMissionRequest);
+                   if(missionResponse.isSuccess()) {
+                       savedCollectable.setMissionID(missionResponse.getMission().getId());
+                       collectableRepo.save(savedCollectable);
+                   }
+                } catch (NullRequestParameterException e) {
+                    e.printStackTrace();
+                }
+            }
             /*
              * Create CollectableResponse from collectable
              * Use CollectableTypeManager to convert the CollectableType to a CollectableTypeComponent
              */
             CollectableTypeManager manager = new CollectableTypeManager();
-            CollectableResponse collectableResponse = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()), collectable.getPastLocations());
+            CollectableResponse collectableResponse = new CollectableResponse(savedCollectable.getId(), manager.buildCollectableType(savedCollectable.getType()), savedCollectable.getPastLocations(), savedCollectable.getMissionID());
 
             return new CreateCollectableResponse(true, "The Collectable was successfully created", collectableResponse);
         }else{
@@ -112,7 +130,7 @@ public class CollectableServiceImpl implements CollectableService {
         //get all Collectables and build collectableResponses from them
         List<Collectable> collectables = collectableRepo.findAll();
         for (Collectable collectable : collectables) {
-            CollectableResponse temp = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()), collectable.getPastLocations());
+            CollectableResponse temp = new CollectableResponse(collectable.getId(), manager.buildCollectableType(collectable.getType()), collectable.getPastLocations(), collectable.getMissionID());
             collectableResponses.add(temp);
         }
 
@@ -186,23 +204,21 @@ public class CollectableServiceImpl implements CollectableService {
     }
 
     @Transactional
-    public GetCollectableTypeByIDResponse getCollectableTypeByID( GetCollectableTypeByIDRequest request ) {
-
-        /* Find all the collectableTypes stored in the system */
-        List<CollectableType> collectableTypes = new ArrayList<>(collectableTypeRepo.findAll());
-
-        /* Search for collectable with the specified ID */
-        CollectableType hold = null;
-        for ( CollectableType type : collectableTypes ) {
-
-            /* Determine if the current collectable is the correct one */
-            if ( type.getId().equals( request.getCollectableTypeID() ) ) {
-
-                hold = type;
-            }
+    public GetCollectableTypeByIDResponse getCollectableTypeByID( GetCollectableTypeByIDRequest request ) throws NullRequestParameterException {
+        if(request == null){
+            return new GetCollectableTypeByIDResponse(false, "The GetCollectableTypeByIDRequest object passed was NULL", null);
         }
 
-        return new GetCollectableTypeByIDResponse( hold );
+        checkNullRequestParameters.checkRequestParameters(request);
+
+        //check if the CollectableID is invalid
+        Optional<CollectableType> optionalCollectableType = collectableTypeRepo.findById(request.getCollectableTypeID());
+
+        if(optionalCollectableType.isEmpty()){
+            return new GetCollectableTypeByIDResponse(false, invalidCollectableTypeIdMessage, null);
+        }
+
+        return new GetCollectableTypeByIDResponse(true, "CollectableType found", optionalCollectableType.get());
     }
 
     @Transactional
@@ -218,5 +234,41 @@ public class CollectableServiceImpl implements CollectableService {
     @Transactional
     public void deleteCollectableSets() {
         collectableSetRepo.deleteAll();
+    }
+
+    private void initialiseUserTrackables() {
+        /*
+         * The "User Trackables" set and type are required to exist before users can enter the system.
+         * Create them on application load if they do not exist.
+         */
+        UUID userTrackableID = new UUID(0, 0);
+
+        Optional<CollectableSet> temp = collectableSetRepo.findById(userTrackableID);
+        CollectableSet userTrackableSet = null;
+        if (temp.isPresent()) {
+            userTrackableSet = temp.get();
+        } else {
+            /* Create the User Trackable set */
+            userTrackableSet = new CollectableSet();
+            userTrackableSet.setId(userTrackableID);
+            userTrackableSet.setName("User Trackables");
+            userTrackableSet.setDescription("User Trackables");
+            collectableSetRepo.save(userTrackableSet);
+        }
+
+        if (!collectableTypeRepo.existsById(userTrackableID)) {
+            HashMap<String, String> properties = new HashMap<>();
+            properties.put("trackable", "true");
+
+            /* Create the User Trackable type */
+            CollectableType userTrackableType = new CollectableType();
+            userTrackableType.setId(userTrackableID);
+            userTrackableType.setName("User Trackables");
+            userTrackableType.setImage("https://via.placeholder.com/100");
+            userTrackableType.setRarity(Rarity.UNIQUE);
+            userTrackableType.setSet(userTrackableSet);
+            userTrackableType.setProperties(properties);
+            collectableTypeRepo.save(userTrackableType);
+        }
     }
 }

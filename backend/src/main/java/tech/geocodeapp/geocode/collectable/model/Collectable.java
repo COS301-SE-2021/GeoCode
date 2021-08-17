@@ -35,6 +35,9 @@ public class Collectable   {
   @ElementCollection(fetch = FetchType.EAGER)
   private Collection<GeoPoint> pastLocations = new ArrayList<>();
 
+  @JsonProperty("missionID")
+  private UUID missionID = null;
+
   public Collectable() {
     id = UUID.randomUUID();
   }
@@ -111,6 +114,11 @@ public class Collectable   {
     this.type = type;
   }
 
+  public UUID getMissionID(){ return missionID; }
+
+  public void setMissionID(UUID missionID) {
+    this.missionID = missionID;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {
