@@ -443,38 +443,6 @@ public class UserServiceImplIT {
     }
 
     @Test
-    public void AddToOwnedGeoCodesTestInvalidUserID(){
-        try {
-            GeoCode firstGeoCode = new GeoCode();
-            firstGeoCode.setId(firstGeoCodeID);
-
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(invalidUser, firstGeoCode);
-            AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void AddToOwnedGeoCodesTestInvalidGeoCodeID(){
-        try {
-            GeoCode invalidGeoCode = new GeoCode();
-            invalidGeoCode.setId(invalidGeoCodeID);
-
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUser, invalidGeoCode);
-            AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidGeoCodeIdMessage, response.getMessage());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
     public void AddToOwnedGeoCodesTestNotAddDuplicate(){
         try {
             GeoCode noPointsFirstOwnedGeoCode = new GeoCode();
@@ -536,38 +504,6 @@ public class UserServiceImplIT {
     }
 
     @Test
-    public void AddToFoundGeoCodesTestInvalidUserID(){
-        try {
-            GeoCode firstGeoCode = new GeoCode();
-            firstGeoCode.setId(firstGeoCodeID);
-
-            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(invalidUser, firstGeoCode);
-            AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void AddToFoundGeoCodesTestInvalidGeoCodeID(){
-        try {
-            GeoCode invalidGeoCode = new GeoCode();
-            invalidGeoCode.setId(invalidGeoCodeID);
-
-            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(validUser, invalidGeoCode);
-            AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidGeoCodeIdMessage, response.getMessage());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
     public void AddToFoundGeoCodesTestNotAddDuplicate(){
         try {
             GeoCode noPointsFirstFoundGeoCode = new GeoCode();
@@ -623,38 +559,6 @@ public class UserServiceImplIT {
             foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
             Assertions.assertEquals(3, foundGeoCodeIDs.size());
             Assertions.assertTrue(foundGeoCodeIDs.contains(noPointsNewFoundGeoCodeID));
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void AddToFoundCollectableTypesTestInvalidUserID(){
-        try {
-            CollectableType testCollectableType = new CollectableType();
-            testCollectableType.setId(testCollectableTypeID);
-
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(invalidUser, testCollectableType);
-            AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void AddToFoundCollectableTypesTestInvalidCollectableTypeID(){
-        try {
-            CollectableType invalidCollectableType = new CollectableType();
-            invalidCollectableType.setId(invalidCollectableTypeID);
-
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUser, invalidCollectableType);
-            AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidCollectableTypeIDMessage, response.getMessage());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
