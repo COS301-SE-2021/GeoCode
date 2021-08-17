@@ -152,4 +152,17 @@ class EventServiceImplIT {
                 .hasMessageContaining( "The given repository does not exist." );
     }
 
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 2 )
+    @DisplayName( "Null repository handling - createEvent" )
+    void createEventNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.createEvent( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
 }
