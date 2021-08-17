@@ -8,7 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.mission.model.Mission;
@@ -74,6 +76,10 @@ public class UserServiceImplIT {
     private final UUID circumferenceMissionID = UUID.fromString("46e8e512-68ca-40d7-89ce-11ae91c58bbc");
 
     private final String existingUserIdMessage = "User ID already exists";
+
+    private final User validUser = new User(validUserId);
+    private final User invalidUser = new User(invalidUserId);
+    private final User noPointsUser = new User(noPointsUserId);
 
     @Test
     public void getCurrentCollectableTestInvalidUser() {
@@ -439,7 +445,10 @@ public class UserServiceImplIT {
     @Test
     public void AddToOwnedGeoCodesTestInvalidUserID(){
         try {
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(invalidUserId, firstGeoCodeID);
+            GeoCode firstGeoCode = new GeoCode();
+            firstGeoCode.setId(firstGeoCodeID);
+
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(invalidUser, firstGeoCode);
             AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -452,7 +461,10 @@ public class UserServiceImplIT {
     @Test
     public void AddToOwnedGeoCodesTestInvalidGeoCodeID(){
         try {
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUserId, invalidGeoCodeID);
+            GeoCode invalidGeoCode = new GeoCode();
+            invalidGeoCode.setId(invalidGeoCodeID);
+
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUser, invalidGeoCode);
             AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -465,7 +477,10 @@ public class UserServiceImplIT {
     @Test
     public void AddToOwnedGeoCodesTestNotAddDuplicate(){
         try {
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(noPointsUserId, noPointsFirstOwnedGeoCodeID);
+            GeoCode noPointsFirstOwnedGeoCode = new GeoCode();
+            noPointsFirstOwnedGeoCode.setId(noPointsFirstOwnedGeoCodeID);
+
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(noPointsUser, noPointsFirstOwnedGeoCode);
             AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -498,7 +513,10 @@ public class UserServiceImplIT {
             Assertions.assertEquals(2, ownedGeoCodeIDs.size());
 
             //add a new owned GeoCode
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(noPointsUserId, noPointsNewOwnedGeoCodeID);
+            GeoCode noPointsNewOwnedGeoCode = new GeoCode();
+            noPointsNewOwnedGeoCode.setId(noPointsNewOwnedGeoCodeID);
+
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(noPointsUser, noPointsNewOwnedGeoCode);
             AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -520,7 +538,10 @@ public class UserServiceImplIT {
     @Test
     public void AddToFoundGeoCodesTestInvalidUserID(){
         try {
-            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(invalidUserId, firstGeoCodeID);
+            GeoCode firstGeoCode = new GeoCode();
+            firstGeoCode.setId(firstGeoCodeID);
+
+            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(invalidUser, firstGeoCode);
             AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -533,7 +554,10 @@ public class UserServiceImplIT {
     @Test
     public void AddToFoundGeoCodesTestInvalidGeoCodeID(){
         try {
-            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(validUserId, invalidGeoCodeID);
+            GeoCode invalidGeoCode = new GeoCode();
+            invalidGeoCode.setId(invalidGeoCodeID);
+
+            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(validUser, invalidGeoCode);
             AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -546,7 +570,10 @@ public class UserServiceImplIT {
     @Test
     public void AddToFoundGeoCodesTestNotAddDuplicate(){
         try {
-            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(noPointsUserId, noPointsFirstFoundGeoCodeID);
+            GeoCode noPointsFirstFoundGeoCode = new GeoCode();
+            noPointsFirstFoundGeoCode.setId(noPointsFirstFoundGeoCodeID);
+
+            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(noPointsUser, noPointsFirstFoundGeoCode);
             AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -579,7 +606,10 @@ public class UserServiceImplIT {
             Assertions.assertEquals(2, foundGeoCodeIDs.size());
 
             //add a new found GeoCode
-            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(noPointsUserId, noPointsNewFoundGeoCodeID);
+            GeoCode noPointsNewFoundGeoCode = new GeoCode();
+            noPointsNewFoundGeoCode.setId(noPointsFirstFoundGeoCodeID);
+
+            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(noPointsUser, noPointsNewFoundGeoCode);
             AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -601,7 +631,10 @@ public class UserServiceImplIT {
     @Test
     public void AddToFoundCollectableTypesTestInvalidUserID(){
         try {
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(invalidUserId, testCollectableTypeID);
+            CollectableType testCollectableType = new CollectableType();
+            testCollectableType.setId(testCollectableTypeID);
+
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(invalidUser, testCollectableType);
             AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -614,7 +647,10 @@ public class UserServiceImplIT {
     @Test
     public void AddToFoundCollectableTypesTestInvalidCollectableTypeID(){
         try {
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUserId, invalidCollectableTypeID);
+            CollectableType invalidCollectableType = new CollectableType();
+            invalidCollectableType.setId(invalidCollectableTypeID);
+
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUser, invalidCollectableType);
             AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -627,7 +663,10 @@ public class UserServiceImplIT {
     @Test
     public void AddToFoundCollectableTypesTestNotAddDuplicate(){
         try {
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUserId, testCollectableType1ID);
+            CollectableType testCollectableType1 = new CollectableType();
+            testCollectableType1.setId(testCollectableType1ID);
+
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUser, testCollectableType1);
             AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -660,7 +699,10 @@ public class UserServiceImplIT {
             Assertions.assertEquals(2, foundCollectableTypeIDs.size());
 
             //add a new found CollectableType
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(noPointsUserId, noPointsNewFoundCollectableTypeID);
+            CollectableType noPointsNewFoundCollectableType = new CollectableType();
+            noPointsNewFoundCollectableType.setId(noPointsNewFoundCollectableTypeID);
+
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(noPointsUser, noPointsNewFoundCollectableType);
             AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -750,7 +792,13 @@ public class UserServiceImplIT {
     @Test
     public void swapCollectableTestCollectableInvalidUserID(){
         try {
-            SwapCollectableRequest request = new SwapCollectableRequest(invalidUserId, collectableInFirstGeoCodeID, firstGeoCodeID);
+            Collectable collectableInFirstGeoCode = new Collectable();
+            collectableInFirstGeoCode.setId(collectableInFirstGeoCodeID);
+
+            GeoCode firstGeoCode = new GeoCode();
+            firstGeoCode.setId(firstGeoCodeID);
+
+            SwapCollectableRequest request = new SwapCollectableRequest(invalidUser, collectableInFirstGeoCode, firstGeoCode);
             SwapCollectableResponse response = userService.swapCollectable(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -766,7 +814,13 @@ public class UserServiceImplIT {
     @Test
     public void swapCollectableTestCollectableInvalidGeoCodeID(){
         try {
-            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, collectableInFirstGeoCodeID, invalidGeoCodeID);
+            Collectable collectableInFirstGeoCode = new Collectable();
+            collectableInFirstGeoCode.setId(collectableInFirstGeoCodeID);
+
+            GeoCode invalidGeoCode = new GeoCode();
+            invalidGeoCode.setId(invalidGeoCodeID);
+
+            SwapCollectableRequest request = new SwapCollectableRequest(validUser, collectableInFirstGeoCode, invalidGeoCode);
             SwapCollectableResponse response = userService.swapCollectable(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -782,7 +836,13 @@ public class UserServiceImplIT {
     @Test
     public void swapCollectableTestCollectableInvalidCollectableID(){
         try {
-            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, invalidCollectableID, firstGeoCodeID);
+            Collectable invalidCollectable = new Collectable();
+            invalidCollectable.setId(invalidCollectableID);
+
+            GeoCode firstGeoCode = new GeoCode();
+            firstGeoCode.setId(firstGeoCodeID);
+
+            SwapCollectableRequest request = new SwapCollectableRequest(validUser, invalidCollectable, firstGeoCode);
             SwapCollectableResponse response = userService.swapCollectable(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -799,7 +859,13 @@ public class UserServiceImplIT {
     @Transactional
     public void swapCollectableTestCollectableIsSwapped(){
         try {
-            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, collectableInFirstGeoCodeID, firstGeoCodeID);
+            Collectable collectableInFirstGeoCode = new Collectable();
+            collectableInFirstGeoCode.setId(collectableInFirstGeoCodeID);
+
+            GeoCode firstGeoCode = new GeoCode();
+            firstGeoCode.setId(firstGeoCodeID);
+
+            SwapCollectableRequest request = new SwapCollectableRequest(validUser, collectableInFirstGeoCode, firstGeoCode);
             SwapCollectableResponse response = userService.swapCollectable(request);
 
             Assertions.assertTrue(response.isSuccess());

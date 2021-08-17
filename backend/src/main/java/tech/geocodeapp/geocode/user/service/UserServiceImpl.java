@@ -9,18 +9,13 @@ import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
-import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
-import tech.geocodeapp.geocode.collectable.response.GetCollectableTypeByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
-import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
@@ -303,37 +298,12 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        //check if the UserID is invalid
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
-
-        if(optionalUser.isEmpty()){
-            return new AddToOwnedGeoCodesResponse(false, invalidUserIdMessage);
-        }
-
-        //check if the GeoCodeID is invalid
-        GetGeoCodeRequest getGeoCodeRequest = new GetGeoCodeRequest(request.getGeoCodeID());
-        GetGeoCodeResponse getGeoCodeResponse;
-
-        try {
-            getGeoCodeResponse = geoCodeService.getGeoCode(getGeoCodeRequest);
-        } catch (InvalidRequestException e) {
-            e.printStackTrace();
-            return new AddToOwnedGeoCodesResponse(false, e.getMessage());
-        }
-
-        GeoCode geoCode = getGeoCodeResponse.getFoundGeoCode();
-
-        if(geoCode == null){
-            return new AddToOwnedGeoCodesResponse(false, invalidGeoCodeIdMessage);
-        }
-
         //add the GeoCodeID to the User's list of owned GeoCodes
-        User user = optionalUser.get();
+        User user = request.getUser();
+        GeoCode geoCode = request.getGeocode();
 
-        if(!user.getOwnedGeocodes().contains(geoCode)){
-            user.addOwnedGeocodesItem(geoCode);
-            userRepo.save(user);
-        }
+        user.addOwnedGeocodesItem(geoCode);
+        userRepo.save(user);
 
         return new AddToOwnedGeoCodesResponse(true, "GeoCode added to the owned GeoCodes");
     }
@@ -351,37 +321,12 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        //check if the UserID is invalid
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
-
-        if(optionalUser.isEmpty()){
-            return new AddToFoundGeoCodesResponse(false, invalidUserIdMessage);
-        }
-
-        //check if the GeoCodeID is invalid
-        GetGeoCodeRequest getGeoCodeRequest = new GetGeoCodeRequest(request.getGeoCodeID());
-        GetGeoCodeResponse getGeoCodeResponse;
-
-        try {
-            getGeoCodeResponse = geoCodeService.getGeoCode(getGeoCodeRequest);
-        } catch (InvalidRequestException e) {
-            e.printStackTrace();
-            return new AddToFoundGeoCodesResponse(false, e.getMessage());
-        }
-
-        GeoCode geoCode = getGeoCodeResponse.getFoundGeoCode();
-
-        if(geoCode == null){
-            return new AddToFoundGeoCodesResponse(false, invalidGeoCodeIdMessage);
-        }
+        User user = request.getUser();
+        GeoCode geoCode = request.getGeocode();
 
         //add the GeoCodeID to the User's list of owned GeoCodes
-        User user = optionalUser.get();
-
-        if(!user.getFoundGeocodes().contains(geoCode)){
-            user.addFoundGeocodesItem(geoCode);
-            userRepo.save(user);
-        }
+        user.addFoundGeocodesItem(geoCode);
+        userRepo.save(user);
 
         return new AddToFoundGeoCodesResponse(true, "GeoCode added to the found GeoCodes");
     }
@@ -399,28 +344,11 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        //check if the UserID is invalid
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+        CollectableType collectableType = request.getCollectableType();
+        User user = request.getUser();
 
-        if(optionalUser.isEmpty()){
-            return new AddToFoundCollectableTypesResponse(false, invalidUserIdMessage);
-        }
-
-        //check if the CollectionTypeID is invalid
-        GetCollectableTypeByIDRequest getCollectableTypeByIDRequest = new GetCollectableTypeByIDRequest(request.getCollectableTypeID());
-        GetCollectableTypeByIDResponse getCollectableTypeByIDResponse = collectableService.getCollectableTypeByID(getCollectableTypeByIDRequest);
-        CollectableType collectableType = getCollectableTypeByIDResponse.getCollectableType();
-
-        if(collectableType == null){
-            return new AddToFoundCollectableTypesResponse(false, invalidCollectableTypeIDMessage);
-        }
-
-        User user = optionalUser.get();
-
-        if(!user.getFoundCollectableTypes().contains(collectableType)){
-            user.addFoundCollectableTypesItem(collectableType);
-            userRepo.save(user);
-        }
+        user.addFoundCollectableTypesItem(collectableType);
+        userRepo.save(user);
 
         return new AddToFoundCollectableTypesResponse(true, "CollectableType added to the found CollectableTypes");
     }
@@ -489,9 +417,7 @@ public class UserServiceImpl implements UserService {
             return new RegisterNewUserResponse(false, existingUserIdMessage);
         }
 
-        User newUser = new User();
-        newUser.setId(request.getUserID());
-        newUser.setUsername(request.getUsername());
+        User newUser = new User(request.getUserID(), request.getUsername());
 
         //create the user's trackable object which will always have a Mission
         CreateCollectableRequest createCollectableRequest = new CreateCollectableRequest(trackableUUID, true);
@@ -530,70 +456,24 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        /* check if the UserID is invalid */
-        GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(request.getUserID());
-        GetUserByIdResponse getUserByIdResponse = this.getUserById(getUserByIdRequest);
+        User currentUser = request.getUser();
+        GeoCode geoCode = request.getGeoCode();
 
-        if(!getUserByIdResponse.isSuccess()){
-            return new SwapCollectableResponse(false, getUserByIdResponse.getMessage(), null);
-        }
-
-        User currentUser = getUserByIdResponse.getUser();
-
-        //get the GeoCode
-        GetGeoCodeRequest getGeoCodeByIDRequest = new GetGeoCodeRequest(request.getGeoCodeID());
-        GetGeoCodeResponse getGeoCodeByIDResponse;
-
-        try {
-            getGeoCodeByIDResponse = geoCodeService.getGeoCode(getGeoCodeByIDRequest);
-        } catch (InvalidRequestException e) {
-            e.printStackTrace();
-            return new SwapCollectableResponse(false, e.getMessage(), null);
-        }
-
-        GeoCode geoCode = getGeoCodeByIDResponse.getFoundGeoCode();
-
-        //check if GeoCodeID is invalid
-        if(geoCode == null){
-            return new SwapCollectableResponse(false, "Invalid ID given for the GeoCode", null);
-        }
-
-        //check if the GeoCode contains the given Collectable
-        if(!geoCode.getCollectables().contains(request.getCollectableID())){
-            return new SwapCollectableResponse(false, "Invalid ID given for the Collectable", null);
-        }
-
-        /* only swap the Collectables if no errors have occurred before now */
-        //currentCollectable to swap out
+        //swap out the currentCollectable
         Collectable oldCurrentCollectable = currentUser.getCurrentCollectable();
-
-        //System.out.println("collectable id: "+request.getCollectableID());
-
-        //swap in newCurrentCollectable
-        GetCollectableByIDRequest getCollectableByIDRequest = new GetCollectableByIDRequest( request.getCollectableID() );
-        GetCollectableByIDResponse getCollectableByIDResponse = collectableService.getCollectableByID( getCollectableByIDRequest );
-        currentUser.setCurrentCollectable( getCollectableByIDResponse.getCollectable() );
-
-        /*if(!getCollectableByIDResponse.isSuccess()){
-            System.out.println("getCollectableByIDResponse failed: "+getCollectableByIDResponse.getMessage());
-        }*/
+        Collectable newCurrentCollectable = request.getCollectable();
+        currentUser.setCurrentCollectable(newCurrentCollectable);
 
         //add the GeoCode to the User's found GeoCodes
-        AddToFoundGeoCodesRequest addToFoundGeoCodesRequest = new AddToFoundGeoCodesRequest(request.getUserID(), request.getGeoCodeID());
+        AddToFoundGeoCodesRequest addToFoundGeoCodesRequest = new AddToFoundGeoCodesRequest(currentUser, geoCode);
         this.addToFoundGeoCodes(addToFoundGeoCodesRequest);
 
         //add the CollectableType to the User's found CollectableTypes
-        Collectable collectable = getCollectableByIDResponse.getCollectable();
-        CollectableType collectableType = collectable.getType();
-        UUID collectableTypeID = collectableType.getId();
-
-        //System.out.println("type: "+collectableType.getName());
-
-        AddToFoundCollectableTypesRequest addToFoundCollectableTypesRequest = new AddToFoundCollectableTypesRequest(request.getUserID(), collectableTypeID);
+        AddToFoundCollectableTypesRequest addToFoundCollectableTypesRequest = new AddToFoundCollectableTypesRequest(currentUser, newCurrentCollectable.getType());
         this.addToFoundCollectableTypes(addToFoundCollectableTypesRequest);
         
         //add the Collectable's Mission to the User's Missions
-        UUID missionID = collectable.getMissionID();
+        UUID missionID = newCurrentCollectable.getMissionID();
         
         if(missionID != null){
             GetMissionByIdRequest getMissionByIdRequest = new GetMissionByIdRequest(missionID);

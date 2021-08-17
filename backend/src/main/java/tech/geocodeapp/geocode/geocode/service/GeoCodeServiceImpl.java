@@ -11,7 +11,6 @@ import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
-import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
@@ -745,61 +744,57 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * if the user created the GeoCode do not allow the swap as it will be unfair
          * else continue as the user found the GeoCode fairly
          */
-        var userID = userService.getCurrentUser().getId();
+        var user = userService.getCurrentUser();
+        var userID = user.getId();
         if ( ( userID == null ) || ( geocode.getCreatedBy().equals( userID ) ) ) {
 
             return new SwapCollectablesResponse( false );
         }
 
         /* Find the target collectable in the GeoCode */
-        var replaceIndex = -1;
-        List< UUID > storedCollectables = new ArrayList<>( geocode.getCollectables() );
-        for ( var i = 0; i < storedCollectables.size(); i++ ) {
 
-            /* Check if the current Collectable is the targeted one */
-            if ( storedCollectables.get( i ).equals( request.getTargetCollectableID() ) ) {
-
-                replaceIndex = i;
-                break;
-            }
-        }
-
-        /* Validate the Collectable the user selected was found in the GeoCode */
-        if ( replaceIndex == -1 ) {
-
+        //check if the targetCollectableID is invalid
+        if(!geocode.getCollectables().contains(request.getTargetCollectableID())){
             return new SwapCollectablesResponse( false );
         }
 
-        /* Find all the available Collectables */
-        UUID hold = null;
-        var geocodeToUser = storedCollectables.get( replaceIndex );
-        var temp = collectableService.getCollectables().getCollectables();
-        for ( CollectableResponse collectableResponse : temp ) {
+        /* Get the Collectable that must be swapped out and given to the User */
+        var geocodeToUserID = request.getTargetCollectableID();
+        Collectable geocodeToUser;
 
-            var collectableID = collectableResponse.getId();
-            if ( collectableID.equals( geocodeToUser ) ) {
+        var getCollectableByIdRequest = new GetCollectableByIDRequest(geocodeToUserID);
 
-                hold = collectableID;
+        try {
+            var getCollectableByIdResponse = collectableService.getCollectableByID(getCollectableByIdRequest);
+
+            /* Validate the Collectable's ID was found */
+            if(!getCollectableByIdResponse.isSuccess()){
+                return new SwapCollectablesResponse(false);
             }
-        }
 
-        /* Validate the Collectable's ID was found */
-        if ( hold == null ) {
-
-            return new SwapCollectablesResponse( false );
+            geocodeToUser = getCollectableByIdResponse.getCollectable();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return new SwapCollectablesResponse(false);
         }
 
         /* Perform the swap */
         Collectable userToGeocode;
-        try {
-            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( userID, hold, geocode.getId() ) ).getCollectable();
-        } catch ( NullRequestParameterException error ) {
 
+        try {
+            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( user, geocodeToUser, geocode ) ).getCollectable();
+        } catch ( NullRequestParameterException error ) {
             /* Validate the Collectable returned */
             return new SwapCollectablesResponse( false );
         }
 
+        //change the location of the Collectable going into the GeoCode
         userToGeocode.changeLocation( new GeoPoint( geocode.getLocation().getLatitude(), geocode.getLocation().getLongitude() ) );
+
+        //swap in the Collectable that is the User's old current Collectable
+        var storedCollectables = new ArrayList<>( geocode.getCollectables() );
+        var replaceIndex = storedCollectables.indexOf(geocodeToUserID);
+
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );
 

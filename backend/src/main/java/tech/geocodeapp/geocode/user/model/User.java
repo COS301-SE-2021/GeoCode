@@ -73,7 +73,20 @@ public class User   {
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Set<Mission> missions = null;
 
-  public User id(UUID id) {
+  public User() {
+
+  }
+
+  public User(UUID id) {
+    this.id = id;
+  }
+
+  public User(UUID id, String username) {
+    this.id = id;
+    this.username = username;
+  }
+
+    public User id(UUID id) {
     this.id = id;
     return this;
   }
