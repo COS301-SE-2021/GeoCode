@@ -33,9 +33,9 @@
               </div>
             </div>
           </ng-template>
-          <ng-template *ngFor="let type of set.types" [ngIf]="!foundID(type.id)" class="notfound">
+          <ng-template *ngFor="let type of set.types" [ngIf]="!foundID(type.id)">
             <div class="collectable">
-              <div class="image">
+              <div class="image notfound">
                 <img src="{{type.image}}">
               </div>
               <div class="name">

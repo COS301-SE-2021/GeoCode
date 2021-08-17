@@ -55,32 +55,33 @@ export class EventContentsPage implements AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit() {
     if(this.event== null){
-    console.log('error');
-    }else{
-      const levelReq: GetCurrentEventStatusRequest ={
-        eventID:this.event.id,
-        userID:this.keycloak.getKeycloakInstance().subject
-      };
-      this.eventApi.getCurrentEventStatus(levelReq).subscribe((response: GetCurrentEventStatusResponse) =>{
-        console.log(response);
-        if(response.success){
-          if(response.targetGeocode==null){
-          this.presentAlert();
-          }else{
-            this.geocodes.push(response.targetGeocode);
-            this.mapsLoader.load().then(handle => {
-              this.googleMaps = handle;
-              this.loadMap();
-            }).catch();
-          }
-        }else{
-          this.navCtrl.back();
-          this.presentToast();
-        }
-      });
+      this.event = (await this.eventApi.getEvent({eventID: this.eventID}).toPromise()).foundEvent;
+      this.name = this.event.name;
+      this.description = this.event.description;
     }
+    const levelReq: GetCurrentEventStatusRequest ={
+      eventID:this.event.id,
+      userID:this.keycloak.getKeycloakInstance().subject
+    };
+    this.eventApi.getCurrentEventStatus(levelReq).subscribe((response: GetCurrentEventStatusResponse) =>{
+      console.log(response);
+      if(response.success){
+        if(response.targetGeocode==null){
+        this.presentAlert();
+        }else{
+          this.geocodes.push(response.targetGeocode);
+          this.mapsLoader.load().then(handle => {
+            this.googleMaps = handle;
+            this.loadMap();
+          }).catch();
+        }
+      }else{
+        this.navCtrl.back();
+        this.presentToast();
+      }
+    });
   }
 async presentToast(){
   const toast =  await this.toastController.create({
