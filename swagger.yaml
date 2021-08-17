@@ -3590,6 +3590,7 @@ components:
         - type
         - amount
         - location
+        - completion
       properties:
         id:
           type: string
@@ -3597,6 +3598,9 @@ components:
         type:
           $ref: "#/components/schemas/MissionType"
         amount:
+          type: number
+          example: 1
+        completion:
           type: number
           example: 1
         location:
