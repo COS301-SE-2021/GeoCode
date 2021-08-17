@@ -438,6 +438,42 @@ class EventServiceImplIT {
         }
     }
 
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - getEnteredEvents" )
+    void getEnteredEventsInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetEnteredEventsRequest request = new GetEnteredEventsRequest();
+        request.setUserID( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.getEnteredEvents( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     ////////////////Helper functions////////////////
 
