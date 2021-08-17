@@ -493,9 +493,8 @@ public class UserServiceImpl implements UserService {
         newUser.setId(request.getUserID());
         newUser.setUsername(request.getUsername());
 
-        //create the user's trackable object
-        CreateCollectableRequest createCollectableRequest = new CreateCollectableRequest();
-        createCollectableRequest.setCollectableTypeId(trackableUUID);
+        //create the user's trackable object which will always have a Mission
+        CreateCollectableRequest createCollectableRequest = new CreateCollectableRequest(trackableUUID, true);
         CreateCollectableResponse createCollectableResponse = collectableService.createCollectable(createCollectableRequest);
 
         if(!createCollectableResponse.isSuccess()){
