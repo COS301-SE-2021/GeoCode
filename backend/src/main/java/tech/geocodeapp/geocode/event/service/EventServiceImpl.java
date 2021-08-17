@@ -143,7 +143,7 @@ public class EventServiceImpl implements EventService {
 
             leaderboard.add( hold );
         } catch ( NullRequestParameterException e ) {
-            e.printStackTrace();
+
             return new CreateEventResponse( false, e.getMessage() );
         }
 
@@ -219,11 +219,12 @@ public class EventServiceImpl implements EventService {
          * Validate if the Event was saved properly
          */
         try {
+
             /* Save the newly created entry to the repository */
             eventRepo.save( event );
             return new CreateEventResponse( true, "Event created" );
         } catch ( IllegalArgumentException error ) {
-            error.printStackTrace();
+
             return new CreateEventResponse( false, error.getMessage() );
         }
     }
