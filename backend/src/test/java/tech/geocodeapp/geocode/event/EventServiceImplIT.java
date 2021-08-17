@@ -724,7 +724,17 @@ class EventServiceImplIT {
         }
     }
 
+    /**
+     * Using valid data does the setGeoCodeService use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - setGeoCodeService" )
+    void setGeoCodeServiceTest() {
 
+        eventService.setGeoCodeService( null  );
+    }
 
 
     ////////////////Helper functions////////////////
