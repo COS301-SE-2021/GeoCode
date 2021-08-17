@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {GetMyMissionsResponse, Mission, UserService} from '../../../services/geocode-api';
+import {GetMyMissionsResponse, Mission, MissionType, UserService} from '../../../services/geocode-api';
 import {KeycloakService} from 'keycloak-angular';
 import {ActivatedRoute} from '@angular/router';
 
@@ -28,6 +28,15 @@ export class UserMissionsPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  getMissionDescription(mission: Mission) {
+    switch(mission.type) {
+      case MissionType.Circumference: return 'Help move this collectable 40 075km which is the distance around the earth.';
+      case MissionType.Swap: return 'Help swap this collectable x times';
+      case MissionType.GeoCode: return 'Help move this collectable to ' + mission.amount;
+      default: return '';
+    }
   }
 
 }
