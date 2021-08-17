@@ -16,19 +16,23 @@ import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
+
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
+
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetPointForUserRequest;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
+
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.*;
@@ -64,13 +68,13 @@ public class EventServiceImpl implements EventService {
      * The GeoCode service to access the use cases and
      * GeoCode repository
      */
-    @NotNull(message = "GeoCode Service Implementation may not be null.")
+    @NotNull( message = "GeoCode Service Implementation may not be null." )
     private GeoCodeService geoCodeService;
 
     /**
      * The User service to access the current user
      */
-    @NotNull(message = "User Service Implementation may not be null.")
+    @NotNull( message = "User Service Implementation may not be null." )
     private UserService userService;
 
     private final String eventNotFoundMessage = "Event not found";
@@ -84,7 +88,7 @@ public class EventServiceImpl implements EventService {
     public EventServiceImpl( EventRepository eventRepo,
                              UserEventStatusRepository userEventStatusRepo,
                              @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService,
-                             @Qualifier("UserService") UserService userService ) throws RepoException {
+                             @Qualifier( "UserService" ) UserService userService ) throws RepoException {
 
         if ( ( eventRepo != null ) && ( userEventStatusRepo != null ) ) {
 
@@ -134,7 +138,7 @@ public class EventServiceImpl implements EventService {
              * Create the request to the leaderboard service
              * and store the response
              */
-            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() + " - Default" );
+            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() );
             var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
 
             leaderboard.add( hold );
@@ -148,7 +152,7 @@ public class EventServiceImpl implements EventService {
 
         UUID eventID = UUID.randomUUID();
 
-        List<GeoCode> geoCodes = new ArrayList<>();
+        List< GeoCode > geoCodes = new ArrayList<>();
         /*
          * Go through each GeoCode ID
          * and get the GeoCode object
@@ -163,13 +167,13 @@ public class EventServiceImpl implements EventService {
                 geoCodes.add( found );
 
                 /* Set the geocode's event ID */
-                if (found.getEventID() != null) {
-                    return new CreateEventResponse(false, "Attempted to link a geocode that is already linked to an event");
+                if ( found.getEventID() != null ) {
+                    return new CreateEventResponse( false, "Attempted to link a geocode that is already linked to an event" );
                 }
-                found.setEventID(eventID);
-                geoCodeService.saveGeoCode(found);
+                found.setEventID( eventID );
+                geoCodeService.saveGeoCode( found );
             } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
-                return new CreateEventResponse(false, "Failed to find geocode with id "+id.toString());
+                return new CreateEventResponse( false, "Failed to find geocode with id " + id.toString() );
             }
         }
 
@@ -195,10 +199,9 @@ public class EventServiceImpl implements EventService {
         }
 
         /* Create the new Event object with the specified attributes */
-        var event = new Event(eventID, request.getName(), request.getDescription(),
-                request.getLocation(), geoCodeIDs, request.getBeginDate(), request.getEndDate(),
-                leaderboard, new HashMap<String, String>() {
-        });
+        var event = new Event( eventID, request.getName(), request.getDescription(),
+                               request.getLocation(), geoCodeIDs, request.getBeginDate(), request.getEndDate(),
+                               leaderboard, request.getProperties() );
 
         /* Check the availability of the Event */
         if ( request.isAvailable() == null ) {
@@ -257,13 +260,13 @@ public class EventServiceImpl implements EventService {
             Optional< Event > temp = eventRepo.findById( request.getEventID() );
             response = temp.map(
 
-                                    /* Indicate the Event was found and return it */
-                                    event -> new GetEventResponse( true, "Event found",event )
+                    /* Indicate the Event was found and return it */
+                    event -> new GetEventResponse( true, "Event found", event )
                                ).orElseGet(
 
-                                    /* Indicate the Event was not found */
-                                    () -> new GetEventResponse( false, eventNotFoundMessage, null )
-                               );
+                    /* Indicate the Event was not found */
+                    () -> new GetEventResponse( false, eventNotFoundMessage, null )
+                                          );
 
         } catch ( EntityNotFoundException error ) {
 
@@ -284,7 +287,7 @@ public class EventServiceImpl implements EventService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public GetCurrentEventStatusResponse getCurrentEventStatus(GetCurrentEventStatusRequest request ) throws InvalidRequestException {
+    public GetCurrentEventStatusResponse getCurrentEventStatus( GetCurrentEventStatusRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -296,66 +299,66 @@ public class EventServiceImpl implements EventService {
         }
 
         /* Get the UserEventStatus object from the repository */
-        UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID(request.getEventID(), request.getUserID());
+        UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID( request.getEventID(), request.getUserID() );
 
         /* Check whether the current user is requesting for themselves */
         UUID currentUserID = userService.getCurrentUserID();
-        if (!currentUserID.equals(request.getUserID())) {
+        if ( !currentUserID.equals( request.getUserID() ) ) {
             /* The userID passed in does not match the current user ID. Just return the passed-in user's status */
-            return new GetCurrentEventStatusResponse(true, "Status returned for another user", status, null);
+            return new GetCurrentEventStatusResponse( true, "Status returned for another user", status, null );
         }
         /* from this point the currentUserID is the same as the request user ID */
 
-        if (status == null) {
+        if ( status == null ) {
             /* User is not participating in an event with the provided id. Enter them into it. */
 
             /* Find the event with the provided id */
-            Optional<Event> temp = eventRepo.findById(request.getEventID());
-            if (temp.isPresent()) {
+            Optional< Event > temp = eventRepo.findById( request.getEventID() );
+            if ( temp.isPresent() ) {
                 /* Create the decorated event */
                 EventManager manager = new EventManager();
-                EventComponent event = manager.buildEvent(temp.get());
+                EventComponent event = manager.buildEvent( temp.get() );
 
                 /* Get the first geocode of the event */
-                UUID nextGeocodeID = event.getGeocodeIDs().get(0);
+                UUID nextGeocodeID = event.getGeocodeIDs().get( 0 );
 
                 /* Create a new status object with the geocodeID set to the first geocode */
-                Map<String, String> details = new HashMap<String, String>();
-                status = new UserEventStatus(UUID.randomUUID(), event.getID(), currentUserID, nextGeocodeID, details);
-                event.handleEventStart(status);
+                Map< String, String > details = new HashMap< String, String >();
+                status = new UserEventStatus( UUID.randomUUID(), event.getID(), currentUserID, nextGeocodeID, details );
+                event.handleEventStart( status );
 
                 /* Create the user's points if the event has a leaderboard */
-                if (event.getLeaderboards().size() > 0) {
+                if ( event.getLeaderboards().size() > 0 ) {
                     try {
-                        UUID leaderboardID = event.getLeaderboards().get(0).getId();
-                        CreatePointRequest pointRequest = new CreatePointRequest(0, currentUserID, leaderboardID);
-                        PointResponse pointResponse = leaderboardService.createPoint(pointRequest);
+                        UUID leaderboardID = event.getLeaderboards().get( 0 ).getId();
+                        CreatePointRequest pointRequest = new CreatePointRequest( 0, currentUserID, leaderboardID );
+                        PointResponse pointResponse = leaderboardService.createPoint( pointRequest );
 
-                        if (!pointResponse.isSuccess()) {
-                            return new GetCurrentEventStatusResponse(false, pointResponse.getMessage(), null, null);
+                        if ( !pointResponse.isSuccess() ) {
+                            return new GetCurrentEventStatusResponse( false, pointResponse.getMessage(), null, null );
                         }
 
-                    } catch (NullRequestParameterException ignored) {
-                        return new GetCurrentEventStatusResponse(false, "Failed to create Point", null, null);
+                    } catch ( NullRequestParameterException ignored ) {
+                        return new GetCurrentEventStatusResponse( false, "Failed to create Point", null, null );
                     }
                 }
 
                 /* Save the event status in the repo once points have been made */
-                userEventStatusRepo.save(status);
+                userEventStatusRepo.save( status );
 
             } else {
                 /* An event with the provided id was not found */
-                return new GetCurrentEventStatusResponse(false, eventNotFoundMessage, null, null);
+                return new GetCurrentEventStatusResponse( false, eventNotFoundMessage, null, null );
             }
         }
 
         UUID geocodeID = status.getGeocodeID();
-        if (geocodeID != null) {
+        if ( geocodeID != null ) {
             try {
                 GetGeoCodeResponse getGeoCodeResponse = geoCodeService.getGeoCode( new GetGeoCodeRequest( geocodeID ) );
                 return new GetCurrentEventStatusResponse( true, "Status returned", status, getGeoCodeResponse.getFoundGeoCode() );
 
-            } catch (tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e) {
+            } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
                 e.printStackTrace();
                 return new GetCurrentEventStatusResponse( false, e.getMessage(), null, null );
             }
@@ -370,14 +373,14 @@ public class EventServiceImpl implements EventService {
      * This function will be called by other subsystems when an event geocode is found.
      *
      * @param foundGeocode the geocode that was just found, triggering the event change
-     * @param userID the unique ID of the user entering the event
+     * @param userID       the unique ID of the user entering the event
      *
      * @throws InvalidRequestException any of the provided parameters are null
      */
     @Override
     public void nextStage( GeoCode foundGeocode, UUID userID ) throws InvalidRequestException, NotFoundException, MismatchedParametersException {
         /* Validate the parameters */
-        if ((foundGeocode == null) || (userID == null) || (foundGeocode.getEventID() == null)) {
+        if ( ( foundGeocode == null ) || ( userID == null ) || ( foundGeocode.getEventID() == null ) ) {
             throw new InvalidRequestException();
         }
 
@@ -385,75 +388,75 @@ public class EventServiceImpl implements EventService {
         UUID eventID = foundGeocode.getEventID();
 
         /* Find the event with the id */
-        Optional<Event> temp = eventRepo.findById(eventID);
-        if (temp.isEmpty()) {
+        Optional< Event > temp = eventRepo.findById( eventID );
+        if ( temp.isEmpty() ) {
             /* An event with the provided id was not found */
-            throw new NotFoundException(eventNotFoundMessage);
+            throw new NotFoundException( eventNotFoundMessage );
         }
 
         /* Create the decorated event */
         EventManager manager = new EventManager();
-        EventComponent event = manager.buildEvent(temp.get());
+        EventComponent event = manager.buildEvent( temp.get() );
 
         /* Get the UserEventStatus object from the repository */
-        UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID(event.getID(), userID);
-        if (status == null) {
-            throw new NotFoundException("User is not participating in this event.");
+        UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID( event.getID(), userID );
+        if ( status == null ) {
+            throw new NotFoundException( "User is not participating in this event." );
         }
 
-        if (status.getGeocodeID() == null) {
+        if ( status.getGeocodeID() == null ) {
             /* User has already finished this event */
             return;
 
-        } else if (!status.getGeocodeID().equals(foundGeocode.getId())) {
+        } else if ( !status.getGeocodeID().equals( foundGeocode.getId() ) ) {
             /* The provided GeoCode is not the user's target */
-            throw new MismatchedParametersException("User was not searching for the given GeoCode");
+            throw new MismatchedParametersException( "User was not searching for the given GeoCode" );
         }
 
         /* Find the user's current geocode in the list */
-        List<UUID> ids = event.getGeocodeIDs();
-        for (int i = 0; i < ids.size(); i++) {
-            if (ids.get(i).equals(status.getGeocodeID())) {
+        List< UUID > ids = event.getGeocodeIDs();
+        for ( int i = 0; i < ids.size(); i++ ) {
+            if ( ids.get( i ).equals( status.getGeocodeID() ) ) {
 
                 /* Edit the status and points using the event decorator */
-                event.handleStageCompletion(i + 1, status);
+                event.handleStageCompletion( i + 1, status );
 
                 /* Set the next geocode id */
-                if (i == ids.size() - 1) {
+                if ( i == ids.size() - 1 ) {
                     /* User has just completed the final stage, end the event */
-                    event.handleEventEnd(status);
-                    status.setGeocodeID(null);
+                    event.handleEventEnd( status );
+                    status.setGeocodeID( null );
                 } else {
                     /* Send the user to the next geocode */
-                    UUID nextGeocodeID = ids.get(i + 1);
-                    status.setGeocodeID(nextGeocodeID);
+                    UUID nextGeocodeID = ids.get( i + 1 );
+                    status.setGeocodeID( nextGeocodeID );
                 }
 
                 /* Update the user's points if the event has a leaderboard */
-                if (event.getLeaderboards().size() > 0) {
+                if ( event.getLeaderboards().size() > 0 ) {
                     try {
-                        UUID leaderboardID = event.getLeaderboards().get(0).getId();
-                        GetPointForUserRequest userPointRequest = new GetPointForUserRequest(userID, leaderboardID);
-                        PointResponse userPointResponse = leaderboardService.getPointForUser(userPointRequest);
+                        UUID leaderboardID = event.getLeaderboards().get( 0 ).getId();
+                        GetPointForUserRequest userPointRequest = new GetPointForUserRequest( userID, leaderboardID );
+                        PointResponse userPointResponse = leaderboardService.getPointForUser( userPointRequest );
                         Point point = userPointResponse.getPoint();
 
-                        if (point != null) {
-                            int pointsAchieved = event.calculatePoints(foundGeocode, i+1, status);
-                            point.setAmount(point.getAmount() + pointsAchieved);
-                            leaderboardService.savePoint(point);
+                        if ( point != null ) {
+                            int pointsAchieved = event.calculatePoints( foundGeocode, i + 1, status );
+                            point.setAmount( point.getAmount() + pointsAchieved );
+                            leaderboardService.savePoint( point );
                         }
 
-                    } catch (NullRequestParameterException ignored) {
-                        throw new NotFoundException("Failed to find the user's points");
+                    } catch ( NullRequestParameterException ignored ) {
+                        throw new NotFoundException( "Failed to find the user's points" );
                     }
                 }
 
                 /* Save the event status in the repo once points have been edited */
-                userEventStatusRepo.save(status);
+                userEventStatusRepo.save( status );
                 return;
             }
         }
-        throw new NotFoundException("The target GeoCode is not a part of the event with the provided ID.");
+        throw new NotFoundException( "The target GeoCode is not a part of the event with the provided ID." );
     }
 
     /**
@@ -465,7 +468,7 @@ public class EventServiceImpl implements EventService {
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    public GetEnteredEventsResponse getEnteredEvents(GetEnteredEventsRequest request ) throws InvalidRequestException {
+    public GetEnteredEventsResponse getEnteredEvents( GetEnteredEventsRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -476,17 +479,17 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        List<Object[]> entries = eventRepo.findEnteredEvents(request.getUserID());
+        List< Object[] > entries = eventRepo.findEnteredEvents( request.getUserID() );
 
-        List<Map<String, Object>> formattedEntries = new ArrayList<>();
-        for (Object[] entry: entries) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("event", entry[0]);
-            map.put("status", entry[1]);
-            formattedEntries.add(map);
+        List< Map< String, Object > > formattedEntries = new ArrayList<>();
+        for ( Object[] entry : entries ) {
+            Map< String, Object > map = new HashMap<>();
+            map.put( "event", entry[ 0 ] );
+            map.put( "status", entry[ 1 ] );
+            formattedEntries.add( map );
         }
 
-        return new GetEnteredEventsResponse(true, "All entered Events returned", formattedEntries);
+        return new GetEnteredEventsResponse( true, "All entered Events returned", formattedEntries );
     }
 
     /**
@@ -520,7 +523,7 @@ public class EventServiceImpl implements EventService {
         for ( Event event : temp ) {
 
             /* Calculate the distance from the given point to the Event using the Haversine formula */
-            var distance = request.getLocation().distanceTo(event.getLocation());
+            var distance = request.getLocation().distanceTo( event.getLocation() );
 
             /* Check if the event is close enough to the given point */
             if ( distance <= request.getRadius() ) {
@@ -528,7 +531,7 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        return new EventsNearMeResponse(true, "Events returned", foundEvents );
+        return new EventsNearMeResponse( true, "Events returned", foundEvents );
     }
 
     /**
@@ -541,9 +544,8 @@ public class EventServiceImpl implements EventService {
 
         var temp = eventRepo.findAll();
 
-        return new GetAllEventsResponse(true, "All Events returned", temp );
+        return new GetAllEventsResponse( true, "All Events returned", temp );
     }
-
 
 
     /**
@@ -689,14 +691,13 @@ public class EventServiceImpl implements EventService {
         this.geoCodeService = geoCodeService;
 
 
-
-//        GetGeoCodesResponse r = geoCodeService.getAllGeoCodes();
-//        GeoPoint start = new GeoPoint(25, 25);
-//        for (GeoCode g: r.getGeocodes()) {
-//            System.out.println(g.getDescription()+", "+g.getLocation().getLatitude()+", "+g.getLocation().getLongitude());
-//        }
-//        List<UUID> output = Graph.getOptimalGeocodeIDOrder(r.getGeocodes(), start);
-//        System.out.println(output);
+        //        GetGeoCodesResponse r = geoCodeService.getAllGeoCodes();
+        //        GeoPoint start = new GeoPoint(25, 25);
+        //        for (GeoCode g: r.getGeocodes()) {
+        //            System.out.println(g.getDescription()+", "+g.getLocation().getLatitude()+", "+g.getLocation().getLongitude());
+        //        }
+        //        List<UUID> output = Graph.getOptimalGeocodeIDOrder(r.getGeocodes(), start);
+        //        System.out.println(output);
     }
 
     /*-------------------------------------*/
@@ -793,20 +794,20 @@ public class EventServiceImpl implements EventService {
     /**
      * Gets a list of GeoCodes and sorts them according to their distance from one another
      *
-     * @param geoCodes the list of GeoCode ID's to sort
+     * @param geoCodes      the list of GeoCode ID's to sort
      * @param startLocation the start location of the event
      *
      * @return the IDs of the provided GeoCodes, in the order that minimises the distance to travel between them
      */
     private List< UUID > sortByDistance( List< GeoCode > geoCodes, GeoPoint startLocation ) {
+
         if ( geoCodes != null ) {
-            return Graph.getOptimalGeocodeIDOrder(geoCodes, startLocation);
+            return Graph.getOptimalGeocodeIDOrder( geoCodes, startLocation );
         } else {
             return null;
         }
     }
 
     /*-------------------------------------*/
-
 
 }

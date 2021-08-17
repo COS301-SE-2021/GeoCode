@@ -333,6 +333,432 @@ class EventServiceImplTest {
         }
     }
 
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - getCurrentEventStatus" )
+    void getCurrentEventStatusNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.getCurrentEventStatus( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - getCurrentEventStatus" )
+    void getCurrentEventStatusInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetCurrentEventStatusRequest request = new GetCurrentEventStatusRequest();
+        request.setEventID( null );
+        request.setUserID( UUID.randomUUID() );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.getCurrentEventStatus( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Using valid data does the getCurrentEventStatus use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - getCurrentEventStatus" )
+    void getCurrentEventStatusTest() {
+
+        try {
+
+            GetCurrentEventStatusRequest request = new GetCurrentEventStatusRequest();
+            request.setEventID( null );
+            request.setUserID( null );
+
+            var event = eventService.getCurrentEventStatus( request  );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - nextStage" )
+    void nextStageNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.nextStage( null, null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - nextStage" )
+    void nextStageInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+//        GetCurrentEventStatusRequest request = new GetCurrentEventStatusRequest();
+//        request.setEventID( null );
+//        request.setUserID( UUID.randomUUID() );
+//
+//        /* Null parameter request check */
+//        assertThatThrownBy( () -> eventService.nextStage( request ) )
+//                .isInstanceOf( InvalidRequestException.class )
+//                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Using valid data does the nextStage use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - nextStage" )
+    void nextStageTest() {
+
+        try {
+
+            eventService.nextStage( null, null  );
+        } catch ( InvalidRequestException | NotFoundException | MismatchedParametersException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - getEnteredEvents" )
+    void getEnteredEventsNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.getEnteredEvents( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - getEnteredEvents" )
+    void getEnteredEventsInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetEnteredEventsRequest request = new GetEnteredEventsRequest();
+        request.setUserID( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.getEnteredEvents( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Using valid data does the getCurrentEventStatus use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - getEnteredEvents" )
+    void getEnteredEventsTest() {
+
+        try {
+
+            GetEnteredEventsRequest request = new GetEnteredEventsRequest();
+            request.setUserID( null );
+
+            var event = eventService.getEnteredEvents( request  );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - eventsNearMe" )
+    void eventsNearMeNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.eventsNearMe( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - eventsNearMe" )
+    void eventsNearMeInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        EventsNearMeRequest request = new EventsNearMeRequest();
+        request.setLocation( null );
+        request.setRadius( 0.0 );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.eventsNearMe( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Using valid data does the getCurrentEventStatus use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - eventsNearMe" )
+    void eventsNearMeTest() {
+
+        try {
+
+            EventsNearMeRequest request = new EventsNearMeRequest();
+            request.setLocation( null );
+            request.setRadius( 0.0 );
+
+            var event = eventService.eventsNearMe( request  );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - getAllEvents" )
+    void getAllEventsTest() {
+
+        var event = eventService.getAllEvents();
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - changeAvailability" )
+    void changeAvailabilityNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.changeAvailability( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - changeAvailability" )
+    void changeAvailabilityInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        ChangeAvailabilityRequest request = new ChangeAvailabilityRequest();
+        request.setAvailability( null );
+        request.setEventID( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.changeAvailability( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Using valid data does the changeAvailability use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - changeAvailability" )
+    void changeAvailabilityTest() {
+
+        try {
+
+            ChangeAvailabilityRequest request = new ChangeAvailabilityRequest();
+            request.setAvailability( null );
+            request.setEventID( null );
+
+            var event = eventService.changeAvailability( request  );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - getEventsByLocation" )
+    void getEventsByLocationNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.getEventsByLocation( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - getEventsByLocation" )
+    void getEventsByLocationInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetEventsByLocationRequest request = new GetEventsByLocationRequest();
+        request.setLocation( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.getEventsByLocation( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Using valid data does the getEventsByLocation use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - getEventsByLocation" )
+    void getEventsByLocationTest() {
+
+        try {
+
+            GetEventsByLocationRequest request = new GetEventsByLocationRequest();
+            request.setLocation( null );
+
+            var event = eventService.getEventsByLocation( request  );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - createLeaderBoard" )
+    void createLeaderBoardNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.createLeaderBoard( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - createLeaderBoard" )
+    void createLeaderBoardInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        CreateLeaderboardRequest request = new CreateLeaderboardRequest();
+        request.setEventID( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.createLeaderBoard( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Using valid data does the createLeaderBoard use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - createLeaderBoard" )
+    void createLeaderBoardTest() {
+
+        try {
+
+            CreateLeaderboardRequest request = new CreateLeaderboardRequest();
+            request.setEventID( null );
+
+            var event = eventService.createLeaderBoard( request  );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Using valid data does the setGeoCodeService use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - setGeoCodeService" )
+    void setGeoCodeServiceTest() {
+
+        eventService.setGeoCodeService( null  );
+    }
+
     @Test
     @Order( 8 )
     @DisplayName( "check Difficulty" )
