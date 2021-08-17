@@ -31,6 +31,7 @@ export class UserGeocodesPage implements AfterViewInit {
   found: GeoCode[] = null;
   markers = [];
   detailedGeoCode: GeoCode = null;
+  showing: 'found'|'created' = null;
 
   constructor(
     private geocodeService: GeoCodeService,
@@ -67,6 +68,8 @@ export class UserGeocodesPage implements AfterViewInit {
   }
 
   async segmentChanged(event) {
+    this.showing = event.target.value;
+    this.closeDetails();
     if (event.target.value === 'found') {
       await this.loadFound();
     } else if (event.target.value === 'created') {
@@ -80,6 +83,7 @@ export class UserGeocodesPage implements AfterViewInit {
       await this.loadGeoCodes(this.foundIDs, this.found);
     }
     this.placeMarkers(this.found);
+    this.showing = 'found';
   }
 
   async loadCreated() {
@@ -88,6 +92,7 @@ export class UserGeocodesPage implements AfterViewInit {
       await this.loadGeoCodes(this.createdIDs, this.created);
     }
     this.placeMarkers(this.created);
+    this.showing = 'created';
   }
 
   loadGeoCodes(ids: string[], target: GeoCode[]) {
@@ -126,5 +131,14 @@ export class UserGeocodesPage implements AfterViewInit {
   showDetails(g: GeoCode) {
     this.detailedGeoCode = g;
     this.mapAndInfo.setInfoVisible(g != null);
+  }
+
+  closeDetails() {
+    console.log(this);
+    this.showDetails(null);
+  }
+
+  shouldShowQR() {
+    return (this.showing === 'created');
   }
 }

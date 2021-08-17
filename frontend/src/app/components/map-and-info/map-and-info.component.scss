@@ -24,3 +24,7 @@ ion-col {
 #infoColumn.splitScreen {
   height: 300px;
 }
+
+#infoColumn {
+  overflow-y: scroll;
+}

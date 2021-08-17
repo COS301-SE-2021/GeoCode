@@ -19,22 +19,7 @@
 
 <ion-content>
   <app-map-and-info #mapAndInfo>
-    <ion-button (click)="showDetails(null)">
-      <ion-icon name="close-outline"></ion-icon>
-    </ion-button>
-    <ion-card>
-      <ion-card-header>
-        <ion-label>yeet</ion-label>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-button>
-          <ion-label>Open in Google Maps</ion-label>
-        </ion-button>
-        <ion-button>
-          <ion-label>Export QR Code</ion-label>
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
+    <app-geocode-details [parent]="this" [geocode]="detailedGeoCode" [showQR]="shouldShowQR()"></app-geocode-details>
   </app-map-and-info>
 
 </ion-content>
