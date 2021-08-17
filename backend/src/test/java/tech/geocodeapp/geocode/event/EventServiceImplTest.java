@@ -49,7 +49,7 @@ class EventServiceImplTest {
 
     /**
      * The service for the Event subsystem
-     *
+     * <p>
      * This is used to access the different use cases
      * needed for functionality
      */
@@ -114,7 +114,7 @@ class EventServiceImplTest {
 
     /**
      * Create the EventServiceImpl with the relevant repositories.
-     *
+     * <p>
      * This is done to ensure a repository with no data is created each time
      * and the service implementation contains fresh code that has not been affected
      * by some other test or data.
@@ -132,18 +132,18 @@ class EventServiceImplTest {
 
         var leaderboardMockRepo = new LeaderboardMockRepository();
         var userRepository = new UserMockRepository();
-        var userService = new UserMockService( userRepository);
+        var userService = new UserMockService( userRepository );
         var pointMockRepository = new PointMockRepository();
 
-        leaderboardService = new LeaderboardServiceImpl(leaderboardMockRepo, pointMockRepository, null, userService);
-        geoCodeService = new GeoCodeMockService(geoCodeMockRepo);
-        userService = new UserMockService(userMockRepo);
+        leaderboardService = new LeaderboardServiceImpl( leaderboardMockRepo, pointMockRepository, null, userService );
+        geoCodeService = new GeoCodeMockService( geoCodeMockRepo );
+        userService = new UserMockService( userMockRepo );
 
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
             eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, userService );
-            eventService.setGeoCodeService(geoCodeService);
+            eventService.setGeoCodeService( geoCodeService );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
@@ -196,7 +196,7 @@ class EventServiceImplTest {
         request.setDescription( "Try get as many as possible" );
         request.setLocation( null );
         request.setName( "Super Sport" );
-        request.setBeginDate( LocalDate.parse("2020-01-08") );
+        request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
         request.setEndDate( null );
 
         /* Null parameter request check */
@@ -216,12 +216,12 @@ class EventServiceImplTest {
 
         try {
             /* Create mock geocodes to add to the event */
-            GeoCode gc1 = new GeoCode().id(UUID.randomUUID());
-            GeoCode gc2 = new GeoCode().id(UUID.randomUUID());
-            GeoCode gc3 = new GeoCode().id(UUID.randomUUID());
-            geoCodeMockRepo.save(gc1);
-            geoCodeMockRepo.save(gc2);
-            geoCodeMockRepo.save(gc3);
+            GeoCode gc1 = new GeoCode().id( UUID.randomUUID() );
+            GeoCode gc2 = new GeoCode().id( UUID.randomUUID() );
+            GeoCode gc3 = new GeoCode().id( UUID.randomUUID() );
+            geoCodeMockRepo.save( gc1 );
+            geoCodeMockRepo.save( gc2 );
+            geoCodeMockRepo.save( gc3 );
 
             /*
              * Create a request object
@@ -233,15 +233,15 @@ class EventServiceImplTest {
             request.setDescription( "Try get as many as possible" );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
             request.setName( "Super Sport" );
-            request.setBeginDate( LocalDate.parse("2020-01-08") );
-            request.setEndDate(  LocalDate.parse("2020-05-21") );
-                List< UUID > geoCodesToFind = new ArrayList<>();
-                geoCodesToFind.add( gc1.getId() );
-                geoCodesToFind.add( gc2.getId() );
-                geoCodesToFind.add( gc3.getId() );
+            request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
+            request.setEndDate( LocalDate.parse( "2020-05-21" ) );
+            List< UUID > geoCodesToFind = new ArrayList<>();
+            geoCodesToFind.add( gc1.getId() );
+            geoCodesToFind.add( gc2.getId() );
+            geoCodesToFind.add( gc3.getId() );
             request.setGeoCodesToFind( geoCodesToFind );
             request.setOrderBy( OrderLevels.GIVEN );
-            request.setProperties( new HashMap<String, String>() );
+            request.setProperties( new HashMap< String, String >() );
 
             CreateEventResponse response = eventService.createEvent( request );
 
@@ -309,8 +309,8 @@ class EventServiceImplTest {
 
             /* Populate with a known Event to find*/
             var event = new Event( eventID, "Test", "Test description", null,
-                                   null, LocalDate.parse("2020-01-08"),
-                                   LocalDate.parse("2020-01-08"), null, new HashMap<String, String>());
+                                   null, LocalDate.parse( "2020-01-08" ),
+                                   LocalDate.parse( "2020-01-08" ), null, new HashMap< String, String >() );
             eventRepo.save( event );
 
             /*
@@ -388,7 +388,7 @@ class EventServiceImplTest {
             request.setEventID( null );
             request.setUserID( null );
 
-            var event = eventService.getCurrentEventStatus( request  );
+            var event = eventService.getCurrentEventStatus( request );
         } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
@@ -422,14 +422,14 @@ class EventServiceImplTest {
          *  Create a request object
          * and assign values to it
          */
-//        GetCurrentEventStatusRequest request = new GetCurrentEventStatusRequest();
-//        request.setEventID( null );
-//        request.setUserID( UUID.randomUUID() );
-//
-//        /* Null parameter request check */
-//        assertThatThrownBy( () -> eventService.nextStage( request ) )
-//                .isInstanceOf( InvalidRequestException.class )
-//                .hasMessageContaining( reqParamError );
+        //        GetCurrentEventStatusRequest request = new GetCurrentEventStatusRequest();
+        //        request.setEventID( null );
+        //        request.setUserID( UUID.randomUUID() );
+        //
+        //        /* Null parameter request check */
+        //        assertThatThrownBy( () -> eventService.nextStage( request ) )
+        //                .isInstanceOf( InvalidRequestException.class )
+        //                .hasMessageContaining( reqParamError );
     }
 
     /**
@@ -443,7 +443,7 @@ class EventServiceImplTest {
 
         try {
 
-            eventService.nextStage( null, null  );
+            eventService.nextStage( null, null );
         } catch ( InvalidRequestException | NotFoundException | MismatchedParametersException e ) {
 
             /* An error occurred, print the stack to identify */
@@ -500,7 +500,7 @@ class EventServiceImplTest {
             GetEnteredEventsRequest request = new GetEnteredEventsRequest();
             request.setUserID( null );
 
-            var event = eventService.getEnteredEvents( request  );
+            var event = eventService.getEnteredEvents( request );
         } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
@@ -559,7 +559,7 @@ class EventServiceImplTest {
             request.setLocation( null );
             request.setRadius( 0.0 );
 
-            var event = eventService.eventsNearMe( request  );
+            var event = eventService.eventsNearMe( request );
         } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
@@ -629,7 +629,7 @@ class EventServiceImplTest {
             request.setAvailability( null );
             request.setEventID( null );
 
-            var event = eventService.changeAvailability( request  );
+            var event = eventService.changeAvailability( request );
         } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
@@ -686,7 +686,7 @@ class EventServiceImplTest {
             GetEventsByLocationRequest request = new GetEventsByLocationRequest();
             request.setLocation( null );
 
-            var event = eventService.getEventsByLocation( request  );
+            var event = eventService.getEventsByLocation( request );
         } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
@@ -743,7 +743,7 @@ class EventServiceImplTest {
             CreateLeaderboardRequest request = new CreateLeaderboardRequest();
             request.setEventID( null );
 
-            var event = eventService.createLeaderBoard( request  );
+            var event = eventService.createLeaderBoard( request );
         } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
@@ -760,7 +760,7 @@ class EventServiceImplTest {
     @DisplayName( "Valid request - setGeoCodeService" )
     void setGeoCodeServiceTest() {
 
-        eventService.setGeoCodeService( null  );
+        eventService.setGeoCodeService( null );
     }
 
     @Test
@@ -780,27 +780,27 @@ class EventServiceImplTest {
     @DisplayName( "check sorting order of GeoCodes by distance" )
     void orderGeoCodes() {
 
-        GeoCode gc1 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(5, 0)); //3rd
-        GeoCode gc2 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(2, 1)); //2nd
-        GeoCode gc3 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(10, -1)); //4th
-        GeoCode gc4 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(0, 0)); //1st
+        GeoCode gc1 = new GeoCode().id( UUID.randomUUID() ).location( new GeoPoint( 5, 0 ) ); //3rd
+        GeoCode gc2 = new GeoCode().id( UUID.randomUUID() ).location( new GeoPoint( 2, 1 ) ); //2nd
+        GeoCode gc3 = new GeoCode().id( UUID.randomUUID() ).location( new GeoPoint( 10, -1 ) ); //4th
+        GeoCode gc4 = new GeoCode().id( UUID.randomUUID() ).location( new GeoPoint( 0, 0 ) ); //1st
 
-        List<GeoCode> geoCodes = new ArrayList<GeoCode>();
-        geoCodes.add(gc1);
-        geoCodes.add(gc2);
-        geoCodes.add(gc3);
-        geoCodes.add(gc4);
-        GeoPoint start = new GeoPoint(0, 0);
+        List< GeoCode > geoCodes = new ArrayList< GeoCode >();
+        geoCodes.add( gc1 );
+        geoCodes.add( gc2 );
+        geoCodes.add( gc3 );
+        geoCodes.add( gc4 );
+        GeoPoint start = new GeoPoint( 0, 0 );
 
-        List<UUID> result = Graph.getOptimalGeocodeIDOrder(geoCodes, start);
+        List< UUID > result = Graph.getOptimalGeocodeIDOrder( geoCodes, start );
 
-        List<UUID> expected = new ArrayList<UUID>();
-        expected.add(gc4.getId()); //1st
-        expected.add(gc2.getId()); //2nd
-        expected.add(gc1.getId()); //3rd
-        expected.add(gc3.getId()); //4th
+        List< UUID > expected = new ArrayList< UUID >();
+        expected.add( gc4.getId() ); //1st
+        expected.add( gc2.getId() ); //2nd
+        expected.add( gc1.getId() ); //3rd
+        expected.add( gc3.getId() ); //4th
 
-        Assertions.assertEquals(expected, result);
+        Assertions.assertEquals( expected, result );
 
     }
 
@@ -808,28 +808,28 @@ class EventServiceImplTest {
 
     /**
      * This function creates numerous Events to be used for testing.
-     *
+     * <p>
      * NOTE: the create function will need to be working with tests passing for this
-     *       helper function to be used
+     * helper function to be used
      */
     private void populate( int size ) {
 
         try {
             /* Create mock geocodes */
-            GeoCode gc1 = new GeoCode().id(UUID.randomUUID());
-            GeoCode gc2 = new GeoCode().id(UUID.randomUUID());
-            GeoCode gc3 = new GeoCode().id(UUID.randomUUID());
-            geoCodeMockRepo.save(gc1);
-            geoCodeMockRepo.save(gc2);
-            geoCodeMockRepo.save(gc3);
+            GeoCode gc1 = new GeoCode().id( UUID.randomUUID() );
+            GeoCode gc2 = new GeoCode().id( UUID.randomUUID() );
+            GeoCode gc3 = new GeoCode().id( UUID.randomUUID() );
+            geoCodeMockRepo.save( gc1 );
+            geoCodeMockRepo.save( gc2 );
+            geoCodeMockRepo.save( gc3 );
 
 
             CreateEventRequest request = new CreateEventRequest();
             request.setDescription( "Try get as many as possible" );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
             request.setName( "Super Sport" );
-            request.setBeginDate( LocalDate.parse("2020-01-08") );
-            request.setEndDate(  LocalDate.parse("2020-05-21") );
+            request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
+            request.setEndDate( LocalDate.parse( "2020-05-21" ) );
             List< UUID > geoCodesToFind = new ArrayList<>();
             geoCodesToFind.add( gc1.getId() );
             geoCodesToFind.add( gc2.getId() );
