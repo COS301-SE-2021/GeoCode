@@ -258,4 +258,6 @@ class EventServiceImplIT {
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqEmptyError );
     }
+
+
 }
