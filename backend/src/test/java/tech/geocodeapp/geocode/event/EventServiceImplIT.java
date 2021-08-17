@@ -136,4 +136,20 @@ class EventServiceImplIT {
         }
 
     }
+
+    /**
+     * Check how the constructor handles the repository being null
+     */
+    @Test
+    @Order( 1 )
+    @Tag( "Tests" )
+    @DisplayName( "Null repository handling - EventServiceImpl" )
+    void RepositoryNullTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, null, leaderboardService, userService ) )
+                .isInstanceOf( RepoException.class )
+                .hasMessageContaining( "The given repository does not exist." );
+    }
+
 }
