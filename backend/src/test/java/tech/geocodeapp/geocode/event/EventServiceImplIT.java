@@ -259,5 +259,26 @@ class EventServiceImplIT {
                 .hasMessageContaining( reqEmptyError );
     }
 
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - getEvent" )
+    void getEventInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        GetEventRequest request = new GetEventRequest();
+        request.setEventID( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.getEvent( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
 
 }
