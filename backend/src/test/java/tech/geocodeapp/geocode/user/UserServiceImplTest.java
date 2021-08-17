@@ -135,6 +135,12 @@ public class UserServiceImplTest {
         CollectableType trackableCollectableType = new CollectableType();
         trackableCollectableType.setId(trackableUUID);
         trackableCollectableType.setRarity(Rarity.COMMON);
+
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("missionType", String.valueOf(MissionType.RANDOM));
+
+        trackableCollectableType.setProperties(properties);
+
         collectableTypeMockRepo.save(trackableCollectableType);
 
         //save the valid user to the MockRepo
@@ -1083,57 +1089,6 @@ public class UserServiceImplTest {
         request.setCollectable(null);
 
         assertThatThrownBy(() -> userService.swapCollectable(request)).isInstanceOf(NullRequestParameterException.class);
-    }
-
-    @Test
-    void swapCollectableTestCollectableInvalidUserID(){
-        try {
-            SwapCollectableRequest request = new SwapCollectableRequest(invalidUser, fishCollectable, geoCodeWithCollectables);
-            SwapCollectableResponse response = userService.swapCollectable(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
-
-            Collectable collectable = response.getCollectable();
-            Assertions.assertNull(collectable);
-        } catch (NullRequestParameterException e) {
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void swapCollectableTestCollectableInvalidGeoCodeID(){
-        try {
-            SwapCollectableRequest request = new SwapCollectableRequest(validUser, fishCollectable, invalidGeoCode);
-            SwapCollectableResponse response = userService.swapCollectable(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("Invalid ID given for the GeoCode", response.getMessage());
-
-            Collectable collectable = response.getCollectable();
-            Assertions.assertNull(collectable);
-        } catch (NullRequestParameterException e) {
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void swapCollectableTestCollectableInvalidCollectableID(){
-        try {
-            Collectable invalidCollectable = new Collectable();
-            invalidCollectable.setId(invalidCollectableID);
-
-            SwapCollectableRequest request = new SwapCollectableRequest(validUser, invalidCollectable, geoCodeWithCollectables);
-            SwapCollectableResponse response = userService.swapCollectable(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("Invalid ID given for the Collectable", response.getMessage());
-
-            Collectable collectable = response.getCollectable();
-            Assertions.assertNull(collectable);
-        } catch (NullRequestParameterException e) {
-            Assertions.fail(e.getMessage());
-        }
     }
 
     @Test

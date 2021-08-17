@@ -8,6 +8,7 @@ import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
+import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
@@ -23,6 +24,7 @@ import tech.geocodeapp.geocode.mission.response.GetMissionByIdResponse;
 import tech.geocodeapp.geocode.mission.response.GetProgressResponse;
 import tech.geocodeapp.geocode.user.response.UpdateCompletionResponse;
 
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
@@ -31,7 +33,7 @@ public class MissionServiceImpl implements MissionService{
     private final MissionRepository missionRepo;
 
     @NotNull(message = "Collectable Service Implementation may not be null.")
-    private final CollectableService collectableService;
+    private CollectableService collectableService;
 
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
     private final String invalidMissionIdMessage = "Invalid Mission Id";
@@ -40,6 +42,19 @@ public class MissionServiceImpl implements MissionService{
     public MissionServiceImpl(MissionRepository missionRepo, @Lazy CollectableService collectableService) {
         this.missionRepo = missionRepo;
         this.collectableService = collectableService;
+
+        init();
+    }
+
+    /**
+     * Once the Collectable service object has been created
+     * insert it into the User and Event subsystem
+     *
+     * This is to avoid circular dependencies as each subsystem requires one another
+     */
+    @PostConstruct
+    public void init() {
+        this.collectableService.setMissionService(this);
     }
 
     /**
@@ -80,7 +95,7 @@ public class MissionServiceImpl implements MissionService{
 
         //get the progress
         int completion = mission.getCompletion();
-        Double progress;
+        double progress;
 
         if(mission.getType().equals(MissionType.GEOCODE)){
             if(completion == 100){
@@ -133,6 +148,8 @@ public class MissionServiceImpl implements MissionService{
             missionType = MissionType.values()[new Random().nextInt(MissionType.values().length-1)];
         }
 
+
+
         //create the Mission
         Mission mission = new Mission();
         mission.setType(missionType);
@@ -141,20 +158,32 @@ public class MissionServiceImpl implements MissionService{
 
         switch(missionType){
             case DISTANCE:
+                //circumference of the Earth (TODO: set the distance as an option)
                 amount = 40075;
                 break;
             case GEOCODE:
                 amount = 1;
                 break;
             case SWAP:
+                //[1..10]
                 amount = new Random().nextInt(10)+1;
+                break;
         }
 
+        mission.setCompletion(0);
         mission.setAmount(amount);
 
         //set the location to the Collectables current location
         List<GeoPoint> pastLocations = new ArrayList<>(collectable.getPastLocations());
-        GeoPoint location = pastLocations.get(pastLocations.size()-1);
+        GeoPoint location;
+
+        if(pastLocations.isEmpty()){
+            location = null;
+        }else{
+            //set to the current location
+            location = pastLocations.get(pastLocations.size()-1);
+        }
+
         mission.setLocation(location);
 
         missionRepo.save(mission);
@@ -203,4 +232,8 @@ public class MissionServiceImpl implements MissionService{
         return new UpdateCompletionResponse(true, "Completion updated");
     }
 
+    @Override
+    public void setCollectableService(CollectableServiceImpl collectableService) {
+        this.collectableService = collectableService;
+    }
 }

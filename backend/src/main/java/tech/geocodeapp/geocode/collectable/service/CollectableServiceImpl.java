@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.collectable.service;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
@@ -17,7 +18,9 @@ import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.mission.request.CreateMissionRequest;
 import tech.geocodeapp.geocode.mission.response.CreateMissionResponse;
 import tech.geocodeapp.geocode.mission.service.MissionService;
+import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -32,19 +35,30 @@ public class CollectableServiceImpl implements CollectableService {
 
     private final CollectableTypeRepository collectableTypeRepo;
 
-    private final MissionService missionService;
+    private MissionService missionService;
 
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
     private final String invalidCollectableIdMessage = "Invalid Collectable ID";
     private String invalidCollectableTypeIdMessage = "Invalid CollectableType ID";
 
-    public CollectableServiceImpl(CollectableRepository collectableRepo, CollectableSetRepository collectableSetRepo, CollectableTypeRepository collectableTypeRepo, MissionService missionService) {
+    public CollectableServiceImpl(CollectableRepository collectableRepo, CollectableSetRepository collectableSetRepo, CollectableTypeRepository collectableTypeRepo, @Lazy MissionService missionService) {
         this.collectableRepo = collectableRepo;
         this.collectableSetRepo = collectableSetRepo;
         this.collectableTypeRepo = collectableTypeRepo;
         this.missionService = missionService;
 
         initialiseUserTrackables();
+    }
+
+    /**
+     * Once the Collectable service object has been created
+     * insert it into the User and Event subsystem
+     *
+     * This is to avoid circular dependencies as each subsystem requires one another
+     */
+    @PostConstruct
+    public void init() {
+        this.missionService.setCollectableService(this);
     }
 
     @Transactional
@@ -234,6 +248,11 @@ public class CollectableServiceImpl implements CollectableService {
     @Transactional
     public void deleteCollectableSets() {
         collectableSetRepo.deleteAll();
+    }
+
+    @Override
+    public void setMissionService(MissionServiceImpl missionService) {
+        this.missionService = missionService;
     }
 
     private void initialiseUserTrackables() {

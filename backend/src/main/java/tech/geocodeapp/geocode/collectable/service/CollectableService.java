@@ -1,9 +1,9 @@
 package tech.geocodeapp.geocode.collectable.service;
 
-import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
 
 /**
  * This interface is for the User subsystem
@@ -26,4 +26,6 @@ public interface CollectableService {
     void deleteCollectables();
     void deleteCollectableTypes();
     void deleteCollectableSets();
+
+    void setMissionService(MissionServiceImpl missionService);
 }
