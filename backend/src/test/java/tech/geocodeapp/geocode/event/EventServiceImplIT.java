@@ -339,4 +339,46 @@ class EventServiceImplIT {
     }
 
 
+    ////////////////Helper functions////////////////
+
+    /**
+     * This function creates numerous Events to be used for testing.
+     *
+     * NOTE: the create function will need to be working with tests passing for this
+     *       helper function to be used
+     */
+    private void populate( int size ) {
+
+        try {
+            /* Create mock geocodes */
+            GeoCode gc1 = new GeoCode().id(UUID.randomUUID());
+            GeoCode gc2 = new GeoCode().id(UUID.randomUUID());
+            GeoCode gc3 = new GeoCode().id(UUID.randomUUID());
+            geoCodeMockRepo.save(gc1);
+            geoCodeMockRepo.save(gc2);
+            geoCodeMockRepo.save(gc3);
+
+
+            CreateEventRequest request = new CreateEventRequest();
+            request.setDescription( "Try get as many as possible" );
+            request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
+            request.setName( "Super Sport" );
+            request.setBeginDate( LocalDate.parse("2020-01-08") );
+            request.setEndDate(  LocalDate.parse("2020-05-21") );
+            List< UUID > geoCodesToFind = new ArrayList<>();
+            geoCodesToFind.add( gc1.getId() );
+            geoCodesToFind.add( gc2.getId() );
+            geoCodesToFind.add( gc3.getId() );
+            request.setGeoCodesToFind( geoCodesToFind );
+            request.setOrderBy( OrderLevels.GIVEN );
+
+            eventService.createEvent( request );
+
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+
+    }
 }
