@@ -610,6 +610,32 @@ class EventServiceImplIT {
         }
     }
 
+    /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 5 )
+    @DisplayName( "Null repository handling - getEventsByLocation" )
+    void getEventsByLocationNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.getEventsByLocation( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     ////////////////Helper functions////////////////
 
