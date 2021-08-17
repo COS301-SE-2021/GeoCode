@@ -249,7 +249,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }
 
         //check if the amount is invalid
-        if(request.getAmount() <= 0){
+        if(request.getAmount() < 0){
             return new PointResponse(false, "The amount for a Point must be positive", null);
         }
 
