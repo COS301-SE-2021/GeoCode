@@ -495,7 +495,27 @@ class EventServiceImplIT {
                 .hasMessageContaining( reqEmptyError );
     }
 
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 6 )
+    @DisplayName( "Invalid repository attribute handling - eventsNearMe" )
+    void eventsNearMeInvalidRequestTest() {
 
+        /*
+         *  Create a request object
+         * and assign values to it
+         */
+        EventsNearMeRequest request = new EventsNearMeRequest();
+        request.setLocation( null );
+        request.setRadius( 0.0 );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> eventService.eventsNearMe( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
 
 
 
