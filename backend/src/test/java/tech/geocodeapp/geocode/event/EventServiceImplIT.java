@@ -459,7 +459,27 @@ class EventServiceImplIT {
                 .hasMessageContaining( reqParamError );
     }
 
+    /**
+     * Using valid data does the getCurrentEventStatus use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 7 )
+    @DisplayName( "Valid request - getEnteredEvents" )
+    void getEnteredEventsTest() {
 
+        try {
+
+            GetEnteredEventsRequest request = new GetEnteredEventsRequest();
+            request.setUserID( null );
+
+            var event = eventService.getEnteredEvents( request  );
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
 
 
 
