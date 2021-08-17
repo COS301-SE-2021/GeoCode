@@ -197,7 +197,8 @@ public class EventServiceImpl implements EventService {
         /* Create the new Event object with the specified attributes */
         var event = new Event(eventID, request.getName(), request.getDescription(),
                 request.getLocation(), geoCodeIDs, request.getBeginDate(), request.getEndDate(),
-                leaderboard, request.getProperties());
+                leaderboard, new HashMap<String, String>() {
+        });
 
         /* Check the availability of the Event */
         if ( request.isAvailable() == null ) {

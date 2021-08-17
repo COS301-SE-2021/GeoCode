@@ -34,15 +34,17 @@
 
       </ion-header>
       <ion-card-content>
+        <ng-template [ngIf]="isAdmin()">
           <ion-row class="row">
             <ion-col>Available</ion-col>
             <ion-col><ion-checkbox disabled="false"  (ionBlur)="updateAvailability(geocode)" [(ngModel)]="geocode.available"></ion-checkbox></ion-col>
           </ion-row>
+        </ng-template>
           <ion-row class="row">
             <ion-col>Difficulty</ion-col>
             <ion-col>{{geocode.difficulty}}</ion-col>
           </ion-row>
-          <ion-button id="button" color="button" (click)="findGeoCode(geocode)"  >Open GeoCode</ion-button>
+          <ion-button id="button" color="button" (click)="findGeoCode(geocode)">Find GeoCode</ion-button>
           <ion-button color="button" (click)="openInMaps(geocode)">Open Location in Google Maps</ion-button>
 
       </ion-card-content>
