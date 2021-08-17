@@ -6,6 +6,7 @@ import {MockGoogleMapsLoader} from '../../mocks/MockGoogleMapsLoader';
 import {MissionService} from '../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {MockActivatedRoute} from '../../mocks/MockActivatedRoute';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('MissionPage', () => {
   let component: MissionPage;
@@ -15,7 +16,7 @@ describe('MissionPage', () => {
     TestBed.configureTestingModule({
       declarations: [ MissionPage ],
       providers: [ MockGoogleMapsLoader.provider(), MissionService, MockActivatedRoute.provider({id: 'randomID'}) ],
-      imports: [IonicModule.forRoot(), HttpClientTestingModule]
+      imports: [IonicModule.forRoot(), HttpClientTestingModule, RouterTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(MissionPage);
