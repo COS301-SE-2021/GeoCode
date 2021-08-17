@@ -7,8 +7,8 @@ import {
   GetCurrentEventStatusRequest,
   GetCurrentEventStatusResponse
 } from '../../../services/geocode-api';
-import {ActivatedRoute, Router} from "@angular/router";
-import {KeycloakService} from "keycloak-angular";
+import {ActivatedRoute, Router} from '@angular/router';
+import {KeycloakService} from 'keycloak-angular';
 
 
 
@@ -93,8 +93,6 @@ async presentToast(){
   async presentAlert() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Alert',
-      subHeader: 'Subtitle',
       message: 'Congratulation you completed the event',
       buttons: ['OK']
     });
@@ -103,6 +101,7 @@ async presentToast(){
 
     const { role } = await alert.onDidDismiss();
     console.log('onDidDismiss resolved with role', role);
+    await this.navCtrl.navigateBack('/events');
   }
 
   //Create map and add mapmarkers of geocodes

@@ -11,7 +11,7 @@
   <ion-list>
     <ion-item *ngFor="let mission of missions" button detail [routerLink]="['/mission/'+mission.id]">
       <ion-label slot="start">{{mission.type}}</ion-label><br>
-      <ion-progress-bar color="accent" type="determinate" value="{{mission.amount}}"></ion-progress-bar ><br /><br />
+      <ion-progress-bar color="accent" type="determinate" value="{{mission.completion/mission.amount}}"></ion-progress-bar ><br /><br />
     </ion-item>
   </ion-list>
 </ion-content>
