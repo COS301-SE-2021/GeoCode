@@ -166,7 +166,7 @@ class EventServiceImplTest {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, null, leaderboardService, userService ) )
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null, userService ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }
@@ -194,7 +194,7 @@ class EventServiceImplTest {
     void createEventInvalidRequestTest() {
 
         /*
-         *  Create a request object
+         * Create a request object
          * and assign values to it
          */
         CreateEventRequest request = new CreateEventRequest();
@@ -220,6 +220,7 @@ class EventServiceImplTest {
     void createEventTest() {
 
         try {
+
             /* Create mock geocodes to add to the event */
             GeoCode gc1 = new GeoCode().id( UUID.randomUUID() );
             GeoCode gc2 = new GeoCode().id( UUID.randomUUID() );
@@ -232,8 +233,6 @@ class EventServiceImplTest {
              * Create a request object
              * and assign values to it
              */
-
-
             CreateEventRequest request = new CreateEventRequest();
             request.setDescription( "Try get as many as possible" );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
@@ -241,13 +240,14 @@ class EventServiceImplTest {
             request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
             request.setEndDate( LocalDate.parse( "2020-05-21" ) );
             List< UUID > geoCodesToFind = new ArrayList<>();
-            geoCodesToFind.add( gc1.getId() );
-            geoCodesToFind.add( gc2.getId() );
-            geoCodesToFind.add( gc3.getId() );
+                geoCodesToFind.add( gc1.getId() );
+                geoCodesToFind.add( gc2.getId() );
+                geoCodesToFind.add( gc3.getId() );
             request.setGeoCodesToFind( geoCodesToFind );
             request.setOrderBy( OrderLevels.GIVEN );
-            request.setProperties( new HashMap< String, String >() );
+            request.setProperties( new HashMap<>() );
 
+            /* Call the use case and keep the response */
             CreateEventResponse response = eventService.createEvent( request );
 
             /*
@@ -269,7 +269,7 @@ class EventServiceImplTest {
     @Test
     @Order( 5 )
     @DisplayName( "Null repository handling - getEvent" )
-    void getEventCodeNullRequestTest() {
+    void getEventNullRequestTest() {
 
         /* Null request check */
         assertThatThrownBy( () -> eventService.getEvent( null ) )
@@ -286,7 +286,7 @@ class EventServiceImplTest {
     void getEventInvalidRequestTest() {
 
         /*
-         *  Create a request object
+         * Create a request object
          * and assign values to it
          */
         GetEventRequest request = new GetEventRequest();
@@ -315,7 +315,9 @@ class EventServiceImplTest {
             /* Populate with a known Event to find*/
             var event = new Event( eventID, "Test", "Test description", null,
                                    null, LocalDate.parse( "2020-01-08" ),
-                                   LocalDate.parse( "2020-01-08" ), null, new HashMap< String, String >() );
+                                   LocalDate.parse( "2020-01-08" ), null, new HashMap<>() );
+
+            /* Add the created Event to the repository */
             eventRepo.save( event );
 
             /*
@@ -325,6 +327,7 @@ class EventServiceImplTest {
             GetEventRequest request = new GetEventRequest();
             request.setEventID( eventID );
 
+            /* Call the use case and save the response */
             GetEventResponse response = eventService.getEvent( request );
 
             /*
@@ -365,7 +368,7 @@ class EventServiceImplTest {
     void getCurrentEventStatusInvalidRequestTest() {
 
         /*
-         *  Create a request object
+         * Create a request object
          * and assign values to it
          */
         GetCurrentEventStatusRequest request = new GetCurrentEventStatusRequest();
@@ -389,11 +392,25 @@ class EventServiceImplTest {
 
         try {
 
+            //ToDo finish this
+
+            /* Insert different random Events into the repository */
+            populate( 3 );
+
+            /* Populate with a known Event to find*/
+            var event = new Event( eventID, "Test", "Test description", null,
+                                   null, LocalDate.parse( "2020-01-08" ),
+                                   LocalDate.parse( "2020-01-08" ), null, new HashMap<>() );
+
+            /* Add the created Event to the repository */
+            eventRepo.save( event );
+
             GetCurrentEventStatusRequest request = new GetCurrentEventStatusRequest();
-            request.setEventID( null );
+            request.setEventID( eventID );
             request.setUserID( null );
 
-            var event = eventService.getCurrentEventStatus( request );
+            var response = eventService.getCurrentEventStatus( request );
+
         } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
@@ -416,28 +433,6 @@ class EventServiceImplTest {
     }
 
     /**
-     * Check how the use case handles an invalid request
-     */
-    @Test
-    @Order( 6 )
-    @DisplayName( "Invalid repository attribute handling - nextStage" )
-    void nextStageInvalidRequestTest() {
-
-        /*
-         *  Create a request object
-         * and assign values to it
-         */
-        //        GetCurrentEventStatusRequest request = new GetCurrentEventStatusRequest();
-        //        request.setEventID( null );
-        //        request.setUserID( UUID.randomUUID() );
-        //
-        //        /* Null parameter request check */
-        //        assertThatThrownBy( () -> eventService.nextStage( request ) )
-        //                .isInstanceOf( InvalidRequestException.class )
-        //                .hasMessageContaining( reqParamError );
-    }
-
-    /**
      * Using valid data does the nextStage use case test
      * complete successfully
      */
@@ -447,6 +442,8 @@ class EventServiceImplTest {
     void nextStageTest() {
 
         try {
+
+            //ToDo finish this
 
             eventService.nextStage( null, null );
         } catch ( InvalidRequestException | NotFoundException | MismatchedParametersException e ) {
@@ -479,7 +476,7 @@ class EventServiceImplTest {
     void getEnteredEventsInvalidRequestTest() {
 
         /*
-         *  Create a request object
+         * Create a request object
          * and assign values to it
          */
         GetEnteredEventsRequest request = new GetEnteredEventsRequest();
@@ -492,7 +489,7 @@ class EventServiceImplTest {
     }
 
     /**
-     * Using valid data does the getCurrentEventStatus use case test
+     * Using valid data does the getEnteredEvents use case test
      * complete successfully
      */
     @Test
@@ -501,6 +498,8 @@ class EventServiceImplTest {
     void getEnteredEventsTest() {
 
         try {
+
+            //ToDo finish this
 
             GetEnteredEventsRequest request = new GetEnteredEventsRequest();
             request.setUserID( null );
@@ -536,7 +535,7 @@ class EventServiceImplTest {
     void eventsNearMeInvalidRequestTest() {
 
         /*
-         *  Create a request object
+         * Create a request object
          * and assign values to it
          */
         EventsNearMeRequest request = new EventsNearMeRequest();
@@ -560,6 +559,8 @@ class EventServiceImplTest {
 
         try {
 
+            //ToDo finish this
+
             EventsNearMeRequest request = new EventsNearMeRequest();
             request.setLocation( null );
             request.setRadius( 0.0 );
@@ -579,7 +580,7 @@ class EventServiceImplTest {
     @Order( 5 )
     @DisplayName( "Null repository handling - getAllEvents" )
     void getAllEventsTest() {
-
+        //ToDo finish this
         var event = eventService.getAllEvents();
     }
 
@@ -606,7 +607,7 @@ class EventServiceImplTest {
     void changeAvailabilityInvalidRequestTest() {
 
         /*
-         *  Create a request object
+         * Create a request object
          * and assign values to it
          */
         ChangeAvailabilityRequest request = new ChangeAvailabilityRequest();
@@ -629,7 +630,7 @@ class EventServiceImplTest {
     void changeAvailabilityTest() {
 
         try {
-
+            //ToDo finish this
             ChangeAvailabilityRequest request = new ChangeAvailabilityRequest();
             request.setAvailability( null );
             request.setEventID( null );
@@ -665,7 +666,7 @@ class EventServiceImplTest {
     void getEventsByLocationInvalidRequestTest() {
 
         /*
-         *  Create a request object
+         * Create a request object
          * and assign values to it
          */
         GetEventsByLocationRequest request = new GetEventsByLocationRequest();
@@ -687,7 +688,7 @@ class EventServiceImplTest {
     void getEventsByLocationTest() {
 
         try {
-
+            //ToDo finish this
             GetEventsByLocationRequest request = new GetEventsByLocationRequest();
             request.setLocation( null );
 
@@ -722,7 +723,7 @@ class EventServiceImplTest {
     void createLeaderBoardInvalidRequestTest() {
 
         /*
-         *  Create a request object
+         * Create a request object
          * and assign values to it
          */
         CreateLeaderboardRequest request = new CreateLeaderboardRequest();
@@ -744,7 +745,7 @@ class EventServiceImplTest {
     void createLeaderBoardTest() {
 
         try {
-
+            //ToDo finish this
             CreateLeaderboardRequest request = new CreateLeaderboardRequest();
             request.setEventID( null );
 
@@ -764,20 +765,8 @@ class EventServiceImplTest {
     @Order( 7 )
     @DisplayName( "Valid request - setGeoCodeService" )
     void setGeoCodeServiceTest() {
-
+        //ToDo finish this
         eventService.setGeoCodeService( null );
-    }
-
-    @Test
-    @Order( 8 )
-    @DisplayName( "check Difficulty" )
-    void checkDifficulty() {
-
-        /* Get the order of difficulties */
-        /* Get the order of difficulties */
-        List< Difficulty > difficultyOrder = Difficulty.getDifficultyOrder();
-
-        System.out.println( difficultyOrder );
     }
 
     @Test
@@ -791,19 +780,19 @@ class EventServiceImplTest {
         GeoCode gc4 = new GeoCode().id( UUID.randomUUID() ).location( new GeoPoint( 0, 0 ) ); //1st
 
         List< GeoCode > geoCodes = new ArrayList< GeoCode >();
-        geoCodes.add( gc1 );
-        geoCodes.add( gc2 );
-        geoCodes.add( gc3 );
-        geoCodes.add( gc4 );
+            geoCodes.add( gc1 );
+            geoCodes.add( gc2 );
+            geoCodes.add( gc3 );
+            geoCodes.add( gc4 );
         GeoPoint start = new GeoPoint( 0, 0 );
 
         List< UUID > result = Graph.getOptimalGeocodeIDOrder( geoCodes, start );
 
-        List< UUID > expected = new ArrayList< UUID >();
-        expected.add( gc4.getId() ); //1st
-        expected.add( gc2.getId() ); //2nd
-        expected.add( gc1.getId() ); //3rd
-        expected.add( gc3.getId() ); //4th
+        List< UUID > expected = new ArrayList<>();
+            expected.add( gc4.getId() ); //1st
+            expected.add( gc2.getId() ); //2nd
+            expected.add( gc1.getId() ); //3rd
+            expected.add( gc3.getId() ); //4th
 
         Assertions.assertEquals( expected, result );
 
@@ -813,7 +802,7 @@ class EventServiceImplTest {
 
     /**
      * This function creates numerous Events to be used for testing.
-     * <p>
+     *
      * NOTE: the create function will need to be working with tests passing for this
      * helper function to be used
      */
