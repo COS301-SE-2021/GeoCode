@@ -4,14 +4,21 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.collectable.CollectableMockRepository;
 import tech.geocodeapp.geocode.collectable.CollectableSetMockRepository;
 import tech.geocodeapp.geocode.collectable.CollectableTypeMockRepository;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
-import tech.geocodeapp.geocode.collectable.model.CollectableSet;
-import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableSetRequest;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableTypeRequest;
+import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
+import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.collectable.response.CreateCollectableSetResponse;
+import tech.geocodeapp.geocode.collectable.response.CreateCollectableTypeResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
@@ -28,116 +35,136 @@ import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 @ExtendWith( MockitoExtension.class )
 public class MissionServiceImplTest {
+    @Mock(name="missionService")
     private MissionService missionService;
+
+    @Mock(name="collectableService")
+    private CollectableService collectableService;
+
     private MissionMockRepository missionMockRepo;
 
-    private Mission validMission;
-    private final UUID validMissionID = UUID.fromString("7e1d1d27-8370-4ba8-bce4-315803368232");
-    private final UUID invalidMissionID = UUID.fromString("48f92adb-e46b-4466-912a-fdc0cf7280c5");
-
-    private final String invalidMissionIDMessage = "Invalid Mission Id";
+    private final UUID invalidMissionId = UUID.fromString("48f92adb-e46b-4466-912a-fdc0cf7280c5");
+    private final String invalidMissionIdMessage = "Invalid Mission Id";
     private final String collectableHasMissionMessage = "Collectable already has a Mission";
 
-    private final GeoPoint validMissionLocation = new GeoPoint(10.0, 10.0);
-    private final GeoPoint fishLocation = new GeoPoint(10.0, 100.0);
+    private UUID christmasSetId;
 
-    private final UUID fishCollectableTypeID = UUID.fromString("91216b44-b123-486c-8ba7-1c2da7d0feef");
-    private final UUID ballCollectableTypeID = UUID.fromString("f85ebdce-a569-4d47-9274-d4b0245c4713");
+    private UUID santaTypeID;
+    private Collectable santaCollectable;
+    private UUID santaCollectableID;
 
-    private final UUID fishCollectableID = UUID.fromString("cfb23fdb-7b9e-4f67-ad67-b2bab0e7541a");
-    private final UUID ballCollectableID = UUID.fromString("49b544b6-307c-4905-bc5e-f61c2afdd56b");
-    private final UUID invalidCollectableID = UUID.fromString("71928fe9-70b5-49bc-95dc-ebbf97343201");
-    
-    private final String invalidCollectableIdMessage = "Invalid Collectable ID";
+    private UUID santaCollectableMissionID;
+    private Mission santaCollectableMission;
 
-    MissionServiceImplTest(){
+    private UUID presentTypeID;
+    private Collectable presentCollectable;
+    private UUID presentCollectableID;
+    private UUID presentCollectableMissionID;
 
+    UUID createCollectableSet(String name, String description){
+        CreateCollectableSetRequest createCollectableSetRequest = new CreateCollectableSetRequest(name, description);
+
+        try {
+            CreateCollectableSetResponse createCollectableSetResponse = collectableService.createCollectableSet(createCollectableSetRequest);
+            return createCollectableSetResponse.getCollectableSet().getId();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    UUID createCollectableType(String name, String image, Rarity rarity, UUID setId, HashMap<String, String> properties) {
+        CreateCollectableTypeRequest createCollectableTypeRequest = new CreateCollectableTypeRequest(name, image, rarity, setId, properties);
+
+        try {
+            CreateCollectableTypeResponse createCollectableTypeResponse = collectableService.createCollectableType(createCollectableTypeRequest);
+            return createCollectableTypeResponse.getCollectableType().getId();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    Collectable createCollectable(UUID typeID, boolean createMission, GeoPoint location){
+        CreateCollectableRequest createCollectableRequest = new CreateCollectableRequest();
+        createCollectableRequest.setCollectableTypeId(typeID);
+        createCollectableRequest.setCreateMission(createMission);
+        createCollectableRequest.setLocation(location);
+
+        CreateCollectableResponse createCollectableResponse = null;
+
+        try {
+            createCollectableResponse = collectableService.createCollectable(createCollectableRequest);
+            Assertions.assertTrue(createCollectableResponse.isSuccess());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            Assertions.fail(e.getMessage());
+        }
+
+        UUID id = createCollectableResponse.getCollectable().getId();
+
+        try {
+            return collectableService.getCollectableByID(new GetCollectableByIDRequest(id)).getCollectable();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private Mission getMissionByID(UUID collectableMissionID) {
+        try {
+            return missionService.getMissionById(new GetMissionByIdRequest(collectableMissionID)).getMission();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @BeforeEach
     void setup() {
-        CollectableTypeMockRepository collectableTypeMockRepo = new CollectableTypeMockRepository();
-        CollectableMockRepository collectableMockRepo = new CollectableMockRepository();
-        CollectableSetMockRepository collectableSetMockRepo = new CollectableSetMockRepository();
-        CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo, missionService);
-
+        //initialize the services and mock repos
         missionMockRepo = new MissionMockRepository();
         missionService = new MissionServiceImpl(missionMockRepo, collectableService);
 
-        //create a Mission
-        validMission = new Mission();
-        validMission.setId(validMissionID);
-        validMission.setType(MissionType.SWAP);
-        validMission.setLocation(validMissionLocation);
+        collectableService = new CollectableServiceImpl(new CollectableMockRepository(), new CollectableSetMockRepository(),
+                new CollectableTypeMockRepository(), missionService);
 
-        missionMockRepo.save(validMission);
+        //create the Christmas set
+        christmasSetId = createCollectableSet("Christmas Set", "Christmas Collectable Set for 2021");
 
-        //create Collectables
-        CollectableSet collectableSet = new CollectableSet("Test Set", "CollectableSet for testing");
-        collectableSetMockRepo.save(collectableSet);
+        //create the Santa CollectableType
+        HashMap<String, String> santaProperties = new HashMap<>();
+        santaProperties.put("missionType", String.valueOf(MissionType.SWAP));
+        santaTypeID = createCollectableType("Santa", "img_santa", Rarity.RARE, christmasSetId, santaProperties);
 
-        CollectableType fishType = new CollectableType("fish", "fish_image", Rarity.COMMON, collectableSet, new HashMap<String,String>(){{
-            put("missionType", "Swap");
-        }});
+        //create a Santa Collectable with a Mission
+        santaCollectable = createCollectable(santaTypeID, true, new GeoPoint(0.0, 0.0));
+        santaCollectableID = santaCollectable.getId();
 
-        fishType.setId(fishCollectableTypeID);
-        collectableTypeMockRepo.save(fishType);
+        //get the missionID for the Santa Collectable's Mission
+        santaCollectableMissionID = santaCollectable.getMissionID();
+        santaCollectableMission = getMissionByID(santaCollectableMissionID);
 
-        //create a Collectable without a Mission
-        Collectable fishCollectable = new Collectable(fishType);
-        fishCollectable.setId(fishCollectableID);
-        fishCollectable.changeLocation(fishLocation);
-        collectableMockRepo.save(fishCollectable);
+        //create the Present CollectableType
+        HashMap<String, String> presentProperties = new HashMap<>();
+        presentProperties.put("missionType", String.valueOf(MissionType.GEOCODE));
+        presentTypeID = createCollectableType("Present", "img_present", Rarity.COMMON, christmasSetId, presentProperties);
 
-        CollectableType ballType = new CollectableType("ball", "ball_image", Rarity.UNCOMMON, collectableSet, new HashMap<String,String>(){{
-            put("missionType", "GeoCode");
-        }});
-
-        ballType.setId(ballCollectableTypeID);
-        collectableTypeMockRepo.save(ballType);
-
-        //create a Collectable with a Mission
-        Collectable ballCollectable = new Collectable();
-        ballCollectable.setId(ballCollectableID);
-
-        Mission ballMission = new Mission();
-        ballCollectable.setMissionID(ballMission.getId());
-        missionMockRepo.save(ballMission);
-
-        collectableMockRepo.save(ballCollectable);
+        //create a Present Collectable without a Mission
+        presentCollectable = createCollectable(presentTypeID, false, new GeoPoint(0.0, 0.0));
+        presentCollectableID = presentCollectable.getId();
     }
 
     @Test
-    void getMissionByIdTestNullRequest(){
+    void getMissionByIdTestInvalidMissionId(){
         try {
-            GetMissionByIdResponse response = missionService.getMissionById(null);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("The GetMissionByIdRequest object passed was NULL", response.getMessage());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    void getMissionByIdTestNullMissionParameter(){
-        GetMissionByIdRequest request = new GetMissionByIdRequest(null);
-
-        assertThatThrownBy(() -> missionService.getMissionById(request)).isInstanceOf(NullRequestParameterException.class);
-    }
-
-    @Test
-    void getMissionByIdTestInvalidMissionID(){
-        try {
-            GetMissionByIdRequest request = new GetMissionByIdRequest(invalidMissionID);
+            GetMissionByIdRequest request = new GetMissionByIdRequest(invalidMissionId);
             GetMissionByIdResponse response = missionService.getMissionById(request);
 
             Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidMissionIDMessage, response.getMessage());
+            Assertions.assertEquals(invalidMissionIdMessage, response.getMessage());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
@@ -146,61 +173,24 @@ public class MissionServiceImplTest {
     @Test
     void getMissionByIdTestValidMissionId(){
         try {
-            GetMissionByIdRequest request = new GetMissionByIdRequest(validMissionID);
+            GetMissionByIdRequest request = new GetMissionByIdRequest(santaCollectableMissionID);
             GetMissionByIdResponse response = missionService.getMissionById(request);
             Mission mission = response.getMission();
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The Mission was found", response.getMessage());
-
-            Assertions.assertEquals(validMissionID, mission.getId());
-            Assertions.assertEquals(MissionType.SWAP, mission.getType());
-            Assertions.assertEquals(validMissionLocation, mission.getLocation());
+            Assertions.assertEquals(santaCollectableMission, mission);
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    void createMissionTestNullRequest(){
-        try {
-            CreateMissionResponse response = missionService.createMission(null);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("The CreateMissionRequest object passed was NULL", response.getMessage());
-        } catch (NullRequestParameterException e) {
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void createMissionTestNullCollectableParameter(){
-        CreateMissionRequest request = new CreateMissionRequest(null);
-
-        assertThatThrownBy(() -> missionService.createMission(request)).isInstanceOf(NullRequestParameterException.class);
-    }
-
-    @Test
-    void createMissionTestInvalidCollectableID(){
-        try {
-            CreateMissionRequest request = new CreateMissionRequest(invalidCollectableID);
-            CreateMissionResponse response = missionService.createMission(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidCollectableIdMessage, response.getMessage());
-
-            Mission mission = response.getMission();
-            Assertions.assertNull(mission);
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
+    @Transactional
     void createMissionTestCollectableWithMission(){
         try {
-            //ballCollectable already has a Mission assigned to it
-            CreateMissionRequest request = new CreateMissionRequest(ballCollectableID);
+            //this Collectable already has a Mission assigned to it (random location)
+            CreateMissionRequest request = new CreateMissionRequest(santaCollectable, new GeoPoint(0.0, 0.0));
             CreateMissionResponse response = missionService.createMission(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -214,25 +204,20 @@ public class MissionServiceImplTest {
     }
 
     @Test
+    @Transactional
     void createMissionTestCollectableWithoutMission(){
         try {
-            //fishCollectable does not have a Mission assigned to it
-            CreateMissionRequest request = new CreateMissionRequest(fishCollectableID);
+            //this Collectable does not have a Mission assigned to it (random location)
+            CreateMissionRequest request = new CreateMissionRequest(presentCollectable, new GeoPoint(0.0, 0.0));
             CreateMissionResponse response = missionService.createMission(request);
+            Mission mission = response.getMission();
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Mission created", response.getMessage());
 
-            Mission mission = response.getMission();
-            Assertions.assertNotNull(mission);
-
-            //test that the Mission was created correctly
-            Assertions.assertEquals(MissionType.SWAP, mission.getType());
-            Assertions.assertEquals(fishLocation, mission.getLocation());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
     }
-
 
 }

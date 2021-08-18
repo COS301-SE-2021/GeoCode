@@ -23,6 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This is the integration testing class for the GeoCode subsystem
+ *
+ * Testing for if the requests, request attributes
+ * and the repository are working in valid order
+ * and what exceptions are thrown if not.
+ */
 @SpringBootTest( classes = GeoCodeApplication.class,
                  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT )
 @TestMethodOrder( MethodOrderer.OrderAnnotation.class )

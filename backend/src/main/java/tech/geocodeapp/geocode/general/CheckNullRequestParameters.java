@@ -16,6 +16,7 @@ public class CheckNullRequestParameters {
 
             try {
                 if(field.get(request) == null) {
+                    System.out.println(field.getName() + " was NULL");
                     throw new NullRequestParameterException();
                 }
             } catch (IllegalAccessException e) {

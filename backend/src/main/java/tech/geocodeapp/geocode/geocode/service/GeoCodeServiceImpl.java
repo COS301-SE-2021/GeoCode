@@ -9,9 +9,9 @@ import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
-import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
@@ -34,6 +34,7 @@ import javax.annotation.PostConstruct;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.security.SecureRandom;
+import java.sql.Array;
 import java.util.*;
 
 import static tech.geocodeapp.geocode.collectable.model.Rarity.*;
@@ -171,19 +172,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 /* Get first stored Collectable type */
                 typeList = calculateCollectableType( collectableTypes.getCollectableTypes() );
 
-                /* Check if the Collectable Type was found */
                 if ( typeList != null ) {
 
-                    /* Check if the CollectableType is a mission or not */
-                    if ( typeList.getMissionType() == null ) {
-
-                        /* Get and set the collectable request with the type */
-                        collectableRequest.setCollectableTypeId( typeList.getId() );
-                    } else {
-
-                        /* Create the request with a mission type */
-                        collectableRequest = new CreateCollectableRequest( typeList.getId(), true );
-                    }
+                    /* Get and set the collectable request with the type and location */
+                    collectableRequest.setCollectableTypeId( typeList.getId() );
+                    collectableRequest.setLocation( request.getLocation() );
                 } else {
 
                     /* Exception thrown when trying to get Collectable */
@@ -196,7 +189,14 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             }
 
             /* Get the response from the created request */
-            CreateCollectableResponse collectableResponse = collectableService.createCollectable( collectableRequest );
+            CreateCollectableResponse collectableResponse = null;
+
+            try {
+                collectableResponse = collectableService.createCollectable( collectableRequest );
+            } catch (NullRequestParameterException e) {
+                e.printStackTrace();
+                return new CreateGeoCodeResponse( false );
+            }
 
             /* Building a collectable from a collectable response */
             var temp = new Collectable();
@@ -233,11 +233,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         var id = UUID.randomUUID();
 
-        /*
-         * Get the user who is creating the GeoCode
-         */
-//        var createdBy = userService.getCurrentUserID();
-        UUID createdBy = null;
+        var createdBy = userService.getCurrentUserID();
 
         /* Create the GeoCode Object */
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
@@ -339,7 +335,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     public GetGeoCodesResponse getAllGeoCodes() {
 
         /* Retrieve all the stored GeoCodes from the repository */
-        List< GeoCode > temp = new ArrayList<>( geoCodeRepo.findGeoCode() );
+        List< GeoCode > temp = geoCodeRepo.findAll();
+
+        //ToDo make a custom query to only select fields wanted
 
         /* Go through each GeoCode found and hide the sensitive data */
         for ( GeoCode geoCode : temp ) {
@@ -416,26 +414,26 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Sort through the stored GeoCodes and
          * find all the GeoCodes with the specified difficulty
          */
-        List< GeoCode > hold = new ArrayList<>( geoCodeRepo.findGeoCodeWithDifficulty( request.getDifficulty() ) );
-//        for ( GeoCode code : geoCodeRepo.findAll() ) {
-//
-//            /* Check if the current GeoCode has the Difficulty wanted */
-//            if ( code.getDifficulty().equals( request.getDifficulty() ) ) {
-//
-//                /*
-//                 * Ensure only the relevant data is shown
-//                 */
-//                code.setHints( null );
-//                code.setQrCode( null );
-//                code.setCollectables( null );
-//
-//                /*
-//                 * The current GeoCode has the valid GeoCode
-//                 * add it to the list
-//                 */
-//                hold.add( code );
-//            }
-//        }
+        List< GeoCode > hold = new ArrayList<>();
+        for ( GeoCode code : geoCodeRepo.findAll() ) {
+
+            /* Check if the current GeoCode has the Difficulty wanted */
+            if ( code.getDifficulty().equals( request.getDifficulty() ) ) {
+
+                /*
+                 * Ensure only the relevant data is shown
+                 */
+                code.setHints( null );
+                code.setQrCode( null );
+                code.setCollectables( null );
+
+                /*
+                 * The current GeoCode has the valid GeoCode
+                 * add it to the list
+                 */
+                hold.add( code );
+            }
+        }
 
         /*
          * Create the new response
@@ -568,10 +566,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /*
-         * Get all the stored GeoCodes
+         * Get all of the stored GeoCodes
          * and find the GeoCode with the specified qrCode
-         *
-         * ToDo use custom query
          */
         List< GeoCode > temp = geoCodeRepo.findAll();
         var x = 0;
@@ -760,61 +756,57 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * if the user created the GeoCode do not allow the swap as it will be unfair
          * else continue as the user found the GeoCode fairly
          */
-        var userID = userService.getCurrentUserID();
+        var user = userService.getCurrentUser();
+        var userID = user.getId();
         if ( ( userID == null ) || ( geocode.getCreatedBy().equals( userID ) ) ) {
 
             return new SwapCollectablesResponse( false );
         }
 
         /* Find the target collectable in the GeoCode */
-        var replaceIndex = -1;
-        List< UUID > storedCollectables = new ArrayList<>( geocode.getCollectables() );
-        for ( var i = 0; i < storedCollectables.size(); i++ ) {
 
-            /* Check if the current Collectable is the targeted one */
-            if ( storedCollectables.get( i ).equals( request.getTargetCollectableID() ) ) {
-
-                replaceIndex = i;
-                break;
-            }
-        }
-
-        /* Validate the Collectable the user selected was found in the GeoCode */
-        if ( replaceIndex == -1 ) {
-
+        //check if the targetCollectableID is invalid
+        if(!geocode.getCollectables().contains(request.getTargetCollectableID())){
             return new SwapCollectablesResponse( false );
         }
 
-        /* Find all the available Collectables */
-        UUID hold = null;
-        var geocodeToUser = storedCollectables.get( replaceIndex );
-        var temp = collectableService.getCollectables().getCollectables();
-        for ( CollectableResponse collectableResponse : temp ) {
+        /* Get the Collectable that must be swapped out and given to the User */
+        var geocodeToUserID = request.getTargetCollectableID();
+        Collectable geocodeToUser;
 
-            var collectableID = collectableResponse.getId();
-            if ( collectableID.equals( geocodeToUser ) ) {
+        var getCollectableByIdRequest = new GetCollectableByIDRequest(geocodeToUserID);
 
-                hold = collectableID;
+        try {
+            var getCollectableByIdResponse = collectableService.getCollectableByID(getCollectableByIdRequest);
+
+            /* Validate the Collectable's ID was found */
+            if(!getCollectableByIdResponse.isSuccess()){
+                return new SwapCollectablesResponse(false);
             }
-        }
 
-        /* Validate the Collectable's ID was found */
-        if ( hold == null ) {
-
-            return new SwapCollectablesResponse( false );
+            geocodeToUser = getCollectableByIdResponse.getCollectable();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return new SwapCollectablesResponse(false);
         }
 
         /* Perform the swap */
         Collectable userToGeocode;
-        try {
-            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( userID, hold, geocode.getId() ) ).getCollectable();
-        } catch ( NullRequestParameterException error ) {
 
+        try {
+            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( user, geocodeToUser, geocode ) ).getCollectable();
+        } catch ( NullRequestParameterException error ) {
             /* Validate the Collectable returned */
             return new SwapCollectablesResponse( false );
         }
 
+        //change the location of the Collectable going into the GeoCode
         userToGeocode.changeLocation( new GeoPoint( geocode.getLocation().getLatitude(), geocode.getLocation().getLongitude() ) );
+
+        //swap in the Collectable that is the User's old current Collectable
+        var storedCollectables = new ArrayList<>( geocode.getCollectables() );
+        var replaceIndex = storedCollectables.indexOf(geocodeToUserID);
+
         storedCollectables.set( replaceIndex, userToGeocode.getId() );
         geocode.setCollectables( storedCollectables );
 
@@ -941,82 +933,58 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      *
      * Determines what type of collectable to create
      *
-     * NOTE: a collectable of Type Rarity is a user Trackable and will not be considered
+     * NOTE: a collectable type with an all-zero ID is a user Trackable and will not be considered
      */
     public CollectableTypeComponent calculateCollectableType( List< CollectableTypeComponent > items ) {
-
-        /* The total sample size */
-        double total = 1000;
-
-        /*
-        * Go through each Collectable Type and assign a probability to it
-        * depending on its Rarity
-        */
-        var probability = new ArrayList< Double >();
-        for ( CollectableTypeComponent item : items ) {
-
-            /* Check the rarity of the object to assign a value to it */
-            double value = 0;
-            switch ( item.getRarity() ) {
-
-                case COMMON:
-                    value = 600 / total;
-                    break;
-
-                case UNCOMMON:
-                    value = 200 / total;
-                    break;
-
-                case RARE:
-                    value = 150 / total;
-                    break;
-
-                case EPIC:
-                    value = 40 / total;
-                    break;
-
-                case LEGENDARY:
-                    value = 10 / total;
-                    break;
-                default:
-                    value = 0;
-            }
-
-            /* Add the calculated value to the list */
-            probability.add( value );
-        }
 
         /* Create a random number between 0 and 1.0 */
         var random = ( new SecureRandom() ).nextDouble();
         var cumulativeProbability = 0.0;
 
-         while ( true ) {
+        try {
+            /* Go through each rarity */
+            for ( Rarity rarity: Rarity.values() ) {
 
-             /* Go through each entry in the list */
-             for ( int x = 0; x < items.size(); x++ ) {
+                /* Check the cumulative probability */
+                cumulativeProbability += rarity.getProbability();
+                if ( random <= cumulativeProbability ) {
 
-                 /* Make sure probability is still in range */
-                 if ( probability.size() > x ) {
+                    /* The current rarity has been selected */
 
-                     /* Check the cumulative probability */
-                     cumulativeProbability += probability.get( x );
-                     if ( random <= cumulativeProbability ) {
+                    /* Find items from the list that have the selected rarity */
+                    var filtered = new ArrayList< CollectableTypeComponent >();
+                    for ( CollectableTypeComponent item: items ) {
+                        if ( rarity.equals(item.getRarity()) ) {
+                            filtered.add(item);
+                        }
+                    }
 
-                         /* The object to return */
-                         var type = items.get( x );
+                    if ( filtered.size() == 0 ) {
+                        /* No items of the selected rarity were found. Try again to generate an item */
+                        return calculateCollectableType( items );
+                    }
 
-                         /* Ensure the Collectable is not a Users Trackable */
-                         if ( type.getRarity().equals( UNIQUE ) ) {
+                    /* The index of the object to return */
+                    var randomIndex = (int) (( new SecureRandom() ).nextDouble() * filtered.size());
+                    var type = filtered.get(randomIndex);
 
-                             /* The Collectable is a User trackable therefore redo the calculation */
-                             type = calculateCollectableType( items );
-                         }
+                    /* Ensure the Collectable is not a Users Trackable */
+                    if ( type.getId().equals( new UUID(0, 0) ) ) {
 
-                         return type;
-                     }
-                 }
-             }
-         }
+                        /* The Collectable is a User trackable therefore redo the calculation */
+                        return calculateCollectableType( items );
+                    }
+
+                    return type;
+                }
+            }
+            /* If we fail to find a value, try again */
+            return calculateCollectableType( items );
+
+        } catch (StackOverflowError e) {
+            /* If we generate a stack overflow from the recursion when retrying, return null */
+            return null;
+        }
     }
 
     /*----------- END -----------*/

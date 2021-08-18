@@ -106,12 +106,17 @@ public class UserMockService implements UserService {
         user.setId(request.getUserID());
         user.setUsername(request.getUsername());
         userRepo.save(user);
-        return new RegisterNewUserResponse(true, "New user registered");
+        return new RegisterNewUserResponse(true, "New user registered", user);
     }
 
     @Override
     public SwapCollectableResponse swapCollectable(SwapCollectableRequest request) throws NullRequestParameterException {
         return null;
+    }
+
+    @Override
+    public void addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException {
+
     }
 
     /**

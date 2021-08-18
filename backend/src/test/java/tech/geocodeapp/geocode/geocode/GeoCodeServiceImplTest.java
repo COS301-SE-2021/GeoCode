@@ -1,10 +1,13 @@
 package tech.geocodeapp.geocode.geocode;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
 
 import org.mockito.Mock;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
@@ -113,30 +116,36 @@ class GeoCodeServiceImplTest {
         /* Ensure a collectable can be made */
         CollectableTypeMockRepository typeMockRepo = new CollectableTypeMockRepository();
 
-            CollectableType type = new CollectableType();
-            type.setId( UUID.fromString( "f44306a6-accb-4e7f-9eb6-e9f6a90e17c0" ) );
-            type.setName( "name" );
-            type.setImage( "Image" );
-            type.setRarity( Rarity.RARE );
-            type.setSet( new CollectableSet() );
+        CollectableType type = new CollectableType();
+        type.setId( UUID.fromString( "f44306a6-accb-4e7f-9eb6-e9f6a90e17c0" ) );
+        type.setName( "name" );
+        type.setImage( "Image" );
+        type.setRarity( Rarity.RARE );
+        type.setSet( new CollectableSet() );
 
-            typeMockRepo.save( type );
-            CollectableType type2 = new CollectableType();
-            type2.setId( UUID.fromString( "f44306a6-acce-4e7f-9eb6-e9f6a90e17c0" ) );
-            type2.setName( "name" );
-            type2.setImage( "Image" );
-            type2.setRarity( Rarity.RARE );
-            type2.setSet( new CollectableSet() );
+        typeMockRepo.save( type );
+        CollectableType type2 = new CollectableType();
+        type2.setId( UUID.fromString( "f44306a6-acce-4e7f-9eb6-e9f6a90e17c0" ) );
+        type2.setName( "name" );
+        type2.setImage( "Image" );
+        type2.setRarity( Rarity.RARE );
+        type2.setSet( new CollectableSet() );
 
-            typeMockRepo.save( type2 );
+        typeMockRepo.save( type2 );
 
         /* Create a new Collectable Service implementation with the relevant repositories */
         collectableService = new CollectableServiceImpl( new CollectableMockRepository(),
                                                          new CollectableSetMockRepository(),
-                                                         typeMockRepo, missionService);
+                                                         typeMockRepo, missionService );
 
         EventMockRepository eventRepo = new EventMockRepository();
         UserEventStatusMockRepository progressLogRepo = new UserEventStatusMockRepository();
+
+        /* Mock the user service to return wanted data */
+        userService = Mockito.mock( UserServiceImpl.class );
+
+        /* Get a random user ID as only a valid response is needed */
+        lenient().when ( userService.getCurrentUserID() ).thenReturn( UUID.randomUUID() );
 
         try {
 
@@ -149,26 +158,13 @@ class GeoCodeServiceImplTest {
         /* Populate the Event repository with a known Event to find*/
         var event = new Event( eventID, "Test", "Test description", null,
                                null, LocalDate.parse( "2020-01-08" ),
-                               LocalDate.parse("2020-01-08"), null, new HashMap<String, String>());
+                               LocalDate.parse( "2020-01-08" ), null, new HashMap<>() );
 
         eventRepo.save( event );
 
         /* Create the mock user repo and insert a new user into it */
         // var userMockRepo = new UserMockRepository();
         // userService = new UserServiceImpl(userMockRepo, new CollectableMockRepository(), collectableService);
-
-
-       /*
-        collectableService = Mockito.mock( CollectableService.class );
-
-
-        List< UUID > collectables = new ArrayList<>();
-
-        collectables.add( UUID.randomUUID() );
-        collectables.add( UUID.randomUUID() );
-        collectables.add( UUID.randomUUID() );
-        when(collectableService.getCollectables()).thenReturn( new GetCollectablesResponse( collectables ) );
-        */
 
         try {
 
