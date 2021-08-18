@@ -304,7 +304,6 @@ public class UserServiceImpl implements UserService {
      * @param request AddToOwnedGeoCodesRequest object
      * @return AddToOwnedGeoCodesResponse object
      */
-    @Transactional
     public AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException{
         if(request == null){
             return new AddToOwnedGeoCodesResponse(false, "The AddToOwnedGeoCodesRequest object passed was NULL");
@@ -317,8 +316,7 @@ public class UserServiceImpl implements UserService {
         GeoCode geoCode = request.getGeocode();
 
         user.addOwnedGeocodesItem(geoCode);
-        //userRepo.addOwnedGeoCode(user.getId(), geoCode.getId());
-        //userRepo.save(user);
+        userRepo.save(user);
 
         return new AddToOwnedGeoCodesResponse(true, "GeoCode added to the owned GeoCodes");
     }
@@ -328,7 +326,6 @@ public class UserServiceImpl implements UserService {
      * @param request AddToFoundGeoCodesRequest object
      * @return AddToFoundGeoCodesResponse object
      */
-    @Transactional
     public AddToFoundGeoCodesResponse addToFoundGeoCodes(AddToFoundGeoCodesRequest request) throws NullRequestParameterException{
         if(request == null){
             return new AddToFoundGeoCodesResponse(false, "The AddToFoundGeoCodesRequest object passed was NULL");
@@ -357,7 +354,6 @@ public class UserServiceImpl implements UserService {
      * @param request AddToFoundCollectableTypesRequest object
      * @return AddToFoundCollectableTypesResponse object
      */
-    @Transactional
     public AddToFoundCollectableTypesResponse addToFoundCollectableTypes(AddToFoundCollectableTypesRequest request) throws NullRequestParameterException{
         if(request == null){
             return new AddToFoundCollectableTypesResponse(false, "The AddToFoundCollectableTypesRequest object passed was NULL");
@@ -516,7 +512,6 @@ public class UserServiceImpl implements UserService {
      * Add the given Mission to the User's list of missions
      * @param request AddToMyMissionsRequest object
      */
-    @Transactional
     public void addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException {
         if(request == null){
             new AddToMyMissionsResponse(false, "The AddToMyMissionsRequest object passed was NULL");
