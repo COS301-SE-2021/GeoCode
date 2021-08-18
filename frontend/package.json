@@ -19,7 +19,7 @@
     "@angular/platform-browser": "~12.2.1",
     "@angular/platform-browser-dynamic": "~12.2.1",
     "@angular/router": "~12.2.1",
-    "@capacitor/android": "^3.2.0",
+    "@capacitor/android": "3.2.0",
     "@capacitor/app": "^1.0.2",
     "@capacitor/camera": "^1.0.4",
     "@capacitor/core": "^3.2.0",
