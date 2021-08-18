@@ -6,7 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.geocodeapp.geocode.GeoCodeApplication;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.request.*;
@@ -566,6 +568,132 @@ public class LeaderboardServiceImplIT {
             Assertions.assertEquals(2, response.getLeaderboard().get(1).getRank());
             Assertions.assertEquals(5, response.getLeaderboard().get(2).getPoints());
             Assertions.assertEquals(3, response.getLeaderboard().get(2).getRank());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getEventLeaderboardTestCountGreaterThanNumberOfPointsLeft() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            //Create three users to use
+            List<UUID> userIds = new ArrayList<UUID>();
+            for (int i = 0; i < 3; i++) {
+                userIds.add(UUID.randomUUID());
+            }
+            for (int i = 0; i < 3; i++) {
+                RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userIds.get(i), "test user");
+                userService.registerNewUser(userRequest);
+            }
+
+            //create 3 points to rank
+            List<PointResponse> pointResponses = new ArrayList<PointResponse>();
+            CreatePointRequest pointRequest = new CreatePointRequest(5, userIds.get(0), leaderboardResponse.getLeaderboard().getId());
+            pointResponses.add(leaderboardService.createPoint(pointRequest));
+            pointRequest.setAmount(10);
+            pointRequest.setUserId(userIds.get(1));
+            pointResponses.add(leaderboardService.createPoint(pointRequest));
+            pointRequest.setAmount(6);
+            pointRequest.setUserId(userIds.get(2));
+            pointResponses.add(leaderboardService.createPoint(pointRequest));
+
+            GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(leaderboardResponse.getLeaderboard().getId(), 2, 3);
+            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Successfully found points for event", response.getMessage());
+            Assertions.assertFalse(response.getLeaderboard().isEmpty());
+            Assertions.assertEquals(2, response.getLeaderboard().size());
+
+            //test that each value in the list is in the correct place with the correct value of points and rank
+            Assertions.assertEquals(6, response.getLeaderboard().get(0).getPoints());
+            Assertions.assertEquals(2, response.getLeaderboard().get(0).getRank());
+            Assertions.assertEquals(5, response.getLeaderboard().get(1).getPoints());
+            Assertions.assertEquals(3, response.getLeaderboard().get(1).getRank());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getEventLeaderboardTestCountLowerThanNumberOfPointsInLeaderboard() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            //Create three users to use
+            List<UUID> userIds = new ArrayList<UUID>();
+            for (int i = 0; i < 3; i++) {
+                userIds.add(UUID.randomUUID());
+            }
+            for (int i = 0; i < 3; i++) {
+                RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userIds.get(i), "test user");
+                userService.registerNewUser(userRequest);
+            }
+
+            //create 3 points to rank
+            List<PointResponse> pointResponses = new ArrayList<PointResponse>();
+            CreatePointRequest pointRequest = new CreatePointRequest(5, userIds.get(0), leaderboardResponse.getLeaderboard().getId());
+            pointResponses.add(leaderboardService.createPoint(pointRequest));
+            pointRequest.setAmount(10);
+            pointRequest.setUserId(userIds.get(1));
+            pointResponses.add(leaderboardService.createPoint(pointRequest));
+            pointRequest.setAmount(6);
+            pointRequest.setUserId(userIds.get(2));
+            pointResponses.add(leaderboardService.createPoint(pointRequest));
+
+            GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(leaderboardResponse.getLeaderboard().getId(), 1, 2);
+            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Successfully found points for event", response.getMessage());
+            Assertions.assertFalse(response.getLeaderboard().isEmpty());
+            Assertions.assertEquals(2, response.getLeaderboard().size());
+
+            //test that each value in the list is in the correct place with the correct value of points and rank
+            Assertions.assertEquals(10, response.getLeaderboard().get(0).getPoints());
+            Assertions.assertEquals(1, response.getLeaderboard().get(0).getRank());
+            Assertions.assertEquals(6, response.getLeaderboard().get(1).getPoints());
+            Assertions.assertEquals(2, response.getLeaderboard().get(1).getRank());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void savePointNullTest() {
+        try {
+            Response response = leaderboardService.savePoint(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Point provided is null", response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void savePointNullValuesTest() {
+        Point point = new Point(null, null, null);
+        assertThatThrownBy(() -> leaderboardService.savePoint(point))
+                .isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
+    public void savePointValidTest() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("testValid");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            UUID userId = UUID.randomUUID();
+            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
+            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
+            GetUserByIdRequest user = new GetUserByIdRequest(userId);
+            Point point = new Point(1, userService.getUserById(user).getUser(), leaderboardResponse.getLeaderboard());
+            Response response = leaderboardService.savePoint(point);
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Saved point successfully", response.getMessage());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
