@@ -9,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
-import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
@@ -35,7 +34,6 @@ import javax.annotation.PostConstruct;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.security.SecureRandom;
-import java.sql.Array;
 import java.util.*;
 
 import static tech.geocodeapp.geocode.collectable.model.Rarity.*;
@@ -178,7 +176,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                     /* Get and set the collectable request with the type and location */
                     collectableRequest.setCollectableTypeId( typeList.getId() );
                     collectableRequest.setLocation( request.getLocation() );
-                    collectableRequest.setCreateMission( typeList.getMissionType() != null );
                 } else {
 
                     /* Exception thrown when trying to get Collectable */
@@ -945,58 +942,89 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      *
      * Determines what type of collectable to create
      *
-     * NOTE: a collectable type with an all-zero ID is a user Trackable and will not be considered
+     * NOTE: a collectable of Type Rarity is a user Trackable and will not be considered
      */
     public CollectableTypeComponent calculateCollectableType( List< CollectableTypeComponent > items ) {
+
+        /* The total sample size */
+        double total = 1000;
+
+        /* Check if there are Types available to choose from  */
+        if ( ( items.size() == 1 ) && ( items.get( 0 ).getRarity() == UNIQUE ) ) {
+
+            /* There are no types available to choose from */
+            return null;
+        }
+
+        /*
+        * Go through each Collectable Type and assign a probability to it
+        * depending on its Rarity
+        */
+        var probability = new ArrayList< Double >();
+        for ( CollectableTypeComponent item : items ) {
+
+            /* Check the rarity of the object to assign a value to it */
+            double value = 0;
+            switch ( item.getRarity() ) {
+
+                case COMMON:
+                    value = 600 / total;
+                    break;
+
+                case UNCOMMON:
+                    value = 200 / total;
+                    break;
+
+                case RARE:
+                    value = 150 / total;
+                    break;
+
+                case EPIC:
+                    value = 40 / total;
+                    break;
+
+                case LEGENDARY:
+                    value = 10 / total;
+                    break;
+                default:
+                    value = 0;
+            }
+
+            /* Add the calculated value to the list */
+            probability.add( value );
+        }
 
         /* Create a random number between 0 and 1.0 */
         var random = ( new SecureRandom() ).nextDouble();
         var cumulativeProbability = 0.0;
 
-        try {
-            /* Go through each rarity */
-            for ( Rarity rarity: Rarity.values() ) {
+         while ( true ) {
 
-                /* Check the cumulative probability */
-                cumulativeProbability += rarity.getProbability();
-                if ( random <= cumulativeProbability ) {
+             /* Go through each entry in the list */
+             for ( int x = 0; x < items.size(); x++ ) {
 
-                    /* The current rarity has been selected */
+                 /* Make sure probability is still in range */
+                 if ( probability.size() > x ) {
 
-                    /* Find items from the list that have the selected rarity */
-                    var filtered = new ArrayList< CollectableTypeComponent >();
-                    for ( CollectableTypeComponent item: items ) {
-                        if ( rarity.equals(item.getRarity()) ) {
-                            filtered.add(item);
-                        }
-                    }
+                     /* Check the cumulative probability */
+                     cumulativeProbability += probability.get( x );
+                     if ( random <= cumulativeProbability ) {
 
-                    if ( filtered.size() == 0 ) {
-                        /* No items of the selected rarity were found. Try again to generate an item */
-                        return calculateCollectableType( items );
-                    }
+                         /* The object to return */
+                         var type = items.get( x );
 
-                    /* The index of the object to return */
-                    var randomIndex = (int) (( new SecureRandom() ).nextDouble() * filtered.size());
-                    var type = filtered.get(randomIndex);
+                         /* Ensure the Collectable is not a Users Trackable */
+                         if ( type.getRarity().equals( UNIQUE ) ) {
 
-                    /* Ensure the Collectable is not a Users Trackable */
-                    if ( type.getId().equals( new UUID(0, 0) ) ) {
+                             /* The Collectable is a User trackable therefore redo the calculation */
+                             type = calculateCollectableType( items );
+                         }
 
-                        /* The Collectable is a User trackable therefore redo the calculation */
-                        return calculateCollectableType( items );
-                    }
-
-                    return type;
-                }
-            }
-            /* If we fail to find a value, try again */
-            return calculateCollectableType( items );
-
-        } catch (StackOverflowError e) {
-            /* If we generate a stack overflow from the recursion when retrying, return null */
-            return null;
-        }
+                         return type;
+                     }
+                 }
+             }
+         }
     }
 
     /*----------- END -----------*/
