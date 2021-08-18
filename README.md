@@ -138,7 +138,7 @@ The following documentation was done in LaTeX and is to document the methods use
 
 * <a href="https://www.overleaf.com/read/byjsbnwxcgnm"> Coding Standards </a>
 * <a href="https://michael-stroh.github.io/capstone/">Technical Installation Guide</a>
-* <a href="https://www.overleaf.com/read/rgwgjxtdvnzg">User Manual</a>
+* <a href="https://www.overleaf.com/read/fjdvrjjsndhv">User Manual</a>
 
 </div>
 
