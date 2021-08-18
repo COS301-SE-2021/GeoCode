@@ -938,6 +938,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* The total sample size */
         double total = 1000;
 
+        /* Check if there are Types available to choose from  */
+        if ( ( items.size() == 1 ) && ( items.get( 0 ).getRarity() == UNIQUE ) ) {
+
+            /* There are no types available to choose from */
+            return null;
+        }
+
         /*
         * Go through each Collectable Type and assign a probability to it
         * depending on its Rarity
