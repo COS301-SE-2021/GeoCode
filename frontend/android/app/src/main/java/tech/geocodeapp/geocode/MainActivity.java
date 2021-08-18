@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package tech.geocodeapp.geocode;
 
 import com.getcapacitor.BridgeActivity;
 
