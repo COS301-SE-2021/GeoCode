@@ -9,6 +9,7 @@ import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.mission.MissionMockRepository;
 import tech.geocodeapp.geocode.mission.service.MissionService;
 import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
@@ -37,7 +38,7 @@ public class CollectableServiceImplTest {
     }
 
     @Test
-    public void createCollectableSetTest(){
+    public void createCollectableSetTest() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
@@ -51,14 +52,14 @@ public class CollectableServiceImplTest {
     }
 
     @Test
-    public void createCollectableSetNullRequestTest(){
+    public void createCollectableSetNullRequestTest() throws NullRequestParameterException {
         CreateCollectableSetResponse response = collectableService.createCollectableSet(null);
 
         Assertions.assertEquals("The CreateCollectableSetRequest object passed was NULL", response.getMessage());
     }
 
     @Test
-    public void createCollectableTypeTestInvalid(){
+    public void createCollectableTypeTestInvalid() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
@@ -74,7 +75,7 @@ public class CollectableServiceImplTest {
     }
 
     @Test
-    public void createCollectableTypeTestValid(){
+    public void createCollectableTypeTestValid() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
@@ -98,13 +99,13 @@ public class CollectableServiceImplTest {
     }
 
     @Test
-    public void createCollectableTypeNullRequestTest(){
+    public void createCollectableTypeNullRequestTest() throws NullRequestParameterException {
         CreateCollectableTypeResponse response = collectableService.createCollectableType(null);
         Assertions.assertEquals("The CreateCollectableTypeRequest object passed was NULL", response.getMessage());
     }
 
     @Test
-    public void createCollectableTestInvalid(){
+    public void createCollectableTestInvalid() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
@@ -117,13 +118,13 @@ public class CollectableServiceImplTest {
     }
 
     @Test
-    public void createCollectableNullRequestTest(){
+    public void createCollectableNullRequestTest() throws NullRequestParameterException {
         CreateCollectableResponse response = collectableService.createCollectable(null);
         Assertions.assertEquals("The CreateCollectableSetRequest object passed was NULL", response.getMessage());
     }
 
     @Test
-    public void createCollectableTestValid(){
+    public void createCollectableTestValid() throws NullRequestParameterException {
         /**
          *  Create a request object
          * and assign values to it
@@ -154,7 +155,7 @@ public class CollectableServiceImplTest {
     }
 
     @Test
-    public void getCollectableSetsTest(){
+    public void getCollectableSetsTest() throws NullRequestParameterException {
         /**
          *  Create a request object
          * and assign values to it
@@ -171,7 +172,7 @@ public class CollectableServiceImplTest {
     }
 
     @Test
-    public void getCollectableTypesTest(){
+    public void getCollectableTypesTest() throws NullRequestParameterException {
         /**
          *  Create a request object
          * and assign values to it
@@ -203,7 +204,7 @@ public class CollectableServiceImplTest {
     }
 
     @Test
-    public void getCollectableTypesBySetTest(){
+    public void getCollectableTypesBySetTest() throws NullRequestParameterException {
         /**
          *  Create a request object
          * and assign values to it
@@ -233,7 +234,7 @@ public class CollectableServiceImplTest {
     }
 
     @Test
-    public void getCollectableTypesBySetTestNoTypeWithSet(){
+    public void getCollectableTypesBySetTestNoTypeWithSet() throws NullRequestParameterException {
         /**
          *  Create a request object
          * and assign values to it
@@ -263,7 +264,7 @@ public class CollectableServiceImplTest {
     }
 
     @Test
-    public void getCollectablesTest(){
+    public void getCollectablesTest() throws NullRequestParameterException {
         /**
         *  Create a request object
         * and assign values to it

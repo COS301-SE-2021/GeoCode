@@ -16,13 +16,12 @@ import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.mission.model.Mission;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
-import tech.geocodeapp.geocode.mission.request.UpdateCompletionRequest;
-import tech.geocodeapp.geocode.mission.response.GetMissionByIdResponse;
 import tech.geocodeapp.geocode.mission.service.MissionService;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
@@ -55,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     private final String existingUserIdMessage = "User ID already exists";
 
-    private final UUID trackableUUID = new UUID(0, 0);
+    private final UUID trackableTypeUUID = new UUID(0, 0);
 
     @NotNull(message = "GeoCode Service Implementation may not be null.")
     private GeoCodeService geoCodeService;
@@ -406,7 +405,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException{
         if(request == null){
-            return new RegisterNewUserResponse(false, "The RegisterNewUserRequest object passed was NULL");
+            return new RegisterNewUserResponse(false, "The RegisterNewUserRequest object passed was NULL", null);
         }
 
         checkNullRequestParameters.checkRequestParameters(request);
@@ -414,17 +413,17 @@ public class UserServiceImpl implements UserService {
         //check if the User already exists
         boolean exists = userRepo.existsById(request.getUserID());
         if(exists){
-            return new RegisterNewUserResponse(false, existingUserIdMessage);
+            return new RegisterNewUserResponse(false, existingUserIdMessage, null);
         }
 
         User newUser = new User(request.getUserID(), request.getUsername());
 
         //create the user's trackable object which will always have a Mission
-        CreateCollectableRequest createCollectableRequest = new CreateCollectableRequest(trackableUUID, true);
+        CreateCollectableRequest createCollectableRequest = new CreateCollectableRequest(trackableTypeUUID, new GeoPoint(0.0, 0.0));//new GeoPoint(0.0, 0.0)
         CreateCollectableResponse createCollectableResponse = collectableService.createCollectable(createCollectableRequest);
 
         if(!createCollectableResponse.isSuccess()){
-            return new RegisterNewUserResponse(false, createCollectableResponse.getMessage());
+            return new RegisterNewUserResponse(false, createCollectableResponse.getMessage(), null);
         }
 
         CollectableResponse collectableResponse = createCollectableResponse.getCollectable();
@@ -436,9 +435,13 @@ public class UserServiceImpl implements UserService {
 
         newUser.setTrackableObject(trackableObject);
         newUser.setCurrentCollectable(trackableObject);
+
+        //add trackable object's Mission to the User's Missions
+        this.addToMyMissions(new AddToMyMissionsRequest(newUser, missionService.getMissionById(new GetMissionByIdRequest(trackableObject.getMissionID())).getMission()));
+
         userRepo.save(newUser);
 
-        return new RegisterNewUserResponse(true, "New User registered");
+        return new RegisterNewUserResponse(true, "New User registered", newUser);
     }
 
     //GeoCode helper functions
@@ -476,20 +479,34 @@ public class UserServiceImpl implements UserService {
         UUID missionID = newCurrentCollectable.getMissionID();
         
         if(missionID != null){
-            GetMissionByIdRequest getMissionByIdRequest = new GetMissionByIdRequest(missionID);
-            GetMissionByIdResponse getMissionByIdResponse = missionService.getMissionById(getMissionByIdRequest);
-
-            Mission mission = getMissionByIdResponse.getMission();
-            currentUser.addMissionsItem(mission);
-
-            //update the completion for the Collectable's Mission
-            UpdateCompletionRequest updateCompletionRequest = new UpdateCompletionRequest(mission, geoCode.getLocation());
-            UpdateCompletionResponse updateCompletionResponse = missionService.updateCompletion(updateCompletionRequest);
+            this.addToMyMissions(new AddToMyMissionsRequest(currentUser, missionService.getMissionById(new GetMissionByIdRequest(missionID)).getMission()));
         }
 
         userRepo.save(currentUser);
 
         return new SwapCollectableResponse(true, "The User's Collectable was swapped with the Collectable in the GeoCode", oldCurrentCollectable );
+    }
+
+    /**
+     * Add the given Mission to the User's list of missions
+     * @param request AddToMyMissionsRequest object
+     */
+    @Transactional
+    public void addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException {
+        if(request == null){
+            new AddToMyMissionsResponse(false, "The AddToMyMissionsRequest object passed was NULL");
+            return;
+        }
+
+        checkNullRequestParameters.checkRequestParameters(request);
+
+        User user = request.getUser();
+        Mission mission = request.getMission();
+
+        user.addMissionsItem(mission);
+        userRepo.save(user);
+
+        new AddToMyMissionsResponse(true, "Missions added to the User's Missions");
     }
 
     /**

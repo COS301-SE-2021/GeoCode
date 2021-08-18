@@ -38,6 +38,7 @@ public class CollectableServiceImpl implements CollectableService {
     private MissionService missionService;
 
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
+
     private final String invalidCollectableIdMessage = "Invalid Collectable ID";
     private String invalidCollectableTypeIdMessage = "Invalid CollectableType ID";
 
@@ -62,10 +63,12 @@ public class CollectableServiceImpl implements CollectableService {
     }
 
     @Transactional
-    public CreateCollectableSetResponse createCollectableSet(CreateCollectableSetRequest request){
+    public CreateCollectableSetResponse createCollectableSet(CreateCollectableSetRequest request) throws NullRequestParameterException {
         if (request == null) {
             return new CreateCollectableSetResponse(false, "The CreateCollectableSetRequest object passed was NULL", null);
         }
+
+        checkNullRequestParameters.checkRequestParameters(request);
 
         CollectableSet collectableSet = new CollectableSet(request.getName(), request.getDescription());
         CollectableSet savedCollectableSet = collectableSetRepo.save(collectableSet);
@@ -73,10 +76,12 @@ public class CollectableServiceImpl implements CollectableService {
     }
 
     @Transactional
-    public CreateCollectableTypeResponse createCollectableType(CreateCollectableTypeRequest request){
+    public CreateCollectableTypeResponse createCollectableType(CreateCollectableTypeRequest request) throws NullRequestParameterException {
         if (request == null) {
             return new CreateCollectableTypeResponse(false, "The CreateCollectableTypeRequest object passed was NULL", null);
         }
+
+        checkNullRequestParameters.checkRequestParameters(request);
 
         UUID setID = request.getSetId();
         Optional<CollectableSet> collectableSetOptional = collectableSetRepo.findById(setID);
@@ -84,6 +89,11 @@ public class CollectableServiceImpl implements CollectableService {
         if(collectableSetOptional.isPresent()){
             CollectableType collectableType = new CollectableType(request.getName(), request.getImage(), request.getRarity(), collectableSetOptional.get(), request.getProperties());
             CollectableType savedCollectableType = collectableTypeRepo.save(collectableType);
+
+            boolean hasMissionType = request.getProperties().containsKey("missionType");
+            System.out.println("hasMissionType:"+ hasMissionType);
+            System.out.println("request.getName():"+request.getName());
+            System.out.println(request.getProperties().get("missionType"));
 
             //create instance of CollectableTypeManager to handle conversion
             CollectableTypeManager manager = new CollectableTypeManager();
@@ -95,19 +105,38 @@ public class CollectableServiceImpl implements CollectableService {
     }
 
     @Transactional
-    public CreateCollectableResponse createCollectable(CreateCollectableRequest request){
+    public CreateCollectableResponse createCollectable(CreateCollectableRequest request) throws NullRequestParameterException {
         if (request == null) {
             return new CreateCollectableResponse(false, "The CreateCollectableSetRequest object passed was NULL", null);
+        }
+
+        if(request.getCollectableTypeId() == null){
+            throw new NullRequestParameterException();
+        }
+
+        //Missions must have a starting location
+        if(request.isCreateMission() && request.getLocation() == null){
+            return new CreateCollectableResponse(false, "createMission set to true, but the location given was NULL", null);
+        }
+
+        if(request.getLocation() != null){
+            System.out.println("location:"+request.getLocation().getLatitude()+", "+request.getLocation().getLongitude());
         }
 
         UUID typeID = request.getCollectableTypeId();
         Optional<CollectableType> collectableTypeOptional = collectableTypeRepo.findById(typeID);
 
+        System.out.println("CollectableTypeID:"+request.getCollectableTypeId());
+
         if(collectableTypeOptional.isPresent()){
             Collectable collectable = new Collectable(collectableTypeOptional.get());
+            collectable.changeLocation(request.getLocation());
+
             Collectable savedCollectable = collectableRepo.save(collectable);
             if(request.isCreateMission()) {
-                CreateMissionRequest createMissionRequest = new CreateMissionRequest(savedCollectable.getId());
+                System.out.println("type name:"+collectableTypeOptional.get().getName());
+
+                CreateMissionRequest createMissionRequest = new CreateMissionRequest(savedCollectable, request.getLocation());
                 try {
                    CreateMissionResponse missionResponse = missionService.createMission(createMissionRequest);
                    if(missionResponse.isSuccess()) {

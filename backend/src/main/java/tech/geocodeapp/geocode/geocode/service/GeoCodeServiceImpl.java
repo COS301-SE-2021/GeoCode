@@ -172,8 +172,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
                 if ( typeList != null ) {
 
-                    /* Get and set the collectable request with the type */
+                    /* Get and set the collectable request with the type and location */
                     collectableRequest.setCollectableTypeId( typeList.getId() );
+                    collectableRequest.setLocation( request.getLocation() );
                 } else {
 
                     /* Exception thrown when trying to get Collectable */
@@ -186,7 +187,14 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             }
 
             /* Get the response from the created request */
-            CreateCollectableResponse collectableResponse = collectableService.createCollectable( collectableRequest );
+            CreateCollectableResponse collectableResponse = null;
+
+            try {
+                collectableResponse = collectableService.createCollectable( collectableRequest );
+            } catch (NullRequestParameterException e) {
+                e.printStackTrace();
+                return new CreateGeoCodeResponse( false );
+            }
 
             /* Building a collectable from a collectable response */
             var temp = new Collectable();

@@ -10,9 +10,9 @@ import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
  */
 public interface CollectableService {
     //Creators
-    CreateCollectableSetResponse createCollectableSet(CreateCollectableSetRequest request);
-    CreateCollectableTypeResponse createCollectableType(CreateCollectableTypeRequest request);
-    CreateCollectableResponse createCollectable(CreateCollectableRequest request);
+    CreateCollectableSetResponse createCollectableSet(CreateCollectableSetRequest request) throws NullRequestParameterException;
+    CreateCollectableTypeResponse createCollectableType(CreateCollectableTypeRequest request) throws NullRequestParameterException;
+    CreateCollectableResponse createCollectable(CreateCollectableRequest request) throws NullRequestParameterException;
 
     //Getters
     GetCollectablesResponse getCollectables();

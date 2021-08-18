@@ -9,9 +9,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
+import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableSetRequest;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableTypeRequest;
+import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
+import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
+import tech.geocodeapp.geocode.collectable.response.CreateCollectableSetResponse;
+import tech.geocodeapp.geocode.collectable.response.CreateCollectableTypeResponse;
+import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
+import tech.geocodeapp.geocode.geocode.request.GetCollectablesRequest;
+import tech.geocodeapp.geocode.geocode.request.SwapCollectablesRequest;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeServiceImpl;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.mission.model.Mission;
 import tech.geocodeapp.geocode.mission.model.MissionType;
@@ -26,22 +41,33 @@ public class UserServiceImplIT {
     @Autowired
     private UserService userService;
 
-    private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
-    private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
-    private final UUID newUserId = UUID.fromString("e03bd781-cca9-43bf-a168-0f0563fca591");
+    @Autowired
+    CollectableServiceImpl collectableService;
 
-    private final UUID noPointsUserId = UUID.fromString("cdc0f9a0-65da-43c6-8d17-505d61c27965");
-    private final UUID userWithPoints1 = UUID.fromString("a98e8a41-0d6f-454f-a5d9-df809d2c1040");
-    private final UUID userWithPoints2 = UUID.fromString("960b6fd8-7283-43e8-9e18-2e6bef38fbb8");
+    @Autowired
+    GeoCodeServiceImpl geoCodeService;
+
+    private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
+    private final UUID validUserId = UUID.fromString("712fb163-d3f3-49b0-865a-acaab6986fd0");
+    private final UUID newUserId = UUID.fromString("febc2388-4de1-467c-b24f-1a522197a882");
+
+    private final UUID noPointsUserId = UUID.fromString("98872d8f-677b-4b20-a148-b526851d8024");
+    private final UUID userWithPoints1 = UUID.fromString("04886c2d-fcdb-40a6-b0ae-4902f0cea58c");
+    private final UUID userWithPoints2 = UUID.fromString("b716e89f-db50-482a-a470-3a01690eee5c");
+
+    private User validUser;
+    private User invalidUser;
+    private User noPointsUser;
 
     private final String invalidUserIdMessage = "Invalid User id";
     private final String invalidGeoCodeIdMessage = "Invalid GeoCode id";
     private final String invalidCollectableTypeIDMessage = "Invalid CollectableType ID";
 
-    private final UUID firstGeoCodeID = UUID.fromString("537689d1-a0d8-4740-bec6-6a40bb69748e");
-    private final UUID secondGeoCodeID = UUID.fromString("5d709c49-326b-470a-8d9d-e7f7bf77ef6e");
-    private final UUID thirdGeoCodeID = UUID.fromString("92e3e6d5-5457-48f7-adb1-7c2f67ee836b");
-    private final UUID trackableUUID = new UUID(0, 0);
+    private UUID firstGeoCodeID;
+    private UUID secondGeoCodeID;
+    private UUID thirdGeoCodeID;
+
+    private UUID trackableTypeUUID = new UUID(0, 0);
 
     private final String firstEvent = "Port Elizabeth Beach Hop - Default";
     private final String secondEvent = "Port Elizabeth High School Open Days - Default";
@@ -77,9 +103,114 @@ public class UserServiceImplIT {
 
     private final String existingUserIdMessage = "User ID already exists";
 
-    private final User validUser = new User(validUserId);
-    private final User invalidUser = new User(invalidUserId);
-    private final User noPointsUser = new User(noPointsUserId);
+    private UUID trackableSetId;
+
+    User registerNewUser(UUID userID, String username){
+        RegisterNewUserRequest request = new RegisterNewUserRequest(userID, username);
+        RegisterNewUserResponse response;
+
+        try {
+            response = userService.registerNewUser(request);
+            Assertions.assertTrue(response.isSuccess());
+
+            return response.getUser();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    UUID createCollectableSet(String name, String description){
+        CreateCollectableSetRequest createCollectableSetRequest = new CreateCollectableSetRequest(name, description);
+
+        try {
+            CreateCollectableSetResponse createCollectableSetResponse = collectableService.createCollectableSet(createCollectableSetRequest);
+            return createCollectableSetResponse.getCollectableSet().getId();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    UUID createCollectableType(String name, String image, Rarity rarity, UUID setId, HashMap<String, String> properties) {
+        CreateCollectableTypeRequest createCollectableTypeRequest = new CreateCollectableTypeRequest(name, image, rarity, setId, properties);
+
+        try {
+            CreateCollectableTypeResponse createCollectableTypeResponse = collectableService.createCollectableType(createCollectableTypeRequest);
+            return createCollectableTypeResponse.getCollectableType().getId();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    Collectable createCollectable(UUID typeID, boolean createMission, GeoPoint location){
+        CreateCollectableRequest createCollectableRequest = new CreateCollectableRequest();
+        createCollectableRequest.setCollectableTypeId(typeID);
+        createCollectableRequest.setCreateMission(createMission);
+        createCollectableRequest.setLocation(location);
+
+        CreateCollectableResponse createCollectableResponse = null;
+
+        try {
+            createCollectableResponse = collectableService.createCollectable(createCollectableRequest);
+            Assertions.assertTrue(createCollectableResponse.isSuccess());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            Assertions.fail(e.getMessage());
+        }
+
+        UUID id = createCollectableResponse.getCollectable().getId();
+
+        try {
+            return collectableService.getCollectableByID(new GetCollectableByIDRequest(id)).getCollectable();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @BeforeEach
+    void setup() throws InvalidRequestException {
+        //create the CollectableSet to hold the "User Trackable" type
+        trackableSetId = createCollectableSet("User Trackable", "Contains the standard User Trackable");
+
+        //create the Trackable CollectableType
+        HashMap<String, String> trackableProperties = new HashMap<>();
+        trackableProperties.put("missionType", String.valueOf(MissionType.RANDOM));
+        createCollectableType("User Trackable", "img_trackable", Rarity.COMMON, trackableSetId, trackableProperties);
+
+        //create invalid User object
+        invalidUser = new User(invalidUserId);
+
+        //register the valid Users
+        validUser = registerNewUser(validUserId, "validUser");
+        noPointsUser = registerNewUser(noPointsUserId, "noPointsUserId");
+
+        //create GeoCodes
+        List<String> hints = new ArrayList<>();
+        hints.add("Behind the climbing wall");
+
+        firstGeoCodeID = geoCodeService.createGeoCode(new CreateGeoCodeRequest("firstGeoCode", new GeoPoint(10.0, 10.0), hints, Difficulty.EASY, true)).getGeoCodeID();
+        secondGeoCodeID = geoCodeService.createGeoCode(new CreateGeoCodeRequest("secondGeoCode", new GeoPoint(10.0, 10.0), hints, Difficulty.MEDIUM, true)).getGeoCodeID();
+        thirdGeoCodeID = geoCodeService.createGeoCode(new CreateGeoCodeRequest("thirdGeoCode", new GeoPoint(10.0, 10.0), hints, Difficulty.HARD, true)).getGeoCodeID();
+
+        var firstCollectables = getCollectables(firstGeoCodeID);
+        var secondCollectables = getCollectables(secondGeoCodeID);
+        var thirdCollectables = getCollectables(thirdGeoCodeID);
+
+        //update missions for the User by swapping Collectables out of GeoCodes
+        swapCollectables(firstGeoCodeID, firstCollectables.get(0));
+        swapCollectables(secondGeoCodeID, secondCollectables.get(3));
+    }
+
+    private void swapCollectables(UUID geoCodeID, UUID collectableID) throws InvalidRequestException {
+        geoCodeService.swapCollectables(new SwapCollectablesRequest(geoCodeID, collectableID));
+    }
+
+    private List<UUID> getCollectables(UUID geoCodeID) throws InvalidRequestException {
+        return geoCodeService.getCollectables(new GetCollectablesRequest(geoCodeID)).getCollectables();
+    }
 
     @Test
     public void getCurrentCollectableTestInvalidUser() {
@@ -686,8 +817,8 @@ public class UserServiceImplIT {
 
             User user = getUserByIdResponse.getUser();
 
-            Assertions.assertEquals(trackableUUID, user.getTrackableObject().getType().getId());
-            Assertions.assertEquals(trackableUUID, user.getCurrentCollectable().getType().getId());
+            Assertions.assertEquals(trackableTypeUUID, user.getTrackableObject().getType().getId());
+            Assertions.assertEquals(trackableTypeUUID, user.getCurrentCollectable().getType().getId());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }

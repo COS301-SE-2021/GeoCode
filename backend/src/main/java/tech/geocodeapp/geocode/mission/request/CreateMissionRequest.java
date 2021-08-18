@@ -1,8 +1,9 @@
 package tech.geocodeapp.geocode.mission.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 /**
  * CreateMissionRequest
@@ -12,18 +13,37 @@ import org.springframework.validation.annotation.Validated;
 
 
 public class CreateMissionRequest   {
-  @JsonProperty("collectableID")
-  private UUID collectableID = null;
+  @JsonProperty("collectable")
+  private Collectable collectable = null;
 
-  public CreateMissionRequest(UUID collectableID){
-    this.collectableID = collectableID;
+  /**
+   * Passed to down from createGeoCode -> createCollectable -> createMission
+   */
+  @JsonProperty("location")
+  private GeoPoint location;
+
+  public CreateMissionRequest(Collectable collectable){
+    this.collectable = collectable;
   }
 
-  public UUID getCollectableID() {
-    return collectableID;
+    public CreateMissionRequest(Collectable savedCollectable, GeoPoint location) {
+      this.collectable = savedCollectable;
+      this.location = location;
+    }
+
+    public Collectable getCollectable() {
+    return collectable;
   }
 
-  public void setCollectableID(UUID collectableID) {
-    this.collectableID = collectableID;
+  public void setCollectable(Collectable collectable) {
+    this.collectable = collectable;
+  }
+
+  public void setLocation(GeoPoint location) {
+    this.location = location;
+  }
+
+  public GeoPoint getLocation(){
+    return location;
   }
 }

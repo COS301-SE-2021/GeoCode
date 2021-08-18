@@ -138,7 +138,6 @@ public class UserServiceImplTest {
 
         HashMap<String, String> properties = new HashMap<>();
         properties.put("missionType", String.valueOf(MissionType.RANDOM));
-
         trackableCollectableType.setProperties(properties);
 
         collectableTypeMockRepo.save(trackableCollectableType);

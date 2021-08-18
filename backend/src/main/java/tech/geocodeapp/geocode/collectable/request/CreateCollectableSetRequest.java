@@ -21,6 +21,15 @@ public class CreateCollectableSetRequest   {
   @JsonProperty("description")
   private String description = null;
 
+  public CreateCollectableSetRequest(){
+
+  }
+
+  public CreateCollectableSetRequest(String name, String description) {
+    this.name = name;
+    this.description = description;
+  }
+
   public CreateCollectableSetRequest name(String name) {
     this.name = name;
     return this;
