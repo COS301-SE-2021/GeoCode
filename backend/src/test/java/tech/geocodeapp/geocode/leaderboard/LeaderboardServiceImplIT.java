@@ -487,4 +487,17 @@ public class LeaderboardServiceImplIT {
         assertThatThrownBy(() -> leaderboardService.getEventLeaderboard(request))
                 .isInstanceOf(NullRequestParameterException.class);
     }
+
+    @Test
+    public void getEventLeaderboardTestInvalidLeaderboardId() {
+        GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(UUID.randomUUID(), 1, 1);
+        try {
+            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("No leaderboard exists for the provided leaderboardId", response.getMessage());
+            Assertions.assertTrue(response.getLeaderboard().isEmpty());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
