@@ -35,6 +35,7 @@ import tech.geocodeapp.geocode.user.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * This is the integration testing class for the GeoCode subsystem
