@@ -34,10 +34,7 @@ import javax.annotation.PostConstruct;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.security.SecureRandom;
-import java.sql.Array;
 import java.util.*;
-
-import static tech.geocodeapp.geocode.collectable.model.Rarity.*;
 
 /**
  * This class implements the GeoCodeService interface
@@ -336,9 +333,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     public GetGeoCodesResponse getAllGeoCodes() {
 
         /* Retrieve all the stored GeoCodes from the repository */
-        List< GeoCode > temp = geoCodeRepo.findAll();
-
-        //ToDo make a custom query to only select fields wanted
+        Collection< GeoCode > temp = geoCodeRepo.findGeoCode();
 
         /* Go through each GeoCode found and hide the sensitive data */
         for ( GeoCode geoCode : temp ) {
@@ -349,7 +344,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Set the response to the masked GeoCodes and return it */
-        return new GetGeoCodesResponse( temp );
+        return new GetGeoCodesResponse( ( List< GeoCode > ) temp );
     }
 
     /**
@@ -567,7 +562,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /*
-         * Get all of the stored GeoCodes
+         * Get all the stored GeoCodes
          * and find the GeoCode with the specified qrCode
          */
         List< GeoCode > temp = geoCodeRepo.findAll();
@@ -767,7 +762,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Find the target collectable in the GeoCode */
 
         //check if the targetCollectableID is invalid
-        if(!geocode.getCollectables().contains(request.getTargetCollectableID())){
+        if ( !geocode.getCollectables().contains( request.getTargetCollectableID() ) ) {
+
             return new SwapCollectablesResponse( false );
         }
 
@@ -782,12 +778,14 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* Validate the Collectable's ID was found */
             if(!getCollectableByIdResponse.isSuccess()){
+
                 return new SwapCollectablesResponse(false);
             }
 
             geocodeToUser = getCollectableByIdResponse.getCollectable();
         } catch (NullRequestParameterException e) {
-            e.printStackTrace();
+
+
             return new SwapCollectablesResponse(false);
         }
 
@@ -795,8 +793,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         Collectable userToGeocode;
 
         try {
+
             userToGeocode = userService.swapCollectable( new SwapCollectableRequest( user, geocodeToUser, geocode ) ).getCollectable();
         } catch ( NullRequestParameterException error ) {
+
             /* Validate the Collectable returned */
             return new SwapCollectablesResponse( false );
         }
@@ -943,6 +943,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         var cumulativeProbability = 0.0;
 
         try {
+
             /* Go through each rarity */
             for ( Rarity rarity: Rarity.values() ) {
 
@@ -955,12 +956,14 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                     /* Find items from the list that have the selected rarity */
                     var filtered = new ArrayList< CollectableTypeComponent >();
                     for ( CollectableTypeComponent item: items ) {
+
                         if ( rarity.equals(item.getRarity()) ) {
                             filtered.add(item);
                         }
                     }
 
                     if ( filtered.size() == 0 ) {
+
                         /* No items of the selected rarity were found. Try again to generate an item */
                         return calculateCollectableType( items );
                     }
@@ -983,10 +986,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             return calculateCollectableType( items );
 
         } catch (StackOverflowError e) {
+
             /* If we generate a stack overflow from the recursion when retrying, return null */
             return null;
         }
     }
-
     /*----------- END -----------*/
 }
