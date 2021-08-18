@@ -409,4 +409,35 @@ public class LeaderboardServiceImplIT {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void updatePointTestValidUserIdAndLeaderboardId() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            UUID userId = UUID.randomUUID();
+            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "test user");
+            userService.registerNewUser(userRequest);
+            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
+
+            UUID updatedUserId = UUID.randomUUID();
+            RegisterNewUserRequest updatedUserRequest = new RegisterNewUserRequest(updatedUserId, "updated user");
+            userService.registerNewUser(updatedUserRequest);
+
+            CreateLeaderboardRequest updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
+            CreateLeaderboardResponse updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
+
+            UpdatePointRequest request = new UpdatePointRequest(pointResponse.getPoint().getId(), null, updatedUserId, updatedLeaderboardResponse.getLeaderboard().getId());
+            PointResponse response = leaderboardService.updatePoint(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Updated point successfully", response.getMessage());
+            Assertions.assertNotNull(response.getPoint());
+            Assertions.assertEquals(updatedUserId, response.getPoint().getUser().getId());
+            Assertions.assertEquals(updatedLeaderboardResponse.getLeaderboard().getId(), response.getPoint().getLeaderBoard().getId());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
