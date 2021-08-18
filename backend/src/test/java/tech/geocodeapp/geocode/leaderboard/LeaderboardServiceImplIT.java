@@ -175,4 +175,16 @@ public class LeaderboardServiceImplIT {
         assertThatThrownBy(() -> leaderboardService.deletePoint(request))
                 .isInstanceOf(NullRequestParameterException.class);
     }
+
+    @Test
+    public void deletePointTestInvalidPointId() {
+        DeletePointRequest request = new DeletePointRequest(UUID.randomUUID());
+        try {
+            DeletePointResponse response = leaderboardService.deletePoint(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("No Point with the given Id exists", response.getMessage());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
