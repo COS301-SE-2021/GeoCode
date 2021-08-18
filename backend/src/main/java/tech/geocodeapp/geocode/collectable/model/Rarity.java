@@ -36,4 +36,15 @@ public enum Rarity {
     }
     return null;
   }
+
+  public double getProbability() {
+    switch(this) {
+      case COMMON: return 0.5;
+      case UNCOMMON: return 0.3;
+      case RARE: return 0.15;
+      case EPIC: return 0.04;
+      case LEGENDARY: return 0.01;
+      default: return 0;
+    }
+  }
 }

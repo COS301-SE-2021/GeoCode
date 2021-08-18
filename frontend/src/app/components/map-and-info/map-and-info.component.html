@@ -1,0 +1,10 @@
+<ion-grid>
+  <ion-row>
+    <ion-col id="mapColumn" [ngClass]="getClass()" [sizeMd]="mapSizeMD()" [sizeLg]="mapSizeLG()" size="12">
+      <div #mapElement class="map"></div>
+    </ion-col>
+    <ion-col id="infoColumn" [ngClass]="getClass()" size-md="4" size-lg="3" size="12" *ngIf="showInfo">
+      <ng-content></ng-content>
+    </ion-col>
+  </ion-row>
+</ion-grid>

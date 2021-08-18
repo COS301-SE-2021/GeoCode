@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -32,7 +33,10 @@ public class Collectable   {
   private CollectableType type = null;
 
   @ElementCollection(fetch = FetchType.EAGER)
-  private Collection<String> pastLocations = new ArrayList<String>();
+  private Collection<GeoPoint> pastLocations = new ArrayList<>();
+
+  @JsonProperty("missionID")
+  private UUID missionID = null;
 
   public Collectable() {
     id = UUID.randomUUID();
@@ -50,11 +54,11 @@ public class Collectable   {
     return this;
   }
 
-  public Collection<String> getPastLocations() {
+  public Collection<GeoPoint> getPastLocations() {
     return pastLocations;
   }
 
-  public void setPastLocations(List<String> pastLocations) {
+  public void setPastLocations(List<GeoPoint> pastLocations) {
     this.pastLocations = pastLocations;
   }
 
@@ -63,7 +67,7 @@ public class Collectable   {
    * in their CollectableType have the history of past locations saved
    * @param location the new location of the Collectable
    */
-  public void changeLocation(String location) {
+  public void changeLocation(GeoPoint location) {
     if(type.getProperties()!=null && type.getProperties().containsKey("trackable")){
       pastLocations.add(location);
     }else{
@@ -110,6 +114,11 @@ public class Collectable   {
     this.type = type;
   }
 
+  public UUID getMissionID(){ return missionID; }
+
+  public void setMissionID(UUID missionID) {
+    this.missionID = missionID;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {

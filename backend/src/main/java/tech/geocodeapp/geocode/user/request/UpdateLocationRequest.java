@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -20,7 +22,7 @@ public class UpdateLocationRequest   {
   private UUID userID = null;
 
   @JsonProperty("location")
-  private String location = null;
+  private GeoPoint location = null;
 
   public UpdateLocationRequest userID(UUID userID) {
     this.userID = userID;
@@ -43,7 +45,7 @@ public class UpdateLocationRequest   {
     this.userID = userID;
   }
 
-  public UpdateLocationRequest location(String location) {
+  public UpdateLocationRequest location(GeoPoint location) {
     this.location = location;
     return this;
   }
@@ -55,52 +57,11 @@ public class UpdateLocationRequest   {
   @Schema(required = true, description = "")
       @NotNull
 
-    public String getLocation() {
+    public GeoPoint getLocation() {
     return location;
   }
 
-  public void setLocation(String location) {
+  public void setLocation(GeoPoint location) {
     this.location = location;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    UpdateLocationRequest updateLocationRequest = (UpdateLocationRequest) o;
-    return Objects.equals(this.userID, updateLocationRequest.userID) &&
-        Objects.equals(this.location, updateLocationRequest.location);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(userID, location);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class UpdateLocationRequest {\n");
-    
-    sb.append("    userID: ").append(toIndentedString(userID)).append("\n");
-    sb.append("    location: ").append(toIndentedString(location)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
   }
 }

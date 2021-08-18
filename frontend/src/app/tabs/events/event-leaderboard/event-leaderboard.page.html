@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="events"></ion-back-button>
+    </ion-buttons>
+    <ion-title id="title">Leaderboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<div>
+  <ion-title>{{leaderBoardName}}</ion-title>
+</div>
+  <ion-grid>
+
+
+    <!--  <ion-row>-->
+    <!--    <ion-col id="headings">Position</ion-col>-->
+    <!--    <ion-col id="headings">Username</ion-col>-->
+    <!--    <ion-col id="headings">Points</ion-col>-->
+    <!--  </ion-row>-->
+    <ion-row id = "row" *ngFor="let point of users" [routerLink]="['/profile/'+point.userID]">
+      <ion-col size="2" id="pos">{{point.rank}}</ion-col>
+      <ion-col>{{point.username}}</ion-col>
+      <ion-col>{{point.points}}</ion-col>
+
+    </ion-row>
+  </ion-grid>
+  <ion-infinite-scroll (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>

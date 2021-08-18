@@ -1,0 +1,182 @@
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {
+  CreateEventRequest, CreateEventResponse, CreateGeoCodeRequest,
+  CreateGeoCodeResponse,
+  EventService,
+  GeoCode,
+  GeoCodeService
+} from '../../../services/geocode-api';
+import {ModalController, NavController, ToastController} from '@ionic/angular';
+import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
+import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
+import {EventLocationComponent} from './event-location/event-location.component';
+import {QRGenerator} from '../../../services/QRGenerator';
+
+@Component({
+  selector: 'app-events-create',
+  templateUrl: './events-create.page.html',
+  styleUrls: ['./events-create.page.scss'],
+})
+export class EventsCreatePage implements AfterViewInit  {
+  @ViewChild('mapElement',{static:false}) mapElement;
+  googleMaps;
+  mapOptions;
+  map;
+  mapMarker;
+  markers= [];
+  geocodes= [];
+  selected=[];
+  type='event';
+  timeHidden=true;
+  challengeHidden=true;
+  height='0%';
+  minDate;
+  minEndDate;
+  timeLimit=0;
+  timeday =0;
+  timehours =0;
+  timeMin =0;
+  // @ts-ignore
+  request: CreateEventRequest = {
+    beginDate: '',
+    description: '',
+    geoCodesToFind: [],
+    location: {latitude: 0,longitude: 0},
+    name: '',
+    orderBy: 'GIVEN',
+    endDate:null,
+    properties:{}
+  };
+  constructor(      private modalController: ModalController,
+                    private navCtrl: NavController,
+                    private geocodeApi: GeoCodeService,
+                    private mapsLoader: GoogleMapsLoader,
+                    private toastController: ToastController,
+                    private eventApi: EventService,
+                    private qrGenerator: QRGenerator) {
+
+  }
+
+  //Create map and add mapmarkers of geocodes
+  loadMap(){
+    this.markers= [];
+    this.mapOptions = {
+      center: {lat: -25.75625115327836, lng: 28.235629260918344},
+      zoom: 15,
+    };
+    this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
+
+  }
+
+  async ngAfterViewInit() {
+    this.googleMaps = await this.mapsLoader.load();
+    this.loadMap();
+    this.minDate= new Date().toISOString();
+    this.minEndDate= new Date().toISOString();
+
+  }
+
+  async createGeoCode() {
+    const modal = await this.modalController.create({
+      component: CreateGeocodeComponent,
+      swipeToClose: true,
+      componentProps: {}
+    });
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data != null) {
+      this.geocodes.push(data);
+      this.geocodeApi.createGeoCode(data)
+        .subscribe(async (response: CreateGeoCodeResponse) =>{
+            const toast =  await this.toastController.create({
+              message: 'GeoCode Created',
+              duration: 2000
+            });
+            await toast.present();
+            this.request.geoCodesToFind.push(response.geoCodeID);
+            //create QR code image
+          if(response.success){
+            this.qrGenerator.generate(response.qrCode);
+          }
+        });
+    }
+  }
+
+  async selectLocation(){
+    const modal = await this.modalController.create({
+      component: EventLocationComponent,
+      swipeToClose: true,
+      componentProps: {}
+    });
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data != null) {
+      this.request.location.latitude=data.getPosition().lat();
+      this.request.location.longitude=data.getPosition().lng();
+    }
+  }
+
+  eventType($event){
+    this.type=$event.detail.value;
+    if($event.detail.value =='timetrial'){
+      this.challengeHidden=true;
+      this.timeHidden=false;
+    }else if($event.detail.value == 'challenge'){
+      this.challengeHidden=false;
+      this.timeHidden=true;
+    }else{
+      this.timeHidden=true;
+      this.challengeHidden=true;
+    }
+  }
+
+  orderBy($event){
+    this.request.orderBy=$event.detail.value;
+  }
+
+  startDate($event){
+    const date = new Date($event.detail.value);
+    this.request.beginDate=date.toISOString().split('T')[0];
+    this.minEndDate=$event.detail.value;
+  }
+
+  endDate($event){
+    const date = new Date($event.detail.value);
+    this.request.endDate=date.toISOString().split('T')[0];
+  }
+
+  showGeoCodes(){
+
+  }
+
+  createEvent(){
+    // eslint-disable-next-line eqeqeq
+    if(this.type=='challenge'){
+      // to be implemented in demo 4 wow factor
+      // eslint-disable-next-line eqeqeq
+    }else if(this.type =='timetrial'){
+      this.request.properties.timeLimit=this.timeLimit +'';
+    }
+    console.log(this.request);
+    this.eventApi.createEvent(this.request).subscribe((response: CreateEventResponse) =>{
+    });
+
+  }
+
+  setName($event){
+    this.request.name=$event.detail.value;
+  }
+
+  setDescription($event){
+    this.request.description=$event.detail.value;
+  }
+
+  setTime($event){
+    const time = new Date($event.detail.value);
+    const day = time.getDate();
+    const hour = time.getHours();
+    const min = time.getMinutes();
+    this.timeLimit = day*24*60+hour*60+min;
+  }
+
+}
