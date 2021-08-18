@@ -27,6 +27,7 @@ import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 
+import tech.geocodeapp.geocode.user.request.AddToOwnedGeoCodesRequest;
 import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
@@ -172,16 +173,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 /* Check if the Collectable Type was found */
                 if ( typeList != null ) {
 
-                    /* Check if the CollectableType is a mission or not */
-                    if ( typeList.getMissionType() == null ) {
+                    /* Get and set the collectable request with the type and location */
+                    collectableRequest.setCollectableTypeId( typeList.getId() );
+                    collectableRequest.setLocation( request.getLocation() );
 
-                        /* Get and set the collectable request with the type */
-                        collectableRequest.setCollectableTypeId( typeList.getId() );
-                    } else {
-
-                        /* Create the request with a mission type */
-                        collectableRequest = new CreateCollectableRequest( typeList.getId(), true );
-                    }
+                    /* Set createMission to true if the collectable type has a mission type */
+                    collectableRequest.setCreateMission( typeList.getMissionType() != null );
                 } else {
 
                     /* Exception thrown when trying to get Collectable */
@@ -242,13 +239,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /*
          * Get the user who is creating the GeoCode
          */
-        var createdBy = userService.getCurrentUserID();
+        var createdBy = userService.getCurrentUser();
 
 
         /* Create the GeoCode Object */
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
-                                      qr.toString(), request.getLocation(), createdBy );
+                                      qr.toString(), request.getLocation(), createdBy.getId() );
 
         /*
          * Save the newly created GeoCode
@@ -270,6 +267,14 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             /* Exception thrown therefore creation failed */
             return new CreateGeoCodeResponse( false );
         }
+
+        /*
+         * Add the GeoCode to the list of GeoCodes that the user has created
+         */
+        try {
+            AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, newGeoCode);
+            userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
+        } catch (NullRequestParameterException e) {}
 
         /*
          * Create the new response
