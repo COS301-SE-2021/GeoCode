@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.event.decorator;
 
-import org.springframework.security.core.parameters.P;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 

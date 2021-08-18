@@ -1,26 +1,20 @@
 package tech.geocodeapp.geocode.event.decorator;
 
-import tech.geocodeapp.geocode.collectable.model.CollectableSet;
-import tech.geocodeapp.geocode.collectable.model.Rarity;
-import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
-import tech.geocodeapp.geocode.leaderboard.model.Point;
 
 import java.time.LocalDate;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.UUID;
 
 public class ConcreteEvent implements EventComponent {
 
-    private UUID id;
+    private java.util.UUID id;
     private String name;
     private String description;
     private GeoPoint location;
-    private List<UUID> geocodeIDs;
+    private List<java.util.UUID> geocodeIDs;
     private LocalDate beginDate;
     private LocalDate endDate;
     private List<Leaderboard> leaderboards;
@@ -29,10 +23,10 @@ public class ConcreteEvent implements EventComponent {
     public ConcreteEvent() { }
 
     @Override
-    public UUID getID() { return id; }
+    public java.util.UUID getID() { return id; }
 
     @Override
-    public void setID(UUID id) { this.id = id; }
+    public void setID(java.util.UUID id) { this.id = id; }
 
     @Override
     public String getName() { return name; }
@@ -53,10 +47,10 @@ public class ConcreteEvent implements EventComponent {
     public void setLocation(GeoPoint location) { this.location = location; }
 
     @Override
-    public List<UUID> getGeocodeIDs() { return geocodeIDs; }
+    public List<java.util.UUID> getGeocodeIDs() { return geocodeIDs; }
 
     @Override
-    public void setGeocodeIDs(List<UUID> geocodeIDs) { this.geocodeIDs = geocodeIDs; }
+    public void setGeocodeIDs(List<java.util.UUID> geocodeIDs) { this.geocodeIDs = geocodeIDs; }
 
     @Override
     public LocalDate getBeginDate() { return beginDate; }

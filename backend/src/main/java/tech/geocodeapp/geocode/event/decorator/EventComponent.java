@@ -1,17 +1,12 @@
 package tech.geocodeapp.geocode.event.decorator;
 
-import tech.geocodeapp.geocode.collectable.model.CollectableSet;
-import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
-import tech.geocodeapp.geocode.leaderboard.model.Point;
 
 import java.time.LocalDate;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.UUID;
 
 public interface EventComponent {
 
@@ -19,9 +14,9 @@ public interface EventComponent {
      * Getters and setters for all variables that the concrete component includes
      */
 
-    UUID getID();
+    java.util.UUID getID();
 
-    void setID(UUID id);
+    void setID(java.util.UUID id);
 
     String getName();
 
@@ -35,9 +30,9 @@ public interface EventComponent {
 
     void setLocation(GeoPoint location);
 
-    List<UUID> getGeocodeIDs();
+    List<java.util.UUID> getGeocodeIDs();
 
-    void setGeocodeIDs(List<UUID> geocodeIDs);
+    void setGeocodeIDs(List<java.util.UUID> geocodeIDs);
 
     LocalDate getBeginDate();
 

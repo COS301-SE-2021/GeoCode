@@ -5,11 +5,10 @@ import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Graph {
 
-    public static List<UUID> getOptimalGeocodeIDOrder(List<GeoCode> geocodes, GeoPoint startLocation) {
+    public static List<java.util.UUID> getOptimalGeocodeIDOrder(List<GeoCode> geocodes, GeoPoint startLocation) {
 
         List<GraphNode> unvisitedNodes = new ArrayList<GraphNode>();
 

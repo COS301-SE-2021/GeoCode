@@ -14,28 +14,28 @@ import java.util.*;
 
 public class GeoCodeMockRepository implements GeoCodeRepository {
 
-    private HashMap< UUID, GeoCode > map = new HashMap<>();
+    private HashMap<java.util.UUID, GeoCode> map = new HashMap<>();
 
     @Override
-    public List< GeoCode > findAll() {
+    public List<GeoCode> findAll() {
 
-        return new ArrayList< GeoCode >( map.values() );
+        return new ArrayList<GeoCode>( map.values() );
     }
 
     @Override
-    public List< GeoCode > findAll( Sort sort ) {
+    public List<GeoCode> findAll(Sort sort ) {
 
         return null;
     }
 
     @Override
-    public Page< GeoCode > findAll( Pageable pageable ) {
+    public Page<GeoCode> findAll(Pageable pageable ) {
 
         return null;
     }
 
     @Override
-    public List< GeoCode > findAllById( Iterable< UUID > uuids ) {
+    public List<GeoCode> findAllById(Iterable<java.util.UUID> uuids ) {
 
         return null;
     }
@@ -47,7 +47,7 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
     }
 
     @Override
-    public void deleteById( UUID uuid ) {
+    public void deleteById(java.util.UUID uuid ) {
 
     }
 
@@ -57,7 +57,7 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
     }
 
     @Override
-    public void deleteAll( Iterable< ? extends GeoCode > entities ) {
+    public void deleteAll( Iterable< ? extends GeoCode> entities ) {
 
     }
 
@@ -68,22 +68,22 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
     }
 
     @Override
-    public < S extends GeoCode > S save( S entity ) {
+    public < S extends GeoCode> S save(S entity ) {
 
         map.put( entity.getId(), entity );
         return entity;
     }
 
     @Override
-    public < S extends GeoCode > List< S > saveAll( Iterable< S > entities ) {
+    public < S extends GeoCode> List< S > saveAll(Iterable< S > entities ) {
 
         return null;
     }
 
     @Override
-    public Optional< GeoCode > findById( UUID uuid ) {
+    public Optional<GeoCode> findById(java.util.UUID uuid ) {
 
-        Optional< GeoCode > hold = Optional.empty();
+        Optional<GeoCode> hold = Optional.empty();
 
         for ( int x = 0; x < map.size(); x++ ) {
 
@@ -97,7 +97,7 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
     }
 
     @Override
-    public boolean existsById( UUID uuid ) {
+    public boolean existsById(java.util.UUID uuid ) {
 
         return false;
     }
@@ -108,13 +108,13 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
     }
 
     @Override
-    public < S extends GeoCode > S saveAndFlush( S entity ) {
+    public < S extends GeoCode> S saveAndFlush(S entity ) {
 
         return null;
     }
 
     @Override
-    public void deleteInBatch( Iterable< GeoCode > entities ) {
+    public void deleteInBatch( Iterable<GeoCode> entities ) {
 
     }
 
@@ -124,43 +124,43 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
     }
 
     @Override
-    public GeoCode getOne( UUID uuid ) {
+    public GeoCode getOne(java.util.UUID uuid ) {
 
         return null;
     }
 
     @Override
-    public < S extends GeoCode > Optional< S > findOne( Example< S > example ) {
+    public < S extends GeoCode> Optional< S > findOne(Example< S > example ) {
 
         return Optional.empty();
     }
 
     @Override
-    public < S extends GeoCode > List< S > findAll( Example< S > example ) {
+    public < S extends GeoCode> List< S > findAll(Example< S > example ) {
 
         return null;
     }
 
     @Override
-    public < S extends GeoCode > List< S > findAll( Example< S > example, Sort sort ) {
+    public < S extends GeoCode> List< S > findAll(Example< S > example, Sort sort ) {
 
         return null;
     }
 
     @Override
-    public < S extends GeoCode > Page< S > findAll( Example< S > example, Pageable pageable ) {
+    public < S extends GeoCode> Page< S > findAll(Example< S > example, Pageable pageable ) {
 
         return null;
     }
 
     @Override
-    public < S extends GeoCode > long count( Example< S > example ) {
+    public < S extends GeoCode> long count(Example< S > example ) {
 
         return 0;
     }
 
     @Override
-    public < S extends GeoCode > boolean exists( Example< S > example ) {
+    public < S extends GeoCode> boolean exists(Example< S > example ) {
 
         return false;
     }
@@ -171,9 +171,9 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
      * @return all the GeoCode's without an eventID
      */
     @Override
-    public Collection< GeoCode > findGeoCode() {
+    public Collection<GeoCode> findGeoCode() {
 
-        Collection< GeoCode > found = new ArrayList<>();
+        Collection<GeoCode> found = new ArrayList<>();
         map.forEach( ( key, value ) -> {
 
             if ( value.getEventID() == null) {
@@ -193,9 +193,9 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
      * @return all the GeoCode's with the specified difficulty
      */
     @Override
-    public Collection< GeoCode > findGeoCodeWithDifficulty( Difficulty difficulty ) {
+    public Collection<GeoCode> findGeoCodeWithDifficulty(Difficulty difficulty ) {
 
-        Collection< GeoCode > found = new ArrayList<>();
+        Collection<GeoCode> found = new ArrayList<>();
         map.forEach( ( key, value ) -> {
 
             if ( value.getDifficulty().equals( difficulty ) ) {
@@ -215,10 +215,10 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
      * @return the GeoCode with the specified qrCode
      */
     @Override
-    public GeoCode findGeoCodeWithQRCode( String qrCode ) {
+    public GeoCode findGeoCodeWithQRCode(String qrCode ) {
 
         //System.out.println( qrCode );
-        for ( Map.Entry< UUID, GeoCode > entry : map.entrySet() ) {
+        for ( Map.Entry<java.util.UUID, GeoCode> entry : map.entrySet() ) {
 
             GeoCode found = entry.getValue();
             if ( ( found!= null ) &&  ( found.getQrCode()!= null ) && ( found.getQrCode().equals( qrCode ) ) ) {
@@ -238,9 +238,9 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
      * @return the GeoCode at the given location
      */
     @Override
-    public GeoCode findGeoCodeAtLocation( GeoPoint location ) {
+    public GeoCode findGeoCodeAtLocation(GeoPoint location ) {
 
-        for ( Map.Entry< UUID, GeoCode > entry : map.entrySet() ) {
+        for ( Map.Entry<java.util.UUID, GeoCode> entry : map.entrySet() ) {
 
             GeoCode found = entry.getValue();
             if ( found.getLocation().equals( location ) ) {

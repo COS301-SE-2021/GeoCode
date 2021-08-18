@@ -121,6 +121,7 @@ public class CollectableServiceImpl implements CollectableService {
 
         if(request.getLocation() != null){
             System.out.println("location:"+request.getLocation().getLatitude()+", "+request.getLocation().getLongitude());
+            System.out.println();
         }
 
         UUID typeID = request.getCollectableTypeId();
