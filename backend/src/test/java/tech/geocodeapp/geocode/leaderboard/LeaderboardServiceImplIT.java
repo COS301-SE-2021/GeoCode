@@ -15,6 +15,7 @@ import tech.geocodeapp.geocode.leaderboard.request.DeletePointRequest;
 import tech.geocodeapp.geocode.leaderboard.request.UpdatePointRequest;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.DeletePointResponse;
+import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
@@ -467,6 +468,18 @@ public class LeaderboardServiceImplIT {
             Assertions.assertEquals(updatedUserId, response.getPoint().getUser().getId());
             Assertions.assertEquals(updatedLeaderboardResponse.getLeaderboard().getId(), response.getPoint().getLeaderBoard().getId());
             Assertions.assertEquals(2, response.getPoint().getAmount());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getEventLeaderboardTestNullRequest() {
+        try {
+            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The GetEventLeaderboardRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getLeaderboard());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
