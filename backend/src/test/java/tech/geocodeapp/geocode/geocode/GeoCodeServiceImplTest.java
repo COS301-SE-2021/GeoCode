@@ -25,6 +25,8 @@ import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.leaderboard.service.*;
 import tech.geocodeapp.geocode.mission.service.MissionService;
+import tech.geocodeapp.geocode.user.MockSecurity;
+import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
 
 import java.time.LocalDate;
@@ -147,8 +149,8 @@ class GeoCodeServiceImplTest {
         /* Mock the user service to return wanted data */
         userService = Mockito.mock( UserServiceImpl.class );
 
-        /* Get a random user ID as only a valid response is needed */
-        lenient().when ( userService.getCurrentUserID() ).thenReturn( UUID.randomUUID() );
+        /* Get a random user as only a valid response is needed */
+        lenient().when ( userService.getCurrentUser() ).thenReturn( new User().id(UUID.randomUUID()) );
 
         try {
 
