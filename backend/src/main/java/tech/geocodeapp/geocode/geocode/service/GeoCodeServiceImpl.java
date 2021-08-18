@@ -231,10 +231,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         var id = UUID.randomUUID();
 
+        var createdBy = userService.getCurrentUserID();
+
         /* Create the GeoCode Object */
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
-                                      qr.toString(), request.getLocation(), UUID.randomUUID(), null );
+                                      qr.toString(), request.getLocation(), createdBy );
 
         /*
          * Save the newly created GeoCode
