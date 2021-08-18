@@ -8,6 +8,7 @@ import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.request.*;
@@ -671,5 +672,12 @@ public class LeaderboardServiceImplIT {
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void savePointNullValuesTest() {
+        Point point = new Point(null, null, null);
+        assertThatThrownBy(() -> leaderboardService.savePoint(point))
+                .isInstanceOf(NullRequestParameterException.class);
     }
 }
