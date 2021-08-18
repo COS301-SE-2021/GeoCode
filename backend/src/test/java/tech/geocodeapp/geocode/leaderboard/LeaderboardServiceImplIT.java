@@ -18,6 +18,7 @@ import tech.geocodeapp.geocode.leaderboard.response.DeletePointResponse;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
+import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
 import tech.geocodeapp.geocode.user.request.RegisterNewUserRequest;
 import tech.geocodeapp.geocode.user.response.RegisterNewUserResponse;
 import tech.geocodeapp.geocode.user.service.UserService;
@@ -325,6 +326,32 @@ public class LeaderboardServiceImplIT {
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("Invalid UserId to update to was provided", response.getMessage());
             Assertions.assertNull(response.getPoint());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void updatePointTestOnlyUserId() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            UUID userId = UUID.randomUUID();
+            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "test user");
+            userService.registerNewUser(userRequest);
+            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
+
+            UUID updatedUserId = UUID.randomUUID();
+            RegisterNewUserRequest updatedUserRequest = new RegisterNewUserRequest(updatedUserId, "updated user");
+            userService.registerNewUser(updatedUserRequest);
+            UpdatePointRequest request = new UpdatePointRequest(pointResponse.getPoint().getId(), null, updatedUserId, null);
+            PointResponse response = leaderboardService.updatePoint(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Updated point successfully", response.getMessage());
+            Assertions.assertNotNull(response.getPoint());
+            Assertions.assertEquals(userService.getUserById(new GetUserByIdRequest(updatedUserId)).getUser().getId(), response.getPoint().getUser().getId());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
