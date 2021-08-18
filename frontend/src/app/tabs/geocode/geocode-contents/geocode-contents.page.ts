@@ -111,23 +111,24 @@ export class GeocodeContentsPage implements AfterViewInit {
       qrCode: code,
       geoCodeID:this.geocode.id
     };
-    console.log(requestQR);
-    this.geocodeApi.getCollectablesInGeoCodeByQRCode(requestQR).subscribe((response: GetCollectablesInGeoCodeByQRCodeResponse) =>{
+    this.geocodeApi.getCollectablesInGeoCodeByQRCode(requestQR).subscribe(async (response: GetCollectablesInGeoCodeByQRCodeResponse) =>{
       console.log(response);
-      this.collectables=response.storedCollectable;
-      this.isHidden=true;
-      // if(response.id == this.geocode.id){
-      //   this.isHidden=true;
-      //   const requestCollectables: GetCollectablesRequest={
-      //     id: response.id
-      //   };
-      //   this.geocodeApi.getGeoCodeCollectables(requestCollectables).subscribe((response2 :GetCollectablesResponse) =>{
-      //     console.log(response2);
-      //     this.collectables= response2.collectables;
-      //   });
-      // }else{
-      //
-      // }
+      if(response.storedCollectable==null){
+        const alert = await this.alertCtrl.create({
+          header: 'Incorrect QR Code',
+
+          message: ' <strong>The QR code you entered is incorrect, please try another code'+'</strong>',
+          buttons: [
+            {
+              text: 'Okay',
+            }
+          ]
+        });
+        alert.present();
+      }else{
+        this.collectables=response.storedCollectable;
+        this.isHidden=true;
+      }
     });
 
   }
