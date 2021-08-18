@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.user.service;
 
-import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.user.model.User;
@@ -34,23 +33,39 @@ public interface UserService {
     //U1.7 getMyLeaderboards
     GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullRequestParameterException;
 
+    //U1.8 getMyMissions
+    GetMyMissionsResponse getMyMissions(GetMyMissionsRequest request) throws NullRequestParameterException;
+
     //User helper functions
+
+    //U1.9 addToOwnedGeoCodes
     AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException;
 
+    //U1.10 addToFoundGeoCodes
     AddToFoundGeoCodesResponse addToFoundGeoCodes(AddToFoundGeoCodesRequest request) throws NullRequestParameterException;
 
+    //U1.11 addToFoundCollectableTypes
     AddToFoundCollectableTypesResponse addToFoundCollectableTypes(AddToFoundCollectableTypesRequest request) throws NullRequestParameterException;
 
+    //U1.12 getUserById
     GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullRequestParameterException;
 
+    //U1.13 getCurrentUser
     User getCurrentUser();
 
+    //U1.14 getCurrentUserID
     UUID getCurrentUserID();
 
+    //U1.15 registerNewUser
     RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException;
 
     //GeoCode helper functions
+
+    //U1.16 swapCollectable
     SwapCollectableResponse swapCollectable(SwapCollectableRequest request) throws NullRequestParameterException;
+
+    //U1.17 addToMyMissions
+    void addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException;
 
     /**
      * Post construct the GeoCode service, this avoids a circular dependency

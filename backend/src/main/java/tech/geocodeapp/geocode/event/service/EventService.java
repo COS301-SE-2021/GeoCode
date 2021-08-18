@@ -6,8 +6,6 @@ import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 
-import java.util.UUID;
-
 /**
  * This is the main interface is for the Event subsystem,
  * it is used to call the relevant use cases to create, manipulate and delete Event.
@@ -45,7 +43,7 @@ public interface EventService {
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly created response instance from the specified GetCurrentEventLevelGeoCodeRequest
+     * @return the newly created response instance from the specified GetCurrentEventStatusRequest
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
@@ -60,7 +58,18 @@ public interface EventService {
      *
      * @throws InvalidRequestException any of the provided parameters are null
      */
-    void nextStage( GeoCode foundGeocode, UUID userID ) throws InvalidRequestException, NotFoundException, MismatchedParametersException;
+    void nextStage(GeoCode foundGeocode, java.util.UUID userID ) throws InvalidRequestException, NotFoundException, MismatchedParametersException;
+
+    /**
+     * Retrieve a list of Events that a user is participating in
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetEnteredEventsRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetEnteredEventsResponse getEnteredEvents(GetEnteredEventsRequest request ) throws InvalidRequestException;
 
     /**
      * Retrieve a list of Events around a certain radius of a location

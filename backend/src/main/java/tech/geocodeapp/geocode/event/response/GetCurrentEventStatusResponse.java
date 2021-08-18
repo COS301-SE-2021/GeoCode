@@ -14,26 +14,28 @@ import javax.validation.Valid;
  */
 @Validated
 public class GetCurrentEventStatusResponse extends Response {
+
     /**
      * The status of the User in this Event so far
      */
     @JsonProperty( "status" )
-    private UserEventStatus status = null;
+    private UserEventStatus status;
 
     /**
      * The found GeoCode
      */
     @JsonProperty( "targetGeocode" )
-    private GeoCode targetGeocode = null;
+    private GeoCode targetGeocode;
 
     /**
-     *  Overloaded Constructor
+     * Overloaded Constructor
      *
-     * @param status The status of the User in this Event so far
+     * @param status        The status of the User in this Event so far
      * @param targetGeocode The target GeoCode
      */
-    public GetCurrentEventStatusResponse(boolean success, String message, UserEventStatus status, GeoCode targetGeocode ) {
-        super(success, message);
+    public GetCurrentEventStatusResponse( boolean success, String message, UserEventStatus status, GeoCode targetGeocode ) {
+
+        super( success, message );
         this.status = status;
         this.targetGeocode = targetGeocode;
     }
@@ -45,7 +47,7 @@ public class GetCurrentEventStatusResponse extends Response {
      *
      * @return the request after the status has been changed
      */
-    public GetCurrentEventStatusResponse status(UserEventStatus status ) {
+    public GetCurrentEventStatusResponse status( UserEventStatus status ) {
 
         this.status = status;
         return this;
@@ -79,7 +81,7 @@ public class GetCurrentEventStatusResponse extends Response {
      *
      * @return the request after the targetGeocode has been changed
      */
-    public GetCurrentEventStatusResponse targetGeocode(GeoCode targetGeocode ) {
+    public GetCurrentEventStatusResponse targetGeocode( GeoCode targetGeocode ) {
 
         this.targetGeocode = targetGeocode;
         return this;
@@ -105,4 +107,5 @@ public class GetCurrentEventStatusResponse extends Response {
 
         this.targetGeocode = targetGeocode;
     }
+
 }

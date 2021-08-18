@@ -55,6 +55,11 @@ public class UserMockService implements UserService {
     }
 
     @Override
+    public GetMyMissionsResponse getMyMissions(GetMyMissionsRequest request) throws NullRequestParameterException {
+        return null;
+    }
+
+    @Override
     public AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException {
         return null;
     }
@@ -85,7 +90,9 @@ public class UserMockService implements UserService {
     }
 
     @Override
-    public UUID getCurrentUserID() { return null; }
+    public UUID getCurrentUserID() {
+        return null;
+    }
 
     /**
      * Only set userId and username for the purpose of this mock as nothing else is required by the leaderboard subsystems unit tests
@@ -99,12 +106,17 @@ public class UserMockService implements UserService {
         user.setId(request.getUserID());
         user.setUsername(request.getUsername());
         userRepo.save(user);
-        return new RegisterNewUserResponse(true, "New user registered");
+        return new RegisterNewUserResponse(true, "New user registered", user);
     }
 
     @Override
     public SwapCollectableResponse swapCollectable(SwapCollectableRequest request) throws NullRequestParameterException {
         return null;
+    }
+
+    @Override
+    public void addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException {
+
     }
 
     /**

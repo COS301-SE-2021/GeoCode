@@ -33,7 +33,7 @@ export class CollectablePage implements OnInit {
       this.sets = [];
       this.types = {};
       for (const set of response.collectableSets) {
-        if (set.id === 'ba429fcf-0023-45e8-a0c9-b0b0db7e0582') {continue;}
+        if (set.id === '00000000-0000-0000-0000-000000000000') {continue;}
         this.collectableService.getCollectableTypeBySet({setId: set.id}).subscribe((response2: GetCollectableTypesResponse) => {
           console.log(response2);
           this.types[set.id] = response2.collectableTypes;

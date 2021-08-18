@@ -1,6 +1,8 @@
 package tech.geocodeapp.geocode.leaderboard.model;
 
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +17,9 @@ import javax.validation.constraints.*;
 
 
 public class EventLeaderboardDetails   {
+  @JsonProperty("userID")
+  private UUID userID = null;
+
   @JsonProperty("username")
   private String username = null;
 
@@ -24,7 +29,8 @@ public class EventLeaderboardDetails   {
   @JsonProperty("rank")
   private Integer rank = null;
 
-  public EventLeaderboardDetails(String username, Integer points, Integer rank) {
+  public EventLeaderboardDetails(UUID userID, String username, Integer points, Integer rank) {
+    this.userID = userID;
     this.username = username;
     this.points = points;
     this.rank = rank;

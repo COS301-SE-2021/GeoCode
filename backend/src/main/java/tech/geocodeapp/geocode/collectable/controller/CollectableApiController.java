@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
 import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
@@ -40,32 +41,47 @@ public class CollectableApiController implements CollectableApi {
     }
 
     public ResponseEntity<CreateCollectableResponse> createCollectable(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableRequest body) {
-        CreateCollectableResponse response = collectableService.createCollectable(body);
+        try{
+            CreateCollectableResponse response = collectableService.createCollectable(body);
 
-        if(response.isSuccess()){
-            return new ResponseEntity<CreateCollectableResponse>(response, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<CreateCollectableResponse>(response, HttpStatus.BAD_REQUEST);
+            if(response.isSuccess()){
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (NullRequestParameterException e){
+            CreateCollectableResponse response = new CreateCollectableResponse(false, e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
     public ResponseEntity<CreateCollectableSetResponse> createCollectableSet(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable Set", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableSetRequest body) {
-        CreateCollectableSetResponse response = collectableService.createCollectableSet(body);
+        try{
+            CreateCollectableSetResponse response = collectableService.createCollectableSet(body);
 
-        if(response.isSuccess()){
-            return new ResponseEntity<CreateCollectableSetResponse>(response, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<CreateCollectableSetResponse>(response, HttpStatus.BAD_REQUEST);
+            if(response.isSuccess()){
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (NullRequestParameterException e){
+            CreateCollectableSetResponse response = new CreateCollectableSetResponse(false, e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
     public ResponseEntity<CreateCollectableTypeResponse> createCollectableType(@Parameter(in = ParameterIn.DEFAULT, description = "Request to create a new Collectable Type", required=true, schema=@Schema()) @Valid @RequestBody CreateCollectableTypeRequest body) {
-        CreateCollectableTypeResponse response = collectableService.createCollectableType(body);
+        try{
+            CreateCollectableTypeResponse response = collectableService.createCollectableType(body);
 
-        if(response.isSuccess()){
-            return new ResponseEntity<CreateCollectableTypeResponse>(response, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<CreateCollectableTypeResponse>(response, HttpStatus.BAD_REQUEST);
+            if(response.isSuccess()){
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (NullRequestParameterException e){
+            CreateCollectableTypeResponse response = new CreateCollectableTypeResponse(false, e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 

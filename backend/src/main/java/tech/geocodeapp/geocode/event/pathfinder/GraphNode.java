@@ -5,11 +5,10 @@ import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 class GraphNode {
 
-    private final UUID geocodeID;
+    private final java.util.UUID geocodeID;
     private final GeoPoint location;
     private final List<GraphEdge> neighbours = new ArrayList<GraphEdge>();
     private boolean visited = false;
@@ -34,7 +33,7 @@ class GraphNode {
         return location;
     }
 
-    List<UUID> getNearestNeighbourRecursive() {
+    List<java.util.UUID> getNearestNeighbourRecursive() {
         /* don't let the path visit this node again */
         this.visited = true;
 
@@ -49,12 +48,12 @@ class GraphNode {
             }
         }
 
-        List<UUID> output;
+        List<java.util.UUID> output;
         if (lowestDistance == null) {
             /* This will be hit if there are no unvisited neighbours remaining */
             /* (i.e. this is the last node in the path) */
             /* Create a new ArrayList that will contain the path */
-            output = new ArrayList<UUID>();
+            output = new ArrayList<java.util.UUID>();
         } else {
             /* Get the ArrayList created further down the path */
             output = lowestDistance.getDestination(this).getNearestNeighbourRecursive();

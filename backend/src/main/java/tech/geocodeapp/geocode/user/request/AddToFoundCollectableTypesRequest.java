@@ -1,34 +1,34 @@
 package tech.geocodeapp.geocode.user.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.UUID;
+import tech.geocodeapp.geocode.collectable.model.CollectableType;
+import tech.geocodeapp.geocode.user.model.User;
 
 public class AddToFoundCollectableTypesRequest {
-    @JsonProperty("userID")
-    private UUID userID = null;
+    @JsonProperty("user")
+    private User user;
 
-    @JsonProperty("collectableTypeID")
-    private UUID collectableTypeID = null;
+    @JsonProperty("collectableType")
+    private CollectableType collectableType;
 
-    public AddToFoundCollectableTypesRequest(UUID userID, UUID collectableTypeID){
-        this.userID = userID;
-        this.collectableTypeID = collectableTypeID;
+    public AddToFoundCollectableTypesRequest(User user, CollectableType collectableType){
+        this.user = user;
+        this.collectableType = collectableType;
     }
 
-    public UUID getUserID() {
-        return userID;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserID(UUID userID) {
-        this.userID = userID;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public UUID getCollectableTypeID() {
-        return collectableTypeID;
+    public CollectableType getCollectableType() {
+        return collectableType;
     }
 
-    public void setCollectableTypeID(UUID collectableTypeID) {
-        this.collectableTypeID = collectableTypeID;
+    public void setCollectableType(CollectableType collectableType) {
+        this.collectableType = collectableType;
     }
 }

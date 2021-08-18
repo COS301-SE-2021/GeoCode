@@ -1,11 +1,14 @@
 package tech.geocodeapp.geocode.event;
 
+import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
+
+import java.util.List;
 
 public class GeoCodeMockService implements GeoCodeService {
 
@@ -89,4 +92,18 @@ public class GeoCodeMockService implements GeoCodeService {
     public void saveGeoCode(GeoCode geocode) {
 
     }
+
+    /**
+     * Determines what type of collectable to create
+     * <p>
+     * NOTE: a collectable of Type Rarity is a user Trackable and will not be considered
+     *
+     * @param items
+     */
+    @Override
+    public CollectableTypeComponent calculateCollectableType( List< CollectableTypeComponent > items ) {
+
+        return null;
+    }
+
 }

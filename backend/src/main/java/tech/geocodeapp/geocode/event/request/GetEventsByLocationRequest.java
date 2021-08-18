@@ -20,6 +20,13 @@ public class GetEventsByLocationRequest {
     private GeoPoint location;
 
     /**
+     * Constructor
+     */
+    public GetEventsByLocationRequest() {
+
+    }
+
+    /**
      * Overloaded Constructor
      *
      * @param location the location to look for Events

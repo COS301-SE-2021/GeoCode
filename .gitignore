@@ -1590,3 +1590,4 @@ FodyWeavers.xsd
 *.tlog
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,windows,macos,android,eclipse,intellij,intellij+all,emacs,vim,vscode,visualstudio,netbeans,java,node,angular,ionic3,maven,git,tortoisegit,webstorm,webstorm+all,webstorm+iml,intellij+iml,adobe,latex
+backend/.jpb/jpb-settings.xml

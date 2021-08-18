@@ -20,6 +20,8 @@ public class GetCurrentCollectableRequest   {
   @JsonProperty("userID")
   private UUID userID = null;
 
+  public GetCurrentCollectableRequest(){}
+
   public GetCurrentCollectableRequest userID(UUID userID) {
     this.userID = userID;
     return this;

@@ -41,7 +41,8 @@ export class TrackableLocationsComponent implements AfterViewInit {
     this.map = new this.googleMaps.Map(this.mapElement.nativeElement, mapOptions);
     for (let i = 0; i < this.trackable.pastLocations.length; i++) {
       const marker = new this.googleMaps.Marker({
-        position: this.convertLocationStringToLatLng(this.trackable.pastLocations[i]),
+        // @ts-ignore
+        position: {lat:this.trackable.pastLocations[i].latitude , lng:this.trackable.pastLocations[i].longitude},
         map: this.map,
         label: (i+1)+''
       });

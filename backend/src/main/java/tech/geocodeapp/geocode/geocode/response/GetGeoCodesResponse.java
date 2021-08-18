@@ -22,7 +22,7 @@ public class GetGeoCodesResponse {
      */
     @JsonProperty( "geocodes" )
     @Valid
-    private List< GeoCode > geocodes = new ArrayList<>();
+    private List<GeoCode> geocodes = new ArrayList<>();
 
     /**
      * Default constructor
@@ -36,7 +36,7 @@ public class GetGeoCodesResponse {
      *
      * @param geocodes A list of all the GeoCodes
      */
-    public GetGeoCodesResponse( List< GeoCode > geocodes ) {
+    public GetGeoCodesResponse( List<GeoCode> geocodes ) {
 
         this.geocodes = geocodes;
     }
@@ -48,7 +48,7 @@ public class GetGeoCodesResponse {
      *
      * @return the request after the geocodes has been changed
      */
-    public GetGeoCodesResponse geocodes( List< GeoCode > geocodes ) {
+    public GetGeoCodesResponse geocodes( List<GeoCode> geocodes ) {
 
         this.geocodes = geocodes;
         return this;
@@ -73,7 +73,7 @@ public class GetGeoCodesResponse {
      * @return the stored geocodes attribute
      */
     @Valid
-    public List< GeoCode > getGeocodes() {
+    public List<GeoCode> getGeocodes() {
 
         return geocodes;
     }
@@ -83,7 +83,7 @@ public class GetGeoCodesResponse {
      *
      * @param geocodes the value the attribute should be set to
      */
-    public void setGeocodes( List< GeoCode > geocodes ) {
+    public void setGeocodes( List<GeoCode> geocodes ) {
 
         this.geocodes = geocodes;
     }

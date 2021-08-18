@@ -11,6 +11,7 @@ import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.mission.model.Mission;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -27,7 +28,7 @@ import javax.validation.constraints.*;
 public class User   {
   @Id
   @JsonProperty("id")
-  private UUID id = null;
+  private java.util.UUID id = null;
 
   @JsonProperty("username")
   private String username = null;
@@ -41,7 +42,7 @@ public class User   {
   @Valid
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<Point> points = new HashSet<Point>();
+  private Set<Point> points = new HashSet<>();
 
   @JsonProperty("currentCollectable")
   @ManyToOne
@@ -52,21 +53,40 @@ public class User   {
   @Valid
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<CollectableType> foundCollectableTypes = null;
+  private Set<CollectableType> foundCollectableTypes = new HashSet<>();
 
   @JsonProperty("foundGeocodes")
   @Valid
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<GeoCode> foundGeocodes = null;
+  private Set<GeoCode> foundGeocodes = new HashSet<>();
 
   @JsonProperty("ownedGeocodes")
   @Valid
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<GeoCode> ownedGeocodes = null;
+  private Set<GeoCode> ownedGeocodes = new HashSet<>();
 
-  public User id(UUID id) {
+  @JsonProperty("missions")
+  @Valid
+  @ManyToMany
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private Set<Mission> missions = new HashSet<>();
+
+  public User() {
+
+  }
+
+  public User(java.util.UUID id) {
+    this.id = id;
+  }
+
+  public User(java.util.UUID id, String username) {
+    this.id = id;
+    this.username = username;
+  }
+
+    public User id(java.util.UUID id) {
     this.id = id;
     return this;
   }
@@ -79,11 +99,11 @@ public class User   {
       @NotNull
 
     @Valid
-    public UUID getId() {
+    public java.util.UUID getId() {
     return id;
   }
 
-  public void setId(UUID id) {
+  public void setId(java.util.UUID id) {
     this.id = id;
   }
 
@@ -177,9 +197,6 @@ public class User   {
   }
 
   public User addFoundCollectableTypesItem(CollectableType foundCollectableTypesItem) {
-    if (this.foundCollectableTypes == null) {
-      this.foundCollectableTypes = new HashSet<CollectableType>();
-    }
     this.foundCollectableTypes.add(foundCollectableTypesItem);
     return this;
   }
@@ -204,9 +221,6 @@ public class User   {
   }
 
   public User addFoundGeocodesItem(GeoCode foundGeocodesItem) {
-    if (this.foundGeocodes == null) {
-      this.foundGeocodes = new HashSet<GeoCode>();
-    }
     this.foundGeocodes.add(foundGeocodesItem);
     return this;
   }
@@ -231,9 +245,6 @@ public class User   {
   }
 
   public User addOwnedGeocodesItem(GeoCode ownedGeocodesItem) {
-    if (this.ownedGeocodes == null) {
-      this.ownedGeocodes = new HashSet<GeoCode>();
-    }
     this.ownedGeocodes.add(ownedGeocodesItem);
     return this;
   }
@@ -252,56 +263,18 @@ public class User   {
     this.ownedGeocodes = ownedGeocodes;
   }
 
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    User user = (User) o;
-    return Objects.equals(this.id, user.id) &&
-        Objects.equals(this.username, user.username) &&
-        Objects.equals(this.trackableObject, user.trackableObject) &&
-        Objects.equals(this.points, user.points) &&
-        Objects.equals(this.currentCollectable, user.currentCollectable) &&
-        Objects.equals(this.foundCollectableTypes, user.foundCollectableTypes) &&
-        Objects.equals(this.foundGeocodes, user.foundGeocodes) &&
-        Objects.equals(this.ownedGeocodes, user.ownedGeocodes);
+  public Set<Mission> getMissions() {
+    return this.missions;
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, username, trackableObject, points, currentCollectable, foundCollectableTypes, foundGeocodes, ownedGeocodes);
+  public void setMissions(Set<Mission> missions) {
+    this.missions = missions;
   }
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class User {\n");
-    
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
-    sb.append("    trackableObject: ").append(toIndentedString(trackableObject)).append("\n");
-    sb.append("    points: ").append(toIndentedString(points)).append("\n");
-    sb.append("    currentCollectable: ").append(toIndentedString(currentCollectable)).append("\n");
-    sb.append("    foundCollectableTypes: ").append(toIndentedString(foundCollectableTypes)).append("\n");
-    sb.append("    foundGeocodes: ").append(toIndentedString(foundGeocodes)).append("\n");
-    sb.append("    ownedGeocodes: ").append(toIndentedString(ownedGeocodes)).append("\n");
-    sb.append("}");
-    return sb.toString();
+  public User addMissionsItem(Mission missionsItem) {
+    this.missions.add(missionsItem);
+    return this;
   }
 
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
+
 }

@@ -25,6 +25,7 @@ import tech.geocodeapp.geocode.user.service.UserService;
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * This class implements the LeaderboardService interface
@@ -100,7 +101,8 @@ public class LeaderboardServiceImpl implements LeaderboardService {
                 }else{
                      List<Point> points = pointRepo.findPointsByLeaderboardBetween(leaderboard.get().getId(), request.getStarting()-1, request.getCount());
                      for(int i = 0; i<points.size(); i++) {
-                         EventLeaderboardDetails details = new EventLeaderboardDetails(points.get(i).getUser().getUsername(), points.get(i).getAmount(), request.getStarting()+i);
+                         User user = points.get(i).getUser();
+                         EventLeaderboardDetails details = new EventLeaderboardDetails(user.getId(), user.getUsername(), points.get(i).getAmount(), request.getStarting()+i);
                          leaderboardDetails.add(details);
                     }
                      success = true;
@@ -161,21 +163,22 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
     @Transactional
-    public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullRequestParameterException{
+    public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetPointsByLeaderboardRequest request) throws NullRequestParameterException{
         if(request == null){
-            return new GetPointsByLeaderboardResponse(false, "The GetMyRankRequest passed was NULL", null);
+            return new GetPointsByLeaderboardResponse(false, "The GetPointsByLeaderboardRequest passed was NULL", null);
         }
 
         checkNullRequestParameters.checkRequestParameters(request);
 
         /* check if leaderboard is invalid */
-        Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboard().getId());
+        UUID leaderboardID = request.getLeaderboard().getId();
+        Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(leaderboardID);
 
         if(optionalLeaderboard.isEmpty()){
             return new GetPointsByLeaderboardResponse(false, "Invalid leaderboard ID", null);
         }
 
-        List<Point> points = pointRepo.findAllByLeaderboardID(request.getLeaderboard().getId());
+        List<Point> points = pointRepo.findAllByLeaderboardID(leaderboardID);
         return new GetPointsByLeaderboardResponse(true, "Leaderboard points returned", points);
     }
 
@@ -200,6 +203,11 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             return new GetMyRankResponse(false, "Invalid leaderboard ID", null);
         }
 
+        //check if amount is invalid
+        if(request.getAmount() < 0){
+            return new GetMyRankResponse(false, "The amount must be positive", null);
+        }
+
         int rank = pointRepo.getMyRank(request.getLeaderboard().getId(), request.getAmount());
         return new GetMyRankResponse(true, "Point rank returned", rank);
     }
@@ -210,7 +218,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @return A responses informing of success or failure and containing the created Point.
      * @throws NullRequestParameterException an exception for when a null value is provided for a parameter of the request
      */
-    @Override
+    @Transactional
     public PointResponse createPoint(CreatePointRequest request) throws NullRequestParameterException{
         if(request == null){
             return new PointResponse(false, "The CreatePointRequest passed was NULL", null);
@@ -239,6 +247,12 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+
+        //check if the amount is invalid
+        if(request.getAmount() < 0){
+            return new PointResponse(false, "The amount for a Point must be at least zero", null);
+        }
+
         Point point= new Point(request.getAmount(), foundUser, leaderboard.get());
         pointRepo.save(point);
         return new PointResponse(true, "The Point was successfully created.", point);
@@ -250,7 +264,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @return A response object informing of success or failure and the reason for failure in the event of it
      * @throws NullRequestParameterException an exception for when the request parameter is null
      */
-    @Override
+    @Transactional
     public DeletePointResponse deletePoint(DeletePointRequest request) throws NullRequestParameterException {
         if(request == null){
             return new DeletePointResponse(false, "The DeletePointRequest passed was NULL");
@@ -274,7 +288,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * @return A response object informing of success or failure and the reason as well as the updated Point object
      * @throws NullRequestParameterException an exception for when the provided parameters are all null or pointId is null.
      */
-    @Override
+    @Transactional
     public PointResponse updatePoint(UpdatePointRequest request) throws NullRequestParameterException {
         if(request == null){
             return new PointResponse(false,"The UpdatePointRequest passed was NULL", null);
@@ -321,6 +335,11 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         //update amount if it was provided
         if(request.getAmount() != null){
+            //check if the amount is invalid
+            if(request.getAmount() <= 0){
+                return new PointResponse(false, "The amount for a Point must be positive", null);
+            }
+
             point.get().setAmount(request.getAmount());
         }
 
@@ -328,7 +347,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         return new PointResponse(true, "Updated point successfully", point.get());
     }
 
-    @Override
+    @Transactional
     public Response savePoint(Point point) throws NullRequestParameterException {
         if(point == null) {
             return new Response(false, "Point provided is null");
