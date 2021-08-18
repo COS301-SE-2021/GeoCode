@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -35,7 +34,7 @@ public class UserEventStatus {
     @JsonProperty( "eventID" )
     @NotNull( message = "UserEventStatus eventID attribute cannot be null." )
     private UUID eventID;
-    
+
     /**
      * The unique id of the user participating in the event
      */
@@ -57,7 +56,7 @@ public class UserEventStatus {
     @JsonProperty( "details" )
     @NotNull( message = "UserEventStatus details attribute cannot be null." )
     @ElementCollection
-    private Map<String, String> details;
+    private Map< String, String > details;
 
     /**
      * Default Constructor
@@ -69,13 +68,13 @@ public class UserEventStatus {
     /**
      * Overloaded Constructor
      *
-     * @param id The unique identifier for the Event
+     * @param id      The unique identifier for the Event
      * @param eventID The unique id of the event to get the next stage from
-     * @param userID The unique id of the user competing in the event
+     * @param userID  The unique id of the user competing in the event
      * @param levelID The unique identifier of a specific GeoCode
      * @param details Miscellaneous recorded details for a user's participation in an event
      */
-    public UserEventStatus(UUID id, UUID eventID, UUID userID, UUID levelID, Map<String, String> details ) {
+    public UserEventStatus( UUID id, UUID eventID, UUID userID, UUID levelID, Map< String, String > details ) {
 
         this.id = id;
         this.eventID = eventID;
@@ -92,7 +91,7 @@ public class UserEventStatus {
      * @return the model after changing the id
      */
     @Valid
-    public UserEventStatus id(UUID id ) {
+    public UserEventStatus id( UUID id ) {
 
         this.id = id;
         return this;
@@ -117,7 +116,7 @@ public class UserEventStatus {
 
         this.id = id;
     }
-    
+
     /**
      * Sets the eventID attribute to the specified value
      *
@@ -125,7 +124,7 @@ public class UserEventStatus {
      *
      * @return the request after the eventID has been changed
      */
-    public UserEventStatus eventID(UUID eventID ) {
+    public UserEventStatus eventID( UUID eventID ) {
 
         this.eventID = eventID;
         return this;
@@ -159,7 +158,7 @@ public class UserEventStatus {
      *
      * @return the request after the userID has been changed
      */
-    public UserEventStatus userID(UUID userID ) {
+    public UserEventStatus userID( UUID userID ) {
 
         this.userID = userID;
         return this;
@@ -193,7 +192,7 @@ public class UserEventStatus {
      *
      * @return the request after the geocodeID has been changed
      */
-    public UserEventStatus geocodeID(UUID geocodeID ) {
+    public UserEventStatus geocodeID( UUID geocodeID ) {
 
         this.geocodeID = geocodeID;
         return this;
@@ -227,7 +226,7 @@ public class UserEventStatus {
      *
      * @return the request after the details has been changed
      */
-    public UserEventStatus details(Map<String, String> details ) {
+    public UserEventStatus details( Map< String, String > details ) {
 
         this.details = details;
         return this;
@@ -239,7 +238,7 @@ public class UserEventStatus {
      * @return the stored details attribute
      */
     @Valid
-    public Map<String, String> getDetails() {
+    public Map< String, String > getDetails() {
 
         return details;
     }
@@ -249,7 +248,7 @@ public class UserEventStatus {
      *
      * @param details the value the attribute should be set to
      */
-    public void setDetails( Map<String, String> details ) {
+    public void setDetails( Map< String, String > details ) {
 
         this.details = details;
     }
@@ -273,7 +272,7 @@ public class UserEventStatus {
             return false;
         }
 
-        UserEventStatus timeLog = (UserEventStatus) obj;
+        UserEventStatus timeLog = ( UserEventStatus ) obj;
         return Objects.equals( this.userID, timeLog.userID ) &&
                 Objects.equals( this.geocodeID, timeLog.geocodeID ) &&
                 Objects.equals( this.details, timeLog.details );
@@ -302,7 +301,7 @@ public class UserEventStatus {
                 "    id: " + toIndentedString( id ) + "\n" +
                 "    eventID: " + toIndentedString( eventID ) + "\n" +
                 "    userID: " + toIndentedString( userID ) + "\n" +
-                "    geocodeID: " + toIndentedString( geocodeID) + "\n" +
+                "    geocodeID: " + toIndentedString( geocodeID ) + "\n" +
                 "}";
     }
 
