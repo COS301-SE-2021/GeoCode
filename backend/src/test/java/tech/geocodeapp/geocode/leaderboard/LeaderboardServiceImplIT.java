@@ -9,7 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
+import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
+import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -59,5 +61,25 @@ public class LeaderboardServiceImplIT {
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void createPointTestNullRequest() {
+        try {
+            PointResponse response = leaderboardService.createPoint(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The CreatePointRequest passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getPoint());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void createPointTestNullAllParameters() {
+        CreatePointRequest request = new CreatePointRequest(null, null, null);
+
+        assertThatThrownBy(() -> leaderboardService.createPoint(request))
+                .isInstanceOf(NullRequestParameterException.class);
     }
 }
