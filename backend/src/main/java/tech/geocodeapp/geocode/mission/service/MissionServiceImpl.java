@@ -37,9 +37,8 @@ public class MissionServiceImpl implements MissionService{
     private final String invalidMissionIdMessage = "Invalid Mission Id";
     private final String collectableHasMissionMessage = "Collectable already has a Mission";
 
-    public MissionServiceImpl(MissionRepository missionRepo, @Lazy CollectableService collectableService) {
+    public MissionServiceImpl(MissionRepository missionRepo) {
         this.missionRepo = missionRepo;
-        this.collectableService = collectableService;
     }
 
     /**

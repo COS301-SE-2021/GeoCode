@@ -126,7 +126,7 @@ public class MissionServiceImplTest {
     void setup() {
         //initialize the services and mock repos
         missionMockRepo = new MissionMockRepository();
-        missionService = new MissionServiceImpl(missionMockRepo, collectableService);
+        missionService = new MissionServiceImpl(missionMockRepo);
 
         collectableService = new CollectableServiceImpl(new CollectableMockRepository(), new CollectableSetMockRepository(),
                 new CollectableTypeMockRepository(), missionService);

@@ -118,6 +118,9 @@ public class UserServiceImplTest {
 
         GeoCodeMockRepository geoCodeMockRepo = new GeoCodeMockRepository();
 
+        MissionMockRepository missionMockRepo = new MissionMockRepository();
+        missionService = new MissionServiceImpl(missionMockRepo);
+
         userMockRepo = new UserMockRepository();
         CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo, missionService);
         GeoCodeService geoCodeService;
@@ -128,9 +131,6 @@ public class UserServiceImplTest {
             e.printStackTrace();
             return;
         }
-
-        MissionMockRepository missionMockRepo = new MissionMockRepository();
-        missionService = new MissionServiceImpl(missionMockRepo, collectableService);
 
         userService = new UserServiceImpl(userMockRepo, collectableMockRepo, new PointMockRepository(), collectableService, missionService);
         userService.setGeoCodeService(geoCodeService);

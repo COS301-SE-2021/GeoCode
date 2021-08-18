@@ -51,6 +51,17 @@ public class CollectableServiceImpl implements CollectableService {
         initialiseUserTrackables();
     }
 
+    /**
+     * Once the Collectable service object has been created
+     * insert it into the User and Event subsystem
+     *
+     * This is to avoid circular dependencies as each subsystem requires one another
+     */
+    @PostConstruct
+    public void init() {
+        this.missionService.setCollectableService(this);
+    }
+
     @Transactional
     public CreateCollectableSetResponse createCollectableSet(CreateCollectableSetRequest request) throws NullRequestParameterException {
         if (request == null) {
