@@ -299,6 +299,9 @@ public class UserServiceImplTest {
 
         invalidGeoCode = new GeoCode();
         invalidGeoCode.setId(invalidGeoCodeID);
+
+        /* Set up mock security */
+        MockSecurity.setup();
     }
 
     @Test
@@ -1165,5 +1168,12 @@ public class UserServiceImplTest {
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
+    }
+
+    @Test
+    void getCurrentUserTest() {
+        MockSecurity.setCurrentUserID(validUserId);
+        User returnedUser = userService.getCurrentUser();
+        Assertions.assertEquals(validUser, returnedUser);
     }
 }
