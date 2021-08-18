@@ -383,4 +383,30 @@ public class LeaderboardServiceImplIT {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void updatePointTestValidAmountAndLeaderboardId() {
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            UUID userId = UUID.randomUUID();
+            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
+            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
+            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            PointResponse createPointResponse = leaderboardService.createPoint(createPointRequest);
+
+            CreateLeaderboardRequest updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
+            CreateLeaderboardResponse updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
+            UpdatePointRequest request = new UpdatePointRequest(createPointResponse.getPoint().getId(), 4, null, updatedLeaderboardResponse.getLeaderboard().getId());
+            PointResponse response = leaderboardService.updatePoint(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Updated point successfully", response.getMessage());
+            Assertions.assertNotNull(response.getPoint());
+            Assertions.assertEquals(updatedLeaderboardResponse.getLeaderboard().getId(), response.getPoint().getLeaderBoard().getId());
+            Assertions.assertEquals(4, response.getPoint().getAmount());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
