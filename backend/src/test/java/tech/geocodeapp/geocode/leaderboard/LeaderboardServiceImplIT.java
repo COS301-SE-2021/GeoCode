@@ -12,6 +12,7 @@ import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
+import tech.geocodeapp.geocode.leaderboard.response.DeletePointResponse;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
@@ -151,6 +152,17 @@ public class LeaderboardServiceImplIT {
             Assertions.assertEquals("The Point was successfully created.", response.getMessage());
             Assertions.assertNotNull(response.getPoint());
             Assertions.assertEquals(1, response.getPoint().getAmount());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void deletePointTestNullRequest() {
+        try {
+            DeletePointResponse response = leaderboardService.deletePoint(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The DeletePointRequest passed was NULL", response.getMessage());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
