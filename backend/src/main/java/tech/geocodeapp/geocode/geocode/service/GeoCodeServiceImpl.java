@@ -345,9 +345,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     public GetGeoCodesResponse getAllGeoCodes() {
 
         /* Retrieve all the stored GeoCodes from the repository */
-        List< GeoCode > temp = geoCodeRepo.findAll();
-
-        //ToDo make a custom query to only select fields wanted
+        List< GeoCode > temp = new ArrayList<>( geoCodeRepo.findGeoCode() );
 
         /* Go through each GeoCode found and hide the sensitive data */
         for ( GeoCode geoCode : temp ) {
