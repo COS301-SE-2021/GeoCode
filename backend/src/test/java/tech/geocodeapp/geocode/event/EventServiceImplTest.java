@@ -25,7 +25,6 @@ import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
 import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
 import tech.geocodeapp.geocode.leaderboard.UserMockService;
 import tech.geocodeapp.geocode.leaderboard.service.*;
-
 import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.service.UserService;
