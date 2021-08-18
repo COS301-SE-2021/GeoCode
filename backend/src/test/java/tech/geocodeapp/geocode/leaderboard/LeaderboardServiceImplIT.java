@@ -97,4 +97,20 @@ public class LeaderboardServiceImplIT {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void createPointTestInvalidUserId() {
+        //create a leaderboard to ensure a valid id for leaderboardId parameter
+        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        try {
+            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            CreatePointRequest request = new CreatePointRequest(1, UUID.randomUUID(), leaderboardResponse.getLeaderboard().getId());
+            PointResponse response = leaderboardService.createPoint(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Invalid user Id provided", response.getMessage());
+            Assertions.assertNull(response.getPoint());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
