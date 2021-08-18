@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.geocodeapp.geocode.GeoCodeApplication;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
@@ -656,6 +657,17 @@ public class LeaderboardServiceImplIT {
             Assertions.assertEquals(1, response.getLeaderboard().get(0).getRank());
             Assertions.assertEquals(6, response.getLeaderboard().get(1).getPoints());
             Assertions.assertEquals(2, response.getLeaderboard().get(1).getRank());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void savePointNullTest() {
+        try {
+            Response response = leaderboardService.savePoint(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("Point provided is null", response.getMessage());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
