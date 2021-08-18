@@ -931,7 +931,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Create a random number between 0 and 1.0 */
-        var random = ( new SecureRandom() ).nextDouble();
+        var random = Math.random();
         var cumulativeProbability = 0.0;
 
         try {
@@ -962,7 +962,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                     }
 
                     /* The index of the object to return */
-                    var randomIndex = ( int ) ( ( new SecureRandom() ).nextDouble() * filtered.size() );
+                    var randomIndex = ( int ) ( ( Math.random() ) * filtered.size() );
                     var type = filtered.get( randomIndex );
 
                     /* Ensure the Collectable is not a Users Trackable */
