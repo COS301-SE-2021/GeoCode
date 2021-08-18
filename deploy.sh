@@ -1,7 +1,7 @@
 cd frontend
 npm install
-cp ../../environment.ts src/environments
-ionic build
+cp ../../environment.prod.ts src/environments
+ionic build --prod
 cd ../backend
 cp ../../keystore.p12 src/main/resources
 mvn spring-boot:build-image -Dspring-boot.build-image.imageName=geocode/backend
