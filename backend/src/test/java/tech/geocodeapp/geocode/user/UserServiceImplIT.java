@@ -46,12 +46,12 @@ public class UserServiceImplIT {
     GeoCodeServiceImpl geoCodeService;
 
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
-    private final UUID validUserId = UUID.fromString("712fb163-d3f3-49b0-865a-acaab6986fd0");
-    private final UUID newUserId = UUID.fromString("febc2388-4de1-467c-b24f-1a522197a882");
+    private final UUID validUserId = UUID.fromString("f479228d-8a4a-4b90-ba86-abccadec5085");
+    private final UUID newUserId = UUID.fromString("f0fa8ba1-081d-4896-b23e-430f8f064a9a");
 
-    private final UUID noPointsUserId = UUID.fromString("98872d8f-677b-4b20-a148-b526851d8024");
-    private final UUID userWithPoints1 = UUID.fromString("04886c2d-fcdb-40a6-b0ae-4902f0cea58c");
-    private final UUID userWithPoints2 = UUID.fromString("b716e89f-db50-482a-a470-3a01690eee5c");
+    private final UUID noPointsUserId = UUID.fromString("bed08b80-08ce-46c8-9948-af43b5d989d8");
+    private UUID userWithPoints1 = UUID.fromString("70c4512e-2969-42a9-a03a-0d8480079ddf");
+    private UUID userWithPoints2 = UUID.fromString("458198a1-a26f-4ff0-8710-b340d1f77300");
 
     private User validUser;
     private User invalidUser;
@@ -79,25 +79,25 @@ public class UserServiceImplIT {
     private int numberOfFoundGeoCodesBefore;
     private int numberOfFoundCollectableTypesBefore;
 
-    private final UUID invalidGeoCodeID = UUID.fromString("c6dab51d-7b2c-45df-940c-189821a36178");
-    private final UUID invalidCollectableID = UUID.fromString("4d2877ee-431e-4a46-b391-c9755291a0f6");
-    private final UUID invalidCollectableTypeID = UUID.fromString("1c39987b-f7b6-478f-b99c-2c57928481af");
+    private final UUID invalidGeoCodeID = UUID.fromString("0c4f80cf-e643-46ba-84c6-2578873d9fd8");
+    private final UUID invalidCollectableID = UUID.fromString("80c582d7-b6cf-4d8f-9006-12876b7d219d");
+    private final UUID invalidCollectableTypeID = UUID.fromString("dfe3f784-ab11-4a2e-91eb-e74b96df6bb9");
 
-    private final UUID noPointsFirstOwnedGeoCodeID = UUID.fromString("c8c60a6d-9bfd-4a1c-a864-6140935a4296");
-    private final UUID noPointsNewOwnedGeoCodeID = UUID.fromString("1589fcd5-aac5-4434-a435-d4d03df05703");
+    private final UUID noPointsFirstOwnedGeoCodeID = UUID.fromString("9225d9be-70ce-460b-aaea-5408bb2262fd");
+    private final UUID noPointsNewOwnedGeoCodeID = UUID.fromString("533f5896-19e4-474c-b433-78902033d475");
 
-    private final UUID noPointsFirstFoundGeoCodeID = UUID.fromString("13edfce8-5ecd-4cce-ad05-9037df0cbb04");
-    private final UUID noPointsNewFoundGeoCodeID = UUID.fromString("74358369-c953-4862-b3b4-7ca4b78a4c83");
+    private final UUID noPointsFirstFoundGeoCodeID = UUID.fromString("b7f0d71a-c13f-43cc-ac8b-ef7ed6a3c394");
+    private final UUID noPointsNewFoundGeoCodeID = UUID.fromString("6df8adef-a5cc-4586-b8c4-0e9201fa6150");
 
-    private final UUID testCollectableTypeID = UUID.fromString("c65410e3-54e0-4958-9ebb-12560a86ae16");
-    private final UUID testCollectableType1ID = UUID.fromString("5350f61f-1052-42d0-8dea-9a7580cfd908");
-    private final UUID testCollectableType2ID = UUID.fromString("cad9d680-6e0e-4c9f-9d05-45fb4b430fdd");
-    private final UUID noPointsNewFoundCollectableTypeID = UUID.fromString("08603f0d-3262-4b71-a50b-4a4605f36bea");
+    private final UUID testCollectableTypeID = UUID.fromString("11a9e458-dd30-48b3-9839-02614191994e");
+    private final UUID testCollectableType1ID = UUID.fromString("180fbfa0-10c1-4ee8-9599-becd9e5805d2");
+    private final UUID testCollectableType2ID = UUID.fromString("5b6f838a-0383-46aa-9a41-25df370a2353");
+    private final UUID noPointsNewFoundCollectableTypeID = UUID.fromString("bd5d2476-7de7-4307-9081-2e17d5d50cca");
 
-    private final UUID collectableInFirstGeoCodeID = UUID.fromString("bf98dbf9-90b5-43ab-91b3-396d8f6ff216");
+    private final UUID collectableInFirstGeoCodeID = UUID.fromString("af42eecd-f4c8-4ba7-909d-c68c69f79421");
 
-    private final UUID swapMissionID = UUID.fromString("4507f78a-2c0c-4073-9af0-7f50ffe2fa0f");
-    private final UUID circumferenceMissionID = UUID.fromString("46e8e512-68ca-40d7-89ce-11ae91c58bbc");
+    private final UUID swapMissionID = UUID.fromString("c665e67f-8fef-4568-8607-d4bbd4f72543");
+    private final UUID circumferenceMissionID = UUID.fromString("e1927f0f-825e-4040-9fbb-fa22197ab0f5");
 
     private final String existingUserIdMessage = "User ID already exists";
 
@@ -114,6 +114,11 @@ public class UserServiceImplIT {
 
         try {
             response = userService.registerNewUser(request);
+
+            if(!response.isSuccess()){
+                System.out.println("user registration failed:"+response.getMessage());
+            }
+
             Assertions.assertTrue(response.isSuccess());
 
             return response.getUser();
@@ -174,9 +179,9 @@ public class UserServiceImplIT {
     }
 
     @BeforeEach
+    @Transactional
     void setup() throws InvalidRequestException, NullRequestParameterException {
         //mock the SecurityContext
-        MockSecurity.setup();
         setUser(validUserId);
 
         //create the CollectableSet to hold the "User Trackable" type
@@ -194,6 +199,8 @@ public class UserServiceImplIT {
         //register the valid Users
         validUser = registerNewUser(validUserId, "validUser");
         noPointsUser = registerNewUser(noPointsUserId, "noPointsUserId");
+        userWithPoints1 = registerNewUser(userWithPoints1, "userWithPoints1").getId();
+        userWithPoints2 = registerNewUser(userWithPoints2, "userWithPoints2").getId();
 
         //create GeoCodes
         List<String> hints = new ArrayList<>();
@@ -222,6 +229,9 @@ public class UserServiceImplIT {
         //here
         System.out.println("firstGeoCodeID:"+firstGeoCodeID);
         System.out.println("secondGeoCodeID:"+secondGeoCodeID);
+
+        //give userWithPoints1 and userWithPoints2 points
+
     }
 
     private UUID getCollectableTypeID(UUID collectableID) throws NullRequestParameterException {
@@ -240,6 +250,7 @@ public class UserServiceImplIT {
     }
 
     private void setUser(UUID userID){
+        MockSecurity.setup();
         MockSecurity.setCurrentUserID(userID);
     }
 
@@ -459,8 +470,9 @@ public class UserServiceImplIT {
 
             List<UUID> ownedGeoCodeIDs = response.getGeocodeIDs();
             Assertions.assertNotNull(ownedGeoCodeIDs);
-            Assertions.assertEquals(1, ownedGeoCodeIDs.size());
-            Assertions.assertEquals(thirdGeoCodeID, ownedGeoCodeIDs.get(0));
+            Assertions.assertEquals(2, ownedGeoCodeIDs.size());
+            Assertions.assertEquals(firstGeoCodeID, ownedGeoCodeIDs.get(0));
+            Assertions.assertEquals(secondGeoCodeID, ownedGeoCodeIDs.get(1));
         }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
@@ -535,6 +547,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getMyLeaderboardsTestUserWithNoPoints(){
         setUser(noPointsUserId);
 
@@ -561,6 +574,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getMyLeaderboardsTestUserWithPoints1(){
         setUser(userWithPoints1);
 
@@ -570,6 +584,7 @@ public class UserServiceImplIT {
         try {
             GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
 
+            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
 
@@ -599,6 +614,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getMyLeaderboardsTestUserWithPoints2(){
         setUser(userWithPoints2);
 
@@ -637,6 +653,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void AddToOwnedGeoCodesTestNotAddDuplicate(){
         try {
             setUser(noPointsUserId);
@@ -702,6 +719,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void AddToFoundGeoCodesTestNotAddDuplicate(){
         setUser(noPointsUserId);
 
@@ -767,6 +785,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void AddToFoundCollectableTypesTestNotAddDuplicate(){
         setUser(noPointsUserId);
 
@@ -832,6 +851,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void getUserByIdTestInvalidUserId(){
         try {
             GetUserByIdRequest request = new GetUserByIdRequest(invalidUserId);
@@ -845,6 +865,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void getUserByIdTestValidUserId(){
         setUser(validUserId);
 
@@ -864,6 +885,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void registerNewUserTestExistingUserId(){
         setUser(validUserId);
 
@@ -904,6 +926,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void swapCollectableTestCollectableInvalidUserID(){
         try {
             Collectable collectableInFirstGeoCode = new Collectable();
@@ -926,6 +949,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void swapCollectableTestCollectableInvalidGeoCodeID(){
         setUser(validUserId);
 
@@ -950,6 +974,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void swapCollectableTestCollectableInvalidCollectableID(){
         setUser(validUserId);
 
@@ -1012,6 +1037,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getMyMissionsTestInvalidUser(){
         GetMyMissionsRequest request = new GetMyMissionsRequest(invalidUserId);
 

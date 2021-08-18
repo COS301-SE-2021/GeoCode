@@ -109,7 +109,7 @@ class EventServiceImplTest {
     /**
      * This is used to have a static known UUID for Event objects
      */
-    java.util.UUID eventID = java.util.UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
+    UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
 
     /**
      * Create the EventServiceImpl with the relevant repositories.

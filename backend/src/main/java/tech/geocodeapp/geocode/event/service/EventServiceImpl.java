@@ -148,16 +148,16 @@ public class EventServiceImpl implements EventService {
         }
 
         /* Store the list of GeoCode UUIDs to create a Level on */
-        List<java.util.UUID> geoCodeIDs = request.getGeoCodesToFind();
+        List< UUID > geoCodeIDs = request.getGeoCodesToFind();
 
-        java.util.UUID eventID = java.util.UUID.randomUUID();
+        UUID eventID = UUID.randomUUID();
 
         List< GeoCode > geoCodes = new ArrayList<>();
         /*
          * Go through each GeoCode ID
          * and get the GeoCode object
          */
-        for ( java.util.UUID id : geoCodeIDs ) {
+        for ( UUID id : geoCodeIDs ) {
             try {
                 /*
                  * Call the GeoCode service to get the GeoCode Object
@@ -398,7 +398,7 @@ public class EventServiceImpl implements EventService {
         }
 
         /* Extract the event ID from the provided geocode */
-        java.util.UUID eventID = foundGeocode.getEventID();
+        UUID eventID = foundGeocode.getEventID();
 
         /* Find the event with the id */
         Optional< Event > temp = eventRepo.findById( eventID );
@@ -738,9 +738,9 @@ public class EventServiceImpl implements EventService {
      *
      * @return the sorted IDs of the provided GeoCodes in order of Difficulty
      */
-    private List<java.util.UUID> sortByDifficulty(List<GeoCode> geoCodes ) {
+    private List< UUID > sortByDifficulty( List< GeoCode > geoCodes ) {
 
-        List<java.util.UUID> hold = null;
+        List< UUID > hold = null;
 
         if ( geoCodes != null ) {
 
