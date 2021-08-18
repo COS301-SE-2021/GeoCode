@@ -26,6 +26,7 @@ import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 
+import tech.geocodeapp.geocode.user.request.AddToOwnedGeoCodesRequest;
 import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
@@ -231,12 +232,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         var id = UUID.randomUUID();
 
-        var createdBy = userService.getCurrentUserID();
+        var createdBy = userService.getCurrentUser();
 
         /* Create the GeoCode Object */
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
                                       request.getDescription(), request.getHints(), collectable,
-                                      qr.toString(), request.getLocation(), createdBy );
+                                      qr.toString(), request.getLocation(), createdBy.getId() );
 
         /*
          * Save the newly created GeoCode
@@ -257,6 +258,16 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* Exception thrown therefore creation failed */
             return new CreateGeoCodeResponse( false );
+        }
+
+        /*
+         * Add the GeoCode to the list of GeoCodes that the user has created
+         */
+        try {
+            AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, newGeoCode);
+            userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
+        } catch (NullRequestParameterException e) {
+
         }
 
         /*
