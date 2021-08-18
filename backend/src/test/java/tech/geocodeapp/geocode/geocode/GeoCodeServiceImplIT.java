@@ -1,10 +1,14 @@
 package tech.geocodeapp.geocode.geocode;
 
 import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
@@ -17,6 +21,7 @@ import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCodeApplication;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.user.MockSecurity;
 import tech.geocodeapp.geocode.user.service.*;
 
 import java.util.ArrayList;
@@ -87,6 +92,11 @@ class GeoCodeServiceImplIT {
     UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
 
     /**
+     * This is used to have a static known UUID
+     */
+    UUID userID = UUID.fromString( "84cfaac5-eb4b-4e4a-80c1-2becd94ab2b3" );
+
+    /**
      * Create the GeoCodeServiceImpl with the relevant repositories.
      *
      * This is done to ensure a repository with no data is created each time
@@ -97,12 +107,26 @@ class GeoCodeServiceImplIT {
     void setup() {
 
         /* Clear the repo of any old data */
-         repo.deleteAll();
+        repo.deleteAll();
 
         try {
 
+            /* Set the current user */
+            //MockSecurity.setup();
+            //MockSecurity.setCurrentUserID( userID );
+
+
+            SecurityContext securityContext = Mockito.mock( SecurityContext.class );
+            Authentication authentication = Mockito.mock( Authentication.class );
+
+            Mockito.when( securityContext.getAuthentication() ).thenReturn( authentication );
+
+            SecurityContextHolder.setContext( securityContext );
+
+            Mockito.when( authentication.getName() ).thenReturn( userID.toString() );
+
             /* Create a new GeoCodeServiceImpl instance to access the different use cases */
-            geoCodeService = new GeoCodeServiceImpl( repo, collectableService, userService, eventService);
+            geoCodeService = new GeoCodeServiceImpl( repo, collectableService, userService, eventService );
         } catch ( RepoException e ) {
 
             e.printStackTrace();
