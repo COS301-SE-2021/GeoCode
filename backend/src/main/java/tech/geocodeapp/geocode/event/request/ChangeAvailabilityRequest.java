@@ -29,6 +29,13 @@ public class ChangeAvailabilityRequest {
     private Boolean availability;
 
     /**
+     * Constructor
+     */
+    public ChangeAvailabilityRequest() {
+
+    }
+
+    /**
      * Overloaded Constructor
      *
      * @param eventID the id of the Event to updated
