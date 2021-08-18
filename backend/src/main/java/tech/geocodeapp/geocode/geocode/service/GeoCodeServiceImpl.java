@@ -180,7 +180,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                     } else {
 
                         /* Create the request with a mission type */
-                        collectableRequest = new CreateCollectableRequest( typeList.getId(), true );
+                        collectableRequest = new CreateCollectableRequest( typeList.getId(), request.getLocation() );
                     }
                 } else {
 
@@ -206,6 +206,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* Building a collectable from a collectable response */
             var temp = new Collectable();
+
+            if(collectableResponse.getCollectable() == null){
+                System.out.println("collectableResponse.getCollectable() == null");
+                System.out.println("message = "+collectableResponse.getMessage());
+            }
             temp.setId( collectableResponse.getCollectable().getId() );
             //CollectableTypeComponent type = collectableResponse.getCollectable().getType();
 
