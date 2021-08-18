@@ -226,4 +226,17 @@ public class LeaderboardServiceImplIT {
         assertThatThrownBy(() -> leaderboardService.updatePoint(request))
                 .isInstanceOf(NullRequestParameterException.class);
     }
+
+    @Test
+    public void updatePointTestInvalidPointId() {
+        UpdatePointRequest request  = new UpdatePointRequest(UUID.randomUUID(), 1, null, null);
+        try {
+            PointResponse response = leaderboardService.updatePoint(request);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("No point with the provided Id exists", response.getMessage());
+            Assertions.assertNull(response.getPoint());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
