@@ -9,10 +9,7 @@ import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
-import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
-import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
-import tech.geocodeapp.geocode.leaderboard.request.DeletePointRequest;
-import tech.geocodeapp.geocode.leaderboard.request.UpdatePointRequest;
+import tech.geocodeapp.geocode.leaderboard.request.*;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.DeletePointResponse;
 import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
@@ -29,7 +26,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
-@TestMethodOrder( MethodOrderer.OrderAnnotation.class )
 public class LeaderboardServiceImplIT {
     @Autowired
     private UserService userService;
@@ -483,5 +479,12 @@ public class LeaderboardServiceImplIT {
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void getEventLeaderboardTestNullRequestParameters() {
+        GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(null, null, null);
+        assertThatThrownBy(() -> leaderboardService.getEventLeaderboard(request))
+                .isInstanceOf(NullRequestParameterException.class);
     }
 }
