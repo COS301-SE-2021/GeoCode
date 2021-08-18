@@ -116,6 +116,7 @@ class GeoCodeServiceImplTest {
         /* Ensure a collectable can be made */
         CollectableTypeMockRepository typeMockRepo = new CollectableTypeMockRepository();
 
+        /* Create a collectable type */
         CollectableType type = new CollectableType();
         type.setId( UUID.fromString( "f44306a6-accb-4e7f-9eb6-e9f6a90e17c0" ) );
         type.setName( "name" );
@@ -124,6 +125,8 @@ class GeoCodeServiceImplTest {
         type.setSet( new CollectableSet() );
 
         typeMockRepo.save( type );
+
+        /* Create a collectable type */
         CollectableType type2 = new CollectableType();
         type2.setId( UUID.fromString( "f44306a6-acce-4e7f-9eb6-e9f6a90e17c0" ) );
         type2.setName( "name" );
