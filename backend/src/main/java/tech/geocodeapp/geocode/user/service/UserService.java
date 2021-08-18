@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.user.service;
 
-import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.user.model.User;
@@ -64,6 +63,9 @@ public interface UserService {
 
     //U1.16 swapCollectable
     SwapCollectableResponse swapCollectable(SwapCollectableRequest request) throws NullRequestParameterException;
+
+    //U1.17 addToMyMissions
+    void addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException;
 
     /**
      * Post construct the GeoCode service, this avoids a circular dependency

@@ -10,7 +10,7 @@ import {ModalController, NavController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
-import {QRGenerator} from "../../../services/QRGenerator";
+import {QRGenerator} from '../../../services/QRGenerator';
 
 @Component({
   selector: 'app-events-create',
@@ -85,7 +85,6 @@ export class EventsCreatePage implements AfterViewInit  {
     await modal.present();
     const { data } = await modal.onDidDismiss();
     if (data != null) {
-      console.log(data);
       this.geocodes.push(data);
       this.geocodeApi.createGeoCode(data)
         .subscribe(async (response: CreateGeoCodeResponse) =>{
@@ -95,11 +94,9 @@ export class EventsCreatePage implements AfterViewInit  {
             });
             await toast.present();
             this.request.geoCodesToFind.push(response.geoCodeID);
-            console.log(response);
             //create QR code image
           if(response.success){
-            console.log('success');
-            //this.qrGenerator.generate(response.qrCode);
+            this.qrGenerator.generate(response.qrCode);
           }
         });
     }
@@ -134,21 +131,17 @@ export class EventsCreatePage implements AfterViewInit  {
   }
 
   orderBy($event){
-    console.log($event.detail.value);
     this.request.orderBy=$event.detail.value;
   }
 
   startDate($event){
     const date = new Date($event.detail.value);
-    //this.request.beginDate=date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
-        this.request.beginDate=date.toISOString().split('T')[0];
-    console.log(this.request.beginDate);
+    this.request.beginDate=date.toISOString().split('T')[0];
     this.minEndDate=$event.detail.value;
   }
 
   endDate($event){
     const date = new Date($event.detail.value);
-    //this.request.endDate=date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
     this.request.endDate=date.toISOString().split('T')[0];
   }
 
@@ -165,9 +158,8 @@ export class EventsCreatePage implements AfterViewInit  {
       this.request.properties.timeLimit=this.timeLimit +'';
     }
     console.log(this.request);
-    // this.eventApi.createEvent(this.request).subscribe((response: CreateEventResponse) =>{
-    //   console.log(response);
-    // });
+    this.eventApi.createEvent(this.request).subscribe((response: CreateEventResponse) =>{
+    });
 
   }
 
@@ -180,14 +172,11 @@ export class EventsCreatePage implements AfterViewInit  {
   }
 
   setTime($event){
-    console.log($event.detail.value);
     const time = new Date($event.detail.value);
     const day = time.getDate();
     const hour = time.getHours();
     const min = time.getMinutes();
-
     this.timeLimit = day*24*60+hour*60+min;
-    console.log(this.timeLimit);
   }
 
 }

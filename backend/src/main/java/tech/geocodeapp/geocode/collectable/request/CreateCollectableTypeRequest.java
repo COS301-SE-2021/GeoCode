@@ -33,6 +33,18 @@ public class CreateCollectableTypeRequest   {
   @JsonProperty("properties")
   private HashMap<String,String> properties = new HashMap<>();
 
+  public CreateCollectableTypeRequest(){
+
+  }
+
+  public CreateCollectableTypeRequest(String name, String image, Rarity rarity, UUID setId, HashMap<String, String> properties) {
+    this.name = name;
+    this.image = image;
+    this.rarity = rarity;
+    this.setId = setId;
+    this.properties = properties;
+  }
+
   public CreateCollectableTypeRequest name(String name) {
     this.name = name;
     return this;

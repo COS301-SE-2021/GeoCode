@@ -31,4 +31,23 @@ export class UserCollectionsPage implements OnInit {
   ngOnInit() {
   }
 
+  foundID(id){
+    if(this.found.includes(id)){
+      return true;
+    }
+    return false;
+  }
+
+  foundSet(types){
+
+    for(let i =0; i<types.length;i++){
+      if(this.found.includes(types[i].id)){
+        return true;
+      }
+
+    }
+    return false;
+
+  }
+
 }

@@ -16,6 +16,8 @@ public class GetUserByIdRequest   {
     @JsonProperty("userID")
     private UUID userID = null;
 
+    public GetUserByIdRequest() {}
+
     public GetUserByIdRequest(UUID userID){
         this.userID = userID;
     }

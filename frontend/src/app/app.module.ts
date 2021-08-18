@@ -20,6 +20,7 @@ const initializeKeycloak = (keycloak: KeycloakService) => () =>
       clientId: environment.keycloakClientID,
     },
     initOptions: {
+      adapter: 'default', // use 'capacitor' for app
       onLoad: 'check-sso',
       silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
     },

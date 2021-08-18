@@ -13,6 +13,7 @@ services:
       DB_USER: '${DATABASE_USERNAME}'
       DB_PASSWORD: '${DATABASE_PASSWORD}'
     volumes:
+      - keycloak-config.json:/opt/jboss/keycloak/imports/geocode.json
       - ../.certificates/fullchain.pem:/etc/x509/https/tls.crt
       - ../.certificates/privkey.pem:/etc/x509/https/tls.key
   spring:
@@ -27,7 +28,6 @@ services:
       KEYCLOAK_REALM: '${KEYCLOAK_REALM}'
       KEYCLOAK_AUTH_SERVER_URL: '${KEYCLOAK_AUTH_SERVER_URL}'
       KEYCLOAK_CLIENT_ID: '${KEYCLOAK_CLIENT_ID}'
-      KEYCLOAK_CLIENT_SECRET: '${KEYCLOAK_CLIENT_SECRET}'
       WEB_REFERRER: '${WEB_REFERRER}'
       KEY_STORE_TYPE: '${KEY_STORE_TYPE}'
       KEY_STORE: '${KEY_STORE}'

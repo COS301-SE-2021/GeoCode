@@ -9,7 +9,7 @@ describe('TrackableLocationsComponent', () => {
   let component: TrackableLocationsComponent;
   let fixture: ComponentFixture<TrackableLocationsComponent>;
   const trackable: Collectable = {
-    pastLocations: ['-25.755918848126488 28.233110280499492'],
+    pastLocations: [{latitude: -25.755918848126488, longitude: 28.233110280499492}],
     type: null,
     id: null,
     mission:null
