@@ -11,6 +11,7 @@ import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
+import tech.geocodeapp.geocode.leaderboard.request.DeletePointRequest;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.DeletePointResponse;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
@@ -166,5 +167,12 @@ public class LeaderboardServiceImplIT {
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void deletePointTestNullPointId() {
+        DeletePointRequest request = new DeletePointRequest(null);
+        assertThatThrownBy(() -> leaderboardService.deletePoint(request))
+                .isInstanceOf(NullRequestParameterException.class);
     }
 }
