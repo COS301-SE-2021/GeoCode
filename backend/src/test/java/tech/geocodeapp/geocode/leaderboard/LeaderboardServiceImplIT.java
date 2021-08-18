@@ -7,6 +7,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class LeaderboardServiceImplIT {
     @Autowired
     private LeaderboardService leaderboardService;
-
+    private final String menloParkChristmas = "Christmas 2021 market";
 
     @Test
     public void createLeaderboardTestNullRequest(){
@@ -39,5 +40,24 @@ public class LeaderboardServiceImplIT {
 
         assertThatThrownBy(() -> leaderboardService.createLeaderboard(request))
                 .isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
+    public void createLeaderboardTestNew(){
+        CreateLeaderboardRequest request = new CreateLeaderboardRequest(menloParkChristmas);
+
+        try {
+            CreateLeaderboardResponse response = leaderboardService.createLeaderboard(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The Leaderboard was successfully created", response.getMessage());
+
+            Leaderboard christmasLeaderboard = response.getLeaderboard();
+
+            Assertions.assertNotNull(christmasLeaderboard);
+            Assertions.assertEquals(menloParkChristmas, christmasLeaderboard.getName());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
     }
 }
