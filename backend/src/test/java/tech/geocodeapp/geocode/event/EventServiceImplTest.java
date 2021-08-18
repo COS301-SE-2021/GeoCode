@@ -23,10 +23,9 @@ import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 
 import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
 import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
-import tech.geocodeapp.geocode.leaderboard.UserMockRepository;
 import tech.geocodeapp.geocode.leaderboard.UserMockService;
 import tech.geocodeapp.geocode.leaderboard.service.*;
-
+import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.service.UserService;
 
@@ -34,7 +33,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * This is the unit testing class for the Event subsystem
@@ -110,7 +108,7 @@ class EventServiceImplTest {
     /**
      * This is used to have a static known UUID for Event objects
      */
-    UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
+    java.util.UUID eventID = java.util.UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
 
     /**
      * Create the EventServiceImpl with the relevant repositories.

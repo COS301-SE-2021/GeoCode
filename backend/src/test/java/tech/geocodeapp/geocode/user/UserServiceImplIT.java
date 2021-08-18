@@ -10,13 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
-import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
-import tech.geocodeapp.geocode.collectable.request.CreateCollectableSetRequest;
-import tech.geocodeapp.geocode.collectable.request.CreateCollectableTypeRequest;
-import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
+import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableSetResponse;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableTypeResponse;
+import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
@@ -105,6 +103,11 @@ public class UserServiceImplIT {
 
     private UUID trackableSetId;
 
+    private UUID collectableID1;
+    private UUID collectableID2;
+    private UUID collectableTypeID1;
+    private UUID collectableTypeID2;
+
     User registerNewUser(UUID userID, String username){
         RegisterNewUserRequest request = new RegisterNewUserRequest(userID, username);
         RegisterNewUserResponse response;
@@ -171,14 +174,19 @@ public class UserServiceImplIT {
     }
 
     @BeforeEach
-    void setup() throws InvalidRequestException {
+    void setup() throws InvalidRequestException, NullRequestParameterException {
+        //mock the SecurityContext
+        MockSecurity.setup();
+        setUser(validUserId);
+
         //create the CollectableSet to hold the "User Trackable" type
         trackableSetId = createCollectableSet("User Trackable", "Contains the standard User Trackable");
 
         //create the Trackable CollectableType
         HashMap<String, String> trackableProperties = new HashMap<>();
         trackableProperties.put("missionType", String.valueOf(MissionType.RANDOM));
-        createCollectableType("User Trackable", "img_trackable", Rarity.COMMON, trackableSetId, trackableProperties);
+        UUID tempID = createCollectableType("User Trackable", "img_trackable", Rarity.COMMON, trackableSetId, trackableProperties);
+        System.out.println("tempID:"+tempID);
 
         //create invalid User object
         invalidUser = new User(invalidUserId);
@@ -200,8 +208,27 @@ public class UserServiceImplIT {
         var thirdCollectables = getCollectables(thirdGeoCodeID);
 
         //update missions for the User by swapping Collectables out of GeoCodes
-        swapCollectables(firstGeoCodeID, firstCollectables.get(0));
-        swapCollectables(secondGeoCodeID, secondCollectables.get(3));
+        //apply to the noPointsUser
+        setUser(validUserId);
+
+        collectableID1 = firstCollectables.get(0);
+        collectableTypeID1 = getCollectableTypeID(collectableID1);
+        swapCollectables(firstGeoCodeID, collectableID1);
+        
+        collectableID2 = secondCollectables.get(3);
+        collectableTypeID2 = getCollectableTypeID(collectableID2);
+        swapCollectables(secondGeoCodeID, collectableID2);
+
+        //here
+        System.out.println("firstGeoCodeID:"+firstGeoCodeID);
+        System.out.println("secondGeoCodeID:"+secondGeoCodeID);
+    }
+
+    private UUID getCollectableTypeID(UUID collectableID) throws NullRequestParameterException {
+        GetCollectableByIDRequest getCollectableByIDRequest = new GetCollectableByIDRequest(collectableID);
+        GetCollectableByIDResponse getCollectableByIDResponse = collectableService.getCollectableByID(getCollectableByIDRequest);
+
+        return getCollectableByIDResponse.getCollectable().getType().getId();
     }
 
     private void swapCollectables(UUID geoCodeID, UUID collectableID) throws InvalidRequestException {
@@ -210,6 +237,10 @@ public class UserServiceImplIT {
 
     private List<UUID> getCollectables(UUID geoCodeID) throws InvalidRequestException {
         return geoCodeService.getCollectables(new GetCollectablesRequest(geoCodeID)).getCollectables();
+    }
+
+    private void setUser(UUID userID){
+        MockSecurity.setCurrentUserID(userID);
     }
 
     @Test
@@ -238,6 +269,8 @@ public class UserServiceImplIT {
             Create a request object
             and assign values to it
             */
+            setUser(validUserId);
+
             GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
             request.setUserID(validUserId);
 
@@ -276,6 +309,8 @@ public class UserServiceImplIT {
             Create a request object
             and assign values to it
             */
+            setUser(validUserId);
+
             GetUserTrackableRequest request = new GetUserTrackableRequest();
             request.setUserID(validUserId);
 
@@ -285,7 +320,7 @@ public class UserServiceImplIT {
 
             Collectable trackableObject = response.getTrackable();
             Assertions.assertNotNull(trackableObject);
-            Assertions.assertEquals(UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3"), trackableObject.getType().getId());
+            Assertions.assertEquals(trackableTypeUUID, trackableObject.getType().getId());
         }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
@@ -310,12 +345,15 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getFoundCollectableTypesTestValidUser() {
         try{
             /*
              Create a request object
              and assign values to it
            */
+            setUser(noPointsUserId);
+
             GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest(noPointsUserId);
 
             GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
@@ -324,13 +362,16 @@ public class UserServiceImplIT {
 
             List<UUID> foundCollectableTypeIDs = response.getCollectableTypeIDs();
             Assertions.assertNotNull(foundCollectableTypeIDs);
-            Assertions.assertEquals(2, foundCollectableTypeIDs.size());
+
+            Assertions.assertTrue(foundCollectableTypeIDs.contains(collectableTypeID1));
+            Assertions.assertTrue(foundCollectableTypeIDs.contains(collectableTypeID2));
         }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
     }
 
     @Test
+    @Transactional
     void getFoundGeoCodesTestInvalidUser() {
         try{
             /*
@@ -349,12 +390,15 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getFoundGeoCodesTestValidUser() {
         try{
             /*
              Create a request object
              and assign values to it
            */
+            setUser(validUserId);
+
             GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest(validUserId);
 
             GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
@@ -363,6 +407,10 @@ public class UserServiceImplIT {
 
             List<UUID> foundGeoCodeIDs = response.getGeocodeIDs();
             Assertions.assertNotNull(foundGeoCodeIDs);
+
+//            for(var id: foundGeoCodeIDs){
+//                System.out.println("id = "+id);
+//            }
 
             //HashSet will cause order to not necessarily be order added in
             Assertions.assertTrue(foundGeoCodeIDs.contains(firstGeoCodeID));
@@ -373,6 +421,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getOwnedGeoCodesTestInvalidUser() {
         try{
             /*
@@ -392,12 +441,15 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getOwnedGeoCodesTestValidUser() {
         try{
             /*
              Create a request object
              and assign values to it
            */
+            setUser(validUserId);
+
             GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
             request.setUserID(validUserId);
 
@@ -415,6 +467,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void updateLocationTestInvalidUser() {
         try{
             /*
@@ -435,12 +488,15 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void updateLocationTestValidUser() {
         try{
             /*
              Create a request object
              and assign values to it
            */
+            setUser(validUserId);
+
             UpdateLocationRequest request = new UpdateLocationRequest();
             request.setUserID(validUserId);
 
@@ -462,6 +518,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getMyLeaderboardsTestInvalidUser(){
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
         request.setUserID(invalidUserId);
@@ -479,6 +536,8 @@ public class UserServiceImplIT {
 
     @Test
     void getMyLeaderboardsTestUserWithNoPoints(){
+        setUser(noPointsUserId);
+
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
         request.setUserID(noPointsUserId);
 
@@ -503,6 +562,8 @@ public class UserServiceImplIT {
 
     @Test
     void getMyLeaderboardsTestUserWithPoints1(){
+        setUser(userWithPoints1);
+
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
         request.setUserID(userWithPoints1);
 
@@ -539,6 +600,8 @@ public class UserServiceImplIT {
 
     @Test
     void getMyLeaderboardsTestUserWithPoints2(){
+        setUser(userWithPoints2);
+
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
         request.setUserID(userWithPoints2);
 
@@ -576,6 +639,8 @@ public class UserServiceImplIT {
     @Test
     public void AddToOwnedGeoCodesTestNotAddDuplicate(){
         try {
+            setUser(noPointsUserId);
+
             GeoCode noPointsFirstOwnedGeoCode = new GeoCode();
             noPointsFirstOwnedGeoCode.setId(noPointsFirstOwnedGeoCodeID);
 
@@ -601,6 +666,8 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void AddToOwnedGeoCodesTestAddNew(){
+        setUser(noPointsUserId);
+
         try {
             //check number of owned GeoCodes before adding
             GetOwnedGeoCodesRequest getOwnedGeoCodesRequest = new GetOwnedGeoCodesRequest(noPointsUserId);
@@ -636,6 +703,8 @@ public class UserServiceImplIT {
 
     @Test
     public void AddToFoundGeoCodesTestNotAddDuplicate(){
+        setUser(noPointsUserId);
+
         try {
             GeoCode noPointsFirstFoundGeoCode = new GeoCode();
             noPointsFirstFoundGeoCode.setId(noPointsFirstFoundGeoCodeID);
@@ -662,6 +731,8 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void AddToFoundGeoCodesTestAddNew(){
+        setUser(noPointsUserId);
+
         try {
             //check number of found GeoCodes before adding
             GetFoundGeoCodesRequest getFoundGeoCodesRequest = new GetFoundGeoCodesRequest(noPointsUserId);
@@ -697,11 +768,13 @@ public class UserServiceImplIT {
 
     @Test
     public void AddToFoundCollectableTypesTestNotAddDuplicate(){
+        setUser(noPointsUserId);
+
         try {
             CollectableType testCollectableType1 = new CollectableType();
             testCollectableType1.setId(testCollectableType1ID);
 
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUser, testCollectableType1);
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(noPointsUser, testCollectableType1);
             AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -723,6 +796,8 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void AddToFoundCollectableTypesTestAddNew(){
+        setUser(noPointsUserId);
+
         try{
             //check number of found CollectableTypes before adding
             GetFoundCollectableTypesRequest getFoundCollectableTypesRequest = new GetFoundCollectableTypesRequest(noPointsUserId);
@@ -771,6 +846,8 @@ public class UserServiceImplIT {
 
     @Test
     public void getUserByIdTestValidUserId(){
+        setUser(validUserId);
+
         try {
             GetUserByIdRequest request = new GetUserByIdRequest(validUserId);
             GetUserByIdResponse response = userService.getUserById(request);
@@ -788,6 +865,8 @@ public class UserServiceImplIT {
 
     @Test
     public void registerNewUserTestExistingUserId(){
+        setUser(validUserId);
+
         try {
             RegisterNewUserRequest request = new RegisterNewUserRequest(validUserId, "john");
             RegisterNewUserResponse response = userService.registerNewUser(request);
@@ -848,6 +927,8 @@ public class UserServiceImplIT {
 
     @Test
     public void swapCollectableTestCollectableInvalidGeoCodeID(){
+        setUser(validUserId);
+
         try {
             Collectable collectableInFirstGeoCode = new Collectable();
             collectableInFirstGeoCode.setId(collectableInFirstGeoCodeID);
@@ -870,6 +951,8 @@ public class UserServiceImplIT {
 
     @Test
     public void swapCollectableTestCollectableInvalidCollectableID(){
+        setUser(validUserId);
+
         try {
             Collectable invalidCollectable = new Collectable();
             invalidCollectable.setId(invalidCollectableID);
@@ -893,6 +976,8 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void swapCollectableTestCollectableIsSwapped(){
+        setUser(validUserId);
+
         try {
             Collectable collectableInFirstGeoCode = new Collectable();
             collectableInFirstGeoCode.setId(collectableInFirstGeoCodeID);
@@ -944,6 +1029,8 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     void getMyMissionsTestValidUser(){
+        setUser(validUserId);
+
         GetMyMissionsRequest request = new GetMyMissionsRequest(validUserId);
 
         try {
