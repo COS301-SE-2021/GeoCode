@@ -341,6 +341,11 @@ public class UserServiceImpl implements UserService {
 
         //add the GeoCodeID to the User's list of owned GeoCodes
         //userRepo.addFoundGeoCode(user.getId(), geoCode.getId());
+
+        System.out.println("adding found geocode: "+geoCode.getId());
+        System.out.println("userID:"+user.getId());
+        System.out.println("");
+
         user.addFoundGeocodesItem(geoCode);
         userRepo.save(user);
 

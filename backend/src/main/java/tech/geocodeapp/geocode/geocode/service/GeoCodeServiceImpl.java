@@ -277,6 +277,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
                 /* Set the attributes as the creation was successful */
                 response = new CreateGeoCodeResponse( true, id, qr.toString() );
+
+                /* add to the User's ownedGeoCodes */
             } else {
 
                 /* An error occurred since the ID's are not identical */
