@@ -7,8 +7,11 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @TestMethodOrder( MethodOrderer.OrderAnnotation.class )
@@ -30,4 +33,11 @@ public class LeaderboardServiceImplIT {
         }
     }
 
+    @Test
+    public void createLeaderboardTestNullName(){
+        CreateLeaderboardRequest request = new CreateLeaderboardRequest(null);
+
+        assertThatThrownBy(() -> leaderboardService.createLeaderboard(request))
+                .isInstanceOf(NullRequestParameterException.class);
+    }
 }
