@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
-import {Event, EventLeaderboardDetails, LeaderboardService, Point} from '../../../services/geocode-api';
+import {
+  Event,
+  EventLeaderboardDetails,
+  GetEventLeaderboardRequest, GetEventLeaderboardResponse,
+  LeaderboardService,
+  Point
+} from '../../../services/geocode-api';
 
 @Component({
   selector: 'app-event-leaderboard',
@@ -8,60 +14,42 @@ import {Event, EventLeaderboardDetails, LeaderboardService, Point} from '../../.
   styleUrls: ['./event-leaderboard.page.scss'],
 })
 export class EventLeaderboardPage implements OnInit {
-
-  points2 = [
-    {username:'person',pos:1,points:100},
-    {username:'a',pos:1,points:100},
-    {username:'a',pos:1,points:100},
-    {username:'a',pos:1,points:100},
-    {username:'a',pos:1,points:100},
-    {username:'a',pos:1,points:100},
-    {username:'a',pos:1,points:100},
-    {username:'a',pos:1,points:100},
-    {username:'a',pos:1,points:100},
-    {username:'a',pos:1,points:100}
-  ];
-
   event: Event = null;
-  users: EventLeaderboardDetails[] = [
-    {username: 'danielle', points: 123, rank: 1},
-    {username: 'samuel', points: 99, rank: 2},
-    {username: 'joshua', points: 87, rank: 3},
-    {username: 'mandisa', points: 79, rank: 4},
-    {username: 'ben', points: 77, rank: 5},
-    {username: 'samkele', points: 65, rank: 6},
-    {username: 'willem', points: 62, rank: 7},
-    {username: 'matthew', points: 59, rank: 8}
-  ];
-  leaderboardIndex = 0;
+  users: EventLeaderboardDetails[] = [];
+  leaderboardIndex = 1;
   numToFetch = 20;
-
+  leaderBoardName='';
   constructor(
     router: Router,
     private leaderboardService: LeaderboardService
   ) {
     const state = router.getCurrentNavigation().extras.state;
+    console.log(state);
     if (state) {
       this.event = state.event;
-      console.log(this.event);
+      this.leaderBoardName = this.event.leaderboards[0].name;
     }
-    this.loadLeaderboard().then().catch();
+    this.loadLeaderboard();
   }
 
   async loadLeaderboard() {
     if (this.event.leaderboards.length > 0) {
-      const data = await this.leaderboardService.getEventLeaderboard({
-        leaderboardID: this.event.leaderboards[0].id,
-        count: this.numToFetch,
-        starting: this.leaderboardIndex
-      }).toPromise();
-      console.log(data);
-      for (const point of data.leaderboard) {
-        this.users.push(point);
-      }
-      this.leaderboardIndex += data.leaderboard.length;
-      return (data.leaderboard.length > 0);
+      const req: GetEventLeaderboardRequest ={
+        leaderboardID:this.event.leaderboards[0].id,
+        count:this.numToFetch,
+        starting:this.leaderboardIndex
+      };
+      this.leaderboardService.getEventLeaderboard(req).subscribe((response: GetEventLeaderboardResponse) =>{
+        for (const point of response.leaderboard) {
+          this.users.push(point);
+        }
+        this.leaderboardIndex +=response.leaderboard.length;
+        return (response.leaderboard.length > 0);
+      },error => {
+        console.error(error);
+      });
     }
+    return false;
   }
 
   ngOnInit() {
@@ -80,7 +68,8 @@ export class EventLeaderboardPage implements OnInit {
   }
 
   async loadData(event) {
-    const moreLoaded = await this.loadFakeLeaderboard();
+    this.leaderboardIndex=this.leaderboardIndex+this.numToFetch;
+    const moreLoaded = await this.loadLeaderboard();
     if (!moreLoaded) {
       event.target.disabled = true;
     }

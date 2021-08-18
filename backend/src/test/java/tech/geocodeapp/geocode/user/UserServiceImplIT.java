@@ -39,7 +39,7 @@ public class UserServiceImplIT {
     private final UUID firstGeoCodeID = UUID.fromString("537689d1-a0d8-4740-bec6-6a40bb69748e");
     private final UUID secondGeoCodeID = UUID.fromString("5d709c49-326b-470a-8d9d-e7f7bf77ef6e");
     private final UUID thirdGeoCodeID = UUID.fromString("92e3e6d5-5457-48f7-adb1-7c2f67ee836b");
-    private final UUID trackableUUID = UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3");
+    private final UUID trackableUUID = new UUID(0, 0);
 
     private final String firstEvent = "Port Elizabeth Beach Hop - Default";
     private final String secondEvent = "Port Elizabeth High School Open Days - Default";

@@ -92,7 +92,7 @@ public class CollectableTypeMockRepository implements CollectableTypeRepository 
 
     @Override
     public boolean existsById(UUID uuid) {
-        return false;
+        return map.containsKey(uuid);
     }
 
     @Override
