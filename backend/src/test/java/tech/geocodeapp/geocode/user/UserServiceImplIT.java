@@ -45,13 +45,13 @@ public class UserServiceImplIT {
     @Autowired
     GeoCodeServiceImpl geoCodeService;
 
-    private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
-    private final UUID validUserId = UUID.fromString("f479228d-8a4a-4b90-ba86-abccadec5085");
-    private final UUID newUserId = UUID.fromString("f0fa8ba1-081d-4896-b23e-430f8f064a9a");
+    private UUID invalidUserId;
+    private UUID validUserId;
+    private UUID newUserId;
 
-    private final UUID noPointsUserId = UUID.fromString("bed08b80-08ce-46c8-9948-af43b5d989d8");
-    private UUID userWithPoints1 = UUID.fromString("70c4512e-2969-42a9-a03a-0d8480079ddf");
-    private UUID userWithPoints2 = UUID.fromString("458198a1-a26f-4ff0-8710-b340d1f77300");
+    private UUID noPointsUserId;
+    private UUID userWithPoints1ID;
+    private UUID userWithPoints2ID;
 
     private User validUser;
     private User invalidUser;
@@ -183,6 +183,11 @@ public class UserServiceImplIT {
     @BeforeEach
     @Transactional
     void setup() throws InvalidRequestException, NullRequestParameterException {
+        invalidUserId = UUID.randomUUID();
+        validUserId = UUID.randomUUID();
+        newUserId = UUID.randomUUID();
+        userWithPoints = UUID.randomUUID();
+
         //mock the SecurityContext
         MockSecurity.setup();
         setUser(validUserId);
@@ -191,10 +196,10 @@ public class UserServiceImplIT {
         trackableSetId = createCollectableSet("User Trackable", "Contains the standard User Trackable");
 
         //create the Trackable CollectableType
-        HashMap<String, String> trackableProperties = new HashMap<>();
-        trackableProperties.put("missionType", String.valueOf(MissionType.RANDOM));
-        UUID tempID = createCollectableType("User Trackable", "img_trackable", Rarity.COMMON, trackableSetId, trackableProperties);
-        System.out.println("tempID:"+tempID);
+//        HashMap<String, String> trackableProperties = new HashMap<>();
+//        trackableProperties.put("missionType", String.valueOf(MissionType.RANDOM));
+//        UUID tempID = createCollectableType("User Trackable", "img_trackable", Rarity.COMMON, trackableSetId, trackableProperties);
+//        System.out.println("tempID:"+tempID);
 
         //create invalid User object
         invalidUser = new User(invalidUserId);
@@ -202,8 +207,8 @@ public class UserServiceImplIT {
         //register the valid Users
         validUser = registerNewUser(validUserId, "validUser");
         noPointsUser = registerNewUser(noPointsUserId, "noPointsUserId");
-        userWithPoints1 = registerNewUser(userWithPoints1, "userWithPoints1").getId();
-        userWithPoints2 = registerNewUser(userWithPoints2, "userWithPoints2").getId();
+        userWithPoints1ID = registerNewUser(userWithPoints1ID, "userWithPoints1");
+        userWithPoints2ID = registerNewUser(userWithPoints2ID, "userWithPoints2");
 
         //create GeoCodes
         List<String> hints = new ArrayList<>();
@@ -234,11 +239,11 @@ public class UserServiceImplIT {
         System.out.println("secondGeoCodeID:"+secondGeoCodeID);
 
         //give userWithPoints1 and userWithPoints2 points
-        setUser(userWithPoints1);
+        setUser(userWithPoints1ID);
         swapCollectables(firstGeoCodeID, firstCollectables.get(1));
         swapCollectables(secondGeoCodeID, secondCollectables.get(0));
 
-        setUser(userWithPoints2);
+        //setUser(userWithPoints2);
 
         setUser(noPointsUserId);
         fourthGeoCodeID = geoCodeService.createGeoCode(new CreateGeoCodeRequest("fourthGeoCode", new GeoPoint(10.0, 10.0), hints, Difficulty.HARD, true)).getGeoCodeID();
@@ -587,10 +592,10 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     void getMyLeaderboardsTestUserWithPoints1(){
-        setUser(userWithPoints1);
+        setUser(userWithPoints1ID);
 
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
-        request.setUserID(userWithPoints1);
+        request.setUserID(userWithPoints1ID);
 
         try {
             GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
@@ -627,10 +632,10 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     void getMyLeaderboardsTestUserWithPoints2(){
-        setUser(userWithPoints2);
+        setUser(userWithPoints2ID);
 
         GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
-        request.setUserID(userWithPoints2);
+        request.setUserID(userWithPoints2ID);
 
         try {
             GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
@@ -669,10 +674,10 @@ public class UserServiceImplIT {
         try {
             setUser(noPointsUserId);
 
-            GeoCode noPointsFirstOwnedGeoCode = new GeoCode();
-            noPointsFirstOwnedGeoCode.setId(noPointsFirstOwnedGeoCodeID);
+            GeoCode fourthGeoCode = new GeoCode();
+            fourthGeoCode.setId(fourthGeoCodeID);
 
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(noPointsUser, noPointsFirstOwnedGeoCode);
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(noPointsUser, fourthGeoCode);
             AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());

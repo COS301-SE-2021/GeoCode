@@ -91,9 +91,9 @@ public class CollectableServiceImpl implements CollectableService {
             CollectableType savedCollectableType = collectableTypeRepo.save(collectableType);
 
             boolean hasMissionType = request.getProperties().containsKey("missionType");
-            System.out.println("hasMissionType:"+ hasMissionType);
-            System.out.println("request.getName():"+request.getName());
-            System.out.println(request.getProperties().get("missionType"));
+            //system.out.println("hasMissionType:"+ hasMissionType);
+            //system.out.println("request.getName():"+request.getName());
+            //system.out.println(request.getProperties().get("missionType"));
 
             //create instance of CollectableTypeManager to handle conversion
             CollectableTypeManager manager = new CollectableTypeManager();
@@ -120,14 +120,14 @@ public class CollectableServiceImpl implements CollectableService {
         }
 
         if(request.getLocation() != null){
-            System.out.println("location:"+request.getLocation().getLatitude()+", "+request.getLocation().getLongitude());
-            System.out.println();
+            //system.out.println("location:"+request.getLocation().getLatitude()+", "+request.getLocation().getLongitude());
+            //system.out.println();
         }
 
         UUID typeID = request.getCollectableTypeId();
         Optional<CollectableType> collectableTypeOptional = collectableTypeRepo.findById(typeID);
 
-        System.out.println("CollectableTypeID:"+request.getCollectableTypeId());
+        //system.out.println("CollectableTypeID:"+request.getCollectableTypeId());
 
         if(collectableTypeOptional.isPresent()){
             Collectable collectable = new Collectable(collectableTypeOptional.get());
@@ -135,7 +135,7 @@ public class CollectableServiceImpl implements CollectableService {
 
             Collectable savedCollectable = collectableRepo.save(collectable);
             if(request.isCreateMission()) {
-                System.out.println("type name:"+collectableTypeOptional.get().getName());
+                //system.out.println("type name:"+collectableTypeOptional.get().getName());
 
                 CreateMissionRequest createMissionRequest = new CreateMissionRequest(savedCollectable, request.getLocation());
                 try {
