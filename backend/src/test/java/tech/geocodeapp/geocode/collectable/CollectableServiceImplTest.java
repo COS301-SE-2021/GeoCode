@@ -29,8 +29,6 @@ public class CollectableServiceImplTest {
 
     @BeforeEach
     void setup() {
-        missionService = new MissionServiceImpl(new MissionMockRepository(), collectableService);
-
         collectableService = new CollectableServiceImpl(new CollectableMockRepository(), new CollectableSetMockRepository(), new CollectableTypeMockRepository(), missionService);
             collectableService.deleteCollectableSets();
             collectableService.deleteCollectables();

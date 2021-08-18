@@ -42,24 +42,13 @@ public class CollectableServiceImpl implements CollectableService {
     private final String invalidCollectableIdMessage = "Invalid Collectable ID";
     private String invalidCollectableTypeIdMessage = "Invalid CollectableType ID";
 
-    public CollectableServiceImpl(CollectableRepository collectableRepo, CollectableSetRepository collectableSetRepo, CollectableTypeRepository collectableTypeRepo, @Lazy MissionService missionService) {
+    public CollectableServiceImpl(CollectableRepository collectableRepo, CollectableSetRepository collectableSetRepo, CollectableTypeRepository collectableTypeRepo, MissionService missionService) {
         this.collectableRepo = collectableRepo;
         this.collectableSetRepo = collectableSetRepo;
         this.collectableTypeRepo = collectableTypeRepo;
         this.missionService = missionService;
 
         initialiseUserTrackables();
-    }
-
-    /**
-     * Once the Collectable service object has been created
-     * insert it into the User and Event subsystem
-     *
-     * This is to avoid circular dependencies as each subsystem requires one another
-     */
-    @PostConstruct
-    public void init() {
-        this.missionService.setCollectableService(this);
     }
 
     @Transactional
