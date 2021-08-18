@@ -14,6 +14,7 @@ import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.service.*;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.*;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.service.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.request.*;
@@ -92,7 +93,7 @@ class GeoCodeServiceImplTest {
     /**
      * This is used to have a static known UUID
      */
-    UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
+    java.util.UUID eventID = java.util.UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
 
     MissionService missionService;
 
@@ -114,7 +115,7 @@ class GeoCodeServiceImplTest {
         CollectableTypeMockRepository typeMockRepo = new CollectableTypeMockRepository();
 
             CollectableType type = new CollectableType();
-            type.setId( UUID.fromString( "f44306a6-accb-4e7f-9eb6-e9f6a90e17c0" ) );
+            type.setId( java.util.UUID.fromString( "f44306a6-accb-4e7f-9eb6-e9f6a90e17c0" ) );
             type.setName( "name" );
             type.setImage( "Image" );
             type.setRarity( Rarity.RARE );
@@ -122,7 +123,7 @@ class GeoCodeServiceImplTest {
 
             typeMockRepo.save( type );
             CollectableType type2 = new CollectableType();
-            type2.setId( UUID.fromString( "f44306a6-acce-4e7f-9eb6-e9f6a90e17c0" ) );
+            type2.setId( java.util.UUID.fromString( "f44306a6-acce-4e7f-9eb6-e9f6a90e17c0" ) );
             type2.setName( "name" );
             type2.setImage( "Image" );
             type2.setRarity( Rarity.RARE );
@@ -207,7 +208,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the following mock data */
             var geoCode = new GeoCode();
-                geoCode.setId( UUID.randomUUID() );
+                geoCode.setId( java.util.UUID.randomUUID() );
                 geoCode.setAvailable( true );
                 geoCode.setDescription( "The EASY GeoCode is stored at location " + x );
                 geoCode.setDifficulty( Difficulty.EASY );
@@ -225,7 +226,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the following mock data */
             var geoCode = new GeoCode();
-            geoCode.setId( UUID.randomUUID() );
+            geoCode.setId( java.util.UUID.randomUUID() );
             geoCode.setAvailable( true );
             geoCode.setDescription( "The HARD GeoCode is stored at location " + x );
             geoCode.setDifficulty( Difficulty.HARD );
@@ -243,7 +244,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the following mock data */
             var geoCode = new GeoCode();
-            geoCode.setId( UUID.randomUUID() );
+            geoCode.setId( java.util.UUID.randomUUID() );
             geoCode.setAvailable( true );
             geoCode.setDescription( "The INSANE GeoCode is stored at location " + x );
             geoCode.setDifficulty( Difficulty.INSANE );
@@ -280,7 +281,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the following mock data */
             var geoCode = new GeoCode();
-                geoCode.setId( UUID.randomUUID() );
+                geoCode.setId( java.util.UUID.randomUUID() );
                 geoCode.setAvailable( true );
                 geoCode.setDescription( "The EASY GeoCode is stored at location " + x );
                 geoCode.setDifficulty( Difficulty.EASY );
@@ -298,7 +299,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the following mock data */
             var geoCode = new GeoCode();
-            geoCode.setId( UUID.randomUUID() );
+            geoCode.setId( java.util.UUID.randomUUID() );
             geoCode.setAvailable( true );
             geoCode.setDescription( "The HARD GeoCode is stored at location " + x );
             geoCode.setDifficulty( Difficulty.HARD );
@@ -316,7 +317,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the following mock data */
             var geoCode = new GeoCode();
-            geoCode.setId( UUID.randomUUID() );
+            geoCode.setId( java.util.UUID.randomUUID() );
             geoCode.setAvailable( true );
             geoCode.setDescription( "The INSANE GeoCode is stored at location " + x );
             geoCode.setDifficulty( Difficulty.INSANE );
@@ -353,7 +354,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the following mock data */
             var geoCode = new GeoCode();
-            geoCode.setId( UUID.randomUUID() );
+            geoCode.setId( java.util.UUID.randomUUID() );
             geoCode.setAvailable( true );
             geoCode.setDescription( "The EASY GeoCode is stored at location " + x );
             geoCode.setDifficulty( Difficulty.EASY );
@@ -371,7 +372,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the following mock data */
             var geoCode = new GeoCode();
-            geoCode.setId( UUID.randomUUID() );
+            geoCode.setId( java.util.UUID.randomUUID() );
             geoCode.setAvailable( true );
             geoCode.setDescription( "The HARD GeoCode is stored at location " + x );
             geoCode.setDifficulty( Difficulty.HARD );
@@ -389,7 +390,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the following mock data */
             var geoCode = new GeoCode();
-            geoCode.setId( UUID.randomUUID() );
+            geoCode.setId( java.util.UUID.randomUUID() );
             geoCode.setAvailable( true );
             geoCode.setDescription( "The INSANE GeoCode is stored at location " + x );
             geoCode.setDifficulty( Difficulty.INSANE );
@@ -417,7 +418,7 @@ class GeoCodeServiceImplTest {
     @DisplayName( "Custom query repository handling - findGeoCodeWithQRCode" )
     void findGeoCodeWithQRCodeTest() {
 
-        var geoCodeID = UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
+        var geoCodeID = java.util.UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
 
 
         /* Create the GeoCode to locate */
@@ -441,7 +442,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the following mock data */
             geoCode = new GeoCode();
-            geoCode.setId( UUID.randomUUID() );
+            geoCode.setId( java.util.UUID.randomUUID() );
             geoCode.setAvailable( true );
             geoCode.setDescription( "The EASY GeoCode is stored at location " + x );
             geoCode.setDifficulty( Difficulty.EASY );
@@ -470,7 +471,7 @@ class GeoCodeServiceImplTest {
     @DisplayName( "Custom query repository handling - findGeoCodeAtLocation" )
     void findGeoCodeAtLocationTest() {
 
-        var geoCodeID = UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
+        var geoCodeID = java.util.UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
         var locate = new GeoPoint( 10.2587 , 40.336981 );
 
         /* Create the GeoCode to locate */
@@ -494,7 +495,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the following mock data */
             geoCode = new GeoCode();
-            geoCode.setId( UUID.randomUUID() );
+            geoCode.setId( java.util.UUID.randomUUID() );
             geoCode.setAvailable( true );
             geoCode.setDescription( "The EASY GeoCode is stored at location " + x );
             geoCode.setDifficulty( Difficulty.EASY );
@@ -524,7 +525,7 @@ class GeoCodeServiceImplTest {
     @DisplayName( "Custom query repository handling - findGeoCode" )
     void findGeoCodeWithoutEventIDTest() {
 
-        var geoCodeID = UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
+        var geoCodeID = java.util.UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
         var locate = new GeoPoint( 10.2587 , 40.336981 );
 
         /* Create the GeoCode to locate */
@@ -548,7 +549,7 @@ class GeoCodeServiceImplTest {
 
             /* Create the request with the following mock data */
             geoCode = new GeoCode();
-            geoCode.setId( UUID.randomUUID() );
+            geoCode.setId( java.util.UUID.randomUUID() );
             geoCode.setAvailable( true );
             geoCode.setDescription( "The EASY GeoCode is stored at location " + x );
             geoCode.setDifficulty( Difficulty.EASY );
@@ -716,7 +717,7 @@ class GeoCodeServiceImplTest {
             GetGeoCodesResponse response = geoCodeService.getAllGeoCodes();
 
             /* Get a geocode from the response */
-            List< GeoCode > geocodes = response.getGeocodes();
+            List<GeoCode> geocodes = response.getGeocodes();
 
             if ( geocodes.size() > 0 ) {
 
@@ -968,7 +969,7 @@ class GeoCodeServiceImplTest {
 
             populate( 1 );
 
-            List< GeoCode > temp = repo.findAll();
+            List<GeoCode> temp = repo.findAll();
 
             /* Create the request with the ID of the GeoCode we want */
             GetHintsRequest request = new GetHintsRequest();
@@ -1016,7 +1017,7 @@ class GeoCodeServiceImplTest {
          * and assign values to it
          * */
         SwapCollectablesRequest request = new SwapCollectablesRequest();
-        request.setTargetCollectableID( UUID.randomUUID() );
+        request.setTargetCollectableID( java.util.UUID.randomUUID() );
         request.setTargetGeoCodeID( null );
 
         /* Null parameter request check */
@@ -1094,7 +1095,7 @@ class GeoCodeServiceImplTest {
 
         /* Create a GeoCode */
         populate( 1 );
-        List< GeoCode > temp = repo.findAll();
+        List<GeoCode> temp = repo.findAll();
 
         try {
 
@@ -1164,7 +1165,7 @@ class GeoCodeServiceImplTest {
 
         /* Create a GeoCode */
         populate( 1 );
-        List< GeoCode > temp = repo.findAll();
+        List<GeoCode> temp = repo.findAll();
 
         try {
 
@@ -1234,7 +1235,7 @@ class GeoCodeServiceImplTest {
 
         /* Create a GeoCode */
         populate( 1 );
-        List< GeoCode > temp = repo.findAll();
+        List<GeoCode> temp = repo.findAll();
 
         try {
 
@@ -1304,7 +1305,7 @@ class GeoCodeServiceImplTest {
 
         /* Create a GeoCode */
         populate( 1 );
-        List< GeoCode > temp = repo.findAll();
+        List<GeoCode> temp = repo.findAll();
 
         try {
 

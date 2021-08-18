@@ -20,9 +20,9 @@ import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
 import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
-import tech.geocodeapp.geocode.leaderboard.UserMockRepository;
 import tech.geocodeapp.geocode.leaderboard.UserMockService;
 import tech.geocodeapp.geocode.leaderboard.service.*;
+import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.service.UserService;
 
@@ -30,7 +30,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * This is the unit testing class for the Event subsystem
@@ -106,7 +105,7 @@ class EventServiceImplTest {
     /**
      * This is used to have a static known UUID
      */
-    UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
+    java.util.UUID eventID = java.util.UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
 
     /**
      * Create the EventServiceImpl with the relevant repositories.
@@ -212,9 +211,9 @@ class EventServiceImplTest {
 
         try {
             /* Create mock geocodes to add to the event */
-            GeoCode gc1 = new GeoCode().id(UUID.randomUUID());
-            GeoCode gc2 = new GeoCode().id(UUID.randomUUID());
-            GeoCode gc3 = new GeoCode().id(UUID.randomUUID());
+            GeoCode gc1 = new GeoCode().id(java.util.UUID.randomUUID());
+            GeoCode gc2 = new GeoCode().id(java.util.UUID.randomUUID());
+            GeoCode gc3 = new GeoCode().id(java.util.UUID.randomUUID());
             geoCodeMockRepo.save(gc1);
             geoCodeMockRepo.save(gc2);
             geoCodeMockRepo.save(gc3);
@@ -231,7 +230,7 @@ class EventServiceImplTest {
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse("2020-01-08") );
             request.setEndDate(  LocalDate.parse("2020-05-21") );
-                List< UUID > geoCodesToFind = new ArrayList<>();
+                List<java.util.UUID> geoCodesToFind = new ArrayList<>();
                 geoCodesToFind.add( gc1.getId() );
                 geoCodesToFind.add( gc2.getId() );
                 geoCodesToFind.add( gc3.getId() );
@@ -350,10 +349,10 @@ class EventServiceImplTest {
     @DisplayName( "check sorting order of GeoCodes by distance" )
     void orderGeoCodes() {
 
-        GeoCode gc1 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(5, 0)); //3rd
-        GeoCode gc2 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(2, 1)); //2nd
-        GeoCode gc3 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(10, -1)); //4th
-        GeoCode gc4 = new GeoCode().id(UUID.randomUUID()).location(new GeoPoint(0, 0)); //1st
+        GeoCode gc1 = new GeoCode().id(java.util.UUID.randomUUID()).location(new GeoPoint(5, 0)); //3rd
+        GeoCode gc2 = new GeoCode().id(java.util.UUID.randomUUID()).location(new GeoPoint(2, 1)); //2nd
+        GeoCode gc3 = new GeoCode().id(java.util.UUID.randomUUID()).location(new GeoPoint(10, -1)); //4th
+        GeoCode gc4 = new GeoCode().id(java.util.UUID.randomUUID()).location(new GeoPoint(0, 0)); //1st
 
         List<GeoCode> geoCodes = new ArrayList<GeoCode>();
         geoCodes.add(gc1);
@@ -362,9 +361,9 @@ class EventServiceImplTest {
         geoCodes.add(gc4);
         GeoPoint start = new GeoPoint(0, 0);
 
-        List<UUID> result = Graph.getOptimalGeocodeIDOrder(geoCodes, start);
+        List<java.util.UUID> result = Graph.getOptimalGeocodeIDOrder(geoCodes, start);
 
-        List<UUID> expected = new ArrayList<UUID>();
+        List<java.util.UUID> expected = new ArrayList<java.util.UUID>();
         expected.add(gc4.getId()); //1st
         expected.add(gc2.getId()); //2nd
         expected.add(gc1.getId()); //3rd
@@ -386,9 +385,9 @@ class EventServiceImplTest {
 
         try {
             /* Create mock geocodes */
-            GeoCode gc1 = new GeoCode().id(UUID.randomUUID());
-            GeoCode gc2 = new GeoCode().id(UUID.randomUUID());
-            GeoCode gc3 = new GeoCode().id(UUID.randomUUID());
+            GeoCode gc1 = new GeoCode().id(java.util.UUID.randomUUID());
+            GeoCode gc2 = new GeoCode().id(java.util.UUID.randomUUID());
+            GeoCode gc3 = new GeoCode().id(java.util.UUID.randomUUID());
             geoCodeMockRepo.save(gc1);
             geoCodeMockRepo.save(gc2);
             geoCodeMockRepo.save(gc3);
@@ -400,7 +399,7 @@ class EventServiceImplTest {
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse("2020-01-08") );
             request.setEndDate(  LocalDate.parse("2020-05-21") );
-            List< UUID > geoCodesToFind = new ArrayList<>();
+            List<java.util.UUID> geoCodesToFind = new ArrayList<>();
             geoCodesToFind.add( gc1.getId() );
             geoCodesToFind.add( gc2.getId() );
             geoCodesToFind.add( gc3.getId() );

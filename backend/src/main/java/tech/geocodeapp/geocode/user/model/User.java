@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 public class User   {
   @Id
   @JsonProperty("id")
-  private UUID id = null;
+  private java.util.UUID id = null;
 
   @JsonProperty("username")
   private String username = null;
@@ -42,7 +42,7 @@ public class User   {
   @Valid
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<Point> points = new HashSet<Point>();
+  private Set<Point> points = new HashSet<>();
 
   @JsonProperty("currentCollectable")
   @ManyToOne
@@ -53,40 +53,40 @@ public class User   {
   @Valid
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<CollectableType> foundCollectableTypes = null;
+  private Set<CollectableType> foundCollectableTypes = new HashSet<>();
 
   @JsonProperty("foundGeocodes")
   @Valid
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<GeoCode> foundGeocodes = null;
+  private Set<GeoCode> foundGeocodes = new HashSet<>();
 
   @JsonProperty("ownedGeocodes")
   @Valid
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<GeoCode> ownedGeocodes = null;
+  private Set<GeoCode> ownedGeocodes = new HashSet<>();
 
   @JsonProperty("missions")
   @Valid
   @ManyToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<Mission> missions = null;
+  private Set<Mission> missions = new HashSet<>();
 
   public User() {
 
   }
 
-  public User(UUID id) {
+  public User(java.util.UUID id) {
     this.id = id;
   }
 
-  public User(UUID id, String username) {
+  public User(java.util.UUID id, String username) {
     this.id = id;
     this.username = username;
   }
 
-    public User id(UUID id) {
+    public User id(java.util.UUID id) {
     this.id = id;
     return this;
   }
@@ -99,11 +99,11 @@ public class User   {
       @NotNull
 
     @Valid
-    public UUID getId() {
+    public java.util.UUID getId() {
     return id;
   }
 
-  public void setId(UUID id) {
+  public void setId(java.util.UUID id) {
     this.id = id;
   }
 
@@ -197,9 +197,6 @@ public class User   {
   }
 
   public User addFoundCollectableTypesItem(CollectableType foundCollectableTypesItem) {
-    if (this.foundCollectableTypes == null) {
-      this.foundCollectableTypes = new HashSet<CollectableType>();
-    }
     this.foundCollectableTypes.add(foundCollectableTypesItem);
     return this;
   }
@@ -224,9 +221,6 @@ public class User   {
   }
 
   public User addFoundGeocodesItem(GeoCode foundGeocodesItem) {
-    if (this.foundGeocodes == null) {
-      this.foundGeocodes = new HashSet<GeoCode>();
-    }
     this.foundGeocodes.add(foundGeocodesItem);
     return this;
   }
@@ -251,9 +245,6 @@ public class User   {
   }
 
   public User addOwnedGeocodesItem(GeoCode ownedGeocodesItem) {
-    if (this.ownedGeocodes == null) {
-      this.ownedGeocodes = new HashSet<GeoCode>();
-    }
     this.ownedGeocodes.add(ownedGeocodesItem);
     return this;
   }
@@ -281,22 +272,9 @@ public class User   {
   }
 
   public User addMissionsItem(Mission missionsItem) {
-    if (this.missions == null) {
-      this.missions = new HashSet<Mission>();
-    }
     this.missions.add(missionsItem);
     return this;
   }
 
 
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
 }

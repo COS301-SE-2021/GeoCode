@@ -1,18 +1,12 @@
 package tech.geocodeapp.geocode.event.decorator;
 
-import org.apache.tomcat.jni.Local;
-import tech.geocodeapp.geocode.collectable.model.CollectableSet;
-import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
-import tech.geocodeapp.geocode.leaderboard.model.Point;
 
 import java.time.LocalDate;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.UUID;
 
 public abstract class EventDecorator implements EventComponent {
     //the decorated EventComponent
@@ -28,7 +22,7 @@ public abstract class EventDecorator implements EventComponent {
     /**
      * @return the value returned by decoratedType's getID() method
      */
-    public UUID getID() {
+    public java.util.UUID getID() {
         return decoratedType.getID();
     }
 
@@ -36,7 +30,7 @@ public abstract class EventDecorator implements EventComponent {
      * Sets the decoratedType's name variable
      * @param id the id of the Event
      */
-    public void setID(UUID id) { decoratedType.setID(id); }
+    public void setID(java.util.UUID id) { decoratedType.setID(id); }
 
     /**
      * @return the value returned by decoratedType's getName() method
@@ -86,7 +80,7 @@ public abstract class EventDecorator implements EventComponent {
     /**
      * @return the id of the decoratedType
      */
-    public List<UUID> getGeocodeIDs() {
+    public List<java.util.UUID> getGeocodeIDs() {
         return decoratedType.getGeocodeIDs();
     }
 
@@ -94,7 +88,7 @@ public abstract class EventDecorator implements EventComponent {
      * Sets the decoratedType's list of geocode IDs
      * @param ids the list of ids
      */
-    public void setGeocodeIDs(List<UUID> ids) {
+    public void setGeocodeIDs(List<java.util.UUID> ids) {
         decoratedType.setGeocodeIDs(ids);
     }
 

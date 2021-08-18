@@ -47,13 +47,13 @@ public class UserServiceImplIT {
     @Autowired
     GeoCodeServiceImpl geoCodeService;
 
-    private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
-    private final UUID validUserId = UUID.fromString("712fb163-d3f3-49b0-865a-acaab6986fd0");
-    private final UUID newUserId = UUID.fromString("febc2388-4de1-467c-b24f-1a522197a882");
+    private final java.util.UUID invalidUserId = java.util.UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
+    private final java.util.UUID validUserId = java.util.UUID.fromString("712fb163-d3f3-49b0-865a-acaab6986fd0");
+    private final java.util.UUID newUserId = java.util.UUID.fromString("febc2388-4de1-467c-b24f-1a522197a882");
 
-    private final UUID noPointsUserId = UUID.fromString("98872d8f-677b-4b20-a148-b526851d8024");
-    private final UUID userWithPoints1 = UUID.fromString("04886c2d-fcdb-40a6-b0ae-4902f0cea58c");
-    private final UUID userWithPoints2 = UUID.fromString("b716e89f-db50-482a-a470-3a01690eee5c");
+    private final java.util.UUID noPointsUserId = java.util.UUID.fromString("98872d8f-677b-4b20-a148-b526851d8024");
+    private final java.util.UUID userWithPoints1 = java.util.UUID.fromString("04886c2d-fcdb-40a6-b0ae-4902f0cea58c");
+    private final java.util.UUID userWithPoints2 = java.util.UUID.fromString("b716e89f-db50-482a-a470-3a01690eee5c");
 
     private User validUser;
     private User invalidUser;
@@ -63,11 +63,11 @@ public class UserServiceImplIT {
     private final String invalidGeoCodeIdMessage = "Invalid GeoCode id";
     private final String invalidCollectableTypeIDMessage = "Invalid CollectableType ID";
 
-    private UUID firstGeoCodeID;
-    private UUID secondGeoCodeID;
-    private UUID thirdGeoCodeID;
+    private java.util.UUID firstGeoCodeID;
+    private java.util.UUID secondGeoCodeID;
+    private java.util.UUID thirdGeoCodeID;
 
-    private UUID trackableTypeUUID = new UUID(0, 0);
+    private java.util.UUID trackableTypeUUID = new java.util.UUID(0, 0);
 
     private final String firstEvent = "Port Elizabeth Beach Hop - Default";
     private final String secondEvent = "Port Elizabeth High School Open Days - Default";
@@ -81,31 +81,31 @@ public class UserServiceImplIT {
     private int numberOfFoundGeoCodesBefore;
     private int numberOfFoundCollectableTypesBefore;
 
-    private final UUID invalidGeoCodeID = UUID.fromString("c6dab51d-7b2c-45df-940c-189821a36178");
-    private final UUID invalidCollectableID = UUID.fromString("4d2877ee-431e-4a46-b391-c9755291a0f6");
-    private final UUID invalidCollectableTypeID = UUID.fromString("1c39987b-f7b6-478f-b99c-2c57928481af");
+    private final java.util.UUID invalidGeoCodeID = java.util.UUID.fromString("c6dab51d-7b2c-45df-940c-189821a36178");
+    private final java.util.UUID invalidCollectableID = java.util.UUID.fromString("4d2877ee-431e-4a46-b391-c9755291a0f6");
+    private final java.util.UUID invalidCollectableTypeID = java.util.UUID.fromString("1c39987b-f7b6-478f-b99c-2c57928481af");
 
-    private final UUID noPointsFirstOwnedGeoCodeID = UUID.fromString("c8c60a6d-9bfd-4a1c-a864-6140935a4296");
-    private final UUID noPointsNewOwnedGeoCodeID = UUID.fromString("1589fcd5-aac5-4434-a435-d4d03df05703");
+    private final java.util.UUID noPointsFirstOwnedGeoCodeID = java.util.UUID.fromString("c8c60a6d-9bfd-4a1c-a864-6140935a4296");
+    private final java.util.UUID noPointsNewOwnedGeoCodeID = java.util.UUID.fromString("1589fcd5-aac5-4434-a435-d4d03df05703");
 
-    private final UUID noPointsFirstFoundGeoCodeID = UUID.fromString("13edfce8-5ecd-4cce-ad05-9037df0cbb04");
-    private final UUID noPointsNewFoundGeoCodeID = UUID.fromString("74358369-c953-4862-b3b4-7ca4b78a4c83");
+    private final java.util.UUID noPointsFirstFoundGeoCodeID = java.util.UUID.fromString("13edfce8-5ecd-4cce-ad05-9037df0cbb04");
+    private final java.util.UUID noPointsNewFoundGeoCodeID = java.util.UUID.fromString("74358369-c953-4862-b3b4-7ca4b78a4c83");
 
-    private final UUID testCollectableTypeID = UUID.fromString("c65410e3-54e0-4958-9ebb-12560a86ae16");
-    private final UUID testCollectableType1ID = UUID.fromString("5350f61f-1052-42d0-8dea-9a7580cfd908");
-    private final UUID testCollectableType2ID = UUID.fromString("cad9d680-6e0e-4c9f-9d05-45fb4b430fdd");
-    private final UUID noPointsNewFoundCollectableTypeID = UUID.fromString("08603f0d-3262-4b71-a50b-4a4605f36bea");
+    private final java.util.UUID testCollectableTypeID = java.util.UUID.fromString("c65410e3-54e0-4958-9ebb-12560a86ae16");
+    private final java.util.UUID testCollectableType1ID = java.util.UUID.fromString("5350f61f-1052-42d0-8dea-9a7580cfd908");
+    private final java.util.UUID testCollectableType2ID = java.util.UUID.fromString("cad9d680-6e0e-4c9f-9d05-45fb4b430fdd");
+    private final java.util.UUID noPointsNewFoundCollectableTypeID = java.util.UUID.fromString("08603f0d-3262-4b71-a50b-4a4605f36bea");
 
-    private final UUID collectableInFirstGeoCodeID = UUID.fromString("bf98dbf9-90b5-43ab-91b3-396d8f6ff216");
+    private final java.util.UUID collectableInFirstGeoCodeID = java.util.UUID.fromString("bf98dbf9-90b5-43ab-91b3-396d8f6ff216");
 
-    private final UUID swapMissionID = UUID.fromString("4507f78a-2c0c-4073-9af0-7f50ffe2fa0f");
-    private final UUID circumferenceMissionID = UUID.fromString("46e8e512-68ca-40d7-89ce-11ae91c58bbc");
+    private final java.util.UUID swapMissionID = java.util.UUID.fromString("4507f78a-2c0c-4073-9af0-7f50ffe2fa0f");
+    private final java.util.UUID circumferenceMissionID = java.util.UUID.fromString("46e8e512-68ca-40d7-89ce-11ae91c58bbc");
 
     private final String existingUserIdMessage = "User ID already exists";
 
-    private UUID trackableSetId;
+    private java.util.UUID trackableSetId;
 
-    User registerNewUser(UUID userID, String username){
+    User registerNewUser(java.util.UUID userID, String username){
         RegisterNewUserRequest request = new RegisterNewUserRequest(userID, username);
         RegisterNewUserResponse response;
 
@@ -120,7 +120,7 @@ public class UserServiceImplIT {
         }
     }
 
-    UUID createCollectableSet(String name, String description){
+    java.util.UUID createCollectableSet(String name, String description){
         CreateCollectableSetRequest createCollectableSetRequest = new CreateCollectableSetRequest(name, description);
 
         try {
@@ -132,7 +132,7 @@ public class UserServiceImplIT {
         }
     }
 
-    UUID createCollectableType(String name, String image, Rarity rarity, UUID setId, HashMap<String, String> properties) {
+    java.util.UUID createCollectableType(String name, String image, Rarity rarity, java.util.UUID setId, HashMap<String, String> properties) {
         CreateCollectableTypeRequest createCollectableTypeRequest = new CreateCollectableTypeRequest(name, image, rarity, setId, properties);
 
         try {
@@ -144,7 +144,7 @@ public class UserServiceImplIT {
         }
     }
 
-    Collectable createCollectable(UUID typeID, boolean createMission, GeoPoint location){
+    Collectable createCollectable(java.util.UUID typeID, boolean createMission, GeoPoint location){
         CreateCollectableRequest createCollectableRequest = new CreateCollectableRequest();
         createCollectableRequest.setCollectableTypeId(typeID);
         createCollectableRequest.setCreateMission(createMission);
@@ -160,7 +160,7 @@ public class UserServiceImplIT {
             Assertions.fail(e.getMessage());
         }
 
-        UUID id = createCollectableResponse.getCollectable().getId();
+        java.util.UUID id = createCollectableResponse.getCollectable().getId();
 
         try {
             return collectableService.getCollectableByID(new GetCollectableByIDRequest(id)).getCollectable();
@@ -172,13 +172,18 @@ public class UserServiceImplIT {
 
     @BeforeEach
     void setup() throws InvalidRequestException {
+        //mock the SecurityContext
+        MockSecurity.setup();
+        MockSecurity.setCurrentUserID(validUserId);
+
         //create the CollectableSet to hold the "User Trackable" type
         trackableSetId = createCollectableSet("User Trackable", "Contains the standard User Trackable");
 
         //create the Trackable CollectableType
         HashMap<String, String> trackableProperties = new HashMap<>();
         trackableProperties.put("missionType", String.valueOf(MissionType.RANDOM));
-        createCollectableType("User Trackable", "img_trackable", Rarity.COMMON, trackableSetId, trackableProperties);
+        java.util.UUID tempID = createCollectableType("User Trackable", "img_trackable", Rarity.COMMON, trackableSetId, trackableProperties);
+        System.out.println("tempID:"+tempID);
 
         //create invalid User object
         invalidUser = new User(invalidUserId);
@@ -200,15 +205,19 @@ public class UserServiceImplIT {
         var thirdCollectables = getCollectables(thirdGeoCodeID);
 
         //update missions for the User by swapping Collectables out of GeoCodes
-        swapCollectables(firstGeoCodeID, firstCollectables.get(0));
+        java.util.UUID collectableID1 = firstCollectables.get(0);
+        swapCollectables(firstGeoCodeID, collectableID1);
+
+
+
         swapCollectables(secondGeoCodeID, secondCollectables.get(3));
     }
 
-    private void swapCollectables(UUID geoCodeID, UUID collectableID) throws InvalidRequestException {
+    private void swapCollectables(java.util.UUID geoCodeID, java.util.UUID collectableID) throws InvalidRequestException {
         geoCodeService.swapCollectables(new SwapCollectablesRequest(geoCodeID, collectableID));
     }
 
-    private List<UUID> getCollectables(UUID geoCodeID) throws InvalidRequestException {
+    private List<java.util.UUID> getCollectables(java.util.UUID geoCodeID) throws InvalidRequestException {
         return geoCodeService.getCollectables(new GetCollectablesRequest(geoCodeID)).getCollectables();
     }
 
@@ -285,7 +294,7 @@ public class UserServiceImplIT {
 
             Collectable trackableObject = response.getTrackable();
             Assertions.assertNotNull(trackableObject);
-            Assertions.assertEquals(UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3"), trackableObject.getType().getId());
+            Assertions.assertEquals(trackableTypeUUID, trackableObject.getType().getId());
         }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
@@ -310,6 +319,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getFoundCollectableTypesTestValidUser() {
         try{
             /*
@@ -322,7 +332,7 @@ public class UserServiceImplIT {
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The IDs of the User's found CollectableTypes was successfully returned", response.getMessage());
 
-            List<UUID> foundCollectableTypeIDs = response.getCollectableTypeIDs();
+            List<java.util.UUID> foundCollectableTypeIDs = response.getCollectableTypeIDs();
             Assertions.assertNotNull(foundCollectableTypeIDs);
             Assertions.assertEquals(2, foundCollectableTypeIDs.size());
         }catch (NullRequestParameterException e){
@@ -331,6 +341,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getFoundGeoCodesTestInvalidUser() {
         try{
             /*
@@ -349,6 +360,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getFoundGeoCodesTestValidUser() {
         try{
             /*
@@ -361,7 +373,7 @@ public class UserServiceImplIT {
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The IDs of the User's found GeoCodes was successfully returned", response.getMessage());
 
-            List<UUID> foundGeoCodeIDs = response.getGeocodeIDs();
+            List<java.util.UUID> foundGeoCodeIDs = response.getGeocodeIDs();
             Assertions.assertNotNull(foundGeoCodeIDs);
 
             //HashSet will cause order to not necessarily be order added in
@@ -373,6 +385,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getOwnedGeoCodesTestInvalidUser() {
         try{
             /*
@@ -392,6 +405,7 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getOwnedGeoCodesTestValidUser() {
         try{
             /*
@@ -405,7 +419,7 @@ public class UserServiceImplIT {
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The IDs of the User's owned GeoCodes was successfully returned", response.getMessage());
 
-            List<UUID> ownedGeoCodeIDs = response.getGeocodeIDs();
+            List<java.util.UUID> ownedGeoCodeIDs = response.getGeocodeIDs();
             Assertions.assertNotNull(ownedGeoCodeIDs);
             Assertions.assertEquals(1, ownedGeoCodeIDs.size());
             Assertions.assertEquals(thirdGeoCodeID, ownedGeoCodeIDs.get(0));
@@ -590,7 +604,7 @@ public class UserServiceImplIT {
 
             Assertions.assertTrue(getOwnedGeoCodesResponse.isSuccess());
 
-            List<UUID> ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
+            List<java.util.UUID> ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
 
             Assertions.assertEquals(2, ownedGeoCodeIDs.size());
         } catch (NullRequestParameterException e) {
@@ -608,7 +622,7 @@ public class UserServiceImplIT {
 
             Assertions.assertTrue(getOwnedGeoCodesResponse.isSuccess());
 
-            List<UUID> ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
+            List<java.util.UUID> ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
             Assertions.assertEquals(2, ownedGeoCodeIDs.size());
 
             //add a new owned GeoCode
@@ -651,7 +665,7 @@ public class UserServiceImplIT {
 
             Assertions.assertTrue(getFoundGeoCodesResponse.isSuccess());
 
-            List<UUID> foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
+            List<java.util.UUID> foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
 
             Assertions.assertEquals(2, foundGeoCodeIDs.size());
         } catch (NullRequestParameterException e) {
@@ -669,7 +683,7 @@ public class UserServiceImplIT {
 
             Assertions.assertTrue(getFoundGeoCodesResponse.isSuccess());
 
-            List<UUID> foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
+            List<java.util.UUID> foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
             Assertions.assertEquals(2, foundGeoCodeIDs.size());
 
             //add a new found GeoCode
@@ -712,7 +726,7 @@ public class UserServiceImplIT {
 
             Assertions.assertTrue(getFoundCollectableTypesResponse.isSuccess());
 
-            List<UUID> foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
+            List<java.util.UUID> foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
 
             Assertions.assertEquals(2, foundCollectableTypeIDs.size());
         } catch (NullRequestParameterException e) {
@@ -730,7 +744,7 @@ public class UserServiceImplIT {
 
             Assertions.assertTrue(getFoundCollectableTypesResponse.isSuccess());
 
-            List<UUID> foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
+            List<java.util.UUID> foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
             Assertions.assertEquals(2, foundCollectableTypeIDs.size());
 
             //add a new found CollectableType

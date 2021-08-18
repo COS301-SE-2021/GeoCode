@@ -144,16 +144,16 @@ public class EventServiceImpl implements EventService {
         }
 
         /* Store the list of GeoCode UUIDs to create a Level on */
-        List< UUID > geoCodeIDs = request.getGeoCodesToFind();
+        List<java.util.UUID> geoCodeIDs = request.getGeoCodesToFind();
 
-        UUID eventID = UUID.randomUUID();
+        java.util.UUID eventID = java.util.UUID.randomUUID();
 
         List<GeoCode> geoCodes = new ArrayList<>();
         /*
          * Go through each GeoCode ID
          * and get the GeoCode object
          */
-        for ( UUID id : geoCodeIDs ) {
+        for ( java.util.UUID id : geoCodeIDs ) {
             try {
                 /*
                  * Call the GeoCode service to get the GeoCode Object
@@ -299,7 +299,7 @@ public class EventServiceImpl implements EventService {
         UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID(request.getEventID(), request.getUserID());
 
         /* Check whether the current user is requesting for themselves */
-        UUID currentUserID = userService.getCurrentUserID();
+        java.util.UUID currentUserID = userService.getCurrentUserID();
         if (!currentUserID.equals(request.getUserID())) {
             /* The userID passed in does not match the current user ID. Just return the passed-in user's status */
             return new GetCurrentEventStatusResponse(true, "Status returned for another user", status, null);
@@ -317,17 +317,17 @@ public class EventServiceImpl implements EventService {
                 EventComponent event = manager.buildEvent(temp.get());
 
                 /* Get the first geocode of the event */
-                UUID nextGeocodeID = event.getGeocodeIDs().get(0);
+                java.util.UUID nextGeocodeID = event.getGeocodeIDs().get(0);
 
                 /* Create a new status object with the geocodeID set to the first geocode */
                 Map<String, String> details = new HashMap<String, String>();
-                status = new UserEventStatus(UUID.randomUUID(), event.getID(), currentUserID, nextGeocodeID, details);
+                status = new UserEventStatus(java.util.UUID.randomUUID(), event.getID(), currentUserID, nextGeocodeID, details);
                 event.handleEventStart(status);
 
                 /* Create the user's points if the event has a leaderboard */
                 if (event.getLeaderboards().size() > 0) {
                     try {
-                        UUID leaderboardID = event.getLeaderboards().get(0).getId();
+                        java.util.UUID leaderboardID = event.getLeaderboards().get(0).getId();
                         CreatePointRequest pointRequest = new CreatePointRequest(0, currentUserID, leaderboardID);
                         PointResponse pointResponse = leaderboardService.createPoint(pointRequest);
 
@@ -349,7 +349,7 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        UUID geocodeID = status.getGeocodeID();
+        java.util.UUID geocodeID = status.getGeocodeID();
         if (geocodeID != null) {
             try {
                 GetGeoCodeResponse getGeoCodeResponse = geoCodeService.getGeoCode( new GetGeoCodeRequest( geocodeID ) );
@@ -375,14 +375,14 @@ public class EventServiceImpl implements EventService {
      * @throws InvalidRequestException any of the provided parameters are null
      */
     @Override
-    public void nextStage( GeoCode foundGeocode, UUID userID ) throws InvalidRequestException, NotFoundException, MismatchedParametersException {
+    public void nextStage(GeoCode foundGeocode, java.util.UUID userID ) throws InvalidRequestException, NotFoundException, MismatchedParametersException {
         /* Validate the parameters */
         if ((foundGeocode == null) || (userID == null) || (foundGeocode.getEventID() == null)) {
             throw new InvalidRequestException();
         }
 
         /* Extract the event ID from the provided geocode */
-        UUID eventID = foundGeocode.getEventID();
+        java.util.UUID eventID = foundGeocode.getEventID();
 
         /* Find the event with the id */
         Optional<Event> temp = eventRepo.findById(eventID);
@@ -411,7 +411,7 @@ public class EventServiceImpl implements EventService {
         }
 
         /* Find the user's current geocode in the list */
-        List<UUID> ids = event.getGeocodeIDs();
+        List<java.util.UUID> ids = event.getGeocodeIDs();
         for (int i = 0; i < ids.size(); i++) {
             if (ids.get(i).equals(status.getGeocodeID())) {
 
@@ -425,14 +425,14 @@ public class EventServiceImpl implements EventService {
                     status.setGeocodeID(null);
                 } else {
                     /* Send the user to the next geocode */
-                    UUID nextGeocodeID = ids.get(i + 1);
+                    java.util.UUID nextGeocodeID = ids.get(i + 1);
                     status.setGeocodeID(nextGeocodeID);
                 }
 
                 /* Update the user's points if the event has a leaderboard */
                 if (event.getLeaderboards().size() > 0) {
                     try {
-                        UUID leaderboardID = event.getLeaderboards().get(0).getId();
+                        java.util.UUID leaderboardID = event.getLeaderboards().get(0).getId();
                         GetPointForUserRequest userPointRequest = new GetPointForUserRequest(userID, leaderboardID);
                         PointResponse userPointResponse = leaderboardService.getPointForUser(userPointRequest);
                         Point point = userPointResponse.getPoint();
@@ -711,9 +711,9 @@ public class EventServiceImpl implements EventService {
      *
      * @return the sorted IDs of the provided GeoCodes in order of Difficulty
      */
-    private List< UUID > sortByDifficulty( List< GeoCode > geoCodes ) {
+    private List<java.util.UUID> sortByDifficulty(List<GeoCode> geoCodes ) {
 
-        List< UUID > hold = null;
+        List<java.util.UUID> hold = null;
 
         if ( geoCodes != null ) {
 
@@ -798,7 +798,7 @@ public class EventServiceImpl implements EventService {
      *
      * @return the IDs of the provided GeoCodes, in the order that minimises the distance to travel between them
      */
-    private List< UUID > sortByDistance( List< GeoCode > geoCodes, GeoPoint startLocation ) {
+    private List<java.util.UUID> sortByDistance(List<GeoCode> geoCodes, GeoPoint startLocation ) {
         if ( geoCodes != null ) {
             return Graph.getOptimalGeocodeIDOrder(geoCodes, startLocation);
         } else {
