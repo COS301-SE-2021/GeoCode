@@ -107,6 +107,8 @@ public class UserServiceImplIT {
     private UUID collectableID2;
     private UUID collectableTypeID1;
     private UUID collectableTypeID2;
+    private UUID fourthGeoCodeID;
+    private UUID fifthGeoCodeID;
 
     User registerNewUser(UUID userID, String username){
         RegisterNewUserRequest request = new RegisterNewUserRequest(userID, username);
@@ -182,6 +184,7 @@ public class UserServiceImplIT {
     @Transactional
     void setup() throws InvalidRequestException, NullRequestParameterException {
         //mock the SecurityContext
+        MockSecurity.setup();
         setUser(validUserId);
 
         //create the CollectableSet to hold the "User Trackable" type
@@ -231,7 +234,15 @@ public class UserServiceImplIT {
         System.out.println("secondGeoCodeID:"+secondGeoCodeID);
 
         //give userWithPoints1 and userWithPoints2 points
+        setUser(userWithPoints1);
+        swapCollectables(firstGeoCodeID, firstCollectables.get(1));
+        swapCollectables(secondGeoCodeID, secondCollectables.get(0));
 
+        setUser(userWithPoints2);
+
+        setUser(noPointsUserId);
+        fourthGeoCodeID = geoCodeService.createGeoCode(new CreateGeoCodeRequest("fourthGeoCode", new GeoPoint(10.0, 10.0), hints, Difficulty.HARD, true)).getGeoCodeID();
+        fifthGeoCodeID = geoCodeService.createGeoCode(new CreateGeoCodeRequest("fifthGeoCode", new GeoPoint(10.0, 10.0), hints, Difficulty.INSANE, true)).getGeoCodeID();
     }
 
     private UUID getCollectableTypeID(UUID collectableID) throws NullRequestParameterException {
@@ -250,7 +261,7 @@ public class UserServiceImplIT {
     }
 
     private void setUser(UUID userID){
-        MockSecurity.setup();
+        //MockSecurity.setup();
         MockSecurity.setCurrentUserID(userID);
     }
 
