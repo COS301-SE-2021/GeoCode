@@ -1,6 +1,6 @@
 cd frontend
 npm install
-cp ../../environment.prod.ts src/environments
+cp ../../environment.ts src/environments
 ionic build --prod
 cd ../backend
 cp ../../keystore.p12 src/main/resources
