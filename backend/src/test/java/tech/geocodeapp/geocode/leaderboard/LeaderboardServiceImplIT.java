@@ -206,4 +206,16 @@ public class LeaderboardServiceImplIT {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void updatePointTestNullRequest() {
+        try {
+            PointResponse response = leaderboardService.updatePoint(null);
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The UpdatePointRequest passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getPoint());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 }
