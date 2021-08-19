@@ -1060,7 +1060,7 @@ public class UserServiceImplIT {
                 }
             }
 
-            var thirdCollectableType = getCollectableTypeByID(thirdCollectableTypeID);
+            var thirdCollectableType = getCollectableTypeByID(thirdCollectableTypeID).getCollectableType();
 
             AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(userWithPoints1, thirdCollectableType);
             AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
