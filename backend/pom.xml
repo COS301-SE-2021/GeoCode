@@ -211,6 +211,7 @@
                     <skipTests>true</skipTests>
                 </configuration>
                 <executions>
+					<!-- Unit tests -->
                     <execution>
                         <id>unit-tests</id>
                         <phase>test</phase>
@@ -224,6 +225,8 @@
                             </includes>
                         </configuration>
                     </execution>
+					<!-- End unit tests -->
+					<!-- Integration tests -->
                     <execution>
                         <id>integration-tests</id>
                         <phase>integration-test</phase>
@@ -238,6 +241,7 @@
                             </includes>
                         </configuration>
                     </execution>
+					<!-- End integration tests -->
                 </executions>
             </plugin>
 
