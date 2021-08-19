@@ -25,7 +25,6 @@ import tech.geocodeapp.geocode.user.service.UserService;
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * This class implements the LeaderboardService interface
@@ -171,7 +170,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         /* check if leaderboard is invalid */
-        UUID leaderboardID = request.getLeaderboard().getId();
+        java.util.UUID leaderboardID = request.getLeaderboard().getId();
         Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(leaderboardID);
 
         if(optionalLeaderboard.isEmpty()){

@@ -25,7 +25,7 @@ import javax.validation.constraints.*;
 
 @Entity
 @Table(name="user_table")
-public class User   {
+public class User {
   @Id
   @JsonProperty("id")
   private java.util.UUID id = null;

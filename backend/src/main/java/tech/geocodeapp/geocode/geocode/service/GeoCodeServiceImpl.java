@@ -204,12 +204,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             /* Building a collectable from a collectable response */
             var temp = new Collectable();
 
-            if(collectableResponse.getCollectable() == null){
-                System.out.println("collectableResponse.getCollectable() == null");
-                System.out.println("message = "+collectableResponse.getMessage());
-            }
             temp.setId( collectableResponse.getCollectable().getId() );
-            //CollectableTypeComponent type = collectableResponse.getCollectable().getType();
 
             CollectableTypeManager manager = new CollectableTypeManager();
 
@@ -267,19 +262,23 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 /* Saved GeoCode not the same therefore creation failed */
                 return new CreateGeoCodeResponse( false );
             }
+
+            /*
+             * Add the GeoCode to the list of GeoCodes that the user has created
+             */
+            try {
+                AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, check);
+                userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
+            } catch (NullRequestParameterException e) {
+                e.printStackTrace();
+                System.out.println("owned geocode not added: "+newGeoCode.getDescription());
+                return new CreateGeoCodeResponse(false);
+            }
         } catch ( IllegalArgumentException error ) {
 
             /* Exception thrown therefore creation failed */
             return new CreateGeoCodeResponse( false );
         }
-
-        /*
-         * Add the GeoCode to the list of GeoCodes that the user has created
-         */
-        try {
-            AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, newGeoCode);
-            userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
-        } catch (NullRequestParameterException e) {}
 
         /*
          * Create the new response
@@ -793,7 +792,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         Collectable userToGeocode;
 
         try {
-
             userToGeocode = userService.swapCollectable( new SwapCollectableRequest( user, geocodeToUser, geocode ) ).getCollectable();
         } catch ( NullRequestParameterException error ) {
 
