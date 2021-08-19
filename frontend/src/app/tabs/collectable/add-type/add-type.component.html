@@ -26,6 +26,13 @@
       <ion-input (ionBlur)="updateRequest($event, 'name')"></ion-input>
     </ion-item>
     <ion-item>
+      <ion-label position="floating">Image URL</ion-label>
+      <ion-input (ionBlur)="updateRequest($event, 'image')"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="request.image !== ''">
+      <img src="{{request.image}}">
+    </ion-item>
+    <ion-item>
       <ion-label position="floating">Rarity</ion-label>
       <ion-select placeholder="Select" interface="popover" (ionBlur)="updateRequest($event, 'rarity')">
         <ion-select-option value="COMMON">Common</ion-select-option>
@@ -40,23 +47,17 @@
       <ion-label>Trackable</ion-label>
       <ion-checkbox [(ngModel)]="trackable"></ion-checkbox>
     </ion-item>
-<!--    <ion-item>-->
-<!--      <ion-label>Expiring</ion-label>-->
-<!--      <ion-checkbox [(ngModel)]="showDatePicker"></ion-checkbox>-->
-
-<!--    </ion-item>-->
-<!--    <ng-template [ngIf]="showDatePicker">-->
-<!--      <ion-item>-->
-<!--        <ion-datetime (ionChange)="setDate($event)" placeholder="Set Expiry Date"></ion-datetime>-->
-<!--      </ion-item>-->
-<!--    </ng-template>-->
-<!--    <ion-item>-->
-<!--      <ion-label>Geofenced</ion-label>-->
-<!--      <ion-checkbox [(ngModel)]="showMap" (ionChange)="loadMap()"></ion-checkbox>-->
-<!--    </ion-item>-->
-    <ion-item #mapContainer class="mapContainer">
-      <div #mapElement class="map"></div>
+    <ion-item>
+      <ion-label position="floating">Mission</ion-label>
+      <ion-select value="None" interface="popover" (ionBlur)="updateMission($event)">
+        <ion-select-option value="None">None</ion-select-option>
+        <ion-select-option value="Circumference">Circumference</ion-select-option>
+        <ion-select-option value="Geocode">Geocode</ion-select-option>
+        <ion-select-option value="Swap">Swap</ion-select-option>
+        <ion-select-option value="Random">Random</ion-select-option>
+      </ion-select>
     </ion-item>
+
   </ion-list>
 
 

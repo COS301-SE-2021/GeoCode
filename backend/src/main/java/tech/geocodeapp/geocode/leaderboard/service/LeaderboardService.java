@@ -24,11 +24,6 @@ public interface LeaderboardService {
     //U5.4 getLeaderboardByID
     GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullRequestParameterException;
 
-    //helper functions
-    GetPointsByLeaderboardResponse getPointsByLeaderboard(GetPointsByLeaderboardRequest request) throws NullRequestParameterException;
-
-    GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullRequestParameterException;
-
     //U5.5 createPoint
     PointResponse createPoint(CreatePointRequest request) throws NullRequestParameterException;
 
@@ -39,5 +34,13 @@ public interface LeaderboardService {
     PointResponse updatePoint(UpdatePointRequest request) throws NullRequestParameterException;
 
     //helper functions
+
+    //U5.8 savePoint
     Response savePoint(Point point) throws NullRequestParameterException;
+
+    //U5.9 getPointsByLeaderboard
+    GetPointsByLeaderboardResponse getPointsByLeaderboard(GetPointsByLeaderboardRequest request) throws NullRequestParameterException;
+
+    //U5.10 etMyRank
+    GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullRequestParameterException;
 }

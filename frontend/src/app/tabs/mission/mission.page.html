@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="profile/me/missions"></ion-back-button>
+    </ion-buttons>
     <ion-title>Mission</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -7,17 +10,14 @@
 <ion-content>
   <br /> <br />
   <ion-card >
-    <ion-card-title id="card-title">Title</ion-card-title>
+    <ion-card-title id="card-title">{{title}}</ion-card-title>
     <ion-card-content id ="details" >
-      Lorem ipsum dolor sit amet,
-      consectetur adipiscing elit, sed do
-      eiusmod tempor incididunt ut labore
-      et.
+{{description}}
     </ion-card-content>
   </ion-card>
   <br />
   <br /><ion-header>Progress</ion-header>
-  <br /><ion-progress-bar color="accent"type="determinate" value={{0.5}}></ion-progress-bar ><br /><br />
+  <br /><ion-progress-bar color="accent"type="determinate" value="{{progress}}"></ion-progress-bar ><br /><br />
 
   <ion-header>Current Location</ion-header>
   <br />

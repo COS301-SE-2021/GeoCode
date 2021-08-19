@@ -37,22 +37,8 @@ public class MissionServiceImpl implements MissionService{
     private final String invalidMissionIdMessage = "Invalid Mission Id";
     private final String collectableHasMissionMessage = "Collectable already has a Mission";
 
-    public MissionServiceImpl(MissionRepository missionRepo, @Lazy CollectableService collectableService) {
+    public MissionServiceImpl(MissionRepository missionRepo) {
         this.missionRepo = missionRepo;
-        this.collectableService = collectableService;
-
-        init();
-    }
-
-    /**
-     * Once the Collectable service object has been created
-     * insert it into the User and Event subsystem
-     *
-     * This is to avoid circular dependencies as each subsystem requires one another
-     */
-    @PostConstruct
-    public void init() {
-        this.collectableService.setMissionService(this);
     }
 
     /**

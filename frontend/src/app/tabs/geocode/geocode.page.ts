@@ -44,19 +44,11 @@ export class GeocodePage implements AfterViewInit  {
   }
 
   //Create map and add mapmarkers of geocodes
-  loadMap(){
-   const mapCenter={
-     latitude:-25.75625115327836,
-     longitude:28.235629260918344
-   };
-    navigator.geolocation.getCurrentPosition((position) => {
-     mapCenter.latitude =position.coords.latitude;
-     mapCenter.longitude=position.coords.longitude;
-    });
+  loadMap(latitude: number, longitude: number){
     this.markers= [];
     this.mapOptions = {
-      center: {lat: mapCenter.latitude, lng: mapCenter.longitude},
-      zoom: 15,
+      center: {lat: latitude, lng: longitude},
+      zoom: 10,
     };
     this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
 
@@ -64,8 +56,13 @@ export class GeocodePage implements AfterViewInit  {
 
   async ngAfterViewInit() {
     this.googleMaps = await this.mapsLoader.load();
-    this.loadMap();
-    this.getAllMap();
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      await this.loadMap(position.coords.latitude, position.coords.longitude);
+      this.getAllMap();
+    }, async (positionError) => {
+      await this.loadMap(0, 0);
+      this.getAllMap();
+    });
   }
 
 

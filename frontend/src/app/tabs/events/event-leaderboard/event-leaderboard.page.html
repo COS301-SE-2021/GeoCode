@@ -19,8 +19,7 @@
     <!--    <ion-col id="headings">Username</ion-col>-->
     <!--    <ion-col id="headings">Points</ion-col>-->
     <!--  </ion-row>-->
-    <ion-row id = "row" *ngFor="let point of users">
-
+    <ion-row id = "row" *ngFor="let point of users" [routerLink]="['/profile/'+point.userID]">
       <ion-col size="2" id="pos">{{point.rank}}</ion-col>
       <ion-col>{{point.username}}</ion-col>
       <ion-col>{{point.points}}</ion-col>

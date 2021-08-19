@@ -23,7 +23,7 @@ export class EventsPage implements AfterViewInit {
   selected = [];
   events = [];
   isHidden = false;
-  height = '60%';
+  height = '93%';
   position;
 
   constructor(private navCtrl: NavController, private mapsLoader: GoogleMapsLoader, private eventApi: EventService) {
@@ -35,7 +35,7 @@ export class EventsPage implements AfterViewInit {
     this.markers = [];
     this.mapOptions = {
       center: {lat: latitude, lng: longitude},
-      zoom: 15,
+      zoom: 10,
     };
     this.map = new this.googleMaps.Map(this.mapElement.nativeElement, this.mapOptions);
   }
@@ -58,8 +58,8 @@ export class EventsPage implements AfterViewInit {
   addToSelected(event) {
     this.selected = [];
     this.selected.push(event);
-    //this.isHidden=false;
-    //  this.height='60%';
+    this.isHidden=false;
+    this.height='60%';
   }
 
   close() {

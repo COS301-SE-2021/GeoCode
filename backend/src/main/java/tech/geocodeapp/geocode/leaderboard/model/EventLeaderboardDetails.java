@@ -17,7 +17,7 @@ import javax.validation.constraints.*;
 
 
 public class EventLeaderboardDetails   {
-  @JsonProperty("id")
+  @JsonProperty("userID")
   private UUID userID = null;
 
   @JsonProperty("username")
