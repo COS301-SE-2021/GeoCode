@@ -7,7 +7,7 @@ services:
       POSTGRES_MULTIPLE_DATABASES: geocode,keycloak
       POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-    image: postgres
+    image: postgres:13.4
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME}"]
       interval: 5s
