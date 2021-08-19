@@ -262,22 +262,22 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 /* Saved GeoCode not the same therefore creation failed */
                 return new CreateGeoCodeResponse( false );
             }
+
+            /*
+             * Add the GeoCode to the list of GeoCodes that the user has created
+             */
+            try {
+                AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, check);
+                userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
+            } catch (NullRequestParameterException e) {
+                e.printStackTrace();
+                System.out.println("owned geocode not added: "+newGeoCode.getDescription());
+                return new CreateGeoCodeResponse(false);
+            }
         } catch ( IllegalArgumentException error ) {
 
             /* Exception thrown therefore creation failed */
             return new CreateGeoCodeResponse( false );
-        }
-
-        /*
-         * Add the GeoCode to the list of GeoCodes that the user has created
-         */
-        try {
-            AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy.getId(), newGeoCode.getId());
-            userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-            System.out.println("owned geocode not added: "+newGeoCode.getDescription());
-            return new CreateGeoCodeResponse(false);
         }
 
         /*

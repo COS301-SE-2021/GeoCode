@@ -849,7 +849,7 @@ public class UserServiceImplTest {
     @Test
     void AddToOwnedGeoCodesTestNotAddDuplicate(){
         try {
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUserId, thirdGeoCodeID);
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUser, thirdGeoCode);
             AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -864,7 +864,7 @@ public class UserServiceImplTest {
     @Test
     void AddToOwnedGeoCodesTestAddNew(){
         try {
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUserId, firstGeoCodeID);
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUser, firstGeoCode);
             AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());

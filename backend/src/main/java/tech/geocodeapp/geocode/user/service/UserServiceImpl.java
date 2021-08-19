@@ -298,11 +298,16 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        //user.addOwnedGeocodesItem(geoCode);
-        userRepo.addOwnedGeoCode(request.getUserID(), request.getGeoCodeID()); //try if @Transactional tag does not work
-        //userRepo.save(user);
+        //add the GeoCodeID to the User's list of owned GeoCodes
+        User user = request.getUser();
+        GeoCode geoCode = request.getGeocode();
 
-        //System.out.println("adding owned geocode: -> user name: "+user.getUsername()+", geocodeID: "+geoCode.getId()+", geocodeDescription: "+geoCode.getDescription());
+        user.addOwnedGeocodesItem(geoCode);
+        userRepo.save(user);
+
+        System.out.println("adding owned geocode: "+geoCode.getId());
+        System.out.println("user id: "+user.getId());
+
         return new AddToOwnedGeoCodesResponse(true, "GeoCode added to the owned GeoCodes");
     }
 
