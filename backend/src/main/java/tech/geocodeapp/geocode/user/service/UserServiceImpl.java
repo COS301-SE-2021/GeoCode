@@ -290,7 +290,6 @@ public class UserServiceImpl implements UserService {
      * @param request AddToOwnedGeoCodesRequest object
      * @return AddToOwnedGeoCodesResponse object
      */
-    //@Transactional
     public AddToOwnedGeoCodesResponse addToOwnedGeoCodes(AddToOwnedGeoCodesRequest request) throws NullRequestParameterException{
         if(request == null){
             return new AddToOwnedGeoCodesResponse(false, "The AddToOwnedGeoCodesRequest object passed was NULL");
@@ -301,6 +300,10 @@ public class UserServiceImpl implements UserService {
         //add the GeoCodeID to the User's list of owned GeoCodes
         User user = request.getUser();
         GeoCode geoCode = request.getGeocode();
+
+        for(var currentGeoCode: user.getOwnedGeocodes()){
+            System.out.println("currentGeoCode:"+currentGeoCode.getDescription());
+        }
 
         user.addOwnedGeocodesItem(geoCode);
         userRepo.save(user);
@@ -347,13 +350,11 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-//        UUID collectableType = request.getCollectableTypeID();
-//        User user = request.getUserID();
-//
-//        user.addFoundCollectableTypesItem(collectableType);
-//        userRepo.save(user);
+        CollectableType collectableType = request.getCollectableType();
+        User user = request.getUser();
 
-        userRepo.addFoundCollectableType(request.getUserID(), request.getCollectableTypeID());
+        user.addFoundCollectableTypesItem(collectableType);
+        userRepo.save(user);
 
         return new AddToFoundCollectableTypesResponse(true, "CollectableType added to the found CollectableTypes");
     }
@@ -477,7 +478,7 @@ public class UserServiceImpl implements UserService {
         this.addToFoundGeoCodes(addToFoundGeoCodesRequest);
 
         //add the CollectableType to the User's found CollectableTypes
-        AddToFoundCollectableTypesRequest addToFoundCollectableTypesRequest = new AddToFoundCollectableTypesRequest(currentUser.getId(), newCurrentCollectable.getType().getId());
+        AddToFoundCollectableTypesRequest addToFoundCollectableTypesRequest = new AddToFoundCollectableTypesRequest(currentUser, newCurrentCollectable.getType());
         this.addToFoundCollectableTypes(addToFoundCollectableTypesRequest);
         
         //add the Collectable's Mission to the User's Missions
