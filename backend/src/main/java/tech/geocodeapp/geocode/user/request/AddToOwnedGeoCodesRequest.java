@@ -1,34 +1,34 @@
 package tech.geocodeapp.geocode.user.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.user.model.User;
+
+import java.util.UUID;
 
 public class AddToOwnedGeoCodesRequest {
-    @JsonProperty("user")
-    private User user;
+    @JsonProperty("userID")
+    private UUID userID = null;
 
-    @JsonProperty("geocode")
-    private GeoCode geocode;
+    @JsonProperty("geoCodeID")
+    private UUID geoCodeID = null;
 
-    public AddToOwnedGeoCodesRequest(User user, GeoCode geocode){
-        this.user = user;
-        this.geocode = geocode;
+    public AddToOwnedGeoCodesRequest(UUID userID, UUID geoCodeID){
+        this.userID = userID;
+        this.geoCodeID = geoCodeID;
     }
 
-    public User getUser() {
-        return user;
+    public UUID getUserID() {
+        return userID;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserID(UUID userID) {
+        this.userID = userID;
     }
 
-    public GeoCode getGeocode() {
-        return geocode;
+    public UUID getGeoCodeID() {
+        return geoCodeID;
     }
 
-    public void setGeocode(GeoCode geocode) {
-        this.geocode = geocode;
+    public void setGeoCodeID(UUID geoCodeID) {
+        this.geoCodeID = geoCodeID;
     }
 }

@@ -5,12 +5,13 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 
 import java.util.*;
 
 public class CollectableMockRepository implements CollectableRepository {
-    private static HashMap<UUID, Collectable> map = new HashMap<UUID, Collectable>();
+    private static HashMap<java.util.UUID, Collectable> map = new HashMap<java.util.UUID, Collectable>();
 
     @Override
     public List<Collectable> findAll() {
@@ -28,7 +29,7 @@ public class CollectableMockRepository implements CollectableRepository {
     }
 
     @Override
-    public List<Collectable> findAllById(Iterable<UUID> uuids) {
+    public List<Collectable> findAllById(Iterable<java.util.UUID> uuids) {
         return null;
     }
 
@@ -38,7 +39,7 @@ public class CollectableMockRepository implements CollectableRepository {
     }
 
     @Override
-    public void deleteById(UUID uuid) {
+    public void deleteById(java.util.UUID uuid) {
 
     }
 
@@ -69,12 +70,12 @@ public class CollectableMockRepository implements CollectableRepository {
     }
 
     @Override
-    public Optional<Collectable> findById(UUID uuid) {
+    public Optional<Collectable> findById(java.util.UUID uuid) {
         return Optional.ofNullable(map.get(uuid));
     }
 
     @Override
-    public boolean existsById(UUID uuid) {
+    public boolean existsById(java.util.UUID uuid) {
         return false;
     }
 
@@ -99,7 +100,7 @@ public class CollectableMockRepository implements CollectableRepository {
     }
 
     @Override
-    public Collectable getOne(UUID uuid) {
+    public Collectable getOne(java.util.UUID uuid) {
         return null;
     }
 

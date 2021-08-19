@@ -8,7 +8,6 @@ import org.springframework.data.domain.Sort;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
@@ -16,7 +15,7 @@ import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 
 public class UserMockRepository implements UserRepository {
-    private static final HashMap<UUID, User> map = new HashMap<>();
+    private static final HashMap<java.util.UUID, User> map = new HashMap<>();
 
     @Override
     public List<User> findAll() {
@@ -34,7 +33,7 @@ public class UserMockRepository implements UserRepository {
     }
 
     @Override
-    public List<User> findAllById(Iterable<UUID> iterable) {
+    public List<User> findAllById(Iterable<java.util.UUID> iterable) {
         return null;
     }
 
@@ -44,7 +43,7 @@ public class UserMockRepository implements UserRepository {
     }
 
     @Override
-    public void deleteById(UUID uuid) {
+    public void deleteById(java.util.UUID uuid) {
 
     }
 
@@ -75,12 +74,12 @@ public class UserMockRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> findById(UUID uuid) {
+    public Optional<User> findById(java.util.UUID uuid) {
         return Optional.ofNullable(map.get(uuid));
     }
 
     @Override
-    public boolean existsById(UUID uuid) {
+    public boolean existsById(java.util.UUID uuid) {
         return map.containsKey(uuid);
     }
 
@@ -105,7 +104,7 @@ public class UserMockRepository implements UserRepository {
     }
 
     @Override
-    public User getOne(UUID uuid) {
+    public User getOne(java.util.UUID uuid) {
         return null;
     }
 
@@ -146,7 +145,7 @@ public class UserMockRepository implements UserRepository {
      * @param geocodeID GeoCode to add
      */
     @Override
-    public void addFoundGeoCode(UUID userID, UUID geocodeID) {
+    public void addFoundGeoCode(java.util.UUID userID, java.util.UUID geocodeID) {
         Optional<User> optionalUser = findById(userID);
         User user = optionalUser.get();
 
@@ -169,7 +168,7 @@ public class UserMockRepository implements UserRepository {
      * @param collectableTypeID CollectableType to add
      */
     @Override
-    public void addFoundCollectableType(UUID userID, UUID collectableTypeID) {
+    public void addFoundCollectableType(java.util.UUID userID, java.util.UUID collectableTypeID) {
         Optional<User> optionalUser = findById(userID);
         User user = optionalUser.get();
 
@@ -195,7 +194,7 @@ public class UserMockRepository implements UserRepository {
      * @param geocodeID GeoCode to add
      */
     @Override
-    public void addOwnedGeoCode(UUID userID, UUID geocodeID) {
+    public void addOwnedGeoCode(java.util.UUID userID, java.util.UUID geocodeID) {
         Optional<User> optionalUser = findById(userID);
         User user = optionalUser.get();
 

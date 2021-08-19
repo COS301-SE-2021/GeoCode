@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.user.model.User;
 
 import javax.validation.Valid;
@@ -42,6 +41,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * @param geocodeID GeoCode to add
      */
     @Modifying
-    @Query(value="INSERT INTO user_table_owned_geocodes VALUES (:userID, :geocodeID)", nativeQuery = true)
+    @Query(value="INSERT INTO user_table_owned_geocodes VALUES (:userID, :geocodeID) ON CONFLICT DO NOTHING", nativeQuery = true)// /UPDATE after NOTHING
     void addOwnedGeoCode(@Param("userID") @NotNull @Valid UUID userID, @Param("geocodeID") @NotNull @Valid UUID geocodeID);
 }

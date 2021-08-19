@@ -112,9 +112,6 @@ public class MissionServiceImpl implements MissionService{
 
         Collectable collectable = request.getCollectable();
 
-        System.out.println("name of CollectableType:"+collectable.getType().getName());
-        System.out.println("collectable type id:"+collectable.getType().getId());
-
         //check if the Collectable already has a Mission
         if(collectable.getMissionID() != null){//TODO: create updateMission to re-assign a Mission [after Demo 3]
             return new CreateMissionResponse(false, collectableHasMissionMessage, null);
@@ -125,10 +122,8 @@ public class MissionServiceImpl implements MissionService{
         //get the MissionType
         MissionType missionType = MissionType.fromValue(collectableType.getProperties().get("missionType"));
 
-        System.out.println("collectable type:"+collectableType.getName());
-
-        //random allocation of missionType means there is an element of luck involved
-        //if type is Random - set type to one of the actual types
+        /* random allocation of missionType means there is an element of luck involved
+        if type is Random - set type to one of the actual types */
         if(missionType == null || missionType.equals(MissionType.RANDOM)){
             missionType = MissionType.values()[new Random().nextInt(MissionType.values().length-1)];
         }

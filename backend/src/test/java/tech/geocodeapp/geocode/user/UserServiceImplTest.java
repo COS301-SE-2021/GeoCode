@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import tech.geocodeapp.geocode.collectable.*;
 import tech.geocodeapp.geocode.collectable.model.*;
+import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
@@ -848,7 +849,7 @@ public class UserServiceImplTest {
     @Test
     void AddToOwnedGeoCodesTestNotAddDuplicate(){
         try {
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUser, thirdGeoCode);
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUserId, thirdGeoCodeID);
             AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -863,7 +864,7 @@ public class UserServiceImplTest {
     @Test
     void AddToOwnedGeoCodesTestAddNew(){
         try {
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUser, firstGeoCode);
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUserId, firstGeoCodeID);
             AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -898,7 +899,7 @@ public class UserServiceImplTest {
     @Test
     void AddToFoundGeoCodesTestNotAddDuplicate(){
         try {
-            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(validUser, secondGeoCode);
+            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(validUserId, secondGeoCodeID);
             AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -913,7 +914,7 @@ public class UserServiceImplTest {
     @Test
     void AddToFoundGeoCodesTestAddNew(){
         try {
-            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(validUser, thirdGeoCode);
+            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(validUserId, thirdGeoCodeID);
             AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -948,7 +949,7 @@ public class UserServiceImplTest {
     @Test
     void AddToFoundCollectableTypesTestNotAddDuplicate(){
         try {
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUser, egg);
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUserId, egg.getId());
             AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -964,10 +965,10 @@ public class UserServiceImplTest {
     void AddToFoundCollectableTypesTestAddNew(){
         try {
             CollectableType wandType = new CollectableType();
-            UUID wandTypeID = UUID.fromString("abad9729-c82f-457c-a42f-418c564dac3f");
+            java.util.UUID wandTypeID = java.util.UUID.fromString("abad9729-c82f-457c-a42f-418c564dac3f");
             wandType.setId(wandTypeID);
 
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUser, wandType);
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUserId, wandTypeID);
             AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
 
             Assertions.assertTrue(response.isSuccess());

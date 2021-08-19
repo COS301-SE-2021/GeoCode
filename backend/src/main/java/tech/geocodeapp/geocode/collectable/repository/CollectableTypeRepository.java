@@ -5,13 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * This class implements the repository for the CollectableType Class
  */
 @Repository
-public interface CollectableTypeRepository extends JpaRepository<CollectableType, UUID> {
+public interface CollectableTypeRepository extends JpaRepository<CollectableType, java.util.UUID> {
     /**
      *  Gets all CollectableType objects of a given rarity
      * @param rarity the Rarity enum value to search by
