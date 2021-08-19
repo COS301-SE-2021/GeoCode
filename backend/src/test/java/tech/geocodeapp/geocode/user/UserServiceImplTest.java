@@ -949,7 +949,7 @@ public class UserServiceImplTest {
     @Test
     void AddToFoundCollectableTypesTestNotAddDuplicate(){
         try {
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUserId, egg.getId());
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUser, egg);
             AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
 
             Assertions.assertTrue(response.isSuccess());
@@ -968,7 +968,7 @@ public class UserServiceImplTest {
             java.util.UUID wandTypeID = java.util.UUID.fromString("abad9729-c82f-457c-a42f-418c564dac3f");
             wandType.setId(wandTypeID);
 
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUserId, wandTypeID);
+            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUser, wandType);
             AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
 
             Assertions.assertTrue(response.isSuccess());
