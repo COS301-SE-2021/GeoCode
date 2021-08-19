@@ -5,7 +5,7 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ master, development ]
+    branches: [ master, development, dev/Configuration ]
   pull_request:
     branches: [ master, development ]
 
@@ -24,4 +24,4 @@ jobs:
     - name: Build with Maven
       run: |
         cd backend
-        mvn --batch-mode --update-snapshots verify
+        mvn clean verify
