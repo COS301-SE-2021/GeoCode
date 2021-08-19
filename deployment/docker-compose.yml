@@ -2,7 +2,7 @@ version: '2.4'
 
 services:
   postgres:
-    container_name: postgres
+    container_name: geocode-postgres
     environment:
       POSTGRES_MULTIPLE_DATABASES: geocode,keycloak
       POSTGRES_USER: ${DATABASE_USERNAME}
@@ -20,13 +20,13 @@ services:
       - ../../.postgres-data:/var/lib/postgresql/data
 
   keycloak:
-    container_name: keycloak
+    container_name: geocode-keycloak
     depends_on:
       postgres:
         condition: service_healthy
     environment:
       DB_VENDOR: POSTGRES
-      DB_ADDR: postgres
+      DB_ADDR: geocode-postgres
       DB_PORT: 5432
       DB_DATABASE: keycloak
       DB_USER: ${DATABASE_USERNAME}
@@ -43,12 +43,12 @@ services:
       - ../../.certificates/privkey.pem:/etc/x509/https/tls.key
 
   spring:
-    container_name: spring
+    container_name: geocode-spring
     depends_on:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: jdbc:postgresql://postgres:5432/geocode
+      DATABASE_URL: jdbc:postgresql://geocode-postgres:5432/geocode
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM}
