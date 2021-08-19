@@ -775,21 +775,21 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void AddToOwnedGeoCodesTestNotAddDuplicate() throws InvalidRequestException {
-        noPointsUser = registerNewUser(noPointsUserId, "noPointsUserId");
+        validUser = registerNewUser(validUserId, "validUser");
 
         List<String> hints = new ArrayList<>();
         hints.add("Behind the climbing wall");
 
-        var createFirstGeoCodeResponse = geoCodeService.createGeoCode(new CreateGeoCodeRequest("4", new GeoPoint(10.0, 10.0), hints, Difficulty.HARD, true));
-        fourthGeoCodeID = createFirstGeoCodeResponse.getGeoCodeID();
-        System.out.println("4: "+createFirstGeoCodeResponse.isSuccess());
+        var createFirstGeoCodeResponse = geoCodeService.createGeoCode(new CreateGeoCodeRequest("1", new GeoPoint(10.0, 10.0), hints, Difficulty.HARD, true));
+        firstGeoCodeID = createFirstGeoCodeResponse.getGeoCodeID();
+        System.out.println("1: "+createFirstGeoCodeResponse.isSuccess());
 
-        var createSecondGeoCodeResponse = geoCodeService.createGeoCode(new CreateGeoCodeRequest("5", new GeoPoint(10.0, 10.0), hints, Difficulty.INSANE, true));
-        fifthGeoCodeID = createSecondGeoCodeResponse.getGeoCodeID();
-        System.out.println("5: "+createSecondGeoCodeResponse.isSuccess());
+        var createSecondGeoCodeResponse = geoCodeService.createGeoCode(new CreateGeoCodeRequest("2", new GeoPoint(10.0, 10.0), hints, Difficulty.INSANE, true));
+        secondGeoCodeID = createSecondGeoCodeResponse.getGeoCodeID();
+        System.out.println("2: "+createSecondGeoCodeResponse.isSuccess());
 
         try {
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(noPointsUserId, fourthGeoCodeID);
+            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(noPointsUserId, secondGeoCodeID);
             AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
 
             Assertions.assertTrue(response.isSuccess());

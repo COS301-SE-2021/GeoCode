@@ -41,6 +41,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * @param geocodeID GeoCode to add
      */
     @Modifying
-    @Query(value="INSERT INTO user_table_owned_geocodes VALUES (:userID, :geocodeID) ON CONFLICT DO NOTHING", nativeQuery = true)// /UPDATE after NOTHING
+    @Query(value="INSERT INTO user_table_owned_geocodes VALUES (:userID, :geocodeID)", nativeQuery = true)// /UPDATE after //NOTHING ON CONFLICT DO NOTHING
     void addOwnedGeoCode(@Param("userID") @NotNull @Valid UUID userID, @Param("geocodeID") @NotNull @Valid UUID geocodeID);
 }
