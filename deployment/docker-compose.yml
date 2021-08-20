@@ -1,0 +1,64 @@
+version: '2.4'
+
+services:
+  postgres:
+    container_name: geocode-postgres
+    environment:
+      POSTGRES_MULTIPLE_DATABASES: geocode,keycloak
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    image: postgres:13.4
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - 14389:5432
+    volumes:
+      - ./setup-databases.sh:/docker-entrypoint-initdb.d/setup-databases.sh
+      - ../../.postgres-data:/var/lib/postgresql/data
+
+  keycloak:
+    container_name: geocode-keycloak
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: geocode-postgres
+      DB_PORT: 5432
+      DB_DATABASE: keycloak
+      DB_USER: ${DATABASE_USERNAME}
+      DB_PASSWORD: ${DATABASE_PASSWORD}
+      KEYCLOAK_USER: ${KEYCLOAK_ADMIN_USERNAME}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KEYCLOAK_IMPORT: /tmp/geocode.json
+    image: quay.io/keycloak/keycloak:13.0.1
+    ports:
+      - 8100:8443
+    volumes:
+      - ./keycloak-config.json:/tmp/geocode.json
+      - ../../.certificates/fullchain.pem:/etc/x509/https/tls.crt
+      - ../../.certificates/privkey.pem:/etc/x509/https/tls.key
+
+  spring:
+    container_name: geocode-spring
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: jdbc:postgresql://geocode-postgres:5432/geocode
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+      KEYCLOAK_AUTH_SERVER_URL: https://geocode-keycloak:8443/auth
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+      WEB_REFERRER: ${WEB_REFERRER}
+      KEY_STORE_TYPE: PKCS12
+      KEY_STORE: classpath:keystore.p12
+      KEY_STORE_ALIAS: ${KEY_STORE_ALIAS}
+      KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD}
+    image: geocode/backend
+    ports:
+      - 8080:8080

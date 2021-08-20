@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.user.model.User;
 
+import java.util.UUID;
+
 public class AddToFoundCollectableTypesRequest {
     @JsonProperty("user")
     private User user;

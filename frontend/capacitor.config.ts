@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'tech.geocodeapp.geocode',
   appName: 'GeoCode',
   webDir: 'www',
   bundledWebRuntime: false,

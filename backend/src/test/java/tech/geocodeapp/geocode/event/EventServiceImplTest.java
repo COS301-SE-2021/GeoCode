@@ -112,6 +112,11 @@ class EventServiceImplTest {
     UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
 
     /**
+     * This is used to have a static known UUID for a user ID
+     */
+    UUID userID = UUID.fromString( "2a72e0f9-86a7-4f38-9fda-5f31a8f3c421" );
+
+    /**
      * Create the EventServiceImpl with the relevant repositories.
      *
      * This is done to ensure a repository with no data is created each time

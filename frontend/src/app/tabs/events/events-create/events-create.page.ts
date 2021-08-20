@@ -159,6 +159,7 @@ export class EventsCreatePage implements AfterViewInit  {
     }
     console.log(this.request);
     this.eventApi.createEvent(this.request).subscribe((response: CreateEventResponse) =>{
+      this.navCtrl.navigateBack('/events');
     });
 
   }
