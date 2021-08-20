@@ -83,7 +83,7 @@ public class CollectableServiceImpl implements CollectableService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        java.util.UUID setID = request.getSetId();
+        UUID setID = request.getSetId();
         Optional<CollectableSet> collectableSetOptional = collectableSetRepo.findById(setID);
 
         if(collectableSetOptional.isPresent()){
@@ -114,7 +114,7 @@ public class CollectableServiceImpl implements CollectableService {
             return new CreateCollectableResponse(false, "createMission set to true, but the location given was NULL", null);
         }
 
-        java.util.UUID typeID = request.getCollectableTypeId();
+        UUID typeID = request.getCollectableTypeId();
         Optional<CollectableType> collectableTypeOptional = collectableTypeRepo.findById(typeID);
 
         if(collectableTypeOptional.isPresent()){
@@ -277,7 +277,7 @@ public class CollectableServiceImpl implements CollectableService {
          * The "User Trackables" set and type are required to exist before users can enter the system.
          * Create them on application load if they do not exist.
          */
-        java.util.UUID userTrackableID = new java.util.UUID(0, 0);
+        UUID userTrackableID = new UUID(0, 0);
 
         Optional<CollectableSet> temp = collectableSetRepo.findById(userTrackableID);
         CollectableSet userTrackableSet = null;

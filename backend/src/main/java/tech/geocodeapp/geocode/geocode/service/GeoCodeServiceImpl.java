@@ -28,6 +28,7 @@ import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 
 import tech.geocodeapp.geocode.user.request.AddToOwnedGeoCodesRequest;
+import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
 import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
@@ -267,11 +268,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
              * Add the GeoCode to the list of GeoCodes that the user has created
              */
             try {
-                AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, check);
+                //PASS createByObj, check INSTEAD (.save() returned object)
+                var createdByObj = userService.getUserById(new GetUserByIdRequest(createdBy.getId())).getUser();
+                AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdByObj, check);
                 userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
             } catch (NullRequestParameterException e) {
                 e.printStackTrace();
-                System.out.println("owned geocode not added: "+newGeoCode.getDescription());
                 return new CreateGeoCodeResponse(false);
             }
         } catch ( IllegalArgumentException error ) {
@@ -792,7 +794,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         Collectable userToGeocode;
 
         try {
-            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( user, geocodeToUser, geocode ) ).getCollectable();
+            //pass fresh objects to the swapCollectable
+            var userObj = userService.getUserById(new GetUserByIdRequest(user.getId())).getUser();
+            var geocodeToUserObj = collectableService.getCollectableByID(new GetCollectableByIDRequest(geocodeToUser.getId())).getCollectable();
+            var geocodeObj = geoCodeRepo.findById(geocode.getId()).get();
+
+            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( userObj, geocodeToUserObj, geocodeObj ) ).getCollectable();
         } catch ( NullRequestParameterException error ) {
 
             /* Validate the Collectable returned */

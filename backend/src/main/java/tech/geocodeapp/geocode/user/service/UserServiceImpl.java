@@ -239,7 +239,7 @@ public class UserServiceImpl implements UserService {
      * @return A GetMyLeaderboardsResponse object: (success, message, object)
      * @throws NullRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
-    @Transactional
+    //@Transactional
     public GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullRequestParameterException{
         if (request == null) {
             return new GetMyLeaderboardsResponse(false, "The GetMyLeaderboardsRequest object passed was NULL", null);
@@ -301,10 +301,6 @@ public class UserServiceImpl implements UserService {
         User user = request.getUser();
         GeoCode geoCode = request.getGeocode();
 
-        for(var currentGeoCode: user.getOwnedGeocodes()){
-            System.out.println("currentGeoCode:"+currentGeoCode.getDescription());
-        }
-
         user.addOwnedGeocodesItem(geoCode);
         userRepo.save(user);
 
@@ -323,14 +319,12 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-//        User user = request.getUser();
-//        GeoCode geoCode = request.getGeocode();
-//
-//        //add the GeoCodeID to the User's list of owned GeoCodes
-//        user.addFoundGeocodesItem(geoCode);
-//        userRepo.save(user);
+        User user = request.getUser();
+        GeoCode geoCode = request.getGeocode();
 
-        userRepo.addFoundGeoCode(request.getUserID(), request.getGeoCodeID());//
+        //add the GeoCodeID to the User's list of owned GeoCodes
+        user.addFoundGeocodesItem(geoCode);
+        userRepo.save(user);
 
         return new AddToFoundGeoCodesResponse(true, "GeoCode added to the found GeoCodes");
     }
@@ -462,30 +456,28 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        User currentUser = request.getUser();
+        User user = request.getUser();
         GeoCode geoCode = request.getGeoCode();
 
         //swap out the currentCollectable
-        Collectable oldCurrentCollectable = currentUser.getCurrentCollectable();
+        Collectable oldCurrentCollectable = user.getCurrentCollectable();
         Collectable newCurrentCollectable = request.getCollectable();
-        currentUser.setCurrentCollectable(newCurrentCollectable);
+        user.setCurrentCollectable(newCurrentCollectable);
 
         //add the GeoCode to the User's found GeoCodes
-        AddToFoundGeoCodesRequest addToFoundGeoCodesRequest = new AddToFoundGeoCodesRequest(currentUser.getId(), geoCode.getId());
-        this.addToFoundGeoCodes(addToFoundGeoCodesRequest);
+        this.addToFoundGeoCodes(new AddToFoundGeoCodesRequest(user, geoCode));
 
         //add the CollectableType to the User's found CollectableTypes
-        AddToFoundCollectableTypesRequest addToFoundCollectableTypesRequest = new AddToFoundCollectableTypesRequest(currentUser, newCurrentCollectable.getType());
-        this.addToFoundCollectableTypes(addToFoundCollectableTypesRequest);
+        this.addToFoundCollectableTypes(new AddToFoundCollectableTypesRequest(user, newCurrentCollectable.getType()));
         
         //add the Collectable's Mission to the User's Missions
         UUID missionID = newCurrentCollectable.getMissionID();
         
         if(missionID != null){
-            this.addToMyMissions(new AddToMyMissionsRequest(currentUser, missionService.getMissionById(new GetMissionByIdRequest(missionID)).getMission()));
+            this.addToMyMissions(new AddToMyMissionsRequest(user, missionService.getMissionById(new GetMissionByIdRequest(missionID)).getMission()));
         }
 
-        userRepo.save(currentUser);
+        userRepo.save(user);
 
         return new SwapCollectableResponse(true, "The User's Collectable was swapped with the Collectable in the GeoCode", oldCurrentCollectable );
     }
