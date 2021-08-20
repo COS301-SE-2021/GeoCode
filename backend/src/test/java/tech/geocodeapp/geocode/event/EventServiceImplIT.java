@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.GeoCodeApplication;
 
+import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
@@ -198,17 +200,18 @@ class EventServiceImplIT {
     @Test
     @Order( 4 )
     @DisplayName( "Valid request - createEvent" )
+    @Transactional
     void createEventTest() {
 
         try {
 
             /* Create mock geocodes to add to the event */
-            GeoCode gc1 = new GeoCode().id( UUID.randomUUID() );
-            GeoCode gc2 = new GeoCode().id( UUID.randomUUID() );
-            GeoCode gc3 = new GeoCode().id( UUID.randomUUID() );
-            geoCodeRepo.save( gc1 );
-            geoCodeRepo.save( gc2 );
-            geoCodeRepo.save( gc3 );
+            List<UUID> geoCodesToFind = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                GeoCode gc = new GeoCode( UUID.randomUUID(), Difficulty.EASY, true, "", new ArrayList<String>(), new ArrayList<UUID>(), "", new GeoPoint(0, 0), UUID.randomUUID() );
+                gc = geoCodeRepo.save(gc);
+                geoCodesToFind.add(gc.getId());
+            }
 
             /*
              * Create a request object
@@ -220,10 +223,6 @@ class EventServiceImplIT {
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
             request.setEndDate( LocalDate.parse( "2020-05-21" ) );
-            List< UUID > geoCodesToFind = new ArrayList<>();
-            geoCodesToFind.add( gc1.getId() );
-            geoCodesToFind.add( gc2.getId() );
-            geoCodesToFind.add( gc3.getId() );
             request.setGeoCodesToFind( geoCodesToFind );
             request.setOrderBy( OrderLevels.GIVEN );
             request.setProperties( new HashMap<>() );
@@ -792,13 +791,12 @@ class EventServiceImplIT {
         try {
 
             /* Create mock geocodes */
-            GeoCode gc1 = new GeoCode().id( UUID.randomUUID() );
-            GeoCode gc2 = new GeoCode().id( UUID.randomUUID() );
-            GeoCode gc3 = new GeoCode().id( UUID.randomUUID() );
-            geoCodeRepo.save( gc1 );
-            geoCodeRepo.save( gc2 );
-            geoCodeRepo.save( gc3 );
-
+            List<UUID> geoCodesToFind = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                GeoCode gc = new GeoCode( UUID.randomUUID(), Difficulty.EASY, true, "", new ArrayList<String>(), new ArrayList<UUID>(), "", new GeoPoint(0, 0), UUID.randomUUID() );
+                gc = geoCodeRepo.save(gc);
+                geoCodesToFind.add(gc.getId());
+            }
 
             CreateEventRequest request = new CreateEventRequest();
             request.setDescription( "Try get as many as possible" );
@@ -806,10 +804,6 @@ class EventServiceImplIT {
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
             request.setEndDate( LocalDate.parse( "2020-05-21" ) );
-            List< UUID > geoCodesToFind = new ArrayList<>();
-            geoCodesToFind.add( gc1.getId() );
-            geoCodesToFind.add( gc2.getId() );
-            geoCodesToFind.add( gc3.getId() );
             request.setGeoCodesToFind( geoCodesToFind );
             request.setOrderBy( OrderLevels.GIVEN );
 
