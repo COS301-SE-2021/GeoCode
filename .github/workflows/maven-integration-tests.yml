@@ -31,9 +31,9 @@ jobs:
         
     - name: Prevent unit tests from running
       run: |
-        tr '\n' '<<<newline>>>' < backend/pom.xml > temp.xml
+        tr '\n' '\t' < backend/pom.xml > temp.xml
         sudo sed -i "s/<!-- Unit tests -->.*<!-- End unit tests -->//g" temp.xml
-        tr '<<<newline>>>' '\n' < temp.xml > backend/pom.xml
+        tr '\t' '\n' < temp.xml > backend/pom.xml
         
     - name: Compile application
       run: |
