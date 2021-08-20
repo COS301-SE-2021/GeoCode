@@ -6,8 +6,6 @@ import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 
-import java.util.UUID;
-
 /**
  * This interface is for the service for the User subsystem
  */
@@ -54,7 +52,7 @@ public interface UserService {
     User getCurrentUser();
 
     //U1.14 getCurrentUserID
-    UUID getCurrentUserID();
+    java.util.UUID getCurrentUserID();
 
     //U1.15 registerNewUser
     RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException;
@@ -65,7 +63,7 @@ public interface UserService {
     SwapCollectableResponse swapCollectable(SwapCollectableRequest request) throws NullRequestParameterException;
 
     //U1.17 addToMyMissions
-    void addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException;
+    AddToMyMissionsResponse addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException;
 
     /**
      * Post construct the GeoCode service, this avoids a circular dependency

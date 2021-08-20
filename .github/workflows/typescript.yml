@@ -22,13 +22,13 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.4.0
         with:
-          node-version: 'lts/fermium'
+          node-version: '14.17.5'
           
       - name: Install Angular CLI
-        run: npm install -g @angular/cli
+        run: npm install -g @angular/cli@12.2.1
         
       - name: Install Ionic CLI
-        run: npm install -g @ionic/cli
+        run: npm install -g @ionic/cli@6.17.0
 
       - name: Install dependencies
         working-directory: ./frontend
@@ -53,13 +53,13 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.4.0
         with:
-          node-version: 'lts/fermium'
+          node-version: '14.17.5'
 
       - name: Install Angular CLI
-        run: npm install -g @angular/cli
+        run: npm install -g @angular/cli@12.2.1
         
       - name: Install Ionic CLI
-        run: npm install -g @ionic/cli
+        run: npm install -g @ionic/cli@6.17.0
 
       - name: Install dependencies
         working-directory: ./frontend
