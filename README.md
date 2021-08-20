@@ -265,7 +265,7 @@ The following software engineers contributed to the GeoCode project:
        <pre>
            - Documentation: Software Requirements Specification
            - Documentation: Architecture Requirements and Design Specifications
-           - Backend: Collectable Subsystem and the design patterns (Decotator, Factory and Strategy patterns) 
+           - Backend: Collectable Subsystem and the design patterns (Decorator, Factory and Strategy patterns) 
            - Backend: Mission Subsystem
            - Backend: LeaderBoard Subsystem
        </pre>
