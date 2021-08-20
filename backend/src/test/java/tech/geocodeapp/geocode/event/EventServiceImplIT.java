@@ -285,6 +285,7 @@ class EventServiceImplIT {
     @Test
     @Order( 7 )
     @DisplayName( "Valid request - getEvent" )
+    @Transactional
     void getEventTest() {
 
         try {
