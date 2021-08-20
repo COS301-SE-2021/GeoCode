@@ -268,9 +268,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
              * Add the GeoCode to the list of GeoCodes that the user has created
              */
             try {
-                //PASS createByObj, check INSTEAD (.save() returned object)
-                var createdByObj = userService.getUserById(new GetUserByIdRequest(createdBy.getId())).getUser();
-                AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdByObj, check);
+                AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, check);
                 userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
             } catch (NullRequestParameterException e) {
                 e.printStackTrace();
