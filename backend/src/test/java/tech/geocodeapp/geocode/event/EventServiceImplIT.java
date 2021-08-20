@@ -293,9 +293,9 @@ class EventServiceImplIT {
             populate( 3 );
 
             /* Populate with a known Event to find*/
-            var event = new Event( eventID, "Test", "Test description", null,
-                                   null, LocalDate.parse( "2020-01-08" ),
-                                   LocalDate.parse( "2020-01-08" ), null, new HashMap<>() );
+            var event = new Event( eventID, "Test", "Test description", new GeoPoint(0, 0),
+                                   new ArrayList<>(), LocalDate.parse( "2020-01-08" ),
+                                   LocalDate.parse( "2020-01-08" ), new ArrayList<>(), new HashMap<>() );
 
             /* Add the created Event to the repository */
             eventRepo.save( event );
@@ -378,9 +378,9 @@ class EventServiceImplIT {
             populate( 3 );
 
             /* Populate with a known Event to find*/
-            var event = new Event( eventID, "Test", "Test description", null,
-                                   null, LocalDate.parse( "2020-01-08" ),
-                                   LocalDate.parse( "2020-01-08" ), null, new HashMap<>() );
+            var event = new Event( eventID, "Test", "Test description", new GeoPoint(0, 0),
+                                   new ArrayList<>(), LocalDate.parse( "2020-01-08" ),
+                                   LocalDate.parse( "2020-01-08" ), new ArrayList<>(), new HashMap<>() );
 
             /* Add the created Event to the repository */
             eventRepo.save( event );
