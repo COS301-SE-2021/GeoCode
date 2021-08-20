@@ -5,12 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * This class implements the repository for the Collectable Class
  */
 @Repository
-public interface CollectableRepository extends JpaRepository<Collectable, java.util.UUID> {
+public interface CollectableRepository extends JpaRepository<Collectable, UUID> {
     /**
      * Gets all Collectables of a provided CollectableType
      * @param type The CollectableType to search by
