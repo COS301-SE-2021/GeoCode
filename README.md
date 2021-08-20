@@ -139,6 +139,10 @@ The following documentation was done in LaTeX and is to document the methods use
 * <a href="https://www.overleaf.com/read/byjsbnwxcgnm"> Coding Standards </a>
 * <a href="https://www.overleaf.com/read/bprjhgpzbcxf">Technical Installation Manual</a>
 * <a href="https://www.overleaf.com/read/fjdvrjjsndhv">User Manual</a>
+* <a href="https://drive.google.com/file/d/1TPxVUnTDn-eS_OPRwaLPnVOdo1seEFya/view?usp=sharing">Architectural Requirements Version Two</a>
+* <a href="https://www.overleaf.com/read/yvhjyygymzdn">Architectural Requirements Version Three</a>
+  
+The following documentation was done in LaTeX and is to document the usability testing of the project.
 * <a href="https://www.overleaf.com/read/hpvhpdhpscwz">Application Theme Test</a>
 
 </div>
@@ -168,7 +172,7 @@ phases of the project to the stakeholders of the GeoCode project.
 
 * <a href="https://drive.google.com/file/d/1OqOuoMHSyd4rTUqWW5j_ME1EZcIJHre4/view?usp=sharing"> Demo 1 </a> - :calendar: 2021-06-14
 * <a href="https://drive.google.com/file/d/1iSdTMS9bjVXQGxdfrJ-6nl46fX0j3h7n/view?usp=sharing"> Demo 2  </a> - :calendar: 2021-06-21 
-* <a href="https://michael-stroh.github.io/capstone/"> Demo 3  </a> - :calendar: 2021-08-20 
+* <a href="https://drive.google.com/file/d/1lVIqfENiN10zGNmveXXlzY8A03thT7aV/view?usp=sharing"> Demo 3  </a> - :calendar: 2021-08-20 
 * <a href="https://michael-stroh.github.io/capstone/"> Demo 4  </a> - :calendar: 2021-09-24 
 
 </div>
@@ -229,7 +233,8 @@ The following software engineers contributed to the GeoCode project:
            - Documentation: Coding Standards
            - Documentation: Software Requirements Specification
            - Documentation: Architecture Requirements and Design Specifications
-           - Backend: GeoCode Subsystem
+           - Backend: GeoCode Subsystem and GeoCode Optimization
+           - Backend: Events Subsystem
        </pre>
    </details>
 
@@ -260,7 +265,9 @@ The following software engineers contributed to the GeoCode project:
        <pre>
            - Documentation: Software Requirements Specification
            - Documentation: Architecture Requirements and Design Specifications
-           - Backend: Collectable Subsystem
+           - Backend: Collectable Subsystem and the design patterns (Decotator, Factory and Strategy patterns) 
+           - Backend: Mission Subsystem
+           - Backend: LeaderBoard Subsystem
        </pre>
    </details>
 
@@ -288,7 +295,10 @@ The following software engineers contributed to the GeoCode project:
        <pre>
            - Documentation: Software Requirements Specification
            - Documentation: Architecture Requirements and Design Specifications
-           - Frontend: GeoCode Pages
+           - Frontend: Explore tabs Pages 
+           - Frontend: Events tabs Pages
+           - Frontend: Profile tabs Pages
+           - Usability Testing: Colour Scheme Test.
        </pre>
    </details>
 
@@ -322,6 +332,8 @@ The following software engineers contributed to the GeoCode project:
            - Documentation: Architecture Requirements and Design Specifications
            - Backend: Collectable Subsystem
            - Backend: User Subsystem  
+           - Backend: LeaderBoard Subsystem
+           
        </pre>
    </details>
 
@@ -350,7 +362,13 @@ The following software engineers contributed to the GeoCode project:
        <pre>
            - Documentation: Software Requirements Specification
            - Documentation: Architecture Requirements and Design Specifications
-           - Frontend: Collectable Pages
+           - Documentation: Technical Installation manual
+           - Frontend: Collectable tab Pages
+           - Frontend: Profile tab Pages
+           - Frontend: QR scanning
+           - Keycloak integration
+           - Server Management and deployment
+           
        </pre>
    </details>
 
