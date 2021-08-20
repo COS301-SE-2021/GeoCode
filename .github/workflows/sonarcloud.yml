@@ -22,9 +22,9 @@ jobs:
           
       - name: Prevent integration tests from running
         run: |
-          tr '\n' ' ' < backend/pom.xml > temp.xml
+          tr '\n' '<<<newline>>>' < backend/pom.xml > temp.xml
           sudo sed -i "s/<!-- Integration tests -->.*<!-- End integration tests -->//g" temp.xml
-          mv temp.xml backend/pom.xml
+          tr '<<<newline>>>' '\n' < temp.xml > backend/pom.xml
         
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
