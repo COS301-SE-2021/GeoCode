@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'GeoCode',
   webDir: 'www',
   bundledWebRuntime: false,
-  cordova: {
+  /*cordova: {
     preferences: {
       ScrollEnabled: 'false',
       BackupWebStorage: 'none',
@@ -15,7 +15,7 @@ const config: CapacitorConfig = {
       SplashScreen: 'screen',
       SplashScreenDelay: '3000'
     }
-  }
+  }*/
 };
 
 export default config;

@@ -32,10 +32,12 @@ export class ProfilePage implements OnInit {
   ) {
     this.userID = route.snapshot.paramMap.get('id');
     if (!this.userID) {
+      const instance = this.keycloak.getKeycloakInstance();
       this.isOwnProfile = true;
-      this.userID = this.keycloak.getKeycloakInstance().subject;
+      this.userID = instance.subject;
       // @ts-ignore
-      this.username=keycloak.getKeycloakInstance().idTokenParsed.preferred_username;
+      this.username = instance.idTokenParsed.preferred_username;
+
       this.userService.getUserTrackable({userID: this.userID}).subscribe((response: GetUserTrackableResponse) => {
         console.log(response);
         this.trackable = response.trackable;
@@ -72,7 +74,7 @@ export class ProfilePage implements OnInit {
   }
 
   async logout() {
-    await this.keycloak.logout(environment.baseRedirectURI+'/welcome');
+    await this.keycloak.logout(environment.baseRedirectURI+'welcome');
   }
 
   async manage() {

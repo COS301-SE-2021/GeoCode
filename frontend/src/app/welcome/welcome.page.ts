@@ -15,20 +15,19 @@ export class WelcomePage {
     private router: Router
   ) {
     if (this.keycloak.getKeycloakInstance().authenticated) {
-      this.router.navigate(['explore']).then().catch();
+      this.router.navigate(['/explore']).then().catch();
     }
   }
 
   async login() {
     await this.keycloak.login({
-      redirectUri: environment.baseRedirectURI+'/explore'
+      redirectUri: environment.baseRedirectURI+'explore'
     });
   }
 
   async register(){
     await this.keycloak.register({
-      redirectUri: environment.baseRedirectURI+'/explore'
+      redirectUri: environment.baseRedirectURI+'explore'
     });
   }
-
 }
