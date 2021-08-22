@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.collectable.CollectableTypeMockRepository;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
@@ -103,7 +104,7 @@ class GeoCodeServiceImplIT {
     /**
      * This is used to have a static known UUID
      */
-    UUID userID = UUID.fromString( "84cfaac5-eb4b-4e4a-80c1-2becd94ab2b3" );
+    UUID userID = UUID.fromString( "f479228d-8a4a-4b90-ba86-abccadec5085" );
 
     /**
      * Create the GeoCodeServiceImpl with the relevant repositories.
@@ -586,6 +587,7 @@ class GeoCodeServiceImplIT {
     @Test
     @Order( 18 )
     @DisplayName( "Valid request - createGeoCode" )
+    @Transactional
     void createGeoCodeTest() {
 
         try {
@@ -1008,6 +1010,7 @@ class GeoCodeServiceImplIT {
     @Test
     @Order( 23 )
     @DisplayName( "Valid request - updateAvailability" )
+    @Transactional
     void updateAvailabilityTest() {
 
         /* Create a GeoCode */
@@ -1078,6 +1081,7 @@ class GeoCodeServiceImplIT {
     @Test
     @Order( 24 )
     @DisplayName( "Valid request getGeoCodesByLocation" )
+    @Transactional
     void getGeoCodesByLocationTest() {
 
         /* Create a GeoCode */
@@ -1148,6 +1152,7 @@ class GeoCodeServiceImplIT {
     @Test
     @Order( 25 )
     @DisplayName( "Valid request - getGeoCodesByQRCode" )
+    @Transactional
     void getGeoCodesByQRCodeTest() {
 
         /* Create a GeoCode */
@@ -1218,6 +1223,7 @@ class GeoCodeServiceImplIT {
     @Test
     @Order( 26 )
     @DisplayName( "Valid request - getCollectables" )
+    @Transactional
     void getCollectablesTest() {
 
         /* Create a GeoCode */

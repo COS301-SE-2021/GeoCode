@@ -28,6 +28,7 @@ import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 
 import tech.geocodeapp.geocode.user.request.AddToOwnedGeoCodesRequest;
+import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
 import tech.geocodeapp.geocode.user.request.SwapCollectableRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
@@ -204,12 +205,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             /* Building a collectable from a collectable response */
             var temp = new Collectable();
 
-            if(collectableResponse.getCollectable() == null){
-                System.out.println("collectableResponse.getCollectable() == null");
-                System.out.println("message = "+collectableResponse.getMessage());
-            }
             temp.setId( collectableResponse.getCollectable().getId() );
-            //CollectableTypeComponent type = collectableResponse.getCollectable().getType();
 
             CollectableTypeManager manager = new CollectableTypeManager();
 
@@ -267,19 +263,22 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 /* Saved GeoCode not the same therefore creation failed */
                 return new CreateGeoCodeResponse( false );
             }
+
+            /*
+             * Add the GeoCode to the list of GeoCodes that the user has created
+             */
+            try {
+                AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, check);
+                userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
+            } catch (NullRequestParameterException e) {
+                e.printStackTrace();
+                return new CreateGeoCodeResponse(false);
+            }
         } catch ( IllegalArgumentException error ) {
 
             /* Exception thrown therefore creation failed */
             return new CreateGeoCodeResponse( false );
         }
-
-        /*
-         * Add the GeoCode to the list of GeoCodes that the user has created
-         */
-        try {
-            AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, newGeoCode);
-            userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
-        } catch (NullRequestParameterException e) {}
 
         /*
          * Create the new response
@@ -793,8 +792,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         Collectable userToGeocode;
 
         try {
+            //pass fresh objects to the swapCollectable
+            var userObj = userService.getUserById(new GetUserByIdRequest(user.getId())).getUser();
+            var geocodeToUserObj = collectableService.getCollectableByID(new GetCollectableByIDRequest(geocodeToUser.getId())).getCollectable();
+            var geocodeObj = geoCodeRepo.findById(geocode.getId()).get();
 
-            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( user, geocodeToUser, geocode ) ).getCollectable();
+            userToGeocode = userService.swapCollectable( new SwapCollectableRequest( userObj, geocodeToUserObj, geocodeObj ) ).getCollectable();
         } catch ( NullRequestParameterException error ) {
 
             /* Validate the Collectable returned */
