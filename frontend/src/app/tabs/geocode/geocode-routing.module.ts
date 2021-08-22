@@ -8,7 +8,7 @@ const routes: Routes = [
     component: GeocodePage
   },
   {
-    path: 'open/:id',
+    path: 'open/:geocodeID',
     loadChildren: () => import('./geocode-contents/geocode-contents.module').then(m => m.GeocodeContentsPageModule)
   },
   {

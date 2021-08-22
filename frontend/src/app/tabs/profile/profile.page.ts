@@ -30,7 +30,7 @@ export class ProfilePage implements OnInit {
     private keycloak: KeycloakService,
     route: ActivatedRoute
   ) {
-    this.userID = route.snapshot.paramMap.get('id');
+    this.userID = route.snapshot.paramMap.get('userID');
     if (!this.userID) {
       const instance = this.keycloak.getKeycloakInstance();
       this.isOwnProfile = true;
