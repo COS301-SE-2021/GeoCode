@@ -24,7 +24,6 @@ public interface EventService {
      */
     CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException;
 
-
     /**
      * Get a specified Event that is stored in the repository
      *
@@ -35,8 +34,6 @@ public interface EventService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     GetEventResponse getEvent( GetEventRequest request ) throws InvalidRequestException;
-
-
 
     /**
      * Get the current status of a User participating in an event, as well as the target GeoCode that they need to locate

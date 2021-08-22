@@ -37,7 +37,12 @@
               }
             ],
             "styles": ["src/theme/variables.scss", "src/global.scss"],
-            "scripts": [],
+            "scripts": [
+              "node_modules/ngx-blockly/scripts/blockly/blockly_compressed.js",
+              "node_modules/ngx-blockly/scripts/blockly/blocks_compressed.js",
+              "node_modules/ngx-blockly/scripts/blockly/python_compressed.js",
+              "node_modules/ngx-blockly/scripts/blockly/msg/js/en.js"
+            ],
             "aot": false,
             "vendorChunk": true,
             "extractLicenses": false,

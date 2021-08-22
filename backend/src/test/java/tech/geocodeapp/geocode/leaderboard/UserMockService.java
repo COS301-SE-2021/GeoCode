@@ -9,7 +9,6 @@ import tech.geocodeapp.geocode.user.response.*;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public class UserMockService implements UserService {
 
@@ -90,7 +89,7 @@ public class UserMockService implements UserService {
     }
 
     @Override
-    public UUID getCurrentUserID() {
+    public java.util.UUID getCurrentUserID() {
         return null;
     }
 
@@ -115,8 +114,8 @@ public class UserMockService implements UserService {
     }
 
     @Override
-    public void addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException {
-
+    public AddToMyMissionsResponse addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException {
+        return null;
     }
 
     /**
