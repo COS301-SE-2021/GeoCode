@@ -126,7 +126,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     @PostConstruct
     public void init() {
 
-        userService.setGeoCodeService( this );
+        //userService.setGeoCodeService( this );
         eventService.setGeoCodeService( this );
     }
 

@@ -1,28 +1,20 @@
 package tech.geocodeapp.geocode.user;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.*;
-
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import tech.geocodeapp.geocode.collectable.*;
+import tech.geocodeapp.geocode.collectable.CollectableMockRepository;
+import tech.geocodeapp.geocode.collectable.CollectableSetMockRepository;
+import tech.geocodeapp.geocode.collectable.CollectableTypeMockRepository;
 import tech.geocodeapp.geocode.collectable.model.*;
-import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
-import tech.geocodeapp.geocode.geocode.exceptions.RepoException;
 import tech.geocodeapp.geocode.geocode.model.*;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
-import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
-import tech.geocodeapp.geocode.geocode.service.GeoCodeServiceImpl;
 import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
 import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
@@ -34,19 +26,22 @@ import tech.geocodeapp.geocode.mission.model.MissionType;
 import tech.geocodeapp.geocode.mission.service.MissionService;
 import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
 import tech.geocodeapp.geocode.user.model.User;
-import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
+import tech.geocodeapp.geocode.user.service.UserService;
+import tech.geocodeapp.geocode.user.service.UserServiceImpl;
+
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith( MockitoExtension.class )
-@MockitoSettings(strictness = Strictness.LENIENT) //to avoid MockSecurity error (.when() line)
+@MockitoSettings(strictness = Strictness.LENIENT) //to avoid MockSecurity error
 public class UserServiceImplTest {
     private UserService userService;
     private UserMockRepository userMockRepo;
-    private MissionService missionService;
 
     private User validUser;
-    private User invalidUser;
 
     private GeoCode firstGeoCode;
     private GeoCode secondGeoCode;
@@ -68,9 +63,6 @@ public class UserServiceImplTest {
     private final UUID fishCollectableID = UUID.fromString("cfb23fdb-7b9e-4f67-ad67-b2bab0e7541a");
     private final UUID ballCollectableID = UUID.fromString("49b544b6-307c-4905-bc5e-f61c2afdd56b");
 
-    private final UUID invalidGeoCodeID = UUID.fromString("c6dab51d-7b2c-45df-940c-189821a36178");
-    private final UUID invalidCollectableID = UUID.fromString("4d2877ee-431e-4a46-b391-c9755291a0f6");
-
     private final UUID fishCollectableTypeID = UUID.fromString("91216b44-b123-486c-8ba7-1c2da7d0feef");
     private final UUID ballCollectableTypeID = UUID.fromString("f85ebdce-a569-4d47-9274-d4b0245c4713");
     
@@ -82,7 +74,6 @@ public class UserServiceImplTest {
     private final UUID circumferenceMissionID = UUID.fromString("88705bf1-3f5e-42a8-ae91-f29bbe5c9dd4");
 
     private final String invalidUserIdMessage = "Invalid User id";
-    private final String existingUserIdMessage = "User ID already exists";
 
     private final String hatfieldEaster = "Hatfield Easter Hunt 2021";
     private final String menloParkChristmas = "Christmas 2021 market";
@@ -101,7 +92,6 @@ public class UserServiceImplTest {
     private GeoCode geoCodeWithCollectables;
     private Collectable fishCollectable;
 
-    private GeoCode invalidGeoCode;
     private CollectableType egg;
 
     UserServiceImplTest() {
@@ -129,21 +119,12 @@ public class UserServiceImplTest {
         GeoCodeMockRepository geoCodeMockRepo = new GeoCodeMockRepository();
 
         MissionMockRepository missionMockRepo = new MissionMockRepository();
-        missionService = new MissionServiceImpl(missionMockRepo);
+        MissionService missionService = new MissionServiceImpl(missionMockRepo);
 
         userMockRepo = new UserMockRepository();
         CollectableService collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo, missionService);
-        GeoCodeService geoCodeService;
-
-        try {
-            geoCodeService = new GeoCodeServiceImpl(geoCodeMockRepo, collectableService, userService, null);
-        } catch (RepoException e) {
-            e.printStackTrace();
-            return;
-        }
 
         userService = new UserServiceImpl(userMockRepo, collectableMockRepo, new PointMockRepository(), collectableService, missionService);
-        userService.setGeoCodeService(geoCodeService);
 
         //save the valid trackable CollectableType
         CollectableType trackableCollectableType = new CollectableType();
@@ -182,9 +163,6 @@ public class UserServiceImplTest {
         bunny.setId(bunnyCollectableTypeID);
         bunny.setName("bunny");
         collectableTypeMockRepo.save(bunny);
-
-        //invalid User to test if function checks for invalid Users when it should
-        invalidUser = new User(invalidUserId);
 
         //add to the User's found CollectableTypes
         try{
@@ -316,9 +294,6 @@ public class UserServiceImplTest {
         geoCodeWithCollectables.addCollectablesItem(ballCollectableID);
 
         geoCodeMockRepo.save(geoCodeWithCollectables);
-
-        invalidGeoCode = new GeoCode();
-        invalidGeoCode.setId(invalidGeoCodeID);
 
         /* Set up mock security */
         MockSecurity.setup();
@@ -1072,6 +1047,7 @@ public class UserServiceImplTest {
             RegisterNewUserResponse response = userService.registerNewUser(request);
 
             Assertions.assertFalse(response.isSuccess());
+            String existingUserIdMessage = "User ID already exists";
             Assertions.assertEquals(existingUserIdMessage, response.getMessage());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();

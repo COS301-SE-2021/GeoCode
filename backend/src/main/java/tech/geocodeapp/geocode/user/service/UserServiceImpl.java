@@ -18,7 +18,6 @@ import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
-import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.mission.model.Mission;
@@ -50,15 +49,8 @@ public class UserServiceImpl implements UserService {
     private final MissionService missionService;
 
     private final String invalidUserIdMessage = "Invalid User id";
-    private final String invalidGeoCodeIdMessage = "Invalid GeoCode id";
-    private final String invalidCollectableTypeIDMessage = "Invalid CollectableType ID";
-
-    private final String existingUserIdMessage = "User ID already exists";
 
     private final UUID trackableTypeUUID = new UUID(0, 0);
-
-    @NotNull(message = "GeoCode Service Implementation may not be null.")
-    private GeoCodeService geoCodeService;
 
     public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, MissionService missionService) {
         this.userRepo = userRepo;
@@ -409,8 +401,9 @@ public class UserServiceImpl implements UserService {
 
         //check if the User already exists
         boolean exists = userRepo.existsById(request.getUserID());
+
         if(exists){
-            return new RegisterNewUserResponse(false, existingUserIdMessage, null);
+            return new RegisterNewUserResponse(false, "User ID already exists", null);
         }
 
         User newUser = new User(request.getUserID(), request.getUsername());
@@ -502,14 +495,5 @@ public class UserServiceImpl implements UserService {
         userRepo.save(user);
 
         return new AddToMyMissionsResponse(true, "Missions added to the User's Missions");
-    }
-
-    /**
-     * Post construct the GeoCode service, this avoids a circular dependency
-     *
-     * @param geoCodeService the service to be set
-     */
-    public void setGeoCodeService( GeoCodeService geoCodeService ){
-        this.geoCodeService = geoCodeService;
     }
 }
