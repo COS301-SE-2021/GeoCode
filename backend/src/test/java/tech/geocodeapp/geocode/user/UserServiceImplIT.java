@@ -549,6 +549,35 @@ public class UserServiceImplIT {
         }
     }
 
+    /**
+     * checks if the details for a Collectable's Mission are correct
+     * @param missionID id of the Mission that the Collectable holds
+     * @param collectableType the type of Collectable that the Collectable in question is in
+     * @param missions the User's Missions
+     */
+    private void checkCollectableMission(UUID missionID, CollectableType collectableType, Set<Mission> missions) {
+        boolean shouldHaveMission = collectableType.getProperties().containsKey("missionType");
+
+        //only check details if the Collectable actually has a Mission
+        if(missionID != null){
+            if(!shouldHaveMission){
+                Assertions.fail("Mission ID present for a Collectable that should not have a Mission");
+                return;
+            }
+
+            MissionType missionType = MissionType.fromValue(collectableType.getProperties().get("missionType"));
+
+            //check the details
+            Assertions.assertTrue(missions.stream().anyMatch(mission ->
+                    mission != null &&
+                    mission.getId().equals(missionID) &&
+                    mission.getType().equals(missionType))
+            );
+        }else if(shouldHaveMission){
+            Assertions.fail("Mission ID not present for a Collectable that should have a Mission");
+        }
+    }
+
     @Test
     public void getCurrentCollectableTestInvalidUser() {
         try{
@@ -872,6 +901,88 @@ public class UserServiceImplIT {
 
     @Test
     @Transactional
+    public void getMyLeaderboardsTestUsersWithPoints() throws NullRequestParameterException, InvalidRequestException {
+        /*createCollectableTypes();
+
+        createOpenDayEvent();
+        addFoundGeoCodesForUser1();
+        addFoundGeoCodesForUser2();
+
+        createWinterSchoolEvent();
+        addFoundGeoCodesForUser1WinterSchool();
+        addFoundGeoCodesForUser2WinterSchool();*/
+
+        //user1
+        userWithPoints1 = registerNewUser(userWithPoints1ID, "userWithPoints1");
+        setUser(userWithPoints1ID);
+
+        var getUser1LeaderboardsRequest = new GetMyLeaderboardsRequest();
+        getUser1LeaderboardsRequest.setUserID(userWithPoints1ID);
+
+        System.out.println("userWithPoints1ID: "+userWithPoints1ID);
+
+        var getUser1LeaderboardsResponse = userService.getMyLeaderboards(getUser1LeaderboardsRequest);
+
+
+//        try {
+
+//
+//
+//            Assertions.assertTrue(getUser1LeaderboardsResponse.isSuccess());
+//            Assertions.assertEquals(successGetMyLeaderboardsMessage, getUser1LeaderboardsResponse.getMessage());
+//
+//            var user1LeaderboardDetails = getUser1LeaderboardsResponse.getLeaderboards();
+//
+//            /* check the user has points */
+//            Assertions.assertFalse(user1LeaderboardDetails.isEmpty());
+//
+//            /* check that the correct details are returned */
+//
+//            //user1 ranked 1st for Open Day event
+//            Assertions.assertTrue(user1LeaderboardDetails.stream().anyMatch(details ->
+//                    details.getName().equals(openDayEventName) && details.getRank() == 1
+//            ));
+//
+//            //user1 ranked 1st for Winter School event
+//            Assertions.assertTrue(user1LeaderboardDetails.stream().anyMatch(details ->
+//                    details.getName().equals(winterSchoolEventName) && details.getRank() == 1
+//            ));
+//
+//            //user2
+//            userWithPoints2 = registerNewUser(userWithPoints2ID, "userWithPoints2");
+//            setUser(userWithPoints2ID);
+//
+//            var getUser2LeaderboardsRequest = new GetMyLeaderboardsRequest();
+//            getUser2LeaderboardsRequest.setUserID(userWithPoints1ID);
+//
+//            var getUser2LeaderboardsResponse = userService.getMyLeaderboards(getUser2LeaderboardsRequest);
+//
+//            Assertions.assertTrue(getUser2LeaderboardsResponse.isSuccess());
+//            Assertions.assertEquals(successGetMyLeaderboardsMessage, getUser2LeaderboardsResponse.getMessage());
+//
+//            var user2LeaderboardDetails = getUser2LeaderboardsResponse.getLeaderboards();
+//
+//            /* check the user has points */
+//            Assertions.assertFalse(user2LeaderboardDetails.isEmpty());
+//
+//            /* check that the correct details are returned */
+//
+//            //user2 ranked 1st for Open Day event
+//            Assertions.assertTrue(user2LeaderboardDetails.stream().anyMatch(details ->
+//                    details.getName().equals(openDayEventName) && details.getRank() == 1
+//            ));
+//
+//            //user2 ranked 1st for Winter School event
+//            Assertions.assertTrue(user2LeaderboardDetails.stream().anyMatch(details ->
+//                    details.getName().equals(winterSchoolEventName) && details.getRank() == 1
+//            ));
+//        } catch (NullRequestParameterException e) {
+//            Assertions.fail(e.getMessage());
+//        }
+    }
+
+    @Test
+    @Transactional
     public void AddToOwnedGeoCodesTestNotAddDuplicate() throws InvalidRequestException {
         try {
             addFirstTwoGeoCodes();
@@ -1159,12 +1270,6 @@ public class UserServiceImplIT {
         addFirstTwoGeoCodes();
         addFoundGeoCodesForUser1();
 
-        Collectable firstFoundCollectable = getCollectableByID(firstFoundCollectableID);
-        Mission firstMission = getMissionByID(firstFoundCollectable.getMissionID());
-
-        Collectable secondFoundCollectable = getCollectableByID(secondFoundCollectableID);
-        Mission secondMission = getMissionByID(secondFoundCollectable.getMissionID());
-
         setUser(userWithPoints1ID);
         GetMyMissionsRequest request = new GetMyMissionsRequest(userWithPoints1ID);
 
@@ -1174,22 +1279,22 @@ public class UserServiceImplIT {
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("User Missions returned", response.getMessage());
 
-            Set<Mission> missions = response.getMissions();
+            var missions = response.getMissions();
             Assertions.assertNotNull(missions);
 
             for(var mission: missions){
                 System.out.println(mission.getType());
             }
 
-            Assertions.assertTrue(missions.stream().anyMatch(mission -> {
-                assert firstMission != null;
-                return mission.getId().equals(firstMission.getId()) && mission.getType().equals(firstMission.getType());
-            }));
+           Collectable firstFoundCollectable = getCollectableByID(firstFoundCollectableID);
+//            Mission firstMission = getMissionByID(firstFoundCollectable.getMissionID());
+//
+           Collectable secondFoundCollectable = getCollectableByID(secondFoundCollectableID);
+//            Mission secondMission = getMissionByID(secondFoundCollectable.getMissionID());
 
-            Assertions.assertTrue(missions.stream().anyMatch(mission -> {
-                assert secondMission != null;
-                return mission.getId().equals(secondMission.getId()) && mission.getType().equals(secondMission.getType());
-            }));
+            //check each found Collectable's Mission
+            checkCollectableMission(firstFoundCollectable.getMissionID(), firstFoundCollectableType, missions);
+            checkCollectableMission(secondFoundCollectable.getMissionID(), secondFoundCollectableType, missions);
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
