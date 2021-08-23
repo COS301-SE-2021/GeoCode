@@ -14,7 +14,7 @@ services:
       timeout: 5s
       retries: 10
     ports:
-      - 14389:5432
+      - 14379:5432
     volumes:
       - ./setup-databases.sh:/docker-entrypoint-initdb.d/setup-databases.sh
       - ../../.postgres-data:/var/lib/postgresql/data
