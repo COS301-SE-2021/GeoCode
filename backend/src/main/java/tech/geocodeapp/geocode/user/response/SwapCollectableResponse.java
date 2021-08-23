@@ -13,13 +13,6 @@ public class SwapCollectableResponse extends Response {
     private Collectable collectable;
 
     /**
-     * Default constructor
-     */
-    public SwapCollectableResponse() {
-
-    }
-
-    /**
      * Overloaded Constructor
      *
      * @param collectable The collectable that is swapped out of the GeoCode
