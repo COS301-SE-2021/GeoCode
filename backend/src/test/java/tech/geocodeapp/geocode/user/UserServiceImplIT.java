@@ -10,8 +10,10 @@ import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
 import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
+import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.event.request.CreateEventRequest;
+import tech.geocodeapp.geocode.event.request.GetCurrentEventStatusRequest;
 import tech.geocodeapp.geocode.event.service.EventServiceImpl;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
@@ -141,6 +143,10 @@ public class UserServiceImplIT {
 
     private List<UUID> winterSchoolGeoCodeIDs;
     private String successGetMyLeaderboardsMessage = "The details for the User's Leaderboards were successfully returned";
+    private UUID openDayEventID;
+    private boolean openDayEvent;
+    private boolean winterSchoolEvent;
+    private UUID winterSchoolEventID;
 
     User registerNewUser(UUID userID, String username){
         RegisterNewUserRequest request = new RegisterNewUserRequest(userID, username);
@@ -242,17 +248,16 @@ public class UserServiceImplIT {
         return null;
     }
 
-    private void createEvent(String name, String description, GeoPoint location,
-                             LocalDate beginDate, LocalDate endDate,
-                             List<UUID> geoCodesToFind, OrderLevels orderBy, Map<String, String> properties) throws tech.geocodeapp.geocode.event.exceptions.InvalidRequestException {
-        //admin user (cannot participate)
-        //setUser(validUserId);
+    private UUID createEvent(String name, String description, GeoPoint location,
+                              LocalDate beginDate, LocalDate endDate,
+                              List<UUID> geoCodesToFind, OrderLevels orderBy, Map<String, String> properties) throws tech.geocodeapp.geocode.event.exceptions.InvalidRequestException {
 
         var createEventRequest = new CreateEventRequest(name, description, location,
                 beginDate, endDate,
                 geoCodesToFind, orderBy, properties);
 
-        eventService.createEvent(createEventRequest);
+        var createEventResponse = eventService.createEvent(createEventRequest);
+        return createEventResponse.getEventID();
     }
 
     private CollectableType getCollectableTypeFromCollectableID(UUID collectableID) {
@@ -270,17 +275,8 @@ public class UserServiceImplIT {
 
     private void swapCollectables(UUID geoCodeID, UUID collectableID) throws InvalidRequestException {
         var geocode = getGeoCodeByID(geoCodeID);
-//        Collectable collectable;
-//
-//        try {
-//            collectable = getCollectableByID(collectableID);
-//        } catch (NullRequestParameterException e) {
-//            e.printStackTrace();
-//        }
-
-        System.out.println("swapping from "+geocode.getDescription()+" taking out "+collectableID);
-
-        geoCodeService.swapCollectables(new SwapCollectablesRequest(geoCodeID, collectableID));
+        var swapCollectablesRequest = new SwapCollectablesRequest(geoCodeID, collectableID);
+        var swapCollectablesResponse = geoCodeService.swapCollectables(swapCollectablesRequest);
     }
 
     private List<UUID> getCollectables(UUID geoCodeID) throws InvalidRequestException {
@@ -343,10 +339,6 @@ public class UserServiceImplIT {
         HashMap<String, String> bearProperties = new HashMap<>();
         bearProperties.put("missionType", String.valueOf(MissionType.DISTANCE));
         bearCollectableTypeID = createCollectableType("Bear", "img_bear", Rarity.COMMON, christmasSetId, bearProperties);
-
-        System.out.println("santaCollectableTypeID: "+santaCollectableTypeID);
-        System.out.println("penguinCollectbaleTypeID: "+ penguinCollectableTypeID);
-        System.out.println("bearCollectableTypeID: "+bearCollectableTypeID);
     }
 
     private User getUserByID(UUID userID) {
@@ -358,8 +350,40 @@ public class UserServiceImplIT {
         }
     }
 
+    private void joinEvent(UUID eventID, UUID userID){
+        /*
+        getTheEventStatus to make sure the EventStatus is saved so that when calling swapCollectables
+        the User is participating in the Event
+        */
+        try {
+            var getCurrentEventStatusRequest = new GetCurrentEventStatusRequest(eventID, userID);
+            var getCurrentEventStatusResponse = eventService.getCurrentEventStatus(getCurrentEventStatusRequest);
+
+            Assertions.assertTrue(getCurrentEventStatusResponse.isSuccess());
+            Assertions.assertEquals("Status returned", getCurrentEventStatusResponse.getMessage());
+        } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Lets the Users join the Events
+     * @param userID
+     */
+    private void joinEvents(UUID userID){
+        if(openDayEvent){
+            joinEvent(openDayEventID, userID);
+        }
+
+        if(winterSchoolEvent){
+            joinEvent(winterSchoolEventID, userID);
+        }
+    }
+
     private void addFoundGeoCodesForUser1(){
         userWithPoints1 = registerNewUser(userWithPoints1ID, "userWithPoints1");
+
+        joinEvents(userWithPoints1ID);
 
         //this User finds 2 GeoCodes
         try {
@@ -382,6 +406,8 @@ public class UserServiceImplIT {
 
     private void addFoundGeoCodesForUser2() throws InvalidRequestException {
         userWithPoints2 = registerNewUser(userWithPoints2ID, "userWithPoints2");
+
+        joinEvents(userWithPoints2ID);
 
         //this User finds 1 GeoCode
         swapCollectables(firstGeoCodeID, firstCollectables.get(1));
@@ -491,6 +517,8 @@ public class UserServiceImplIT {
     }
 
     private void createOpenDayEvent() throws NullRequestParameterException, InvalidRequestException {
+        openDayEvent = true;
+        
         //create an Event's GeoCodes
         addFirstTwoGeoCodes();
 
@@ -499,7 +527,7 @@ public class UserServiceImplIT {
         openDayGeoCodeIDs.add(secondGeoCodeID);
 
         try {
-            createEvent(openDayEventName, openDayEventName, new GeoPoint(0.0, 0.0),
+            openDayEventID = createEvent(openDayEventName, openDayEventName, new GeoPoint(0.0, 0.0),
                     LocalDate.now(), LocalDate.now().plusDays(1), openDayGeoCodeIDs, OrderLevels.GIVEN, new HashMap<>());
         } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
             e.printStackTrace();
@@ -508,6 +536,7 @@ public class UserServiceImplIT {
 
     private void addFoundGeoCodesForUser1WinterSchool() throws InvalidRequestException {
         setUser(userWithPoints1ID);
+        joinEvents(userWithPoints1ID);
 
         //this User finds 2 GeoCodes
         swapCollectablesAtPosition(winterSchoolGeoCode1ID, 1);
@@ -516,6 +545,7 @@ public class UserServiceImplIT {
 
     private void addFoundGeoCodesForUser2WinterSchool() throws InvalidRequestException {
         setUser(userWithPoints2ID);
+        joinEvents(userWithPoints2ID);
 
         //this User finds all 3 GeoCodes
         swapCollectablesAtPosition(winterSchoolGeoCode1ID, 1);
@@ -528,6 +558,8 @@ public class UserServiceImplIT {
     }
 
     private void createWinterSchoolEvent(){
+        winterSchoolEvent = true;
+
         //create GeoCodes
         setUser(validUserId);
 
@@ -542,7 +574,7 @@ public class UserServiceImplIT {
         winterSchoolGeoCodeIDs.add(winterSchoolGeoCode3ID);
 
         try {
-            createEvent(winterSchoolEventName, winterSchoolEventName, new GeoPoint(0.0, 0.0),
+            winterSchoolEventID = createEvent(winterSchoolEventName, winterSchoolEventName, new GeoPoint(0.0, 0.0),
                     LocalDate.now(), LocalDate.now().plusDays(3), winterSchoolGeoCodeIDs, OrderLevels.DIFFICULTY, new HashMap<>());
         } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
             e.printStackTrace();
@@ -571,10 +603,48 @@ public class UserServiceImplIT {
             Assertions.assertTrue(missions.stream().anyMatch(mission ->
                     mission != null &&
                     mission.getId().equals(missionID) &&
-                    mission.getType().equals(missionType))
-            );
+                    mission.getType().equals(missionType)
+            ));
         }else if(shouldHaveMission){
             Assertions.fail("Mission ID not present for a Collectable that should have a Mission");
+        }
+    }
+
+    /**
+     * checks that the Leaderboard details returned by User.getMyLeaderboardDetails are correct
+     * @param user The User
+     * @param eventNames The names of the Events
+     * @param correctRankings The rankings that the User should be given based off timing and GeoCode difficulty
+     * (whichever is relevant to the Event)
+     */
+    private void checkUserLeaderboardDetails(User user, List<String> eventNames, List<Integer> correctRankings){
+        UUID userID = user.getId();
+        setUser(userID);
+
+        var getMyLeaderboardsRequest = new GetMyLeaderboardsRequest(userID);
+
+        try {
+            var getMyLeaderboardsResponse = userService.getMyLeaderboards(getMyLeaderboardsRequest);
+
+            Assertions.assertTrue(getMyLeaderboardsResponse.isSuccess());
+            Assertions.assertEquals(successGetMyLeaderboardsMessage, getMyLeaderboardsResponse.getMessage());
+
+            var userLeaderboardDetails = getMyLeaderboardsResponse.getLeaderboards();
+
+            /* check the user has points */
+            Assertions.assertFalse(userLeaderboardDetails.isEmpty());
+
+            /* check that the correct details are returned */
+            for(int i = 0; i < eventNames.size(); ++i){
+                int finalI = i;
+
+                Assertions.assertTrue(userLeaderboardDetails.stream().anyMatch(details ->
+                        details.getName().equals(eventNames.get(finalI)) &&
+                        details.getRank() == correctRankings.get(finalI)
+                ));
+            }
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
         }
     }
 
@@ -902,7 +972,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void getMyLeaderboardsTestUsersWithPoints() throws NullRequestParameterException, InvalidRequestException {
-        /*createCollectableTypes();
+        createCollectableTypes();
 
         createOpenDayEvent();
         addFoundGeoCodesForUser1();
@@ -910,75 +980,28 @@ public class UserServiceImplIT {
 
         createWinterSchoolEvent();
         addFoundGeoCodesForUser1WinterSchool();
-        addFoundGeoCodesForUser2WinterSchool();*/
+        addFoundGeoCodesForUser2WinterSchool();
 
         //user1
-        userWithPoints1 = registerNewUser(userWithPoints1ID, "userWithPoints1");
-        setUser(userWithPoints1ID);
+        var eventNames = new ArrayList<>(Arrays.asList(
+           openDayEventName,
+           winterSchoolEventName
+        ));
 
-        var getUser1LeaderboardsRequest = new GetMyLeaderboardsRequest();
-        getUser1LeaderboardsRequest.setUserID(userWithPoints1ID);
+        var user1CorrectRankings = new ArrayList<>(Arrays.asList(
+                1,
+                2
+        ));
 
-        System.out.println("userWithPoints1ID: "+userWithPoints1ID);
+        checkUserLeaderboardDetails(userWithPoints1, eventNames, user1CorrectRankings);
 
-        var getUser1LeaderboardsResponse = userService.getMyLeaderboards(getUser1LeaderboardsRequest);
+        var user2CorrectRankings = new ArrayList<>(Arrays.asList(
+                2,
+                1
+        ));
 
-
-//        try {
-
-//
-//
-//            Assertions.assertTrue(getUser1LeaderboardsResponse.isSuccess());
-//            Assertions.assertEquals(successGetMyLeaderboardsMessage, getUser1LeaderboardsResponse.getMessage());
-//
-//            var user1LeaderboardDetails = getUser1LeaderboardsResponse.getLeaderboards();
-//
-//            /* check the user has points */
-//            Assertions.assertFalse(user1LeaderboardDetails.isEmpty());
-//
-//            /* check that the correct details are returned */
-//
-//            //user1 ranked 1st for Open Day event
-//            Assertions.assertTrue(user1LeaderboardDetails.stream().anyMatch(details ->
-//                    details.getName().equals(openDayEventName) && details.getRank() == 1
-//            ));
-//
-//            //user1 ranked 1st for Winter School event
-//            Assertions.assertTrue(user1LeaderboardDetails.stream().anyMatch(details ->
-//                    details.getName().equals(winterSchoolEventName) && details.getRank() == 1
-//            ));
-//
-//            //user2
-//            userWithPoints2 = registerNewUser(userWithPoints2ID, "userWithPoints2");
-//            setUser(userWithPoints2ID);
-//
-//            var getUser2LeaderboardsRequest = new GetMyLeaderboardsRequest();
-//            getUser2LeaderboardsRequest.setUserID(userWithPoints1ID);
-//
-//            var getUser2LeaderboardsResponse = userService.getMyLeaderboards(getUser2LeaderboardsRequest);
-//
-//            Assertions.assertTrue(getUser2LeaderboardsResponse.isSuccess());
-//            Assertions.assertEquals(successGetMyLeaderboardsMessage, getUser2LeaderboardsResponse.getMessage());
-//
-//            var user2LeaderboardDetails = getUser2LeaderboardsResponse.getLeaderboards();
-//
-//            /* check the user has points */
-//            Assertions.assertFalse(user2LeaderboardDetails.isEmpty());
-//
-//            /* check that the correct details are returned */
-//
-//            //user2 ranked 1st for Open Day event
-//            Assertions.assertTrue(user2LeaderboardDetails.stream().anyMatch(details ->
-//                    details.getName().equals(openDayEventName) && details.getRank() == 1
-//            ));
-//
-//            //user2 ranked 1st for Winter School event
-//            Assertions.assertTrue(user2LeaderboardDetails.stream().anyMatch(details ->
-//                    details.getName().equals(winterSchoolEventName) && details.getRank() == 1
-//            ));
-//        } catch (NullRequestParameterException e) {
-//            Assertions.fail(e.getMessage());
-//        }
+        //user2
+        checkUserLeaderboardDetails(userWithPoints2, eventNames, user2CorrectRankings);
     }
 
     @Test
@@ -1115,8 +1138,6 @@ public class UserServiceImplIT {
             }
         }
 
-        System.out.println("third type id:"+thirdCollectableTypeID);
-
         var addToFoundCollectableTypesResponse = addToFoundCollectableTypes(userWithPoints1ID, thirdCollectableTypeID);
         Assertions.assertTrue(addToFoundCollectableTypesResponse.isSuccess());
         Assertions.assertEquals("CollectableType added to the found CollectableTypes", addToFoundCollectableTypesResponse.getMessage());
@@ -1230,8 +1251,6 @@ public class UserServiceImplIT {
             Collectable collectable = response.getCollectable();
             Assertions.assertNotNull(collectable);
 
-            //System.out.println("collectable that comes out: "+collectable.getId());
-
             GetCurrentCollectableRequest getCurrentCollectableRequest = new GetCurrentCollectableRequest();
             getCurrentCollectableRequest.setUserID(validUserId);
 
@@ -1282,15 +1301,8 @@ public class UserServiceImplIT {
             var missions = response.getMissions();
             Assertions.assertNotNull(missions);
 
-            for(var mission: missions){
-                System.out.println(mission.getType());
-            }
-
            Collectable firstFoundCollectable = getCollectableByID(firstFoundCollectableID);
-//            Mission firstMission = getMissionByID(firstFoundCollectable.getMissionID());
-//
            Collectable secondFoundCollectable = getCollectableByID(secondFoundCollectableID);
-//            Mission secondMission = getMissionByID(secondFoundCollectable.getMissionID());
 
             //check each found Collectable's Mission
             checkCollectableMission(firstFoundCollectable.getMissionID(), firstFoundCollectableType, missions);

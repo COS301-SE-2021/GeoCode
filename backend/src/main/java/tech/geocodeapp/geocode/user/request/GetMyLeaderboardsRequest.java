@@ -20,6 +20,14 @@ public class GetMyLeaderboardsRequest   {
   @JsonProperty("userID")
   private UUID userID = null;
 
+  public GetMyLeaderboardsRequest(){
+
+  }
+
+  public GetMyLeaderboardsRequest(UUID userID) {
+    this.userID = userID;
+  }
+
   public GetMyLeaderboardsRequest userID(UUID userID) {
     this.userID = userID;
     return this;

@@ -475,9 +475,10 @@ public class UserServiceImpl implements UserService {
         
         if(missionID != null){
             this.addToMyMissions(new AddToMyMissionsRequest(user, missionService.getMissionById(new GetMissionByIdRequest(missionID)).getMission()));
+        }else{
+            //save() called in addToMyMissions
+            userRepo.save(user);
         }
-
-        userRepo.save(user);
 
         return new SwapCollectableResponse(true, "The User's Collectable was swapped with the Collectable in the GeoCode", oldCurrentCollectable );
     }
