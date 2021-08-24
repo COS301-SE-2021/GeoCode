@@ -9,9 +9,11 @@ import java.util.UUID;
  */
 public class GetProgressRequest   {
   @JsonProperty("missionID")
-  private UUID missionID = null;
+  private UUID missionID;
 
-  public GetProgressRequest() {}
+  public GetProgressRequest(UUID missionID) {
+    this.missionID = missionID;
+  }
 
   public UUID getMissionID() {
     return missionID;

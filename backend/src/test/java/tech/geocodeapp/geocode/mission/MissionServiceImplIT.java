@@ -18,6 +18,7 @@ import tech.geocodeapp.geocode.mission.model.Mission;
 import tech.geocodeapp.geocode.mission.model.MissionType;
 import tech.geocodeapp.geocode.mission.request.CreateMissionRequest;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
+import tech.geocodeapp.geocode.mission.request.GetProgressRequest;
 import tech.geocodeapp.geocode.mission.service.MissionService;
 
 import java.util.HashMap;
@@ -40,6 +41,9 @@ public class MissionServiceImplIT {
     private Mission santaCollectableMission;
 
     private Collectable presentCollectable;
+
+    private final String invalidMissionIdMessage = "Invalid Mission Id";
+
 
     UUID createCollectableSet(String name, String description){
         var createCollectableSetRequest = new CreateCollectableSetRequest(name, description);
@@ -133,7 +137,7 @@ public class MissionServiceImplIT {
             var response = missionService.getMissionById(request);
 
             Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("Invalid Mission Id", response.getMessage());
+            Assertions.assertEquals(invalidMissionIdMessage, response.getMessage());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
@@ -186,4 +190,41 @@ public class MissionServiceImplIT {
             e.printStackTrace();
         }
     }
+
+    @Test
+    void getProgressTestInvalidMissionID(){
+        try{
+            var request = new GetProgressRequest(UUID.randomUUID());
+            var response = missionService.getProgress(request);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals(invalidMissionIdMessage, response.getMessage());
+            Assertions.assertNull(response.getProgress());
+        }catch (NullRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getProgressTestValidMissionID(){
+        try{
+            var request = new GetProgressRequest(santaCollectableMissionID);
+            var response = missionService.getProgress(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Progress returned", response.getMessage());
+
+            Double progress = response.getProgress();
+            Assertions.assertNotNull(progress);
+
+            //test that the progress is calculated correctly
+            var mission = getMissionByID(santaCollectableMissionID);
+
+            Assertions.assertNotNull(mission);
+            Assertions.assertEquals(((double) mission.getCompletion()) / mission.getAmount(), progress);
+        }catch (NullRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
 }

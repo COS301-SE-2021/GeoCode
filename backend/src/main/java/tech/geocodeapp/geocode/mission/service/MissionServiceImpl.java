@@ -66,7 +66,7 @@ public class MissionServiceImpl implements MissionService{
         var mission = optionalMission.get();
 
         //get the progress
-        var progress = (double) (mission.getCompletion() / mission.getAmount());
+        var progress = ((double) mission.getCompletion()) / mission.getAmount();
 
         return new GetProgressResponse(true, "Progress returned", progress);
     }
@@ -87,7 +87,7 @@ public class MissionServiceImpl implements MissionService{
         var collectable = request.getCollectable();
 
         //check if the Collectable already has a Mission
-        if(collectable.getMissionID() != null){//TODO: create updateMission to re-assign a Mission [after Demo 3]
+        if(collectable.getMissionID() != null){
             var collectableHasMissionMessage = "Collectable already has a Mission";
             return new CreateMissionResponse(false, collectableHasMissionMessage, null);
         }
