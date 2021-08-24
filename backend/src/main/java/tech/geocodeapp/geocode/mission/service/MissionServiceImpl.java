@@ -1,12 +1,9 @@
 package tech.geocodeapp.geocode.mission.service;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
-import tech.geocodeapp.geocode.collectable.service.CollectableService;
-import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
@@ -22,20 +19,15 @@ import tech.geocodeapp.geocode.mission.response.GetMissionByIdResponse;
 import tech.geocodeapp.geocode.mission.response.GetProgressResponse;
 import tech.geocodeapp.geocode.user.response.UpdateCompletionResponse;
 
-import javax.annotation.PostConstruct;
-import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.Optional;
+import java.util.Random;
 
 @Service("MissionService")
 public class MissionServiceImpl implements MissionService{
     private final MissionRepository missionRepo;
 
-    @NotNull(message = "Collectable Service Implementation may not be null.")
-    private CollectableService collectableService;
-
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
     private final String invalidMissionIdMessage = "Invalid Mission Id";
-    private final String collectableHasMissionMessage = "Collectable already has a Mission";
 
     public MissionServiceImpl(MissionRepository missionRepo) {
         this.missionRepo = missionRepo;
@@ -100,6 +92,7 @@ public class MissionServiceImpl implements MissionService{
 
         //check if the Collectable already has a Mission
         if(collectable.getMissionID() != null){//TODO: create updateMission to re-assign a Mission [after Demo 3]
+            String collectableHasMissionMessage = "Collectable already has a Mission";
             return new CreateMissionResponse(false, collectableHasMissionMessage, null);
         }
 
@@ -186,10 +179,5 @@ public class MissionServiceImpl implements MissionService{
         missionRepo.save(mission);
 
         return new UpdateCompletionResponse(true, "Completion updated");
-    }
-
-    @Override
-    public void setCollectableService(CollectableServiceImpl collectableService) {
-        this.collectableService = collectableService;
     }
 }
