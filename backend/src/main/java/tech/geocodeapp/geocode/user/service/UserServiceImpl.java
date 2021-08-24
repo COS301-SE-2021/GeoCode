@@ -32,8 +32,6 @@ public class UserServiceImpl implements UserService {
     private final CollectableRepository collectableRepo;
     private final PointRepository pointRepo;
 
-    private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
-
     @NotNull(message = "Collectable Service Implementation may not be null.")
     private final CollectableService collectableService;
 
@@ -41,8 +39,8 @@ public class UserServiceImpl implements UserService {
     private final MissionService missionService;
 
     private final String invalidUserIdMessage = "Invalid User id";
-
     private final UUID trackableTypeUUID = new UUID(0, 0);
+    private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
 
     public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, MissionService missionService) {
         this.userRepo = userRepo;
@@ -131,7 +129,6 @@ public class UserServiceImpl implements UserService {
      * Gets the IDs of the CollectableTypes that the User has found so far
      * @param request The GetFoundCollectableTypesRequest object
      * @return A GetCollectableTypesResponse object: (success, message, object)
-     * @throws NullRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
     @Transactional
     public GetFoundCollectableTypesResponse getFoundCollectableTypes(GetFoundCollectableTypesRequest request) throws NullRequestParameterException{
@@ -161,7 +158,6 @@ public class UserServiceImpl implements UserService {
      * Gets the IDs of the GeoCodes that the User has found so far
      * @param request The GetFoundGeoCodesRequest object
      * @return A GetFoundGeoCodesResponse object: (success, message, object)
-     * @throws NullRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
     @Transactional
     public GetFoundGeoCodesResponse getFoundGeoCodes(GetFoundGeoCodesRequest request) throws NullRequestParameterException {
@@ -409,6 +405,7 @@ public class UserServiceImpl implements UserService {
 
         var collectableResponse = createCollectableResponse.getCollectable();
 
+        //get the trackable object
         var getCollectableIdRequest = new GetCollectableByIDRequest(collectableResponse.getId());
         var getCollectableByIDResponse = collectableService.getCollectableByID(getCollectableIdRequest);
 
@@ -459,9 +456,11 @@ public class UserServiceImpl implements UserService {
         
         //add the Collectable's Mission to the User's Missions
         var missionID = newCurrentCollectable.getMissionID();
-        
+
         if(missionID != null){
-            this.addToMyMissions(new AddToMyMissionsRequest(user, missionService.getMissionById(new GetMissionByIdRequest(missionID)).getMission()));
+            var mission  = missionService.getMissionById(new GetMissionByIdRequest(missionID)).getMission();
+
+            this.addToMyMissions(new AddToMyMissionsRequest(user, mission));
         }else{
             //save() called in addToMyMissions
             userRepo.save(user);
