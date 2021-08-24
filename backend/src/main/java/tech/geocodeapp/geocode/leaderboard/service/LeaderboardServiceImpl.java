@@ -40,7 +40,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     /**
      * Creates a Leaderboard
      * @param request - Contains the name of the Leaderboard to be created
-     * @return The created Leaderboard
+     * @return CreateLeaderboardResponse containing the created Leaderboard
      */
     public CreateLeaderboardResponse createLeaderboard(CreateLeaderboardRequest request) throws NullRequestParameterException{
         if(request == null){
@@ -60,7 +60,6 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * A method to retrieve a set number of points from a leaderboard for a provided leaderboardId starting at a specified rank.
      * @param request - Contains the leaderboardId to use, the position to start for points and the number of points to get.
      * @return A list of the details of the requested points
-     * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
     @Transactional
     public GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullRequestParameterException{
@@ -195,12 +194,13 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             return new GetMyRankResponse(false, "The amount must be at least zero", null);
         }
 
+        //get the rank for the amount on the leaderboard
         var rank = pointRepo.getMyRank(request.getLeaderboard().getId(), request.getAmount());
         return new GetMyRankResponse(true, "Point rank returned", rank);
     }
 
     /**
-     * A method to create a new Point for a user in a leaderboard
+     * A method to create a new Point for a User in a Leaderboard
      * @param request Contains the amount, leaderboardId and userId to use for creating the Point
      * @return A responses informing of success or failure and containing the created Point.
      * @throws NullRequestParameterException an exception for when a null value is provided for a parameter of the request
@@ -226,6 +226,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         try {
             var userResponse = userService.getUserById(userRequest);
+
             if(!userResponse.isSuccess()){
                 return new PointResponse(false, "Invalid user Id provided",null);
             }else{
@@ -240,8 +241,9 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             return new PointResponse(false, "The amount for a Point must be at least zero", null);
         }
 
-        var point= new Point(request.getAmount(), foundUser, leaderboard.get());
+        var point = new Point(request.getAmount(), foundUser, leaderboard.get());
         pointRepo.save(point);
+
         return new PointResponse(true, "The Point was successfully created.", point);
     }
 
@@ -261,6 +263,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         //check if the point to delete exists
         var point = pointRepo.findById(request.getPointId());
+
         if(point.isEmpty()){
             return new DeletePointResponse(false,"No Point with the given Id exists");
         }
@@ -291,6 +294,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         //check that the point to update exists
         var point = pointRepo.findById(request.getPointId());
+
         if(point.isEmpty()){
             return new PointResponse(false, "No point with the provided Id exists", null);
         }
@@ -298,6 +302,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         //check that if a leaderboard id is provided that it exists
         if(request.getLeaderboardId() != null) {
             var leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
+
             if(leaderboard.isEmpty()){
                 return new PointResponse(false, "Invalid LeaderboardId to update to was provided", null);
             }else{
@@ -308,8 +313,10 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         //check that if a user id is provided that it exists
         if(request.getUserId() != null) {
             var userByIdRequest = new GetUserByIdRequest(request.getUserId());
+
             try {
                 var user = userService.getUserById(userByIdRequest);
+
                 if(!user.isSuccess()){
                     return new PointResponse(false, "Invalid UserId to update to was provided", null);
                 }else{
@@ -331,6 +338,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }
 
         pointRepo.save(point.get());
+
         return new PointResponse(true, "Updated point successfully", point.get());
     }
 
@@ -339,6 +347,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         if(point == null) {
             return new Response(false, "Point provided is null");
         }
+
         checkNullRequestParameters.checkRequestParameters(point);
 
         pointRepo.save(point);
