@@ -9,13 +9,6 @@ public class GetPointsByLeaderboardRequest {
     private Leaderboard leaderboard;
 
     /**
-     * Default constructor
-     */
-    public GetPointsByLeaderboardRequest() {
-
-    }
-
-    /**
      * Overloaded Constructor
      *
      * @param leaderboard The leaderboard to be searched for

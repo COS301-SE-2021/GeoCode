@@ -12,7 +12,7 @@
       </ion-fab-button>
     </ion-fab>
   </ng-template>
-  <ion-card *ngFor="let set of sets">
+  <ion-card *ngFor="let set of sets" class="card">
     <ion-card-content>
       <div class="header">
         <div class="details">
@@ -36,7 +36,7 @@
         <div class="items">
           <div class="collectable" *ngFor="let type of types[set.id]">
             <div class="image">
-              <img src="https://via.placeholder.com/100">
+              <img src="{{type.image}}">
             </div>
             <div class="name">
               {{type.name}}

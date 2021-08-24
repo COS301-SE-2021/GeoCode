@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.10"
+  version: "1.5.12"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -2454,7 +2454,7 @@ components:
         pastLocations:
           type: array
           items:
-            type: string
+            $ref: "#/components/schemas/GeoPoint"
         mission:
           type: string
           format: uuid
@@ -2514,6 +2514,10 @@ components:
         collectableTypeId:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+        createMission:
+          type: boolean
+          example: false
       xml:
         name: "CreateCollectableRequest"
 
@@ -2535,7 +2539,7 @@ components:
         - name
         - rarity
         - id
-        - set
+        - collectableSet
       properties:
         name:
           type: string
@@ -2543,16 +2547,20 @@ components:
           $ref: "#/components/schemas/Rarity"
         id:
           type: string
+        image:
+          type: string
           format: uuid
-        set:
+        collectableSet:
           $ref: "#/components/schemas/CollectableSet"
-        expiraryDate:
+        expiryDate:
           type: string
           format: date-time
         area:
           type: string
         trackable:
           type: boolean
+        missionType:
+          $ref: "#/components/schemas/MissionType"
       xml:
         name: "CollectableTypeComponent"
 
@@ -2598,13 +2606,17 @@ components:
         id:
           type: string
           format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         type:
           $ref: "#/components/schemas/CollectableTypeComponent"
         pastLocations:
           type: array
           items:
             type: string
-
+        missionId:
+          type: string
+          format: uuid
+          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
       xml:
         name: "CollectableResponse"
 
@@ -2731,10 +2743,14 @@ components:
     EventLeaderboardDetails:
       type: "object"
       required:
+        - userID
         - username
         - points
         - rank
       properties:
+        userID:
+          type: string
+          format: uuid
         username:
           type: string
           example: "john_smith"
@@ -3574,6 +3590,7 @@ components:
         - type
         - amount
         - location
+        - completion
       properties:
         id:
           type: string
@@ -3581,6 +3598,9 @@ components:
         type:
           $ref: "#/components/schemas/MissionType"
         amount:
+          type: number
+          example: 1
+        completion:
           type: number
           example: 1
         location:

@@ -136,4 +136,5 @@ public class UserMockRepository implements UserRepository {
     public <S extends User> boolean exists(Example<S> example) {
         return false;
     }
+
 }

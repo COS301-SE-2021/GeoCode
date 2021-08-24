@@ -1,7 +1,7 @@
 
 
 ion-toolbar{
-  --background: var(--ion-color-teal);
+  --background: var(--ion-toolbar-background);
   color: white;
 }
 
@@ -59,4 +59,16 @@ ion-toolbar{
   white-space: normal;
   text-align: center;
   margin: 5px;
+}
+
+.image {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+}
+
+.image img {
+  max-height: 100px;
 }

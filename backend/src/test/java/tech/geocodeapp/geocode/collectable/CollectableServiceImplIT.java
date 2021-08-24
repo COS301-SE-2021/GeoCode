@@ -7,9 +7,8 @@ import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
 import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 
-
-import java.util.HashMap;
 import java.util.UUID;
 
 @SpringBootTest
@@ -20,7 +19,7 @@ public class CollectableServiceImplIT {
     private UUID validTypeId;
 
     @BeforeEach
-     void build() {
+     void build() throws NullRequestParameterException {
         CreateCollectableSetRequest request = new CreateCollectableSetRequest();
         request.setName("Test Set");
         request.setDescription("A set for tests");
@@ -33,21 +32,13 @@ public class CollectableServiceImplIT {
         typeRequest.setRarity(Rarity.RARE);
         typeRequest.setId(validSetId);
 
-//        HashMap<String, String> properties = new HashMap<String, String>();
-//        properties.put("missionType", "Swap");
-//        typeRequest.setProperties(properties);
-        //System.out.println("validSetId: "+validSetId);
-
         CreateCollectableTypeResponse typeResponse = collectableService.createCollectableType(typeRequest);
         validTypeId = typeResponse.getCollectableType().getId();
-
-        //System.out.println("validTypeId: "+validTypeId);
-
     }
 
 
     @Test
-    public void createCollectableSetTest(){
+    public void createCollectableSetTest() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
@@ -61,7 +52,7 @@ public class CollectableServiceImplIT {
     }
 
     @Test
-    public void createCollectableSetNullRequestTest(){
+    public void createCollectableSetNullRequestTest() throws NullRequestParameterException {
         CreateCollectableSetResponse response = collectableService.createCollectableSet(null);
 
         Assertions.assertFalse(response.isSuccess());
@@ -70,7 +61,7 @@ public class CollectableServiceImplIT {
     }
 
     @Test
-    public void createCollectableTypeTestInvalid(){
+    public void createCollectableTypeTestInvalid() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
@@ -86,7 +77,7 @@ public class CollectableServiceImplIT {
     }
 
     @Test
-    public void createCollectableTypeTestValid(){
+    public void createCollectableTypeTestValid() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
@@ -104,13 +95,13 @@ public class CollectableServiceImplIT {
     }
 
     @Test
-    public void createCollectableTypeNullRequestTest(){
+    public void createCollectableTypeNullRequestTest() throws NullRequestParameterException {
         CreateCollectableTypeResponse response = collectableService.createCollectableType(null);
         Assertions.assertEquals("The CreateCollectableTypeRequest object passed was NULL", response.getMessage());
     }
 
     @Test
-    public void createCollectableTestInvalid(){
+    public void createCollectableTestInvalid() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
@@ -123,18 +114,17 @@ public class CollectableServiceImplIT {
     }
 
     @Test
-    public void createCollectableNullRequestTest(){
+    public void createCollectableNullRequestTest() throws NullRequestParameterException {
         CreateCollectableResponse response = collectableService.createCollectable(null);
         Assertions.assertEquals("The CreateCollectableSetRequest object passed was NULL", response.getMessage());
     }
 
     @Test
-    public void createCollectableTestValid(){
+    public void createCollectableTestValid() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
           */
-
 
         //create the Collectable
         CreateCollectableRequest collectableRequest = new CreateCollectableRequest();

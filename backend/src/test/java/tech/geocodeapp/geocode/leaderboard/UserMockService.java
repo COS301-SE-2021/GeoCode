@@ -9,7 +9,6 @@ import tech.geocodeapp.geocode.user.response.*;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public class UserMockService implements UserService {
 
@@ -90,7 +89,7 @@ public class UserMockService implements UserService {
     }
 
     @Override
-    public UUID getCurrentUserID() {
+    public java.util.UUID getCurrentUserID() {
         return null;
     }
 
@@ -106,7 +105,7 @@ public class UserMockService implements UserService {
         user.setId(request.getUserID());
         user.setUsername(request.getUsername());
         userRepo.save(user);
-        return new RegisterNewUserResponse(true, "New user registered");
+        return new RegisterNewUserResponse(true, "New user registered", user);
     }
 
     @Override
@@ -114,13 +113,8 @@ public class UserMockService implements UserService {
         return null;
     }
 
-    /**
-     * Post construct the GeoCode service, this avoids a circular dependency
-     *
-     * @param geoCodeService the service to be set
-     */
     @Override
-    public void setGeoCodeService(GeoCodeService geoCodeService) {
-
+    public AddToMyMissionsResponse addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException {
+        return null;
     }
 }

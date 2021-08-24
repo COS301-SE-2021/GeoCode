@@ -17,17 +17,6 @@ public class LeaderboardMockRepository implements LeaderboardRepository {
     private static final HashMap<UUID, Leaderboard> map = new HashMap<>();
 
     @Override
-    public Optional<Leaderboard> findByName(String name) {
-        for(Leaderboard leaderboard : map.values()){
-            if(leaderboard.getName().equals(name)){
-                return Optional.of(leaderboard);
-            }
-        }
-
-        return Optional.empty();
-    }
-
-    @Override
     @NonNull
     public List<Leaderboard> findAll() {
         return (List<Leaderboard>) map.values();

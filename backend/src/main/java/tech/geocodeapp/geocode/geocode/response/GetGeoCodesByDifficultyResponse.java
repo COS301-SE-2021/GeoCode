@@ -22,7 +22,7 @@ public class GetGeoCodesByDifficultyResponse {
      */
     @Valid
     @JsonProperty( "geocodes" )
-    private List< GeoCode > geocodes = null;
+    private List<GeoCode> geocodes = null;
 
     /**
      * Default constructor
@@ -36,7 +36,7 @@ public class GetGeoCodesByDifficultyResponse {
      *
      * @param geocodes The list of GeoCodes with the specified difficulty
      */
-    public GetGeoCodesByDifficultyResponse( List< GeoCode > geocodes ) {
+    public GetGeoCodesByDifficultyResponse( List<GeoCode> geocodes ) {
 
         this.geocodes = geocodes;
     }
@@ -48,7 +48,7 @@ public class GetGeoCodesByDifficultyResponse {
      *
      * @return the request after the hints has been changed
      */
-    public GetGeoCodesByDifficultyResponse geocodes( List< GeoCode > geocodes ) {
+    public GetGeoCodesByDifficultyResponse geocodes( List<GeoCode> geocodes ) {
 
         this.geocodes = geocodes;
         return this;
@@ -75,7 +75,7 @@ public class GetGeoCodesByDifficultyResponse {
      *
      * @return the stored hints attribute
      */
-    public List< GeoCode > getGeocodes() {
+    public List<GeoCode> getGeocodes() {
 
         return geocodes;
     }
@@ -85,7 +85,7 @@ public class GetGeoCodesByDifficultyResponse {
      *
      * @param geocodes the value the attribute should be set to
      */
-    public void setGeocodes( List< GeoCode > geocodes ) {
+    public void setGeocodes( List<GeoCode> geocodes ) {
 
         this.geocodes = geocodes;
     }

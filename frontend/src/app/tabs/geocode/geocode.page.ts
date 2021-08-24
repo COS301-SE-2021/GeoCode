@@ -10,6 +10,7 @@ import {
   GetGeoCodesByDifficultyRequest, GeoCode
 } from '../../services/geocode-api';
 import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-geocode',
@@ -34,7 +35,8 @@ export class GeocodePage implements AfterViewInit  {
   constructor(
     private navCtrl: NavController,
     private geocodeApi: GeoCodeService,
-    private mapsLoader: GoogleMapsLoader
+    private mapsLoader: GoogleMapsLoader,
+    private keycloak: KeycloakService
   ) {
     this.geocodes = [];
     this.selected= this.geocodes;
@@ -42,11 +44,11 @@ export class GeocodePage implements AfterViewInit  {
   }
 
   //Create map and add mapmarkers of geocodes
-  loadMap(){
+  loadMap(latitude: number, longitude: number){
     this.markers= [];
     this.mapOptions = {
-      center: {lat: -25.75625115327836, lng: 28.235629260918344},
-      zoom: 15,
+      center: {lat: latitude, lng: longitude},
+      zoom: 10,
     };
     this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
 
@@ -54,8 +56,13 @@ export class GeocodePage implements AfterViewInit  {
 
   async ngAfterViewInit() {
     this.googleMaps = await this.mapsLoader.load();
-    this.loadMap();
-    this.getAllMap();
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      await this.loadMap(position.coords.latitude, position.coords.longitude);
+      this.getAllMap();
+    }, async (positionError) => {
+      await this.loadMap(0, 0);
+      this.getAllMap();
+    });
   }
 
 
@@ -89,7 +96,6 @@ export class GeocodePage implements AfterViewInit  {
   //Get all geocodes no matter the difficulty
   getAllMap(){
     this.geocodeApi.getGeoCodes().subscribe((response: GetGeoCodesResponse)=>{
-
       this.geocodes=response.geocodes;
       this.selected=[];
 
@@ -99,7 +105,6 @@ export class GeocodePage implements AfterViewInit  {
           position: {lat: parseFloat(String(code.location.latitude)), lng:parseFloat( String(code.location.longitude))},
           map: this.map,
           title: '',
-
         });
 
         this.markers.push(marker);
@@ -153,10 +158,10 @@ export class GeocodePage implements AfterViewInit  {
   //Load map based on passed in request object created in one of the map functions
   loadFilterMap(request){
 
-    this.mapOptions = {
-      center: {lat: -25.75625115327836, lng: 28.235629260918344},
-      zoom: 15,
-    };
+    // this.mapOptions = {
+    //   center: {lat: -25.75625115327836, lng: 28.235629260918344},
+    //   zoom: 15,
+    // };
 
     this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
     this.geocodeApi.getGeoCodesByDifficulty(request).subscribe((response: GetGeoCodesByDifficultyResponse)=>{
@@ -200,6 +205,10 @@ export class GeocodePage implements AfterViewInit  {
 
   openInMaps(geocode: GeoCode) {
     window.open('https://www.google.com/maps/search/?api=1&query='+geocode.location.latitude+'%2C'+geocode.location.longitude);
+  }
+
+  isAdmin() {
+    return this.keycloak.isUserInRole('Admin');
   }
 
 }

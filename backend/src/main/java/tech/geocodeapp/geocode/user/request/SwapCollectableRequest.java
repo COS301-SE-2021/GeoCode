@@ -1,22 +1,24 @@
 package tech.geocodeapp.geocode.user.request;
 
-import java.util.UUID;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.user.model.User;
 
 public class SwapCollectableRequest {
     /*
-    * The id of the User to swap the Collectable for
+    * The User to swap the Collectable for
      */
-    private UUID userID;
+    private User user;
 
     /**
-     * The id of the collectable to be swapped in
+     * The collectable to be swapped in
      */
-    private UUID collectableID;
+    private Collectable collectable;
 
     /**
-     * The UUID of the GeoCode
+     * The GeoCode that the Collectable is in
      */
-    private UUID geoCodeID;
+    private GeoCode geocode;
 
     /**
      * Default constructor
@@ -27,14 +29,14 @@ public class SwapCollectableRequest {
 
     /**
      * Overloaded Constructor
-     * @param userID The id of the User to swap the Collectable for
-     * @param collectableID The collectableID to be searched for
-     * @param geoCodeID The UUID of the GeoCode
+     * @param user The  User to swap the Collectable for
+     * @param collectable The collectableID to be searched for
+     * @param geocode The GeoCode
      */
-    public SwapCollectableRequest(UUID userID, UUID collectableID, UUID geoCodeID) {
-        this.userID = userID;
-        this.collectableID = collectableID;
-        this.geoCodeID = geoCodeID;
+    public SwapCollectableRequest(User user, Collectable collectable, GeoCode geocode) {
+        this.user = user;
+        this.collectable = collectable;
+        this.geocode = geocode;
     }
 
     /**
@@ -42,34 +44,34 @@ public class SwapCollectableRequest {
      *
      * @return the stored collectableID attribute
      */
-    public UUID getCollectableID() {
+    public Collectable getCollectable() {
 
-        return collectableID;
+        return collectable;
     }
 
     /**
      * Sets the collectableID attribute to the specified value
      *
-     * @param collectableID the value the attribute should be set to
+     * @param collectable the value the attribute should be set to
      */
-    public void setCollectableID( UUID collectableID ) {
+    public void setCollectable(Collectable collectable) {
 
-        this.collectableID = collectableID;
+        this.collectable = collectable;
     }
 
-    public UUID getGeoCodeID() {
-        return geoCodeID;
+    public GeoCode getGeoCode() {
+        return geocode;
     }
 
-    public void setGeoCodeID(UUID geoCodeID) {
-        this.geoCodeID = geoCodeID;
+    public void setGeoCode(GeoCode geocode) {
+        this.geocode = geocode;
     }
 
-    public UUID getUserID() {
-        return userID;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserID(UUID userID) {
-        this.userID = userID;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

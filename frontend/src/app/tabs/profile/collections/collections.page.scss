@@ -6,6 +6,18 @@
   height: auto;
 }
 
+.image {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+}
+
+.image img {
+  max-height: 100px;
+}
+
 .items {
   width: auto;
   white-space: nowrap;
@@ -21,7 +33,7 @@
 }
 
 .notfound {
-  opacity: 0.4;
+  opacity: 0.1;
 }
 
 .header {
@@ -34,4 +46,13 @@
 
 .header ion-button {
   margin-top: 0px
+}
+
+.card{
+  background-color: var(--ion-color-card);
+}
+
+.found{
+  color: var(--ion-color-accent);
+  font-weight: bold;
 }

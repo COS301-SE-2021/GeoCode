@@ -3,6 +3,10 @@ import { IonicModule } from '@ionic/angular';
 
 import { MissionPage } from './mission.page';
 import {MockGoogleMapsLoader} from '../../mocks/MockGoogleMapsLoader';
+import {MissionService} from '../../services/geocode-api';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {MockActivatedRoute} from '../../mocks/MockActivatedRoute';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('MissionPage', () => {
   let component: MissionPage;
@@ -11,8 +15,8 @@ describe('MissionPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MissionPage ],
-      providers: [MockGoogleMapsLoader.provider()],
-      imports: [IonicModule.forRoot()]
+      providers: [ MockGoogleMapsLoader.provider(), MissionService, MockActivatedRoute.provider({id: 'randomID'}) ],
+      imports: [IonicModule.forRoot(), HttpClientTestingModule, RouterTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(MissionPage);

@@ -1,22 +1,41 @@
 package tech.geocodeapp.geocode.user;
 
-import java.util.*;
-
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.collectable.model.CollectableType;
+import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.collectable.request.*;
+import tech.geocodeapp.geocode.collectable.response.*;
+import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
+import tech.geocodeapp.geocode.event.model.OrderLevels;
+import tech.geocodeapp.geocode.event.request.CreateEventRequest;
+import tech.geocodeapp.geocode.event.request.GetCurrentEventStatusRequest;
+import tech.geocodeapp.geocode.event.service.EventServiceImpl;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
-import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
+import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
+import tech.geocodeapp.geocode.geocode.request.GetCollectablesRequest;
+import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
+import tech.geocodeapp.geocode.geocode.request.SwapCollectablesRequest;
+import tech.geocodeapp.geocode.geocode.response.CreateGeoCodeResponse;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeServiceImpl;
 import tech.geocodeapp.geocode.mission.model.Mission;
 import tech.geocodeapp.geocode.mission.model.MissionType;
+import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
+import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
 import tech.geocodeapp.geocode.user.model.User;
-import tech.geocodeapp.geocode.user.service.*;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
+import tech.geocodeapp.geocode.user.service.UserService;
+
+import java.time.LocalDate;
+import java.util.*;
 
 @SpringBootTest
 @TestMethodOrder( MethodOrderer.OrderAnnotation.class )
@@ -24,56 +43,563 @@ public class UserServiceImplIT {
     @Autowired
     private UserService userService;
 
-    private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
-    private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
-    private final UUID newUserId = UUID.fromString("e03bd781-cca9-43bf-a168-0f0563fca591");
+    @Autowired
+    CollectableServiceImpl collectableService;
 
-    private final UUID noPointsUserId = UUID.fromString("cdc0f9a0-65da-43c6-8d17-505d61c27965");
-    private final UUID userWithPoints1 = UUID.fromString("a98e8a41-0d6f-454f-a5d9-df809d2c1040");
-    private final UUID userWithPoints2 = UUID.fromString("960b6fd8-7283-43e8-9e18-2e6bef38fbb8");
+    @Autowired
+    GeoCodeServiceImpl geoCodeService;
+
+    @Autowired
+    MissionServiceImpl missionService;
+
+    @Autowired
+    EventServiceImpl eventService;
+
+    private final UUID invalidUserId = UUID.randomUUID();
+    private final UUID validUserId = UUID.randomUUID();
+    private final UUID newUserId = UUID.randomUUID();
+    private final UUID noPointsUserId = UUID.randomUUID();
+    private final UUID userWithPoints1ID = UUID.randomUUID();
+    private final UUID userWithPoints2ID = UUID.randomUUID();
+
+    private User userWithPoints1;
+    private User userWithPoints2;
 
     private final String invalidUserIdMessage = "Invalid User id";
-    private final String invalidGeoCodeIdMessage = "Invalid GeoCode id";
-    private final String invalidCollectableTypeIDMessage = "Invalid CollectableType ID";
 
-    private final UUID firstGeoCodeID = UUID.fromString("537689d1-a0d8-4740-bec6-6a40bb69748e");
-    private final UUID secondGeoCodeID = UUID.fromString("5d709c49-326b-470a-8d9d-e7f7bf77ef6e");
-    private final UUID thirdGeoCodeID = UUID.fromString("92e3e6d5-5457-48f7-adb1-7c2f67ee836b");
-    private final UUID trackableUUID = new UUID(0, 0);
+    private UUID firstGeoCodeID;
+    private UUID secondGeoCodeID;
+    private UUID thirdGeoCodeID;
 
-    private final String firstEvent = "Port Elizabeth Beach Hop - Default";
-    private final String secondEvent = "Port Elizabeth High School Open Days - Default";
+    private final UUID trackableTypeUUID = new UUID(0, 0);
 
-    private final int user1FirstEventPoints = 5;
-    private final int user2FirstEventPoints = 5;
-    private final int user1SecondEventPoints = 10;
-    private final int user2SecondEventPoints = 5;
+    private final String successGetMyLeaderboardsMessage = "The details for the User's Leaderboards were successfully returned";
 
-    private int numberOfOwnedGeoCodesBefore;
-    private int numberOfFoundGeoCodesBefore;
-    private int numberOfFoundCollectableTypesBefore;
+    private UUID christmasSetId;
 
-    private final UUID invalidGeoCodeID = UUID.fromString("c6dab51d-7b2c-45df-940c-189821a36178");
-    private final UUID invalidCollectableID = UUID.fromString("4d2877ee-431e-4a46-b391-c9755291a0f6");
-    private final UUID invalidCollectableTypeID = UUID.fromString("1c39987b-f7b6-478f-b99c-2c57928481af");
+    private final String openDayEventName = "Open Day 2021";
+    private final String winterSchoolEventName = "Winter School 2021";
 
-    private final UUID noPointsFirstOwnedGeoCodeID = UUID.fromString("c8c60a6d-9bfd-4a1c-a864-6140935a4296");
-    private final UUID noPointsNewOwnedGeoCodeID = UUID.fromString("1589fcd5-aac5-4434-a435-d4d03df05703");
+    private List<UUID> firstCollectables;
+    private List<UUID> secondCollectables;
 
-    private final UUID noPointsFirstFoundGeoCodeID = UUID.fromString("13edfce8-5ecd-4cce-ad05-9037df0cbb04");
-    private final UUID noPointsNewFoundGeoCodeID = UUID.fromString("74358369-c953-4862-b3b4-7ca4b78a4c83");
+    private UUID firstFoundCollectableID;
+    private UUID secondFoundCollectableID;
+    private UUID firstFoundCollectableTypeID;
+    private UUID secondFoundCollectableTypeID;
 
-    private final UUID testCollectableTypeID = UUID.fromString("c65410e3-54e0-4958-9ebb-12560a86ae16");
-    private final UUID testCollectableType1ID = UUID.fromString("5350f61f-1052-42d0-8dea-9a7580cfd908");
-    private final UUID testCollectableType2ID = UUID.fromString("cad9d680-6e0e-4c9f-9d05-45fb4b430fdd");
-    private final UUID noPointsNewFoundCollectableTypeID = UUID.fromString("08603f0d-3262-4b71-a50b-4a4605f36bea");
+    private CollectableType firstFoundCollectableType;
+    private CollectableType secondFoundCollectableType;
 
-    private final UUID collectableInFirstGeoCodeID = UUID.fromString("bf98dbf9-90b5-43ab-91b3-396d8f6ff216");
+    private UUID winterSchoolGeoCode1ID;
+    private UUID winterSchoolGeoCode2ID;
+    private UUID winterSchoolGeoCode3ID;
 
-    private final UUID swapMissionID = UUID.fromString("4507f78a-2c0c-4073-9af0-7f50ffe2fa0f");
-    private final UUID circumferenceMissionID = UUID.fromString("46e8e512-68ca-40d7-89ce-11ae91c58bbc");
+    private boolean openDayEvent;
+    private UUID openDayEventID;
 
-    private final String existingUserIdMessage = "User ID already exists";
+    private boolean winterSchoolEvent;
+    private UUID winterSchoolEventID;
+
+    void registerNewUser(UUID userID, String username){
+        var request = new RegisterNewUserRequest(userID, username);
+        RegisterNewUserResponse response;
+
+        try {
+            response = userService.registerNewUser(request);
+            Assertions.assertTrue(response.isSuccess());
+
+            //so do not have to remember to do this each time
+            setUser(userID);
+
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    UUID createCollectableSet(String name, String description){
+        var createCollectableSetRequest = new CreateCollectableSetRequest(name, description);
+
+        try {
+            var createCollectableSetResponse = collectableService.createCollectableSet(createCollectableSetRequest);
+            return createCollectableSetResponse.getCollectableSet().getId();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private UUID createCollectableType(String name, String image, Rarity rarity, UUID setId, HashMap<String, String> properties) {
+        var createCollectableTypeRequest = new CreateCollectableTypeRequest(name, image, rarity, setId, properties);
+
+        try {
+            var createCollectableTypeResponse = collectableService.createCollectableType(createCollectableTypeRequest);
+            Assertions.assertTrue(createCollectableTypeResponse.isSuccess());
+
+            return createCollectableTypeResponse.getCollectableType().getId();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    void createCollectable(UUID typeID, boolean createMission, GeoPoint location){
+        var createCollectableRequest = new CreateCollectableRequest();
+        createCollectableRequest.setCollectableTypeId(typeID);
+        createCollectableRequest.setCreateMission(createMission);
+        createCollectableRequest.setLocation(location);
+
+        CreateCollectableResponse createCollectableResponse = null;
+
+        try {
+            createCollectableResponse = collectableService.createCollectable(createCollectableRequest);
+            Assertions.assertTrue(createCollectableResponse.isSuccess());
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            Assertions.fail(e.getMessage());
+        }
+
+        var id = createCollectableResponse.getCollectable().getId();
+
+        try {
+            collectableService.getCollectableByID(new GetCollectableByIDRequest(id));
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private AddToOwnedGeoCodesResponse addToOwnedGeoCodes(UUID userID, UUID geocodeID) {//***here
+        try {
+            var user = getUserByID(userID);
+            GeoCode geocode = null;
+
+            try {
+                geocode = getGeoCodeByID(geocodeID);
+            } catch (InvalidRequestException e) {
+                e.printStackTrace();
+            }
+
+            return userService.addToOwnedGeoCodes(new AddToOwnedGeoCodesRequest(user, geocode));
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private GetOwnedGeoCodesResponse getOwnedGeoCodes(UUID userID) {
+        var request = new GetOwnedGeoCodesRequest(userID);
+
+        try {
+            return userService.getOwnedGeoCodes(request);
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private UUID createEvent(String name, String description, GeoPoint location,
+                              LocalDate beginDate, LocalDate endDate,
+                              List<UUID> geoCodesToFind, OrderLevels orderBy, Map<String, String> properties) throws tech.geocodeapp.geocode.event.exceptions.InvalidRequestException {
+
+        var createEventRequest = new CreateEventRequest(name, description, location,
+                beginDate, endDate,
+                geoCodesToFind, orderBy, properties);
+
+        var createEventResponse = eventService.createEvent(createEventRequest);
+        return createEventResponse.getEventID();
+    }
+
+    private CollectableType getCollectableTypeFromCollectableID(UUID collectableID) {
+        var getCollectableByIDRequest = new GetCollectableByIDRequest(collectableID);
+        GetCollectableByIDResponse getCollectableByIDResponse = null;
+
+        try {
+            getCollectableByIDResponse = collectableService.getCollectableByID(getCollectableByIDRequest);
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+
+        Assertions.assertNotNull(getCollectableByIDResponse);
+        return getCollectableByIDResponse.getCollectable().getType();
+    }
+
+    private void swapCollectables(UUID geoCodeID, UUID collectableID) {
+        var swapCollectablesRequest = new SwapCollectablesRequest(geoCodeID, collectableID);
+
+        try {
+            geoCodeService.swapCollectables(swapCollectablesRequest);
+        } catch (InvalidRequestException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<UUID> getCollectables(UUID geoCodeID) {
+        try {
+            return geoCodeService.getCollectables(new GetCollectablesRequest(geoCodeID)).getCollectables();
+        } catch (InvalidRequestException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Mocks the User logging in
+     * @param userID The id of the User to be set in setCurrentUserID
+     */
+    private void setUser(UUID userID){
+        MockSecurity.setup();
+        MockSecurity.setCurrentUserID(userID);
+    }
+
+    private UUID createGeoCode(String description, GeoPoint location, Difficulty difficulty) {
+        List<String> hints = new ArrayList<>();
+        hints.add("Hint 1");
+
+        CreateGeoCodeResponse createGeoCodeResponse = null;
+        try {
+            createGeoCodeResponse = geoCodeService.createGeoCode(new CreateGeoCodeRequest(description, location, hints, difficulty, true));
+        } catch (InvalidRequestException e) {
+            e.printStackTrace();
+        }
+
+        Assertions.assertNotNull(createGeoCodeResponse);
+        return createGeoCodeResponse.getGeoCodeID();
+    }
+
+    private void addFirstTwoGeoCodes() throws NullRequestParameterException, InvalidRequestException {
+        registerNewUser(validUserId, "validUser");
+
+        firstGeoCodeID = createGeoCode("1", new GeoPoint(10.0, 10.0), Difficulty.HARD);
+        firstCollectables = getCollectables(firstGeoCodeID);
+
+        secondGeoCodeID = createGeoCode("2", new GeoPoint(10.0, 10.0), Difficulty.INSANE);
+        secondCollectables = getCollectables(secondGeoCodeID);
+    }
+
+    private void createCollectableTypes(){
+        //create the CollectableSet to hold the "User Trackable" type
+        christmasSetId = createCollectableSet("Christmas Set", "Christmas 2021 Collectables");
+
+        //create the CollectableTypes so that the GeoCodes have CollectableTypes to be populated with
+        var santaProperties = new HashMap<String, String>();
+        santaProperties.put("missionType", String.valueOf(MissionType.SWAP));
+        createCollectableType("Santa", "img_santa", Rarity.COMMON, christmasSetId, santaProperties);
+
+        var penguinProperties = new HashMap<String, String>();
+        penguinProperties.put("missionType", String.valueOf(MissionType.GEOCODE));
+        createCollectableType("Penguin", "img_penguin", Rarity.EPIC, christmasSetId, penguinProperties);
+
+        var bearProperties = new HashMap<String, String>();
+        bearProperties.put("missionType", String.valueOf(MissionType.DISTANCE));
+        createCollectableType("Bear", "img_bear", Rarity.COMMON, christmasSetId, bearProperties);
+    }
+
+    private User getUserByID(UUID userID) {
+        try {
+            return userService.getUserById(new GetUserByIdRequest(userID)).getUser();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void joinEvent(UUID eventID, UUID userID){
+        /*
+        getTheEventStatus to make sure the EventStatus is saved so that when calling swapCollectables
+        the User is participating in the Event
+        */
+        try {
+            var getCurrentEventStatusRequest = new GetCurrentEventStatusRequest(eventID, userID);
+            var getCurrentEventStatusResponse = eventService.getCurrentEventStatus(getCurrentEventStatusRequest);
+
+            Assertions.assertTrue(getCurrentEventStatusResponse.isSuccess());
+            Assertions.assertEquals("Status returned", getCurrentEventStatusResponse.getMessage());
+        } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Lets the Users join the Events
+     * @param userID The userID
+     */
+    private void joinEvents(UUID userID){
+        if(openDayEvent){
+            joinEvent(openDayEventID, userID);
+        }
+
+        if(winterSchoolEvent){
+            joinEvent(winterSchoolEventID, userID);
+        }
+    }
+
+    private void addFoundGeoCodesForUser1(){
+        registerNewUser(userWithPoints1ID, "userWithPoints1");
+
+        joinEvents(userWithPoints1ID);
+
+        //this User finds 2 GeoCodes
+        //user wants the first Collectable in both
+        firstFoundCollectableID = firstCollectables.get(0);
+        firstFoundCollectableType = getCollectableTypeFromCollectableID(firstFoundCollectableID);
+        firstFoundCollectableTypeID = firstFoundCollectableType.getId();
+        swapCollectables(firstGeoCodeID, firstFoundCollectableID);
+
+        secondFoundCollectableID = secondCollectables.get(0);
+        secondFoundCollectableType = getCollectableTypeFromCollectableID(secondFoundCollectableID);
+        secondFoundCollectableTypeID = secondFoundCollectableType.getId();
+        swapCollectables(secondGeoCodeID, secondFoundCollectableID);
+
+        userWithPoints1 = getUserByID(userWithPoints1ID);
+    }
+
+    private void addFoundGeoCodesForUser2() {
+        registerNewUser(userWithPoints2ID, "userWithPoints2");
+
+        joinEvents(userWithPoints2ID);
+
+        //this User finds 1 GeoCode
+        swapCollectables(firstGeoCodeID, firstCollectables.get(1));
+
+        userWithPoints2 = getUserByID(userWithPoints2ID);
+    }
+
+    private GetFoundCollectableTypesResponse getFoundCollectableTypes(User user){
+        try {
+            return userService.getFoundCollectableTypes(new GetFoundCollectableTypesRequest(user.getId()));
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    private AddToFoundCollectableTypesResponse addToFoundCollectableTypes(UUID userID, UUID collectableTypeID){
+        try {
+            var user = userService.getUserById(new GetUserByIdRequest(userID)).getUser();
+            var collectableType = getCollectableTypeByID(collectableTypeID);
+
+            return userService.addToFoundCollectableTypes(new AddToFoundCollectableTypesRequest(user, collectableType));
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private GetFoundGeoCodesResponse getFoundGeoCodes(UUID userID){
+        try {
+            var response = userService.getFoundGeoCodes(new GetFoundGeoCodesRequest(userID));
+
+            Assertions.assertTrue(response.isSuccess());
+
+            return response;
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private AddToFoundGeoCodesResponse addToFoundGeoCodes(UUID userID, UUID geocodeID){
+        try {
+            var user = getUserByID(userID);
+            GeoCode geocode = null;
+
+            try {
+                geocode = getGeoCodeByID(geocodeID);
+            } catch (InvalidRequestException e) {
+                e.printStackTrace();
+            }
+
+            return userService.addToFoundGeoCodes(new AddToFoundGeoCodesRequest(user, geocode));
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Mission getMissionByID(UUID missionID) {
+        try {
+            return missionService.getMissionById(new GetMissionByIdRequest(missionID)).getMission();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private AddToMyMissionsResponse addToMyMissions(UUID userID, UUID missionID){
+        var user = getUserByID(userID);
+        var mission = getMissionByID(missionID);
+
+        try {
+            return userService.addToMyMissions(new AddToMyMissionsRequest(user, mission));
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private GeoCode getGeoCodeByID(UUID id) throws InvalidRequestException {
+        var request = new GetGeoCodeRequest(id);
+        return geoCodeService.getGeoCode(request).getFoundGeoCode();
+    }
+
+    private Collectable getCollectableByID(UUID id) throws NullRequestParameterException {
+        var response = collectableService.getCollectableByID(new GetCollectableByIDRequest(id));
+        return response.getCollectable();
+    }
+
+    private CollectableType getCollectableTypeByID(UUID collectableTypeID){
+        try {
+            return collectableService.getCollectableTypeByID(new GetCollectableTypeByIDRequest(collectableTypeID)).getCollectableType();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private SwapCollectableResponse swapCollectable(UUID userID, UUID collectableID, UUID geocodeID) throws NullRequestParameterException, InvalidRequestException {
+        var user = getUserByID(userID);
+        var collectable = getCollectableByID(collectableID);
+        var geocode = getGeoCodeByID(geocodeID);
+
+        return userService.swapCollectable(new SwapCollectableRequest(user, collectable, geocode));
+    }
+
+    private void createOpenDayEvent() throws NullRequestParameterException, InvalidRequestException {
+        openDayEvent = true;
+        
+        //create an Event's GeoCodes
+        addFirstTwoGeoCodes();
+
+        List<UUID> openDayGeoCodeIDs = new ArrayList<>();
+        openDayGeoCodeIDs.add(firstGeoCodeID);
+        openDayGeoCodeIDs.add(secondGeoCodeID);
+
+        try {
+            openDayEventID = createEvent(openDayEventName, openDayEventName, new GeoPoint(0.0, 0.0),
+                    LocalDate.now(), LocalDate.now().plusDays(1), openDayGeoCodeIDs, OrderLevels.GIVEN, new HashMap<>());
+        } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addFoundGeoCodesForUser1WinterSchool() {
+        setUser(userWithPoints1ID);
+        joinEvents(userWithPoints1ID);
+
+        //this User finds 2 GeoCodes
+        swapCollectablesAtPosition(winterSchoolGeoCode1ID, 1);
+        swapCollectablesAtPosition(winterSchoolGeoCode3ID, 1);
+    }
+
+    private void addFoundGeoCodesForUser2WinterSchool() {
+        setUser(userWithPoints2ID);
+        joinEvents(userWithPoints2ID);
+
+        //this User finds all 3 GeoCodes
+        swapCollectablesAtPosition(winterSchoolGeoCode1ID, 1);
+        swapCollectablesAtPosition(winterSchoolGeoCode3ID, 1);
+        swapCollectablesAtPosition(winterSchoolGeoCode2ID, 1);
+    }
+
+    private void swapCollectablesAtPosition(UUID geocodeID, int position) {
+        var collectables = getCollectables(geocodeID);
+
+        Assertions.assertNotNull(collectables);
+        swapCollectables(geocodeID, collectables.get(position-1));
+    }
+
+    private void createWinterSchoolEvent(){
+        winterSchoolEvent = true;
+
+        //create GeoCodes
+        setUser(validUserId);
+
+        winterSchoolGeoCode1ID = createGeoCode("winterSchool1", new GeoPoint(0.0, 0.0), Difficulty.EASY);
+        winterSchoolGeoCode2ID = createGeoCode("winterSchool2", new GeoPoint(0.0, 0.0), Difficulty.INSANE);
+        winterSchoolGeoCode3ID = createGeoCode("winterSchool3", new GeoPoint(0.0, 0.0), Difficulty.HARD);
+
+        //create the Event
+        List<UUID> winterSchoolGeoCodeIDs = new ArrayList<>();
+        winterSchoolGeoCodeIDs.add(winterSchoolGeoCode1ID);
+        winterSchoolGeoCodeIDs.add(winterSchoolGeoCode2ID);
+        winterSchoolGeoCodeIDs.add(winterSchoolGeoCode3ID);
+
+        try {
+            winterSchoolEventID = createEvent(winterSchoolEventName, winterSchoolEventName, new GeoPoint(0.0, 0.0),
+                    LocalDate.now(), LocalDate.now().plusDays(3), winterSchoolGeoCodeIDs, OrderLevels.DIFFICULTY, new HashMap<>());
+        } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * checks if the details for a Collectable's Mission are correct
+     * @param missionID id of the Mission that the Collectable holds
+     * @param collectableType the type of Collectable that the Collectable in question is in
+     * @param missions the User's Missions
+     */
+    private void checkCollectableMission(UUID missionID, CollectableType collectableType, Set<Mission> missions) {
+        var shouldHaveMission = collectableType.getProperties().containsKey("missionType");
+
+        //only check details if the Collectable actually has a Mission
+        if(missionID != null){
+            if(!shouldHaveMission){
+                Assertions.fail("Mission ID present for a Collectable that should not have a Mission");
+                return;
+            }
+
+            var missionType = MissionType.fromValue(collectableType.getProperties().get("missionType"));
+
+            //check the details
+            Assertions.assertTrue(missions.stream().anyMatch(mission ->
+                    mission != null &&
+                    mission.getId().equals(missionID) &&
+                    mission.getType().equals(missionType)
+            ));
+        }else if(shouldHaveMission){
+            Assertions.fail("Mission ID not present for a Collectable that should have a Mission");
+        }
+    }
+
+    /**
+     * checks that the Leaderboard details returned by User.getMyLeaderboardDetails are correct
+     * @param user The User
+     * @param eventNames The names of the Events
+     * @param correctRankings The rankings that the User should be given based off timing and GeoCode difficulty
+     * (whichever is relevant to the Event)
+     */
+    private void checkUserLeaderboardDetails(User user, List<String> eventNames, List<Integer> correctRankings){
+        var userID = user.getId();
+        setUser(userID);
+
+        var getMyLeaderboardsRequest = new GetMyLeaderboardsRequest(userID);
+
+        try {
+            var getMyLeaderboardsResponse = userService.getMyLeaderboards(getMyLeaderboardsRequest);
+
+            Assertions.assertTrue(getMyLeaderboardsResponse.isSuccess());
+            Assertions.assertEquals(successGetMyLeaderboardsMessage, getMyLeaderboardsResponse.getMessage());
+
+            var userLeaderboardDetails = getMyLeaderboardsResponse.getLeaderboards();
+
+            /* check the user has points */
+            Assertions.assertFalse(userLeaderboardDetails.isEmpty());
+
+            /* check that the correct details are returned */
+            for(var i = 0; i < eventNames.size(); ++i){
+                var finalI = i;
+
+                Assertions.assertTrue(userLeaderboardDetails.stream().anyMatch(details ->
+                        details.getName().equals(eventNames.get(finalI)) &&
+                        details.getRank() == correctRankings.get(finalI)
+                ));
+            }
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void getCurrentCollectableTestInvalidUser() {
@@ -82,10 +608,11 @@ public class UserServiceImplIT {
             Create a request object
             and assign values to it
             */
-            GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
+            var request = new GetCurrentCollectableRequest();
             request.setUserID(invalidUserId);//invalid UUID (no user has it)
 
-            GetCurrentCollectableResponse response = userService.getCurrentCollectable(request);
+            var response = userService.getCurrentCollectable(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getCollectable());
@@ -96,15 +623,19 @@ public class UserServiceImplIT {
 
     @Test
     public void getCurrentCollectableTestValidUser() {
+        registerNewUser(validUserId, "validUser");
+
         try{
             /*
             Create a request object
             and assign values to it
             */
-            GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
+
+            var request = new GetCurrentCollectableRequest();
             request.setUserID(validUserId);
 
-            GetCurrentCollectableResponse response = userService.getCurrentCollectable(request);
+            var response = userService.getCurrentCollectable(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The user's Collectable was successfully returned", response.getMessage());
             Assertions.assertNotNull(response.getCollectable());
@@ -120,10 +651,11 @@ public class UserServiceImplIT {
             Create a request object
             and assign values to it
             */
-            GetUserTrackableRequest request = new GetUserTrackableRequest();
+            var request = new GetUserTrackableRequest();
             request.setUserID(invalidUserId);
 
-            GetUserTrackableResponse response = userService.getUserTrackable(request);
+            var response = userService.getUserTrackable(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getTrackable());
@@ -134,21 +666,26 @@ public class UserServiceImplIT {
 
     @Test
     public void getUserTrackableTestValidUser() {
+        registerNewUser(validUserId, "validUser");
+
         try{
             /*
             Create a request object
             and assign values to it
             */
-            GetUserTrackableRequest request = new GetUserTrackableRequest();
+
+            var request = new GetUserTrackableRequest();
             request.setUserID(validUserId);
 
-            GetUserTrackableResponse response = userService.getUserTrackable(request);
+            var response = userService.getUserTrackable(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The user's Trackable was successfully returned", response.getMessage());
 
-            Collectable trackableObject = response.getTrackable();
+            var trackableObject = response.getTrackable();
+
             Assertions.assertNotNull(trackableObject);
-            Assertions.assertEquals(UUID.fromString("0855b7da-bdad-44b7-9c22-18fe266ceaf3"), trackableObject.getType().getId());
+            Assertions.assertEquals(trackableTypeUUID, trackableObject.getType().getId());
         }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
         }
@@ -161,9 +698,10 @@ public class UserServiceImplIT {
             Create a request object
             and assign values to it
             */
-            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest(invalidUserId);
+            var request = new GetFoundCollectableTypesRequest(invalidUserId);
 
-            GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
+            var response = userService.getFoundCollectableTypes(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getCollectableTypeIDs());
@@ -173,36 +711,49 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getFoundCollectableTypesTestValidUser() {
         try{
+            addFirstTwoGeoCodes();
+            addFoundGeoCodesForUser1();
+
             /*
              Create a request object
              and assign values to it
            */
-            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest(noPointsUserId);
+            setUser(userWithPoints1ID);
 
-            GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
+            var request = new GetFoundCollectableTypesRequest(userWithPoints1ID);
+
+            var response = userService.getFoundCollectableTypes(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The IDs of the User's found CollectableTypes was successfully returned", response.getMessage());
 
-            List<UUID> foundCollectableTypeIDs = response.getCollectableTypeIDs();
+            var foundCollectableTypeIDs = response.getCollectableTypeIDs();
+
             Assertions.assertNotNull(foundCollectableTypeIDs);
-            Assertions.assertEquals(2, foundCollectableTypeIDs.size());
-        }catch (NullRequestParameterException e){
+            Assertions.assertTrue(foundCollectableTypeIDs.contains(firstFoundCollectableTypeID));
+            Assertions.assertTrue(foundCollectableTypeIDs.contains(secondFoundCollectableTypeID));
+        }catch (NullRequestParameterException | InvalidRequestException e){
             Assertions.fail(e.getMessage());
         }
     }
 
     @Test
+    @Transactional
     void getFoundGeoCodesTestInvalidUser() {
+        registerNewUser(validUserId, "validUser");
+
         try{
             /*
             Create a request object
             and assign values to it
             */
-            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest(invalidUserId);
+            var request = new GetFoundGeoCodesRequest(invalidUserId);
 
-            GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
+            var response = userService.getFoundGeoCodes(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getGeocodeIDs());
@@ -212,40 +763,50 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getFoundGeoCodesTestValidUser() {
         try{
+            addFirstTwoGeoCodes();
+            addFoundGeoCodesForUser1();
+
             /*
              Create a request object
              and assign values to it
            */
-            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest(validUserId);
+            setUser(userWithPoints1ID);
 
-            GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
+            var request = new GetFoundGeoCodesRequest(userWithPoints1ID);
+
+            var response = userService.getFoundGeoCodes(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The IDs of the User's found GeoCodes was successfully returned", response.getMessage());
 
-            List<UUID> foundGeoCodeIDs = response.getGeocodeIDs();
+            var foundGeoCodeIDs = response.getGeocodeIDs();
+
             Assertions.assertNotNull(foundGeoCodeIDs);
 
             //HashSet will cause order to not necessarily be order added in
             Assertions.assertTrue(foundGeoCodeIDs.contains(firstGeoCodeID));
             Assertions.assertTrue(foundGeoCodeIDs.contains(secondGeoCodeID));
-        }catch (NullRequestParameterException e){
+        }catch (NullRequestParameterException | InvalidRequestException e){
             Assertions.fail(e.getMessage());
         }
     }
 
     @Test
+    @Transactional
     void getOwnedGeoCodesTestInvalidUser() {
         try{
             /*
             Create a request object
             and assign values to it
             */
-            GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
+            var request = new GetOwnedGeoCodesRequest();
             request.setUserID(invalidUserId);
 
-            GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(request);
+            var response = userService.getOwnedGeoCodes(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getGeocodeIDs());
@@ -255,40 +816,50 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getOwnedGeoCodesTestValidUser() {
         try{
+            addFirstTwoGeoCodes();
+
             /*
              Create a request object
              and assign values to it
            */
-            GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
+            setUser(validUserId);
+
+            var request = new GetOwnedGeoCodesRequest();
             request.setUserID(validUserId);
 
-            GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(request);
+            var response = userService.getOwnedGeoCodes(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The IDs of the User's owned GeoCodes was successfully returned", response.getMessage());
 
-            List<UUID> ownedGeoCodeIDs = response.getGeocodeIDs();
+            var ownedGeoCodeIDs = response.getGeocodeIDs();
+
             Assertions.assertNotNull(ownedGeoCodeIDs);
-            Assertions.assertEquals(1, ownedGeoCodeIDs.size());
-            Assertions.assertEquals(thirdGeoCodeID, ownedGeoCodeIDs.get(0));
-        }catch (NullRequestParameterException e){
+            Assertions.assertEquals(2, ownedGeoCodeIDs.size());
+            Assertions.assertTrue(ownedGeoCodeIDs.contains(firstGeoCodeID));
+            Assertions.assertTrue(ownedGeoCodeIDs.contains(secondGeoCodeID));
+        }catch (NullRequestParameterException | InvalidRequestException e){
             Assertions.fail(e.getMessage());
         }
     }
 
     @Test
+    @Transactional
     public void updateLocationTestInvalidUser() {
         try{
             /*
             Create a request object
             and assign values to it
             */
-            UpdateLocationRequest request = new UpdateLocationRequest();
+            var request = new UpdateLocationRequest();
             request.setUserID(invalidUserId);
             request.setLocation(new GeoPoint(10.0f, 10.0f));
 
-            UpdateLocationResponse response = userService.updateLocation(request);
+            var response = userService.updateLocation(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getTrackable());
@@ -298,26 +869,33 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void updateLocationTestValidUser() {
+        registerNewUser(validUserId, "validUser");
+
         try{
             /*
              Create a request object
              and assign values to it
            */
-            UpdateLocationRequest request = new UpdateLocationRequest();
+
+            var request = new UpdateLocationRequest();
             request.setUserID(validUserId);
 
-            GeoPoint location = new GeoPoint(100.0f, 40.0f);
+            var location = new GeoPoint(100.0f, 40.0f);
             request.setLocation(location);
 
-            UpdateLocationResponse response = userService.updateLocation(request);
+            var response = userService.updateLocation(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The trackable object's location was successfully updated", response.getMessage());
 
-            Collectable trackableObject = response.getTrackable();
+            var trackableObject = response.getTrackable();
+
             Assertions.assertNotNull(trackableObject);
 
             List<GeoPoint> pastLocations = new ArrayList<>(trackableObject.getPastLocations());
+
             Assertions.assertEquals(location, pastLocations.get(pastLocations.size()-1));
         }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
@@ -325,12 +903,13 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getMyLeaderboardsTestInvalidUser(){
-        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        var request = new GetMyLeaderboardsRequest();
         request.setUserID(invalidUserId);
 
         try {
-            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+            var response = userService.getMyLeaderboards(request);
 
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
@@ -341,143 +920,77 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     void getMyLeaderboardsTestUserWithNoPoints(){
-        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        registerNewUser(noPointsUserId, "noPointsUser");
+
+        var request = new GetMyLeaderboardsRequest();
         request.setUserID(noPointsUserId);
 
         try {
-            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+            var response = userService.getMyLeaderboards(request);
 
             Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
-
-            System.out.println("printing the details for the leaderboards:");
-
-            for(MyLeaderboardDetails details : response.getLeaderboards()){
-                System.out.println(details.getName()+", "+details.getPoints()+", "+details.getRank());
-            }
-
+            Assertions.assertEquals(successGetMyLeaderboardsMessage, response.getMessage());
             Assertions.assertTrue(response.getLeaderboards().isEmpty());
-
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
     }
 
     @Test
-    void getMyLeaderboardsTestUserWithPoints1(){
-        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
-        request.setUserID(userWithPoints1);
+    @Transactional
+    public void getMyLeaderboardsTestUsersWithPoints() throws NullRequestParameterException, InvalidRequestException {
+        createCollectableTypes();
 
-        try {
-            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+        createOpenDayEvent();
+        addFoundGeoCodesForUser1();
+        addFoundGeoCodesForUser2();
 
-            Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
+        createWinterSchoolEvent();
+        addFoundGeoCodesForUser1WinterSchool();
+        addFoundGeoCodesForUser2WinterSchool();
 
-            List<MyLeaderboardDetails> leaderboardDetails = response.getLeaderboards();
+        //user1
+        var eventNames = new ArrayList<>(Arrays.asList(
+           openDayEventName,
+           winterSchoolEventName
+        ));
 
-            /* check the user has points */
-            Assertions.assertFalse(leaderboardDetails.isEmpty());
+        var user1CorrectRankings = new ArrayList<>(Arrays.asList(
+                1,
+                2
+        ));
 
-            /* check that the correct details are returned */
+        checkUserLeaderboardDetails(userWithPoints1, eventNames, user1CorrectRankings);
 
-            //user1 ranked 1st for First event
-            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
-                    details.getName().equals(firstEvent) &&
-                            details.getPoints() == user1FirstEventPoints &&
-                            details.getRank() == 1
-            ));
+        var user2CorrectRankings = new ArrayList<>(Arrays.asList(
+                2,
+                1
+        ));
 
-            //user1 ranked 1st for Second event
-            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
-                    details.getName().equals(secondEvent) &&
-                            details.getPoints() == user1SecondEventPoints &&
-                            details.getRank() == 1
-            ));
-        } catch (NullRequestParameterException e) {
-            Assertions.fail(e.getMessage());
-        }
+        //user2
+        checkUserLeaderboardDetails(userWithPoints2, eventNames, user2CorrectRankings);
     }
 
     @Test
-    void getMyLeaderboardsTestUserWithPoints2(){
-        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
-        request.setUserID(userWithPoints2);
-
+    @Transactional
+    public void AddToOwnedGeoCodesTestNotAddDuplicate() throws InvalidRequestException {
         try {
-            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+            addFirstTwoGeoCodes();
+            
+            var response = addToOwnedGeoCodes(validUserId, secondGeoCodeID);
 
-            Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("The details for the User's Leaderboards were successfully returned", response.getMessage());
-
-            List<MyLeaderboardDetails> leaderboardDetails = response.getLeaderboards();
-
-            /* check the user has points */
-            Assertions.assertFalse(leaderboardDetails.isEmpty());
-
-            /* check that the correct details are returned */
-
-            //user2 ranked 1st for First event
-            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
-                    details.getName().equals(firstEvent) &&
-                            details.getPoints() == user2FirstEventPoints &&
-                            details.getRank() == 1
-            ));
-
-            //user1 ranked 2nd for Second event
-            Assertions.assertTrue(leaderboardDetails.stream().anyMatch(details ->
-                    details.getName().equals(secondEvent) &&
-                            details.getPoints() == user2SecondEventPoints &&
-                            details.getRank() == 2
-            ));
-        } catch (NullRequestParameterException e) {
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    public void AddToOwnedGeoCodesTestInvalidUserID(){
-        try {
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(invalidUserId, firstGeoCodeID);
-            AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void AddToOwnedGeoCodesTestInvalidGeoCodeID(){
-        try {
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(validUserId, invalidGeoCodeID);
-            AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidGeoCodeIdMessage, response.getMessage());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void AddToOwnedGeoCodesTestNotAddDuplicate(){
-        try {
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(noPointsUserId, noPointsFirstOwnedGeoCodeID);
-            AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
-
+            Assertions.assertNotNull(response);
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("GeoCode added to the owned GeoCodes", response.getMessage());
 
-            GetOwnedGeoCodesRequest getOwnedGeoCodesRequest = new GetOwnedGeoCodesRequest(noPointsUserId);
-            GetOwnedGeoCodesResponse getOwnedGeoCodesResponse = userService.getOwnedGeoCodes(getOwnedGeoCodesRequest);
+            var getOwnedGeoCodesResponse = getOwnedGeoCodes(validUserId);
 
+            Assertions.assertNotNull(getOwnedGeoCodesResponse);
             Assertions.assertTrue(getOwnedGeoCodesResponse.isSuccess());
 
-            List<UUID> ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
-
+            var ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
             Assertions.assertEquals(2, ownedGeoCodeIDs.size());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
@@ -488,202 +1001,161 @@ public class UserServiceImplIT {
     @Transactional
     public void AddToOwnedGeoCodesTestAddNew(){
         try {
-            //check number of owned GeoCodes before adding
-            GetOwnedGeoCodesRequest getOwnedGeoCodesRequest = new GetOwnedGeoCodesRequest(noPointsUserId);
-            GetOwnedGeoCodesResponse getOwnedGeoCodesResponse = userService.getOwnedGeoCodes(getOwnedGeoCodesRequest);
+            addFirstTwoGeoCodes();
 
-            Assertions.assertTrue(getOwnedGeoCodesResponse.isSuccess());
+            //create the third GeoCode
+            thirdGeoCodeID = createGeoCode("3", new GeoPoint(15.0, 15.0), Difficulty.EASY);
 
-            List<UUID> ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
-            Assertions.assertEquals(2, ownedGeoCodeIDs.size());
+            var response = addToOwnedGeoCodes(validUserId, thirdGeoCodeID);
 
-            //add a new owned GeoCode
-            AddToOwnedGeoCodesRequest request = new AddToOwnedGeoCodesRequest(noPointsUserId, noPointsNewOwnedGeoCodeID);
-            AddToOwnedGeoCodesResponse response = userService.addToOwnedGeoCodes(request);
-
+            Assertions.assertNotNull(response);
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("GeoCode added to the owned GeoCodes", response.getMessage());
 
             //check that the number of owned GeoCodes has increased by 1
-            getOwnedGeoCodesResponse = userService.getOwnedGeoCodes(getOwnedGeoCodesRequest);
+            var getOwnedGeoCodesResponse = getOwnedGeoCodes(validUserId);
 
+            Assertions.assertNotNull(getOwnedGeoCodesResponse);
             Assertions.assertTrue(getOwnedGeoCodesResponse.isSuccess());
 
-            ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
+            var ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
+
             Assertions.assertEquals(3, ownedGeoCodeIDs.size());
-            Assertions.assertTrue(ownedGeoCodeIDs.contains(noPointsNewOwnedGeoCodeID));
-        } catch (NullRequestParameterException e) {
+            Assertions.assertTrue(ownedGeoCodeIDs.contains(thirdGeoCodeID));
+        } catch (NullRequestParameterException | InvalidRequestException e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void AddToFoundGeoCodesTestInvalidUserID(){
-        try {
-            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(invalidUserId, firstGeoCodeID);
-            AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void AddToFoundGeoCodesTestInvalidGeoCodeID(){
-        try {
-            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(validUserId, invalidGeoCodeID);
-            AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidGeoCodeIdMessage, response.getMessage());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
+    @Transactional
     public void AddToFoundGeoCodesTestNotAddDuplicate(){
         try {
-            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(noPointsUserId, noPointsFirstFoundGeoCodeID);
-            AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
+            addFirstTwoGeoCodes();
+            addFoundGeoCodesForUser1();
 
-            Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("GeoCode added to the found GeoCodes", response.getMessage());
+            var getFoundGeoCodesResponse = getFoundGeoCodes(userWithPoints1ID);
 
-            GetFoundGeoCodesRequest getFoundGeoCodesRequest = new GetFoundGeoCodesRequest(noPointsUserId);
-            GetFoundGeoCodesResponse getFoundGeoCodesResponse = userService.getFoundGeoCodes(getFoundGeoCodesRequest);
+            Assertions.assertNotNull(getFoundGeoCodesResponse);
 
-            Assertions.assertTrue(getFoundGeoCodesResponse.isSuccess());
-
-            List<UUID> foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
+            var foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
 
             Assertions.assertEquals(2, foundGeoCodeIDs.size());
-        } catch (NullRequestParameterException e) {
+        } catch (NullRequestParameterException | InvalidRequestException e) {
             e.printStackTrace();
         }
     }
 
     @Test
     @Transactional
-    public void AddToFoundGeoCodesTestAddNew(){
-        try {
-            //check number of found GeoCodes before adding
-            GetFoundGeoCodesRequest getFoundGeoCodesRequest = new GetFoundGeoCodesRequest(noPointsUserId);
-            GetFoundGeoCodesResponse getFoundGeoCodesResponse = userService.getFoundGeoCodes(getFoundGeoCodesRequest);
+    public void AddToFoundGeoCodesTestAddNew() throws NullRequestParameterException, InvalidRequestException {
+        addFirstTwoGeoCodes();
+        addFoundGeoCodesForUser1();
 
-            Assertions.assertTrue(getFoundGeoCodesResponse.isSuccess());
+        //set to the admin user to create this GeoCode
+        setUser(validUserId);
 
-            List<UUID> foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
-            Assertions.assertEquals(2, foundGeoCodeIDs.size());
+        thirdGeoCodeID = createGeoCode("3", new GeoPoint(0.0, 0.0), Difficulty.EASY);
 
-            //add a new found GeoCode
-            AddToFoundGeoCodesRequest request = new AddToFoundGeoCodesRequest(noPointsUserId, noPointsNewFoundGeoCodeID);
-            AddToFoundGeoCodesResponse response = userService.addToFoundGeoCodes(request);
+        var thirdCollectables = getCollectables(thirdGeoCodeID);
 
-            Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("GeoCode added to the found GeoCodes", response.getMessage());
+        setUser(userWithPoints1ID);
 
-            //check that the number of owned GeoCodes has increased by 1
-            getFoundGeoCodesResponse = userService.getFoundGeoCodes(getFoundGeoCodesRequest);
+        Assertions.assertNotNull(thirdCollectables);
 
-            Assertions.assertTrue(getFoundGeoCodesResponse.isSuccess());
+        var collectableID = thirdCollectables.get(0);
+        swapCollectables(thirdGeoCodeID, collectableID);
 
-            foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
-            Assertions.assertEquals(3, foundGeoCodeIDs.size());
-            Assertions.assertTrue(foundGeoCodeIDs.contains(noPointsNewFoundGeoCodeID));
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
+        //check that the number of owned GeoCodes has increased by 1
+        var getFoundGeoCodesResponse = getFoundGeoCodes(userWithPoints1ID);
 
-    @Test
-    public void AddToFoundCollectableTypesTestInvalidUserID(){
-        try {
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(invalidUserId, testCollectableTypeID);
-            AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
+        Assertions.assertNotNull(getFoundGeoCodesResponse);
+        Assertions.assertTrue(getFoundGeoCodesResponse.isSuccess());
 
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
+        var foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
 
-    @Test
-    public void AddToFoundCollectableTypesTestInvalidCollectableTypeID(){
-        try {
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUserId, invalidCollectableTypeID);
-            AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
-
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidCollectableTypeIDMessage, response.getMessage());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void AddToFoundCollectableTypesTestNotAddDuplicate(){
-        try {
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(validUserId, testCollectableType1ID);
-            AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
-
-            Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("CollectableType added to the found CollectableTypes", response.getMessage());
-
-            GetFoundCollectableTypesRequest getFoundCollectableTypesRequest = new GetFoundCollectableTypesRequest(noPointsUserId);
-            GetFoundCollectableTypesResponse getFoundCollectableTypesResponse = userService.getFoundCollectableTypes(getFoundCollectableTypesRequest);
-
-            Assertions.assertTrue(getFoundCollectableTypesResponse.isSuccess());
-
-            List<UUID> foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
-
-            Assertions.assertEquals(2, foundCollectableTypeIDs.size());
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
+        Assertions.assertEquals(3, foundGeoCodeIDs.size());
+        Assertions.assertTrue(foundGeoCodeIDs.contains(thirdGeoCodeID));
     }
 
     @Test
     @Transactional
-    public void AddToFoundCollectableTypesTestAddNew(){
-        try{
-            //check number of found CollectableTypes before adding
-            GetFoundCollectableTypesRequest getFoundCollectableTypesRequest = new GetFoundCollectableTypesRequest(noPointsUserId);
-            GetFoundCollectableTypesResponse getFoundCollectableTypesResponse = userService.getFoundCollectableTypes(getFoundCollectableTypesRequest);
+    public void AddToFoundCollectableTypesTestNotAddDuplicate() throws NullRequestParameterException, InvalidRequestException {
+        addFirstTwoGeoCodes();
+        addFoundGeoCodesForUser1();
 
-            Assertions.assertTrue(getFoundCollectableTypesResponse.isSuccess());
+        //create the CollectableSet to hold the "User Trackable" type
+        christmasSetId = createCollectableSet("Christmas Set", "Christmas 2021 Collectables");
 
-            List<UUID> foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
-            Assertions.assertEquals(2, foundCollectableTypeIDs.size());
+        var newCollectableTypeID = createCollectableType("new type", "img_new_type", Rarity.COMMON, christmasSetId, new HashMap<>());
+        createCollectable(newCollectableTypeID, false, new GeoPoint(0.0, 0.0));
 
-            //add a new found CollectableType
-            AddToFoundCollectableTypesRequest request = new AddToFoundCollectableTypesRequest(noPointsUserId, noPointsNewFoundCollectableTypeID);
-            AddToFoundCollectableTypesResponse response = userService.addToFoundCollectableTypes(request);
+        var response = addToFoundCollectableTypes(userWithPoints1ID, firstFoundCollectableTypeID);
 
-            Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("CollectableType added to the found CollectableTypes", response.getMessage());
-    
-            //check that the number of owned CollectableTypes has increased by 1
-            getFoundCollectableTypesResponse = userService.getFoundCollectableTypes(getFoundCollectableTypesRequest);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals("CollectableType added to the found CollectableTypes", response.getMessage());
 
-            Assertions.assertTrue(getFoundCollectableTypesResponse.isSuccess());
-    
-            foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
-            Assertions.assertEquals(3, foundCollectableTypeIDs.size());
-            Assertions.assertTrue(foundCollectableTypeIDs.contains(noPointsNewFoundCollectableTypeID));
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-        }
+        var getFoundCollectableTypesResponse = getFoundCollectableTypes(userWithPoints1);
+
+        Assertions.assertNotNull(getFoundCollectableTypesResponse);
+        Assertions.assertTrue(getFoundCollectableTypesResponse.isSuccess());
+
+        var foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
+
+        Assertions.assertEquals(2, foundCollectableTypeIDs.size());
     }
 
     @Test
+    @Transactional
+    public void AddToFoundCollectableTypesTestAddNew() throws NullRequestParameterException, InvalidRequestException {
+        addFirstTwoGeoCodes();
+        addFoundGeoCodesForUser1();
+
+        //check number of found CollectableTypes before adding
+        UUID thirdCollectableTypeID = null;
+
+        var collectableTypes = collectableService.getCollectableTypes().getCollectableTypes();
+
+        //find the third (or second if the first 2 types are the same) ID that we have not found yet
+        for(var type: collectableTypes){
+            if(!type.getId().equals(firstFoundCollectableTypeID) && !type.getId().equals(secondFoundCollectableTypeID)){
+                thirdCollectableTypeID = type.getId();
+                break;
+            }
+        }
+
+        var addToFoundCollectableTypesResponse = addToFoundCollectableTypes(userWithPoints1ID, thirdCollectableTypeID);
+
+        Assertions.assertNotNull(addToFoundCollectableTypesResponse);
+        Assertions.assertTrue(addToFoundCollectableTypesResponse.isSuccess());
+        Assertions.assertEquals("CollectableType added to the found CollectableTypes", addToFoundCollectableTypesResponse.getMessage());
+
+        //check that the number of owned CollectableTypes has increased by 1
+        var getFoundCollectableTypesResponse = getFoundCollectableTypes(userWithPoints1);
+
+        Assertions.assertNotNull(getFoundCollectableTypesResponse);
+        Assertions.assertTrue(getFoundCollectableTypesResponse.isSuccess());
+
+        var foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
+
+        int numberOfFoundCollectableTypesBefore;
+
+        if(firstFoundCollectableTypeID.equals(secondFoundCollectableTypeID)){
+            numberOfFoundCollectableTypesBefore = 1;
+        }else{
+            numberOfFoundCollectableTypesBefore = 2;
+        }
+
+        Assertions.assertEquals(numberOfFoundCollectableTypesBefore+1, foundCollectableTypeIDs.size());
+        Assertions.assertTrue(foundCollectableTypeIDs.contains(thirdCollectableTypeID));
+    }
+
+    @Test
+    @Transactional
     public void getUserByIdTestInvalidUserId(){
         try {
-            GetUserByIdRequest request = new GetUserByIdRequest(invalidUserId);
-            GetUserByIdResponse response = userService.getUserById(request);
+            var request = new GetUserByIdRequest(invalidUserId);
+            var response = userService.getUserById(request);
 
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
@@ -693,29 +1165,38 @@ public class UserServiceImplIT {
     }
 
     @Test
+    @Transactional
     public void getUserByIdTestValidUserId(){
+        registerNewUser(validUserId, "validUser");
+
         try {
-            GetUserByIdRequest request = new GetUserByIdRequest(validUserId);
-            GetUserByIdResponse response = userService.getUserById(request);
-            User user = response.getUser();
+            var request = new GetUserByIdRequest(validUserId);
+            var response = userService.getUserById(request);
+            var user = response.getUser();
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The User was found", response.getMessage());
 
             Assertions.assertEquals(validUserId, user.getId());
-            Assertions.assertEquals("michael", user.getUsername());
+            Assertions.assertEquals("validUser", user.getUsername());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
     }
 
     @Test
+    @Transactional
     public void registerNewUserTestExistingUserId(){
+        registerNewUser(validUserId, "validUser");
+
         try {
-            RegisterNewUserRequest request = new RegisterNewUserRequest(validUserId, "john");
-            RegisterNewUserResponse response = userService.registerNewUser(request);
+            var request = new RegisterNewUserRequest(validUserId, "john");
+            var response = userService.registerNewUser(request);
 
             Assertions.assertFalse(response.isSuccess());
+
+            var existingUserIdMessage = "User ID already exists";
+
             Assertions.assertEquals(existingUserIdMessage, response.getMessage());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
@@ -726,70 +1207,54 @@ public class UserServiceImplIT {
     @Transactional
     public void registerNewUserTestNewUserId(){
         try {
-            String newUsername = "bob";
-            RegisterNewUserRequest request = new RegisterNewUserRequest(newUserId, newUsername);
-            RegisterNewUserResponse response = userService.registerNewUser(request);
+            var newUsername = "bob";
+            var request = new RegisterNewUserRequest(newUserId, newUsername);
+            var response = userService.registerNewUser(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("New User registered", response.getMessage());
 
-            GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(newUserId);
-            GetUserByIdResponse getUserByIdResponse = userService.getUserById(getUserByIdRequest);
+            var getUserByIdRequest = new GetUserByIdRequest(newUserId);
+            var getUserByIdResponse = userService.getUserById(getUserByIdRequest);
 
             Assertions.assertTrue(getUserByIdResponse.isSuccess());
 
-            User user = getUserByIdResponse.getUser();
+            var user = getUserByIdResponse.getUser();
 
-            Assertions.assertEquals(trackableUUID, user.getTrackableObject().getType().getId());
-            Assertions.assertEquals(trackableUUID, user.getCurrentCollectable().getType().getId());
+            Assertions.assertEquals(trackableTypeUUID, user.getTrackableObject().getType().getId());
+            Assertions.assertEquals(trackableTypeUUID, user.getCurrentCollectable().getType().getId());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void swapCollectableTestCollectableInvalidUserID(){
+    @Transactional
+    public void swapCollectableTestCollectableIsSwapped() throws NullRequestParameterException, InvalidRequestException {
+        addFirstTwoGeoCodes();
+
         try {
-            SwapCollectableRequest request = new SwapCollectableRequest(invalidUserId, collectableInFirstGeoCodeID, firstGeoCodeID);
-            SwapCollectableResponse response = userService.swapCollectable(request);
+            //get the 3rd Collectable in the first GeoCode
+            var newCurrentCollectableID = firstCollectables.get(2);
+            var response = swapCollectable(validUserId, newCurrentCollectableID, firstGeoCodeID);
 
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("The User's Collectable was swapped with the Collectable in the GeoCode", response.getMessage());
 
-            Collectable collectable = response.getCollectable();
-            Assertions.assertNull(collectable);
-        } catch (NullRequestParameterException e) {
-            Assertions.fail(e.getMessage());
-        }
-    }
+            var collectable = response.getCollectable();
+            Assertions.assertNotNull(collectable);
 
-    @Test
-    public void swapCollectableTestCollectableInvalidGeoCodeID(){
-        try {
-            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, collectableInFirstGeoCodeID, invalidGeoCodeID);
-            SwapCollectableResponse response = userService.swapCollectable(request);
+            var getCurrentCollectableRequest = new GetCurrentCollectableRequest();
+            getCurrentCollectableRequest.setUserID(validUserId);
 
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("Invalid ID given for the GeoCode", response.getMessage());
+            var getCurrentCollectableResponse = userService.getCurrentCollectable(getCurrentCollectableRequest);
 
-            Collectable collectable = response.getCollectable();
-            Assertions.assertNull(collectable);
-        } catch (NullRequestParameterException e) {
-            Assertions.fail(e.getMessage());
-        }
-    }
+            Assertions.assertTrue(getCurrentCollectableResponse.isSuccess());
 
-    @Test
-    public void swapCollectableTestCollectableInvalidCollectableID(){
-        try {
-            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, invalidCollectableID, firstGeoCodeID);
-            SwapCollectableResponse response = userService.swapCollectable(request);
+            //test that the User's Collectable is now the swapped out Collectable
+            var currentCollectable = getCurrentCollectableResponse.getCollectable();
 
-            Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("Invalid ID given for the Collectable", response.getMessage());
-
-            Collectable collectable = response.getCollectable();
-            Assertions.assertNull(collectable);
+            Assertions.assertEquals(newCurrentCollectableID, currentCollectable.getId());
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
@@ -797,40 +1262,11 @@ public class UserServiceImplIT {
 
     @Test
     @Transactional
-    public void swapCollectableTestCollectableIsSwapped(){
-        try {
-            SwapCollectableRequest request = new SwapCollectableRequest(validUserId, collectableInFirstGeoCodeID, firstGeoCodeID);
-            SwapCollectableResponse response = userService.swapCollectable(request);
-
-            Assertions.assertTrue(response.isSuccess());
-            Assertions.assertEquals("The User's Collectable was swapped with the Collectable in the GeoCode", response.getMessage());
-
-            Collectable collectable = response.getCollectable();
-            Assertions.assertNotNull(collectable);
-
-            System.out.println("collectable that comes out: "+collectable.getId());
-
-            GetCurrentCollectableRequest getCurrentCollectableRequest = new GetCurrentCollectableRequest();
-            getCurrentCollectableRequest.setUserID(validUserId);
-
-            GetCurrentCollectableResponse getCurrentCollectableResponse = userService.getCurrentCollectable(getCurrentCollectableRequest);
-
-            Assertions.assertTrue(getCurrentCollectableResponse.isSuccess());
-
-            //test that the User's Collectable is now the swapped out Collectable
-            Collectable currentCollectable = getCurrentCollectableResponse.getCollectable();
-            Assertions.assertEquals(collectableInFirstGeoCodeID, currentCollectable.getId());
-        } catch (NullRequestParameterException e) {
-            Assertions.fail(e.getMessage());
-        }
-    }
-
-    @Test
     void getMyMissionsTestInvalidUser(){
-        GetMyMissionsRequest request = new GetMyMissionsRequest(invalidUserId);
+        var request = new GetMyMissionsRequest(invalidUserId);
 
         try {
-            GetMyMissionsResponse response = userService.getMyMissions(request);
+            var response = userService.getMyMissions(request);
 
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
@@ -842,20 +1278,30 @@ public class UserServiceImplIT {
 
     @Test
     @Transactional
-    void getMyMissionsTestValidUser(){
-        GetMyMissionsRequest request = new GetMyMissionsRequest(validUserId);
+    void getMyMissionsTestValidUser() throws NullRequestParameterException, InvalidRequestException {
+        createCollectableTypes();
+        addFirstTwoGeoCodes();
+        addFoundGeoCodesForUser1();
+
+        setUser(userWithPoints1ID);
+        var request = new GetMyMissionsRequest(userWithPoints1ID);
 
         try {
-            GetMyMissionsResponse response = userService.getMyMissions(request);
+            var response = userService.getMyMissions(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("User Missions returned", response.getMessage());
 
-            Set<Mission> missions = response.getMissions();
+            var missions = response.getMissions();
+
             Assertions.assertNotNull(missions);
 
-            Assertions.assertTrue(missions.stream().anyMatch(mission -> mission.getId().equals(swapMissionID) && mission.getType().equals(MissionType.SWAP)));
-            Assertions.assertTrue(missions.stream().anyMatch(mission -> mission.getId().equals(circumferenceMissionID) && mission.getType().equals(MissionType.DISTANCE)));
+            var firstFoundCollectable = getCollectableByID(firstFoundCollectableID);
+            var secondFoundCollectable = getCollectableByID(secondFoundCollectableID);
+
+            //check each found Collectable's Mission
+            checkCollectableMission(firstFoundCollectable.getMissionID(), firstFoundCollectableType, missions);
+            checkCollectableMission(secondFoundCollectable.getMissionID(), secondFoundCollectableType, missions);
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
