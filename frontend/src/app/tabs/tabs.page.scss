@@ -12,6 +12,39 @@ ion-icon{
 
 }
 
+.hidden {
+  height: 0;
+  border: 0;
+}
 
+ion-list {
+  position: absolute;
+  bottom: 0;
+  width: 200px;
+  border: 0;
+  overflow: hidden;
+  background: inherit;
+}
+
+.item {
+  --color: white;
+
+  ion-icon {
+    color: white;
+  }
+}
+
+.item.selected {
+  --color: black;
+
+  ion-icon {
+    color: black;
+  }
+}
+
+ion-item {
+  --background: none;
+  --border-style: none;
+}
 
 

@@ -1,37 +1,61 @@
-import {Component, OnDestroy, ViewChild} from '@angular/core';
-import {Observable, Subscription} from 'rxjs';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Subscription} from 'rxjs';
 import {IonTabs} from '@ionic/angular';
-import {WindowMonitor} from '../services/WindowMonitor';
+import {NavigationLayout, WindowMonitor} from '../services/WindowMonitor';
+
+class TabDefinition {
+  name: string;
+  internalName: string;
+  iconName: string;
+}
 
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss']
 })
-export class TabsPage implements OnDestroy {
+export class TabsPage implements OnInit, OnDestroy {
 
-  static subscriber;
-  private showTabs: boolean;
   @ViewChild('tabs') tabs: IonTabs;
-  tabChanger = new Observable(subscriber => TabsPage.subscriber = subscriber);
 
+  private tabList: TabDefinition[] = [
+    { name: 'Explore', internalName: 'explore', iconName: 'qr-code-outline' },
+    { name: 'Collections', internalName: 'collections', iconName: 'diamond-outline' },
+    { name: 'Events', internalName: 'events', iconName: 'trophy-outline' },
+    { name: 'Profile', internalName: 'profile', iconName: 'person-circle-outline' }
+  ];
+
+  private selectedTab: string;
+
+  private navigationLayout: NavigationLayout;
   private navigationTypeSubscription: Subscription;
 
   constructor(windowMonitor: WindowMonitor) {
-    this.showTabs = (windowMonitor.getCurrentNavigationLayout() === 'tabs');
-    this.tabChanger.subscribe(async (next: string) => {
-      await this.tabs.select(next.toLowerCase());
-    });
+    this.navigationLayout = windowMonitor.getCurrentNavigationLayout();
 
     this.navigationTypeSubscription = windowMonitor.onNavigationLayoutChange(layout => {
-      this.showTabs = (layout === 'tabs');
+      this.navigationLayout = layout;
     });
+  }
+
+  ngOnInit() {
+    //this.selectedTab = this.tabs.getSelected();
   }
 
   ngOnDestroy() {
     this.navigationTypeSubscription.unsubscribe();
   }
 
+  async changeTab(tabName: string) {
+    await this.tabs.select(tabName);
+  }
 
+  isSelected(tab: TabDefinition) {
+    try {
+      return (this.tabs.getSelected() === tab.internalName);
+    } catch {
+      return false;
+    }
+  }
 
 }

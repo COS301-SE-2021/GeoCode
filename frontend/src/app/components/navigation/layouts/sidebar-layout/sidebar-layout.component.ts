@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {TabsPage} from '../../../../tabs/tabs.page';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-sidebar-layout',
@@ -12,7 +11,4 @@ export class SidebarLayoutComponent implements OnInit {
 
   ngOnInit() {}
 
-  changeTab(tabName: string) {
-    TabsPage.subscriber.next(tabName);
-  }
 }

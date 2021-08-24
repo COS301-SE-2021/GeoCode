@@ -16,17 +16,12 @@ export class NavComponent implements OnDestroy {
   constructor(windowMonitor: WindowMonitor) {
     this.navigationLayout = windowMonitor.getCurrentNavigationLayout();
 
-    this.navigationLayoutSubscription = windowMonitor.onNavigationLayoutChange(type => {
-      this.navigationLayout = type;
+    this.navigationLayoutSubscription = windowMonitor.onNavigationLayoutChange(layout => {
+      this.navigationLayout = layout;
     });
   }
 
   ngOnDestroy() {
     this.navigationLayoutSubscription.unsubscribe();
-  }
-
-  changeTab(tabName: string) {
-    const obs = TabsPage.subscriber;
-    obs.next(tabName);
   }
 }

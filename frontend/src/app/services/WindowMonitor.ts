@@ -13,6 +13,7 @@ export class WindowMonitor {
   private navigationLayout = new Subject<NavigationLayout>();
   private navigationLayoutObserver = this.navigationLayout.asObservable();
 
+
   public onWindowResize(next: (value: number) => void): Subscription {
     return this.windowSizeObserver.subscribe(next);
   }
@@ -21,10 +22,12 @@ export class WindowMonitor {
     return this.navigationLayoutObserver.pipe(distinctUntilChanged()).subscribe(next);
   }
 
+
   public fireResize(): void {
     this.windowSize.next(window.innerWidth);
     this.navigationLayout.next(this.getCurrentNavigationLayout());
   }
+
 
   public getCurrentNavigationLayout(): NavigationLayout {
     if (window.innerWidth > 1280) {

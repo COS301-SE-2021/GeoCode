@@ -1,5 +1,6 @@
 <ion-toolbar>
   <ng-content select="ion-title"></ng-content>
-  <ng-content select="ion-buttons"></ng-content>
+  <ng-content select="ion-buttons [slot='start']"></ng-content>
+  <ng-content select="ion-buttons [slot='end']"></ng-content>
   <ng-content></ng-content>
 </ion-toolbar>

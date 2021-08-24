@@ -1,25 +1,17 @@
 <ion-tabs #tabs>
 
-  <ion-tab-bar slot="bottom" *ngIf="showTabs">
-    <ion-tab-button tab="explore">
-      <ion-icon name="qr-code-outline"></ion-icon>
-      <ion-label>Explore</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="collections">
-      <ion-icon name="diamond-outline"></ion-icon>
-      <ion-label>Collections</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="events">
-      <ion-icon name="trophy-outline"></ion-icon>
-      <ion-label>Events</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="profile">
-      <ion-icon name="person-circle-outline"></ion-icon>
-      <ion-label>Profile</ion-label>
+  <ion-tab-bar slot="bottom" [ngClass]="{'hidden': navigationLayout === 'sidebar'}">
+    <ion-tab-button *ngFor="let tab of tabList" tab="{{tab.internalName}}">
+      <ion-icon name="{{tab.iconName}}"></ion-icon>
+      <ion-label>{{tab.name}}</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
+
+  <ion-list [ngClass]="{'hidden': navigationLayout === 'tabs'}">
+    <ion-item button *ngFor="let tab of tabList" (click)="tabs.select(tab.internalName)" [ngClass]="{'selected': isSelected(tab)}">
+      <ion-icon slot="start" name="{{tab.iconName}}"></ion-icon>
+      <ion-label>{{tab.name}}</ion-label>
+    </ion-item>
+  </ion-list>
 
 </ion-tabs>
