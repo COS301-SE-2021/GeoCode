@@ -1,13 +1,15 @@
 <ion-tabs #tabs>
 
-  <ion-tab-bar slot="bottom" [ngClass]="{'hidden': navigationLayout === 'sidebar'}">
+  <ion-tab-bar slot="bottom" [ngClass]="{'hidden': navigationLayout.layout === 'sidebar'}">
     <ion-tab-button *ngFor="let tab of tabList" tab="{{tab.internalName}}">
       <ion-icon name="{{tab.iconName}}"></ion-icon>
       <ion-label>{{tab.name}}</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 
-  <ion-list [ngClass]="{'hidden': navigationLayout === 'tabs'}">
+  <img src="/assets/images/logo.png" [ngClass]="{'hidden': navigationLayout.layout === 'tabs' || navigationLayout.compact}">
+
+  <ion-list [ngClass]="{'hidden': navigationLayout.layout === 'tabs'}">
     <ion-item button *ngFor="let tab of tabList" (click)="tabs.select(tab.internalName)" [ngClass]="{'selected': isSelected(tab)}">
       <ion-icon slot="start" name="{{tab.iconName}}"></ion-icon>
       <ion-label>{{tab.name}}</ion-label>

@@ -1,19 +1,21 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Open GeoCode</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="explore"></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="scan()">
-        <ion-icon name="qr-code-outline"></ion-icon>
-        <ion-label>Scan</ion-label>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-nav>
 
-<ion-content>
+  <app-nav-header>
+    <app-nav-toolbar>
+      <ion-title>Open GeoCode</ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="explore"></ion-back-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="scan()">
+          <ion-icon name="qr-code-outline"></ion-icon>
+          <ion-label>Scan</ion-label>
+        </ion-button>
+      </ion-buttons>
+    </app-nav-toolbar>
+  </app-nav-header>
+
+  <ion-content *ngIf="geocode !== null">
 
     <div #mapElement class="map" [hidden]="isHidden"></div>
 
@@ -55,4 +57,6 @@
       </div>
     </div>
 
-</ion-content>
+  </ion-content>
+
+</app-nav>

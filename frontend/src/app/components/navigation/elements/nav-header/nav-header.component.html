@@ -1,4 +1,21 @@
-<ion-header>
+<ng-container *ngIf="navigationLayout.layout === 'tabs'">
+  <ion-header>
+    <ng-container *ngTemplateOutlet="toolbar" ngProjectAs="app-nav-toolbar"></ng-container>
+    <ng-container *ngTemplateOutlet="other"></ng-container>
+  </ion-header>
+</ng-container>
+
+<ng-container *ngIf="navigationLayout.layout === 'sidebar'">
+  <div id="logoPad" *ngIf="!navigationLayout.compact"></div>
+  <ng-container *ngTemplateOutlet="toolbar" ngProjectAs="app-nav-toolbar"></ng-container>
+  <ng-container *ngTemplateOutlet="other"></ng-container>
+</ng-container>
+
+
+<ng-template #toolbar>
   <ng-content select="app-nav-toolbar"></ng-content>
+</ng-template>
+
+<ng-template #other>
   <ng-content></ng-content>
-</ion-header>
+</ng-template>

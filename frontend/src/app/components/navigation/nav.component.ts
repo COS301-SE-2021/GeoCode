@@ -1,5 +1,4 @@
 import {Component, OnDestroy} from '@angular/core';
-import {TabsPage} from '../../tabs/tabs.page';
 import {WindowMonitor, NavigationLayout} from '../../services/WindowMonitor';
 import {Subscription} from 'rxjs';
 
@@ -10,7 +9,7 @@ import {Subscription} from 'rxjs';
 })
 export class NavComponent implements OnDestroy {
 
-  private navigationLayout: NavigationLayout;
+  protected navigationLayout: NavigationLayout;
   private navigationLayoutSubscription: Subscription;
 
   constructor(windowMonitor: WindowMonitor) {

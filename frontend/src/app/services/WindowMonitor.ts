@@ -1,8 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Subject, Subscription} from 'rxjs';
-import {distinctUntilChanged} from 'rxjs/operators';
+import {distinctUntilChanged, distinctUntilKeyChanged} from 'rxjs/operators';
 
-export type NavigationLayout = 'sidebar'|'tabs';
+export class NavigationLayout {
+  layout: 'tabs'|'sidebar';
+  compact?: boolean;
+}
 
 @Injectable({ providedIn: 'root' })
 export class WindowMonitor {
@@ -19,7 +22,10 @@ export class WindowMonitor {
   }
 
   public onNavigationLayoutChange(next: (value: NavigationLayout) => void): Subscription {
-    return this.navigationLayoutObserver.pipe(distinctUntilChanged()).subscribe(next);
+    const compareFunc = (x: NavigationLayout, y: NavigationLayout) => {
+      return ( (x.layout === y.layout) && (x.compact === y.compact) );
+    }
+    return this.navigationLayoutObserver.pipe(distinctUntilChanged(compareFunc)).subscribe(next);
   }
 
 
@@ -31,9 +37,9 @@ export class WindowMonitor {
 
   public getCurrentNavigationLayout(): NavigationLayout {
     if (window.innerWidth > 1280) {
-      return 'sidebar';
+      return { layout: 'sidebar', compact: (window.innerHeight < 500) };
     } else {
-      return 'tabs';
+      return { layout: 'tabs' };
     }
   }
 }

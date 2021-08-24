@@ -1,9 +1,9 @@
-<app-sidebar-layout *ngIf="navigationLayout === 'sidebar'">
+<app-sidebar-layout *ngIf="navigationLayout.layout === 'sidebar'">
   <ng-container *ngTemplateOutlet="header" ngProjectAs="app-nav-header"></ng-container>
   <ng-container *ngTemplateOutlet="content" ngProjectAs="ion-content"></ng-container>
 </app-sidebar-layout>
 
-<app-tab-layout *ngIf="navigationLayout === 'tabs'">
+<app-tab-layout *ngIf="navigationLayout.layout === 'tabs'">
   <ng-container *ngTemplateOutlet="header" ngProjectAs="app-nav-header"></ng-container>
   <ng-container *ngTemplateOutlet="content" ngProjectAs="ion-content"></ng-container>
 </app-tab-layout>

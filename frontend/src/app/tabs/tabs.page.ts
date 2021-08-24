@@ -14,7 +14,7 @@ class TabDefinition {
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss']
 })
-export class TabsPage implements OnInit, OnDestroy {
+export class TabsPage implements OnDestroy {
 
   @ViewChild('tabs') tabs: IonTabs;
 
@@ -25,8 +25,6 @@ export class TabsPage implements OnInit, OnDestroy {
     { name: 'Profile', internalName: 'profile', iconName: 'person-circle-outline' }
   ];
 
-  private selectedTab: string;
-
   private navigationLayout: NavigationLayout;
   private navigationTypeSubscription: Subscription;
 
@@ -35,11 +33,8 @@ export class TabsPage implements OnInit, OnDestroy {
 
     this.navigationTypeSubscription = windowMonitor.onNavigationLayoutChange(layout => {
       this.navigationLayout = layout;
+      console.log(layout);
     });
-  }
-
-  ngOnInit() {
-    //this.selectedTab = this.tabs.getSelected();
   }
 
   ngOnDestroy() {
