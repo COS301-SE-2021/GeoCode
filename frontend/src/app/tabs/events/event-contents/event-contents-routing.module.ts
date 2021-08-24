@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: EventContentsPage
-  }
+  },
+  {
+    path: 'open/:geocodeID',
+    loadChildren: () => import('../../geocode/geocode-contents/geocode-contents.module').then(m => m.GeocodeContentsPageModule)
+  },
 ];
 
 @NgModule({
