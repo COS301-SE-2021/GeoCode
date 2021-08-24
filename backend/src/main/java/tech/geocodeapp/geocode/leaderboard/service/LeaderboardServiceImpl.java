@@ -14,13 +14,11 @@ import tech.geocodeapp.geocode.leaderboard.request.*;
 import tech.geocodeapp.geocode.leaderboard.response.*;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
-import tech.geocodeapp.geocode.user.response.GetUserByIdResponse;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This class implements the LeaderboardService interface
@@ -29,10 +27,9 @@ import java.util.Optional;
 public class LeaderboardServiceImpl implements LeaderboardService {
     private final LeaderboardRepository leaderboardRepo;
     private final PointRepository pointRepo;
+    private final UserService userService;
 
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
-
-    private final UserService userService;
 
     public LeaderboardServiceImpl(LeaderboardRepository leaderboardRepo, PointRepository pointRepo, @Lazy UserService userService) {
         this.leaderboardRepo = leaderboardRepo;
@@ -44,7 +41,6 @@ public class LeaderboardServiceImpl implements LeaderboardService {
      * Creates a Leaderboard
      * @param request - Contains the name of the Leaderboard to be created
      * @return The created Leaderboard
-     * @throws NullRequestParameterException - an exception for when a request parameter is NULL
      */
     public CreateLeaderboardResponse createLeaderboard(CreateLeaderboardRequest request) throws NullRequestParameterException{
         if(request == null){
@@ -54,7 +50,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         /* create the new Leaderboard */
-        Leaderboard leaderboard = new Leaderboard(request.getName());
+        var leaderboard = new Leaderboard(request.getName());
         leaderboardRepo.save(leaderboard);
 
         return new CreateLeaderboardResponse(true, "The Leaderboard was successfully created", leaderboard);
@@ -74,7 +70,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        boolean success = false;
+        var success = false;
         String message;
         List<EventLeaderboardDetails> leaderboardDetails = new ArrayList<>();
 
@@ -83,17 +79,17 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }else if(request.getCount()<1) {
             message = "Count is lower than the minimum value allowed";
         }else{
-            Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardID());
+            var leaderboard = leaderboardRepo.findById(request.getLeaderboardID());
             if(leaderboard.isEmpty()){
                 message = "No leaderboard exists for the provided leaderboardId";
             }else{
                 if(pointRepo.countByLeaderboard(leaderboard.get())<request.getStarting()) {
                     message = "Starting is greater than the number of points in the leaderboard";
                 }else{
-                     List<Point> points = pointRepo.findPointsByLeaderboardBetween(leaderboard.get().getId(), request.getStarting()-1, request.getCount());
-                     for(int i = 0; i<points.size(); i++) {
-                         User user = points.get(i).getUser();
-                         EventLeaderboardDetails details = new EventLeaderboardDetails(user.getId(), user.getUsername(), points.get(i).getAmount(), request.getStarting()+i);
+                    var points = pointRepo.findPointsByLeaderboardBetween(leaderboard.get().getId(), request.getStarting()-1, request.getCount());
+                     for(var i = 0; i<points.size(); i++) {
+                         var user = points.get(i).getUser();
+                         var details = new EventLeaderboardDetails(user.getId(), user.getUsername(), points.get(i).getAmount(), request.getStarting()+i);
                          leaderboardDetails.add(details);
                     }
                      success = true;
@@ -118,7 +114,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         /* check if the User has got a Point for the given Leaderboard */
-        Optional<Point> optionalPoint = pointRepo.getPointForUser(request.getUserID(), request.getLeaderboardID());
+        var optionalPoint = pointRepo.getPointForUser(request.getUserID(), request.getLeaderboardID());
 
         if(optionalPoint.isEmpty()){
             return new PointResponse(false, "The User does not have any points yet for the given Leaderboard", null);
@@ -141,7 +137,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboardID());
+        var optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboardID());
 
         return optionalLeaderboard.map(leaderboard -> new GetLeaderboardByIDResponse(true, "Leaderboard found", leaderboard)).orElseGet(
                 () -> new GetLeaderboardByIDResponse(false, "Leaderboard not found", null));
@@ -162,14 +158,14 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         /* check if leaderboard is invalid */
-        java.util.UUID leaderboardID = request.getLeaderboard().getId();
-        Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(leaderboardID);
+        var leaderboardID = request.getLeaderboard().getId();
+        var optionalLeaderboard = leaderboardRepo.findById(leaderboardID);
 
         if(optionalLeaderboard.isEmpty()){
             return new GetPointsByLeaderboardResponse(false, "Invalid leaderboard ID", null);
         }
 
-        List<Point> points = pointRepo.findAllByLeaderboardID(leaderboardID);
+        var points = pointRepo.findAllByLeaderboardID(leaderboardID);
         return new GetPointsByLeaderboardResponse(true, "Leaderboard points returned", points);
     }
 
@@ -188,7 +184,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         /* check if leaderboard is invalid */
-        Optional<Leaderboard> optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboard().getId());
+        var optionalLeaderboard = leaderboardRepo.findById(request.getLeaderboard().getId());
 
         if(optionalLeaderboard.isEmpty()){
             return new GetMyRankResponse(false, "Invalid leaderboard ID", null);
@@ -199,7 +195,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             return new GetMyRankResponse(false, "The amount must be at least zero", null);
         }
 
-        int rank = pointRepo.getMyRank(request.getLeaderboard().getId(), request.getAmount());
+        var rank = pointRepo.getMyRank(request.getLeaderboard().getId(), request.getAmount());
         return new GetMyRankResponse(true, "Point rank returned", rank);
     }
 
@@ -218,18 +214,18 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         // check if leaderboard is invalid
-        Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
+        var leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
 
         if(leaderboard.isEmpty()){
             return new PointResponse(false, "Invalid leaderboard Id provided",null);
         }
 
         //check if user is invalid
-        GetUserByIdRequest userRequest = new GetUserByIdRequest(request.getUserId());
+        var userRequest = new GetUserByIdRequest(request.getUserId());
         User foundUser = null;
 
         try {
-            GetUserByIdResponse userResponse = userService.getUserById(userRequest);
+            var userResponse = userService.getUserById(userRequest);
             if(!userResponse.isSuccess()){
                 return new PointResponse(false, "Invalid user Id provided",null);
             }else{
@@ -244,7 +240,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             return new PointResponse(false, "The amount for a Point must be at least zero", null);
         }
 
-        Point point= new Point(request.getAmount(), foundUser, leaderboard.get());
+        var point= new Point(request.getAmount(), foundUser, leaderboard.get());
         pointRepo.save(point);
         return new PointResponse(true, "The Point was successfully created.", point);
     }
@@ -264,7 +260,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the point to delete exists
-        Optional<Point> point = pointRepo.findById(request.getPointId());
+        var point = pointRepo.findById(request.getPointId());
         if(point.isEmpty()){
             return new DeletePointResponse(false,"No Point with the given Id exists");
         }
@@ -294,14 +290,14 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }
 
         //check that the point to update exists
-        Optional<Point> point = pointRepo.findById(request.getPointId());
+        var point = pointRepo.findById(request.getPointId());
         if(point.isEmpty()){
             return new PointResponse(false, "No point with the provided Id exists", null);
         }
 
         //check that if a leaderboard id is provided that it exists
         if(request.getLeaderboardId() != null) {
-            Optional<Leaderboard> leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
+            var leaderboard = leaderboardRepo.findById(request.getLeaderboardId());
             if(leaderboard.isEmpty()){
                 return new PointResponse(false, "Invalid LeaderboardId to update to was provided", null);
             }else{
@@ -311,9 +307,9 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         //check that if a user id is provided that it exists
         if(request.getUserId() != null) {
-            GetUserByIdRequest userByIdRequest = new GetUserByIdRequest(request.getUserId());
+            var userByIdRequest = new GetUserByIdRequest(request.getUserId());
             try {
-                GetUserByIdResponse user = userService.getUserById(userByIdRequest);
+                var user = userService.getUserById(userByIdRequest);
                 if(!user.isSuccess()){
                     return new PointResponse(false, "Invalid UserId to update to was provided", null);
                 }else{
