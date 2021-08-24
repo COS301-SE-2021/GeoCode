@@ -1,0 +1,68 @@
+<div class="page">
+  <div id="menu">
+    <img id="sidebarLogo" src="/assets/images/logo.png">
+    <ng-content select="app-nav-header"></ng-content>
+    <ion-list>
+      <ion-item button (click)="changeTab('explore')">
+        <ion-icon slot="start" name="qr-code-outline"></ion-icon>
+        <ion-label>Explore</ion-label>
+      </ion-item>
+      <ion-item button (click)="changeTab('collections')">
+        <ion-icon slot="start" name="diamond-outline"></ion-icon>
+        <ion-label>Collections</ion-label>
+      </ion-item>
+      <ion-item button (click)="changeTab('events')">
+        <ion-icon slot="start" name="trophy-outline"></ion-icon>
+        <ion-label>Events</ion-label>
+      </ion-item>
+      <ion-item button (click)="changeTab('profile')">
+        <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+        <ion-label>Profile</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+  <div id="content">
+    <ng-content select="ion-content"></ng-content>
+  </div>
+  <!--<ion-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col id="sidebarMenu" size="2">
+
+        </ion-col>
+        <ion-col id="infoColumn" size="10">
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>-->
+</div>
+
+
+<!--<ion-split-pane contentId="main">
+  <ion-content id="sidebarMenu" side="start">
+    <img id="sidebarLogo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/640px-Google_2015_logo.svg.png">
+    <ng-content select="app-nav-header"></ng-content>
+    <ion-list>
+      <ion-item button (click)="changeTab('explore')">
+        <ion-icon slot="start" name="qr-code-outline"></ion-icon>
+        <ion-label>Explore</ion-label>
+      </ion-item>
+      <ion-item button (click)="changeTab('collections')">
+        <ion-icon slot="start" name="diamond-outline"></ion-icon>
+        <ion-label>Collections</ion-label>
+      </ion-item>
+      <ion-item button (click)="changeTab('events')">
+        <ion-icon slot="start" name="trophy-outline"></ion-icon>
+        <ion-label>Events</ion-label>
+      </ion-item>
+      <ion-item button (click)="changeTab('profile')">
+        <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+        <ion-label>Profile</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+  <ion-content id="main">
+    <ng-content select="ion-content"></ng-content>
+  </ion-content>
+</ion-split-pane>-->

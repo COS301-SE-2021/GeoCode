@@ -1,0 +1,30 @@
+#sidebarMenu {
+  max-width: 270px;
+  height: 100%;
+}
+
+.page {
+  display: flex;
+  height: 100vh;
+}
+
+#menu {
+  width:200px;
+  height:100%;
+}
+
+#content {
+  height:100%;
+  flex:1;
+  min-width:50px;
+}
+
+#menu ion-list {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+#sidebarMenu img {
+  width: 50px;
+}

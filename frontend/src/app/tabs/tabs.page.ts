@@ -1,22 +1,37 @@
-import { Component } from '@angular/core';
-import {Platform} from '@ionic/angular';
+import {Component, OnDestroy, ViewChild} from '@angular/core';
+import {Observable, Subscription} from 'rxjs';
+import {IonTabs} from '@ionic/angular';
+import {WindowMonitor} from '../services/WindowMonitor';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss']
 })
-export class TabsPage {
-  tabsPlacement='bottom';
-  geoCodeIcon = '/assets/images/QRCodeWht.svg';
-  //eventsIcon = '/assets/images/CalendarIconWht.svg';
-  //eventsIcon = 'trophy-outline';
-  collectableIcon = '/assets/images/CoinStackWht.svg';
+export class TabsPage implements OnDestroy {
 
-  constructor(public platform: Platform) {
-  if(!this.platform.is('mobile')){
-    this.tabsPlacement='top';
+  static subscriber;
+  private showTabs: boolean;
+  @ViewChild('tabs') tabs: IonTabs;
+  tabChanger = new Observable(subscriber => TabsPage.subscriber = subscriber);
+
+  private navigationTypeSubscription: Subscription;
+
+  constructor(windowMonitor: WindowMonitor) {
+    this.showTabs = (windowMonitor.getCurrentNavigationLayout() === 'tabs');
+    this.tabChanger.subscribe(async (next: string) => {
+      await this.tabs.select(next.toLowerCase());
+    });
+
+    this.navigationTypeSubscription = windowMonitor.onNavigationLayoutChange(layout => {
+      this.showTabs = (layout === 'tabs');
+    });
   }
+
+  ngOnDestroy() {
+    this.navigationTypeSubscription.unsubscribe();
   }
+
+
 
 }

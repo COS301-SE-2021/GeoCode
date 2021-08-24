@@ -1,7 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {Router} from '@angular/router';
 import {KeycloakService} from 'keycloak-angular';
 import {App} from '@capacitor/app';
+import {WindowMonitor} from './services/WindowMonitor';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,8 @@ import {App} from '@capacitor/app';
 export class AppComponent {
   constructor(
     private keycloak: KeycloakService,
-    private router: Router
+    private router: Router,
+    private windowMonitor: WindowMonitor
   ) {
     const instance = this.keycloak.getKeycloakInstance();
 
@@ -27,5 +29,10 @@ export class AppComponent {
         this.router.navigate([target]).then().catch();
       }
     });
+  }
+
+  @HostListener('window:resize')
+  private fireResize() {
+    this.windowMonitor.fireResize();
   }
 }

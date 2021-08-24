@@ -1,6 +1,6 @@
-<ion-tabs [slot]="tabsPlacement" >
+<ion-tabs #tabs>
 
-  <ion-tab-bar slot="bottom">
+  <ion-tab-bar slot="bottom" *ngIf="showTabs">
     <ion-tab-button tab="explore">
       <ion-icon name="qr-code-outline"></ion-icon>
       <ion-label>Explore</ion-label>

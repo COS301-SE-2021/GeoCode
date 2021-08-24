@@ -1,45 +1,46 @@
-<ion-header>
-  <ion-toolbar >
-    <ion-title id="page-title">Explore</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-nav>
+  <app-nav-header>
+    <app-nav-toolbar >
+      <ion-title id="page-title">Explore</ion-title>
+    </app-nav-toolbar>
+  </app-nav-header>
 
-<ion-content>
+  <ion-content>
 
-  <div class="horizontalscroll">
-    <div class="items">
-      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="getAllMap()">Get all GeoCodes</ion-button></ion-col>
-      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="easyMap()">Easy</ion-button></ion-col>
-      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="mediumMap()">Medium </ion-button></ion-col>
-      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="hardMap()">Difficult</ion-button></ion-col>
-      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="insaneMap()">Insane</ion-button></ion-col>
+    <div class="horizontalscroll">
+      <div class="items">
+        <ion-col id="button-col"><ion-button id="button"  color="button" (click)="getAllMap()">Get all GeoCodes</ion-button></ion-col>
+        <ion-col id="button-col"><ion-button id="button"  color="button" (click)="easyMap()">Easy</ion-button></ion-col>
+        <ion-col id="button-col"><ion-button id="button"  color="button" (click)="mediumMap()">Medium </ion-button></ion-col>
+        <ion-col id="button-col"><ion-button id="button"  color="button" (click)="hardMap()">Difficult</ion-button></ion-col>
+        <ion-col id="button-col"><ion-button id="button"  color="button" (click)="insaneMap()">Insane</ion-button></ion-col>
+      </div>
     </div>
-  </div>
-  <div #mapElement [style.height]="height" class="map"></div>
+    <div #mapElement [style.height]="height" class="map"></div>
 
-  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button color="button" [routerLink]="['create-geocode']">
-      <ion-icon  name="add-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+      <ion-fab-button color="button" [routerLink]="['create-geocode']">
+        <ion-icon  name="add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
 
-  <div  id ="geoCodeDetails" [hidden]="isHidden">
+    <div  id ="geoCodeDetails" [hidden]="isHidden">
 
-    <ion-card *ngFor="let geocode of selected">
-      <div  id="close-button"><ion-button id="close" color="white" (click)="close()">X</ion-button></div>
-      <ion-header>
-        <ion-title id="card-title">
-          {{geocode.description}}
-        </ion-title>
+      <ion-card *ngFor="let geocode of selected">
+        <div  id="close-button"><ion-button id="close" color="white" (click)="close()">X</ion-button></div>
+        <ion-header>
+          <ion-title id="card-title">
+            {{geocode.description}}
+          </ion-title>
 
-      </ion-header>
-      <ion-card-content>
-        <ng-template [ngIf]="isAdmin()">
-          <ion-row class="row">
-            <ion-col>Available</ion-col>
-            <ion-col><ion-checkbox disabled="false"  (ionBlur)="updateAvailability(geocode)" [(ngModel)]="geocode.available"></ion-checkbox></ion-col>
-          </ion-row>
-        </ng-template>
+        </ion-header>
+        <ion-card-content>
+          <ng-template [ngIf]="isAdmin()">
+            <ion-row class="row">
+              <ion-col>Available</ion-col>
+              <ion-col><ion-checkbox disabled="false"  (ionBlur)="updateAvailability(geocode)" [(ngModel)]="geocode.available"></ion-checkbox></ion-col>
+            </ion-row>
+          </ng-template>
           <ion-row class="row">
             <ion-col>Difficulty</ion-col>
             <ion-col>{{geocode.difficulty}}</ion-col>
@@ -47,10 +48,12 @@
           <ion-button id="button" color="button" (click)="findGeoCode(geocode)">Find GeoCode</ion-button>
           <ion-button color="button" (click)="openInMaps(geocode)">Open Location in Google Maps</ion-button>
 
-      </ion-card-content>
-    </ion-card>
-</div>
+        </ion-card-content>
+      </ion-card>
+    </div>
 
 
 
-</ion-content>
+  </ion-content>
+</app-nav>
+
