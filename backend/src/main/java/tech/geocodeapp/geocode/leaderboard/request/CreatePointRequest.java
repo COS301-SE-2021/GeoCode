@@ -9,12 +9,6 @@ public class CreatePointRequest {
     private UUID leaderboardId;
 
     /**
-     * Default Constructor
-     */
-    public CreatePointRequest() {
-    }
-
-    /**
      * Fully parameterised Constructor
      * @param amount The starting value of the point
      * @param userId The UUID that identifies the user that the Point is being created for

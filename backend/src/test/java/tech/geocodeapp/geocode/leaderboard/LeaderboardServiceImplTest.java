@@ -21,7 +21,6 @@ import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
 import tech.geocodeapp.geocode.user.request.RegisterNewUserRequest;
-import tech.geocodeapp.geocode.user.request.UpdateLocationRequest;
 import tech.geocodeapp.geocode.user.response.RegisterNewUserResponse;
 import tech.geocodeapp.geocode.user.service.UserService;
 
@@ -49,7 +48,7 @@ public class LeaderboardServiceImplTest {
         userService = new UserMockService(userRepository);
         pointMockRepository = new PointMockRepository();
 
-        leaderboardService = new LeaderboardServiceImpl(leaderboardMockRepo, pointMockRepository, null, userService);
+        leaderboardService = new LeaderboardServiceImpl(leaderboardMockRepo, pointMockRepository, userService);
 
         /* create a Leaderboard so that can test for uniqueness of names */
         Leaderboard leaderboard1 = new Leaderboard(hatfieldEaster);

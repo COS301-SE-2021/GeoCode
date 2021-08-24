@@ -3,7 +3,6 @@ package tech.geocodeapp.geocode.leaderboard;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import tech.geocodeapp.geocode.GeoCodeApplication;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.general.response.Response;
@@ -49,7 +48,7 @@ public class LeaderboardServiceImplIT {
 
     @BeforeEach
     void setUp(){
-        leaderboardService = new LeaderboardServiceImpl(leaderboardRepository, pointRepository, eventService, userService);
+        leaderboardService = new LeaderboardServiceImpl(leaderboardRepository, pointRepository, userService);
     }
 
     @Test

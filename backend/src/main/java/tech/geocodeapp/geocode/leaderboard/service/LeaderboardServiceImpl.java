@@ -1,12 +1,7 @@
 package tech.geocodeapp.geocode.leaderboard.service;
 
-import javax.transaction.Transactional;
-import javax.validation.constraints.NotNull;
-
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-
-import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.general.response.Response;
@@ -22,9 +17,10 @@ import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
 import tech.geocodeapp.geocode.user.response.GetUserByIdResponse;
 import tech.geocodeapp.geocode.user.service.UserService;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.ArrayList;
 
 /**
  * This class implements the LeaderboardService interface
@@ -36,15 +32,11 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
 
-    @NotNull(message = "Event Service Implementation may not be null.")
-    private final EventService eventService;
-
     private final UserService userService;
 
-    public LeaderboardServiceImpl(LeaderboardRepository leaderboardRepo, PointRepository pointRepo, EventService eventService, @Lazy UserService userService) {
+    public LeaderboardServiceImpl(LeaderboardRepository leaderboardRepo, PointRepository pointRepo, @Lazy UserService userService) {
         this.leaderboardRepo = leaderboardRepo;
         this.pointRepo = pointRepo;
-        this.eventService = eventService;
         this.userService = userService;
     }
 
@@ -83,7 +75,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         boolean success = false;
-        String message = "";
+        String message;
         List<EventLeaderboardDetails> leaderboardDetails = new ArrayList<>();
 
         if(request.getStarting()<1) {
@@ -204,7 +196,7 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
         //check if amount is invalid
         if(request.getAmount() < 0){
-            return new GetMyRankResponse(false, "The amount must be positive", null);
+            return new GetMyRankResponse(false, "The amount must be at least zero", null);
         }
 
         int rank = pointRepo.getMyRank(request.getLeaderboard().getId(), request.getAmount());
