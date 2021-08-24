@@ -102,7 +102,7 @@ public class UserServiceImplIT {
     private UUID winterSchoolEventID;
 
     void registerNewUser(UUID userID, String username){
-        RegisterNewUserRequest request = new RegisterNewUserRequest(userID, username);
+        var request = new RegisterNewUserRequest(userID, username);
         RegisterNewUserResponse response;
 
         try {
@@ -118,10 +118,10 @@ public class UserServiceImplIT {
     }
 
     UUID createCollectableSet(String name, String description){
-        CreateCollectableSetRequest createCollectableSetRequest = new CreateCollectableSetRequest(name, description);
+        var createCollectableSetRequest = new CreateCollectableSetRequest(name, description);
 
         try {
-            CreateCollectableSetResponse createCollectableSetResponse = collectableService.createCollectableSet(createCollectableSetRequest);
+            var createCollectableSetResponse = collectableService.createCollectableSet(createCollectableSetRequest);
             return createCollectableSetResponse.getCollectableSet().getId();
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
@@ -130,10 +130,10 @@ public class UserServiceImplIT {
     }
 
     private UUID createCollectableType(String name, String image, Rarity rarity, UUID setId, HashMap<String, String> properties) {
-        CreateCollectableTypeRequest createCollectableTypeRequest = new CreateCollectableTypeRequest(name, image, rarity, setId, properties);
+        var createCollectableTypeRequest = new CreateCollectableTypeRequest(name, image, rarity, setId, properties);
 
         try {
-            CreateCollectableTypeResponse createCollectableTypeResponse = collectableService.createCollectableType(createCollectableTypeRequest);
+            var createCollectableTypeResponse = collectableService.createCollectableType(createCollectableTypeRequest);
             Assertions.assertTrue(createCollectableTypeResponse.isSuccess());
 
             return createCollectableTypeResponse.getCollectableType().getId();
@@ -144,7 +144,7 @@ public class UserServiceImplIT {
     }
 
     void createCollectable(UUID typeID, boolean createMission, GeoPoint location){
-        CreateCollectableRequest createCollectableRequest = new CreateCollectableRequest();
+        var createCollectableRequest = new CreateCollectableRequest();
         createCollectableRequest.setCollectableTypeId(typeID);
         createCollectableRequest.setCreateMission(createMission);
         createCollectableRequest.setLocation(location);
@@ -159,7 +159,7 @@ public class UserServiceImplIT {
             Assertions.fail(e.getMessage());
         }
 
-        UUID id = createCollectableResponse.getCollectable().getId();
+        var id = createCollectableResponse.getCollectable().getId();
 
         try {
             collectableService.getCollectableByID(new GetCollectableByIDRequest(id));
@@ -211,7 +211,7 @@ public class UserServiceImplIT {
     }
 
     private CollectableType getCollectableTypeFromCollectableID(UUID collectableID) {
-        GetCollectableByIDRequest getCollectableByIDRequest = new GetCollectableByIDRequest(collectableID);
+        var getCollectableByIDRequest = new GetCollectableByIDRequest(collectableID);
         GetCollectableByIDResponse getCollectableByIDResponse = null;
 
         try {
@@ -282,15 +282,15 @@ public class UserServiceImplIT {
         christmasSetId = createCollectableSet("Christmas Set", "Christmas 2021 Collectables");
 
         //create the CollectableTypes so that the GeoCodes have CollectableTypes to be populated with
-        HashMap<String, String> santaProperties = new HashMap<>();
+        var santaProperties = new HashMap<String, String>();
         santaProperties.put("missionType", String.valueOf(MissionType.SWAP));
         createCollectableType("Santa", "img_santa", Rarity.COMMON, christmasSetId, santaProperties);
 
-        HashMap<String, String> penguinProperties = new HashMap<>();
+        var penguinProperties = new HashMap<String, String>();
         penguinProperties.put("missionType", String.valueOf(MissionType.GEOCODE));
         createCollectableType("Penguin", "img_penguin", Rarity.EPIC, christmasSetId, penguinProperties);
 
-        HashMap<String, String> bearProperties = new HashMap<>();
+        var bearProperties = new HashMap<String, String>();
         bearProperties.put("missionType", String.valueOf(MissionType.DISTANCE));
         createCollectableType("Bear", "img_bear", Rarity.COMMON, christmasSetId, bearProperties);
     }
@@ -541,7 +541,7 @@ public class UserServiceImplIT {
      * @param missions the User's Missions
      */
     private void checkCollectableMission(UUID missionID, CollectableType collectableType, Set<Mission> missions) {
-        boolean shouldHaveMission = collectableType.getProperties().containsKey("missionType");
+        var shouldHaveMission = collectableType.getProperties().containsKey("missionType");
 
         //only check details if the Collectable actually has a Mission
         if(missionID != null){
@@ -550,7 +550,7 @@ public class UserServiceImplIT {
                 return;
             }
 
-            MissionType missionType = MissionType.fromValue(collectableType.getProperties().get("missionType"));
+            var missionType = MissionType.fromValue(collectableType.getProperties().get("missionType"));
 
             //check the details
             Assertions.assertTrue(missions.stream().anyMatch(mission ->
@@ -571,7 +571,7 @@ public class UserServiceImplIT {
      * (whichever is relevant to the Event)
      */
     private void checkUserLeaderboardDetails(User user, List<String> eventNames, List<Integer> correctRankings){
-        UUID userID = user.getId();
+        var userID = user.getId();
         setUser(userID);
 
         var getMyLeaderboardsRequest = new GetMyLeaderboardsRequest(userID);
@@ -588,8 +588,8 @@ public class UserServiceImplIT {
             Assertions.assertFalse(userLeaderboardDetails.isEmpty());
 
             /* check that the correct details are returned */
-            for(int i = 0; i < eventNames.size(); ++i){
-                int finalI = i;
+            for(var i = 0; i < eventNames.size(); ++i){
+                var finalI = i;
 
                 Assertions.assertTrue(userLeaderboardDetails.stream().anyMatch(details ->
                         details.getName().equals(eventNames.get(finalI)) &&
@@ -608,10 +608,11 @@ public class UserServiceImplIT {
             Create a request object
             and assign values to it
             */
-            GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
+            var request = new GetCurrentCollectableRequest();
             request.setUserID(invalidUserId);//invalid UUID (no user has it)
 
-            GetCurrentCollectableResponse response = userService.getCurrentCollectable(request);
+            var response = userService.getCurrentCollectable(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getCollectable());
@@ -630,10 +631,11 @@ public class UserServiceImplIT {
             and assign values to it
             */
 
-            GetCurrentCollectableRequest request = new GetCurrentCollectableRequest();
+            var request = new GetCurrentCollectableRequest();
             request.setUserID(validUserId);
 
-            GetCurrentCollectableResponse response = userService.getCurrentCollectable(request);
+            var response = userService.getCurrentCollectable(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The user's Collectable was successfully returned", response.getMessage());
             Assertions.assertNotNull(response.getCollectable());
@@ -649,10 +651,11 @@ public class UserServiceImplIT {
             Create a request object
             and assign values to it
             */
-            GetUserTrackableRequest request = new GetUserTrackableRequest();
+            var request = new GetUserTrackableRequest();
             request.setUserID(invalidUserId);
 
-            GetUserTrackableResponse response = userService.getUserTrackable(request);
+            var response = userService.getUserTrackable(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getTrackable());
@@ -671,14 +674,16 @@ public class UserServiceImplIT {
             and assign values to it
             */
 
-            GetUserTrackableRequest request = new GetUserTrackableRequest();
+            var request = new GetUserTrackableRequest();
             request.setUserID(validUserId);
 
-            GetUserTrackableResponse response = userService.getUserTrackable(request);
+            var response = userService.getUserTrackable(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The user's Trackable was successfully returned", response.getMessage());
 
-            Collectable trackableObject = response.getTrackable();
+            var trackableObject = response.getTrackable();
+
             Assertions.assertNotNull(trackableObject);
             Assertions.assertEquals(trackableTypeUUID, trackableObject.getType().getId());
         }catch (NullRequestParameterException e){
@@ -693,9 +698,10 @@ public class UserServiceImplIT {
             Create a request object
             and assign values to it
             */
-            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest(invalidUserId);
+            var request = new GetFoundCollectableTypesRequest(invalidUserId);
 
-            GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
+            var response = userService.getFoundCollectableTypes(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getCollectableTypeIDs());
@@ -717,15 +723,16 @@ public class UserServiceImplIT {
            */
             setUser(userWithPoints1ID);
 
-            GetFoundCollectableTypesRequest request = new GetFoundCollectableTypesRequest(userWithPoints1ID);
+            var request = new GetFoundCollectableTypesRequest(userWithPoints1ID);
 
-            GetFoundCollectableTypesResponse response = userService.getFoundCollectableTypes(request);
+            var response = userService.getFoundCollectableTypes(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The IDs of the User's found CollectableTypes was successfully returned", response.getMessage());
 
-            List<UUID> foundCollectableTypeIDs = response.getCollectableTypeIDs();
-            Assertions.assertNotNull(foundCollectableTypeIDs);
+            var foundCollectableTypeIDs = response.getCollectableTypeIDs();
 
+            Assertions.assertNotNull(foundCollectableTypeIDs);
             Assertions.assertTrue(foundCollectableTypeIDs.contains(firstFoundCollectableTypeID));
             Assertions.assertTrue(foundCollectableTypeIDs.contains(secondFoundCollectableTypeID));
         }catch (NullRequestParameterException | InvalidRequestException e){
@@ -743,9 +750,10 @@ public class UserServiceImplIT {
             Create a request object
             and assign values to it
             */
-            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest(invalidUserId);
+            var request = new GetFoundGeoCodesRequest(invalidUserId);
 
-            GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
+            var response = userService.getFoundGeoCodes(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getGeocodeIDs());
@@ -767,13 +775,15 @@ public class UserServiceImplIT {
            */
             setUser(userWithPoints1ID);
 
-            GetFoundGeoCodesRequest request = new GetFoundGeoCodesRequest(userWithPoints1ID);
+            var request = new GetFoundGeoCodesRequest(userWithPoints1ID);
 
-            GetFoundGeoCodesResponse response = userService.getFoundGeoCodes(request);
+            var response = userService.getFoundGeoCodes(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The IDs of the User's found GeoCodes was successfully returned", response.getMessage());
 
-            List<UUID> foundGeoCodeIDs = response.getGeocodeIDs();
+            var foundGeoCodeIDs = response.getGeocodeIDs();
+
             Assertions.assertNotNull(foundGeoCodeIDs);
 
             //HashSet will cause order to not necessarily be order added in
@@ -792,10 +802,11 @@ public class UserServiceImplIT {
             Create a request object
             and assign values to it
             */
-            GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
+            var request = new GetOwnedGeoCodesRequest();
             request.setUserID(invalidUserId);
 
-            GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(request);
+            var response = userService.getOwnedGeoCodes(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getGeocodeIDs());
@@ -816,16 +827,17 @@ public class UserServiceImplIT {
            */
             setUser(validUserId);
 
-            GetOwnedGeoCodesRequest request = new GetOwnedGeoCodesRequest();
+            var request = new GetOwnedGeoCodesRequest();
             request.setUserID(validUserId);
 
-            GetOwnedGeoCodesResponse response = userService.getOwnedGeoCodes(request);
+            var response = userService.getOwnedGeoCodes(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The IDs of the User's owned GeoCodes was successfully returned", response.getMessage());
 
-            List<UUID> ownedGeoCodeIDs = response.getGeocodeIDs();
-            Assertions.assertNotNull(ownedGeoCodeIDs);
+            var ownedGeoCodeIDs = response.getGeocodeIDs();
 
+            Assertions.assertNotNull(ownedGeoCodeIDs);
             Assertions.assertEquals(2, ownedGeoCodeIDs.size());
             Assertions.assertTrue(ownedGeoCodeIDs.contains(firstGeoCodeID));
             Assertions.assertTrue(ownedGeoCodeIDs.contains(secondGeoCodeID));
@@ -842,11 +854,12 @@ public class UserServiceImplIT {
             Create a request object
             and assign values to it
             */
-            UpdateLocationRequest request = new UpdateLocationRequest();
+            var request = new UpdateLocationRequest();
             request.setUserID(invalidUserId);
             request.setLocation(new GeoPoint(10.0f, 10.0f));
 
-            UpdateLocationResponse response = userService.updateLocation(request);
+            var response = userService.updateLocation(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
             Assertions.assertNull(response.getTrackable());
@@ -866,20 +879,23 @@ public class UserServiceImplIT {
              and assign values to it
            */
 
-            UpdateLocationRequest request = new UpdateLocationRequest();
+            var request = new UpdateLocationRequest();
             request.setUserID(validUserId);
 
-            GeoPoint location = new GeoPoint(100.0f, 40.0f);
+            var location = new GeoPoint(100.0f, 40.0f);
             request.setLocation(location);
 
-            UpdateLocationResponse response = userService.updateLocation(request);
+            var response = userService.updateLocation(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The trackable object's location was successfully updated", response.getMessage());
 
-            Collectable trackableObject = response.getTrackable();
+            var trackableObject = response.getTrackable();
+
             Assertions.assertNotNull(trackableObject);
 
             List<GeoPoint> pastLocations = new ArrayList<>(trackableObject.getPastLocations());
+
             Assertions.assertEquals(location, pastLocations.get(pastLocations.size()-1));
         }catch (NullRequestParameterException e){
             Assertions.fail(e.getMessage());
@@ -889,11 +905,11 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     void getMyLeaderboardsTestInvalidUser(){
-        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        var request = new GetMyLeaderboardsRequest();
         request.setUserID(invalidUserId);
 
         try {
-            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+            var response = userService.getMyLeaderboards(request);
 
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
@@ -908,11 +924,11 @@ public class UserServiceImplIT {
     void getMyLeaderboardsTestUserWithNoPoints(){
         registerNewUser(noPointsUserId, "noPointsUser");
 
-        GetMyLeaderboardsRequest request = new GetMyLeaderboardsRequest();
+        var request = new GetMyLeaderboardsRequest();
         request.setUserID(noPointsUserId);
 
         try {
-            GetMyLeaderboardsResponse response = userService.getMyLeaderboards(request);
+            var response = userService.getMyLeaderboards(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals(successGetMyLeaderboardsMessage, response.getMessage());
@@ -974,7 +990,7 @@ public class UserServiceImplIT {
             Assertions.assertNotNull(getOwnedGeoCodesResponse);
             Assertions.assertTrue(getOwnedGeoCodesResponse.isSuccess());
 
-            List<UUID> ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
+            var ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
             Assertions.assertEquals(2, ownedGeoCodeIDs.size());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
@@ -1003,6 +1019,7 @@ public class UserServiceImplIT {
             Assertions.assertTrue(getOwnedGeoCodesResponse.isSuccess());
 
             var ownedGeoCodeIDs = getOwnedGeoCodesResponse.getGeocodeIDs();
+
             Assertions.assertEquals(3, ownedGeoCodeIDs.size());
             Assertions.assertTrue(ownedGeoCodeIDs.contains(thirdGeoCodeID));
         } catch (NullRequestParameterException | InvalidRequestException e) {
@@ -1020,7 +1037,9 @@ public class UserServiceImplIT {
             var getFoundGeoCodesResponse = getFoundGeoCodes(userWithPoints1ID);
 
             Assertions.assertNotNull(getFoundGeoCodesResponse);
-            List<UUID> foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
+
+            var foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
+
             Assertions.assertEquals(2, foundGeoCodeIDs.size());
         } catch (NullRequestParameterException | InvalidRequestException e) {
             e.printStackTrace();
@@ -1038,7 +1057,7 @@ public class UserServiceImplIT {
 
         thirdGeoCodeID = createGeoCode("3", new GeoPoint(0.0, 0.0), Difficulty.EASY);
 
-        List<UUID> thirdCollectables = getCollectables(thirdGeoCodeID);
+        var thirdCollectables = getCollectables(thirdGeoCodeID);
 
         setUser(userWithPoints1ID);
 
@@ -1054,6 +1073,7 @@ public class UserServiceImplIT {
         Assertions.assertTrue(getFoundGeoCodesResponse.isSuccess());
 
         var foundGeoCodeIDs = getFoundGeoCodesResponse.getGeocodeIDs();
+
         Assertions.assertEquals(3, foundGeoCodeIDs.size());
         Assertions.assertTrue(foundGeoCodeIDs.contains(thirdGeoCodeID));
     }
@@ -1067,19 +1087,21 @@ public class UserServiceImplIT {
         //create the CollectableSet to hold the "User Trackable" type
         christmasSetId = createCollectableSet("Christmas Set", "Christmas 2021 Collectables");
 
-        UUID newCollectableTypeID = createCollectableType("new type", "img_new_type", Rarity.COMMON, christmasSetId, new HashMap<>());
+        var newCollectableTypeID = createCollectableType("new type", "img_new_type", Rarity.COMMON, christmasSetId, new HashMap<>());
         createCollectable(newCollectableTypeID, false, new GeoPoint(0.0, 0.0));
 
         var response = addToFoundCollectableTypes(userWithPoints1ID, firstFoundCollectableTypeID);
 
         Assertions.assertNotNull(response);
         Assertions.assertEquals("CollectableType added to the found CollectableTypes", response.getMessage());
+
         var getFoundCollectableTypesResponse = getFoundCollectableTypes(userWithPoints1);
 
         Assertions.assertNotNull(getFoundCollectableTypesResponse);
         Assertions.assertTrue(getFoundCollectableTypesResponse.isSuccess());
 
-        List<UUID> foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
+        var foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
+
         Assertions.assertEquals(2, foundCollectableTypeIDs.size());
     }
 
@@ -1132,8 +1154,8 @@ public class UserServiceImplIT {
     @Transactional
     public void getUserByIdTestInvalidUserId(){
         try {
-            GetUserByIdRequest request = new GetUserByIdRequest(invalidUserId);
-            GetUserByIdResponse response = userService.getUserById(request);
+            var request = new GetUserByIdRequest(invalidUserId);
+            var response = userService.getUserById(request);
 
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
@@ -1148,9 +1170,9 @@ public class UserServiceImplIT {
         registerNewUser(validUserId, "validUser");
 
         try {
-            GetUserByIdRequest request = new GetUserByIdRequest(validUserId);
-            GetUserByIdResponse response = userService.getUserById(request);
-            User user = response.getUser();
+            var request = new GetUserByIdRequest(validUserId);
+            var response = userService.getUserById(request);
+            var user = response.getUser();
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The User was found", response.getMessage());
@@ -1168,11 +1190,13 @@ public class UserServiceImplIT {
         registerNewUser(validUserId, "validUser");
 
         try {
-            RegisterNewUserRequest request = new RegisterNewUserRequest(validUserId, "john");
-            RegisterNewUserResponse response = userService.registerNewUser(request);
+            var request = new RegisterNewUserRequest(validUserId, "john");
+            var response = userService.registerNewUser(request);
 
             Assertions.assertFalse(response.isSuccess());
-            String existingUserIdMessage = "User ID already exists";
+
+            var existingUserIdMessage = "User ID already exists";
+
             Assertions.assertEquals(existingUserIdMessage, response.getMessage());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
@@ -1183,19 +1207,19 @@ public class UserServiceImplIT {
     @Transactional
     public void registerNewUserTestNewUserId(){
         try {
-            String newUsername = "bob";
-            RegisterNewUserRequest request = new RegisterNewUserRequest(newUserId, newUsername);
-            RegisterNewUserResponse response = userService.registerNewUser(request);
+            var newUsername = "bob";
+            var request = new RegisterNewUserRequest(newUserId, newUsername);
+            var response = userService.registerNewUser(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("New User registered", response.getMessage());
 
-            GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(newUserId);
-            GetUserByIdResponse getUserByIdResponse = userService.getUserById(getUserByIdRequest);
+            var getUserByIdRequest = new GetUserByIdRequest(newUserId);
+            var getUserByIdResponse = userService.getUserById(getUserByIdRequest);
 
             Assertions.assertTrue(getUserByIdResponse.isSuccess());
 
-            User user = getUserByIdResponse.getUser();
+            var user = getUserByIdResponse.getUser();
 
             Assertions.assertEquals(trackableTypeUUID, user.getTrackableObject().getType().getId());
             Assertions.assertEquals(trackableTypeUUID, user.getCurrentCollectable().getType().getId());
@@ -1211,24 +1235,25 @@ public class UserServiceImplIT {
 
         try {
             //get the 3rd Collectable in the first GeoCode
-            UUID newCurrentCollectableID = firstCollectables.get(2);
+            var newCurrentCollectableID = firstCollectables.get(2);
             var response = swapCollectable(validUserId, newCurrentCollectableID, firstGeoCodeID);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The User's Collectable was swapped with the Collectable in the GeoCode", response.getMessage());
 
-            Collectable collectable = response.getCollectable();
+            var collectable = response.getCollectable();
             Assertions.assertNotNull(collectable);
 
-            GetCurrentCollectableRequest getCurrentCollectableRequest = new GetCurrentCollectableRequest();
+            var getCurrentCollectableRequest = new GetCurrentCollectableRequest();
             getCurrentCollectableRequest.setUserID(validUserId);
 
-            GetCurrentCollectableResponse getCurrentCollectableResponse = userService.getCurrentCollectable(getCurrentCollectableRequest);
+            var getCurrentCollectableResponse = userService.getCurrentCollectable(getCurrentCollectableRequest);
 
             Assertions.assertTrue(getCurrentCollectableResponse.isSuccess());
 
             //test that the User's Collectable is now the swapped out Collectable
-            Collectable currentCollectable = getCurrentCollectableResponse.getCollectable();
+            var currentCollectable = getCurrentCollectableResponse.getCollectable();
+
             Assertions.assertEquals(newCurrentCollectableID, currentCollectable.getId());
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
@@ -1238,10 +1263,10 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     void getMyMissionsTestInvalidUser(){
-        GetMyMissionsRequest request = new GetMyMissionsRequest(invalidUserId);
+        var request = new GetMyMissionsRequest(invalidUserId);
 
         try {
-            GetMyMissionsResponse response = userService.getMyMissions(request);
+            var response = userService.getMyMissions(request);
 
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals(invalidUserIdMessage, response.getMessage());
@@ -1259,19 +1284,20 @@ public class UserServiceImplIT {
         addFoundGeoCodesForUser1();
 
         setUser(userWithPoints1ID);
-        GetMyMissionsRequest request = new GetMyMissionsRequest(userWithPoints1ID);
+        var request = new GetMyMissionsRequest(userWithPoints1ID);
 
         try {
-            GetMyMissionsResponse response = userService.getMyMissions(request);
+            var response = userService.getMyMissions(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("User Missions returned", response.getMessage());
 
             var missions = response.getMissions();
+
             Assertions.assertNotNull(missions);
 
-           Collectable firstFoundCollectable = getCollectableByID(firstFoundCollectableID);
-           Collectable secondFoundCollectable = getCollectableByID(secondFoundCollectableID);
+            var firstFoundCollectable = getCollectableByID(firstFoundCollectableID);
+            var secondFoundCollectable = getCollectableByID(secondFoundCollectableID);
 
             //check each found Collectable's Mission
             checkCollectableMission(firstFoundCollectable.getMissionID(), firstFoundCollectableType, missions);
