@@ -1,25 +1,15 @@
 package tech.geocodeapp.geocode.user.service;
 
-import java.util.*;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
-import tech.geocodeapp.geocode.collectable.response.CollectableResponse;
-import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
-import tech.geocodeapp.geocode.collectable.response.GetCollectableByIDResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
-import tech.geocodeapp.geocode.leaderboard.model.MyLeaderboardDetails;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
-import tech.geocodeapp.geocode.mission.model.Mission;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
 import tech.geocodeapp.geocode.mission.service.MissionService;
 import tech.geocodeapp.geocode.user.model.User;
@@ -29,6 +19,9 @@ import tech.geocodeapp.geocode.user.response.*;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * This class implements the UserService interface
@@ -72,13 +65,13 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+        var optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetCurrentCollectableResponse(false, invalidUserIdMessage, null);
         }
 
-        Collectable currentUserCollectable = optionalUser.get().getCurrentCollectable();
+        var currentUserCollectable = optionalUser.get().getCurrentCollectable();
         return new GetCurrentCollectableResponse(true, "The user's Collectable was successfully returned", currentUserCollectable);
     }
 
@@ -95,13 +88,13 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+        var optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetUserTrackableResponse(false, invalidUserIdMessage, null);
         }
 
-        Collectable userTrackable = optionalUser.get().getTrackableObject();
+        var userTrackable = optionalUser.get().getTrackableObject();
         return new GetUserTrackableResponse(true, "The user's Trackable was successfully returned", userTrackable);
     }
 
@@ -118,14 +111,14 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+        var optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new UpdateLocationResponse(false, invalidUserIdMessage, null);
         }
 
-        User currentUser = optionalUser.get();
-        Collectable trackableObject = currentUser.getTrackableObject();
+        var currentUser = optionalUser.get();
+        var trackableObject = currentUser.getTrackableObject();
 
         //update the trackable's location
         trackableObject.changeLocation(request.getLocation());
@@ -148,15 +141,15 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+        var optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetFoundCollectableTypesResponse(false, invalidUserIdMessage, null);
         }
 
         //get IDs for all the found CollectableTypes for the current User
-        User currentUser = optionalUser.get();
-        Set<CollectableType> foundCollectableTypes = currentUser.getFoundCollectableTypes();
+        var currentUser = optionalUser.get();
+        var foundCollectableTypes = currentUser.getFoundCollectableTypes();
 
         List<UUID> foundCollectableTypeIDs = new ArrayList<>();
         foundCollectableTypes.forEach(collectableType -> foundCollectableTypeIDs.add(collectableType.getId()));
@@ -178,15 +171,15 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+        var optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetFoundGeoCodesResponse(false, invalidUserIdMessage, null);
         }
 
         //get IDs for all the found GeoCodes for the current User
-        User currentUser = optionalUser.get();
-        Set<GeoCode> foundGeoCodes = currentUser.getFoundGeocodes();
+        var currentUser = optionalUser.get();
+        var foundGeoCodes = currentUser.getFoundGeocodes();
 
         List<UUID> foundGeoCodeIDs = new ArrayList<>();
         foundGeoCodes.forEach(foundGeoCode -> foundGeoCodeIDs.add(foundGeoCode.getId()));
@@ -208,15 +201,15 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+        var optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetOwnedGeoCodesResponse(false, invalidUserIdMessage, null);
         }
 
         //get IDs for all the GeoCodes owned by the current User
-        User currentUser = optionalUser.get();
-        Set<GeoCode> ownedGeocodes = currentUser.getOwnedGeocodes();
+        var currentUser = optionalUser.get();
+        var ownedGeocodes = currentUser.getOwnedGeocodes();
 
         List<UUID> ownedGeoCodeIDs = new ArrayList<>();
         ownedGeocodes.forEach(ownedGeocode -> ownedGeoCodeIDs.add(ownedGeocode.getId()));
@@ -230,7 +223,6 @@ public class UserServiceImpl implements UserService {
      * @return A GetMyLeaderboardsResponse object: (success, message, object)
      * @throws NullRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
-    //@Transactional
     public GetMyLeaderboardsResponse getMyLeaderboards(GetMyLeaderboardsRequest request) throws NullRequestParameterException{
         if (request == null) {
             return new GetMyLeaderboardsResponse(false, "The GetMyLeaderboardsRequest object passed was NULL", null);
@@ -239,15 +231,15 @@ public class UserServiceImpl implements UserService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         /* check if user ID is invalid */
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+        var optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetMyLeaderboardsResponse(false, invalidUserIdMessage, null);
         }
 
-        User currentUser = optionalUser.get();
+        var currentUser = optionalUser.get();
+        var leaderboardDetailsList = pointRepo.getMyLeaderboards(currentUser.getId());
 
-        List<MyLeaderboardDetails> leaderboardDetailsList = pointRepo.getMyLeaderboards(currentUser.getId());
         return new GetMyLeaderboardsResponse(true, "The details for the User's Leaderboards were successfully returned", leaderboardDetailsList);
     }
 
@@ -265,13 +257,13 @@ public class UserServiceImpl implements UserService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the UserID is invalid
-        Optional<User> optionalUser = userRepo.findById(request.getUserID());
+        var optionalUser = userRepo.findById(request.getUserID());
 
         if(optionalUser.isEmpty()){
             return new GetMyMissionsResponse(false, invalidUserIdMessage, null);
         }
 
-        User user = optionalUser.get();
+        var user = optionalUser.get();
 
         return new GetMyMissionsResponse(true, "User Missions returned", user.getMissions());
     }
@@ -289,8 +281,8 @@ public class UserServiceImpl implements UserService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         //add the GeoCodeID to the User's list of owned GeoCodes
-        User user = request.getUser();
-        GeoCode geoCode = request.getGeocode();
+        var user = request.getUser();
+        var geoCode = request.getGeocode();
 
         user.addOwnedGeocodesItem(geoCode);
         userRepo.save(user);
@@ -310,8 +302,8 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        User user = request.getUser();
-        GeoCode geoCode = request.getGeocode();
+        var user = request.getUser();
+        var geoCode = request.getGeocode();
 
         //add the GeoCodeID to the User's list of owned GeoCodes
         user.addFoundGeocodesItem(geoCode);
@@ -332,8 +324,8 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        CollectableType collectableType = request.getCollectableType();
-        User user = request.getUser();
+        var collectableType = request.getCollectableType();
+        var user = request.getUser();
 
         user.addFoundCollectableTypesItem(collectableType);
         userRepo.save(user);
@@ -354,8 +346,8 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        UUID id = request.getUserID();
-        Optional<User> optionalUser = userRepo.findById(id);
+        var id = request.getUserID();
+        var optionalUser = userRepo.findById(id);
 
         return optionalUser.map(user -> new GetUserByIdResponse(true, "The User was found", user)).orElseGet(
                 () -> new GetUserByIdResponse(false, invalidUserIdMessage, null));
@@ -368,7 +360,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User getCurrentUser(){
         /* make request to get the current User*/
-        GetUserByIdRequest request = new GetUserByIdRequest(getCurrentUserID());
+        var request = new GetUserByIdRequest(getCurrentUserID());
 
         try{
             return getUserById(request).getUser();
@@ -405,28 +397,31 @@ public class UserServiceImpl implements UserService {
             return new RegisterNewUserResponse(false, "User ID already exists", null);
         }
 
-        User newUser = new User(request.getUserID(), request.getUsername());
+        var newUser = new User(request.getUserID(), request.getUsername());
 
         //create the user's trackable object which will always have a Mission
-        CreateCollectableRequest createCollectableRequest = new CreateCollectableRequest(trackableTypeUUID, new GeoPoint(0.0, 0.0));
-        CreateCollectableResponse createCollectableResponse = collectableService.createCollectable(createCollectableRequest);
+        var createCollectableRequest = new CreateCollectableRequest(trackableTypeUUID, new GeoPoint(0.0, 0.0));
+        var createCollectableResponse = collectableService.createCollectable(createCollectableRequest);
 
         if(!createCollectableResponse.isSuccess()){
             return new RegisterNewUserResponse(false, createCollectableResponse.getMessage(), null);
         }
 
-        CollectableResponse collectableResponse = createCollectableResponse.getCollectable();
+        var collectableResponse = createCollectableResponse.getCollectable();
 
-        GetCollectableByIDRequest getCollectableIdRequest = new GetCollectableByIDRequest(collectableResponse.getId());
-        GetCollectableByIDResponse getCollectableByIDResponse = collectableService.getCollectableByID(getCollectableIdRequest);
+        var getCollectableIdRequest = new GetCollectableByIDRequest(collectableResponse.getId());
+        var getCollectableByIDResponse = collectableService.getCollectableByID(getCollectableIdRequest);
 
-        Collectable trackableObject = getCollectableByIDResponse.getCollectable();
+        var trackableObject = getCollectableByIDResponse.getCollectable();
 
         newUser.setTrackableObject(trackableObject);
         newUser.setCurrentCollectable(trackableObject);
 
         //add trackable object's Mission to the User's Missions
-        this.addToMyMissions(new AddToMyMissionsRequest(newUser, missionService.getMissionById(new GetMissionByIdRequest(trackableObject.getMissionID())).getMission()));
+        var getMissionByIDRequest = new GetMissionByIdRequest(trackableObject.getMissionID());
+        var mission = missionService.getMissionById(getMissionByIDRequest).getMission();
+
+        this.addToMyMissions(new AddToMyMissionsRequest(newUser, mission));
 
         userRepo.save(newUser);
 
@@ -448,12 +443,12 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        User user = request.getUser();
-        GeoCode geoCode = request.getGeoCode();
+        var user = request.getUser();
+        var geoCode = request.getGeoCode();
 
         //swap out the currentCollectable
-        Collectable oldCurrentCollectable = user.getCurrentCollectable();
-        Collectable newCurrentCollectable = request.getCollectable();
+        var oldCurrentCollectable = user.getCurrentCollectable();
+        var newCurrentCollectable = request.getCollectable();
         user.setCurrentCollectable(newCurrentCollectable);
 
         //add the GeoCode to the User's found GeoCodes
@@ -463,7 +458,7 @@ public class UserServiceImpl implements UserService {
         this.addToFoundCollectableTypes(new AddToFoundCollectableTypesRequest(user, newCurrentCollectable.getType()));
         
         //add the Collectable's Mission to the User's Missions
-        UUID missionID = newCurrentCollectable.getMissionID();
+        var missionID = newCurrentCollectable.getMissionID();
         
         if(missionID != null){
             this.addToMyMissions(new AddToMyMissionsRequest(user, missionService.getMissionById(new GetMissionByIdRequest(missionID)).getMission()));
@@ -487,8 +482,8 @@ public class UserServiceImpl implements UserService {
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        User user = request.getUser();
-        Mission mission = request.getMission();
+        var user = request.getUser();
+        var mission = request.getMission();
 
         user.addMissionsItem(mission);
         userRepo.save(user);
