@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -19,9 +21,47 @@ public class CreateCollectableRequest   {
   @JsonProperty("collectableTypeId")
   private UUID collectableTypeId = null;
 
+  /**
+   * whether or not a mission should be created for this Collectable
+   */
+  @JsonProperty("createMission")
+  private boolean createMission = false;
+
+  /**
+   * The location is needed when creating a Mission of type MissionType.GEOCODE
+   * This location is the location of the GeoCode that the Collectable is placed in when created
+   */
+  @JsonProperty("location")
+  private GeoPoint location;
+
+  public CreateCollectableRequest() {
+
+  }
+
+  public CreateCollectableRequest(UUID collectableTypeId, boolean createMission) {
+    this.collectableTypeId = collectableTypeId;
+    this.createMission = createMission;
+  }
+
+  public CreateCollectableRequest(UUID collectableTypeId, GeoPoint location) {
+    this.collectableTypeId = collectableTypeId;
+    this.location = location;
+
+    //location is provided => Collectable has a Mission
+    this.createMission = true;
+  }
+
   public CreateCollectableRequest collectableTypeId(UUID collectableTypeId) {
     this.collectableTypeId = collectableTypeId;
     return this;
+  }
+
+  public boolean isCreateMission() {
+    return createMission;
+  }
+
+  public void setCreateMission(boolean createMission) {
+    this.createMission = createMission;
   }
 
   /**
@@ -77,5 +117,13 @@ public class CreateCollectableRequest   {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
+  }
+
+  public void setLocation(GeoPoint location) {
+    this.location = location;
+  }
+
+  public GeoPoint getLocation(){
+    return this.location;
   }
 }

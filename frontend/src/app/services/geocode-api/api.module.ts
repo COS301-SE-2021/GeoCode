@@ -4,7 +4,10 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { CollectableService } from './api/collectable.service';
+import { EventService } from './api/event.service';
 import { GeoCodeService } from './api/geoCode.service';
+import { LeaderboardService } from './api/leaderboard.service';
+import { MissionService } from './api/mission.service';
 import { UserService } from './api/user.service';
 
 @NgModule({
@@ -13,7 +16,10 @@ import { UserService } from './api/user.service';
   exports:      [],
   providers: [
     CollectableService,
+    EventService,
     GeoCodeService,
+    LeaderboardService,
+    MissionService,
     UserService ]
 })
 export class ApiModule {

@@ -1,5 +1,8 @@
 {
   "name": "GeoCode",
-  "integrations": {},
+  "integrations": {
+    "cordova": {},
+    "capacitor": {}
+  },
   "type": "angular"
 }

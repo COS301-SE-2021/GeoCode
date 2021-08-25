@@ -1,8 +1,9 @@
 package tech.geocodeapp.geocode.collectable.response;
 
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
+import tech.geocodeapp.geocode.general.response.Response;
 
-public class GetCollectableTypeByIDResponse {
+public class GetCollectableTypeByIDResponse extends Response {
 
     /**
      * The found collectable with the given collectableID
@@ -21,8 +22,8 @@ public class GetCollectableTypeByIDResponse {
      *
      * @param collectableType The collectable from the specified collectable
      */
-    public GetCollectableTypeByIDResponse( CollectableType collectableType ) {
-
+    public GetCollectableTypeByIDResponse(boolean success, String message, CollectableType collectableType ) {
+        super(success, message);
         this.collectableType = collectableType;
     }
 
