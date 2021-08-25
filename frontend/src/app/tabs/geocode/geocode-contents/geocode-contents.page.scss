@@ -1,26 +1,15 @@
-ion-title{
-  font-size: xx-large;
-  text-align: center;
-  padding:0.5%;
-}
+
 
 ion-toolbar{
-  --background: var(--ion-color-teal);
+  --background: var(--ion-toolbar-background);
   color: white;
 }
-
-ion-content{
- //--ion-background-color:white;
-}
-
 
 .map{
   width: 100%;
   height: 60%;
   border-width: 0px;
   padding: 0px;
-  background-color: white;
-
 }
 
 .barcode{
@@ -29,7 +18,6 @@ ion-content{
   --border-color: var(--ion-color-winered) ;
   color:var(--ion-color-winered);
   font-size: large;
-
 }
 
 .barcode-input{
@@ -71,4 +59,16 @@ ion-content{
   white-space: normal;
   text-align: center;
   margin: 5px;
+}
+
+.image {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+}
+
+.image img {
+  max-height: 100px;
 }

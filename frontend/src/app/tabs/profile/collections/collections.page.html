@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Collections</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-template *ngFor="let set of collections" [ngIf]="foundSet(set.types)">
+  <ion-card  class="card">
+    <ion-card-content>
+      <div class="header">
+        <div class="details">
+          <ion-card-title>
+            {{set.name}}
+          </ion-card-title>
+          <ion-card-subtitle>
+            {{set.description}}
+          </ion-card-subtitle>
+        </div>
+      </div>
+      <div class="horizontalscroll">
+        <div class="items">
+          <ng-template *ngFor="let type of set.types" [ngIf]="foundID(type.id)">
+            <div class="collectable">
+              <div class="image">
+                <img src="{{type.image}}">
+              </div>
+              <div class="found">
+                {{type.name}}
+              </div>
+            </div>
+          </ng-template>
+          <ng-template *ngFor="let type of set.types" [ngIf]="!foundID(type.id)">
+            <div class="collectable">
+              <div class="image notfound">
+                <img src="{{type.image}}">
+              </div>
+              <div class="name">
+                {{type.name}}
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  </ng-template>
+
+</ion-content>

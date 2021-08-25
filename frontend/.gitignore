@@ -31,4 +31,4 @@ npm-debug.log*
 /www
 
 environment.ts
-index.html
+environment.android.ts

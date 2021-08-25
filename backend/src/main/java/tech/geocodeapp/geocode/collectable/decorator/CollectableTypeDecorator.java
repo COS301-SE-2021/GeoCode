@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.collectable.decorator;
 
 import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.mission.model.MissionType;
 
 import java.util.GregorianCalendar;
 import java.util.UUID;
@@ -127,5 +128,23 @@ public abstract class CollectableTypeDecorator implements CollectableTypeCompone
      */
     public void setArea(String area) {
         decoratedType.setArea(area);
+    }
+
+    /**
+     * gets the decoratedType's missionType
+     * @return the value of the decoratedType's getMissionType() method
+     */
+    @Override
+    public MissionType getMissionType() {
+        return decoratedType.getMissionType();
+    }
+
+    /**
+     * Sets the decoratedType's missionType
+     * @param missionType the missionType to use
+     */
+    @Override
+    public void setMissionType(MissionType missionType) {
+        decoratedType.setMissionType(missionType);
     }
 }

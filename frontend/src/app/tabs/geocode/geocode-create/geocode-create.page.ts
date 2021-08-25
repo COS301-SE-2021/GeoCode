@@ -1,8 +1,10 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {GeoCodeService, CreateGeoCodeRequest, CreateGeoCodeResponse} from '../../../services/geocode-api';
 import {NavController} from '@ionic/angular';
-
-declare let google;
+import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
+import {QRGenerator} from '../../../services/QRGenerator';
+import {GeoPoint} from '../../../services/geocode-api';
+import IQrCodeWithLogo, {BaseOptions} from 'qrcode-with-logos';
 let map;
 @Component({
   selector: 'app-geocode-create',
@@ -10,27 +12,26 @@ let map;
   styleUrls: ['./geocode-create.page.scss'],
 })
 
-
-
 export class GeocodeCreatePage implements AfterViewInit {
 @ViewChild('mapElement',{static:false}) mapElement;
+googleMaps;
 locations;
 mapOptions;
 hints = [];
 difficulty;
 marker;
+geoLocation: GeoPoint={latitude:0,longitude:0};
+//Request object to be updated as fields change
 request: CreateGeoCodeRequest= {
-  description: 'Testing insert',
+    description: 'Testing insert',
     available: true,
     difficulty:'EASY',
     hints:['Hint1','Hint2'],
-    latitude:'',
-  longitude:'',
-    id:''
+    location:{latitude:0,longitude:0}
 
 };
 
-  constructor(public geocodeAPI: GeoCodeService,public navCtrl:NavController) { }
+  constructor(public geocodeAPI: GeoCodeService,public navCtrl: NavController, private mapsLoader: GoogleMapsLoader, private qr: QRGenerator) {}
 
   //create map
   initMap() {
@@ -39,20 +40,12 @@ request: CreateGeoCodeRequest= {
       center: {lat: -25.75625115327836, lng: 28.235629260918344},
       zoom: 15,
     };
-    map = new google.maps.Map(this.mapElement.nativeElement, this.mapOptions);
 
-    //Load the markers
-    const markerIcon = {
+    map = new this.googleMaps.Map(this.mapElement.nativeElement, this.mapOptions);
 
-      scaledSize: new google.maps.Size(60, 60),
-      origin: new google.maps.Point(0, 0), // used if icon is a part of sprite, indicates image position in sprite
-      anchor: new google.maps.Point(20,40) // lets offset the marker image
-    };
-
-    // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
-    google.maps.event.addListener(map, 'click', (event)=>{
+    //Add event listeners to map
+    this.googleMaps.event.addListener(map, 'click', (event)=>{
       this.placeMarker(event.latLng);
-
     });
 
 
@@ -60,7 +53,10 @@ request: CreateGeoCodeRequest= {
 
   //create map
   ngAfterViewInit(): void {
-    this.initMap();
+    this.mapsLoader.load().then(handle => {
+      this.googleMaps = handle;
+      this.initMap();
+    }).catch();
   }
 
   //update the description field for the request
@@ -71,26 +67,18 @@ request: CreateGeoCodeRequest= {
   //create the geocode and update the remaining fields
   createGeoCode(){
     this.locations=this.marker.getPosition();
-    this.request.latitude=this.locations.lat();
-    this.request.longitude=this.locations.lng();
+    this.request.location.longitude=this.locations.lng();
+    this.request.location.latitude=this.locations.lat();
     this.request.hints=this.hints;
     this.request.difficulty = this.difficulty;
-    console.log(this.request);
+
+    //Call geocode api to send request to controller
     this.geocodeAPI.createGeoCode(this.request)
       .subscribe((response: CreateGeoCodeResponse) =>{
         console.log(response);
-        this.hints=[];
-        this.locations=[];
-        this.difficulty=[];
-
-        this.navCtrl.navigateBack('/geocode');
+        this.qr.generate(response.qrCode);
+        this.navCtrl.navigateBack('/explore').then().catch();
       });
-
-  }
-
-  //update location for the request
-  updateLocation(location){
-    this.locations=location;
   }
 
   //update difficulty field for request
@@ -103,24 +91,19 @@ request: CreateGeoCodeRequest= {
      this.hints.push(event.target.value);
   }
 
-    placeMarker(location){
-   this.marker = new google.maps.Marker({
+  //Place map marker based on user click listener
+  placeMarker(location){
+    this.marker = new this.googleMaps.Marker({
         map,
-        animation: google.maps.Animation.DROP,
+        animation: this.googleMaps.Animation.DROP,
         position: location
       }
     );
-    const infoWindow = new google.maps.InfoWindow({
-      content: 'Help Me!'
-    });
     map.setCenter(location);
-
   }
 
 }
 
-//Place the marker in the users selected location and update that maps center
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 
 
 
