@@ -32,7 +32,7 @@ export class GeocodeContentsPage implements AfterViewInit {
 
   constructor(
     route: ActivatedRoute,
-    router: Router,
+    private router: Router,
     public geocodeApi: GeoCodeService,
     public navCtrl: NavController,
     private alertCtrl: AlertController,
@@ -40,13 +40,13 @@ export class GeocodeContentsPage implements AfterViewInit {
     private qrScanner: QRScanner
   ) {
     //Get passed in param from routing
-    const state = router.getCurrentNavigation().extras.state;
+    const state = this.router.getCurrentNavigation().extras.state;
     if (state) {
       //Set the geocode to the passed in geocode
       this.geocode = state.geocode;
     } else {
       this.geocode = null;
-      this.geocodeID = route.snapshot.paramMap.get('id');
+      this.geocodeID = route.snapshot.paramMap.get('geocodeID');
     }
   }
 
@@ -159,7 +159,7 @@ export class GeocodeContentsPage implements AfterViewInit {
             this.geocodeApi.swapCollectables(request).subscribe((response: SwapCollectablesResponse) =>{
               console.log(response);
             });
-            this.navCtrl.navigateBack('/explore');
+            this.router.navigate(['../..']);
 
           }
         }
