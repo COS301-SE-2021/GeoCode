@@ -11,6 +11,4 @@ public interface ImageRepository {
 
     Image findById(UUID id) throws IOException;
 
-    byte[] getBytesById(UUID id) throws IOException;
-
 }

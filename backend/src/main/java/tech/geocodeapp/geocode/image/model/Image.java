@@ -2,7 +2,6 @@ package tech.geocodeapp.geocode.image.model;
 
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-import java.awt.image.BufferedImage;
 import java.util.UUID;
 
 public class Image {
@@ -12,11 +11,11 @@ public class Image {
     private UUID id;
 
     @NotNull
-    private BufferedImage imageData;
+    private byte[] bytes;
 
-    public Image(UUID id, BufferedImage imageData) {
+    public Image(UUID id, byte[] bytes) {
         this.id = id;
-        this.imageData = imageData;
+        this.bytes = bytes;
     }
 
     public UUID getId() {
@@ -27,11 +26,11 @@ public class Image {
         this.id = id;
     }
 
-    public BufferedImage getImageData() {
-        return imageData;
+    public byte[] getBytes() {
+        return bytes;
     }
 
-    public void setImageData(BufferedImage imageData) {
-        this.imageData = imageData;
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
     }
 }

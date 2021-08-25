@@ -1,9 +1,7 @@
 package tech.geocodeapp.geocode.image.request;
 
-import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.util.Objects;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -15,30 +13,30 @@ import javax.validation.constraints.*;
 @Validated
 public class CreateImageRequest {
 
-    private BufferedImage imageData = null;
+    private InputStream imageByteStream = null;
 
-    public CreateImageRequest(BufferedImage imageData) {
-        this.imageData = imageData;
+    public CreateImageRequest(InputStream imageByteStream) {
+        this.imageByteStream = imageByteStream;
     }
 
-    public CreateImageRequest imageData(BufferedImage imageData) {
-        this.imageData = imageData;
+    public CreateImageRequest imageByteStream(InputStream imageByteStream) {
+        this.imageByteStream = imageByteStream;
         return this;
     }
 
     /**
-     * Get imageData
-     * @return imageData
+     * Get imageByteStream
+     * @return imageByteStream
      **/
     @NotNull
 
     @Valid
-    public BufferedImage getImageData() {
-        return imageData;
+    public InputStream getImageByteStream() {
+        return imageByteStream;
     }
 
-    public void setImageData(BufferedImage imageData) {
-        this.imageData = imageData;
+    public void setImageByteStream(InputStream imageByteStream) {
+        this.imageByteStream = imageByteStream;
     }
 
 
@@ -51,12 +49,12 @@ public class CreateImageRequest {
             return false;
         }
         CreateImageRequest createImageRequest = (CreateImageRequest) o;
-        return Objects.equals(this.imageData, createImageRequest.imageData);
+        return Objects.equals(this.imageByteStream, createImageRequest.imageByteStream);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(imageData, super.hashCode());
+        return Objects.hash(imageByteStream, super.hashCode());
     }
 
     @Override
@@ -64,7 +62,7 @@ public class CreateImageRequest {
         StringBuilder sb = new StringBuilder();
         sb.append("class CreateImageRequest {\n");
         sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-        sb.append("    imageData: ").append(toIndentedString(imageData)).append("\n");
+        sb.append("    imageByteStream: ").append(toIndentedString(imageByteStream)).append("\n");
         sb.append("}");
         return sb.toString();
     }

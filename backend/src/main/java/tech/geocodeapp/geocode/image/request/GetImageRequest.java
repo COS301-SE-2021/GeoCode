@@ -1,44 +1,44 @@
-package tech.geocodeapp.geocode.image.response;
+package tech.geocodeapp.geocode.image.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import tech.geocodeapp.geocode.general.response.Response;
-import tech.geocodeapp.geocode.image.model.Image;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
- * GetImageBytesResponse
+ * GetImageRequest
  */
 @Validated
-public class GetImageBytesResponse extends Response {
+public class GetImageRequest {
 
-    private byte[] bytes = null;
+    private UUID imageID = null;
 
-    public GetImageBytesResponse(boolean success, String message, byte[] bytes) {
-        super(success, message);
-        this.bytes = bytes;
+    public GetImageRequest(UUID imageID) {
+        this.imageID = imageID;
     }
 
-    public GetImageBytesResponse bytes(byte[] bytes) {
-        this.bytes = bytes;
+    public GetImageRequest imageID(UUID imageID) {
+        this.imageID = imageID;
         return this;
     }
 
     /**
-     * Get bytes
-     * @return bytes
+     * Get imageID
+     * @return imageID
      **/
+    @Schema(example = "054463f2-2f7c-4864-8130-68e5aa79ee7f", required = true, description = "")
     @NotNull
 
     @Valid
-    public byte[] getImageBytes() {
-        return bytes;
+    public UUID getImageID() {
+        return imageID;
     }
 
-    public void setImageBytes(byte[] bytes) {
-        this.bytes = bytes;
+    public void setImageID(UUID imageID) {
+        this.imageID = imageID;
     }
 
 
@@ -50,21 +50,22 @@ public class GetImageBytesResponse extends Response {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        GetImageBytesResponse getImageBytesResponse = (GetImageBytesResponse) o;
-        return Objects.equals(this.bytes, getImageBytesResponse.bytes);
+        GetImageRequest getImageDataRequest = (GetImageRequest) o;
+        return Objects.equals(this.imageID, getImageDataRequest.imageID) &&
+                super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bytes, super.hashCode());
+        return Objects.hash(imageID, super.hashCode());
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class GetImageBytesResponse {\n");
+        sb.append("class GetImageRequest {\n");
         sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-        sb.append("    bytes: ").append(toIndentedString(bytes)).append("\n");
+        sb.append("    imageID: ").append(toIndentedString(imageID)).append("\n");
         sb.append("}");
         return sb.toString();
     }

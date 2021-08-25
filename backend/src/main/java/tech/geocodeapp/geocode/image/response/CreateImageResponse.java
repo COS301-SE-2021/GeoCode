@@ -19,9 +19,6 @@ public class CreateImageResponse extends Response {
     @JsonProperty("imageID")
     private UUID imageID = null;
 
-    public CreateImageResponse() {
-    }
-
     public CreateImageResponse(boolean success, String message, UUID imageID) {
         super(success, message);
         this.imageID = imageID;
