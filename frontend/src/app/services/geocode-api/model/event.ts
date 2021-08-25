@@ -12,7 +12,7 @@
 import { GeoPoint } from './geoPoint';
 import { Leaderboard } from './leaderboard';
 
-export interface Event {
+export interface Event { 
     id: string;
     name: string;
     description: string;

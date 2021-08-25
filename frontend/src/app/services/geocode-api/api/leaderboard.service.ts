@@ -69,7 +69,7 @@ export class LeaderboardService {
     /**
      * Create a new Leaderboard
      * Creates a new Leaderboard with the provided name
-     * @param body
+     * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -125,7 +125,7 @@ export class LeaderboardService {
     /**
      * Create a new point object
      * Creates a new point object for a provided user and leaderboard
-     * @param body
+     * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -181,7 +181,7 @@ export class LeaderboardService {
     /**
      * Delete a point
      * Deletes a point based on a provided id
-     * @param body
+     * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -244,7 +244,7 @@ export class LeaderboardService {
     public getEventLeaderboard(body: GetEventLeaderboardRequest, observe?: 'body', reportProgress?: boolean): Observable<GetEventLeaderboardResponse>;
     public getEventLeaderboard(body: GetEventLeaderboardRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetEventLeaderboardResponse>>;
     public getEventLeaderboard(body: GetEventLeaderboardRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetEventLeaderboardResponse>>;
-    public getEventLeaderboard(body: GetEventLeaderboardRequest, observe: any = 'body', reportProgress: boolean = true ): Observable<any> {
+    public getEventLeaderboard(body: GetEventLeaderboardRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling getEventLeaderboard.');
@@ -405,7 +405,7 @@ export class LeaderboardService {
     /**
      * Updates a point
      * Updates the fields of a point with values provided for the given id
-     * @param body
+     * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
