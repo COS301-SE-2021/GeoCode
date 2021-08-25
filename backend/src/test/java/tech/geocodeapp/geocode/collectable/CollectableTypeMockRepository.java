@@ -5,13 +5,14 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.repository.CollectableTypeRepository;
 
 import java.util.*;
 
 public class CollectableTypeMockRepository implements CollectableTypeRepository {
 
-    private static HashMap<UUID, CollectableType> map = new HashMap<UUID, CollectableType>();
+    private static HashMap<java.util.UUID, CollectableType> map = new HashMap<java.util.UUID, CollectableType>();
 
     @Override
     public List<CollectableType> getCollectableTypesByRarity(Rarity rarity) {
@@ -44,7 +45,7 @@ public class CollectableTypeMockRepository implements CollectableTypeRepository 
     }
 
     @Override
-    public List<CollectableType> findAllById(Iterable<UUID> iterable) {
+    public List<CollectableType> findAllById(Iterable<java.util.UUID> iterable) {
         return null;
     }
 
@@ -54,7 +55,7 @@ public class CollectableTypeMockRepository implements CollectableTypeRepository 
     }
 
     @Override
-    public void deleteById(UUID uuid) {
+    public void deleteById(java.util.UUID uuid) {
 
     }
 
@@ -85,14 +86,14 @@ public class CollectableTypeMockRepository implements CollectableTypeRepository 
     }
 
     @Override
-    public Optional<CollectableType> findById(UUID uuid) {
+    public Optional<CollectableType> findById(java.util.UUID uuid) {
         CollectableType collectableType=map.get(uuid);
         return Optional.ofNullable(collectableType);
     }
 
     @Override
-    public boolean existsById(UUID uuid) {
-        return false;
+    public boolean existsById(java.util.UUID uuid) {
+        return map.containsKey(uuid);
     }
 
     @Override
@@ -116,7 +117,7 @@ public class CollectableTypeMockRepository implements CollectableTypeRepository 
     }
 
     @Override
-    public CollectableType getOne(UUID uuid) {
+    public CollectableType getOne(java.util.UUID uuid) {
         return null;
     }
 

@@ -1,6 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Find GeoCode</ion-title>
+    <ion-title>Open GeoCode</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="explore"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="scan()">
+        <ion-icon name="qr-code-outline"></ion-icon>
+        <ion-label>Scan</ion-label>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -11,7 +20,7 @@
     <ion-item class="barcode" [hidden]="isHidden">
       <ion-label>GeoCode</ion-label>
       <ion-input #QR class="barcode-input" type="text"></ion-input>
-      <ion-button color="danger" (click)="found(QR)">Found</ion-button>
+      <ion-button color="danger" (click)="found(QR.value)">Found</ion-button>
     </ion-item>
 
     <div class="hints" [hidden]="isHidden">
@@ -36,7 +45,7 @@
         <div class="items">
           <div class="collectable" *ngFor="let collectable of collectables">
             <div class="image" (click)="swapCollectable(collectable)">
-              <img src="https://via.placeholder.com/100">
+              <img src="{{collectable.type.image}}">
             </div>
             <div class="name">
               {{collectable.type.name}}

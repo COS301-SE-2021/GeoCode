@@ -7,7 +7,32 @@ const routes: Routes = [
   {
     path: '',
     component: ProfilePage
-  }
+  },
+  {
+    path: 'events/profile/:userID',
+    redirectTo: ':userID'
+  },
+  {
+    path: 'events',
+    loadChildren: () => import('./events/events.module').then( m => m.EventsPageModule)
+  },
+  {
+    path: 'collections',
+    loadChildren: () => import('./collections/collections.module').then( m => m.CollectionsPageModule)
+  },
+  {
+    path: 'missions',
+    loadChildren: () => import('./missions/missions.module').then( m => m.MissionsPageModule)
+  },
+  {
+    path: 'geocodes',
+    loadChildren: () => import('./geocodes/geocodes.module').then( m => m.GeocodesPageModule)
+  },
+  {
+    path: ':userID',
+    component: ProfilePage
+  },
+
 ];
 
 @NgModule({

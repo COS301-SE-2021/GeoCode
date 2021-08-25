@@ -1,246 +1,119 @@
 package tech.geocodeapp.geocode.event.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.request.*;
+import tech.geocodeapp.geocode.event.service.EventService;
 
 import javax.validation.Valid;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @RestController
+@Validated
 public class EventApiController implements EventApi {
 
-    private static final Logger log = LoggerFactory.getLogger( EventApiController.class );
+    private final EventService eventService;
 
-    private final ObjectMapper objectMapper;
-
-    private final HttpServletRequest request;
-
-    @org.springframework.beans.factory.annotation.Autowired
-    public EventApiController( ObjectMapper objectMapper, HttpServletRequest request ) {
-
-        this.objectMapper = objectMapper;
-        this.request = request;
+    public EventApiController( EventService service ) {
+        this.eventService = service;
     }
 
     public ResponseEntity< ChangeAvailabilityResponse > changeAvailability( @Parameter( in = ParameterIn.DEFAULT, description = "Request to update the availability of an Event", required = true, schema = @Schema() ) @Valid @RequestBody ChangeAvailabilityRequest body ) {
 
-        String accept = request.getHeader( "Accept" );
-
-        if ( accept != null && accept.contains( "application/json" ) ) {
-
-            try {
-
-                return new ResponseEntity<>( objectMapper.readValue( "{\n  \"success\" : true\n}", ChangeAvailabilityResponse.class ), HttpStatus.NOT_IMPLEMENTED );
-            } catch ( IOException e ) {
-
-                log.error( "Couldn't serialize response for content type application/json", e );
-                return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
-            }
-        }
-
         return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
-    public ResponseEntity< CreateEventResponse > createEvent( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateEventRequest body ) {
+    public ResponseEntity< CreateEventResponse > createEvent( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateEventRequest body ) throws InvalidRequestException {
 
-        String accept = request.getHeader( "Accept" );
+        CreateEventResponse response = eventService.createEvent(body);
 
-        if ( accept != null && accept.contains( "application/json" ) ) {
+        if ( ( response != null ) ) {
 
-            try {
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
 
-                return new ResponseEntity<>( objectMapper.readValue( "{\n  \"success\" : true\n}", CreateEventResponse.class ), HttpStatus.NOT_IMPLEMENTED );
-            } catch ( IOException e ) {
-
-                log.error( "Couldn't serialize response for content type application/json", e );
-                return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
-            }
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
         }
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
     public ResponseEntity< CreateLeaderboardResponse > createLeaderBoard( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Leaderboard for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateLeaderboardRequest body ) {
 
-        String accept = request.getHeader( "Accept" );
-
-        if ( accept != null && accept.contains( "application/json" ) ) {
-
-            try {
-
-                return new ResponseEntity<>( objectMapper.readValue( "{\n  \"success\" : true\n}", CreateLeaderboardResponse.class ), HttpStatus.NOT_IMPLEMENTED );
-            } catch ( IOException e ) {
-
-                log.error( "Couldn't serialize response for content type application/json", e );
-                return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
-            }
-        }
-
         return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
-    public ResponseEntity< CreatePointResponse > createPoint( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Point for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreatePointRequest body ) {
+    @Override
+    public ResponseEntity<GetCurrentEventStatusResponse> getCurrentEventStatus(GetCurrentEventStatusRequest body ) throws InvalidRequestException {
 
-        String accept = request.getHeader( "Accept" );
+        GetCurrentEventStatusResponse response = eventService.getCurrentEventStatus( body );
 
-        if ( accept != null && accept.contains( "application/json" ) ) {
+        if ( ( response != null ) ) {
 
-            try {
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
 
-                return new ResponseEntity<>( objectMapper.readValue( "{\n  \"points\" : [ {\n    \"leaderBoard\" : {\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"event\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"location\" : {\n          \"latitude\" : 25.7545,\n          \"longitude\" : 28.2314\n        },\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      }\n    },\n    \"amount\" : 0,\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }, {\n    \"leaderBoard\" : {\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"event\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"location\" : {\n          \"latitude\" : 25.7545,\n          \"longitude\" : 28.2314\n        },\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      }\n    },\n    \"amount\" : 0,\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  } ]\n}", CreatePointResponse.class ), HttpStatus.NOT_IMPLEMENTED );
-            } catch ( IOException e ) {
-
-                log.error( "Couldn't serialize response for content type application/json", e );
-                return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
-            }
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
         }
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
-    }
-
-    public ResponseEntity< CreateTimeTrialResponse > createTimeTrial( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Time Trial for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateTimeTrialRequest body ) {
-
-        String accept = request.getHeader( "Accept" );
-
-        if ( accept != null && accept.contains( "application/json" ) ) {
-
-            try {
-
-                return new ResponseEntity<>( objectMapper.readValue( "{\n  \"timeTrial\" : [ {\n    \"timeLimit\" : 0.8008281904610115\n  }, {\n    \"timeLimit\" : 0.8008281904610115\n  } ]\n}", CreateTimeTrialResponse.class ), HttpStatus.NOT_IMPLEMENTED );
-            } catch ( IOException e ) {
-
-                log.error( "Couldn't serialize response for content type application/json", e );
-                return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
-            }
-        }
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
     public ResponseEntity< GetAllEventsResponse > getAllEvents() {
+      
+        GetAllEventsResponse response = eventService.getAllEvents();
 
-        String accept = request.getHeader( "Accept" );
+        if ( ( response != null ) ) {
 
-        if ( accept != null && accept.contains( "application/json" ) ) {
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
 
-            try {
-
-                return new ResponseEntity<>( objectMapper.readValue( "{\n  \"events\" : [ {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"location\" : {\n      \"latitude\" : 25.7545,\n      \"longitude\" : 28.2314\n    },\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }, {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"location\" : {\n      \"latitude\" : 25.7545,\n      \"longitude\" : 28.2314\n    },\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  } ]\n}", GetAllEventsResponse.class ), HttpStatus.NOT_IMPLEMENTED );
-            } catch ( IOException e ) {
-
-                log.error( "Couldn't serialize response for content type application/json", e );
-                return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
-            }
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
         }
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
-    public ResponseEntity< GetEventsByLocationResponse > getEventsByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody GetEventsByLocationRequest body ) {
+    @Override
+    public ResponseEntity<GetEnteredEventsResponse> getEnteredEvents(GetEnteredEventsRequest body ) throws InvalidRequestException {
 
-        String accept = request.getHeader( "Accept" );
+        GetEnteredEventsResponse response = eventService.getEnteredEvents( body );
 
-        if ( accept != null && accept.contains( "application/json" ) ) {
+        if ( ( response != null ) ) {
 
-            try {
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
 
-                return new ResponseEntity<>( objectMapper.readValue( "{\n  \"events\" : [ {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"location\" : {\n      \"latitude\" : 25.7545,\n      \"longitude\" : 28.2314\n    },\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }, {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"location\" : {\n      \"latitude\" : 25.7545,\n      \"longitude\" : 28.2314\n    },\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  } ]\n}", GetEventsByLocationResponse.class ), HttpStatus.NOT_IMPLEMENTED );
-            } catch ( IOException e ) {
-
-                log.error( "Couldn't serialize response for content type application/json", e );
-                return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
-            }
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
         }
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
-    public ResponseEntity< GetLeaderBoardByTimeTrialResponse > getLeaderBoardByTimeTrial( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get the Leaderboard for a TimeTrial", required = true, schema = @Schema() ) @Valid @RequestBody GetLeaderBoardByTimeTrialRequest body ) {
+    public ResponseEntity< EventsNearMeResponse > getEventsNearMe( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get an Event by its location", required = true, schema = @Schema() ) @Valid @RequestBody EventsNearMeRequest body ) throws InvalidRequestException {
 
-        String accept = request.getHeader( "Accept" );
+        EventsNearMeResponse response = eventService.eventsNearMe(body);
 
-        if ( accept != null && accept.contains( "application/json" ) ) {
+        if ( ( response != null ) ) {
 
-            try {
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
 
-                return new ResponseEntity<>( objectMapper.readValue( "{\n  \"leaderboard\" : [ {\n    \"name\" : \"name\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"event\" : {\n      \"name\" : \"name\",\n      \"description\" : \"description\",\n      \"location\" : {\n        \"latitude\" : 25.7545,\n        \"longitude\" : 28.2314\n      },\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n    }\n  }, {\n    \"name\" : \"name\",\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n    \"event\" : {\n      \"name\" : \"name\",\n      \"description\" : \"description\",\n      \"location\" : {\n        \"latitude\" : 25.7545,\n        \"longitude\" : 28.2314\n      },\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n    }\n  } ]\n}", GetLeaderBoardByTimeTrialResponse.class ), HttpStatus.NOT_IMPLEMENTED );
-            } catch ( IOException e ) {
-
-                log.error( "Couldn't serialize response for content type application/json", e );
-                return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
-            }
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
         }
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
-    public ResponseEntity< GetPointsResponse > getPoints() {
+    public ResponseEntity< GetEventResponse > getEvent( GetEventRequest body ) throws InvalidRequestException {
 
-        String accept = request.getHeader( "Accept" );
+        GetEventResponse response = eventService.getEvent( body );
 
-        if ( accept != null && accept.contains( "application/json" ) ) {
+        if ( ( response != null ) ) {
 
-            try {
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
 
-                return new ResponseEntity<>( objectMapper.readValue( "{\n  \"points\" : [ {\n    \"leaderBoard\" : {\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"event\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"location\" : {\n          \"latitude\" : 25.7545,\n          \"longitude\" : 28.2314\n        },\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      }\n    },\n    \"amount\" : 0,\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }, {\n    \"leaderBoard\" : {\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"event\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"location\" : {\n          \"latitude\" : 25.7545,\n          \"longitude\" : 28.2314\n        },\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      }\n    },\n    \"amount\" : 0,\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  } ]\n}", GetPointsResponse.class ), HttpStatus.NOT_IMPLEMENTED );
-            } catch ( IOException e ) {
-
-                log.error( "Couldn't serialize response for content type application/json", e );
-                return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
-            }
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
         }
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
-    }
-
-    public ResponseEntity< GetPointsByLeaderBoardResponse > getPointsByLeaderBoard( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get Points for a Leaderboard of the specified Event", required = true, schema = @Schema() ) @Valid @RequestBody GetPointsByLeaderBoardRequest body ) {
-
-        String accept = request.getHeader( "Accept" );
-
-        if ( accept != null && accept.contains( "application/json" ) ) {
-
-            try {
-
-                return new ResponseEntity<>( objectMapper.readValue( "{\n  \"points\" : [ {\n    \"leaderBoard\" : {\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"event\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"location\" : {\n          \"latitude\" : 25.7545,\n          \"longitude\" : 28.2314\n        },\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      }\n    },\n    \"amount\" : 0,\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }, {\n    \"leaderBoard\" : {\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"event\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"location\" : {\n          \"latitude\" : 25.7545,\n          \"longitude\" : 28.2314\n        },\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      }\n    },\n    \"amount\" : 0,\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  } ]\n}", GetPointsByLeaderBoardResponse.class ), HttpStatus.NOT_IMPLEMENTED );
-            } catch ( IOException e ) {
-
-                log.error( "Couldn't serialize response for content type application/json", e );
-                return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
-            }
-        }
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
-    }
-
-    public ResponseEntity< GetPointsByUserResponse > getPointsByUser( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get the Points for an Event", required = true, schema = @Schema() ) @Valid @RequestBody GetPointsByUserRequest body ) {
-
-        String accept = request.getHeader( "Accept" );
-
-        if ( accept != null && accept.contains( "application/json" ) ) {
-
-            try {
-
-                return new ResponseEntity<>( objectMapper.readValue( "{\n  \"points\" : [ {\n    \"leaderBoard\" : {\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"event\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"location\" : {\n          \"latitude\" : 25.7545,\n          \"longitude\" : 28.2314\n        },\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      }\n    },\n    \"amount\" : 0,\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  }, {\n    \"leaderBoard\" : {\n      \"name\" : \"name\",\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\n      \"event\" : {\n        \"name\" : \"name\",\n        \"description\" : \"description\",\n        \"location\" : {\n          \"latitude\" : 25.7545,\n          \"longitude\" : 28.2314\n        },\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n      }\n    },\n    \"amount\" : 0,\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\n  } ]\n}", GetPointsByUserResponse.class ), HttpStatus.NOT_IMPLEMENTED );
-            } catch ( IOException e ) {
-
-                log.error( "Couldn't serialize response for content type application/json", e );
-                return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
-            }
-        }
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
     }
 
 }

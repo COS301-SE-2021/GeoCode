@@ -20,21 +20,21 @@ jobs:
             cp environments/environment.prod.ts environments/environment.ts
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2.1.5
+        uses: actions/setup-node@v2.4.0
         with:
-          node-version: 12.21
+          node-version: '14.17.5'
           
-      - name: install @angular/cli
-        run: npm install -i -D -E @angular/cli
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli@12.2.1
         
-      - name: install ionic
-        run: npm install -g @ionic/cli
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli@6.17.0
 
-      - name: install npm dependencies
+      - name: Install dependencies
         working-directory: ./frontend
         run: npm ci
 
-      - name: Build App
+      - name: Build app
         working-directory: ./frontend
         run: ionic build
 
@@ -49,28 +49,22 @@ jobs:
         run: |
             cd frontend/src
             cp environments/environment.prod.ts environments/environment.ts
-            sudo sed -i "s/googleMapsKey: ''/googleMapsKey: '${{secrets.GOOGLE_MAPS_KEY}}'/g" environments/environment.ts
-            sudo sed -i "s/hardcodedKeycloakToken: ''/hardcodedKeycloakToken: '${{secrets.EXAMPLE_KEYCLOAK_TOKEN}}'/g" environments/environment.ts
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2.1.5
+        uses: actions/setup-node@v2.4.0
         with:
-          node-version: 12.21
+          node-version: '14.17.5'
 
-      - name: install @angular/cli
-        run: npm install -i -D -E @angular/cli
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli@12.2.1
+        
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli@6.17.0
 
-      - name: install ionic
-        run: npm install -g @ionic/cli
-
-      - name: install npm dependencies
+      - name: Install dependencies
         working-directory: ./frontend
         run: npm ci
 
-      - name: link angular
-        working-directory: ./frontend
-        run: npm link @angular/cli
-
-      - name: run tests
+      - name: Run tests
         working-directory: ./frontend
         run: ng test --watch false --browsers=ChromeHeadless

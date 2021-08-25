@@ -28,6 +28,7 @@ public class CollectableType   {
   @JsonProperty("name")
   private String name = null;
 
+  @Column(length=1000)
   @JsonProperty("image")
   private String image = null;
 

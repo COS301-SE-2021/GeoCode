@@ -1,8 +1,9 @@
 package tech.geocodeapp.geocode.leaderboard.response;
 
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
-public class GetLeaderboardByIDResponse {
+public class GetLeaderboardByIDResponse extends Response {
     /**
      * The found leaderboard with the given leaderboardID
      */
@@ -20,8 +21,8 @@ public class GetLeaderboardByIDResponse {
      *
      * @param leaderboard The leaderboard from the specified leaderboard
      */
-    public GetLeaderboardByIDResponse( Leaderboard leaderboard ) {
-
+    public GetLeaderboardByIDResponse(boolean success, String message, Leaderboard leaderboard ) {
+        super(success, message);
         this.leaderboard = leaderboard;
     }
 

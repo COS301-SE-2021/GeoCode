@@ -3,15 +3,11 @@ package tech.geocodeapp.geocode.leaderboard.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 
-import org.hibernate.annotations.Cascade;
 import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.user.model.User;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -26,22 +22,32 @@ import javax.validation.constraints.*;
 public class Point   {
   @Id
   @JsonProperty("id")
-  private UUID id = null;
+  private java.util.UUID id = null;
 
   @JsonProperty("amount")
   private Integer amount = null;
 
   @JsonProperty("user")
-  @OneToOne
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  @ManyToOne
   private User user = null;
 
   @JsonProperty("leaderboard")
-  @OneToOne
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  @ManyToOne
   private Leaderboard leaderboard = null;
 
-  public Point id(UUID id) {
+  public Point() {
+    id = java.util.UUID.randomUUID();
+  }
+
+  //constructor to use when creating a point when values are already known
+  public Point(Integer amount, User user, Leaderboard leaderboard) {
+    id = java.util.UUID.randomUUID();
+    this.amount = amount;
+    this.user = user;
+    this.leaderboard = leaderboard;
+  }
+
+  public Point id(java.util.UUID id) {
     this.id = id;
     return this;
   }
@@ -54,11 +60,11 @@ public class Point   {
       @NotNull
 
     @Valid
-    public UUID getId() {
+    public java.util.UUID getId() {
     return id;
   }
 
-  public void setId(UUID id) {
+  public void setId(java.util.UUID id) {
     this.id = id;
   }
 

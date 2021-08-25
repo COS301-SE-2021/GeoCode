@@ -3,6 +3,8 @@ package tech.geocodeapp.geocode.event.service;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 
 /**
  * This is the main interface is for the Event subsystem,
@@ -17,8 +19,65 @@ public interface EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateEventRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException;
+
+    /**
+     * Get a specified Event that is stored in the repository
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetEventRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetEventResponse getEvent( GetEventRequest request ) throws InvalidRequestException;
+
+    /**
+     * Get the current status of a User participating in an event, as well as the target GeoCode that they need to locate
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetCurrentEventStatusRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetCurrentEventStatusResponse getCurrentEventStatus(GetCurrentEventStatusRequest request ) throws InvalidRequestException;
+
+    /**
+     * A function that moves a user to the next stage of an event.
+     * This function will be called by other subsystems when an event geocode is found.
+     *
+     * @param foundGeocode the geocode that was just found, triggering the stage change. It should include an event ID.
+     * @param userID the unique ID of the user entering the event
+     *
+     * @throws InvalidRequestException any of the provided parameters are null
+     */
+    void nextStage(GeoCode foundGeocode, java.util.UUID userID ) throws InvalidRequestException, NotFoundException, MismatchedParametersException;
+
+    /**
+     * Retrieve a list of Events that a user is participating in
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified GetEnteredEventsRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetEnteredEventsResponse getEnteredEvents(GetEnteredEventsRequest request ) throws InvalidRequestException;
+
+    /**
+     * Retrieve a list of Events around a certain radius of a location
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified EventsNearMeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    EventsNearMeResponse eventsNearMe( EventsNearMeRequest request ) throws InvalidRequestException;
 
     /**
      * Get all the stored Events in the repository
@@ -33,6 +92,8 @@ public interface EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified ChangeAvailabilityRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     ChangeAvailabilityResponse changeAvailability( ChangeAvailabilityRequest request ) throws InvalidRequestException;
 
@@ -42,17 +103,10 @@ public interface EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     GetEventsByLocationResponse getEventsByLocation( GetEventsByLocationRequest request ) throws InvalidRequestException;
-
-    /**
-     * Create a new point for a leaderboard
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
-     */
-    CreatePointResponse createPoint( CreatePointRequest request ) throws InvalidRequestException;
 
     /**
      * Create a new Leaderboard for an Event
@@ -60,51 +114,15 @@ public interface EventService {
      * @param request the attributes the response should be created from
      *
      * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) throws InvalidRequestException;
 
     /**
-     * Create a new TimeTrial for an event, that will be active for a pre-determined
-     * amount of time
+     * Post construct the GeoCode service, this avoids a circular dependency
      *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     * @param geoCodeService the service to be set
      */
-    CreateTimeTrialResponse createTimeTrial( CreateTimeTrialRequest request );
-
-    /**
-     * Get the points for a specific event that a user has gotten
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
-     */
-    GetPointsByUserResponse getPointsByUser( GetPointsByUserRequest request ) throws InvalidRequestException;
-
-    /**
-     * Get the points for a specific leaderboard
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
-     */
-    GetPointsByLeaderBoardResponse getPointsByLeaderboard( GetPointsByLeaderBoardRequest request ) throws InvalidRequestException;
-
-    /**
-     * Get the points of a specific Event
-     *
-     * @return the newly created response instance
-     */
-    GetPointsResponse getPoints();
-
-    /**
-     * Get the Leaderboard of a TimeTrial
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
-     */
-    GetLeaderBoardByTimeTrialResponse getLeaderBoardByTimeTrial( GetLeaderBoardByTimeTrialRequest request ) throws InvalidRequestException;
-
+    void setGeoCodeService( GeoCodeService geoCodeService );
 }

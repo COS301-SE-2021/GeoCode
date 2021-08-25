@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.collectable.decorator;
 
 import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.mission.model.MissionType;
 
 import java.util.GregorianCalendar;
 import java.util.UUID;
@@ -13,6 +14,7 @@ public class ConcreteCollectableType implements CollectableTypeComponent {
     private UUID id;
     private CollectableSet set;
     private String image;
+    private MissionType missionType;
 
     public ConcreteCollectableType() {
 
@@ -109,6 +111,23 @@ public class ConcreteCollectableType implements CollectableTypeComponent {
     @Override
     public void setArea(String area) {
 
+    }
+
+    /**
+     * the getter for the missionType variable
+     */
+    @Override
+    public MissionType getMissionType() {
+        return missionType;
+    }
+
+    /**
+     * Setter for the missionType
+     * @param missionType the mission type to set
+     */
+    @Override
+    public void setMissionType(MissionType missionType) {
+        this.missionType = missionType;
     }
 
 }

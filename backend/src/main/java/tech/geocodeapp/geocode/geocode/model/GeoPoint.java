@@ -4,7 +4,6 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.*;
 import javax.persistence.Embeddable;
-import javax.persistence.Table;
 
 import java.util.Objects;
 
@@ -13,7 +12,6 @@ import java.util.Objects;
  */
 @Validated
 @Embeddable
-@Table( name = "geopoint" )
 public class GeoPoint {
 
     /**
@@ -40,7 +38,7 @@ public class GeoPoint {
     /**
      * Overloaded Constructor
      *
-     * @param latitude latitude co-ordinate of an object in the real world
+     * @param latitude  latitude co-ordinate of an object in the real world
      * @param longitude longitude co-ordinate of an object in the real world
      */
     public GeoPoint( double latitude, double longitude ) {
@@ -171,6 +169,39 @@ public class GeoPoint {
             return "null";
         }
         return o.toString().replace( "\n", "\n    " );
+    }
+
+    /**
+     * Calculates the distance (in kilometres) between this GeoPoint and another.
+     *
+     * @param point the other GeoPoint in the measurement
+     *
+     * @return the distance (in kilometres) between this GeoPoint and the provided one.
+     */
+    public double distanceTo( GeoPoint point ) {
+
+        /* The math module contains a function
+         * named toRadians which converts from
+         * degrees to radians. */
+        double lat1 = Math.toRadians( this.getLatitude() );
+        double lon1 = Math.toRadians( this.getLongitude() );
+        double lat2 = Math.toRadians( point.getLatitude() );
+        double lon2 = Math.toRadians( point.getLongitude() );
+
+        /* Haversine formula */
+        double dlon = lon2 - lon1;
+        double dlat = lat2 - lat1;
+        double a = Math.pow( Math.sin( dlat / 2 ), 2 )
+                + Math.cos( lat1 ) * Math.cos( lat2 )
+                * Math.pow( Math.sin( dlon / 2 ), 2 );
+
+        double c = 2 * Math.asin( Math.sqrt( a ) );
+
+        /* Radius of earth in kilometres. Use 3956 for miles */
+        double r = 6371;
+
+        /* calculate the result */
+        return ( c * r );
     }
 
 }

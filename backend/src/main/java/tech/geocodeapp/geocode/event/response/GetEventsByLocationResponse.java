@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
 
 import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.general.response.Response;
 
 import java.util.Objects;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  * GetEventsByLocationResponse object returns all the Events at the given location
  */
 @Validated
-public class GetEventsByLocationResponse {
+public class GetEventsByLocationResponse extends Response {
 
     @JsonProperty( "events" )
     private List< Event > events;
@@ -23,8 +24,8 @@ public class GetEventsByLocationResponse {
      *
      * @param events the list of Events at the specified location
      */
-    public GetEventsByLocationResponse( List< Event > events ) {
-
+    public GetEventsByLocationResponse( boolean success, String message, List< Event > events ) {
+        super(success, message);
         this.events = events;
     }
 
@@ -131,6 +132,7 @@ public class GetEventsByLocationResponse {
 
             return "null";
         }
+
         return o.toString().replace( "\n", "\n    " );
     }
 

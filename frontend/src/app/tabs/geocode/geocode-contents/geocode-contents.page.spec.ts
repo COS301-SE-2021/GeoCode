@@ -5,9 +5,10 @@ import { GeocodeContentsPage } from './geocode-contents.page';
 import {GeoCode, GeoCodeService} from '../../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
-import {ActivatedRoute, convertToParamMap} from '@angular/router';
-import {of} from 'rxjs';
-import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MockGoogleMapsLoader} from '../../../mocks/MockGoogleMapsLoader';
+import createSpy = jasmine.createSpy;
+import {MockActivatedRoute} from '../../../mocks/MockActivatedRoute';
 
 describe('GeocodeContentsPage', () => {
   let component: GeocodeContentsPage;
@@ -17,24 +18,30 @@ describe('GeocodeContentsPage', () => {
     id: null,
     available: true,
     collectables: [],
-    description: "",
+    description: '',
     hints: [],
     difficulty: 'EASY',
-    latitude: '-25.755918848126488',
-    longitude: '28.233110280499492',
-    qrCode: ""
-  }
-
-  const mockActivatedRoute = {
-    queryParams: of({ geocode })
+    location: {
+      latitude: -25.755918848126488,
+      longitude: 28.233110280499492
+    },
+    qrCode: ''
   };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodeContentsPage ],
-      providers: [{provide: ActivatedRoute, useValue: mockActivatedRoute}, GeoCodeService, GoogleMapsLoader],
+      providers: [
+        MockActivatedRoute.provider({id: 'randomID'}),
+        GeoCodeService,
+        MockGoogleMapsLoader.provider()
+      ],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
     }).compileComponents();
+
+    const router = TestBed.inject(Router);
+    // @ts-ignore we do not need the other elements of Navigation for loading the page in tests
+    router.getCurrentNavigation = () => ({ extras: {state: {geocode}} });
 
     fixture = TestBed.createComponent(GeocodeContentsPage);
     component = fixture.componentInstance;

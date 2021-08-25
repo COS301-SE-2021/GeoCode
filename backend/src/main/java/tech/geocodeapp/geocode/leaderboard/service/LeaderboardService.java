@@ -1,28 +1,46 @@
 package tech.geocodeapp.geocode.leaderboard.service;
 
 import org.springframework.stereotype.Service;
-import tech.geocodeapp.geocode.leaderboard.exception.NullLeaderboardRequestParameterException;
-import tech.geocodeapp.geocode.leaderboard.request.GetEventLeaderboardRequest;
-import tech.geocodeapp.geocode.leaderboard.request.GetLeaderboardByIDRequest;
-import tech.geocodeapp.geocode.leaderboard.request.GetMyRankRequest;
-import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
-import tech.geocodeapp.geocode.leaderboard.response.GetLeaderboardByIDResponse;
-import tech.geocodeapp.geocode.leaderboard.response.GetMyRankResponse;
-import tech.geocodeapp.geocode.leaderboard.response.GetPointsByLeaderboardResponse;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
+import tech.geocodeapp.geocode.leaderboard.model.Point;
+import tech.geocodeapp.geocode.leaderboard.request.*;
+import tech.geocodeapp.geocode.leaderboard.response.*;
 
 /**
  * This interface is for the GeoCode subsystem
  */
-@Service
 public interface LeaderboardService {
 
-    //U5.1 getEventLeaderboard
-    GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullLeaderboardRequestParameterException;
+    //U5.1 createLeaderboard
+    CreateLeaderboardResponse createLeaderboard(CreateLeaderboardRequest request) throws NullRequestParameterException;
+
+    //U5.2 getEventLeaderboard
+    GetEventLeaderboardResponse getEventLeaderboard(GetEventLeaderboardRequest request) throws NullRequestParameterException;
+
+    //U5.3 GetPointForUser
+    PointResponse getPointForUser(GetPointForUserRequest request) throws NullRequestParameterException;
+
+    //U5.4 getLeaderboardByID
+    GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullRequestParameterException;
+
+    //U5.5 createPoint
+    PointResponse createPoint(CreatePointRequest request) throws NullRequestParameterException;
+
+    //U5.6 deletePoint
+    DeletePointResponse deletePoint(DeletePointRequest request) throws NullRequestParameterException;
+
+    //U5.7 updatePoint
+    PointResponse updatePoint(UpdatePointRequest request) throws NullRequestParameterException;
 
     //helper functions
-    public GetLeaderboardByIDResponse getLeaderboardByID(GetLeaderboardByIDRequest request) throws NullLeaderboardRequestParameterException;
 
-    public GetPointsByLeaderboardResponse getPointsByLeaderboard(GetMyRankRequest request) throws NullLeaderboardRequestParameterException;
+    //U5.8 savePoint
+    Response savePoint(Point point) throws NullRequestParameterException;
 
-    public GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullLeaderboardRequestParameterException;
+    //U5.9 getPointsByLeaderboard
+    GetPointsByLeaderboardResponse getPointsByLeaderboard(GetPointsByLeaderboardRequest request) throws NullRequestParameterException;
+
+    //U5.10 etMyRank
+    GetMyRankResponse getMyRank(GetMyRankRequest request) throws NullRequestParameterException;
 }

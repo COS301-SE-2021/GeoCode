@@ -7,9 +7,10 @@ import {
   GetGeoCodesResponse,
   UpdateAvailabilityRequest,
   UpdateAvailabilityResponse,
-  GetGeoCodesByDifficultyRequest
+  GetGeoCodesByDifficultyRequest, GeoCode
 } from '../../services/geocode-api';
 import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
+import {KeycloakService} from 'keycloak-angular';
 
 @Component({
   selector: 'app-geocode',
@@ -24,38 +25,44 @@ export class GeocodePage implements AfterViewInit  {
   map;
   mapMarker;
   markers= [];
-  geocodes = [];
+  geocodes: GeoCode[] = [];
   selected=[];
   isHidden=true;
-  height='90%';
+  height='60%';
 
 
 
   constructor(
     private navCtrl: NavController,
     private geocodeApi: GeoCodeService,
-    private mapsLoader: GoogleMapsLoader
+    private mapsLoader: GoogleMapsLoader,
+    private keycloak: KeycloakService
   ) {
-    this.geocodes = [{id:'123456789',latitude:-25.75625115327836,longitude:28.235629260918344,difficulty:'EASY',description:'TEST'}];
+    this.geocodes = [];
     this.selected= this.geocodes;
+    this.close();
   }
 
   //Create map and add mapmarkers of geocodes
-  loadMap(){
+  loadMap(latitude: number, longitude: number){
     this.markers= [];
     this.mapOptions = {
-      center: {lat: -25.75625115327836, lng: 28.235629260918344},
-      zoom: 15,
+      center: {lat: latitude, lng: longitude},
+      zoom: 10,
     };
     this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
 
   }
 
-  ngAfterViewInit(): void {
-    this.mapsLoader.load().then(handle => {
-      this.googleMaps = handle;
-      this.loadMap();
-    }).catch();
+  async ngAfterViewInit() {
+    this.googleMaps = await this.mapsLoader.load();
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      await this.loadMap(position.coords.latitude, position.coords.longitude);
+      this.getAllMap();
+    }, async (positionError) => {
+      await this.loadMap(0, 0);
+      this.getAllMap();
+    });
   }
 
 
@@ -68,18 +75,8 @@ export class GeocodePage implements AfterViewInit  {
   }
 
   //Navigate to findGeoCode page
-  findGeoCode(geocode){
-    const navigationExtras: NavigationExtras = {
-      queryParams: {
-        geocode
-      }
-    };
-   this.navCtrl.navigateForward('/geocode/geocode-contents',navigationExtras);
-  }
-
-  //navigate to the create geocode page
-  createGeoCode(){
-    this.navCtrl.navigateForward('/geocode/geocode-create');
+  async findGeoCode(geocode){
+    await this.navCtrl.navigateForward('/explore/open/'+geocode.id,{ state: {geocode} });
   }
 
   //Call Geocode service and update Availability
@@ -87,7 +84,7 @@ export class GeocodePage implements AfterViewInit  {
     //create request object to update the availability
     const request: UpdateAvailabilityRequest={
       geoCodeID: geocode.id,
-      isAvailable: geocode.available
+      available: geocode.available
     };
 
     //Call the geocodeAPI and send request to controller and log any errors
@@ -99,17 +96,15 @@ export class GeocodePage implements AfterViewInit  {
   //Get all geocodes no matter the difficulty
   getAllMap(){
     this.geocodeApi.getGeoCodes().subscribe((response: GetGeoCodesResponse)=>{
-
       this.geocodes=response.geocodes;
       this.selected=[];
 
       //Add markers to map
       for(const code of this.geocodes){
         const marker=new this.googleMaps.Marker({
-          position: {lat: parseFloat(code.latitude), lng:parseFloat( code.longitude)},
+          position: {lat: parseFloat(String(code.location.latitude)), lng:parseFloat( String(code.location.longitude))},
           map: this.map,
           title: '',
-
         });
 
         this.markers.push(marker);
@@ -143,10 +138,10 @@ export class GeocodePage implements AfterViewInit  {
   }
 
   //get all geocodes with difficult difficulty
-  difficultMap(){
+  hardMap(){
     this.clearMarkers();
     const request: GetGeoCodesByDifficultyRequest={
-      difficulty: 'DIFFICULTY'
+      difficulty: 'HARD'
     };
     this.loadFilterMap(request);
   }
@@ -163,10 +158,10 @@ export class GeocodePage implements AfterViewInit  {
   //Load map based on passed in request object created in one of the map functions
   loadFilterMap(request){
 
-    this.mapOptions = {
-      center: {lat: -25.75625115327836, lng: 28.235629260918344},
-      zoom: 15,
-    };
+    // this.mapOptions = {
+    //   center: {lat: -25.75625115327836, lng: 28.235629260918344},
+    //   zoom: 15,
+    // };
 
     this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
     this.geocodeApi.getGeoCodesByDifficulty(request).subscribe((response: GetGeoCodesByDifficultyResponse)=>{
@@ -177,7 +172,7 @@ export class GeocodePage implements AfterViewInit  {
       //Add all geocodes locations to map
       for(const code of this.geocodes){
         const marker=new this.googleMaps.Marker({
-          position: {lat: parseFloat(code.latitude), lng:parseFloat( code.longitude)},
+          position: {lat: parseFloat(String(code.location.latitude)), lng:parseFloat( String(code.location.longitude))},
           map: this.map,
           title: '',
         });
@@ -206,6 +201,14 @@ export class GeocodePage implements AfterViewInit  {
   close(){
     this.isHidden=true;
     this.height='90%';
+  }
+
+  openInMaps(geocode: GeoCode) {
+    window.open('https://www.google.com/maps/search/?api=1&query='+geocode.location.latitude+'%2C'+geocode.location.longitude);
+  }
+
+  isAdmin() {
+    return this.keycloak.isUserInRole('Admin');
   }
 
 }

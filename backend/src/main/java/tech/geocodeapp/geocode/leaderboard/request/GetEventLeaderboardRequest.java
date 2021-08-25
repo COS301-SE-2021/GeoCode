@@ -1,11 +1,12 @@
 package tech.geocodeapp.geocode.leaderboard.request;
 
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
+
 import javax.validation.constraints.*;
 
 /**
@@ -16,8 +17,8 @@ import javax.validation.constraints.*;
 
 
 public class GetEventLeaderboardRequest   {
-  @JsonProperty("eventID")
-  private String eventID = null;
+  @JsonProperty("leaderboardID")
+  private UUID leaderboardID = null;
 
   @JsonProperty("starting")
   private Integer starting = null;
@@ -25,8 +26,17 @@ public class GetEventLeaderboardRequest   {
   @JsonProperty("count")
   private Integer count = null;
 
-  public GetEventLeaderboardRequest eventID(String eventID) {
-    this.eventID = eventID;
+  public GetEventLeaderboardRequest() {
+  }
+
+  public GetEventLeaderboardRequest(UUID leaderboardID, Integer starting, Integer count) {
+    this.leaderboardID = leaderboardID;
+    this.starting = starting;
+    this.count = count;
+  }
+
+  public GetEventLeaderboardRequest leaderboardID(UUID leaderboardId) {
+    this.leaderboardID = leaderboardId;
     return this;
   }
 
@@ -37,12 +47,12 @@ public class GetEventLeaderboardRequest   {
   @Schema(example = "054463f2-2f7c-4864-8130-68e5aa79ee7f", required = true, description = "")
       @NotNull
 
-    public String getEventID() {
-    return eventID;
+    public UUID getLeaderboardID() {
+    return leaderboardID;
   }
 
-  public void setEventID(String eventID) {
-    this.eventID = eventID;
+  public void setLeaderboardID(UUID leaderboardID) {
+    this.leaderboardID = leaderboardID;
   }
 
   public GetEventLeaderboardRequest starting(Integer starting) {
@@ -93,14 +103,14 @@ public class GetEventLeaderboardRequest   {
       return false;
     }
     GetEventLeaderboardRequest getEventLeaderboardRequest = (GetEventLeaderboardRequest) o;
-    return Objects.equals(this.eventID, getEventLeaderboardRequest.eventID) &&
+    return Objects.equals(this.leaderboardID, getEventLeaderboardRequest.leaderboardID) &&
         Objects.equals(this.starting, getEventLeaderboardRequest.starting) &&
         Objects.equals(this.count, getEventLeaderboardRequest.count);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(eventID, starting, count);
+    return Objects.hash(leaderboardID, starting, count);
   }
 
   @Override
@@ -108,7 +118,7 @@ public class GetEventLeaderboardRequest   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetEventLeaderboardRequest {\n");
     
-    sb.append("    eventID: ").append(toIndentedString(eventID)).append("\n");
+    sb.append("    eventID: ").append(toIndentedString(leaderboardID)).append("\n");
     sb.append("    starting: ").append(toIndentedString(starting)).append("\n");
     sb.append("    count: ").append(toIndentedString(count)).append("\n");
     sb.append("}");

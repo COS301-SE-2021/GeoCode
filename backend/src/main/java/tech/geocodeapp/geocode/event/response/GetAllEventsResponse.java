@@ -6,6 +6,7 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 
 import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.general.response.Response;
 
 import java.util.Objects;
 import java.util.List;
@@ -14,13 +15,12 @@ import java.util.List;
  * GetAllEventsResponse object returns all the Event objects in the system
  */
 @Validated
-public class GetAllEventsResponse {
+public class GetAllEventsResponse extends Response {
 
     /**
-     * All the Event's stored inside of the EventsRepository
+     * All the Event's stored inside the EventsRepository
      */
     @JsonProperty( "events" )
-    @NotNull( message = "GetAllEventsResponse events cannot be null." )
     private List< Event > events;
 
     /**
@@ -28,8 +28,8 @@ public class GetAllEventsResponse {
      *
      * @param events the list of events to set the events attribute to
      */
-    public GetAllEventsResponse( @Valid List< Event > events ) {
-
+    public GetAllEventsResponse( boolean success, String message, List< Event > events ) {
+        super(success, message);
         this.events = events;
     }
 
@@ -40,20 +40,20 @@ public class GetAllEventsResponse {
      *
      * @return the request after the events has been changed
      */
-    public GetAllEventsResponse events( @Valid List< Event > events ) {
+    public GetAllEventsResponse events( List< Event > events ) {
 
         this.events = events;
         return this;
     }
 
     /**
-     * Sets a single event inside of the events attribute to the specified value
+     * Sets a single event inside the events attribute to the specified value
      *
      * @param eventsItem the value the attribute should be set to
      *
      * @return the stored events attribute
      */
-    public GetAllEventsResponse addEventsItem( @Valid Event eventsItem ) {
+    public GetAllEventsResponse addEventsItem( Event eventsItem ) {
 
         this.events.add( eventsItem );
         return this;
