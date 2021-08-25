@@ -11,6 +11,7 @@ import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
+import tech.geocodeapp.geocode.mission.request.UpdateCompletionRequest;
 import tech.geocodeapp.geocode.mission.service.MissionService;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
@@ -461,6 +462,10 @@ public class UserServiceImpl implements UserService {
             var mission  = missionService.getMissionById(new GetMissionByIdRequest(missionID)).getMission();
 
             this.addToMyMissions(new AddToMyMissionsRequest(user, mission));
+
+            //update the completion of the Mission
+            var updateCompletionRequest = new UpdateCompletionRequest(mission, geoCode.getLocation());
+            missionService.updateCompletion(updateCompletionRequest);
         }else{
             //save() called in addToMyMissions
             userRepo.save(user);
