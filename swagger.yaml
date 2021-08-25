@@ -1954,6 +1954,66 @@ paths:
       security:
         - bearerAuth: []
         
+  /Image/uploadImage:
+    post:
+      tags:
+        - "Image"
+      summary: "Uploads an image"
+      description: "Uploads an image to the server and returns its ID"
+      operationId: "uploadImage"
+      requestBody:
+        content:
+          image/png:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: "Image uploaded"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadImageResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UploadImageResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - bearerAuth: []
+        
+  /Image/getImage/{imageID}:
+    get:
+      tags:
+        - "Image"
+      summary: "Retrieves an image"
+      description: "Retrieves an image with the specified ID"
+      operationId: "getImage"
+      parameters:
+        - in: path
+          name: imageID
+          schema:
+            type: string
+            format: uuid
+            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+          required: true
+          description: "ID of the image to retrieve"
+      responses:
+        '200':
+          description: "Image retrieved"
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: "An image with the specified ID was not found"
+      security:
+        - bearerAuth: []
+
+        
 
 components:
   responses:
@@ -3714,3 +3774,19 @@ components:
           example: "Completion Updated"
       xml:
         name: "UpdateCompletionResponse"
+        
+    UploadImageResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          required:
+            - imageID
+          properties:
+            message:
+              example: "Image uploaded"
+            imageID:
+              type: string
+              format: uuid
+              example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+          xml:
+            name: "UploadImageResponse"
