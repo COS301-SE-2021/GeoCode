@@ -19,7 +19,6 @@ public class Image {
         this.imageData = imageData;
     }
 
-
     public UUID getId() {
         return id;
     }

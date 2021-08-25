@@ -25,7 +25,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public CreateImageResponse createImage( CreateImageRequest request ) throws InvalidRequestException {
+    public CreateImageResponse createImage( CreateImageRequest request ) throws InvalidRequestException, IOException {
         if ( request == null ) {
             throw new InvalidRequestException( "No request object provided" );
         }
@@ -33,19 +33,13 @@ public class ImageServiceImpl implements ImageService {
             throw new InvalidRequestException( "Invalid image provided" );
         }
 
-
-        try {
-            Image image = new Image( UUID.randomUUID(), request.getImageData() );
-            this.imageRepo.save( image );
-            return new CreateImageResponse( true, "The image was successfully uploaded", image.getId() );
-
-        } catch ( IOException e ) {
-            return new CreateImageResponse();
-        }
+        Image image = new Image( UUID.randomUUID(), request.getImageData() );
+        this.imageRepo.save( image );
+        return new CreateImageResponse( true, "The image was successfully uploaded", image.getId() );
     }
 
     @Override
-    public GetImageBytesResponse getImageBytes(GetImageBytesRequest request ) throws InvalidRequestException, NotFoundException {
+    public GetImageBytesResponse getImageBytes(GetImageBytesRequest request ) throws InvalidRequestException, NotFoundException, IOException {
         if ( request == null ) {
             throw new InvalidRequestException( "No request object provided" );
         }
@@ -53,12 +47,11 @@ public class ImageServiceImpl implements ImageService {
             throw new InvalidRequestException("Invalid image ID provided");
         }
 
-        try {
-            byte[] bytes = this.imageRepo.getBytesById(request.getImageID());
-            return new GetImageBytesResponse(true, "Image returned", bytes);
-
-        } catch ( IOException e ) {
-            return new GetImageBytesResponse(false, "Image not found", null);
+        byte[] bytes = this.imageRepo.getBytesById(request.getImageID());
+        if ( bytes == null ) {
+            throw new NotFoundException();
         }
+
+        return new GetImageBytesResponse(true, "Image returned", bytes);
     }
 }
