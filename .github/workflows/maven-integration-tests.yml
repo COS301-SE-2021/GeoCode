@@ -48,6 +48,7 @@ jobs:
           -Denv.DATABASE_USERNAME=${{secrets.TEST_DATABASE_USERNAME}} \
           -Denv.DATABASE_PASSWORD=${{secrets.TEST_DATABASE_PASSWORD}} \
           -Denv.ALLOWED_ORIGINS_COMMA_SEPARATED="http://localhost" \
+          -Denv.IMAGE_DIRECTORY="~/image-data" \
           -Denv.KEY_STORE_TYPE=PKCS12 \
           -Denv.KEY_STORE=classpath:keystore.p12 \
           -Denv.KEY_STORE_ALIAS=localhost \

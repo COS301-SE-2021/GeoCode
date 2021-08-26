@@ -1,8 +1,9 @@
 package tech.geocodeapp.geocode.image.repository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
-import tech.geocodeapp.geocode.image.exceptions.DirectoryNotFoundException;
 import tech.geocodeapp.geocode.image.model.Image;
 
 import java.io.File;
@@ -13,15 +14,15 @@ import java.util.UUID;
 @Repository("ImageRepository")
 public class ImageRepositoryImpl implements ImageRepository {
 
+    private final Logger log = LoggerFactory.getLogger(ImageRepositoryImpl.class);
     private final String imageDirectory;
 
-    public ImageRepositoryImpl( @Value("${image-directory}") String imageDirectory ) throws DirectoryNotFoundException {
+    public ImageRepositoryImpl( @Value("${image-directory}") String imageDirectory ) throws IOException {
         this.imageDirectory = imageDirectory;
 
         /* Create the directory if it does not exist */
-        if (Files.exists( Paths.get( imageDirectory ) ) ) {
-            throw new DirectoryNotFoundException();
-        }
+        Files.createDirectories( Paths.get( imageDirectory ) );
+        log.info( "Using image directory \""+imageDirectory+"\"" );
     }
 
     @Override
