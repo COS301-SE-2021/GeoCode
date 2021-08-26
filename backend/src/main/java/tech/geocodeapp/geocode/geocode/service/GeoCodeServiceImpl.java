@@ -242,6 +242,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         var createdBy = userService.getCurrentUser();
 
+        if ( createdBy == null ) {
+
+            /* A user was not find so cannot create the GeoCode */
+            return new CreateGeoCodeResponse( false );
+        }
 
         /* Create the GeoCode Object */
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
