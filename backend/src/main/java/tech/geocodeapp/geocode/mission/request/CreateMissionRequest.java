@@ -17,8 +17,8 @@ public class CreateMissionRequest {
   @JsonProperty("location")
   private GeoPoint location;
 
-  public CreateMissionRequest(Collectable savedCollectable, GeoPoint location) {
-      this.collectable = savedCollectable;
+  public CreateMissionRequest(Collectable collectable, GeoPoint location) {
+      this.collectable = collectable;
       this.location = location;
     }
 

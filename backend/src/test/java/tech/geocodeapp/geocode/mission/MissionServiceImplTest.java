@@ -189,6 +189,27 @@ public class MissionServiceImplTest {
     }
 
     @Test
+    void getMissionByIdTestNullRequest(){
+        try{
+            var response = missionService.getMissionById(null);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The GetMissionByIdRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getMission());
+        }catch (NullRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getMissionByIdTestNullParameter(){
+        var request = new GetMissionByIdRequest(null);
+
+        assertThatThrownBy(() -> missionService.getMissionById(request))
+                .isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
     void getMissionByIdTestInvalidMissionId(){
         try {
             var request = new GetMissionByIdRequest(invalidMissionId);
@@ -214,6 +235,27 @@ public class MissionServiceImplTest {
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    void createMissionTestNullRequest(){
+        try{
+            var response = missionService.createMission(null);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The CreateMissionRequest object passed was NULL", response.getMessage());
+            Assertions.assertNull(response.getMission());
+        }catch (NullRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void createMissionTestNullParameter(){
+        var request = new CreateMissionRequest(null, null);
+
+        assertThatThrownBy(() -> missionService.createMission(request))
+                .isInstanceOf(NullRequestParameterException.class);
     }
 
     @Test
