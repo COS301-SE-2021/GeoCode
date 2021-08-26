@@ -10,17 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
-import tech.geocodeapp.geocode.collectable.CollectableTypeMockRepository;
-import tech.geocodeapp.geocode.collectable.model.CollectableType;
-import tech.geocodeapp.geocode.collectable.model.Rarity;
-import tech.geocodeapp.geocode.collectable.repository.CollectableTypeRepository;
-import tech.geocodeapp.geocode.collectable.request.CreateCollectableSetRequest;
-import tech.geocodeapp.geocode.collectable.request.CreateCollectableTypeRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
-import tech.geocodeapp.geocode.collectable.response.CreateCollectableSetResponse;
-import tech.geocodeapp.geocode.collectable.response.CreateCollectableTypeResponse;
 import tech.geocodeapp.geocode.event.service.EventService;
-import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
@@ -31,7 +22,6 @@ import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCodeApplication;
 import tech.geocodeapp.geocode.collectable.service.*;
-import tech.geocodeapp.geocode.user.MockSecurity;
 import tech.geocodeapp.geocode.user.service.*;
 
 import java.util.ArrayList;
@@ -148,7 +138,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 1 )
-    @Tag( "Tests" )
+    //@Tag( "Tests" )
     @DisplayName( "Null repository handling - GeoCodeServiceImpl" )
     void RepositoryNullTest() {
 
@@ -163,7 +153,6 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 1 )
-    @Tag( "Tests" )
     @DisplayName( "Custom query repository for Hard difficulty - findGeoCodeWithDifficulty" )
     void findGeoCodeWithHardDifficultyTest() {
 
@@ -237,7 +226,6 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 1 )
-    @Tag( "Tests" )
     @DisplayName( "Custom query repository for Insane difficulty - findGeoCodeWithDifficulty" )
     void findGeoCodeWithInsaneDifficultyTest() {
 
@@ -311,7 +299,6 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 1 )
-    @Tag( "Tests" )
     @DisplayName( "Custom query repository where not found - findGeoCodeWithDifficulty" )
     void findGeoCodeWithEmptyDifficultyTest() {
 
@@ -380,7 +367,6 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 1 )
-    @Tag( "Tests" )
     @DisplayName( "Custom query repository handling - findGeoCodeWithQRCode" )
     void findGeoCodeWithQRCodeTest() {
 
@@ -581,13 +567,37 @@ class GeoCodeServiceImplIT {
     }
 
     /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 10 )
+    @DisplayName( "All invalid repository attribute handling - createGeoCode" )
+    void createGeoCodeAllInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         * */
+        CreateGeoCodeRequest request = new CreateGeoCodeRequest();
+        request.setAvailable( null );
+        request.setDescription( null );
+        request.setDifficulty( null );
+        request.setHints( null );
+        request.setLocation( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.createGeoCode( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
      * Using valid data does the createGeoCode use case test
      * complete successfully
      */
     @Test
     @Order( 18 )
     @DisplayName( "Valid request - createGeoCode" )
-    @Transactional
     void createGeoCodeTest() {
 
         try {
@@ -659,7 +669,7 @@ class GeoCodeServiceImplIT {
             GetGeoCodesResponse response = geoCodeService.getAllGeoCodes();
 
             /* Get a geocode from the response */
-            List<GeoCode> geocodes = response.getGeocodes();
+            List< GeoCode > geocodes = response.getGeocodes();
 
             if ( geocodes.size() > 0 ) {
 
@@ -731,7 +741,7 @@ class GeoCodeServiceImplIT {
             Difficulty difficulty = Difficulty.INSANE;
 
             /* Populate the repo with the given amount of GeoCodes */
-            populate( size );
+            populateUsingDirectInsert( size );
 
             /*
              * Create a request object
@@ -817,7 +827,7 @@ class GeoCodeServiceImplIT {
             listOfDifficulties.add( Difficulty.EASY );
 
             /* Populate the repo with the given amount of GeoCodes */
-            populate( size );
+            populateUsingDirectInsert( size );
 
             /*
              * Create a request object
@@ -909,9 +919,9 @@ class GeoCodeServiceImplIT {
 
         try {
 
-            populate( 1 );
+            populateWithCreateGeoCode( 1 );
 
-            List<GeoCode> temp = repo.findAll();
+            List< GeoCode > temp = repo.findAll();
 
             /* Create the request with the ID of the GeoCode we want */
             GetHintsRequest request = new GetHintsRequest();
@@ -953,6 +963,29 @@ class GeoCodeServiceImplIT {
     @Order( 13 )
     @DisplayName( "Invalid repository attribute handling - swapCollectables" )
     void swapCollectablesInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         * */
+        SwapCollectablesRequest request = new SwapCollectablesRequest();
+        request.setTargetCollectableID( java.util.UUID.randomUUID() );
+        request.setTargetGeoCodeID( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.swapCollectables( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 13 )
+    @DisplayName( "All invalid repository attribute handling - swapCollectables" )
+    void swapCollectablesAllInvalidRequestTest() {
 
         /*
          *  Create a request object
@@ -1010,12 +1043,11 @@ class GeoCodeServiceImplIT {
     @Test
     @Order( 23 )
     @DisplayName( "Valid request - updateAvailability" )
-    @Transactional
     void updateAvailabilityTest() {
 
         /* Create a GeoCode */
-        populate( 1 );
-        List<GeoCode> temp = repo.findAll();
+        populateWithCreateGeoCode( 1 );
+        List< GeoCode > temp = repo.findAll();
 
         try {
 
@@ -1081,12 +1113,11 @@ class GeoCodeServiceImplIT {
     @Test
     @Order( 24 )
     @DisplayName( "Valid request getGeoCodesByLocation" )
-    @Transactional
     void getGeoCodesByLocationTest() {
 
         /* Create a GeoCode */
-        populate( 1 );
-        List<GeoCode> temp = repo.findAll();
+        populateUsingDirectInsert( 1 );
+        List< GeoCode > temp = repo.findAll();
 
         try {
 
@@ -1152,12 +1183,11 @@ class GeoCodeServiceImplIT {
     @Test
     @Order( 25 )
     @DisplayName( "Valid request - getGeoCodesByQRCode" )
-    @Transactional
     void getGeoCodesByQRCodeTest() {
 
         /* Create a GeoCode */
-        populate( 1 );
-        List<GeoCode> temp = repo.findAll();
+        populateWithCreateGeoCode( 1 );
+        List< GeoCode > temp = repo.findAll();
 
         try {
 
@@ -1223,12 +1253,11 @@ class GeoCodeServiceImplIT {
     @Test
     @Order( 26 )
     @DisplayName( "Valid request - getCollectables" )
-    @Transactional
     void getCollectablesTest() {
 
         /* Create a GeoCode */
-        populate( 1 );
-        List<GeoCode> temp = repo.findAll();
+        populateWithCreateGeoCode( 1 );
+        List< GeoCode > temp = repo.findAll();
 
         try {
 
@@ -1254,12 +1283,102 @@ class GeoCodeServiceImplIT {
         }
     }
 
+    /**
+     * Check the logic used when create a collectable type
+     */
+    @Disabled
+    @Test
+    @Order( 26 )
+    @DisplayName( "Valid request - calculateCollectableType" )
+    void collectableTypeTest() {
+
+        var count = new ArrayList<>();
+
+        var iterations = 1000000;
+        for ( var x = 0; x < iterations; x++ ) {
+
+            var name = geoCodeService.calculateCollectableType( null );
+
+        }
+    }
+
     ////////////////Helper functions////////////////
 
     /**
-     * This function creates numerous GeoCodes to be used for testing.
+     * This function creates numerous GeoCodes, saved directly to the repo to save execution time,
+     * to be used for testing.
      */
-    private void populate( int size ) {
+    private void populateUsingDirectInsert( int size ) {
+
+        /* check if the size is valid */
+        if ( size >= 2 ) {
+
+            /* Populate half with INSANE geoCodes to give variability */
+            for ( int x = 0; x < ( size / 2 ); x++ ) {
+
+                /* Create the request with the following mock data */
+                // CreateGeoCodeRequest request = new CreateGeoCodeRequest();
+                GeoCode request = new GeoCode();
+                request.setAvailable( true );
+                request.setDescription( "The INSANE GeoCode is stored at location " + x );
+                request.setDifficulty( Difficulty.INSANE );
+                List< String > hints = new ArrayList<>();
+                hints.add( "Hint one for: " + x );
+                hints.add( "Hint two for: " + x );
+                hints.add( "Hint three for: " + x );
+                request.setHints( hints );
+                request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+                /* Add the created GeoCode to the list */
+                repo.save( request );
+                // geoCodeService.createGeoCode( request );
+            }
+
+            /* Populate half with EASY geoCodes to give variability */
+            for ( int x = ( size / 2 ); x < size; x++ ) {
+
+                /* Create the request with the following mock data */
+                GeoCode request = new GeoCode();
+                request.setAvailable( true );
+                request.setDescription( "The EASY GeoCode is stored at location " + x );
+                request.setDifficulty( Difficulty.EASY );
+                List< String > hints = new ArrayList<>();
+                hints.add( "Hint one for: " + x );
+                hints.add( "Hint two for: " + x );
+                hints.add( "Hint three for: " + x );
+                request.setHints( hints );
+                request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+                /* Add the created GeoCode to the list */
+                repo.save( request );
+            }
+        } else if ( size == 1 ) {
+
+            int x = 1;
+
+            /* Create the request with the following mock data */
+            GeoCode request = new GeoCode();
+            request.setAvailable( true );
+            request.setDescription( "The DIFFICULTY GeoCode is stored at location " + x );
+            request.setDifficulty( Difficulty.HARD );
+            List< String > hints = new ArrayList<>();
+            hints.add( "Hint one for: " + x );
+            hints.add( "Hint two for: " + x );
+            hints.add( "Hint three for: " + x );
+            request.setHints( hints );
+            request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+            /* Add the created GeoCode to the list */
+            repo.save( request );
+        }
+
+    }
+
+
+    /**
+     * This function creates numerous GeoCodes to be used for testing using the createGeoCode use case.
+     */
+    private void populateWithCreateGeoCode( int size ) {
 
         try {
 
