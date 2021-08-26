@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.image.exceptions;
 
-
 public class NotFoundException extends Exception {
 
     public NotFoundException() {

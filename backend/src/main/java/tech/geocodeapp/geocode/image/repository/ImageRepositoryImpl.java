@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.image.repository;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+import tech.geocodeapp.geocode.image.exceptions.DirectoryNotFoundException;
 import tech.geocodeapp.geocode.image.model.Image;
 
 import java.io.File;
@@ -14,11 +15,13 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     private final String imageDirectory;
 
-    public ImageRepositoryImpl( @Value("${image-directory}") String imageDirectory ) throws IOException {
+    public ImageRepositoryImpl( @Value("${image-directory}") String imageDirectory ) throws DirectoryNotFoundException {
         this.imageDirectory = imageDirectory;
 
         /* Create the directory if it does not exist */
-        Files.createDirectories( Paths.get( imageDirectory ) );
+        if (Files.exists( Paths.get( imageDirectory ) ) ) {
+            throw new DirectoryNotFoundException();
+        }
     }
 
     @Override
