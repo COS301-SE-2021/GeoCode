@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.12"
+  version: "1.5.13"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -1292,8 +1292,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/GetEventLeaderboardResponse'
-        '404':
-          description: "Unable to find CollectableTypes of given set"
+        '400':
+          description: "Could not get the Event's Leaderboard details"
           content:
             application/json:
               schema:
@@ -1732,6 +1732,15 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/CreateLeaderboardResponse'
+        '400':
+          description: "Could not create the Leaderboard"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLeaderboardResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateLeaderboardResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -1756,6 +1765,15 @@ paths:
       responses:
         '200':
           description: "Successfully created a new point"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+        '400':
+          description: "Could not create a new point"
           content:
             application/json:
               schema:
@@ -1794,6 +1812,15 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/DeletePointResponse'
+        '400':
+          description: "Could not delete point"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DeletePointResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -1818,6 +1845,15 @@ paths:
       responses:
         '200':
           description: "Successfully Updated point"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+        '400':
+          description: "Could not update point"
           content:
             application/json:
               schema:
