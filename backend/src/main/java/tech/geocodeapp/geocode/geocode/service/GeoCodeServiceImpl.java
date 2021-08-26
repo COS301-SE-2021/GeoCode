@@ -268,10 +268,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
              * Add the GeoCode to the list of GeoCodes that the user has created
              */
             try {
+
                 AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, check);
                 userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
             } catch (NullRequestParameterException e) {
-                e.printStackTrace();
+
                 return new CreateGeoCodeResponse(false);
             }
         } catch ( IllegalArgumentException error ) {
@@ -999,4 +1000,5 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
     }
     /*----------- END -----------*/
+
 }
