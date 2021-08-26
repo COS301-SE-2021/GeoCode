@@ -1,4 +1,4 @@
-package tech.geocodeapp.geocode.user.response;
+package tech.geocodeapp.geocode.mission.response;
 
 import tech.geocodeapp.geocode.general.response.Response;
 

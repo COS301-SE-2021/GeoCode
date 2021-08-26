@@ -8,7 +8,7 @@ import tech.geocodeapp.geocode.mission.request.UpdateCompletionRequest;
 import tech.geocodeapp.geocode.mission.response.CreateMissionResponse;
 import tech.geocodeapp.geocode.mission.response.GetMissionByIdResponse;
 import tech.geocodeapp.geocode.mission.response.GetProgressResponse;
-import tech.geocodeapp.geocode.user.response.UpdateCompletionResponse;
+import tech.geocodeapp.geocode.mission.response.UpdateCompletionResponse;
 
 /**
  * This interface is for the service for the Mission subsystem
