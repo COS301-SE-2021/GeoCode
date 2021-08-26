@@ -126,7 +126,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     @PostConstruct
     public void init() {
 
-        userService.setGeoCodeService( this );
+        //userService.setGeoCodeService( this );
         eventService.setGeoCodeService( this );
     }
 
@@ -242,11 +242,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         var createdBy = userService.getCurrentUser();
 
-        if ( createdBy == null ) {
-
-            /* A user was not find so cannot create the GeoCode */
-            return new CreateGeoCodeResponse( false );
-        }
 
         /* Create the GeoCode Object */
         var newGeoCode = new GeoCode( id, request.getDifficulty(), request.isAvailable(),
@@ -273,11 +268,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
              * Add the GeoCode to the list of GeoCodes that the user has created
              */
             try {
-
                 AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, check);
                 userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
             } catch (NullRequestParameterException e) {
-
+                e.printStackTrace();
                 return new CreateGeoCodeResponse(false);
             }
         } catch ( IllegalArgumentException error ) {
@@ -320,8 +314,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     }
 
     /**
-<<<<<<< Updated upstream
-=======
      * Update a stored GeoCode
      *
      * @param request the attributes the response should be created from
@@ -333,31 +325,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     @Override
     public UpdateGeoCodeResponse updateGeoCode( UpdateGeoCodeRequest request ) throws InvalidRequestException {
 
-        /* Validate the request */
-        if ( request == null ) {
-
-            throw new InvalidRequestException( true );
-        } else if ( request.getGeoCodeID() == null ) {
-
-            /* An ID is needed */
-            throw new InvalidRequestException();
-        } else if ( ( request.getLocation() == null ) && ( request.getHints() == null ) &&
-                ( request.getDifficulty() == null ) && ( request.getDescription() == null ) &&
-                ( request.isAvailable() == null ) && ( request.getHints() == null ) ) {
-
-            /* There is nothing to update as no parameters passed */
-            throw new InvalidRequestException();
-        }
-
-        var response = new UpdateGeoCodeResponse();
-
-        response.setSuccess( true );
-
-        return response;
+        return null;
     }
 
     /**
->>>>>>> Stashed changes
      * Get the GeoCode associated with the given ID
      *
      * @param request the attributes the response should be created from
@@ -1043,5 +1014,4 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
     }
     /*----------- END -----------*/
-
 }
