@@ -314,6 +314,21 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     }
 
     /**
+     * Update a stored GeoCode
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public UpdateGeoCodeResponse updateGeoCode( UpdateGeoCodeRequest request ) throws InvalidRequestException {
+
+        return null;
+    }
+
+    /**
      * Get the GeoCode associated with the given ID
      *
      * @param request the attributes the response should be created from
