@@ -11,6 +11,7 @@ import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
+import tech.geocodeapp.geocode.mission.request.UpdateCompletionRequest;
 import tech.geocodeapp.geocode.mission.service.MissionService;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
@@ -444,15 +445,25 @@ public class UserServiceImpl implements UserService {
         this.addToFoundCollectableTypes(new AddToFoundCollectableTypesRequest(user, newCurrentCollectable.getType()));
         
         //add the Collectable's Mission to the User's Missions
-        var missionID = newCurrentCollectable.getMissionID();
+        var newCurrentCollectableMissionID = newCurrentCollectable.getMissionID();
 
-        if(missionID != null){
-            var mission  = missionService.getMissionById(new GetMissionByIdRequest(missionID)).getMission();
+        if(newCurrentCollectableMissionID != null){
+            var newCurrentCollectableMission  = missionService.getMissionById(new GetMissionByIdRequest(newCurrentCollectableMissionID)).getMission();
 
-            this.addToMyMissions(new AddToMyMissionsRequest(user, mission));
+            this.addToMyMissions(new AddToMyMissionsRequest(user, newCurrentCollectableMission));
         }else{
             //save() called in addToMyMissions
             userRepo.save(user);
+        }
+
+        var oldCurrentCollectableMissionID = oldCurrentCollectable.getMissionID();
+
+        if(oldCurrentCollectableMissionID != null){
+            var oldCurrentCollectableMission = missionService.getMissionById(new GetMissionByIdRequest(oldCurrentCollectableMissionID)).getMission();
+
+            //update the completion of the Mission
+            var updateCompletionRequest = new UpdateCompletionRequest(oldCurrentCollectableMission, geoCode.getLocation());
+            missionService.updateCompletion(updateCompletionRequest);
         }
 
         return new SwapCollectableResponse(true, "The User's Collectable was swapped with the Collectable in the GeoCode", oldCurrentCollectable );

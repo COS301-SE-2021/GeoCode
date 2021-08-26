@@ -10,13 +10,6 @@ public class GetLeaderboardByIDResponse extends Response {
     private Leaderboard leaderboard;
 
     /**
-     * Default constructor
-     */
-    public GetLeaderboardByIDResponse() {
-
-    }
-
-    /**
      * Overloaded Constructor
      *
      * @param leaderboard The leaderboard from the specified leaderboard

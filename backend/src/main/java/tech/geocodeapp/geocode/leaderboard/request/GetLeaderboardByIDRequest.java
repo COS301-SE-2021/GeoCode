@@ -6,14 +6,7 @@ public class GetLeaderboardByIDRequest {
     /**
      * The id of the Leaderboard to be searched for
      */
-    private UUID leaderboardID;
-
-    /**
-     * Default constructor
-     */
-    public GetLeaderboardByIDRequest() {
-
-    }
+    private final UUID leaderboardID;
 
     /**
      * Overloaded Constructor
@@ -33,15 +26,5 @@ public class GetLeaderboardByIDRequest {
     public UUID getLeaderboardID() {
 
         return leaderboardID;
-    }
-
-    /**
-     * Sets the leaderboardID attribute to the specified value
-     *
-     * @param leaderboardID the value the attribute should be set to
-     */
-    public void setLeaderboardID(UUID leaderboardID) {
-
-        this.leaderboardID = leaderboardID;
     }
 }
