@@ -30,7 +30,6 @@ public class GetImageRequest {
      * @return imageID
      **/
     @Schema(example = "054463f2-2f7c-4864-8130-68e5aa79ee7f", required = true, description = "")
-    @NotNull
 
     @Valid
     public UUID getImageID() {

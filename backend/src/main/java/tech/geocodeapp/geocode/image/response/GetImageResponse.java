@@ -30,7 +30,6 @@ public class GetImageResponse extends Response {
      * Get image
      * @return image
      **/
-    @NotNull
 
     @Valid
     public Image getImage() {

@@ -28,7 +28,6 @@ public class CreateImageRequest {
      * Get imageByteStream
      * @return imageByteStream
      **/
-    @NotNull
 
     @Valid
     public InputStream getImageByteStream() {
