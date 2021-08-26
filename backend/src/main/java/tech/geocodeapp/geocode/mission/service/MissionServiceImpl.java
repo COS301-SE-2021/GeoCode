@@ -169,6 +169,9 @@ public class MissionServiceImpl implements MissionService{
             case DISTANCE:
                 var addedDistance = mission.getLocation().distanceTo(location);
                 mission.setCompletion((int) (mission.getCompletion()+addedDistance));
+
+                //update the Mission's current location
+                mission.setLocation(location);
                 break;
         }
 

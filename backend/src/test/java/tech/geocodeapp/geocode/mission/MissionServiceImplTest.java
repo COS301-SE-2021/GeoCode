@@ -20,12 +20,14 @@ import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.mission.model.Mission;
 import tech.geocodeapp.geocode.mission.model.MissionType;
 import tech.geocodeapp.geocode.mission.request.CreateMissionRequest;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
 import tech.geocodeapp.geocode.mission.request.GetProgressRequest;
+import tech.geocodeapp.geocode.mission.request.UpdateCompletionRequest;
 import tech.geocodeapp.geocode.mission.service.MissionService;
 import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
 
@@ -53,6 +55,19 @@ public class MissionServiceImplTest {
 
     private final String invalidMissionIdMessage = "Invalid Mission Id";
 
+    private UUID presentCollectableMissionID;
+    private Mission presentCollectableMission;
+
+    private Collectable bearCollectable;
+    private UUID bearCollectableMissionID;
+    private Mission bearCollectableMission;
+
+    private GeoPoint targetLocation;
+    
+    private Collectable fishCollectable;
+    private UUID fishCollectableMissionID;
+    private Mission fishCollectableMission;
+
     UUID createCollectableSet(String name, String description){
         var createCollectableSetRequest = new CreateCollectableSetRequest(name, description);
 
@@ -75,6 +90,10 @@ public class MissionServiceImplTest {
             e.printStackTrace();
             return null;
         }
+    }
+
+    Collectable createCollectable(UUID typeID, boolean createMission){
+        return createCollectable(typeID, createMission, new GeoPoint(0.0, 0.0));
     }
 
     Collectable createCollectable(UUID typeID, boolean createMission, GeoPoint location){
@@ -136,13 +155,37 @@ public class MissionServiceImplTest {
         santaCollectableMissionID = santaCollectable.getMissionID();
         santaCollectableMission = getMissionByID(santaCollectableMissionID);
 
-        //create the Present CollectableType
+        //create the Present CollectableType (does not have a MissionType)
         var presentProperties = new HashMap<String, String>();
-        presentProperties.put("missionType", String.valueOf(MissionType.GEOCODE));
         var presentTypeID = createCollectableType("Present", "img_present", Rarity.COMMON, christmasSetId, presentProperties);
 
         //create a Present Collectable without a Mission
-        presentCollectable = createCollectable(presentTypeID, false, new GeoPoint(0.0, 0.0));
+        presentCollectable = createCollectable(presentTypeID, false);
+
+        //create the Bear CollectableType
+        var bearProperties = new HashMap<String, String>();
+        bearProperties.put("missionType", String.valueOf(MissionType.GEOCODE));
+        var bearTypeID = createCollectableType("Bear", "img_bear", Rarity.RARE, christmasSetId, bearProperties);
+
+        //create a Bear Collectable with a Mission
+        targetLocation = new GeoPoint(100.0, 100.0);
+
+        bearCollectable = createCollectable(bearTypeID, true, targetLocation);
+
+        bearCollectableMissionID = bearCollectable.getMissionID();
+        bearCollectableMission = getMissionByID(bearCollectableMissionID);
+
+        //create a CollectableType that has a Distance MissionType
+        var fishProperties = new HashMap<String, String>();
+        fishProperties.put("missionType", String.valueOf(MissionType.DISTANCE));
+        var fishTypeID = createCollectableType("Fish", "img_fish", Rarity.RARE, christmasSetId, fishProperties);
+        
+        //create a Fish Collectable
+        fishCollectable = createCollectable(fishTypeID, true, new GeoPoint(0.0, 0.0));
+        
+        fishCollectableMissionID = fishCollectable.getMissionID();
+        fishCollectableMission = getMissionByID(fishCollectableMissionID);
+        
     }
 
     @Test
@@ -264,5 +307,100 @@ public class MissionServiceImplTest {
         }
     }
 
+    @Test
+    void updateCompletionTestNullRequest(){
+        try{
+            var response = missionService.updateCompletion(null);
+
+            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertEquals("The UpdateCompletionRequest object passed was NULL", response.getMessage());
+        }catch (NullRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void updateCompletionTestNullParameter(){
+        var request = new UpdateCompletionRequest(null, null);
+
+        assertThatThrownBy(() -> missionService.updateCompletion(request))
+                .isInstanceOf(NullRequestParameterException.class);
+    }
+
+    @Test
+    void updateCompletionTestSwapType(){
+        try{
+            var completionBefore = santaCollectableMission.getCompletion();
+
+            //update the completion
+            var request = new UpdateCompletionRequest(santaCollectableMission, new GeoPoint(0.0, 0.0));
+            var response = missionService.updateCompletion(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Completion updated", response.getMessage());
+
+            //check the completion has been updated to be 1 more swap than before
+            Assertions.assertEquals(completionBefore+1, santaCollectableMission.getCompletion());
+        }catch (NullRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void updateCompletionTestGeoCodeTypeNotFinalLocation(){
+        try{
+            //update the completion
+            var request = new UpdateCompletionRequest(bearCollectableMission, new GeoPoint(0.0, 0.0));
+            var response = missionService.updateCompletion(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Completion updated", response.getMessage());
+
+            //check the completion is still zero since target location was not reached
+            Assertions.assertEquals(0, bearCollectableMission.getCompletion());
+        }catch (NullRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void updateCompletionTestGeoCodeTypeFinalLocation(){
+        try{
+            //update the completion
+            var request = new UpdateCompletionRequest(bearCollectableMission, targetLocation);
+            var response = missionService.updateCompletion(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Completion updated", response.getMessage());
+
+            //check the completion is still zero since target location was not reached
+            Assertions.assertEquals(100, bearCollectableMission.getCompletion());
+        }catch (NullRequestParameterException e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void updateCompletionTestDistanceType(){
+        try{
+            var completionBefore = fishCollectableMission.getCompletion();
+            var locationBefore = fishCollectableMission.getLocation();
+
+            var nextLocation = new GeoPoint(0.0, 0.0);
+
+            //update the completion
+            var request = new UpdateCompletionRequest(fishCollectableMission, nextLocation);
+            var response = missionService.updateCompletion(request);
+
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Completion updated", response.getMessage());
+
+            //check the completion has been updated to be the increased distance
+            Assertions.assertEquals((int) (completionBefore+locationBefore.distanceTo(fishCollectableMission.getLocation())), fishCollectableMission.getCompletion());
+            Assertions.assertEquals(nextLocation, fishCollectableMission.getLocation());
+        }catch (NullRequestParameterException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
 
 }
