@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.13"
+  version: "1.5.14"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -1999,6 +1999,18 @@ paths:
       operationId: "uploadImage"
       requestBody:
         content:
+          image/bmp:
+            schema:
+              type: string
+              format: binary
+          image/gif:
+            schema:
+              type: string
+              format: binary
+          image/jpeg:
+            schema:
+              type: string
+              format: binary
           image/png:
             schema:
               type: string
@@ -2009,12 +2021,57 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UploadImageResponse'
+                $ref: '#/components/schemas/CreateImageResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/UploadImageResponse'
+                $ref: '#/components/schemas/CreateImageResponse'
+        '400':
+          description: "Request does not include a file"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '413':
+          description: "File is too large"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+        '415':
+          description: "File is not an image"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+        '422':
+          description: "Image could not be processed"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+        '500':
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
       security:
         - bearerAuth: []
         
@@ -2038,16 +2095,22 @@ paths:
         '200':
           description: "Image retrieved"
           content:
+            image/gif:
+              schema:
+                type: string
+                format: binary
             image/png:
               schema:
                 type: string
                 format: binary
+        '400':
+          description: "Request does not include a valid UUID"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: "An image with the specified ID was not found"
-      security:
-        - bearerAuth: []
+        '500':
+          description: "Internal server error"
 
         
 
@@ -3811,7 +3874,7 @@ components:
       xml:
         name: "UpdateCompletionResponse"
         
-    UploadImageResponse:
+    CreateImageResponse:
       allOf:
         - $ref: "#/components/schemas/Response"
         - type: "object"
@@ -3825,4 +3888,4 @@ components:
               format: uuid
               example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
           xml:
-            name: "UploadImageResponse"
+            name: "CreateImageResponse"
