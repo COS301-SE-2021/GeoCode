@@ -14,7 +14,8 @@ services:
       timeout: 5s
       retries: 10
     ports:
-      - 14389:5432
+      - 14379:5432
+    restart: always
     volumes:
       - ./setup-databases.sh:/docker-entrypoint-initdb.d/setup-databases.sh
       - ../../.postgres-data:/var/lib/postgresql/data
@@ -37,6 +38,7 @@ services:
     image: quay.io/keycloak/keycloak:13.0.1
     ports:
       - 8100:8443
+    restart: always
     volumes:
       - ./keycloak-config.json:/tmp/geocode.json
       - ../../.certificates/fullchain.pem:/etc/x509/https/tls.crt
@@ -62,3 +64,4 @@ services:
     image: geocode/backend
     ports:
       - 8080:8080
+    restart: always

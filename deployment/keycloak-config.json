@@ -768,11 +768,9 @@
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "",
         "*"
       ],
       "webOrigins": [
-        "",
         "*"
       ],
       "notBefore": 0,
@@ -836,9 +834,12 @@
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/*"
+        "http://localhost/*",
+        "/*",
+        "geocode://*"
       ],
       "webOrigins": [
+        "http://localhost",
         "+"
       ],
       "notBefore": 0,

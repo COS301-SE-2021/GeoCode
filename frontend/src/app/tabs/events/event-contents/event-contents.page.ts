@@ -50,7 +50,7 @@ export class EventContentsPage implements AfterViewInit {
       console.log(this.event);
     } else {
       this.event = null;
-      this.eventID = route.snapshot.paramMap.get('id');
+      this.eventID = route.snapshot.paramMap.get('eventID');
       console.log(this.eventID);
     }
   }
@@ -117,7 +117,7 @@ async presentToast(){
 
   //Navigate to findGeoCode page
   async findGeoCode(geocode){
-    await this.navCtrl.navigateForward('/explore/open/'+geocode.id,{ state: {geocode} });
+    await this.navCtrl.navigateForward('/events/'+this.event.id+'/open/'+geocode.id,{ state: {geocode} });
   }
 
   openInMaps(geocode: GeoCode) {
@@ -126,7 +126,7 @@ async presentToast(){
 
   async openLeaderBoard() {
     const event = this.event;
-    await this.navCtrl.navigateForward('/events/' + this.event.id+'/leaderboard', {state: {event}});
+    await this.navCtrl.navigateForward('/events/'+this.event.id+'/leaderboard', {state: {event}});
   }
 
 

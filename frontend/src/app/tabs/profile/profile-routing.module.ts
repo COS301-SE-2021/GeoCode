@@ -9,6 +9,10 @@ const routes: Routes = [
     component: ProfilePage
   },
   {
+    path: 'events/profile/:userID',
+    redirectTo: ':userID'
+  },
+  {
     path: 'events',
     loadChildren: () => import('./events/events.module').then( m => m.EventsPageModule)
   },
@@ -23,7 +27,11 @@ const routes: Routes = [
   {
     path: 'geocodes',
     loadChildren: () => import('./geocodes/geocodes.module').then( m => m.GeocodesPageModule)
-  }
+  },
+  {
+    path: ':userID',
+    component: ProfilePage
+  },
 
 ];
 
