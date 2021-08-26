@@ -110,5 +110,6 @@ export * from './updateCompletionResponse';
 export * from './updateLocationRequest';
 export * from './updateLocationResponse';
 export * from './updatePointRequest';
+export * from './uploadImageResponse';
 export * from './user';
 export * from './userEventStatus';
