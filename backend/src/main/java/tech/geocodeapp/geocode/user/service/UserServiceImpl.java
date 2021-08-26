@@ -17,7 +17,6 @@ import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 
-import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -477,6 +476,6 @@ public class UserServiceImpl implements UserService {
         user.addMissionsItem(mission);
         userRepo.save(user);
 
-        return new AddToMyMissionsResponse(true, "Missions added to the User's Missions");
+        return new AddToMyMissionsResponse(true, "Mission added to the User's Missions");
     }
 }

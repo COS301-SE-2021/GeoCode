@@ -6,10 +6,10 @@ import tech.geocodeapp.geocode.user.model.User;
 
 public class AddToFoundGeoCodesRequest {
     @JsonProperty("userID")
-    private User user = null;
+    private User user;
 
     @JsonProperty("geoCodeID")
-    private GeoCode geocode = null;
+    private GeoCode geocode;
 
     public AddToFoundGeoCodesRequest(User user, GeoCode geocode){
         this.user = user;
