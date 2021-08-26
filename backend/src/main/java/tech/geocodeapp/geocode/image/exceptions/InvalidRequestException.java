@@ -1,8 +1,17 @@
 package tech.geocodeapp.geocode.image.exceptions;
 
+import org.springframework.http.HttpStatus;
+
 public class InvalidRequestException extends Exception {
 
-    public InvalidRequestException(String message) {
+    private final HttpStatus status;
+
+    public InvalidRequestException(String message, HttpStatus status) {
         super(message);
+        this.status = status;
+    }
+
+    public HttpStatus getStatus() {
+        return status;
     }
 }
