@@ -20,12 +20,6 @@ public class UpdateGeoCodeResponse {
     private Boolean success;
 
     /**
-     * A message about the success of updating
-     */
-    @JsonProperty( "message" )
-    private String message;
-
-    /**
      * Default constructor
      */
     public UpdateGeoCodeResponse() {
@@ -40,18 +34,6 @@ public class UpdateGeoCodeResponse {
     public UpdateGeoCodeResponse( Boolean success ) {
 
         this.success = success;
-    }
-
-    /**
-     * Overloaded Constructor
-     *
-     * @param success Determines if the creation of a GeoCode with the specified attributes in the request was a success or not
-     * @param message A message about the success of updating
-     */
-    public UpdateGeoCodeResponse( Boolean success, String message ) {
-
-        this.success = success;
-        this.message = message;
     }
 
     /**
@@ -88,29 +70,6 @@ public class UpdateGeoCodeResponse {
     }
 
     /**
-     * Sets the message attribute to the specified value
-     *
-     * @param message the value the attribute should be set to
-     *
-     * @return the response after the message has been changed
-     */
-    public UpdateGeoCodeResponse message( String message ) {
-
-        this.message = message;
-        return this;
-    }
-
-    /**
-     * Sets the message attribute to the specified value
-     *
-     * @param message the value the attribute should be set to
-     */
-    public void setMessage( String message ) {
-
-        this.message = message;
-    }
-
-    /**
      * Determines if the specified object is the same as the current object
      *
      * @param obj the object we want to compare with the specific attributes of this class
@@ -129,9 +88,7 @@ public class UpdateGeoCodeResponse {
             return false;
         }
 
-        var updateGeoCodeRequest = ( UpdateGeoCodeResponse ) obj;
-        return  Objects.equals( this.success, updateGeoCodeRequest.success ) &&
-                Objects.equals( this.message, updateGeoCodeRequest.message );
+        return Objects.equals( this.success, ( ( UpdateGeoCodeResponse ) obj ).success );
     }
 
     /**
@@ -142,7 +99,7 @@ public class UpdateGeoCodeResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash( success, message );
+        return Objects.hash( success );
     }
 
     /**
@@ -155,7 +112,6 @@ public class UpdateGeoCodeResponse {
 
         return "class CreateGeoCodeResponse {\n" +
                 "    success: " + toIndentedString( success ) + "\n" +
-                "    message: " + toIndentedString( message ) + "\n" +
                 "}";
     }
 
