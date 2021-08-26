@@ -29,7 +29,7 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepo;
 
     /* The maximum file size of images that can be uploaded */
-    private final int MAX_IMAGE_FILE_SIZE = 8388608; // 8 MiB (mebibytes)
+    private final int MAX_IMAGE_FILE_SIZE = 1048576; // 1024 KiB (kebibytes)
 
     /* The maximum width and height that images should be resized to */
     private final int MAX_IMAGE_DIMENSION = 200; // 200 pixels
@@ -52,23 +52,28 @@ public class ImageServiceImpl implements ImageService {
         /* Read the input stream data into a byte array, up to the maximum file size */
         byte[] bytes = inputStream.readNBytes(MAX_IMAGE_FILE_SIZE);
 
-        if (inputStream.read() != -1) {
-            /* Input stream still contains data */
-            throw new InvalidRequestException( "The supplied file is larger than 8 mebibytes", HttpStatus.PAYLOAD_TOO_LARGE );
-        }
-
-        /* Close the input stream */
+        /* Get the next byte (for data validation) and then close the input stream */
+        int nextByte = inputStream.read();
         inputStream.close();
+
+        if (bytes.length == 0) {
+            /* No data in byte array */
+            throw new InvalidRequestException( "No file was supplied with the request", HttpStatus.BAD_REQUEST );
+
+        } else if (nextByte != -1) {
+            /* Input stream still contained data after reading */
+            throw new InvalidRequestException( "The supplied file is larger than 1024 kebibytes", HttpStatus.PAYLOAD_TOO_LARGE );
+        }
 
         ImageFormat outputFormat = ImageFormat.fromBytes( bytes );
         if (outputFormat == null) {
             throw new InvalidRequestException( "The supplied file has an invalid MIME type", HttpStatus.UNSUPPORTED_MEDIA_TYPE );
 
         } else if (outputFormat == ImageFormat.PNG) {
-
             BufferedImage imageData = ImageIO.read( new ByteArrayInputStream( bytes ) );
             if ( imageData == null ) {
-                throw new InvalidRequestException( "The supplied file could not be read as an image", HttpStatus.UNSUPPORTED_MEDIA_TYPE );
+                /* This should never be hit, because the file has already been identified as an image */
+                throw new InvalidRequestException( "The supplied file could not be read as an image", HttpStatus.UNPROCESSABLE_ENTITY );
             }
 
             /* Resize the BufferedImage for reduced bandwidth and storage requirements */
@@ -93,7 +98,7 @@ public class ImageServiceImpl implements ImageService {
             throw new InvalidRequestException( "No request object provided", HttpStatus.BAD_REQUEST );
         }
         if ( request.getImageID() == null ) {
-            throw new InvalidRequestException( "Invalid image ID provided", HttpStatus.BAD_REQUEST );
+            throw new InvalidRequestException( "No image ID provided", HttpStatus.BAD_REQUEST );
         }
 
         Image image = this.imageRepo.findById( request.getImageID() );
@@ -128,7 +133,7 @@ public class ImageServiceImpl implements ImageService {
             outputHeight = (int) ( ( outputWidth / inputWidth ) * inputHeight );
         }
 
-        BufferedImage output = new BufferedImage( outputWidth, outputHeight, input.getType() );
+        BufferedImage output = new BufferedImage( outputWidth, outputHeight, BufferedImage.TYPE_INT_ARGB );
 
         Graphics2D g2d = output.createGraphics();
         g2d.drawImage( input, 0, 0, outputWidth, outputHeight, null );
