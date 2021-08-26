@@ -9,12 +9,19 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * CreateGeoCodeRequest used to specify the attributes needed to create a new GeoCode object
  */
 @Validated
 public class UpdateGeoCodeRequest {
+
+    /**
+     * The unique ID of a GeoCode in the database
+     */
+    @JsonProperty( "geoCodeID" )
+    private UUID geoCodeID = null;
 
     /**
      * The description of where the GeoCode is and what it involves
@@ -58,19 +65,54 @@ public class UpdateGeoCodeRequest {
     /**
      * Overloaded Constructor
      *
+     * @param geoCodeID The unique ID of a GeoCode in the database
      * @param description The description of where the GeoCode is and what it involves
      * @param location    The location of the GeoCode in the real world
      * @param hints       The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
      * @param difficulty  The level of difficulty to find a GeoCode in the real world
      * @param available   If the GeoCode is active in the system
      */
-    public UpdateGeoCodeRequest( String description, GeoPoint location, List< String > hints, Difficulty difficulty, Boolean available ) {
+    public UpdateGeoCodeRequest( UUID geoCodeID, String description, GeoPoint location, List< String > hints, Difficulty difficulty, Boolean available ) {
 
         this.description = description;
         this.location = location;
         this.hints = hints;
         this.difficulty = difficulty;
         this.available = available;
+    }
+
+    /**
+     * Sets the geoCodeID attribute to the specified value
+     *
+     * @param geoCodeID the value the attribute should be set to
+     *
+     * @return the request after the geoCodeID has been changed
+     */
+    public UpdateGeoCodeRequest geoCodeID( UUID geoCodeID ) {
+
+        this.geoCodeID = geoCodeID;
+        return this;
+    }
+
+    /**
+     * Gets the saved geoCodeID attribute
+     *
+     * @return the stored geoCodeID attribute
+     */
+    @Valid
+    public UUID getGeoCodeID() {
+
+        return geoCodeID;
+    }
+
+    /**
+     * Sets the geoCodeID attribute to the specified value
+     *
+     * @param geoCodeID the value the attribute should be set to
+     */
+    public void setGeoCodeID( UUID geoCodeID ) {
+
+        this.geoCodeID = geoCodeID;
     }
 
     /**
@@ -271,11 +313,13 @@ public class UpdateGeoCodeRequest {
 
             return false;
         }
+
         var createGeoCodeRequest = ( UpdateGeoCodeRequest ) obj;
         return  Objects.equals( this.description, createGeoCodeRequest.description ) &&
                 Objects.equals( this.location, createGeoCodeRequest.location ) &&
                 Objects.equals( this.hints, createGeoCodeRequest.hints ) &&
                 Objects.equals( this.difficulty, createGeoCodeRequest.difficulty ) &&
+                Objects.equals( this.geoCodeID, createGeoCodeRequest.geoCodeID ) &&
                 Objects.equals( this.available, createGeoCodeRequest.available );
     }
 
@@ -287,7 +331,7 @@ public class UpdateGeoCodeRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( description, location, hints, difficulty, available );
+        return Objects.hash( description, location, hints, difficulty, available, geoCodeID );
     }
 
     /**
@@ -304,6 +348,7 @@ public class UpdateGeoCodeRequest {
                 "    hints: " + toIndentedString( hints ) + "\n" +
                 "    difficulty: " + toIndentedString( difficulty ) + "\n" +
                 "    available: " + toIndentedString( available ) + "\n" +
+                "    geoCodeID: " + toIndentedString( geoCodeID ) + "\n" +
                 "}";
     }
 
