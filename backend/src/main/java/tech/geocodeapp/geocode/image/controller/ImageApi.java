@@ -20,16 +20,16 @@ import java.util.UUID;
 @Validated
 public interface ImageApi {
 
-    @Operation(summary = "Retrieves an image", description = "Retrieves an image with the specified ID", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Image" })
+    @Operation(summary = "Retrieves an image", description = "Retrieves an image with the specified ID", tags={ "Image" })
     @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Image retrieved", content = @Content(mediaType = "image/gif", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "200", description = "Image retrieved", content = @Content(mediaType = "image/png", schema = @Schema(implementation = Resource.class))),
-
+            @ApiResponse(responseCode = "400", description = "Request does not include a valid UUID"),
             @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
-
-            @ApiResponse(responseCode = "404", description = "An image with the specified ID was not found") })
+            @ApiResponse(responseCode = "404", description = "An image with the specified ID was not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error") })
     @RequestMapping(value = "/Image/getImage/{imageID}",
-            produces = { "image/png", "image/gif" },
+            produces = { "image/gif", "image/png" },
             method = RequestMethod.GET)
     ResponseEntity<byte[]> getImage(@Parameter(in = ParameterIn.PATH, description = "ID of the image to retrieve", required=true, schema=@Schema()) @PathVariable("imageID") UUID imageID);
 
@@ -38,11 +38,15 @@ public interface ImageApi {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Image" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Image uploaded", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateImageResponse.class))),
-
-            @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+            @ApiResponse(responseCode = "400", description = "Request does not include a file", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateImageResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
+            @ApiResponse(responseCode = "413", description = "File is too large", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateImageResponse.class))),
+            @ApiResponse(responseCode = "415", description = "File is not an image", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateImageResponse.class))),
+            @ApiResponse(responseCode = "422", description = "Image could not be processed", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateImageResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateImageResponse.class))) })
     @RequestMapping(value = "/Image/uploadImage",
             produces = { "application/json", "application/xml" },
-            consumes = { "image/png", "image/jpeg", "image/gif" },
+            consumes = { "image/bmp", "image/gif", "image/jpeg", "image/png" },
             method = RequestMethod.POST)
     ResponseEntity<CreateImageResponse> uploadImage(HttpServletRequest request);
 
