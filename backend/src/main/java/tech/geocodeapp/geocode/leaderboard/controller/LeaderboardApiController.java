@@ -65,7 +65,7 @@ public class LeaderboardApiController implements LeaderboardApi {
         if (response.isSuccess()) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else {
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
