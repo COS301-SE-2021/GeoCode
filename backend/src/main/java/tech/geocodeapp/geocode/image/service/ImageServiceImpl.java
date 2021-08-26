@@ -5,6 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.image.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.image.exceptions.NotFoundException;
 import tech.geocodeapp.geocode.image.model.Image;
+import tech.geocodeapp.geocode.image.model.ImageFormat;
 import tech.geocodeapp.geocode.image.repository.ImageRepository;
 import tech.geocodeapp.geocode.image.request.CreateImageRequest;
 import tech.geocodeapp.geocode.image.request.GetImageRequest;
@@ -14,8 +15,10 @@ import tech.geocodeapp.geocode.image.response.GetImageResponse;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 @Validated
@@ -40,25 +43,34 @@ public class ImageServiceImpl implements ImageService {
             throw new InvalidRequestException( "No image byte stream provided" );
         }
 
-        /* Convert the input stream data to a BufferedImage */
-        BufferedImage imageData = ImageIO.read( request.getImageByteStream() );
-        if ( imageData == null ) {
+        /* Convert the input stream data to byte array */
+        byte[] bytes = readBytesFromInputStream(request.getImageByteStream());
+
+        ImageFormat outputFormat = ImageFormat.fromBytes( bytes );
+        if (outputFormat == null) {
             throw new InvalidRequestException( "Invalid image provided" );
+
+        } else if (outputFormat == ImageFormat.PNG) {
+
+            BufferedImage imageData = ImageIO.read( new ByteArrayInputStream( bytes ) );
+            if ( imageData == null ) {
+                throw new InvalidRequestException( "Invalid image provided" );
+            }
+
+            /* Resize the BufferedImage for reduced bandwidth and storage requirements */
+            imageData = resizeImage( imageData );
+
+            /* Convert the BufferedImage to a byte array */
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            ImageIO.write( imageData, "png", stream );
+            bytes = stream.toByteArray();
         }
 
-        /* Resize the BufferedImage for reduced bandwidth and storage requirements */
-        imageData = resizeImage( imageData );
-
-        /* Convert the BufferedImage to a byte array */
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        ImageIO.write( imageData, "png", stream );
-        byte[] bytes = stream.toByteArray();
-
         /* Save the image in the repo */
-        Image image = new Image( UUID.randomUUID(), bytes );
+        Image image = new Image( UUID.randomUUID(), bytes, outputFormat );
         this.imageRepo.save( image );
 
-        return new CreateImageResponse( true, "The image was successfully uploaded", image.getId() );
+        return new CreateImageResponse( true, "The image was successfully saved", image.getId() );
     }
 
     @Override
@@ -74,10 +86,27 @@ public class ImageServiceImpl implements ImageService {
         if ( image == null ) {
             throw new NotFoundException();
         }
-        return new GetImageResponse( true, "Image returned", image );
+
+        return new GetImageResponse( true, "Image returned successfully", image );
     }
 
     /********** Helper functions **********/
+
+    private byte[] readBytesFromInputStream( InputStream inputStream ) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        while (true) {
+            byte[] buffer = new byte[1024];
+
+            int numBytesRead = inputStream.read(buffer);
+
+            if (numBytesRead <= 0) {
+                return outputStream.toByteArray();
+            } else {
+                outputStream.write(buffer, 0, numBytesRead);
+            }
+        }
+    }
 
     private BufferedImage resizeImage( BufferedImage input ) {
 

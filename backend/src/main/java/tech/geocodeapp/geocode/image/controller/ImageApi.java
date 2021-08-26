@@ -29,7 +29,7 @@ public interface ImageApi {
 
             @ApiResponse(responseCode = "404", description = "An image with the specified ID was not found") })
     @RequestMapping(value = "/Image/getImage/{imageID}",
-            produces = { "image/png" },
+            produces = { "image/png", "image/gif" },
             method = RequestMethod.GET)
     ResponseEntity<byte[]> getImage(@Parameter(in = ParameterIn.PATH, description = "ID of the image to retrieve", required=true, schema=@Schema()) @PathVariable("imageID") UUID imageID);
 
@@ -42,7 +42,7 @@ public interface ImageApi {
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/Image/uploadImage",
             produces = { "application/json", "application/xml" },
-            consumes = { "image/*" },
+            consumes = { "image/png", "image/jpeg", "image/gif" },
             method = RequestMethod.POST)
     ResponseEntity<CreateImageResponse> uploadImage(HttpServletRequest request);
 
