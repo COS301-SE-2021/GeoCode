@@ -55,7 +55,6 @@ public class UserServiceImpl implements UserService {
      * @param request The GetCurrentCollectableRequest object
      * @return A GetCurrentCollectableResponse object: (success, message, object)
      */
-    @Transactional
     public GetCurrentCollectableResponse getCurrentCollectable(GetCurrentCollectableRequest request) throws NullRequestParameterException{
         if (request == null) {
             return new GetCurrentCollectableResponse(false, "The GetCurrentCollectableRequest object passed was NULL", null);
@@ -78,7 +77,6 @@ public class UserServiceImpl implements UserService {
      * @param request The GetUserTrackableRequest object
      * @return A GetUserTrackableResponse object: (success, message, object)
      */
-    @Transactional
     public GetUserTrackableResponse getUserTrackable(GetUserTrackableRequest request) throws NullRequestParameterException{
         if (request == null) {
             return new GetUserTrackableResponse(false, "The GetUserTrackableRequest object passed was NULL", null);
@@ -101,7 +99,6 @@ public class UserServiceImpl implements UserService {
      * @param request The UpdateLocationRequest object
      * @return A UpdateLocationResponse object: (success, message, object)
      */
-    @Transactional
     public UpdateLocationResponse updateLocation(UpdateLocationRequest request) throws NullRequestParameterException {
         if (request == null) {
             return new UpdateLocationResponse(false, "The UpdateLocationRequest object passed was NULL", null);
@@ -130,7 +127,6 @@ public class UserServiceImpl implements UserService {
      * @param request The GetFoundCollectableTypesRequest object
      * @return A GetCollectableTypesResponse object: (success, message, object)
      */
-    @Transactional
     public GetFoundCollectableTypesResponse getFoundCollectableTypes(GetFoundCollectableTypesRequest request) throws NullRequestParameterException{
         if (request == null) {
             return new GetFoundCollectableTypesResponse(false, "The GetFoundCollectableTypesRequest object passed was NULL", null);
@@ -159,7 +155,6 @@ public class UserServiceImpl implements UserService {
      * @param request The GetFoundGeoCodesRequest object
      * @return A GetFoundGeoCodesResponse object: (success, message, object)
      */
-    @Transactional
     public GetFoundGeoCodesResponse getFoundGeoCodes(GetFoundGeoCodesRequest request) throws NullRequestParameterException {
         if (request == null) {
             return new GetFoundGeoCodesResponse(false, "The GetFoundGeoCodesRequest object passed was NULL", null);
@@ -189,7 +184,6 @@ public class UserServiceImpl implements UserService {
      * @return A GetOwnedGeoCodesResponse object: (success, message, object)
      * @throws NullRequestParameterException Exception for 1 or more NULL parameters when making a User request
      */
-    @Transactional
     public GetOwnedGeoCodesResponse getOwnedGeoCodes(GetOwnedGeoCodesRequest request) throws NullRequestParameterException {
         if (request == null) {
             return new GetOwnedGeoCodesResponse(false, "The GetOwnedGeoCodesRequest object passed was NULL", null);
@@ -244,7 +238,6 @@ public class UserServiceImpl implements UserService {
      * @param request GetMyMissionsRequest object
      * @return GetMyMissionsResponse object
      */
-    @Transactional
     public GetMyMissionsResponse getMyMissions(GetMyMissionsRequest request) throws NullRequestParameterException {
         if(request == null){
             return new GetMyMissionsResponse(false, "The GetMyMissionsRequest object passed was NULL", null);
@@ -334,7 +327,6 @@ public class UserServiceImpl implements UserService {
      * @param request The GetUserByIdRequest object
      * @return The User if they exist, else NULL contained in a GetUserByIdResponse object
      */
-    @Transactional
     public GetUserByIdResponse getUserById(GetUserByIdRequest request) throws NullRequestParameterException {
         if(request == null){
             return new GetUserByIdResponse(false, "The GetUserByIdRequest object passed was NULL", null);
@@ -353,7 +345,6 @@ public class UserServiceImpl implements UserService {
      *  Gets the current User using the Keycloak details
      * @return The current User
      */
-    @Transactional
     public User getCurrentUser(){
         /* make request to get the current User*/
         var request = new GetUserByIdRequest(getCurrentUserID());
@@ -432,7 +423,6 @@ public class UserServiceImpl implements UserService {
      * @param request The UUID identifying the Collectable to swap with the currentCollectable
      * @return The original currentCollectable
      */
-    @Transactional
     public SwapCollectableResponse swapCollectable( SwapCollectableRequest request ) throws NullRequestParameterException {
         if(request == null){
             return new SwapCollectableResponse(false, "The SwapCollectableRequest object passed was NULL", null);
