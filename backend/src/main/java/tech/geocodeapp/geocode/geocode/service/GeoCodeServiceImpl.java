@@ -271,7 +271,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, check);
                 userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
             } catch (NullRequestParameterException e) {
-                e.printStackTrace();
+
                 return new CreateGeoCodeResponse(false);
             }
         } catch ( IllegalArgumentException error ) {
@@ -325,7 +325,25 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     @Override
     public UpdateGeoCodeResponse updateGeoCode( UpdateGeoCodeRequest request ) throws InvalidRequestException {
 
-        return null;
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getGeoCodeID() == null ) {
+
+            /* No GeoCode */
+            throw new InvalidRequestException();
+        } else if ( ( request.getLocation() == null ) && ( request.getHints() == null ) &&
+                ( request.getDifficulty() == null ) && ( request.getDescription() == null ) &&
+                ( request.isAvailable() == null ) ) {
+
+            /* No attribute specified to update */
+            throw new InvalidRequestException();
+        }
+
+        UpdateGeoCodeResponse response = new UpdateGeoCodeResponse();
+
+        return response;
     }
 
     /**
@@ -1014,4 +1032,5 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
     }
     /*----------- END -----------*/
+
 }

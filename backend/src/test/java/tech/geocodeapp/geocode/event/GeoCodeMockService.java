@@ -23,6 +23,21 @@ public class GeoCodeMockService implements GeoCodeService {
         return null;
     }
 
+    /**
+     * Update a stored GeoCode
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public UpdateGeoCodeResponse updateGeoCode( UpdateGeoCodeRequest request ) throws InvalidRequestException {
+
+        return null;
+    }
+
     @Override
     public GetGeoCodeResponse getGeoCode(GetGeoCodeRequest request) throws InvalidRequestException {
         var temp = geocodeRepo.findById(request.getGeoCodeID());
