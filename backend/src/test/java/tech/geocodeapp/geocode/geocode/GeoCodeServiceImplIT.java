@@ -629,6 +629,113 @@ class GeoCodeServiceImplIT {
     }
 
     /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 2 )
+    @DisplayName( "Null repository handling - updateGeoCode" )
+    void updateGeoCodeNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> geoCodeService.updateGeoCode( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 10 )
+    @DisplayName( "Invalid repository attribute handling - updateGeoCode" )
+    void updateGeoCodeInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         * */
+        var request = new UpdateGeoCodeRequest();
+        request.setAvailable( true );
+        request.setDescription( null );
+        request.setDifficulty( Difficulty.INSANE );
+        request.setHints( null );
+        request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.updateGeoCode( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 10 )
+    @DisplayName( "All invalid repository attribute handling - updateGeoCode" )
+    void updateGeoCodeAllInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         * */
+        var request = new UpdateGeoCodeRequest();
+        request.setAvailable( null );
+        request.setDescription( null );
+        request.setDifficulty( null );
+        request.setHints( null );
+        request.setLocation( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.updateGeoCode( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Using valid data does the createGeoCode use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 18 )
+    @DisplayName( "Valid request - updateGeoCode" )
+    void updateGeoCodeTest() {
+
+        try {
+
+            /*
+             * Create a request object
+             * and assign values to it
+             */
+            var request = new UpdateGeoCodeRequest();
+            request.setAvailable( true );
+            request.setDescription( "The GeoCode is stored at the art Museum in Jhb South" );
+            request.setDifficulty( Difficulty.INSANE );
+            List< String > hints = new ArrayList<>();
+            hints.add( "This " );
+            hints.add( "is " );
+            hints.add( "a " );
+            hints.add( "secret " );
+            hints.add( "hint." );
+            request.setHints( hints );
+            request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
+
+            var response = geoCodeService.updateGeoCode( request );
+
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the description created with the code
+             */
+            Assertions.assertTrue( response.isSuccess() );
+
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Using valid data does the getAllGeoCode use case test
      * complete successfully
      */
