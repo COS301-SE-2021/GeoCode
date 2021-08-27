@@ -4,23 +4,15 @@ import java.util.UUID;
 
 public class UpdatePointRequest {
 
-    private UUID pointId;
+    private final UUID pointId;
 
     /**
      * Increase the User's points by this amount
      */
     private Integer amount;
 
-    private UUID userId = null;
-    private UUID leaderboardId = null;
-
-    public UpdatePointRequest() {
-    }
-
-    public UpdatePointRequest(UUID pointId, Integer amount) {
-        this.pointId = pointId;
-        this.amount = amount;
-    }
+    private UUID userId;
+    private UUID leaderboardId;
 
     public UpdatePointRequest(UUID pointId, Integer amount, UUID userId, UUID leaderboardId) {
         this.pointId = pointId;
@@ -31,10 +23,6 @@ public class UpdatePointRequest {
 
     public UUID getPointId() {
         return pointId;
-    }
-
-    public void setPointId(UUID pointId) {
-        this.pointId = pointId;
     }
 
     public Integer getAmount() {

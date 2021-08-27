@@ -8,10 +8,6 @@ public class PointResponse extends Response {
     @JsonProperty("point")
     private Point point;
 
-    public PointResponse() {
-
-    }
-
     public PointResponse(boolean success, String message, Point point) {
         super(success, message);
         this.point = point;
