@@ -267,6 +267,7 @@ public class UserServiceImplTest {
         /* create a GeoCode with Collectables for the User to swap out */
         geoCodeWithCollectables = new GeoCode();
         geoCodeWithCollectables.setId(geoCodeWithCollectablesID);
+        geoCodeWithCollectables.setLocation(new GeoPoint(10.0, 10.0));
 
         //save the Collectables
         var collectableSet = new CollectableSet("Test Set", "CollectableSet for testing");
@@ -1125,6 +1126,7 @@ public class UserServiceImplTest {
             //test that the User's Collectable is now the fishCollectable
             Assertions.assertEquals(fishCollectableID, validUser.getCurrentCollectable().getId());
         } catch (NullRequestParameterException e) {
+            e.printStackTrace();
             Assertions.fail(e.getMessage());
         }
     }
