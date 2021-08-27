@@ -19,7 +19,6 @@ import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-05T10:13:51.670Z[GMT]")
 @RestController
 public class LeaderboardApiController implements LeaderboardApi {
     private static final Logger log = LoggerFactory.getLogger(LeaderboardApiController.class);

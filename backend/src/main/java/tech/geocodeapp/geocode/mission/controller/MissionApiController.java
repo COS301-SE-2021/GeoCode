@@ -23,7 +23,6 @@ import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-12T09:55:42.563Z[GMT]")
 @RestController
 public class MissionApiController implements MissionApi {
 

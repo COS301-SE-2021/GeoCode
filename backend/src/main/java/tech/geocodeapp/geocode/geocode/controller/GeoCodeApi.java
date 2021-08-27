@@ -19,7 +19,6 @@ import tech.geocodeapp.geocode.geocode.request.*;
 
 
 @Validated
-@CrossOrigin(origins = "${web_referrer}", maxAge = 3600)
 public interface GeoCodeApi {
 
     @Operation( summary = "Creates a new GeoCode", description = "Create GeoCode", security = {
