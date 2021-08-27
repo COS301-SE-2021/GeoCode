@@ -19,7 +19,6 @@ import tech.geocodeapp.geocode.event.request.*;
 import javax.validation.Valid;
 
 @Validated
-@CrossOrigin(origins = "${web_referrer}", maxAge = 3600)
 public interface EventApi {
 
     @Operation( summary = "Changes an Event's availability", description = "Changes the specified Event's availability to the given availability", security = {

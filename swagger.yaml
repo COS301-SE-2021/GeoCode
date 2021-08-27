@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.12"
+  version: "1.5.14"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -1292,8 +1292,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/GetEventLeaderboardResponse'
-        '404':
-          description: "Unable to find CollectableTypes of given set"
+        '400':
+          description: "Could not get the Event's Leaderboard details"
           content:
             application/json:
               schema:
@@ -1732,6 +1732,15 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/CreateLeaderboardResponse'
+        '400':
+          description: "Could not create the Leaderboard"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLeaderboardResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateLeaderboardResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -1756,6 +1765,15 @@ paths:
       responses:
         '200':
           description: "Successfully created a new point"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+        '400':
+          description: "Could not create a new point"
           content:
             application/json:
               schema:
@@ -1794,6 +1812,15 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/DeletePointResponse'
+        '400':
+          description: "Could not delete point"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DeletePointResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -1818,6 +1845,15 @@ paths:
       responses:
         '200':
           description: "Successfully Updated point"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PointResponse'
+        '400':
+          description: "Could not update point"
           content:
             application/json:
               schema:
@@ -1953,6 +1989,129 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - bearerAuth: []
+        
+  /Image/uploadImage:
+    post:
+      tags:
+        - "Image"
+      summary: "Uploads an image"
+      description: "Uploads an image to the server and returns its ID"
+      operationId: "uploadImage"
+      requestBody:
+        content:
+          image/bmp:
+            schema:
+              type: string
+              format: binary
+          image/gif:
+            schema:
+              type: string
+              format: binary
+          image/jpeg:
+            schema:
+              type: string
+              format: binary
+          image/png:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: "Image uploaded"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+        '400':
+          description: "Request does not include a file"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '413':
+          description: "File is too large"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+        '415':
+          description: "File is not an image"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+        '422':
+          description: "Image could not be processed"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+        '500':
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateImageResponse'
+      security:
+        - bearerAuth: []
+        
+  /Image/getImage/{imageID}:
+    get:
+      tags:
+        - "Image"
+      summary: "Retrieves an image"
+      description: "Retrieves an image with the specified ID"
+      operationId: "getImage"
+      parameters:
+        - in: path
+          name: imageID
+          schema:
+            type: string
+            format: uuid
+            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+          required: true
+          description: "ID of the image to retrieve"
+      responses:
+        '200':
+          description: "Image retrieved"
+          content:
+            image/gif:
+              schema:
+                type: string
+                format: binary
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: "Request does not include a valid UUID"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: "An image with the specified ID was not found"
+        '500':
+          description: "Internal server error"
+
         
 
 components:
@@ -3714,3 +3873,19 @@ components:
           example: "Completion Updated"
       xml:
         name: "UpdateCompletionResponse"
+        
+    CreateImageResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          required:
+            - imageID
+          properties:
+            message:
+              example: "Image uploaded"
+            imageID:
+              type: string
+              format: uuid
+              example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+          xml:
+            name: "CreateImageResponse"

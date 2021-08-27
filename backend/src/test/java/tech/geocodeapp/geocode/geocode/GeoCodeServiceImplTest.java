@@ -149,7 +149,8 @@ class GeoCodeServiceImplTest {
         userService = Mockito.mock( UserServiceImpl.class );
 
         /* Get a random user as only a valid response is needed */
-        lenient().when ( userService.getCurrentUser() ).thenReturn( new User().id(java.util.UUID.randomUUID()) );
+        lenient().when ( userService.getCurrentUser() ).thenReturn( new User().id( java.util.UUID.randomUUID() ) );
+        lenient().when ( userService.getCurrentUserID() ).thenReturn( java.util.UUID.randomUUID() );
 
         try {
 
@@ -788,7 +789,7 @@ class GeoCodeServiceImplTest {
             Difficulty difficulty = Difficulty.INSANE;
 
             /* Populate the repo with the given amount of GeoCodes */
-            populate( size );
+            populateUsingDirectInsert( size );
 
             /*
              * Create a request object
@@ -874,7 +875,7 @@ class GeoCodeServiceImplTest {
             listOfDifficulties.add( Difficulty.EASY );
 
             /* Populate the repo with the given amount of GeoCodes */
-            populate( size );
+            populateUsingDirectInsert( size );
 
             /*
              * Create a request object
@@ -966,7 +967,7 @@ class GeoCodeServiceImplTest {
 
         try {
 
-            populate( 1 );
+            populateWithCreateGeoCode( 1 );
 
             List< GeoCode > temp = repo.findAll();
 
@@ -1093,7 +1094,7 @@ class GeoCodeServiceImplTest {
     void updateAvailabilityTest() {
 
         /* Create a GeoCode */
-        populate( 1 );
+        populateWithCreateGeoCode( 1 );
         List< GeoCode > temp = repo.findAll();
 
         try {
@@ -1163,7 +1164,7 @@ class GeoCodeServiceImplTest {
     void getGeoCodesByLocationTest() {
 
         /* Create a GeoCode */
-        populate( 1 );
+        populateUsingDirectInsert( 1 );
         List< GeoCode > temp = repo.findAll();
 
         try {
@@ -1233,7 +1234,7 @@ class GeoCodeServiceImplTest {
     void getGeoCodesByQRCodeTest() {
 
         /* Create a GeoCode */
-        populate( 1 );
+        populateWithCreateGeoCode( 1 );
         List< GeoCode > temp = repo.findAll();
 
         try {
@@ -1303,7 +1304,7 @@ class GeoCodeServiceImplTest {
     void getCollectablesTest() {
 
         /* Create a GeoCode */
-        populate( 1 );
+        populateWithCreateGeoCode( 1 );
         List< GeoCode > temp = repo.findAll();
 
         try {
@@ -1352,9 +1353,80 @@ class GeoCodeServiceImplTest {
     ////////////////Helper functions////////////////
 
     /**
-     * This function creates numerous GeoCodes to be used for testing.
+     * This function creates numerous GeoCodes, saved directly to the repo to save execution time,
+     * to be used for testing.
      */
-    private void populate( int size ) {
+    private void populateUsingDirectInsert( int size ) {
+
+        /* check if the size is valid */
+        if ( size >= 2 ) {
+
+            /* Populate half with INSANE geoCodes to give variability */
+            for ( int x = 0; x < ( size / 2 ); x++ ) {
+
+                /* Create the request with the following mock data */
+                // CreateGeoCodeRequest request = new CreateGeoCodeRequest();
+                GeoCode request = new GeoCode();
+                request.setAvailable( true );
+                request.setDescription( "The INSANE GeoCode is stored at location " + x );
+                request.setDifficulty( Difficulty.INSANE );
+                List< String > hints = new ArrayList<>();
+                hints.add( "Hint one for: " + x );
+                hints.add( "Hint two for: " + x );
+                hints.add( "Hint three for: " + x );
+                request.setHints( hints );
+                request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+                /* Add the created GeoCode to the list */
+                repo.save( request );
+                // geoCodeService.createGeoCode( request );
+            }
+
+            /* Populate half with EASY geoCodes to give variability */
+            for ( int x = ( size / 2 ); x < size; x++ ) {
+
+                /* Create the request with the following mock data */
+                GeoCode request = new GeoCode();
+                request.setAvailable( true );
+                request.setDescription( "The EASY GeoCode is stored at location " + x );
+                request.setDifficulty( Difficulty.EASY );
+                List< String > hints = new ArrayList<>();
+                hints.add( "Hint one for: " + x );
+                hints.add( "Hint two for: " + x );
+                hints.add( "Hint three for: " + x );
+                request.setHints( hints );
+                request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+                /* Add the created GeoCode to the list */
+                repo.save( request );
+            }
+        } else if ( size == 1 ) {
+
+            int x = 1;
+
+            /* Create the request with the following mock data */
+            GeoCode request = new GeoCode();
+            request.setAvailable( true );
+            request.setDescription( "The DIFFICULTY GeoCode is stored at location " + x );
+            request.setDifficulty( Difficulty.HARD );
+            List< String > hints = new ArrayList<>();
+            hints.add( "Hint one for: " + x );
+            hints.add( "Hint two for: " + x );
+            hints.add( "Hint three for: " + x );
+            request.setHints( hints );
+            request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
+
+            /* Add the created GeoCode to the list */
+            repo.save( request );
+        }
+
+    }
+
+
+    /**
+     * This function creates numerous GeoCodes to be used for testing using the createGeoCode use case.
+     */
+    private void populateWithCreateGeoCode( int size ) {
 
         try {
 
@@ -1370,9 +1442,9 @@ class GeoCodeServiceImplTest {
                     request.setDescription( "The INSANE GeoCode is stored at location " + x );
                     request.setDifficulty( Difficulty.INSANE );
                     List< String > hints = new ArrayList<>();
-                        hints.add( "Hint one for: " + x );
-                        hints.add( "Hint two for: " + x );
-                        hints.add( "Hint three for: " + x );
+                    hints.add( "Hint one for: " + x );
+                    hints.add( "Hint two for: " + x );
+                    hints.add( "Hint three for: " + x );
                     request.setHints( hints );
                     request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
 
@@ -1408,9 +1480,9 @@ class GeoCodeServiceImplTest {
                 request.setDescription( "The DIFFICULTY GeoCode is stored at location " + x );
                 request.setDifficulty( Difficulty.HARD );
                 List< String > hints = new ArrayList<>();
-                    hints.add( "Hint one for: " + x );
-                    hints.add( "Hint two for: " + x );
-                    hints.add( "Hint three for: " + x );
+                hints.add( "Hint one for: " + x );
+                hints.add( "Hint two for: " + x );
+                hints.add( "Hint three for: " + x );
                 request.setHints( hints );
                 request.setLocation( new GeoPoint( 10.2587 + x, 40.336981 + x ) );
 

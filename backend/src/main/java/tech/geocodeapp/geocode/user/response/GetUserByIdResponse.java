@@ -4,14 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.user.model.User;
 
-import javax.validation.Valid;
-
 /**
  * GetUserByIdResponse
  */
 public class GetUserByIdResponse extends Response {
     @JsonProperty("user")
-    @Valid
     private User user;
 
     public GetUserByIdResponse(boolean success, String message, User user){
