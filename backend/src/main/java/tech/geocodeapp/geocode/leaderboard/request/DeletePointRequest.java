@@ -4,10 +4,7 @@ import java.util.UUID;
 
 public class DeletePointRequest {
 
-    private UUID pointId;
-
-    public DeletePointRequest() {
-    }
+    private final UUID pointId;
 
     public DeletePointRequest(UUID pointId) {
         this.pointId = pointId;
@@ -17,7 +14,4 @@ public class DeletePointRequest {
         return pointId;
     }
 
-    public void setPointId(UUID pointId) {
-        this.pointId = pointId;
-    }
 }

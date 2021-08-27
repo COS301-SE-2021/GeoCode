@@ -14,7 +14,7 @@ public class GetPointForUserRequest {
     /**
      * The Leaderboard ID
      */
-    private UUID leaderboardID;
+    private final UUID leaderboardID;
 
     public GetPointForUserRequest(UUID userID, UUID leaderboardID) {
         this.userID = userID;
@@ -31,9 +31,5 @@ public class GetPointForUserRequest {
 
     public UUID getLeaderboardID() {
         return leaderboardID;
-    }
-
-    public void setLeaderboardID(UUID leaderboardID) {
-        this.leaderboardID = leaderboardID;
     }
 }

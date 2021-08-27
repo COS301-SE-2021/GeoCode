@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.leaderboard.service;
 
-import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
