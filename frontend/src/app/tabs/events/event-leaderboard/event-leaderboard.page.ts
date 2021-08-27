@@ -33,7 +33,7 @@ export class EventLeaderboardPage implements OnInit {
       this.leaderBoardName = this.event.leaderboards[0].name;
     } else {
       this.event = null;
-      this.eventID = route.snapshot.paramMap.get('id');
+      this.eventID = route.snapshot.paramMap.get('eventID');
       console.log(this.eventID);
     }
     this.loadLeaderboard();

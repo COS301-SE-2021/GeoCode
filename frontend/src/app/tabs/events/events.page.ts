@@ -67,12 +67,12 @@ export class EventsPage implements AfterViewInit {
     this.height = '93%';
   }
 
-  goToEvent(event) {
-    this.navCtrl.navigateForward('/events/' + event.id, {state: {event}});
+  async goToEvent(event) {
+    await this.navCtrl.navigateForward('/events/'+event.id, {state: {event}});
   }
 
-  goToLeaderBoard(event) {
-    this.navCtrl.navigateForward('/events/' + event.id + '/leaderboard', {state: {event}});
+  async goToLeaderBoard(event) {
+    await this.navCtrl.navigateForward('/events/'+event.id+'/leaderboard', {state: {event}});
   }
 
   radius($event) {

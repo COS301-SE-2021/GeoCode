@@ -271,7 +271,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, check);
                 userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
             } catch (NullRequestParameterException e) {
-                e.printStackTrace();
+
                 return new CreateGeoCodeResponse(false);
             }
         } catch ( IllegalArgumentException error ) {
@@ -309,6 +309,39 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             /* Exception thrown therefore creation failed */
             response.setSuccess( false );
         }
+
+        return response;
+    }
+
+    /**
+     * Update a stored GeoCode
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public UpdateGeoCodeResponse updateGeoCode( UpdateGeoCodeRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getGeoCodeID() == null ) {
+
+            /* No GeoCode */
+            throw new InvalidRequestException();
+        } else if ( ( request.getLocation() == null ) && ( request.getHints() == null ) &&
+                ( request.getDifficulty() == null ) && ( request.getDescription() == null ) &&
+                ( request.isAvailable() == null ) ) {
+
+            /* No attribute specified to update */
+            throw new InvalidRequestException();
+        }
+
+        UpdateGeoCodeResponse response = new UpdateGeoCodeResponse();
 
         return response;
     }
@@ -999,4 +1032,5 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
     }
     /*----------- END -----------*/
+
 }

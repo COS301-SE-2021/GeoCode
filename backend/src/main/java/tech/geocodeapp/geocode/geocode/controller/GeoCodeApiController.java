@@ -42,6 +42,22 @@ public class GeoCodeApiController implements GeoCodeApi {
         }
     }
 
+    public ResponseEntity< UpdateGeoCodeResponse > updatedGeoCode( @Parameter( in = ParameterIn.DEFAULT,
+            description = "Request to update a GeoCode",
+            required = true, schema = @Schema() )
+                                                                   @Valid @RequestBody UpdateGeoCodeRequest body ) throws InvalidRequestException {
+
+        UpdateGeoCodeResponse response = geoCodeService.updateGeoCode( body );
+
+        if ( ( response != null ) && ( response.isSuccess() != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( response, HttpStatus.BAD_REQUEST );
+        }
+    }
+
     public ResponseEntity< GetGeoCodeByLocationResponse > getGeoCodeByLocation( @Parameter( in = ParameterIn.DEFAULT,
             description = "Request to get a GeoCode at or near the given location",
             required = true, schema = @Schema() )
