@@ -47,7 +47,7 @@ public class LeaderboardApiController implements LeaderboardApi {
         if (response.isSuccess()) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else {
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -64,7 +64,7 @@ public class LeaderboardApiController implements LeaderboardApi {
         if (response.isSuccess()) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else {
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -81,7 +81,7 @@ public class LeaderboardApiController implements LeaderboardApi {
         if (response.isSuccess()) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -96,7 +96,7 @@ public class LeaderboardApiController implements LeaderboardApi {
         if (response.isSuccess()) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else {
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -113,7 +113,7 @@ public class LeaderboardApiController implements LeaderboardApi {
         if (response.isSuccess()) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else {
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -130,7 +130,7 @@ public class LeaderboardApiController implements LeaderboardApi {
         if (response.isSuccess()) {
            return new ResponseEntity<>(response, HttpStatus.OK);
         }else {
-           return new ResponseEntity<>(response, HttpStatus.OK);
+           return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -147,7 +147,7 @@ public class LeaderboardApiController implements LeaderboardApi {
         if (response.isSuccess()) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else {
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 

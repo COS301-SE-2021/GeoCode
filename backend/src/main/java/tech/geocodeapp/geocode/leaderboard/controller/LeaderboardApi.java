@@ -26,7 +26,9 @@ public interface LeaderboardApi {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "Leaderboard" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Successfully created the Leaderboard", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateLeaderboardResponse.class))),
-        
+
+        @ApiResponse(responseCode = "400", description = "Could not create the Leaderboard", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateLeaderboardResponse.class))),
+
         @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/Leaderboard/createLeaderboard",
         produces = { "application/json", "application/xml" }, 
@@ -39,7 +41,9 @@ public interface LeaderboardApi {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "Leaderboard" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Successfully created a new point", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PointResponse.class))),
-        
+
+        @ApiResponse(responseCode = "400", description = "Could not create a new point", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PointResponse.class))),
+
         @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/Leaderboard/createPoint",
         produces = { "application/json", "application/xml" }, 
@@ -52,7 +56,9 @@ public interface LeaderboardApi {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "Leaderboard" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Successfully deleted a point", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DeletePointResponse.class))),
-        
+
+        @ApiResponse(responseCode = "400", description = "Could not delete point", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DeletePointResponse.class))),
+
         @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/Leaderboard/deletePoint",
         produces = { "application/json", "application/xml" }, 
@@ -65,10 +71,10 @@ public interface LeaderboardApi {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "Leaderboard" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Successfully returned the Event's Leaderboard details", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetEventLeaderboardResponse.class))),
-        
+
         @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
         
-        @ApiResponse(responseCode = "404", description = "Unable to find CollectableTypes of given set", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetEventLeaderboardResponse.class))) })
+        @ApiResponse(responseCode = "400", description = "Could not get the Event's Leaderboard details", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetEventLeaderboardResponse.class))) })
     @RequestMapping(value = "/Leaderboard/getEventLeaderboard",
         produces = { "application/json", "application/xml" }, 
         consumes = { "application/json", "application/xml" }, 
@@ -110,7 +116,9 @@ public interface LeaderboardApi {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "Leaderboard" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Successfully Updated point", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PointResponse.class))),
-        
+
+        @ApiResponse(responseCode = "400", description = "Could not update point", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PointResponse.class))),
+
         @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/Leaderboard/updatePoint",
         produces = { "application/json", "application/xml" }, 
