@@ -112,10 +112,6 @@ class GeoCodeServiceImplIT {
         try {
 
             /* Set the current user */
-            //MockSecurity.setup();
-            //MockSecurity.setCurrentUserID( userID );
-
-
             SecurityContext securityContext = Mockito.mock( SecurityContext.class );
             Authentication authentication = Mockito.mock( Authentication.class );
 

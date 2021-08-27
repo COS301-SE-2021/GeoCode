@@ -320,6 +320,44 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     }
 
     /**
+<<<<<<< Updated upstream
+=======
+     * Update a stored GeoCode
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public UpdateGeoCodeResponse updateGeoCode( UpdateGeoCodeRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getGeoCodeID() == null ) {
+
+            /* An ID is needed */
+            throw new InvalidRequestException();
+        } else if ( ( request.getLocation() == null ) && ( request.getHints() == null ) &&
+                ( request.getDifficulty() == null ) && ( request.getDescription() == null ) &&
+                ( request.isAvailable() == null ) && ( request.getHints() == null ) ) {
+
+            /* There is nothing to update as no parameters passed */
+            throw new InvalidRequestException();
+        }
+
+        var response = new UpdateGeoCodeResponse();
+
+        response.setSuccess( true );
+
+        return response;
+    }
+
+    /**
+>>>>>>> Stashed changes
      * Get the GeoCode associated with the given ID
      *
      * @param request the attributes the response should be created from
