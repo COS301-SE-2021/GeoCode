@@ -5,11 +5,11 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.lenient;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
@@ -22,6 +22,7 @@ import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCodeApplication;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
 
 import java.util.ArrayList;
@@ -111,15 +112,12 @@ class GeoCodeServiceImplIT {
 
         try {
 
-            /* Set the current user */
-            SecurityContext securityContext = Mockito.mock( SecurityContext.class );
-            Authentication authentication = Mockito.mock( Authentication.class );
+            /* Mock the user service to return wanted data */
+            userService = Mockito.mock( UserServiceImpl.class );
 
-            Mockito.when( securityContext.getAuthentication() ).thenReturn( authentication );
-
-            SecurityContextHolder.setContext( securityContext );
-
-            Mockito.when( authentication.getName() ).thenReturn( userID.toString() );
+            /* Get a random user as only a valid response is needed */
+            lenient().when ( userService.getCurrentUser() ).thenReturn( new User().id( java.util.UUID.randomUUID() ) );
+            lenient().when ( userService.getCurrentUserID() ).thenReturn( java.util.UUID.randomUUID() );
 
             /* Create a new GeoCodeServiceImpl instance to access the different use cases */
             geoCodeService = new GeoCodeServiceImpl( repo, collectableService, userService, eventService );
@@ -607,11 +605,11 @@ class GeoCodeServiceImplIT {
             request.setDescription( "The GeoCode is stored at the art Museum in Jhb South" );
             request.setDifficulty( Difficulty.INSANE );
             List< String > hints = new ArrayList<>();
-            hints.add( "This " );
-            hints.add( "is " );
-            hints.add( "a " );
-            hints.add( "secret " );
-            hints.add( "hint." );
+                hints.add( "This " );
+                hints.add( "is " );
+                hints.add( "a " );
+                hints.add( "secret " );
+                hints.add( "hint." );
             request.setHints( hints );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
 

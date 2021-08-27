@@ -149,7 +149,8 @@ class GeoCodeServiceImplTest {
         userService = Mockito.mock( UserServiceImpl.class );
 
         /* Get a random user as only a valid response is needed */
-        lenient().when ( userService.getCurrentUser() ).thenReturn( new User().id(java.util.UUID.randomUUID()) );
+        lenient().when ( userService.getCurrentUser() ).thenReturn( new User().id( java.util.UUID.randomUUID() ) );
+        lenient().when ( userService.getCurrentUserID() ).thenReturn( java.util.UUID.randomUUID() );
 
         try {
 
