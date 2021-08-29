@@ -1,6 +1,9 @@
 <div id="geoCodeDetails">
   <ion-card *ngIf="geocode">
-    <div  id="close-button"><ion-button id="close" color="white" (click)="parent.closeDetails()">X</ion-button></div>
+    <div  id="close-button">
+      <ion-button id="close" color="white" (click)="parent.closeDetails()">X</ion-button>
+      <ion-button *ngIf="showQR" id="close" color="white" (click)="updateGeocode()"> Edit <ion-icon name="create-outline"></ion-icon></ion-button>
+    </div>
     <ion-header>
       <ion-title id="card-title">
         <div class="title-text-wrap">
@@ -20,8 +23,8 @@
         <ion-col>Difficulty</ion-col>
         <ion-col>{{geocode.difficulty}}</ion-col>
       </ion-row>
-      <ion-button id="button" color="button" (click)="findGeoCode()">Find GeoCode</ion-button>
-      <ion-button color="button" (click)="openInMaps()">Open in Google Maps</ion-button>
+<!--      <ion-button id="button" color="button" (click)="findGeoCode()">Find GeoCode</ion-button>-->
+      <ion-button color="button" (click)="openInMaps()">Google Maps</ion-button>
       <ion-button *ngIf="showQR" color="button" (click)="getQR()">Download QR</ion-button>
 
     </ion-card-content>

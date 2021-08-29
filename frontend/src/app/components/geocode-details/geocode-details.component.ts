@@ -60,4 +60,8 @@ export class GeocodeDetailsComponent implements OnInit {
     this.qrGenerator.generate(this.geocode.qrCode);
   }
 
+  updateGeocode(){
+
+  }
+
 }
