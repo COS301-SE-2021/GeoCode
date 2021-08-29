@@ -22,6 +22,7 @@ export class EventsPage implements AfterViewInit {
   markers ;
   selected = [];
   events = [];
+  listView = false;
   isHidden = false;
   height = '93%';
   position;
@@ -127,6 +128,10 @@ export class EventsPage implements AfterViewInit {
       mark.setMap(null);
     }
     this.markers = [];
+  }
+
+  toggleList(){
+    this.listView= !this.listView;
   }
 
 }
