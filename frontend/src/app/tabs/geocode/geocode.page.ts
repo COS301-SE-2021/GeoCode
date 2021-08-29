@@ -29,7 +29,7 @@ export class GeocodePage implements AfterViewInit  {
   selected=[];
   isHidden=true;
   height='60%';
-
+  listView = false;
 
 
   constructor(
@@ -209,6 +209,10 @@ export class GeocodePage implements AfterViewInit  {
 
   isAdmin() {
     return this.keycloak.isUserInRole('Admin');
+  }
+
+  toggleList(){
+  this.listView= !this.listView;
   }
 
 }
