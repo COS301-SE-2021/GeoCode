@@ -6,8 +6,10 @@ import {
   UpdateAvailabilityRequest,
   UpdateAvailabilityResponse
 } from '../../services/geocode-api';
-import {NavController} from '@ionic/angular';
+import {ModalController, NavController} from '@ionic/angular';
 import {QRGenerator} from '../../services/QRGenerator';
+import {CreateGeocodeComponent} from "../../tabs/events/events-create/create-geocode/create-geocode.component";
+import {GeocodeUpdateComponent} from "../../tabs/profile/geocodes/geocode-update/geocode-update.component";
 
 @Component({
   selector: 'app-geocode-details',
@@ -21,6 +23,7 @@ export class GeocodeDetailsComponent implements OnInit {
   @Input() showQR = false;
 
   constructor(
+    private modalController: ModalController,
     private geocodeService: GeoCodeService,
     private keycloak: KeycloakService,
     private navCtrl: NavController,
@@ -60,8 +63,14 @@ export class GeocodeDetailsComponent implements OnInit {
     this.qrGenerator.generate(this.geocode.qrCode);
   }
 
-  updateGeocode(){
-
+  async updateGeocode(geocode) {
+    const modal = await this.modalController.create({
+      component: GeocodeUpdateComponent,
+      swipeToClose: true,
+      componentProps: {}
+    });
+    await modal.present();
+    const {data} = await modal.onDidDismiss();
   }
 
 }
