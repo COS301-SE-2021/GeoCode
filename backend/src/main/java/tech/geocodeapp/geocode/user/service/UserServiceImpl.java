@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.user.service;
 
+import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
@@ -364,6 +365,15 @@ public class UserServiceImpl implements UserService {
     public UUID getCurrentUserID(){
         String uuid = SecurityContextHolder.getContext().getAuthentication().getName();
         return UUID.fromString(uuid);
+    }
+
+    /**
+     * Returns whether the current user is an Admin
+     * @return true if the current user is an Admin
+     */
+    public boolean currentUserIsAdmin() {
+        var account = (SimpleKeycloakAccount) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        return account.getRoles().contains( "Admin" );
     }
 
     /**

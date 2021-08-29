@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.user.service;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.*;
@@ -52,6 +53,8 @@ public interface UserService {
 
     //U1.14 getCurrentUserID
     java.util.UUID getCurrentUserID();
+
+    boolean currentUserIsAdmin();
 
     //U1.15 registerNewUser
     RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException;
