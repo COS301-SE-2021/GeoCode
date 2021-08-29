@@ -2,7 +2,7 @@
   <ion-card *ngIf="geocode">
     <div  id="close-button">
       <ion-button id="close" color="white" (click)="parent.closeDetails()">X</ion-button>
-      <ion-button *ngIf="showQR" id="close" color="white" (click)="updateGeocode()"> Edit <ion-icon name="create-outline"></ion-icon></ion-button>
+      <ion-button *ngIf="showQR" id="close" color="white" (click)="updateGeocode(geocode)"> Edit <ion-icon name="create-outline"></ion-icon></ion-button>
     </div>
     <ion-header>
       <ion-title id="card-title">

@@ -11,4 +11,20 @@ export class GeocodeUpdateComponent implements OnInit {
 
   ngOnInit() {}
 
+  updateRequest($event,type){
+
+  }
+
+  updateHints($event){
+
+  }
+
+  updateDifficulty($event){
+
+  }
+
+  updateGeoCode(){
+
+  }
+
 }
