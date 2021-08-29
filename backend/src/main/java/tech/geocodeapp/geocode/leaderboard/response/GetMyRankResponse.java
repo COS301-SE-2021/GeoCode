@@ -9,13 +9,6 @@ public class GetMyRankResponse extends Response {
     private Integer rank;
 
     /**
-     * Default constructor
-     */
-    public GetMyRankResponse() {
-
-    }
-
-    /**
      * Overloaded Constructor
      *
      * @param rank The rank from the specified leaderboard

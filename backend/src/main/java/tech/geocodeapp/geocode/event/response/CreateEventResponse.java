@@ -8,12 +8,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * CreateEventResponse object that determines if the Event was created successfully
  */
 @Validated
 public class CreateEventResponse extends Response {
+    private UUID eventID;
+
     /**
      * Overloaded Constructor
      *
@@ -21,5 +24,19 @@ public class CreateEventResponse extends Response {
      */
     public CreateEventResponse( boolean success, String message ) {
         super(success, message);
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param success the status of the Event created
+     */
+    public CreateEventResponse( boolean success, String message, UUID eventID) {
+        super(success, message);
+        this.eventID = eventID;
+    }
+
+    public UUID getEventID() {
+        return eventID;
     }
 }

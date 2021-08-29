@@ -117,14 +117,4 @@ public class UserMockService implements UserService {
     public AddToMyMissionsResponse addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException {
         return null;
     }
-
-    /**
-     * Post construct the GeoCode service, this avoids a circular dependency
-     *
-     * @param geoCodeService the service to be set
-     */
-    @Override
-    public void setGeoCodeService(GeoCodeService geoCodeService) {
-
-    }
 }
