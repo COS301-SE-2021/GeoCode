@@ -7,7 +7,11 @@
 <ion-content>
 
   <div class="horizontalscroll">
+    <ion-button [hidden]="listView"  color="button" (click)="toggleList()" slot="fixed"><ion-icon name="list-outline"></ion-icon></ion-button>
+    <ion-button [hidden]="!listView" color="button" (click)="toggleList()"><ion-icon name="map-outline"></ion-icon></ion-button>
+
     <div class="items">
+
       <ion-col id="button-col"><ion-button id="button"  color="button" (click)="getAllMap()">Get all GeoCodes</ion-button></ion-col>
       <ion-col id="button-col"><ion-button id="button"  color="button" (click)="easyMap()">Easy</ion-button></ion-col>
       <ion-col id="button-col"><ion-button id="button"  color="button" (click)="mediumMap()">Medium </ion-button></ion-col>
@@ -15,7 +19,30 @@
       <ion-col id="button-col"><ion-button id="button"  color="button" (click)="insaneMap()">Insane</ion-button></ion-col>
     </div>
   </div>
-  <div #mapElement [style.height]="height" class="map"></div>
+  <div #mapElement [style.height]="height" class="map" [hidden]="listView"></div>
+  <div  [hidden]="!listView">
+    <ion-card *ngFor="let geocode of geocodes" class="listItems">
+      <ion-header>
+        <ion-title id="card-title">
+          {{geocode.description}}
+        </ion-title>
+      </ion-header>
+      <ion-card-content>
+        <ng-template [ngIf]="isAdmin()">
+          <ion-row class="row">
+            <ion-col>Available</ion-col>
+            <ion-col><ion-checkbox disabled="false"  (ionBlur)="updateAvailability(geocode)" [(ngModel)]="geocode.available"></ion-checkbox></ion-col>
+          </ion-row>
+        </ng-template>
+        <ion-row class="row">
+          <ion-col>Difficulty</ion-col>
+          <ion-col>{{geocode.difficulty}}</ion-col>
+        </ion-row>
+        <ion-button id="button" color="button" (click)="findGeoCode(geocode)">Find GeoCode</ion-button>
+        <ion-button color="button" (click)="openInMaps(geocode)">Google Maps</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
   <ion-fab vertical="bottom" horizontal="start" slot="fixed">
     <ion-fab-button color="button" [routerLink]="['create-geocode']">
