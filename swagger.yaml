@@ -2339,6 +2339,47 @@ components:
       xml:
         name: "UpdateAvailabilityResponse"
 
+    UpdateGeoCodeRequest:
+      type: "object"
+      required:
+        - geoCodeID
+        - description
+        - location
+        - hints
+        - difficulty
+        - available
+      properties:
+        geoCodeID:
+          type: string
+          format: uuid
+        description:
+          type: string
+          example: "This describes the GeoCode to be created"
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+        hints:
+          type: array
+          items:
+            type: string
+        difficulty:
+          $ref: "#/components/schemas/Difficulty"
+        available:
+          type: boolean
+          example: "This describes the GeoCode to be created"
+      xml:
+        name: "UpdateGeoCodeRequest"
+
+    UpdateGeoCodeResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "The GeoCode could not be update"
+          xml:
+            name: "UpdateGeoCodeResponse"
+
+
     GetCollectablesRequest:
       type: "object"
       required:
