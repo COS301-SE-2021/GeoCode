@@ -855,6 +855,47 @@ paths:
       security:
         - bearerAuth: []
 
+  /GeoCode/updateGeoCode:
+    post:
+      tags:
+        - "GeoCode"
+      summary: "Update the geocode properties"
+      description: "Update the properties for a geocode"
+      operationId: "updateGeoCode"
+      requestBody:
+        required: true
+        description: "Request to update a GeoCode's properties"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGeoCodeRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/UpdateGeoCodeRequest"
+      responses:
+        '200':
+          description: "Updated the GeoCode's properties successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateGeoCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/UpdateGeoCodeResponse"
+        '404':
+          description: "Return the GeoCode properties was not updated successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateGeoCodeRequest"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/UpdateGeoCodeResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: [ ]
+
   /Collectable/createCollectableType:
     post:
       tags:
