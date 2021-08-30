@@ -341,9 +341,52 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             throw new InvalidRequestException();
         }
 
+        /* Get the GeoCode to update */
+        GeoCode updateGeoCode = null;
+        var geoCode = geoCodeRepo.findById( request.getGeoCodeID() );
+        if ( geoCode.isPresent() ) {
+
+            updateGeoCode = geoCode.get();
+        }
+
+        if ( updateGeoCode == null ) {
+
+            return new UpdateGeoCodeResponse( false, "The GeoCode was not found" );
+        }
+
+        /* Create the response to return */
         UpdateGeoCodeResponse response = new UpdateGeoCodeResponse();
 
-        return response;
+        /* Determine which attribute to update and update it */
+        if ( request.getLocation() != null ) {
+
+            updateGeoCode.setLocation( request.getLocation() );
+        }
+        if( request.getHints() != null ) {
+
+            updateGeoCode.setHints( request.getHints() );
+        }
+        if ( request.getDifficulty() != null ) {
+
+            updateGeoCode.setDifficulty( request.getDifficulty() );
+        }
+        if ( request.getDescription() != null ) {
+
+            updateGeoCode.setDescription( request.getDescription() );
+        }
+        if ( request.isAvailable() != null ) {
+
+            updateGeoCode.setAvailable( request.isAvailable() );
+        }
+
+        var checkGeoCode = geoCodeRepo.save( updateGeoCode );
+        if ( ( checkGeoCode == null ) || ( !checkGeoCode.getId().equals( request.getGeoCodeID() ) )  ) {
+
+            return new UpdateGeoCodeResponse( false, "The GeoCode could not be update" );
+        }
+
+        /* Return the GeoCode was successfully updated */
+        return new UpdateGeoCodeResponse( true );
     }
 
     /**
