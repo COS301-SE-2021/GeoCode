@@ -42,6 +42,8 @@ import { SwapCollectablesRequest } from '../model/swapCollectablesRequest';
 import { SwapCollectablesResponse } from '../model/swapCollectablesResponse';
 import { UpdateAvailabilityRequest } from '../model/updateAvailabilityRequest';
 import { UpdateAvailabilityResponse } from '../model/updateAvailabilityResponse';
+import { UpdateGeoCodeRequest } from '../model/updateGeoCodeRequest';
+import { UpdateGeoCodeResponse } from '../model/updateGeoCodeResponse';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -785,6 +787,62 @@ export class GeoCodeService {
         }
 
         return this.httpClient.request<UpdateAvailabilityResponse>('post',`${this.basePath}/GeoCode/updateAvailability`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Update the geocode properties
+     * Update the properties for a geocode
+     * @param body Request to update a GeoCode&#x27;s properties
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateGeoCode(body: UpdateGeoCodeRequest, observe?: 'body', reportProgress?: boolean): Observable<UpdateGeoCodeResponse>;
+    public updateGeoCode(body: UpdateGeoCodeRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UpdateGeoCodeResponse>>;
+    public updateGeoCode(body: UpdateGeoCodeRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UpdateGeoCodeResponse>>;
+    public updateGeoCode(body: UpdateGeoCodeRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling updateGeoCode.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<UpdateGeoCodeResponse>('post',`${this.basePath}/GeoCode/updateGeoCode`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
