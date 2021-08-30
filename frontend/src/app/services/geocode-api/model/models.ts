@@ -117,6 +117,8 @@ export * from './updateAvailabilityRequest';
 export * from './updateAvailabilityResponse';
 export * from './updateCompletionRequest';
 export * from './updateCompletionResponse';
+export * from './updateGeoCodeRequest';
+export * from './updateGeoCodeResponse';
 export * from './updateLocationRequest';
 export * from './updateLocationResponse';
 export * from './updatePointRequest';
