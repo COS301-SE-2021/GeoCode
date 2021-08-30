@@ -9,9 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ModelObject } from './modelObject';
-import { Response } from './response';
+import { Collectable } from './collectable';
+import { GeoCode } from './geoCode';
+import { User } from './user';
 
-export interface UpdateCompletionResponse extends Response { 
-    message?: any;
+export interface SwapCollectableRequest { 
+    user: User;
+    collectable: Collectable;
+    geocode: GeoCode;
 }

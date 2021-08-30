@@ -9,10 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ModelObject } from './modelObject';
-import { Response } from './response';
+import { CollectableType } from './collectableType';
+import { User } from './user';
 
-export interface UploadImageResponse extends Response { 
-    message?: any;
-    imageID: string;
+export interface AddToFoundCollectableTypesRequest { 
+    user: User;
+    collectableType: CollectableType;
 }

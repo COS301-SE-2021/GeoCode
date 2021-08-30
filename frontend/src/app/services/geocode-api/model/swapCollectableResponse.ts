@@ -9,9 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Collectable } from './collectable';
 import { ModelObject } from './modelObject';
 import { Response } from './response';
 
-export interface UpdateCompletionResponse extends Response { 
+export interface SwapCollectableResponse extends Response { 
     message?: any;
+    collectable?: Collectable;
 }

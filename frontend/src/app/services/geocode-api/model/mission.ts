@@ -16,6 +16,5 @@ export interface Mission {
     id: string;
     type: MissionType;
     amount: number;
-    completion: number;
     location: GeoPoint;
 }

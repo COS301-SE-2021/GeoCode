@@ -9,9 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ModelObject } from './modelObject';
-import { Response } from './response';
+import { Mission } from './mission';
+import { User } from './user';
 
-export interface UpdateCompletionResponse extends Response { 
-    message?: any;
+export interface AddToMyMissionsRequest { 
+    user: User;
+    mission: Mission;
 }

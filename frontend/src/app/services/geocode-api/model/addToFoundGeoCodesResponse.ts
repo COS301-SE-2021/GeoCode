@@ -12,6 +12,6 @@
 import { ModelObject } from './modelObject';
 import { Response } from './response';
 
-export interface UpdateCompletionResponse extends Response { 
+export interface AddToFoundGeoCodesResponse extends Response { 
     message?: any;
 }
