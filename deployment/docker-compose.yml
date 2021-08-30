@@ -54,9 +54,10 @@ services:
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM}
-      KEYCLOAK_AUTH_SERVER_URL: https://geocode-keycloak:8443/auth
+      KEYCLOAK_AUTH_SERVER_URL: ${KEYCLOAK_AUTH_SERVER_URL}
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
-      WEB_REFERRER: ${WEB_REFERRER}
+      ALLOWED_ORIGINS_COMMA_SEPARATED: ${ALLOWED_ORIGINS_COMMA_SEPARATED}
+      IMAGE_DIRECTORY: ~/image-data
       KEY_STORE_TYPE: PKCS12
       KEY_STORE: classpath:keystore.p12
       KEY_STORE_ALIAS: ${KEY_STORE_ALIAS}
@@ -65,3 +66,5 @@ services:
     ports:
       - 8080:8080
     restart: always
+    volumes:
+      - ../../.image-data:~/image-data
