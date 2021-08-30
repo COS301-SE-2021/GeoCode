@@ -4,9 +4,9 @@ import {
   GeoCodeService,
   GetHintsRequest,
   GetHintsResponse,
-  GetGeoCodeByQRCodeRequest,
-  GetCollectablesRequest,
-  GetGeoCodeByQRCodeResponse, GetCollectablesResponse, SwapCollectablesRequest, SwapCollectablesResponse
+  SwapCollectablesRequest,
+  SwapCollectablesResponse,
+  GetCollectablesInGeoCodeByQRCodeRequest, GetCollectablesInGeoCodeByQRCodeResponse
 } from '../../../services/geocode-api';
 import {AlertController, NavController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
@@ -32,7 +32,7 @@ export class GeocodeContentsPage implements AfterViewInit {
 
   constructor(
     route: ActivatedRoute,
-    router: Router,
+    private router: Router,
     public geocodeApi: GeoCodeService,
     public navCtrl: NavController,
     private alertCtrl: AlertController,
@@ -40,13 +40,13 @@ export class GeocodeContentsPage implements AfterViewInit {
     private qrScanner: QRScanner
   ) {
     //Get passed in param from routing
-    const state = router.getCurrentNavigation().extras.state;
+    const state = this.router.getCurrentNavigation().extras.state;
     if (state) {
       //Set the geocode to the passed in geocode
       this.geocode = state.geocode;
     } else {
       this.geocode = null;
-      this.geocodeID = route.snapshot.paramMap.get('id');
+      this.geocodeID = route.snapshot.paramMap.get('geocodeID');
     }
   }
 
@@ -55,14 +55,14 @@ export class GeocodeContentsPage implements AfterViewInit {
     //Create map and center towards passed in geocode
     console.log(this.geocode);
     this.mapOptions = {
-      center: {lat: parseFloat(this.geocode.latitude), lng: parseFloat(this.geocode.longitude)},
+      center: {lat: parseFloat(this.geocode.location.latitude), lng: parseFloat(this.geocode.location.longitude)},
       zoom: 18,
     };
   //Create map
    this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
    //Create map marker at geocode location
    new this.googleMaps.Marker({
-      position: {lat: parseFloat(this.geocode.latitude), lng: parseFloat(this.geocode.longitude)},
+      position: {lat: parseFloat(this.geocode.location.latitude), lng: parseFloat(this.geocode.location.longitude)},
       map: this.map,
       title: '',
     });
@@ -107,25 +107,27 @@ export class GeocodeContentsPage implements AfterViewInit {
   }
 
   found(code){
-    const requestQR: GetGeoCodeByQRCodeRequest={
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      QRCode: code.value
+    const requestQR: GetCollectablesInGeoCodeByQRCodeRequest={
+      qrCode: code,
+      geoCodeID:this.geocode.id
     };
-    console.log(requestQR);
-    this.geocodeApi.getGeoCodeByQRCode(requestQR).subscribe((response: GetGeoCodeByQRCodeResponse) =>{
+    this.geocodeApi.getCollectablesInGeoCodeByQRCode(requestQR).subscribe(async (response: GetCollectablesInGeoCodeByQRCodeResponse) =>{
       console.log(response);
+      if(response.storedCollectable==null){
+        const alert = await this.alertCtrl.create({
+          header: 'Incorrect QR Code',
 
-      if(response.id == this.geocode.id){
-        this.isHidden=true;
-        const requestCollectables: GetCollectablesRequest={
-          geoCodeID: response.id
-        };
-        this.geocodeApi.getGeoCodeCollectables(requestCollectables).subscribe((response2 :GetCollectablesResponse) =>{
-          console.log(response2);
-          this.collectables= response2.collectables;
+          message: ' <strong>The QR code you entered is incorrect, please try another code'+'</strong>',
+          buttons: [
+            {
+              text: 'Okay',
+            }
+          ]
         });
+        alert.present();
       }else{
-
+        this.collectables=response.storedCollectable;
+        this.isHidden=true;
       }
     });
 
@@ -157,7 +159,7 @@ export class GeocodeContentsPage implements AfterViewInit {
             this.geocodeApi.swapCollectables(request).subscribe((response: SwapCollectablesResponse) =>{
               console.log(response);
             });
-            this.navCtrl.navigateBack('/geocode');
+            this.router.navigate(['../..']);
 
           }
         }
@@ -169,6 +171,8 @@ export class GeocodeContentsPage implements AfterViewInit {
 
     async scan() {
       const data = await this.qrScanner.scan();
-      console.log(data);
+      if (data) {
+        this.found(data);
+      }
     }
 }

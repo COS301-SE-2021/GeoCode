@@ -7,7 +7,7 @@ import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
 import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
-
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 
 import java.util.UUID;
 
@@ -15,9 +15,30 @@ import java.util.UUID;
 public class CollectableServiceImplIT {
     @Autowired
     private CollectableServiceImpl collectableService;
+    private UUID validSetId;
+    private UUID validTypeId;
+
+    @BeforeEach
+     void build() throws NullRequestParameterException {
+        CreateCollectableSetRequest request = new CreateCollectableSetRequest();
+        request.setName("Test Set");
+        request.setDescription("A set for tests");
+        CreateCollectableSetResponse response = collectableService.createCollectableSet(request);
+        validSetId = response.getCollectableSet().getId();
+
+        CreateCollectableTypeRequest typeRequest = new CreateCollectableTypeRequest();
+        typeRequest.setName("Test Type");
+        typeRequest.setImage("dgergergnhtfhjhg");
+        typeRequest.setRarity(Rarity.RARE);
+        typeRequest.setId(validSetId);
+
+        CreateCollectableTypeResponse typeResponse = collectableService.createCollectableType(typeRequest);
+        validTypeId = typeResponse.getCollectableType().getId();
+    }
+
 
     @Test
-    public void createCollectableSetTest(){
+    public void createCollectableSetTest() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
@@ -31,7 +52,7 @@ public class CollectableServiceImplIT {
     }
 
     @Test
-    public void createCollectableSetNullRequestTest(){
+    public void createCollectableSetNullRequestTest() throws NullRequestParameterException {
         CreateCollectableSetResponse response = collectableService.createCollectableSet(null);
 
         Assertions.assertFalse(response.isSuccess());
@@ -40,7 +61,7 @@ public class CollectableServiceImplIT {
     }
 
     @Test
-    public void createCollectableTypeTestInvalid(){
+    public void createCollectableTypeTestInvalid() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
@@ -56,7 +77,7 @@ public class CollectableServiceImplIT {
     }
 
     @Test
-    public void createCollectableTypeTestValid(){
+    public void createCollectableTypeTestValid() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
@@ -66,7 +87,7 @@ public class CollectableServiceImplIT {
         request.setName("Santa");
         request.setImage("dgergergnhtfhjhg");
         request.setRarity(Rarity.RARE);
-        request.setId(UUID.fromString("09a25dd7-00d8-422e-bf9f-07ee5c4dc5f1"));
+        request.setId(validSetId);
 
         CreateCollectableTypeResponse response = collectableService.createCollectableType(request);
 
@@ -74,13 +95,13 @@ public class CollectableServiceImplIT {
     }
 
     @Test
-    public void createCollectableTypeNullRequestTest(){
+    public void createCollectableTypeNullRequestTest() throws NullRequestParameterException {
         CreateCollectableTypeResponse response = collectableService.createCollectableType(null);
         Assertions.assertEquals("The CreateCollectableTypeRequest object passed was NULL", response.getMessage());
     }
 
     @Test
-    public void createCollectableTestInvalid(){
+    public void createCollectableTestInvalid() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
@@ -93,22 +114,21 @@ public class CollectableServiceImplIT {
     }
 
     @Test
-    public void createCollectableNullRequestTest(){
+    public void createCollectableNullRequestTest() throws NullRequestParameterException {
         CreateCollectableResponse response = collectableService.createCollectable(null);
         Assertions.assertEquals("The CreateCollectableSetRequest object passed was NULL", response.getMessage());
     }
 
     @Test
-    public void createCollectableTestValid(){
+    public void createCollectableTestValid() throws NullRequestParameterException {
         /*
            Create a request object
           and assign values to it
           */
 
-
         //create the Collectable
         CreateCollectableRequest collectableRequest = new CreateCollectableRequest();
-        collectableRequest.setCollectableTypeId(UUID.fromString("333599b9-94c7-403d-8389-83ed48387d13"));
+        collectableRequest.setCollectableTypeId(validTypeId);
 
         CreateCollectableResponse collectableResponse = collectableService.createCollectable(collectableRequest);
         Assertions.assertTrue(collectableResponse.isSuccess());
@@ -145,7 +165,7 @@ public class CollectableServiceImplIT {
 
         //create the request
         GetCollectableTypesBySetRequest typesBySetRequest = new GetCollectableTypesBySetRequest();
-        typesBySetRequest.setSetId(UUID.fromString("09a25dd7-00d8-422e-bf9f-07ee5c4dc5f1"));
+        typesBySetRequest.setSetId(validSetId);
 
         GetCollectableTypesResponse response = collectableService.getCollectableTypesBySet(typesBySetRequest);
         Assertions.assertTrue(!response.getCollectableTypes().isEmpty());

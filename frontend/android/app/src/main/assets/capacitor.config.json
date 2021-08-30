@@ -1,0 +1,6 @@
+{
+	"appId": "tech.geocodeapp.geocode",
+	"appName": "GeoCode",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

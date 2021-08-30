@@ -8,6 +8,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MockGoogleMapsLoader} from '../../../mocks/MockGoogleMapsLoader';
 import createSpy = jasmine.createSpy;
+import {MockActivatedRoute} from '../../../mocks/MockActivatedRoute';
 
 describe('GeocodeContentsPage', () => {
   let component: GeocodeContentsPage;
@@ -20,24 +21,18 @@ describe('GeocodeContentsPage', () => {
     description: '',
     hints: [],
     difficulty: 'EASY',
-    latitude: '-25.755918848126488',
-    longitude: '28.233110280499492',
+    location: {
+      latitude: -25.755918848126488,
+      longitude: 28.233110280499492
+    },
     qrCode: ''
-  };
-
-  const mockActivatedRoute = {
-    snapshot: {
-      paramMap: {
-        get: () => 'randomID'
-      }
-    }
   };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodeContentsPage ],
       providers: [
-        {provide: ActivatedRoute, useValue: mockActivatedRoute},
+        MockActivatedRoute.provider({id: 'randomID'}),
         GeoCodeService,
         MockGoogleMapsLoader.provider()
       ],

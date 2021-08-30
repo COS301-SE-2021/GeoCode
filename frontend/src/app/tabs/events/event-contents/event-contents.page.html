@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Event</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <br>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">  <ion-title id="time-name">{{name}}</ion-title></ion-col>
+      <ion-col size="6">  <ion-button color="button" class="leaderBoardButton" (click)="openLeaderBoard()">Leader Board</ion-button></ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <br>
+
+  <div #mapElement class="map"></div>
+  <br>
+
+  <br>
+  <ion-item>
+    <ion-label>Current Level</ion-label>
+    <ion-label>{{level}}</ion-label>
+
+  </ion-item>
+
+  <div  id ="geoCodeDetails">
+
+    <ion-card *ngFor="let g of geocodes " >
+      <ion-header>
+        <ion-title id="card-title">
+          {{g.description}}
+        </ion-title>
+      </ion-header>
+      <ion-card-content>
+<!--        <ion-row class="row">-->
+<!--          <ion-col class="col">Description</ion-col>-->
+<!--          <ion-col class="col">{{geocode.description}}</ion-col>-->
+<!--        </ion-row>-->
+        <ion-row class="row">
+          <ion-col class="col">Difficulty</ion-col>
+          <ion-col class="col">{{g.difficulty}}</ion-col>
+        </ion-row>
+        <ion-button id="button" color="button" (click)="findGeoCode(g)"  >Find GeoCode</ion-button>
+        <ion-button color="button" (click)="openInMaps(geocode)">Open Location in Google Maps</ion-button>
+           </ion-card-content>
+    </ion-card>
+  </div>
+<!--  <ion-grid>-->
+<!--    <ion-row>-->
+<!--      <ion-col>Stage</ion-col>-->
+<!--      <ion-col>Description</ion-col>-->
+<!--      <ion-col>Difficulty</ion-col>-->
+<!--      <ion-col>Found</ion-col>-->
+<!--    </ion-row>-->
+<!--    <ion-row *ngFor="let code of geocodes">-->
+<!--      <ion-col id="pos">{{code.stage}}</ion-col>-->
+<!--      <ion-col>{{code.description}}</ion-col>-->
+<!--      <ion-col>{{code.difficulty}}</ion-col>-->
+<!--      <ion-col><ion-checkbox disabled="false"  [(ngModel)]="code.found"></ion-checkbox></ion-col>-->
+<!--    </ion-row>-->
+<!--  </ion-grid>-->
+</ion-content>

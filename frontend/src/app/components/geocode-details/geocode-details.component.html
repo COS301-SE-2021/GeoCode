@@ -1,0 +1,32 @@
+<div id="geoCodeDetails">
+  <ion-card *ngIf="geocode">
+    <div  id="close-button">
+      <ion-button id="close" color="white" (click)="parent.closeDetails()">X</ion-button>
+      <ion-button *ngIf="showQR" id="close" color="white" (click)="updateGeocode(geocode)"> Edit <ion-icon name="create-outline"></ion-icon></ion-button>
+    </div>
+    <ion-header>
+      <ion-title id="card-title">
+        <div class="title-text-wrap">
+          {{geocode.description}}
+        </div>
+      </ion-title>
+
+    </ion-header>
+    <ion-card-content>
+      <ng-template [ngIf]="isAdmin()">
+        <ion-row class="row">
+          <ion-col>Available</ion-col>
+          <ion-col><ion-checkbox disabled="false"  (ionBlur)="updateAvailability()" [(ngModel)]="geocode.available"></ion-checkbox></ion-col>
+        </ion-row>
+      </ng-template>
+      <ion-row class="row">
+        <ion-col>Difficulty</ion-col>
+        <ion-col>{{geocode.difficulty}}</ion-col>
+      </ion-row>
+<!--      <ion-button id="button" color="button" (click)="findGeoCode()">Find GeoCode</ion-button>-->
+      <ion-button color="button" (click)="openInMaps()">Google Maps</ion-button>
+      <ion-button *ngIf="showQR" color="button" (click)="getQR()">Download QR</ion-button>
+
+    </ion-card-content>
+  </ion-card>
+</div>

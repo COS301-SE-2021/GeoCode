@@ -1,13 +1,24 @@
 package tech.geocodeapp.geocode.user.request;
 
-import java.util.UUID;
+import tech.geocodeapp.geocode.collectable.model.Collectable;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.user.model.User;
 
 public class SwapCollectableRequest {
+    /*
+    * The User to swap the Collectable for
+     */
+    private User user;
 
     /**
-     * The id of the collectable to be searched for
+     * The collectable to be swapped in
      */
-    private UUID collectableID;
+    private Collectable collectable;
+
+    /**
+     * The GeoCode that the Collectable is in
+     */
+    private GeoCode geocode;
 
     /**
      * Default constructor
@@ -18,12 +29,14 @@ public class SwapCollectableRequest {
 
     /**
      * Overloaded Constructor
-     *
-     * @param collectableID The collectableID to be searched for
+     * @param user The  User to swap the Collectable for
+     * @param collectable The collectableID to be searched for
+     * @param geocode The GeoCode
      */
-    public SwapCollectableRequest( UUID collectableID ) {
-
-        this.collectableID = collectableID;
+    public SwapCollectableRequest(User user, Collectable collectable, GeoCode geocode) {
+        this.user = user;
+        this.collectable = collectable;
+        this.geocode = geocode;
     }
 
     /**
@@ -31,18 +44,34 @@ public class SwapCollectableRequest {
      *
      * @return the stored collectableID attribute
      */
-    public UUID getCollectableID() {
+    public Collectable getCollectable() {
 
-        return collectableID;
+        return collectable;
     }
 
     /**
      * Sets the collectableID attribute to the specified value
      *
-     * @param collectableID the value the attribute should be set to
+     * @param collectable the value the attribute should be set to
      */
-    public void setCollectableID( UUID collectableID ) {
+    public void setCollectable(Collectable collectable) {
 
-        this.collectableID = collectableID;
+        this.collectable = collectable;
+    }
+
+    public GeoCode getGeoCode() {
+        return geocode;
+    }
+
+    public void setGeoCode(GeoCode geocode) {
+        this.geocode = geocode;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

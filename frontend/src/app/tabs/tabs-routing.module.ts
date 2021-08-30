@@ -29,7 +29,12 @@ const routes: Routes = [
         pathMatch: 'full'
       }
     ]
+  },
+  {
+    path: 'mission',
+    loadChildren: () => import('./mission/mission.module').then( m => m.MissionPageModule)
   }
+
 ];
 
 @NgModule({

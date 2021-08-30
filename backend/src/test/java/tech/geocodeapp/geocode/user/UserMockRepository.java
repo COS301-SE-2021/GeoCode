@@ -14,7 +14,7 @@ import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 
 public class UserMockRepository implements UserRepository {
-    private static HashMap<UUID, User> map = new HashMap<UUID, User>();
+    private static final HashMap<UUID, User> map = new HashMap<>();
 
     @Override
     public List<User> findAll() {
@@ -79,7 +79,7 @@ public class UserMockRepository implements UserRepository {
 
     @Override
     public boolean existsById(UUID uuid) {
-        return false;
+        return map.containsKey(uuid);
     }
 
     @Override
@@ -136,4 +136,5 @@ public class UserMockRepository implements UserRepository {
     public <S extends User> boolean exists(Example<S> example) {
         return false;
     }
+
 }

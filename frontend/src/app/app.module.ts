@@ -11,26 +11,32 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {environment} from '../environments/environment';
 import {RequestInterceptor} from './services/RequestInterceptor';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
+import {IonicStorageModule, Storage} from '@ionic/storage-angular';
 
-const initializeKeycloak = (keycloak: KeycloakService) => () =>
-  keycloak.init({
+const initializeKeycloak = (keycloak: KeycloakService) => async () => {
+  await keycloak.init({
     config: {
       url: 'https://geocodeapp.tech:8100/auth',
       realm: 'GeoCode',
       clientId: environment.keycloakClientID,
     },
-    initOptions: {
-      onLoad: 'check-sso',
-      silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
-    },
+    initOptions: environment.keycloakInitOptions,
     enableBearerInterceptor: false
   });
-
+};
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ApiModule, KeycloakAngularModule],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    HttpClientModule,
+    ApiModule,
+    KeycloakAngularModule,
+    IonicStorageModule.forRoot()
+  ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: BASE_PATH, useValue: environment.serverAddress+'/api' },

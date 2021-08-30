@@ -2,8 +2,11 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { UserGeocodesPage } from './geocodes.page';
-import {MockGoogleMapsLoader} from '../../../mocks/MockGoogleMapsLoader';
-import {UrlSerializer} from '@angular/router';
+import {GeoCodeService, UserService} from '../../../services/geocode-api';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {MockKeycloak} from '../../../mocks/MockKeycloak';
+import {CustomComponentsModule} from '../../../components/components.module';
 
 describe('UserGeocodesPage', () => {
   let component: UserGeocodesPage;
@@ -12,8 +15,12 @@ describe('UserGeocodesPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ UserGeocodesPage ],
-      providers: [ UrlSerializer, MockGoogleMapsLoader.provider() ],
-      imports: [IonicModule.forRoot()]
+      providers: [
+        GeoCodeService,
+        UserService,
+        MockKeycloak.provider()
+      ],
+      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, CustomComponentsModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(UserGeocodesPage);

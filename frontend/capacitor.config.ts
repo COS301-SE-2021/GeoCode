@@ -1,11 +1,11 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'tech.geocodeapp.geocode',
   appName: 'GeoCode',
   webDir: 'www',
   bundledWebRuntime: false,
-  cordova: {
+  /*cordova: {
     preferences: {
       ScrollEnabled: 'false',
       BackupWebStorage: 'none',
@@ -15,7 +15,7 @@ const config: CapacitorConfig = {
       SplashScreen: 'screen',
       SplashScreenDelay: '3000'
     }
-  }
+  }*/
 };
 
 export default config;

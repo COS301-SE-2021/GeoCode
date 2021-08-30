@@ -2,7 +2,9 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {GeoCodeService, CreateGeoCodeRequest, CreateGeoCodeResponse} from '../../../services/geocode-api';
 import {NavController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
-
+import {QRGenerator} from '../../../services/QRGenerator';
+import {GeoPoint} from '../../../services/geocode-api';
+import IQrCodeWithLogo, {BaseOptions} from 'qrcode-with-logos';
 let map;
 @Component({
   selector: 'app-geocode-create',
@@ -18,19 +20,18 @@ mapOptions;
 hints = [];
 difficulty;
 marker;
-
+geoLocation: GeoPoint={latitude:0,longitude:0};
 //Request object to be updated as fields change
 request: CreateGeoCodeRequest= {
     description: 'Testing insert',
     available: true,
     difficulty:'EASY',
     hints:['Hint1','Hint2'],
-    latitude:'',
-    longitude:'',
-    id:''
+    location:{latitude:0,longitude:0}
+
 };
 
-  constructor(public geocodeAPI: GeoCodeService,public navCtrl: NavController, private mapsLoader: GoogleMapsLoader) {}
+  constructor(public geocodeAPI: GeoCodeService,public navCtrl: NavController, private mapsLoader: GoogleMapsLoader, private qr: QRGenerator) {}
 
   //create map
   initMap() {
@@ -66,20 +67,18 @@ request: CreateGeoCodeRequest= {
   //create the geocode and update the remaining fields
   createGeoCode(){
     this.locations=this.marker.getPosition();
-    this.request.latitude=this.locations.lat();
-    this.request.longitude=this.locations.lng();
+    this.request.location.longitude=this.locations.lng();
+    this.request.location.latitude=this.locations.lat();
     this.request.hints=this.hints;
     this.request.difficulty = this.difficulty;
 
     //Call geocode api to send request to controller
     this.geocodeAPI.createGeoCode(this.request)
       .subscribe((response: CreateGeoCodeResponse) =>{
-        this.hints=[];
-        this.locations=[];
-        this.difficulty=[];
+        console.log(response);
+        this.qr.generate(response.qrCode);
         this.navCtrl.navigateBack('/explore').then().catch();
       });
-
   }
 
   //update difficulty field for request

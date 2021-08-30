@@ -20,7 +20,7 @@
     <ion-item class="barcode" [hidden]="isHidden">
       <ion-label>GeoCode</ion-label>
       <ion-input #QR class="barcode-input" type="text"></ion-input>
-      <ion-button color="danger" (click)="found(QR)">Found</ion-button>
+      <ion-button color="danger" (click)="found(QR.value)">Found</ion-button>
     </ion-item>
 
     <div class="hints" [hidden]="isHidden">
@@ -45,7 +45,7 @@
         <div class="items">
           <div class="collectable" *ngFor="let collectable of collectables">
             <div class="image" (click)="swapCollectable(collectable)">
-              <img src="https://via.placeholder.com/100">
+              <img src="{{collectable.type.image}}">
             </div>
             <div class="name">
               {{collectable.type.name}}

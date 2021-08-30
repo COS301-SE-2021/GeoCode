@@ -7,14 +7,28 @@ const routes: Routes = [
   {
     path: '',
     component: EventsPage
-  },  {
-    path: 'event-leaderboard',
+  },
+  {
+    path: 'create',
+    loadChildren: () => import('./events-create/events-create.module').then( m => m.EventsCreatePageModule)
+  },
+  {
+    path: ':eventID/leaderboard',
     loadChildren: () => import('./event-leaderboard/event-leaderboard.module').then( m => m.EventLeaderboardPageModule)
   },
   {
-    path: 'event-timetrial',
-    loadChildren: () => import('./event-timetrial/event-timetrial.module').then( m => m.EventTimetrialPageModule)
-  }
+    path: ':eventID',
+    loadChildren: () => import('./event-contents/event-contents.module').then(m => m.EventContentsModule)
+  },
+  {
+    path: 'profile/:userID/events/:eventID/leaderboard',
+    redirectTo: ':eventID/leaderboard'
+  },
+  {
+    path: 'profile/:userID',
+    loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
+  },
+
 
 ];
 
