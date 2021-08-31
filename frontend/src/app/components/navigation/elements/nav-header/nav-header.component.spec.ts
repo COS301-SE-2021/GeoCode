@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { NavigationComponent } from './navigation.component';
+import { NavHeaderComponent } from './nav-header.component';
 
-describe('NavigationComponent', () => {
-  let component: NavigationComponent;
-  let fixture: ComponentFixture<NavigationComponent>;
+describe('NavHeaderComponent', () => {
+  let component: NavHeaderComponent;
+  let fixture: ComponentFixture<NavHeaderComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ NavigationComponent ],
+      declarations: [ NavHeaderComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NavigationComponent);
+    fixture = TestBed.createComponent(NavHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

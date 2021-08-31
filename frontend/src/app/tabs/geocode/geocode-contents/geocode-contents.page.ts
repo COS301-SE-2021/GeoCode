@@ -70,19 +70,11 @@ export class GeocodeContentsPage implements AfterViewInit {
 
   async ngAfterViewInit() {
     if (this.geocode === null) {
-      await this.loadGeoCode();
+      this.geocode = (await this.geocodeApi.getGeoCode({geoCodeID: this.geocodeID}).toPromise()).foundGeoCode;
     }
     this.loadHints();
     this.googleMaps = await this.mapsLoader.load();
     this.loadMap();
-  }
-
-  loadGeoCode() {
-    return new Promise((resolve, reject) => {
-      //load geocode by ID when we have a backend function for it
-      console.log('Cannot open arbitrary geocodes in this page for now');
-      reject('Failed to load geocode');
-    });
   }
 
 
