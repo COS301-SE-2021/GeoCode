@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {GeoCodeService, UpdateGeoCodeRequest} from '../../../../services/geocode-api';
+import {GeoCodeService, UpdateGeoCodeRequest, UpdateGeoCodeResponse} from '../../../../services/geocode-api';
 
 @Component({
   selector: 'app-geocode-update',
@@ -7,13 +7,13 @@ import {GeoCodeService, UpdateGeoCodeRequest} from '../../../../services/geocode
   styleUrls: ['./geocode-update.component.scss'],
 })
 export class GeocodeUpdateComponent implements OnInit {
-  updateRequest : UpdateGeoCodeRequest ={
+  updateRequest: UpdateGeoCodeRequest ={
     available: false,
     description: '',
-    difficulty: undefined,
+    difficulty: 'EASY',
     geoCodeID: '',
-    hints: undefined,
-    location: undefined
+    hints: [],
+    location: {latitude:0,longitude:0}
   };
   constructor(private geocodeAPI: GeoCodeService) { }
 
@@ -32,7 +32,7 @@ export class GeocodeUpdateComponent implements OnInit {
   }
 
   updateGeoCode(){
-    this.geocodeAPI.updateGeoCode(this.updateRequest).subscribe((response: UpdateGeoCodeRequest)=>{
+    this.geocodeAPI.updateGeoCode(this.updateRequest).subscribe((response: UpdateGeoCodeResponse)=>{
       console.log(response);
     });
   }
