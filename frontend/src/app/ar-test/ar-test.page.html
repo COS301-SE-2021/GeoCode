@@ -1,12 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>ARLauncher</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="close()"><ion-icon name="close" slot="icon-only"></ion-icon></ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <iframe src="/assets/aframe-ar.html"></iframe>
+  <app-collectable-ar-viewer [collectables]="[null, null, null]"></app-collectable-ar-viewer>
 </ion-content>

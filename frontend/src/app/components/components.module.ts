@@ -8,15 +8,16 @@ import {NavComponent} from './navigation/nav.component';
 import {NavHeaderComponent} from './navigation/elements/nav-header/nav-header.component';
 import {NavToolbarComponent} from './navigation/elements/nav-toolbar/nav-toolbar.component';
 import {NavigationLayoutsModule} from './navigation/layouts/navigation-layouts.module';
+import {CollectableArViewerComponent} from './collectable-ar-viewer/collectable-ar-viewer.component';
 
 @NgModule({
-  declarations: [MapAndInfoComponent, GeocodeDetailsComponent, NavComponent, NavHeaderComponent, NavToolbarComponent],
+  declarations: [MapAndInfoComponent, GeocodeDetailsComponent, NavComponent, NavHeaderComponent, NavToolbarComponent, CollectableArViewerComponent],
   imports: [
     CommonModule,
     IonicModule,
     FormsModule,
     NavigationLayoutsModule
   ],
-  exports: [MapAndInfoComponent, GeocodeDetailsComponent, NavComponent, NavHeaderComponent, NavToolbarComponent]
+  exports: [MapAndInfoComponent, GeocodeDetailsComponent, NavComponent, NavHeaderComponent, NavToolbarComponent, CollectableArViewerComponent]
 })
 export class CustomComponentsModule {}

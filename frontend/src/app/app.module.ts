@@ -11,7 +11,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {environment} from '../environments/environment';
 import {RequestInterceptor} from './services/RequestInterceptor';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
-import {IonicStorageModule, Storage} from '@ionic/storage-angular';
+import {IonicStorageModule} from '@ionic/storage-angular';
 
 const initializeKeycloak = (keycloak: KeycloakService) => async () => {
   await keycloak.init({
@@ -43,6 +43,6 @@ const initializeKeycloak = (keycloak: KeycloakService) => async () => {
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
     { provide: APP_INITIALIZER, useFactory: initializeKeycloak, multi: true, deps: [KeycloakService] },
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
