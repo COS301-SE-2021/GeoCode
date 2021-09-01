@@ -14,13 +14,6 @@ public class GetMyRankRequest {
     private Integer amount;
 
     /**
-     * Default constructor
-     */
-    public GetMyRankRequest() {
-
-    }
-
-    /**
      * Overloaded Constructor
      *
      * @param leaderboard The leaderboard to be searched for

@@ -9,7 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ModelObject } from './modelObject';
+import { Response } from './response';
 
-export interface GetCurrentCollectableRequest { 
-    userID: string;
+export interface CreateImageResponse extends Response { 
+    message?: any;
+    imageID: string;
 }

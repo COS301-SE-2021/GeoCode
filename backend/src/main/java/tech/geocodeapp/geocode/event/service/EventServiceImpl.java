@@ -222,7 +222,7 @@ public class EventServiceImpl implements EventService {
 
             /* Save the newly created entry to the repository */
             eventRepo.save( event );
-            return new CreateEventResponse( true, "Event created" );
+            return new CreateEventResponse( true, "Event created", event.getId() );
         } catch ( IllegalArgumentException error ) {
 
             return new CreateEventResponse( false, error.getMessage() );

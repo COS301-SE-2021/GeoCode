@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.14"
+  version: "1.5.15"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -886,6 +886,47 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
+
+  /GeoCode/updateGeoCode:
+    post:
+      tags:
+        - "GeoCode"
+      summary: "Update the geocode properties"
+      description: "Update the properties for a geocode"
+      operationId: "updateGeoCode"
+      requestBody:
+        required: true
+        description: "Request to update a GeoCode's properties"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGeoCodeRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/UpdateGeoCodeRequest"
+      responses:
+        '200':
+          description: "Updated the GeoCode's properties successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateGeoCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/UpdateGeoCodeResponse"
+        '404':
+          description: "Return the GeoCode properties was not updated successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateGeoCodeRequest"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/UpdateGeoCodeResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: [ ]
 
   /Collectable/createCollectableType:
     post:
@@ -2111,6 +2152,32 @@ paths:
           description: "An image with the specified ID was not found"
         '500':
           description: "Internal server error"
+    head:
+      tags:
+        - "Image"
+      summary: "Retrieves an image"
+      description: "Retrieves an image with the specified ID"
+      operationId: "getImageHeader"
+      parameters:
+        - in: path
+          name: imageID
+          schema:
+            type: string
+            format: uuid
+            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+          required: true
+          description: "ID of the image to retrieve"
+      responses:
+        '200':
+          description: "Image retrieved"
+        '400':
+          description: "Request does not include a valid UUID"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: "An image with the specified ID was not found"
+        '500':
+          description: "Internal server error"
 
         
 
@@ -2529,6 +2596,47 @@ components:
           type: boolean
       xml:
         name: "UpdateAvailabilityResponse"
+
+    UpdateGeoCodeRequest:
+      type: "object"
+      required:
+        - geoCodeID
+        - description
+        - location
+        - hints
+        - difficulty
+        - available
+      properties:
+        geoCodeID:
+          type: string
+          format: uuid
+        description:
+          type: string
+          example: "This describes the GeoCode to be created"
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+        hints:
+          type: array
+          items:
+            type: string
+        difficulty:
+          $ref: "#/components/schemas/Difficulty"
+        available:
+          type: boolean
+          example: "This describes the GeoCode to be created"
+      xml:
+        name: "UpdateGeoCodeRequest"
+
+    UpdateGeoCodeResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "The GeoCode could not be update"
+          xml:
+            name: "UpdateGeoCodeResponse"
+
 
     GetCollectablesRequest:
       type: "object"
@@ -3506,7 +3614,7 @@ components:
         - location
         - beginDate
         - endDate
-        - geoCodesToFind
+        - createGeoCodesToFind
         - orderBy
         - available
         - properties
@@ -3529,12 +3637,10 @@ components:
           format: date
           pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
           example: "2017-01-01"
-        geoCodesToFind:
+        createGeoCodesToFind:
           type: array
           items:
-            type: string
-            format: uuid
-            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+            $ref: "#/components/schemas/CreateGeoCodeRequest"
         orderBy:
           $ref: "#/components/schemas/OrderLevels"
         available:

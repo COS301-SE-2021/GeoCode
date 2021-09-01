@@ -12,13 +12,6 @@ public class GetPointsByLeaderboardResponse extends Response {
     private List<Point> points;
 
     /**
-     * Default constructor
-     */
-    public GetPointsByLeaderboardResponse() {
-
-    }
-
-    /**
      * Overloaded Constructor
      *
      * @param points The points from the specified Leaderboard

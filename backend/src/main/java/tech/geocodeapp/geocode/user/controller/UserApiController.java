@@ -145,10 +145,6 @@ public class UserApiController implements UserApi {
         }
     }
 
-    public ResponseEntity<GetUsersResponse> getUsers(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all users in the system", required=true, schema=@Schema()) @Valid @RequestBody GetUsersRequest body) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
     public ResponseEntity<GetMyLeaderboardsResponse> getMyLeaderboards(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the name, points and ranking for all of the Leaderboards that a User is on", required=true, schema=@Schema()) @Valid @RequestBody GetMyLeaderboardsRequest body) {
         try{
             GetMyLeaderboardsResponse response = userService.getMyLeaderboards(body);

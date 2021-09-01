@@ -109,18 +109,6 @@ public interface UserApi {
             method = RequestMethod.POST)
     ResponseEntity<GetOwnedGeoCodesResponse> getOwnedGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's owned GeoCodes", required=true, schema=@Schema()) @Valid @RequestBody GetOwnedGeoCodesRequest body);
 
-    @Operation(summary = "Get all of the users in the system", description = "Get all of the users", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Successfully returned all of the users", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetUsersResponse.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
-    @RequestMapping(value = "/User/getUsers",
-        produces = { "application/json", "application/xml" }, 
-        consumes = { "application/json", "application/xml" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<GetUsersResponse> getUsers(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all users in the system", required = true, schema = @Schema()) @Valid @RequestBody GetUsersRequest body);
-
     @Operation(summary = "Gets the User's Leaderboard rankings", description = "Gets all the points and ranking for the Leaderboards that the given User is on", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
     @ApiResponses(value = {

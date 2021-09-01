@@ -126,7 +126,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     @PostConstruct
     public void init() {
 
-        userService.setGeoCodeService( this );
+        //userService.setGeoCodeService( this );
         eventService.setGeoCodeService( this );
     }
 
@@ -271,7 +271,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 AddToOwnedGeoCodesRequest ownedGeoCodesRequest = new AddToOwnedGeoCodesRequest(createdBy, check);
                 userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
             } catch (NullRequestParameterException e) {
-                e.printStackTrace();
+
                 return new CreateGeoCodeResponse(false);
             }
         } catch ( IllegalArgumentException error ) {
@@ -311,6 +311,82 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         return response;
+    }
+
+    /**
+     * Update a stored GeoCode
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public UpdateGeoCodeResponse updateGeoCode( UpdateGeoCodeRequest request ) throws InvalidRequestException {
+
+        /* Validate the request */
+        if ( request == null ) {
+
+            throw new InvalidRequestException( true );
+        } else if ( request.getGeoCodeID() == null ) {
+
+            /* No GeoCode */
+            throw new InvalidRequestException();
+        } else if ( ( request.getLocation() == null ) && ( request.getHints() == null ) &&
+                ( request.getDifficulty() == null ) && ( request.getDescription() == null ) &&
+                ( request.isAvailable() == null ) ) {
+
+            /* No attribute specified to update */
+            throw new InvalidRequestException();
+        }
+
+        /* Get the GeoCode to update */
+        GeoCode updateGeoCode = null;
+        var geoCode = geoCodeRepo.findById( request.getGeoCodeID() );
+        if ( geoCode.isPresent() ) {
+
+            updateGeoCode = geoCode.get();
+        }
+
+        if ( updateGeoCode == null ) {
+
+            return new UpdateGeoCodeResponse( false, "The GeoCode was not found" );
+        }
+
+        /* Create the response to return */
+        UpdateGeoCodeResponse response = new UpdateGeoCodeResponse();
+
+        /* Determine which attribute to update and update it */
+        if ( request.getLocation() != null ) {
+
+            updateGeoCode.setLocation( request.getLocation() );
+        }
+        if( request.getHints() != null ) {
+
+            updateGeoCode.setHints( request.getHints() );
+        }
+        if ( request.getDifficulty() != null ) {
+
+            updateGeoCode.setDifficulty( request.getDifficulty() );
+        }
+        if ( request.getDescription() != null ) {
+
+            updateGeoCode.setDescription( request.getDescription() );
+        }
+        if ( request.isAvailable() != null ) {
+
+            updateGeoCode.setAvailable( request.isAvailable() );
+        }
+
+        var checkGeoCode = geoCodeRepo.save( updateGeoCode );
+        if ( ( checkGeoCode == null ) || ( !checkGeoCode.getId().equals( request.getGeoCodeID() ) )  ) {
+
+            return new UpdateGeoCodeResponse( false, "The GeoCode could not be update" );
+        }
+
+        /* Return the GeoCode was successfully updated */
+        return new UpdateGeoCodeResponse( true );
     }
 
     /**
@@ -999,4 +1075,5 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
     }
     /*----------- END -----------*/
+
 }

@@ -34,6 +34,19 @@ public interface GeoCodeApi {
             consumes = { "application/json", "application/xml" } )
     ResponseEntity< CreateGeoCodeResponse > createGeoCode( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new GeoCode", required = true, schema = @Schema() ) @Valid @RequestBody CreateGeoCodeRequest body ) throws InvalidRequestException;
 
+    @Operation( summary = "Updated a GeoCode", description = "Update GeoCode", security = {
+            @SecurityRequirement( name = "bearerAuth" ) }, tags = { "GeoCode" } )
+    @ApiResponses( value = {
+            @ApiResponse( responseCode = "200", description = "Update GeoCode Response", content = @Content( mediaType = "application/json", schema = @Schema( implementation = UpdateGeoCodeResponse.class ) ) ),
+
+            @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
+
+            @ApiResponse( responseCode = "404", description = "Return the GeoCode could not be UPDATED", content = @Content( mediaType = "application/json", schema = @Schema( implementation = UpdateGeoCodeResponse.class ) ) ) } )
+    @PostMapping( value = "/GeoCode/updatedGeoCode",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" } )
+    ResponseEntity< UpdateGeoCodeResponse > updatedGeoCode( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new GeoCode", required = true, schema = @Schema() ) @Valid @RequestBody UpdateGeoCodeRequest body ) throws InvalidRequestException;
+
 
     @Operation( summary = "Get the GeoCode's collectables associated with the given QR Code", description = "Get the GeoCode's collectables associated with the given QR Code", security = {
             @SecurityRequirement( name = "bearerAuth" ) }, tags = { "GeoCode" } )
