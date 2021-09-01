@@ -14,5 +14,5 @@ import { Response } from './response';
 
 export interface CreateImageResponse extends Response { 
     message?: any;
-    imageID: string;
+    fileName: string;
 }

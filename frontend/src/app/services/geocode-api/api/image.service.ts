@@ -57,18 +57,18 @@ export class ImageService {
 
     /**
      * Retrieves an image
-     * Retrieves an image with the specified ID
-     * @param imageID ID of the image to retrieve
+     * Retrieves an image with the specified file name
+     * @param fileName File name of the image to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getImage(imageID: string, observe?: 'body', reportProgress?: boolean): Observable<Blob>;
-    public getImage(imageID: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Blob>>;
-    public getImage(imageID: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Blob>>;
-    public getImage(imageID: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getImage(fileName: string, observe?: 'body', reportProgress?: boolean): Observable<Blob>;
+    public getImage(fileName: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Blob>>;
+    public getImage(fileName: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Blob>>;
+    public getImage(fileName: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (imageID === null || imageID === undefined) {
-            throw new Error('Required parameter imageID was null or undefined when calling getImage.');
+        if (fileName === null || fileName === undefined) {
+            throw new Error('Required parameter fileName was null or undefined when calling getImage.');
         }
 
         let headers = this.defaultHeaders;
@@ -87,47 +87,7 @@ export class ImageService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Blob>('get',`${this.basePath}/Image/getImage/${encodeURIComponent(String(imageID))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Retrieves an image
-     * Retrieves an image with the specified ID
-     * @param imageID ID of the image to retrieve
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getImageHeader(imageID: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getImageHeader(imageID: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getImageHeader(imageID: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getImageHeader(imageID: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (imageID === null || imageID === undefined) {
-            throw new Error('Required parameter imageID was null or undefined when calling getImageHeader.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<any>('head',`${this.basePath}/Image/getImage/${encodeURIComponent(String(imageID))}`,
+        return this.httpClient.request<Blob>('get',`${this.basePath}/Image/getImage/${encodeURIComponent(String(fileName))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
