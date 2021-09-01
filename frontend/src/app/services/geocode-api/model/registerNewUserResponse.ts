@@ -11,9 +11,7 @@
  */
 import { ModelObject } from './modelObject';
 import { Response } from './response';
-import { User } from './user';
 
 export interface RegisterNewUserResponse extends Response { 
     message?: any;
-    user?: User;
 }

@@ -9,8 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Collectable } from './collectable';
 
 export interface CreateMissionRequest { 
-    collectable: Collectable;
+    collectableTypeID: string;
 }

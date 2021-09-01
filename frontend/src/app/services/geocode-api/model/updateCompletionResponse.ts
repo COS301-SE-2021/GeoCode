@@ -9,9 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ModelObject } from './modelObject';
-import { Response } from './response';
 
-export interface UpdateCompletionResponse extends Response { 
-    message?: any;
+export interface UpdateCompletionResponse { 
+    success: boolean;
+    message: string;
 }
