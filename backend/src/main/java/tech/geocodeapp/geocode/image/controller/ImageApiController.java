@@ -5,6 +5,7 @@ import java.util.UUID;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +35,10 @@ public class ImageApiController implements ImageApi {
             GetImageRequest request = new GetImageRequest( imageID );
             GetImageResponse response = imageService.getImage( request );
 
-            return new ResponseEntity<>( response.getImage().getBytes(), HttpStatus.OK );
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType( response.getImage().getFormat().getMimeType() );
+
+            return new ResponseEntity<>( response.getImage().getBytes(), headers, HttpStatus.OK );
 
         } catch (InvalidRequestException e) {
             return new ResponseEntity<>( e.getStatus() );
