@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.14"
+  version: "1.5.15"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -2152,6 +2152,32 @@ paths:
           description: "An image with the specified ID was not found"
         '500':
           description: "Internal server error"
+    head:
+      tags:
+        - "Image"
+      summary: "Retrieves an image"
+      description: "Retrieves an image with the specified ID"
+      operationId: "getImageHeader"
+      parameters:
+        - in: path
+          name: imageID
+          schema:
+            type: string
+            format: uuid
+            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+          required: true
+          description: "ID of the image to retrieve"
+      responses:
+        '200':
+          description: "Image retrieved"
+        '400':
+          description: "Request does not include a valid UUID"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: "An image with the specified ID was not found"
+        '500':
+          description: "Internal server error"
 
         
 
@@ -2276,8 +2302,6 @@ components:
         available:
           type: boolean
           example: "This describes the GeoCode to be created"
-        event:
-          $ref: "#/components/schemas/Event"
       xml:
         name: "CreateGeoCodeRequest"
 
