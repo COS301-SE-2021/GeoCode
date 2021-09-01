@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import tech.geocodeapp.geocode.image.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.image.exceptions.NotFoundException;
+import tech.geocodeapp.geocode.image.model.ImageFormat;
 import tech.geocodeapp.geocode.image.request.CreateImageRequest;
 import tech.geocodeapp.geocode.image.request.GetImageRequest;
 import tech.geocodeapp.geocode.image.response.CreateImageResponse;
@@ -30,9 +31,9 @@ public class ImageApiController implements ImageApi {
         this.imageService = imageService;
     }
 
-    public ResponseEntity< byte[] > getImage(@Parameter(in = ParameterIn.PATH, description = "ID of the image to retrieve", required=true, schema=@Schema()) @PathVariable("imageID") UUID imageID) {
+    public ResponseEntity< byte[] > getImage(@Parameter(in = ParameterIn.PATH, description = "Name of the image file to retrieve", required=true, schema=@Schema()) @PathVariable("fileName") String fileName) {
         try {
-            GetImageRequest request = new GetImageRequest( imageID );
+            GetImageRequest request = new GetImageRequest( fileName );
             GetImageResponse response = imageService.getImage( request );
 
             HttpHeaders headers = new HttpHeaders();

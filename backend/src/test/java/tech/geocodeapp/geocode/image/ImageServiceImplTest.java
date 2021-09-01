@@ -17,7 +17,6 @@ import tech.geocodeapp.geocode.image.service.ImageServiceImpl;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -69,7 +68,7 @@ public class ImageServiceImplTest {
         CreateImageRequest request = new CreateImageRequest( stream );
         assertThatThrownBy( () -> imageService.createImage( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "The supplied file is larger than 1024 kebibytes" );
+                .hasMessageContaining( "The supplied file is larger than 1024 kibibytes" );
     }
 
     @Test
@@ -92,7 +91,7 @@ public class ImageServiceImplTest {
         CreateImageRequest request = new CreateImageRequest( inputStream );
         CreateImageResponse response = imageService.createImage( request );
 
-        Image createdImage = imageRepo.findById(response.getImageID());
+        Image createdImage = imageRepo.findByName(response.getFileName());
 
         File exampleOutputFile = new File( RESIZED_INPUT_IMAGE_LOCATION );
         byte[] exampleOutputBytes = Files.readAllBytes( exampleOutputFile.toPath() );
@@ -108,7 +107,7 @@ public class ImageServiceImplTest {
         CreateImageRequest request = new CreateImageRequest( new ByteArrayInputStream( inputBytes ) );
         CreateImageResponse response = imageService.createImage( request );
 
-        Image createdImage = imageRepo.findById(response.getImageID());
+        Image createdImage = imageRepo.findByName(response.getFileName());
 
         Assertions.assertArrayEquals( inputBytes, createdImage.getBytes() );
     }
@@ -125,13 +124,13 @@ public class ImageServiceImplTest {
         GetImageRequest request = new GetImageRequest( null );
         assertThatThrownBy( () -> imageService.getImage( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( "No image ID provided" );
+                .hasMessageContaining( "No file name provided" );
     }
 
     @Test
     void getImageTestNotFound() {
         /* repo is empty */
-        GetImageRequest request = new GetImageRequest( UUID.randomUUID() );
+        GetImageRequest request = new GetImageRequest( "random.png" );
 
         assertThatThrownBy( () -> imageService.getImage( request ) )
                 .isInstanceOf( NotFoundException.class );
@@ -142,10 +141,10 @@ public class ImageServiceImplTest {
         /* Place file in repo */
         File inputFile = new File( RESIZED_INPUT_IMAGE_LOCATION );
         byte[] inputBytes = Files.readAllBytes( inputFile.toPath() );
-        Image inputImage = new Image( UUID.randomUUID(), inputBytes );
+        Image inputImage = new Image( "random.png", inputBytes );
         imageRepo.save(inputImage);
 
-        GetImageRequest request = new GetImageRequest( inputImage.getId() );
+        GetImageRequest request = new GetImageRequest( inputImage.getFileName() );
         GetImageResponse response = imageService.getImage( request );
 
         Assertions.assertArrayEquals( inputBytes, response.getImage().getBytes() );
