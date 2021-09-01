@@ -2116,22 +2116,21 @@ paths:
       security:
         - bearerAuth: []
         
-  /Image/getImage/{imageID}:
+  /Image/getImage/{fileName}:
     get:
       tags:
         - "Image"
       summary: "Retrieves an image"
-      description: "Retrieves an image with the specified ID"
+      description: "Retrieves an image with the specified file name"
       operationId: "getImage"
       parameters:
         - in: path
-          name: imageID
+          name: fileName
           schema:
             type: string
-            format: uuid
-            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f.png"
           required: true
-          description: "ID of the image to retrieve"
+          description: "File name of the image to retrieve"
       responses:
         '200':
           description: "Image retrieved"
@@ -2145,37 +2144,11 @@ paths:
                 type: string
                 format: binary
         '400':
-          description: "Request does not include a valid UUID"
+          description: "Request does not include a valid file name"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
-          description: "An image with the specified ID was not found"
-        '500':
-          description: "Internal server error"
-    head:
-      tags:
-        - "Image"
-      summary: "Retrieves an image"
-      description: "Retrieves an image with the specified ID"
-      operationId: "getImageHeader"
-      parameters:
-        - in: path
-          name: imageID
-          schema:
-            type: string
-            format: uuid
-            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-          required: true
-          description: "ID of the image to retrieve"
-      responses:
-        '200':
-          description: "Image retrieved"
-        '400':
-          description: "Request does not include a valid UUID"
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '404':
-          description: "An image with the specified ID was not found"
+          description: "An image with the specified file name was not found"
         '500':
           description: "Internal server error"
 
@@ -3985,13 +3958,12 @@ components:
         - $ref: "#/components/schemas/Response"
         - type: "object"
           required:
-            - imageID
+            - fileName
           properties:
             message:
               example: "Image uploaded"
-            imageID:
+            fileName:
               type: string
-              format: uuid
-              example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+              example: "054463f2-2f7c-4864-8130-68e5aa79ee7f.png"
           xml:
             name: "CreateImageResponse"
