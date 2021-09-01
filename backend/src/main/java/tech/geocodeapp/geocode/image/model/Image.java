@@ -3,37 +3,36 @@ package tech.geocodeapp.geocode.image.model;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.UUID;
 
 public class Image {
 
     @Id
     @NotNull
-    private UUID id;
+    private String fileName;
 
     @NotNull
     private byte[] bytes;
 
     private ImageFormat format;
 
-    public Image(UUID id, byte[] bytes) throws IOException {
-        this.id = id;
-        this.bytes = bytes;
-        this.format = ImageFormat.fromBytes( bytes );
-    }
-
-    public Image(UUID id, byte[] bytes, ImageFormat format) {
-        this.id = id;
+    public Image(String fileName, byte[] bytes, ImageFormat format) throws IOException {
+        this.fileName = fileName;
         this.bytes = bytes;
         this.format = format;
     }
 
-    public UUID getId() {
-        return id;
+    public Image(String fileName, byte[] bytes) {
+        this.fileName = fileName;
+        this.bytes = bytes;
+        this.format = ImageFormat.fromBytes( bytes );
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public byte[] getBytes() {
@@ -50,9 +49,5 @@ public class Image {
 
     public void setFormat(ImageFormat format) {
         this.format = format;
-    }
-
-    public String getFileName() {
-        return id.toString()+"."+format.toString();
     }
 }
