@@ -5,6 +5,7 @@ import {App} from '@capacitor/app';
 import {WindowMonitor} from './services/WindowMonitor';
 import {KeycloakInstance} from 'keycloak-js';
 import {environment} from '../environments/environment';
+import {GeoPoint} from './services/geocode-api';
 
 @Component({
   selector: 'app-root',
@@ -34,14 +35,36 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     if (this.keycloakInstance.authenticated) {
-      const success = true;
-      console.log('call handleLogin here and set success');
-      if (!success) {
-        await this.keycloak.logout(environment.baseRedirectURI+'welcome');
+      const location = await this.getLocation();
+      
+      if (location !== null) {
+        console.log('call handleLogin here');
+
+      } else {
+        alert('Location access is required to use GeoCode.');
+        await this.logout();
       }
+
     } else {
       this.router.navigate(['/welcome']).then().catch();
     }
+  }
+
+  async logout() {
+    await this.keycloak.logout(environment.baseRedirectURI+'welcome');
+  }
+
+  async getLocation(): Promise<GeoPoint> {
+    return new Promise<GeoPoint>(resolve => {
+      navigator.geolocation.getCurrentPosition((position) => {
+        resolve({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+      }, () => {
+        resolve(null);
+      });
+    });
   }
 
   @HostListener('window:resize')
