@@ -9,8 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GeoPoint } from './geoPoint';
 
 export interface RegisterNewUserRequest { 
     userID: string;
     username: string;
+    location: GeoPoint;
 }
