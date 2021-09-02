@@ -5,7 +5,7 @@ import {App} from '@capacitor/app';
 import {WindowMonitor} from './services/WindowMonitor';
 import {KeycloakInstance} from 'keycloak-js';
 import {environment} from '../environments/environment';
-import {GeoPoint} from './services/geocode-api';
+import {Locator} from './services/Locator';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +19,8 @@ export class AppComponent implements OnInit {
   constructor(
     private keycloak: KeycloakService,
     private router: Router,
-    private windowMonitor: WindowMonitor
+    private windowMonitor: WindowMonitor,
+    private locator: Locator
   ) {
     this.keycloakInstance = this.keycloak.getKeycloakInstance();
 
@@ -33,10 +34,15 @@ export class AppComponent implements OnInit {
     });
   }
 
+  @HostListener('window:resize')
+  private fireResize() {
+    this.windowMonitor.fireResize();
+  }
+
   async ngOnInit() {
     if (this.keycloakInstance.authenticated) {
-      const location = await this.getLocation();
-      
+      const location = await this.locator.getCurrentLocation();
+
       if (location !== null) {
         console.log('call handleLogin here');
 
@@ -52,23 +58,5 @@ export class AppComponent implements OnInit {
 
   async logout() {
     await this.keycloak.logout(environment.baseRedirectURI+'welcome');
-  }
-
-  async getLocation(): Promise<GeoPoint> {
-    return new Promise<GeoPoint>(resolve => {
-      navigator.geolocation.getCurrentPosition((position) => {
-        resolve({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        });
-      }, () => {
-        resolve(null);
-      });
-    });
-  }
-
-  @HostListener('window:resize')
-  private fireResize() {
-    this.windowMonitor.fireResize();
   }
 }
