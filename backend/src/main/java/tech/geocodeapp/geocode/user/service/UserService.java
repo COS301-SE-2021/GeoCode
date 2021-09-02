@@ -1,7 +1,7 @@
 package tech.geocodeapp.geocode.user.service;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
@@ -54,6 +54,8 @@ public interface UserService {
     //U1.14 getCurrentUserID
     java.util.UUID getCurrentUserID();
 
+    boolean currentUserIsAdmin();
+
     //U1.15 registerNewUser
     RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException;
 
@@ -64,11 +66,4 @@ public interface UserService {
 
     //U1.17 addToMyMissions
     AddToMyMissionsResponse addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException;
-
-    /**
-     * Post construct the GeoCode service, this avoids a circular dependency
-     *
-     * @param geoCodeService the service to be set
-     */
-    void setGeoCodeService( GeoCodeService geoCodeService );
 }

@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.mission.service;
 
-import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.mission.request.CreateMissionRequest;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
@@ -26,6 +25,4 @@ public interface MissionService {
 
     //U1.4 updateCompletion
     UpdateCompletionResponse updateCompletion(UpdateCompletionRequest request) throws NullRequestParameterException;
-
-    void setCollectableService(CollectableServiceImpl collectableService);
 }

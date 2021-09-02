@@ -93,6 +93,11 @@ public class UserMockService implements UserService {
         return null;
     }
 
+    @Override
+    public boolean currentUserIsAdmin() {
+        return false;
+    }
+
     /**
      * Only set userId and username for the purpose of this mock as nothing else is required by the leaderboard subsystems unit tests
      * @param request a request with the userId and username of the new user
@@ -116,15 +121,5 @@ public class UserMockService implements UserService {
     @Override
     public AddToMyMissionsResponse addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException {
         return null;
-    }
-
-    /**
-     * Post construct the GeoCode service, this avoids a circular dependency
-     *
-     * @param geoCodeService the service to be set
-     */
-    @Override
-    public void setGeoCodeService(GeoCodeService geoCodeService) {
-
     }
 }

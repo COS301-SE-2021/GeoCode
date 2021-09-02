@@ -142,7 +142,7 @@ class EventServiceImplTest {
         var userRepository = new UserMockRepository();
         var userService = new UserMockService( userRepository );
         var pointMockRepository = new PointMockRepository();
-        leaderboardService = new LeaderboardServiceImpl( leaderboardMockRepo, pointMockRepository, null, userService );
+        leaderboardService = new LeaderboardServiceImpl( leaderboardMockRepo, pointMockRepository, userService );
 
         /* Create the GeoCode and User service */
         geoCodeService = new GeoCodeMockService( geoCodeMockRepo );

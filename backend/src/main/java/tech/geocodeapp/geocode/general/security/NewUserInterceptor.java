@@ -29,17 +29,16 @@ public class NewUserInterceptor extends GenericFilterBean {
      * Intercepts all incoming requests and registers new users who are not present in the GeoCode database.
      */
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException {
-        KeycloakSecurityContext ctx = (KeycloakSecurityContext) servletRequest.getAttribute(KeycloakSecurityContext.class.getName());
-        if (ctx != null) {
+    public void doFilter( ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain ) throws ServletException, IOException {
+        KeycloakSecurityContext ctx = (KeycloakSecurityContext) servletRequest.getAttribute( KeycloakSecurityContext.class.getName() );
+        if ( ctx != null ) {
             UUID uuid = UUID.fromString(ctx.getToken().getSubject());
             String username = ctx.getToken().getPreferredUsername();
 
-            try{
+            try {
                 RegisterNewUserRequest registerNewUserRequest = new RegisterNewUserRequest(uuid, username);
-                userService.registerNewUser(registerNewUserRequest);
-            }catch(NullRequestParameterException e){
-                e.printStackTrace();
+                userService.registerNewUser( registerNewUserRequest );
+            } catch ( NullRequestParameterException e ) {
                 return;
             }
         }

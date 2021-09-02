@@ -22,7 +22,6 @@ import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 import tech.geocodeapp.geocode.user.service.UserServiceImpl;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 @RestController
 public class UserApiController implements UserApi {
 
@@ -144,10 +143,6 @@ public class UserApiController implements UserApi {
             GetOwnedGeoCodesResponse response = new GetOwnedGeoCodesResponse(false, e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-    }
-
-    public ResponseEntity<GetUsersResponse> getUsers(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all users in the system", required=true, schema=@Schema()) @Valid @RequestBody GetUsersRequest body) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<GetMyLeaderboardsResponse> getMyLeaderboards(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the name, points and ranking for all of the Leaderboards that a User is on", required=true, schema=@Schema()) @Valid @RequestBody GetMyLeaderboardsRequest body) {
