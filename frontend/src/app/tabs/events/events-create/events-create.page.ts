@@ -11,6 +11,7 @@ import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
 import {QRGenerator} from '../../../services/QRGenerator';
+import {BlocklyComponent} from '../../../components/blockly/blockly.component';
 
 @Component({
   selector: 'app-events-create',
@@ -28,6 +29,7 @@ export class EventsCreatePage implements AfterViewInit  {
   selected=[];
   type='event';
   timeHidden=true;
+  blockHidden =false;
   challengeHidden=true;
   height='0%';
   minDate;
@@ -178,6 +180,16 @@ export class EventsCreatePage implements AfterViewInit  {
     const hour = time.getHours();
     const min = time.getMinutes();
     this.timeLimit = day*24*60+hour*60+min;
+  }
+
+ async  createBlockly(){
+    const modal = await this.modalController.create({
+      component: BlocklyComponent,
+      swipeToClose: true,
+      componentProps: {}
+    });
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
   }
 
 }
