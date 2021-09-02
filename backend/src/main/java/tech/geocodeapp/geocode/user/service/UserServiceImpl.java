@@ -9,7 +9,6 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
 import tech.geocodeapp.geocode.mission.request.UpdateCompletionRequest;
@@ -388,12 +387,13 @@ public class UserServiceImpl implements UserService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the User already exists
-        boolean exists = userRepo.existsById(request.getUserID());
+        var optionalUser = userRepo.findById(this.getCurrentUserID());
 
-        if(exists){
-            return new RegisterNewUserResponse(false, "User ID already exists", null);
+        if(optionalUser.isPresent()){
+            return new RegisterNewUserResponse(true, "User ID already exists", optionalUser.get());
         }
 
+        //the User is a new User
         var newUser = new User(request.getUsername());
 
         //create the user's trackable object which will always have a Mission
@@ -421,7 +421,12 @@ public class UserServiceImpl implements UserService {
 
         this.addToMyMissions(new AddToMyMissionsRequest(newUser, mission));
 
-        userRepo.save(newUser);
+        /* check that the new User was successfully saved */
+        var check = userRepo.save(newUser);
+
+        if(!newUser.equals(check)){
+            return new RegisterNewUserResponse(false, "New User registration failed", null);
+        }
 
         return new RegisterNewUserResponse(true, "New User registered", newUser);
     }
