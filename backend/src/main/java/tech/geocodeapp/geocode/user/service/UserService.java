@@ -52,9 +52,8 @@ public interface UserService {
     User getCurrentUser();
 
     //U1.14 getCurrentUserID
+    /** @deprecated use CurrentUserDetails.getID() */
     java.util.UUID getCurrentUserID();
-
-    boolean currentUserIsAdmin();
 
     //U1.15 registerNewUser
     RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException;
