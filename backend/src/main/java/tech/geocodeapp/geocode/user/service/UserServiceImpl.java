@@ -387,7 +387,7 @@ public class UserServiceImpl implements UserService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the User already exists
-        var optionalUser = userRepo.findById(this.getCurrentUserID());
+        var optionalUser = userRepo.findById(this.getCurrentUserID());//TODO: discuss
 
         if(optionalUser.isPresent()){
             return new RegisterNewUserResponse(true, "User ID already exists", optionalUser.get());
