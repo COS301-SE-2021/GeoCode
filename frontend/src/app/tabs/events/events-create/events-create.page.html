@@ -1,71 +1,75 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="events"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Create Event</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-nav>
 
-<ion-content>
-  <ion-list>
-    <ion-item>
-      <ion-label>Name</ion-label>
-      <ion-input type="text" placeholder="Event Name" (ionChange)="setName($event)"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Description</ion-label>
-    </ion-item>
-    <ion-item>
-         <ion-textarea type="text" placeholder="Event description" (ionChange)="setDescription($event)"></ion-textarea>
-    </ion-item>
-    <ion-item>
-      <ion-label>Location</ion-label>
-      <ion-button color="button"  (click)="selectLocation()">Select location on map</ion-button>
-    </ion-item>
-    <ion-item>
-      <ion-label>Start Date</ion-label>
-      <ion-datetime displayFormat="MMM D YYYY" min="{{minDate}}" max="4000"  (ionChange)="startDate($event)"></ion-datetime>
-    </ion-item>
-    <ion-item>
-      <ion-label>End Date</ion-label>
-      <ion-datetime displayFormat="MMM D YYYY" min="{{minEndDate}}" max="4000" (ionChange)="endDate($event)"></ion-datetime>
-    </ion-item>
-    <ion-item>
-      <ion-label>Event Type</ion-label>
-      <ion-select value="event" (ionChange)="eventType($event)" >
-        <ion-select-option value="event">Event</ion-select-option>
-        <ion-select-option value="timetrial">Time Trial</ion-select-option>
-<!--        <ion-select-option value="challenge">Coding Challenge</ion-select-option>-->
-      </ion-select>
-    </ion-item>
-    <ion-item [hidden]="timeHidden">
-      <ion-label>Time Limit(days:hours:minutes)</ion-label>
-      <ion-datetime displayFormat="D:HH:mm" (ionChange)="setTime($event)" ></ion-datetime>
-    </ion-item>
-    <ion-item>
-      <ion-item [hidden]="blockHidden">
-        <ion-label>Create Blockly event</ion-label>
-        <ion-button color="button"  (click)="createBlockly()" >Create Blockly</ion-button>
-      </ion-item>
+  <app-nav-header>
+    <app-nav-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="events"></ion-back-button>
+      </ion-buttons>
+      <ion-title>Create Event</ion-title>
+    </app-nav-toolbar>
+  </app-nav-header>
+
+  <ion-content>
+    <ion-list>
+      <ion-item>
+        <ion-label>Name</ion-label>
+        <ion-input type="text" placeholder="Event Name" (ionChange)="setName($event)"></ion-input>
       </ion-item>
       <ion-item>
-      <ion-label>Order GeoCodes By</ion-label>
-      <ion-select value="GIVEN" (ionChange)="orderBy($event)" >
-        <ion-select-option value="DIFFICULTY">Difficulty</ion-select-option>
-        <ion-select-option value="DISTANCE">Quickest Route</ion-select-option>
-        <ion-select-option value="GIVEN">Given Order</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label>Add GeoCode</ion-label>
-      <ion-button color="button"  (click)="createGeoCode()" >Create +</ion-button>
-    </ion-item>
-       </ion-list>
-<!--  <ion-item>-->
-<!--    <ion-label>Created GeoCodes</ion-label>-->
-<!--    <ion-button color="button"  (click)="showGeoCodes()">Show</ion-button>-->
-<!--  </ion-item>-->
-  <ion-button color="button"  (click)="createEvent()">Create Event</ion-button>
-  <div #mapElement [style.height]="height" class="map"></div>
-</ion-content>
+        <ion-label>Description</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-textarea type="text" placeholder="Event description" (ionChange)="setDescription($event)"></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label>Location</ion-label>
+        <ion-button color="button"  (click)="selectLocation()">Select location on map</ion-button>
+      </ion-item>
+      <ion-item>
+        <ion-label>Start Date</ion-label>
+        <ion-datetime displayFormat="MMM D YYYY" min="{{minDate}}" max="4000"  (ionChange)="startDate($event)"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>End Date</ion-label>
+        <ion-datetime displayFormat="MMM D YYYY" min="{{minEndDate}}" max="4000" (ionChange)="endDate($event)"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>Event Type</ion-label>
+        <ion-select value="event" (ionChange)="eventType($event)" >
+          <ion-select-option value="event">Event</ion-select-option>
+          <ion-select-option value="timetrial">Time Trial</ion-select-option>
+          <!--        <ion-select-option value="challenge">Coding Challenge</ion-select-option>-->
+        </ion-select>
+      </ion-item>
+      <ion-item [hidden]="timeHidden">
+        <ion-label>Time Limit(days:hours:minutes)</ion-label>
+        <ion-datetime displayFormat="D:HH:mm" (ionChange)="setTime($event)" ></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-item [hidden]="blockHidden">
+          <ion-label>Create Blockly event</ion-label>
+          <ion-button color="button"  (click)="createBlockly()" >Create Blockly</ion-button>
+        </ion-item>
+      </ion-item>
+      <ion-item>
+        <ion-label>Order GeoCodes By</ion-label>
+        <ion-select value="GIVEN" (ionChange)="orderBy($event)" >
+          <ion-select-option value="DIFFICULTY">Difficulty</ion-select-option>
+          <ion-select-option value="DISTANCE">Quickest Route</ion-select-option>
+          <ion-select-option value="GIVEN">Given Order</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Add GeoCode</ion-label>
+        <ion-button color="button"  (click)="createGeoCode()" >Create +</ion-button>
+      </ion-item>
+    </ion-list>
+    <!--  <ion-item>-->
+    <!--    <ion-label>Created GeoCodes</ion-label>-->
+    <!--    <ion-button color="button"  (click)="showGeoCodes()">Show</ion-button>-->
+    <!--  </ion-item>-->
+    <ion-button color="button"  (click)="createEvent()">Create Event</ion-button>
+    <div #mapElement [style.height]="height" class="map"></div>
+  </ion-content>
+
+</app-nav>
