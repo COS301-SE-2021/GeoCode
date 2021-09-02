@@ -25,10 +25,11 @@ export class MapAndInfoComponent extends AsynchronouslyInitialisedComponent impl
     this.googleMaps = await this.mapsLoader.load();
     navigator.geolocation.getCurrentPosition(async (position) => {
       await this.loadMap(position.coords.latitude, position.coords.longitude);
+      this.componentLoaded();
     }, async (positionError) => {
       await this.loadMap(0, 0);
+      this.componentLoaded();
     });
-    this.componentLoaded();
   }
 
   async loadMap(centreLat, centreLong) {

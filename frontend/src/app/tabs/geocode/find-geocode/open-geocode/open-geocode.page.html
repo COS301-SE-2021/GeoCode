@@ -1,0 +1,31 @@
+<app-nav>
+
+  <app-nav-header>
+    <app-nav-toolbar>
+      <ion-title>Open GeoCode</ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="explore"></ion-back-button>
+      </ion-buttons>
+    </app-nav-toolbar>
+  </app-nav-header>
+
+  <ion-content>
+    <iframe #iframe src="/assets/aframe-ar.html" *ngIf="useAR"></iframe>
+    <div *ngIf="!useAR">
+      <h2>Collectables</h2>
+      <div class="horizontalscroll">
+        <div class="items">
+          <div class="collectable" *ngFor="let collectable of collectables">
+            <div class="image" (click)="swapCollectable(collectable)">
+              <img src="{{collectable.type.image}}">
+            </div>
+            <div class="name">
+              {{collectable.type.name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+
+</app-nav>

@@ -117,7 +117,7 @@ async presentToast(){
 
   //Navigate to findGeoCode page
   async findGeoCode(geocode){
-    await this.navCtrl.navigateForward('/events/'+this.event.id+'/open/'+geocode.id,{ state: {geocode} });
+    await this.navCtrl.navigateForward('/events/'+this.event.id+'/geocode/'+geocode.id,{ state: {geocode} });
   }
 
   openInMaps(geocode: GeoCode) {

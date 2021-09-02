@@ -1,15 +1,16 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Events</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-nav>
 
-<ion-content>
-  <div  slot="fixed" class="horizontalscroll" >
-    <div class="items" >
-      <ion-grid>
+  <app-nav-header>
+    <app-nav-toolbar>
+      <ion-title>Events</ion-title>
+    </app-nav-toolbar>
+  </app-nav-header>
+
+  <ion-content>
+    <div  slot="fixed" class="horizontalscroll" >
+      <div class="items" >
         <ion-row>
-          <ion-col id="button-col"><ion-select id="button"  value='{radius}' placeholder= "Select Radius" (ionChange)="radius($event)" >
+          <ion-col id="button-col"><ion-select id="button"  value='{radius}' placeholder= "Select Radius" (ionChange)="radius($event)">
             <ion-select-option value="10">10km</ion-select-option>
             <ion-select-option value="50">50km</ion-select-option>
             <ion-select-option value="100">100km</ion-select-option>
@@ -65,14 +66,10 @@
         </ion-row>
         <ion-button id="button" color="button" (click)="goToEvent(event)">Join Event</ion-button>
         <ion-button id="button" color="button" (click)="goToLeaderBoard(event)">LeaderBoard</ion-button>
-
       </ion-card-content>
     </ion-card>
   </div>
-
-  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button color="button" [routerLink]="['create']">
-      <ion-icon  name="add-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>
+
+</app-nav>
+

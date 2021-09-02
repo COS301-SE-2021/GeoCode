@@ -5,12 +5,14 @@ import java.util.UUID;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import tech.geocodeapp.geocode.image.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.image.exceptions.NotFoundException;
+import tech.geocodeapp.geocode.image.model.ImageFormat;
 import tech.geocodeapp.geocode.image.request.CreateImageRequest;
 import tech.geocodeapp.geocode.image.request.GetImageRequest;
 import tech.geocodeapp.geocode.image.response.CreateImageResponse;
@@ -29,12 +31,15 @@ public class ImageApiController implements ImageApi {
         this.imageService = imageService;
     }
 
-    public ResponseEntity< byte[] > getImage(@Parameter(in = ParameterIn.PATH, description = "ID of the image to retrieve", required=true, schema=@Schema()) @PathVariable("imageID") UUID imageID) {
+    public ResponseEntity< byte[] > getImage(@Parameter(in = ParameterIn.PATH, description = "Name of the image file to retrieve", required=true, schema=@Schema()) @PathVariable("fileName") String fileName) {
         try {
-            GetImageRequest request = new GetImageRequest( imageID );
+            GetImageRequest request = new GetImageRequest( fileName );
             GetImageResponse response = imageService.getImage( request );
 
-            return new ResponseEntity<>( response.getImage().getBytes(), HttpStatus.OK );
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType( response.getImage().getFormat().getMimeType() );
+
+            return new ResponseEntity<>( response.getImage().getBytes(), headers, HttpStatus.OK );
 
         } catch (InvalidRequestException e) {
             return new ResponseEntity<>( e.getStatus() );
