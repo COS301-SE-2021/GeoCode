@@ -3292,6 +3292,7 @@ components:
       required:
         - userID
         - username
+        - location
       properties:
         userID:
           type: string
@@ -3299,6 +3300,8 @@ components:
           example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
         username:
           type: string
+        location:
+          $ref: "#/components/schemas/GeoPoint"
       xml:
         name: "RegisterNewUserRequest"
 
