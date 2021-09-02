@@ -40,6 +40,7 @@ export class EventsCreatePage implements AfterViewInit  {
   request: CreateEventRequest = {
     beginDate: '',
     description: '',
+    // @ts-ignore
     geoCodesToFind: [],
     location: {latitude: 0,longitude: 0},
     name: '',
@@ -93,6 +94,7 @@ export class EventsCreatePage implements AfterViewInit  {
               duration: 2000
             });
             await toast.present();
+          // @ts-ignore
             this.request.geoCodesToFind.push(response.geoCodeID);
             //create QR code image
           if(response.success){

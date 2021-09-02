@@ -8,14 +8,16 @@ import { ProfilePageRoutingModule } from './profile-routing.module';
 
 import { ProfilePage } from './profile.page';
 import {TrackableLocationsComponent} from './trackable-locations/trackable-locations.component';
+import {CustomComponentsModule} from '../../components/components.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ProfilePageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        ProfilePageRoutingModule,
+        CustomComponentsModule,
+    ],
   declarations: [ProfilePage, TrackableLocationsComponent]
 })
 export class ProfilePageModule {}

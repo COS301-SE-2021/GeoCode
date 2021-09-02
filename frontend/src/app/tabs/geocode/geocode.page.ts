@@ -76,7 +76,7 @@ export class GeocodePage implements AfterViewInit  {
 
   //Navigate to findGeoCode page
   async findGeoCode(geocode){
-    await this.navCtrl.navigateForward('/explore/open/'+geocode.id,{ state: {geocode} });
+    await this.navCtrl.navigateForward('/explore/geocode/'+geocode.id,{ state: {geocode} });
   }
 
   //Call Geocode service and update Availability

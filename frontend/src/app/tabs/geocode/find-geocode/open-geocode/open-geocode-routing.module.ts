@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { GeocodeContentsPage } from './geocode-contents.page';
+
+import { OpenGeocodePage } from './open-geocode.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: GeocodeContentsPage
+    component: OpenGeocodePage
   }
 ];
 
@@ -13,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class GeocodeContentsPageRoutingModule {}
+export class OpenGeocodePageRoutingModule {}

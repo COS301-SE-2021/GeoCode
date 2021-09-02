@@ -1,18 +1,22 @@
 package tech.geocodeapp.geocode.image.model;
 
+import org.springframework.http.MediaType;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URLConnection;
 
 public enum ImageFormat {
 
-    PNG( "png" ),
-    GIF( "gif" );
+    PNG( "png", MediaType.IMAGE_PNG ),
+    GIF( "gif", MediaType.IMAGE_GIF );
 
     private String extension;
+    private MediaType type;
 
-    ImageFormat(String extension) {
+    ImageFormat( String extension, MediaType type ) {
         this.extension = extension;
+        this.type = type;
     }
 
     public String toString() {
@@ -29,5 +33,9 @@ public enum ImageFormat {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    public MediaType getMimeType() {
+        return type;
     }
 }

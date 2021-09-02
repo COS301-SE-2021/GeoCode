@@ -1,10 +1,11 @@
-<ion-header>
-  <ion-toolbar >
-    <ion-title id="page-title">Explore</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-nav>
+  <app-nav-header>
+    <app-nav-toolbar >
+      <ion-title id="page-title">Explore</ion-title>
+    </app-nav-toolbar>
+  </app-nav-header>
 
-<ion-content>
+  <ion-content>
 
   <div class="horizontalscroll">
     <ion-button [hidden]="listView"  color="button" (click)="toggleList()" slot="fixed"><ion-icon name="list-outline"></ion-icon></ion-button>
@@ -74,10 +75,12 @@
           <ion-button id="button" color="button" (click)="findGeoCode(geocode)">Find GeoCode</ion-button>
           <ion-button color="button" (click)="openInMaps(geocode)">Google Maps</ion-button>
 
-      </ion-card-content>
-    </ion-card>
-</div>
+        </ion-card-content>
+      </ion-card>
+    </div>
 
 
 
-</ion-content>
+  </ion-content>
+</app-nav>
+
