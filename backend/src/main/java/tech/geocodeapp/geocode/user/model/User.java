@@ -23,7 +23,7 @@ import javax.validation.constraints.*;
 public class User {
   @Id
   @JsonProperty("id")
-  private java.util.UUID id = null;
+  private UUID id = null;
 
   @JsonProperty("username")
   private String username = null;
@@ -72,16 +72,16 @@ public class User {
 
   }
 
-  public User(java.util.UUID id) {
+  public User(UUID id) {
     this.id = id;
   }
 
-  public User(java.util.UUID id, String username) {
-    this.id = id;
+  public User(String username) {
+    this.id = UUID.randomUUID();
     this.username = username;
   }
 
-    public User id(java.util.UUID id) {
+    public User id(UUID id) {
     this.id = id;
     return this;
   }
@@ -93,11 +93,11 @@ public class User {
   @Schema(required = true)
   @NotNull
   @Valid
-  public java.util.UUID getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(java.util.UUID id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

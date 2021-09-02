@@ -394,7 +394,7 @@ public class UserServiceImpl implements UserService {
             return new RegisterNewUserResponse(false, "User ID already exists", null);
         }
 
-        var newUser = new User(request.getUserID(), request.getUsername());
+        var newUser = new User(request.getUsername());
 
         //create the user's trackable object which will always have a Mission
         var createCollectableRequest = new CreateCollectableRequest(trackableTypeUUID, request.getLocation());

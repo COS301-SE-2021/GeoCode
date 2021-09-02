@@ -3,15 +3,10 @@ package tech.geocodeapp.geocode.user.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
-import java.util.UUID;
-
 /**
  * RegisterNewUserRequest
  */
 public class RegisterNewUserRequest   {
-    @JsonProperty("userID")
-    private UUID userID;
-
     @JsonProperty("username")
     private String username;
 
@@ -24,35 +19,12 @@ public class RegisterNewUserRequest   {
 
     /**
      * Overloaded constructor
-     * @param userID The id of the new User
      * @param username The username of the new User
+     * @param location The location of the User's Trackable
      */
-    public RegisterNewUserRequest(UUID userID, String username){
-        this.userID = userID;
-        this.username = username;
-    }
-
-    /**
-     * Overloaded constructor
-     * @param userID The id of the new User
-     * @param username The username of the new User
-     */
-    public RegisterNewUserRequest(UUID userID, String username, GeoPoint location){
-        this.userID = userID;
+    public RegisterNewUserRequest(String username, GeoPoint location){
         this.username = username;
         this.location = location;
-    }
-
-    /**
-     * Get userID
-     * @return userID
-     **/
-    public UUID getUserID() {
-        return userID;
-    }
-
-    public void setUserID(UUID userID) {
-        this.userID = userID;
     }
 
     public String getUsername() {

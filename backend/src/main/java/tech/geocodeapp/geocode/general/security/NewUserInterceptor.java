@@ -30,18 +30,18 @@ public class NewUserInterceptor extends GenericFilterBean {
      */
     @Override
     public void doFilter( ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain ) throws ServletException, IOException {
-        KeycloakSecurityContext ctx = (KeycloakSecurityContext) servletRequest.getAttribute( KeycloakSecurityContext.class.getName() );
-        if ( ctx != null ) {
-            UUID uuid = UUID.fromString(ctx.getToken().getSubject());
-            String username = ctx.getToken().getPreferredUsername();
-
-            try {
-                RegisterNewUserRequest registerNewUserRequest = new RegisterNewUserRequest(uuid, username);
-                userService.registerNewUser( registerNewUserRequest );
-            } catch ( NullRequestParameterException e ) {
-                return;
-            }
-        }
-        filterChain.doFilter(servletRequest, servletResponse);
+//        KeycloakSecurityContext ctx = (KeycloakSecurityContext) servletRequest.getAttribute( KeycloakSecurityContext.class.getName() );
+//        if ( ctx != null ) {
+//            UUID uuid = UUID.fromString(ctx.getToken().getSubject());
+//            String username = ctx.getToken().getPreferredUsername();
+//
+//            try {
+//                RegisterNewUserRequest registerNewUserRequest = new RegisterNewUserRequest(username);
+//                userService.registerNewUser( registerNewUserRequest );
+//            } catch ( NullRequestParameterException e ) {
+//                return;
+//            }
+//        }
+//        filterChain.doFilter(servletRequest, servletResponse);
     }
 }
