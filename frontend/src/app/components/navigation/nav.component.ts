@@ -9,7 +9,7 @@ import {Subscription} from 'rxjs';
 })
 export class NavComponent implements OnDestroy {
 
-  protected navigationLayout: NavigationLayout;
+  public navigationLayout: NavigationLayout;
   private navigationLayoutSubscription: Subscription;
 
   constructor(windowMonitor: WindowMonitor) {

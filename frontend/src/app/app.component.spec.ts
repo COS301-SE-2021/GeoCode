@@ -6,6 +6,7 @@ import {environment} from '../environments/environment';
 import {KeycloakService} from 'keycloak-angular';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
+import {CustomComponentsModule} from './components/components.module';
 
 describe('AppComponent', () => {
 
@@ -22,7 +23,7 @@ describe('AppComponent', () => {
         { provide: KeycloakService, useValue: mockKeycloak }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [RouterTestingModule]
+      imports: [RouterTestingModule, CustomComponentsModule]
     }).compileComponents();
 
     const router = TestBed.inject(Router);

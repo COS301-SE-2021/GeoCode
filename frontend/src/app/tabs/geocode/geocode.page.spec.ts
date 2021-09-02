@@ -8,6 +8,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {FormsModule} from '@angular/forms';
 import {MockGoogleMapsLoader} from '../../mocks/MockGoogleMapsLoader';
 import {MockKeycloak} from '../../mocks/MockKeycloak';
+import {CustomComponentsModule} from '../../components/components.module';
 
 describe('GeocodePage', () => {
   let component: GeocodePage;
@@ -17,7 +18,7 @@ describe('GeocodePage', () => {
     TestBed.configureTestingModule({
       declarations: [ GeocodePage ],
       providers: [AlertController, NavController, GeoCodeService, MockGoogleMapsLoader.provider(), MockKeycloak.provider()],
-      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, FormsModule]
+      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, FormsModule, CustomComponentsModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(GeocodePage);
