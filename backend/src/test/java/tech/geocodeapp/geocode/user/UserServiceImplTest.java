@@ -51,11 +51,11 @@ public class UserServiceImplTest {
     private GeoCode thirdGeoCode;
 
     private final UUID invalidUserId = UUID.fromString("31d72621-091c-49ad-9c28-8abda8b8f055");
-    private final UUID validUserId = UUID.fromString("183e06b6-2130-45e3-8b43-634ccd3e8e6f");
+    private UUID validUserId;
     private final UUID newUserId = UUID.fromString("e03bd781-cca9-43bf-a168-0f0563fca591");
 
-    private final UUID userWithPoints1 = UUID.fromString("f1f1cc86-47f0-4cdd-b313-e9275b9e8925");
-    private final UUID userWithPoints2 = UUID.fromString("38437809-528e-464e-a81f-140ad9f50cda");
+    private UUID userWithPoints1;
+    private UUID userWithPoints2;
     private final UUID firstGeoCodeID = UUID.fromString("0998cf20-8256-4529-b144-d3c8aa4f0fb1");
     private final UUID secondGeoCodeID = UUID.fromString("8c3e3a65-118b-47ca-8cca-097134cd00d9");
     private final UUID thirdGeoCodeID = UUID.fromString("7b32fce8-44e4-422b-a80d-521d490e9ee3");
@@ -108,8 +108,13 @@ public class UserServiceImplTest {
         }
     }
 
-    private RegisterNewUserRequest registerNewUser(UUID userID, String username){
-        return new RegisterNewUserRequest(userID, username, new GeoPoint(0.0, 0.0));
+    private UUID registerNewUser(String username){
+        try {
+            return userService.registerNewUser(new RegisterNewUserRequest(username, new GeoPoint(0.0, 0.0))).getUser().getId();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @BeforeEach
@@ -144,14 +149,7 @@ public class UserServiceImplTest {
         collectableTypeMockRepo.save(trackableCollectableType);
 
         //save the valid user to the MockRepo
-        var registerNewUserRequest = registerNewUser(validUserId, "john_smith");
-
-        try {
-            userService.registerNewUser(registerNewUserRequest);
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-            return;
-        }
+        validUserId = registerNewUser("validUser");
 
         //make 3 CollectableTypes for Easter
         egg = new CollectableType();
@@ -227,16 +225,8 @@ public class UserServiceImplTest {
         userMockRepo.save(validUser);
 
         /* add two Users that will have points */
-        var registerNewUserRequest1 = registerNewUser(userWithPoints1, "alice");
-        var registerNewUserRequest2 = registerNewUser(userWithPoints2, "bob");
-
-        try {
-            userService.registerNewUser(registerNewUserRequest1);
-            userService.registerNewUser(registerNewUserRequest2);
-        } catch (NullRequestParameterException e) {
-            e.printStackTrace();
-            return;
-        }
+        userWithPoints1 = registerNewUser("alice");
+        userWithPoints2 = registerNewUser("bob");
 
         /* get the users with points */
         User user1;
@@ -1050,8 +1040,8 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void registerNewUserTestNullUserParameter(){
-        var request = registerNewUser(null, "alice");
+    void registerNewUserTestNullParameter(){
+        var request = new RegisterNewUserRequest(null, new GeoPoint(0.0, 0.0));
 
         assertThatThrownBy(() -> userService.registerNewUser(request)).isInstanceOf(NullRequestParameterException.class);
     }
@@ -1059,7 +1049,7 @@ public class UserServiceImplTest {
     @Test
     void registerNewUserTestExistingUserId(){
         try {
-            var request = registerNewUser(validUserId, "john");
+            var request = new RegisterNewUserRequest( "john", new GeoPoint(0.0, 0.0));
             var response = userService.registerNewUser(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -1073,7 +1063,7 @@ public class UserServiceImplTest {
     void registerNewUserTestNewUserId(){
         try {
             String newUsername = "bob";
-            var request = registerNewUser(newUserId, newUsername);
+            var request = new RegisterNewUserRequest(newUsername, new GeoPoint(0.0, 0.0));
             var response = userService.registerNewUser(request);
 
             Assertions.assertTrue(response.isSuccess());
