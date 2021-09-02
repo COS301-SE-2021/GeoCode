@@ -1,4 +1,4 @@
-import {Collectable} from '../../services/geocode-api';
+import {CollectableResponse} from '../../../../services/geocode-api';
 
 export class Position {
   x: number;
@@ -18,13 +18,13 @@ export class Position {
 }
 
 export class CollectableData {
-  raw: Collectable;
+  raw: CollectableResponse;
   position: Position;
 
   height = 0.5;
   width = 0.5;
 
-  constructor(collectable: Collectable, position: Position) {
+  constructor(collectable: CollectableResponse, position: Position) {
     this.raw = collectable;
     this.position = position;
   }

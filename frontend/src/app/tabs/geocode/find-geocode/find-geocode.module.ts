@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { IonicModule } from '@ionic/angular';
-import { GeocodeContentsPageRoutingModule } from './geocode-contents-routing.module';
-import { GeocodeContentsPage } from './geocode-contents.page';
+
+import { FindGeocodePageRoutingModule } from './find-geocode-routing.module';
+
+import { FindGeocodePage } from './find-geocode.page';
 import {CustomComponentsModule} from '../../../components/components.module';
 
 @NgModule({
@@ -11,9 +14,9 @@ import {CustomComponentsModule} from '../../../components/components.module';
         CommonModule,
         FormsModule,
         IonicModule,
-        GeocodeContentsPageRoutingModule,
+        FindGeocodePageRoutingModule,
         CustomComponentsModule
     ],
-  declarations: [GeocodeContentsPage]
+  declarations: [FindGeocodePage]
 })
-export class GeocodeContentsPageModule {}
+export class FindGeocodePageModule {}

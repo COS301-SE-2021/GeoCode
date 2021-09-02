@@ -9,15 +9,7 @@ const routes: Routes = [
   {
     path: 'welcome',
     loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule)
-  },  {
-    path: 'ar-test',
-    loadChildren: () => import('./ar-test/ar-test.module').then( m => m.ArTestPageModule)
   }
-
-
-
-
-
 ];
 @NgModule({
   imports: [

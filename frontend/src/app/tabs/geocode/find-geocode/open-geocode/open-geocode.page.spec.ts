@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { ArTestModelPage } from './ar-test-model.page';
+import { OpenGeocodePage } from './open-geocode.page';
 
-describe('ArTestModelPage', () => {
-  let component: ArTestModelPage;
-  let fixture: ComponentFixture<ArTestModelPage>;
+describe('OpenGeocodePage', () => {
+  let component: OpenGeocodePage;
+  let fixture: ComponentFixture<OpenGeocodePage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ArTestModelPage ],
+      declarations: [ OpenGeocodePage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ArTestModelPage);
+    fixture = TestBed.createComponent(OpenGeocodePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

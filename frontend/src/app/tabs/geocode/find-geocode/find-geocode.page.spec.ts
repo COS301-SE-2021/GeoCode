@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { CollectableArViewerComponent } from './collectable-ar-viewer.component';
+import { FindGeocodePage } from './find-geocode.page';
 
-describe('CollectableArViewerComponent', () => {
-  let component: CollectableArViewerComponent;
-  let fixture: ComponentFixture<CollectableArViewerComponent>;
+describe('FindGeocodePage', () => {
+  let component: FindGeocodePage;
+  let fixture: ComponentFixture<FindGeocodePage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CollectableArViewerComponent ],
+      declarations: [ FindGeocodePage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CollectableArViewerComponent);
+    fixture = TestBed.createComponent(FindGeocodePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

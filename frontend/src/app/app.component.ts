@@ -17,11 +17,9 @@ export class AppComponent {
   ) {
     const instance = this.keycloak.getKeycloakInstance();
 
-    this.router.navigate(['/ar-test']).then().catch();
-
-    /*if (!instance.authenticated) {
+    if (!instance.authenticated) {
       this.router.navigate(['/welcome']).then().catch();
-    }*/
+    }
 
     App.addListener('appUrlOpen', data => {
       console.log('App opened with URL: ' + data.url);
