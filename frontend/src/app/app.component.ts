@@ -1,25 +1,26 @@
-import {Component, HostListener} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {KeycloakService} from 'keycloak-angular';
 import {App} from '@capacitor/app';
 import {WindowMonitor} from './services/WindowMonitor';
+import {KeycloakInstance} from 'keycloak-js';
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
+  private keycloakInstance: KeycloakInstance;
+
   constructor(
     private keycloak: KeycloakService,
     private router: Router,
     private windowMonitor: WindowMonitor
   ) {
-    const instance = this.keycloak.getKeycloakInstance();
-
-    if (!instance.authenticated) {
-      this.router.navigate(['/welcome']).then().catch();
-    }
+    this.keycloakInstance = this.keycloak.getKeycloakInstance();
 
     App.addListener('appUrlOpen', data => {
       console.log('App opened with URL: ' + data.url);
@@ -29,6 +30,18 @@ export class AppComponent {
         this.router.navigate([target]).then().catch();
       }
     });
+  }
+
+  async ngOnInit() {
+    if (this.keycloakInstance.authenticated) {
+      const success = true;
+      console.log('call handleLogin here and set success');
+      if (!success) {
+        await this.keycloak.logout(environment.baseRedirectURI+'welcome');
+      }
+    } else {
+      this.router.navigate(['/welcome']).then().catch();
+    }
   }
 
   @HostListener('window:resize')
