@@ -102,7 +102,7 @@ public class UserServiceImplIT {
     private UUID winterSchoolEventID;
 
     void registerNewUser(UUID userID, String username){
-        var request = new RegisterNewUserRequest(userID, username);
+        var request = new RegisterNewUserRequest(userID, username, new GeoPoint(0.0, 0.0));
         RegisterNewUserResponse response;
 
         try {
@@ -1190,7 +1190,7 @@ public class UserServiceImplIT {
         registerNewUser(validUserId, "validUser");
 
         try {
-            var request = new RegisterNewUserRequest(validUserId, "john");
+            var request = new RegisterNewUserRequest(validUserId, "john", new GeoPoint(0.0, 0.0));
             var response = userService.registerNewUser(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -1208,7 +1208,7 @@ public class UserServiceImplIT {
     public void registerNewUserTestNewUserId(){
         try {
             var newUsername = "bob";
-            var request = new RegisterNewUserRequest(newUserId, newUsername);
+            var request = new RegisterNewUserRequest(newUserId, newUsername, new GeoPoint(0.0, 0.0));
             var response = userService.registerNewUser(request);
 
             Assertions.assertTrue(response.isSuccess());

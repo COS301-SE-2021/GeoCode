@@ -397,7 +397,7 @@ public class UserServiceImpl implements UserService {
         var newUser = new User(request.getUserID(), request.getUsername());
 
         //create the user's trackable object which will always have a Mission
-        var createCollectableRequest = new CreateCollectableRequest(trackableTypeUUID, new GeoPoint(0.0, 0.0));
+        var createCollectableRequest = new CreateCollectableRequest(trackableTypeUUID, request.getLocation());
         var createCollectableResponse = collectableService.createCollectable(createCollectableRequest);
 
         if(!createCollectableResponse.isSuccess()){

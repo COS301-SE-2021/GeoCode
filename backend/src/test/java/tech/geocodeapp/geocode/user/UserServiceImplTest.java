@@ -108,6 +108,10 @@ public class UserServiceImplTest {
         }
     }
 
+    private RegisterNewUserRequest registerNewUser(UUID userID, String username){
+        return new RegisterNewUserRequest(userID, username, new GeoPoint(0.0, 0.0));
+    }
+
     @BeforeEach
     void setup() {
         var collectableTypeMockRepo = new CollectableTypeMockRepository();
@@ -140,7 +144,7 @@ public class UserServiceImplTest {
         collectableTypeMockRepo.save(trackableCollectableType);
 
         //save the valid user to the MockRepo
-        var registerNewUserRequest = new RegisterNewUserRequest(validUserId, "john_smith");
+        var registerNewUserRequest = registerNewUser(validUserId, "john_smith");
 
         try {
             userService.registerNewUser(registerNewUserRequest);
@@ -223,8 +227,8 @@ public class UserServiceImplTest {
         userMockRepo.save(validUser);
 
         /* add two Users that will have points */
-        var registerNewUserRequest1 = new RegisterNewUserRequest(userWithPoints1, "alice");
-        var registerNewUserRequest2 = new RegisterNewUserRequest(userWithPoints2, "bob");
+        var registerNewUserRequest1 = registerNewUser(userWithPoints1, "alice");
+        var registerNewUserRequest2 = registerNewUser(userWithPoints2, "bob");
 
         try {
             userService.registerNewUser(registerNewUserRequest1);
@@ -1047,7 +1051,7 @@ public class UserServiceImplTest {
 
     @Test
     void registerNewUserTestNullUserParameter(){
-        var request = new RegisterNewUserRequest(null, "alice");
+        var request = registerNewUser(null, "alice");
 
         assertThatThrownBy(() -> userService.registerNewUser(request)).isInstanceOf(NullRequestParameterException.class);
     }
@@ -1055,7 +1059,7 @@ public class UserServiceImplTest {
     @Test
     void registerNewUserTestExistingUserId(){
         try {
-            var request = new RegisterNewUserRequest(validUserId, "john");
+            var request = registerNewUser(validUserId, "john");
             var response = userService.registerNewUser(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -1069,7 +1073,7 @@ public class UserServiceImplTest {
     void registerNewUserTestNewUserId(){
         try {
             String newUsername = "bob";
-            var request = new RegisterNewUserRequest(newUserId, newUsername);
+            var request = registerNewUser(newUserId, newUsername);
             var response = userService.registerNewUser(request);
 
             Assertions.assertTrue(response.isSuccess());
