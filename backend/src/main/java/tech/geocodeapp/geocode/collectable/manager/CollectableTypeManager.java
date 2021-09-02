@@ -1,10 +1,8 @@
 package tech.geocodeapp.geocode.collectable.manager;
 
+import tech.geocodeapp.geocode.collectable.factory.*;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
-import tech.geocodeapp.geocode.collectable.context.CollectableTypeContext;
 import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
-import tech.geocodeapp.geocode.collectable.factory.AbstractCollectableTypeFactory;
-import tech.geocodeapp.geocode.collectable.strategy.BasicCollectableTypeStrategy;
 import tech.geocodeapp.geocode.mission.model.MissionType;
 
 import java.util.HashMap;
@@ -18,8 +16,7 @@ public class CollectableTypeManager {
      */
     public CollectableTypeComponent buildCollectableType(CollectableType type){
         CollectableTypeComponent builtType;
-        CollectableTypeContext context = new CollectableTypeContext(new BasicCollectableTypeStrategy());
-        AbstractCollectableTypeFactory factory = context.executeStrategy();
+        AbstractCollectableTypeFactory factory = new BasicCollectableTypeFactory();
 
         //create a String to store name, rarity, id and image in that order separated by a #
         String property;
@@ -47,24 +44,21 @@ public class CollectableTypeManager {
 
         //check if expiring property exists and decorate if it does
         if(type.getProperties().containsKey("expiring")) {
-            context.Switch("expiring");
-            factory = context.executeStrategy();
+            factory = new ExpiringCollectableTypeFactory();
             property = type.getProperties().get("expiring");
             builtType = factory.decorateCollectableType(property, builtType);
         }
 
         //check if geofenced property exists and decorate if it does
         if(type.getProperties().containsKey("geofenced")) {
-            context.Switch("geofenced");
-            factory = context.executeStrategy();
+            factory = new GeofencedCollectableTypeFactory();
             property = type.getProperties().get("geofenced");
             builtType = factory.decorateCollectableType(property, builtType);
         }
 
         //check if trackable property exists and decorate if it does
         if(type.getProperties().containsKey("trackable")) {
-            context.Switch("trackable");
-            factory = context.executeStrategy();
+            factory = new TrackableCollectableTypeFactory();
             property = type.getProperties().get("trackable");
             builtType = factory.decorateCollectableType(property, builtType);
         }
