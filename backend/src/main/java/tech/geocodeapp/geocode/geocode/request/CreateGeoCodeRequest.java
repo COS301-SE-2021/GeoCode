@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
+import tech.geocodeapp.geocode.event.decorator.EventComponent;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
@@ -17,6 +18,11 @@ import java.util.UUID;
  */
 @Validated
 public class CreateGeoCodeRequest {
+    /**
+     * The id of the GeoCode to create
+     * Optionally given, if not given then a new uuid is created
+     */
+    private UUID id = null;
 
     /**
      * The description of where the GeoCode is and what it involves
@@ -51,10 +57,35 @@ public class CreateGeoCodeRequest {
     private Boolean available = null;
 
     /**
+     * The EventComponent for the Event for the GeoCode to create.
+     * Used to check whether an Event is a Blockly Event in createGeoCode, so that
+     * no Collectables are added for a Blockly Event
+     */
+    private EventComponent eventComponent = null;
+
+    /**
      * Default constructor
      */
     public CreateGeoCodeRequest() {
 
+    }
+
+    /**
+     * Overloaded Constructor
+     * @param id The id of the GeoCode to create
+     * @param description The description of where the GeoCode is and what it involves
+     * @param location    The location of the GeoCode in the real world
+     * @param hints       The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
+     * @param difficulty  The level of difficulty to find a GeoCode in the real world
+     * @param available   If the GeoCode is active in the system
+     */
+    public CreateGeoCodeRequest( UUID id, String description, GeoPoint location, List< String > hints, Difficulty difficulty, Boolean available ) {
+        this.id = id;
+        this.description = description;
+        this.location = location;
+        this.hints = hints;
+        this.difficulty = difficulty;
+        this.available = available;
     }
 
     /**
@@ -73,6 +104,26 @@ public class CreateGeoCodeRequest {
         this.hints = hints;
         this.difficulty = difficulty;
         this.available = available;
+    }
+
+    /**
+     * Overloaded Constructor
+     *
+     * @param description The description of where the GeoCode is and what it involves
+     * @param location    The location of the GeoCode in the real world
+     * @param hints       The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
+     * @param difficulty  The level of difficulty to find a GeoCode in the real world
+     * @param available   If the GeoCode is active in the system
+     * @param eventComponent Optional parameter to set the event id of the GeoCode and check whether the event is a Blockly event
+     */
+    public CreateGeoCodeRequest( String description, GeoPoint location, List< String > hints, Difficulty difficulty, Boolean available, EventComponent eventComponent ) {
+
+        this.description = description;
+        this.location = location;
+        this.hints = hints;
+        this.difficulty = difficulty;
+        this.available = available;
+        this.eventComponent = eventComponent;
     }
 
     /**
@@ -322,4 +373,19 @@ public class CreateGeoCodeRequest {
         return o.toString().replace( "\n", "\n    " );
     }
 
+    public EventComponent getEventComponent() {
+        return eventComponent;
+    }
+
+    public void setEventComponent(EventComponent eventComponent) {
+        this.eventComponent = eventComponent;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 }

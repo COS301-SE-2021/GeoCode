@@ -1,20 +1,18 @@
 package tech.geocodeapp.geocode.event.request;
 
-import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.Valid;
-
-import tech.geocodeapp.geocode.event.model.Event;
+import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * CreateEventRequest object that is used to specify the attributes for a new Event
@@ -61,7 +59,7 @@ public class CreateEventRequest {
      * The different GeoCodes to find during the Event
      */
     @JsonProperty( "geoCodesToFind" )
-    private List< UUID > geoCodesToFind;
+    private List< CreateGeoCodeRequest > createGeoCodesToFind;
 
     /**
      * The order in which the Users will complete the different Levels
@@ -96,20 +94,20 @@ public class CreateEventRequest {
      * @param location the Event will be held at in the real world's location
      * @param beginDate The starting Date of the Event
      * @param endDate The end Date of the Event
-     * @param geoCodesToFind The different GeoCodes to find during the Event
+     * @param createGeoCodesToFind The different GeoCodes to find during the Event
      * @param orderBy The order in which the Users will complete the different Levels
      * @param properties Properties of the Event
      */
-    public CreateEventRequest( String name, String description, GeoPoint location,
-                               LocalDate beginDate, LocalDate endDate,
-                               List< UUID > geoCodesToFind, OrderLevels orderBy, Map<String, String> properties ) {
+    public CreateEventRequest(String name, String description, GeoPoint location,
+                              LocalDate beginDate, LocalDate endDate,
+                              List< CreateGeoCodeRequest > createGeoCodesToFind, OrderLevels orderBy, Map<String, String> properties ) {
 
         this.name = name;
         this.description = description;
         this.location = location;
         this.beginDate = beginDate;
         this.endDate = endDate;
-        this.geoCodesToFind = geoCodesToFind;
+        this.createGeoCodesToFind = createGeoCodesToFind;
         this.orderBy = orderBy;
         this.properties = properties;
     }
@@ -122,13 +120,13 @@ public class CreateEventRequest {
      * @param location the Event will be held at in the real world's location
      * @param beginDate The starting Date of the Event
      * @param endDate The end Date of the Event
-     * @param geoCodesToFind The different GeoCodes to find during the Event
+     * @param createGeoCodesToFind The different GeoCodes to find during the Event
      * @param orderBy The order in which the Users will complete the different Levels
      * @param available If the Event is active in the system for a user to participate
      * @param properties Properties of the Event
      */
     public CreateEventRequest( String name, String description, GeoPoint location,
-                               LocalDate beginDate, LocalDate endDate, List< UUID > geoCodesToFind,
+                               LocalDate beginDate, LocalDate endDate, List< CreateGeoCodeRequest > createGeoCodesToFind,
                                OrderLevels orderBy, Boolean available, Map<String, String> properties ) {
 
         this.name = name;
@@ -136,9 +134,10 @@ public class CreateEventRequest {
         this.location = location;
         this.beginDate = beginDate;
         this.endDate = endDate;
-        this.geoCodesToFind = geoCodesToFind;
+        this.createGeoCodesToFind = createGeoCodesToFind;
         this.orderBy = orderBy;
         this.available = available;
+        this.properties = properties;
     }
 
     /**
@@ -314,22 +313,22 @@ public class CreateEventRequest {
      *
      * @return the request after the geoCodesToFind has been changed
      */
-    public CreateEventRequest geoCodesToFind( List< UUID > geoCodesToFind ) {
+    public CreateEventRequest geoCodesToFind( List< CreateGeoCodeRequest > geoCodesToFind ) {
 
-        this.geoCodesToFind = geoCodesToFind;
+        this.createGeoCodesToFind = geoCodesToFind;
         return this;
     }
 
     /**
      * Adds a single entry into the geoCodesToFind list
      *
-     * @param geoCodesToFindItem the entry to insert into the geoCodesToFind list
+     * @param createGeoCodesToFindItem the entry to insert into the geoCodesToFind list
      *
      * @return the request after the geoCodesToFind has been changed
      */
-    public CreateEventRequest addGeoCodesToFindItem( UUID geoCodesToFindItem ) {
+    public CreateEventRequest addGeoCodesToFindItem( CreateGeoCodeRequest createGeoCodesToFindItem ) {
 
-        this.geoCodesToFind.add( geoCodesToFindItem );
+        this.createGeoCodesToFind.add( createGeoCodesToFindItem );
         return this;
     }
 
@@ -338,19 +337,19 @@ public class CreateEventRequest {
      *
      * @return the stored geoCodesToFind attribute
      */
-    public List< UUID > getGeoCodesToFind() {
+    public List< CreateGeoCodeRequest > getCreateGeoCodesToFind() {
 
-        return geoCodesToFind;
+        return createGeoCodesToFind;
     }
 
     /**
      * Sets the geoCodesToFind attribute to the specified value
      *
-     * @param geoCodesToFind the value the attribute should be set to
+     * @param createGeoCodesToFind the value the attribute should be set to
      */
-    public void setGeoCodesToFind( List< UUID > geoCodesToFind ) {
+    public void setCreateGeoCodesToFind(List<CreateGeoCodeRequest> createGeoCodesToFind) {
 
-        this.geoCodesToFind = geoCodesToFind;
+        this.createGeoCodesToFind = createGeoCodesToFind;
     }
 
     /**
@@ -480,7 +479,7 @@ public class CreateEventRequest {
                 Objects.equals( this.location, createEventRequest.location ) &&
                 Objects.equals( this.beginDate, createEventRequest.beginDate ) &&
                 Objects.equals( this.endDate, createEventRequest.endDate ) &&
-                Objects.equals( this.geoCodesToFind, createEventRequest.geoCodesToFind ) &&
+                Objects.equals( this.createGeoCodesToFind, createEventRequest.createGeoCodesToFind) &&
                 Objects.equals( this.orderBy, createEventRequest.orderBy ) &&
                 Objects.equals( this.available, createEventRequest.available ) &&
                 Objects.equals( this.properties, createEventRequest.properties );
@@ -494,7 +493,7 @@ public class CreateEventRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( name, description, location, beginDate, endDate, geoCodesToFind, orderBy, available, properties );
+        return Objects.hash( name, description, location, beginDate, endDate, createGeoCodesToFind, orderBy, available, properties );
     }
 
     /**
@@ -511,7 +510,7 @@ public class CreateEventRequest {
                 "    location: " + toIndentedString( location ) + "\n" +
                 "    beginDate: " + toIndentedString( beginDate ) + "\n" +
                 "    endDate: " + toIndentedString( endDate ) + "\n" +
-                "    geoCodesToFind: " + toIndentedString( geoCodesToFind ) + "\n" +
+                "    geoCodesToFind: " + toIndentedString(createGeoCodesToFind) + "\n" +
                 "    orderBy: " + toIndentedString( orderBy ) + "\n" +
                 "    available: " + toIndentedString( available ) + "\n" +
                 "}";
