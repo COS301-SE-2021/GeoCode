@@ -380,4 +380,12 @@ public class CreateGeoCodeRequest {
     public void setEventComponent(EventComponent eventComponent) {
         this.eventComponent = eventComponent;
     }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 }

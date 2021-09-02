@@ -76,7 +76,7 @@ public class EventServiceImpl implements EventService {
      * The User service to access the current user
      */
     @NotNull( message = "User Service Implementation may not be null." )
-    private UserService userService;
+    private final UserService userService;
 
     private final String eventNotFoundMessage = "Event not found";
 
@@ -173,8 +173,8 @@ public class EventServiceImpl implements EventService {
 
         /* Store the list of GeoCode UUIDs to create a Level on */
         List<CreateGeoCodeRequest> createGeoCodeRequests = request.getCreateGeoCodesToFind();
-        List<UUID> geoCodeIDs = null;
 
+        List<UUID> geoCodeIDs = new ArrayList<>();
         List< GeoCode > geoCodes = new ArrayList<>();
 
         /*
@@ -182,13 +182,24 @@ public class EventServiceImpl implements EventService {
          * and get the GeoCode object
          */
         for ( CreateGeoCodeRequest createGeoCodeRequest : createGeoCodeRequests ) {
+            UUID id = null;
+            
             try {
                 /*
                  * Call the GeoCode service to create the GeoCode Object
+                 * Pass eventComponent to createGeoCode to use to check if Collectables
+                 * should be added to the GeoCode
                  * */
+                createGeoCodeRequest.setEventComponent(eventComponent);
+
                 var createGeoCodeResponse = geoCodeService.createGeoCode( createGeoCodeRequest );
 
-                var id = createGeoCodeResponse.getGeoCodeID();
+                id = createGeoCodeResponse.getGeoCodeID();
+
+                /* add the current GeoCode's id to the list of GeoCode ids, so that if the
+                * GeoCode id list is not empty when setting it for the created Event
+                *  */
+                geoCodeIDs.add( id );
 
                 /*
                  * Call the GeoCode service to get the GeoCode Object
@@ -197,15 +208,9 @@ public class EventServiceImpl implements EventService {
                 var found = geoCodeService.getGeoCode( new GetGeoCodeRequest( id ) ).getFoundGeoCode();
                 geoCodes.add( found );
 
-                /* Set the geocode's event ID */
-                if ( found.getEventID() != null ) {
-                    return new CreateEventResponse( false, "Attempted to link a geocode that is already linked to an event" );
-                }
-
-                found.setEventID( eventID );
                 geoCodeService.saveGeoCode( found );
             } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
-                return new CreateEventResponse( false, "Failed to find geocode with createGeoCodeRequest " + createGeoCodeRequest.toString() );
+                return new CreateEventResponse( false, "Invalid id for a GeoCode: " + id);
             }
         }
 
@@ -229,6 +234,9 @@ public class EventServiceImpl implements EventService {
             /* The GeoCodes are no longer valid so stop */
             return new CreateEventResponse( false, "Sorting failed" );
         }
+
+        /* set the GeoCode ids now that we have them after the GeoCodes have been created */
+        event.setGeocodeIDs(geoCodeIDs);
 
         /*
          * Save the newly create Event
@@ -343,7 +351,7 @@ public class EventServiceImpl implements EventService {
                 UUID nextGeocodeID = event.getGeocodeIDs().get( 0 );
 
                 /* Create a new status object with the geocodeID set to the first geocode */
-                Map< String, String > details = new HashMap< String, String >();
+                Map< String, String > details = new HashMap<>();
                 status = new UserEventStatus( UUID.randomUUID(), event.getID(), currentUserID, nextGeocodeID, details );
                 event.handleEventStart( status );
 

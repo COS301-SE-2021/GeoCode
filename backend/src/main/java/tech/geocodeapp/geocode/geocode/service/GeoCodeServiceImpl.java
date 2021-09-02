@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.geocode.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -162,7 +163,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         * So only Collectables if the current GeoCode is not part of a
         * Blockly Event
         * */
-        if( eventComponent == null  ) {//TODO: put back in once Blockly Event decorator is done: || !eventComponent.isBlocklyEvent()
+        if( eventComponent == null || !eventComponent.isBlocklyEvent() ) {//TODO: put back in once Blockly Event decorator is done: || !eventComponent.isBlocklyEvent()
             /* Get all the stored Collectables */
             var collectableTypes = collectableService.getCollectableTypes();
 
@@ -241,9 +242,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
         /*
          * Create the GeoCode object
-         * and set its attributes to the given attributes in the request
+         * and set its attributes to the given attributes in the request.
+         * ID is optionally passed
          */
-        var id = UUID.randomUUID();//TODO: use passed in id (if it was passed in)
+        var id = request.getId() != null ? request.getId() : UUID.randomUUID();
 
         /*
          * Get the user who is creating the GeoCode
@@ -448,6 +450,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response and return all the
          * collectable ID's for the found GeoCode
          */
+        System.out.println("GeoCodeID when getting the Collectables: "+request.getGeoCodeID());
+        Assertions.assertNotNull(hold);
+        Assertions.assertNotNull(hold.getCollectables());
         return new GetCollectablesResponse( new ArrayList<>( hold.getCollectables() ) );
     }
 
