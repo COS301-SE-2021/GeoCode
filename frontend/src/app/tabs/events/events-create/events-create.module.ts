@@ -9,16 +9,18 @@ import { EventsCreatePageRoutingModule } from './events-create-routing.module';
 import { EventsCreatePage } from './events-create.page';
 import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
+import {CustomComponentsModule} from '../../../components/components.module';
 
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    EventsCreatePageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        EventsCreatePageRoutingModule,
+        CustomComponentsModule
+    ],
   declarations: [EventsCreatePage,CreateGeocodeComponent,EventLocationComponent]
 })
 export class EventsCreatePageModule {}

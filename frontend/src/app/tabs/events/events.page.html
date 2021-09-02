@@ -22,7 +22,6 @@
             <ion-button [hidden]="!listView" color="card" (click)="toggleList()"><ion-icon name="map-outline"></ion-icon></ion-button>
           </ion-col>
         </ion-row>
-      </ion-grid>
 
     </div>
   </div>
@@ -69,6 +68,12 @@
       </ion-card-content>
     </ion-card>
   </div>
+
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button color="button" [routerLink]="['create']">
+      <ion-icon  name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
 
 </app-nav>
