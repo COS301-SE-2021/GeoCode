@@ -133,14 +133,21 @@ public class UserServiceImplIT {
     private CollectableType firstFoundCollectableType;
     private CollectableType secondFoundCollectableType;
 
-    private List<UUID> openDayGeoCodeIDs;
+    private List<CreateGeoCodeRequest> createOpenDayGeoCodeRequests;
 
     private UUID winterSchoolGeoCode1ID;
     private UUID winterSchoolGeoCode2ID;
     private UUID winterSchoolGeoCode3ID;
 
-    private List<UUID> winterSchoolGeoCodeIDs;
+    private List<CreateGeoCodeRequest> winterSchoolCreateGeoCodeRequests;
     private String successGetMyLeaderboardsMessage = "The details for the User's Leaderboards were successfully returned";
+
+    private CreateGeoCodeRequest createFirstGeoCodeRequest;
+    private CreateGeoCodeRequest createSecondGeoCodeRequest;
+
+    private CreateGeoCodeRequest createWinterSchoolGeoCode1Request;
+    private CreateGeoCodeRequest createWinterSchoolGeoCode2Request;
+    private CreateGeoCodeRequest createWinterSchoolGeoCode3Request;
 
     User registerNewUser(UUID userID, String username){
         RegisterNewUserRequest request = new RegisterNewUserRequest(userID, username);
@@ -244,13 +251,13 @@ public class UserServiceImplIT {
 
     private void createEvent(String name, String description, GeoPoint location,
                              LocalDate beginDate, LocalDate endDate,
-                             List<UUID> geoCodesToFind, OrderLevels orderBy, Map<String, String> properties) throws tech.geocodeapp.geocode.event.exceptions.InvalidRequestException {
+                             List<CreateGeoCodeRequest> createGeoCodesToFind, OrderLevels orderBy, Map<String, String> properties) throws tech.geocodeapp.geocode.event.exceptions.InvalidRequestException {
         //admin user (cannot participate)
         //setUser(validUserId);
 
         var createEventRequest = new CreateEventRequest(name, description, location,
                 beginDate, endDate,
-                geoCodesToFind, orderBy, properties);
+                createGeoCodesToFind, orderBy, properties);
 
         eventService.createEvent(createEventRequest);
     }
@@ -310,13 +317,25 @@ public class UserServiceImplIT {
         return createGeoCodeResponse.getGeoCodeID();
     }
 
+    private UUID getGeoCodeID(CreateGeoCodeRequest request){//TODO: do not call this as it creates the geocodes
+        try {
+            return geoCodeService.createGeoCode(request).getGeoCodeID();
+        } catch (InvalidRequestException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private void addFirstTwoGeoCodes() throws NullRequestParameterException, InvalidRequestException {
         validUser = registerNewUser(validUserId, "validUser");
 
-        firstGeoCodeID = createGeoCode("1", new GeoPoint(10.0, 10.0), Difficulty.HARD);
+        //TODO: pass GeoCodeID when creating a GeoCode, eg: pass firstGeoCodeID
+        firstGeoCodeID = UUID.randomUUID();
+        createFirstGeoCodeRequest = new CreateGeoCodeRequest(firstGeoCodeID, "1", new GeoPoint(10.0, 10.0), new ArrayList<String>(), Difficulty.HARD, true);
         firstCollectables = getCollectables(firstGeoCodeID);
 
-        secondGeoCodeID = createGeoCode("2", new GeoPoint(10.0, 10.0), Difficulty.INSANE);
+        secondGeoCodeID = UUID.randomUUID();
+        createSecondGeoCodeRequest = new CreateGeoCodeRequest(secondGeoCodeID, "2", new GeoPoint(10.0, 10.0), new ArrayList<String>(), Difficulty.INSANE, true);
         secondCollectables = getCollectables(secondGeoCodeID);
 
         //get the GeoCode objects
@@ -494,13 +513,9 @@ public class UserServiceImplIT {
         //create an Event's GeoCodes
         addFirstTwoGeoCodes();
 
-        openDayGeoCodeIDs = new ArrayList<>();
-        openDayGeoCodeIDs.add(firstGeoCodeID);
-        openDayGeoCodeIDs.add(secondGeoCodeID);
-
         try {
             createEvent(openDayEventName, openDayEventName, new GeoPoint(0.0, 0.0),
-                    LocalDate.now(), LocalDate.now().plusDays(1), openDayGeoCodeIDs, OrderLevels.GIVEN, new HashMap<>());
+                    LocalDate.now(), LocalDate.now().plusDays(1), createOpenDayGeoCodeRequests, OrderLevels.GIVEN, new HashMap<>());
         } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
             e.printStackTrace();
         }
@@ -531,19 +546,27 @@ public class UserServiceImplIT {
         //create GeoCodes
         setUser(validUserId);
 
-        winterSchoolGeoCode1ID = createGeoCode("winterSchool1", new GeoPoint(0.0, 0.0), Difficulty.EASY);
-        winterSchoolGeoCode2ID = createGeoCode("winterSchool2", new GeoPoint(0.0, 0.0), Difficulty.INSANE);
-        winterSchoolGeoCode3ID = createGeoCode("winterSchool3", new GeoPoint(0.0, 0.0), Difficulty.HARD);
+        winterSchoolGeoCode1ID = UUID.randomUUID();
+        createWinterSchoolGeoCode1Request = new CreateGeoCodeRequest(winterSchoolGeoCode1ID, "winterSchool1", new GeoPoint(0.0, 0.0),
+                new ArrayList<String>(), Difficulty.EASY, true);
+
+        winterSchoolGeoCode2ID = UUID.randomUUID();
+        createWinterSchoolGeoCode2Request = new CreateGeoCodeRequest(winterSchoolGeoCode2ID, "winterSchool2", new GeoPoint(0.0, 0.0),
+                new ArrayList<String>(), Difficulty.INSANE, true);
+
+        winterSchoolGeoCode3ID = UUID.randomUUID();
+        createWinterSchoolGeoCode3Request = new CreateGeoCodeRequest(winterSchoolGeoCode3ID, "winterSchool3", new GeoPoint(0.0, 0.0),
+                new ArrayList<String>(), Difficulty.HARD, true);
 
         //create the Event
-        winterSchoolGeoCodeIDs = new ArrayList<>();
-        winterSchoolGeoCodeIDs.add(winterSchoolGeoCode1ID);
-        winterSchoolGeoCodeIDs.add(winterSchoolGeoCode2ID);
-        winterSchoolGeoCodeIDs.add(winterSchoolGeoCode3ID);
+        winterSchoolCreateGeoCodeRequests = new ArrayList<>();
+        winterSchoolCreateGeoCodeRequests.add(createWinterSchoolGeoCode1Request);
+        winterSchoolCreateGeoCodeRequests.add(createWinterSchoolGeoCode2Request);
+        winterSchoolCreateGeoCodeRequests.add(createWinterSchoolGeoCode3Request);
 
         try {
             createEvent(winterSchoolEventName, winterSchoolEventName, new GeoPoint(0.0, 0.0),
-                    LocalDate.now(), LocalDate.now().plusDays(3), winterSchoolGeoCodeIDs, OrderLevels.DIFFICULTY, new HashMap<>());
+                    LocalDate.now(), LocalDate.now().plusDays(3), winterSchoolCreateGeoCodeRequests, OrderLevels.DIFFICULTY, new HashMap<>());
         } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
             e.printStackTrace();
         }

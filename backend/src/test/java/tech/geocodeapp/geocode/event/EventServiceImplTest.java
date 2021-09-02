@@ -19,6 +19,7 @@ import tech.geocodeapp.geocode.event.service.*;
 import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
 import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 
 import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
@@ -226,12 +227,12 @@ class EventServiceImplTest {
         try {
 
             /* Create mock geocodes to add to the event */
-            GeoCode gc1 = new GeoCode().id( UUID.randomUUID() );
-            GeoCode gc2 = new GeoCode().id( UUID.randomUUID() );
-            GeoCode gc3 = new GeoCode().id( UUID.randomUUID() );
-            geoCodeMockRepo.save( gc1 );
-            geoCodeMockRepo.save( gc2 );
-            geoCodeMockRepo.save( gc3 );
+//            GeoCode gc1 = new GeoCode().id( UUID.randomUUID() );
+//            GeoCode gc2 = new GeoCode().id( UUID.randomUUID() );
+//            GeoCode gc3 = new GeoCode().id( UUID.randomUUID() );
+//            geoCodeMockRepo.save( gc1 );
+//            geoCodeMockRepo.save( gc2 );
+//            geoCodeMockRepo.save( gc3 );
 
             /*
              * Create a request object
@@ -243,11 +244,10 @@ class EventServiceImplTest {
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
             request.setEndDate( LocalDate.parse( "2020-05-21" ) );
-            List< UUID > geoCodesToFind = new ArrayList<>();
-                geoCodesToFind.add( gc1.getId() );
-                geoCodesToFind.add( gc2.getId() );
-                geoCodesToFind.add( gc3.getId() );
-            request.setGeoCodesToFind( geoCodesToFind );
+
+            List< CreateGeoCodeRequest > createGeoCodeRequests = new ArrayList<>();
+            request.setCreateGeoCodesToFind( createGeoCodeRequests );
+
             request.setOrderBy( OrderLevels.GIVEN );
             request.setProperties( new HashMap<>() );
 
@@ -813,26 +813,16 @@ class EventServiceImplTest {
     private void populate( int size ) {
 
         try {
-            /* Create mock geocodes */
-            GeoCode gc1 = new GeoCode().id( UUID.randomUUID() );
-            GeoCode gc2 = new GeoCode().id( UUID.randomUUID() );
-            GeoCode gc3 = new GeoCode().id( UUID.randomUUID() );
-            geoCodeMockRepo.save( gc1 );
-            geoCodeMockRepo.save( gc2 );
-            geoCodeMockRepo.save( gc3 );
-
-
             CreateEventRequest request = new CreateEventRequest();
             request.setDescription( "Try get as many as possible" );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
             request.setEndDate( LocalDate.parse( "2020-05-21" ) );
-            List< UUID > geoCodesToFind = new ArrayList<>();
-            geoCodesToFind.add( gc1.getId() );
-            geoCodesToFind.add( gc2.getId() );
-            geoCodesToFind.add( gc3.getId() );
-            request.setGeoCodesToFind( geoCodesToFind );
+
+            List< CreateGeoCodeRequest > createGeoCodeRequests = new ArrayList<>();
+            request.setCreateGeoCodesToFind( createGeoCodeRequests );
+
             request.setOrderBy( OrderLevels.GIVEN );
 
             eventService.createEvent( request );

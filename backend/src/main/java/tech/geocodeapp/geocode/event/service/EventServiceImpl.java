@@ -22,6 +22,7 @@ import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
@@ -124,7 +125,7 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException( true );
         } else if ( ( request.getDescription() == null ) || ( request.getLocation() == null ) ||
                 ( request.getName() == null ) || ( request.getBeginDate() == null ) ||
-                ( request.getEndDate() == null ) || ( request.getGeoCodesToFind() == null ) ||
+                ( request.getEndDate() == null ) || ( request.getCreateGeoCodesToFind() == null ) ||
                 ( request.getOrderBy() == null ) ) {
 
             throw new InvalidRequestException();
@@ -147,18 +148,48 @@ public class EventServiceImpl implements EventService {
             return new CreateEventResponse( false, e.getMessage() );
         }
 
-        /* Store the list of GeoCode UUIDs to create a Level on */
-        List< UUID > geoCodeIDs = request.getGeoCodesToFind();
-
+        /* Create the new Event object with the specified attributes */
         UUID eventID = UUID.randomUUID();
 
+        /* set the geoCodeIDs to null for now, set it once the GeoCodeIDs have been stored */
+        var event = new Event( eventID, request.getName(), request.getDescription(),
+                request.getLocation(), null, request.getBeginDate(), request.getEndDate(),
+                leaderboard, request.getProperties() );
+
+        /* Check the availability of the Event */
+        if ( request.isAvailable() == null ) {
+
+            /* None is set so make it default available */
+            event.setAvailable( true );
+        } else {
+
+            /* Set to the given */
+            event.setAvailable( request.isAvailable() );
+        }
+
+        /* Create the EventComponent to pass to the createGeoCode function */
+        EventManager eventManager = new EventManager();
+        EventComponent eventComponent = eventManager.buildEvent(event);
+
+        /* Store the list of GeoCode UUIDs to create a Level on */
+        List<CreateGeoCodeRequest> createGeoCodeRequests = request.getCreateGeoCodesToFind();
+        List<UUID> geoCodeIDs = null;
+
         List< GeoCode > geoCodes = new ArrayList<>();
+
         /*
          * Go through each GeoCode ID
          * and get the GeoCode object
          */
-        for ( UUID id : geoCodeIDs ) {
+        for ( CreateGeoCodeRequest createGeoCodeRequest : createGeoCodeRequests ) {
             try {
+                /*
+                 * Call the GeoCode service to create the GeoCode Object
+                 * */
+                var createGeoCodeResponse = geoCodeService.createGeoCode( createGeoCodeRequest );
+
+                var id = createGeoCodeResponse.getGeoCodeID();
+
                 /*
                  * Call the GeoCode service to get the GeoCode Object
                  * add the found object to the list
@@ -170,10 +201,11 @@ public class EventServiceImpl implements EventService {
                 if ( found.getEventID() != null ) {
                     return new CreateEventResponse( false, "Attempted to link a geocode that is already linked to an event" );
                 }
+
                 found.setEventID( eventID );
                 geoCodeService.saveGeoCode( found );
             } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
-                return new CreateEventResponse( false, "Failed to find geocode with id " + id.toString() );
+                return new CreateEventResponse( false, "Failed to find geocode with createGeoCodeRequest " + createGeoCodeRequest.toString() );
             }
         }
 
@@ -196,22 +228,6 @@ public class EventServiceImpl implements EventService {
 
             /* The GeoCodes are no longer valid so stop */
             return new CreateEventResponse( false, "Sorting failed" );
-        }
-
-        /* Create the new Event object with the specified attributes */
-        var event = new Event( eventID, request.getName(), request.getDescription(),
-                               request.getLocation(), geoCodeIDs, request.getBeginDate(), request.getEndDate(),
-                               leaderboard, request.getProperties() );
-
-        /* Check the availability of the Event */
-        if ( request.isAvailable() == null ) {
-
-            /* None is set so make it default available */
-            event.setAvailable( true );
-        } else {
-
-            /* Set to the given */
-            event.setAvailable( request.isAvailable() );
         }
 
         /*

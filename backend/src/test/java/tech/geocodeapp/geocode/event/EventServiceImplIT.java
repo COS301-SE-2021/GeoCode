@@ -8,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.GeoCodeApplication;
 
-import tech.geocodeapp.geocode.collectable.model.Collectable;
 import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
@@ -20,6 +19,7 @@ import tech.geocodeapp.geocode.event.service.*;
 
 import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
@@ -205,12 +205,12 @@ class EventServiceImplIT {
 
         try {
 
-            /* Create mock geocodes to add to the event */
-            List<UUID> geoCodesToFind = new ArrayList<>();
+            /* Create GeoCodes to add to the event */
+            List<CreateGeoCodeRequest> createGeoCodeRequests = new ArrayList<>();
+
             for (int i = 0; i < 3; i++) {
-                GeoCode gc = new GeoCode( UUID.randomUUID(), Difficulty.EASY, true, "", new ArrayList<String>(), new ArrayList<UUID>(), "", new GeoPoint(0, 0), UUID.randomUUID() );
-                gc = geoCodeRepo.save(gc);
-                geoCodesToFind.add(gc.getId());
+                var createGeoCodeRequest = new CreateGeoCodeRequest( "", new GeoPoint(0, 0), new ArrayList<String>(), Difficulty.EASY, true );
+                createGeoCodeRequests.add(createGeoCodeRequest);
             }
 
             /*
@@ -223,7 +223,7 @@ class EventServiceImplIT {
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
             request.setEndDate( LocalDate.parse( "2020-05-21" ) );
-            request.setGeoCodesToFind( geoCodesToFind );
+            request.setCreateGeoCodesToFind( createGeoCodeRequests );
             request.setOrderBy( OrderLevels.GIVEN );
             request.setProperties( new HashMap<>() );
 
@@ -792,11 +792,11 @@ class EventServiceImplIT {
         try {
 
             /* Create mock geocodes */
-            List<UUID> geoCodesToFind = new ArrayList<>();
+            List<CreateGeoCodeRequest> createGeoCodeRequests = new ArrayList<>();
+
             for (int i = 0; i < 3; i++) {
-                GeoCode gc = new GeoCode( UUID.randomUUID(), Difficulty.EASY, true, "", new ArrayList<String>(), new ArrayList<UUID>(), "", new GeoPoint(0, 0), UUID.randomUUID() );
-                gc = geoCodeRepo.save(gc);
-                geoCodesToFind.add(gc.getId());
+                var createGeoCodeRequest = new CreateGeoCodeRequest( "", new GeoPoint(0, 0), new ArrayList<String>(), Difficulty.EASY, true );
+                createGeoCodeRequests.add(createGeoCodeRequest);
             }
 
             CreateEventRequest request = new CreateEventRequest();
@@ -805,7 +805,7 @@ class EventServiceImplIT {
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
             request.setEndDate( LocalDate.parse( "2020-05-21" ) );
-            request.setGeoCodesToFind( geoCodesToFind );
+            request.setCreateGeoCodesToFind( createGeoCodeRequests );
             request.setOrderBy( OrderLevels.GIVEN );
 
             eventService.createEvent( request );
