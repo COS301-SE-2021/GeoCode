@@ -111,13 +111,37 @@ public class UserServiceImplTest {
         }
     }
 
-    private UUID registerNewUser(String username){
+    private void setUser(UUID userID){
+        mockCurrentUserDetails.setID(userID);
+    }
+
+    private void setUser(UUID userID, String username, boolean isAdmin){
+        mockCurrentUserDetails.setID(userID);
+        mockCurrentUserDetails.setUsername(username);
+        mockCurrentUserDetails.setAdmin(isAdmin);
+    }
+
+    private UUID handleUserLogin(String username){
+        return handleLogin(UUID.randomUUID(), username, false);
+    }
+
+    private UUID handleAdminLogin(String username){
+        return handleLogin(UUID.randomUUID(), username, true);
+    }
+
+    private UUID handleLogin(UUID userID, String username, boolean isAdmin){
         try {
-            return userService.handleLogin(new HandleLoginRequest(new GeoPoint(0.0, 0.0))).getUser().getId();
+            setUser(userID, username, isAdmin);
+            var response = userService.handleLogin(new HandleLoginRequest(new GeoPoint(0.0, 0.0)));
+
+            Assertions.assertEquals("New User registered", response.getMessage());
+            Assertions.assertTrue(response.isSuccess());
+
+            return mockCurrentUserDetails.getID();
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
-            return null;
         }
+        return null;
     }
 
     @BeforeEach
@@ -154,7 +178,9 @@ public class UserServiceImplTest {
         collectableTypeMockRepo.save(trackableCollectableType);
 
         //save the valid user to the MockRepo
-        validUserId = registerNewUser("validUser");
+        validUserId = handleUserLogin("validUser");
+
+        System.out.println("validUserId: "+validUserId);
 
         //make 3 CollectableTypes for Easter
         egg = new CollectableType();
@@ -177,6 +203,9 @@ public class UserServiceImplTest {
             var getUserByIdRequest = new GetUserByIdRequest(validUserId);
             var getUserByIdResponse = userService.getUserById(getUserByIdRequest);
             validUser = getUserByIdResponse.getUser();
+
+            Assertions.assertEquals("The User was found", getUserByIdResponse.getMessage());
+            Assertions.assertTrue(getUserByIdResponse.isSuccess());
         }catch(NullRequestParameterException e){
             e.printStackTrace();
             return;
@@ -230,8 +259,8 @@ public class UserServiceImplTest {
         userMockRepo.save(validUser);
 
         /* add two Users that will have points */
-        userWithPoints1 = registerNewUser("alice");
-        userWithPoints2 = registerNewUser("bob");
+        userWithPoints1 = handleUserLogin("alice");
+        userWithPoints2 = handleUserLogin("bob");
 
         /* get the users with points */
         User user1;
@@ -1023,38 +1052,40 @@ public class UserServiceImplTest {
             Assertions.assertEquals("The User was found", response.getMessage());
 
             Assertions.assertEquals(validUserId, user.getId());
-            Assertions.assertEquals("john_smith", user.getUsername());
+            Assertions.assertEquals("validUser", user.getUsername());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    void registerNewUserTestNullRequest(){
+    void handleLoginTestNullRequest(){
         try {
             var response = userService.handleLogin(null);
 
             Assertions.assertFalse(response.isSuccess());
-            Assertions.assertEquals("The RegisterNewUserRequest object passed was NULL", response.getMessage());
+            Assertions.assertEquals("The HandleLoginRequest object passed was NULL", response.getMessage());
         } catch (NullRequestParameterException e) {
             Assertions.fail(e.getMessage());
         }
     }
 
     @Test
-    void registerNewUserTestNullParameter(){
+    void handleLoginTestNullParameter(){
         var request = new HandleLoginRequest(null);
 
         assertThatThrownBy(() -> userService.handleLogin(request)).isInstanceOf(NullRequestParameterException.class);
     }
 
     @Test
-    void registerNewUserTestExistingUserId(){
+    void handleLoginTestExistingUserId(){
         try {
+            setUser(validUserId);
+
             var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
             var response = userService.handleLogin(request);
 
-            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("User ID already exists", response.getMessage());
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
@@ -1062,9 +1093,12 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void registerNewUserTestNewUserId(){
+    void handleLoginTestNewUserId(){
         try {
             String newUsername = "bob";
+            var newUserId = UUID.randomUUID();
+            setUser(newUserId, newUsername, false);
+
             var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
             var response = userService.handleLogin(request);
 

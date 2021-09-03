@@ -109,12 +109,9 @@ public class UserServiceImplIT {
     private CreateGeoCodeRequest createWinterSchoolGeoCode3Request;
 
     /**
-     * Pass the current User's user id to be set in the security context
-     * @param userID The user id
+     * @return The current User's user id
      */
-    private void registerNewUser(UUID userID){
-        //TODO: set username (pass in as parameter)
-
+    private UUID handleLogin(){
         HandleLoginRequest request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
         Response response;
 
@@ -122,11 +119,11 @@ public class UserServiceImplIT {
             response = userService.handleLogin(request);
             Assertions.assertTrue(response.isSuccess());
 
-            //so do not have to remember to do this each time
-            setUser(userID);
+            return userService.getCurrentUserID();
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     UUID createCollectableSet(String name, String description){
@@ -289,7 +286,7 @@ public class UserServiceImplIT {
      * only created when Event.createEvent creates them
      */
     private void addFirstTwoGeoCodes() throws NullRequestParameterException, InvalidRequestException {
-        validUserId = registerNewUser("validUser");
+        validUserId = handleLogin();
 
         firstGeoCodeID = createGeoCode("1", new GeoPoint(10.0, 10.0), Difficulty.HARD);
         firstCollectables = getCollectables(firstGeoCodeID);
@@ -304,7 +301,7 @@ public class UserServiceImplIT {
      * only created when Event.createEvent creates them
      */
     private void addOpenDayGeoCodes() throws NullRequestParameterException, InvalidRequestException {
-        validUserId = registerNewUser("validUser");
+        validUserId = handleLogin();
 
         firstGeoCodeID = UUID.randomUUID();
         secondGeoCodeID = UUID.randomUUID();
@@ -397,7 +394,7 @@ public class UserServiceImplIT {
     }
 
     private void addFoundGeoCodesForUser1(){
-        userWithPoints1ID = registerNewUser("userWithPoints1");
+        userWithPoints1ID = handleLogin();
 
         joinEvents(userWithPoints1ID);
 
@@ -417,7 +414,7 @@ public class UserServiceImplIT {
     }
 
     private void addFoundGeoCodesForUser2() {
-        userWithPoints2ID = registerNewUser("userWithPoints2");
+        userWithPoints2ID = handleLogin();
 
         joinEvents(userWithPoints2ID);
 
@@ -695,7 +692,7 @@ public class UserServiceImplIT {
 
     @Test
     public void getCurrentCollectableTestValidUser() {
-        validUserId = registerNewUser("validUser");
+        validUserId = handleLogin();
 
         try{
             /*
@@ -738,7 +735,7 @@ public class UserServiceImplIT {
 
     @Test
     public void getUserTrackableTestValidUser() {
-        validUserId = registerNewUser("validUser");
+        validUserId = handleLogin();
 
         try{
             /*
@@ -815,7 +812,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     void getFoundGeoCodesTestInvalidUser() {
-        validUserId = registerNewUser("validUser");
+        validUserId = handleLogin();
 
         try{
             /*
@@ -944,7 +941,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void updateLocationTestValidUser() {
-        validUserId = registerNewUser("validUser");
+        validUserId = handleLogin();
 
         try{
             /*
@@ -995,7 +992,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     void getMyLeaderboardsTestUserWithNoPoints(){
-        UUID noPointsUserId = registerNewUser("noPointsUser");
+        UUID noPointsUserId = handleLogin();
 
         var request = new GetMyLeaderboardsRequest();
         request.setUserID(noPointsUserId);
@@ -1240,7 +1237,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void getUserByIdTestValidUserId(){
-        validUserId = registerNewUser("validUser");
+        validUserId = handleLogin();
 
         try {
             var request = new GetUserByIdRequest(validUserId);
@@ -1259,8 +1256,8 @@ public class UserServiceImplIT {
 
     @Test
     @Transactional
-    public void registerNewUserTestExistingUserId(){
-        validUserId = registerNewUser("validUser");
+    public void handleLoginTestExistingUserId(){
+        validUserId = handleLogin();
 
         try {
             var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
@@ -1278,7 +1275,7 @@ public class UserServiceImplIT {
 
     @Test
     @Transactional
-    public void registerNewUserTestNewUserId(){
+    public void handleLoginTestNewUserId(){
         try {
             var newUsername = "bob";
             var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));

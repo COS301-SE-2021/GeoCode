@@ -30,7 +30,6 @@ import tech.geocodeapp.geocode.leaderboard.UserMockService;
 import tech.geocodeapp.geocode.leaderboard.service.*;
 import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
-import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -142,13 +141,14 @@ class EventServiceImplTest {
         /* Create the leaderboard service with all the relevant repositories */
         var leaderboardMockRepo = new LeaderboardMockRepository();
         var userRepository = new UserMockRepository();
-        var userService = new UserMockService( userRepository );
+
+        currentUserDetails = new MockCurrentUserDetails();
+        var userService = new UserMockService( userRepository, currentUserDetails);
         var pointMockRepository = new PointMockRepository();
         leaderboardService = new LeaderboardServiceImpl( leaderboardMockRepo, pointMockRepository, userService );
 
         /* Create the GeoCode and User service */
         geoCodeService = new GeoCodeMockService( geoCodeMockRepo );
-        currentUserDetails = new MockCurrentUserDetails();
 
         try {
 

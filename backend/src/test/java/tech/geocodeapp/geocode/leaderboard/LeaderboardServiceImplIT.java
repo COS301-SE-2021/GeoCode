@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
@@ -42,12 +43,19 @@ public class LeaderboardServiceImplIT {
         leaderboardService = new LeaderboardServiceImpl(leaderboardRepository, pointRepository, userService);
     }
 
-    private void registerNewUser(String username){
+    private UUID registerNewUser(String username){
+        HandleLoginRequest request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
+        Response response;
+
         try {
-            userService.handleLogin(new HandleLoginRequest(new GeoPoint(0.0, 0.0)));
+            response = userService.handleLogin(request);
+            Assertions.assertTrue(response.isSuccess());
+
+            return userService.getCurrentUserID();
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     @Test

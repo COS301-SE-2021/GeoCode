@@ -376,20 +376,20 @@ public class UserServiceImpl implements UserService {
      */
     public Response handleLogin(HandleLoginRequest request) throws NullRequestParameterException{
         if(request == null){
-            return new Response(false, "The RegisterNewUserRequest object passed was NULL");
+            return new Response(false, "The HandleLoginRequest object passed was NULL");
         }
 
         checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the User already exists
-        var optionalUser = userRepo.findById(currentUserDetails.getID());//TODO: discuss
+        boolean exists = userRepo.existsById(currentUserDetails.getID());
 
-        if(optionalUser.isPresent()){
+        if(exists){
             return new Response(true, "User ID already exists");
         }
 
         //the User is a new User
-        var newUser = new User();
+        var newUser = new User(currentUserDetails.getID(), currentUserDetails.getUsername());
 
         //create the user's trackable object which will always have a Mission
         var createCollectableRequest = new CreateCollectableRequest(trackableTypeUUID, request.getLocation());

@@ -72,12 +72,8 @@ public class User {
 
   }
 
-  public User(UUID id) {
+  public User(UUID id, String username) {
     this.id = id;
-  }
-
-  public User(String username) {
-    this.id = UUID.randomUUID();
     this.username = username;
   }
 
