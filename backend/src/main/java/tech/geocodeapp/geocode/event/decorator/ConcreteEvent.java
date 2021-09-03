@@ -77,6 +77,33 @@ public class ConcreteEvent implements EventComponent {
     @Override
     public void setAvailable(Boolean available) { this.available = available; }
 
+    @Override
+    public boolean isBlocklyEvent() {
+        return blocklyEvent;
+    }
+
+    @Override
+    public void setBlocklyEvent(boolean blocklyEvent) {
+        this.blocklyEvent = blocklyEvent;
+    }
+
+    /**
+     * @return null because blocklyDetails are not contained in the concreteComponent
+     */
+    @Override
+    public String getBlocklyDetails() {
+        return null;
+    }
+
+    /**
+     * Do nothing because the blocklyDetails are not contained in the concreteComponent
+     * @param blocklyDetails unused
+     */
+    @Override
+    public void setBlocklyDetails(String blocklyDetails) {
+
+    }
+
     /**
      * @return null because timeLimit is not contained in the concreteComponent
      */
