@@ -50,8 +50,14 @@ public interface EventComponent {
 
     void setAvailable(Boolean available);
 
+    /**
+     * Getter for checking if the event is a normal event or a blockly one
+     */
     boolean isBlocklyEvent();
 
+    /**
+     * Setter used to set the blocklyEvent variable
+     */
     void setBlocklyEvent();
 
     /**
