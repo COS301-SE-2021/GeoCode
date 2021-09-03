@@ -29,6 +29,7 @@ public class BasicEventFactory extends AbstractEventFactory {
         toReturn.setEndDate(event.getEndDate());
         toReturn.setLeaderboards(event.getLeaderboards());
         toReturn.setAvailable(event.isAvailable());
+        toReturn.setBlocklyEvent(false);
 
         return toReturn;
     }
