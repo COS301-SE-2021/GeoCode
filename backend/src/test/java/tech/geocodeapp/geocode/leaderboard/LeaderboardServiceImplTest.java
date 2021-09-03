@@ -17,7 +17,7 @@ import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
 import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
-import tech.geocodeapp.geocode.user.request.RegisterNewUserRequest;
+import tech.geocodeapp.geocode.user.request.HandleLoginRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.ArrayList;
@@ -58,8 +58,8 @@ public class LeaderboardServiceImplTest {
 
     private UUID registerNewUser(String username){
         try {
-            var request = new RegisterNewUserRequest(new GeoPoint(0.0, 0.0));
-            var response = userService.registerNewUser(request);
+            var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
+            var response = userService.handleLogin(request);
 
             Assertions.assertEquals("New User registered", response.getMessage());
             Assertions.assertTrue(response.isSuccess());

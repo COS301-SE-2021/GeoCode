@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.leaderboard;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.*;
@@ -98,10 +99,10 @@ public class UserMockService implements UserService {
      * @return the response indicating success or failure
      */
     @Override
-    public RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException {
+    public Response handleLogin(HandleLoginRequest request) throws NullRequestParameterException {
         User user = new User();
         userRepo.save(user);
-        return new RegisterNewUserResponse(true, "New user registered", user);
+        return new Response(true, "New user registered");
     }
 
     @Override

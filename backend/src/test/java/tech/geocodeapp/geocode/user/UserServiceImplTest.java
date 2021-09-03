@@ -113,7 +113,7 @@ public class UserServiceImplTest {
 
     private UUID registerNewUser(String username){
         try {
-            return userService.registerNewUser(new RegisterNewUserRequest(new GeoPoint(0.0, 0.0))).getUser().getId();
+            return userService.handleLogin(new HandleLoginRequest(new GeoPoint(0.0, 0.0))).getUser().getId();
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
             return null;
@@ -1032,7 +1032,7 @@ public class UserServiceImplTest {
     @Test
     void registerNewUserTestNullRequest(){
         try {
-            var response = userService.registerNewUser(null);
+            var response = userService.handleLogin(null);
 
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("The RegisterNewUserRequest object passed was NULL", response.getMessage());
@@ -1043,16 +1043,16 @@ public class UserServiceImplTest {
 
     @Test
     void registerNewUserTestNullParameter(){
-        var request = new RegisterNewUserRequest(null);
+        var request = new HandleLoginRequest(null);
 
-        assertThatThrownBy(() -> userService.registerNewUser(request)).isInstanceOf(NullRequestParameterException.class);
+        assertThatThrownBy(() -> userService.handleLogin(request)).isInstanceOf(NullRequestParameterException.class);
     }
 
     @Test
     void registerNewUserTestExistingUserId(){
         try {
-            var request = new RegisterNewUserRequest(new GeoPoint(0.0, 0.0));
-            var response = userService.registerNewUser(request);
+            var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
+            var response = userService.handleLogin(request);
 
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("User ID already exists", response.getMessage());
@@ -1065,8 +1065,8 @@ public class UserServiceImplTest {
     void registerNewUserTestNewUserId(){
         try {
             String newUsername = "bob";
-            var request = new RegisterNewUserRequest(new GeoPoint(0.0, 0.0));
-            var response = userService.registerNewUser(request);
+            var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
+            var response = userService.handleLogin(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("New User registered", response.getMessage());

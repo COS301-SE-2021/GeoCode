@@ -1,7 +1,5 @@
 package tech.geocodeapp.geocode.user.service;
 
-import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
@@ -9,6 +7,7 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.general.security.wrapper.CurrentUserDetails;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
@@ -375,9 +374,9 @@ public class UserServiceImpl implements UserService {
      * Registers a new user
      * @param request The id for the User
      */
-    public RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException{
+    public Response handleLogin(HandleLoginRequest request) throws NullRequestParameterException{
         if(request == null){
-            return new RegisterNewUserResponse(false, "The RegisterNewUserRequest object passed was NULL", null);
+            return new Response(false, "The RegisterNewUserRequest object passed was NULL");
         }
 
         checkNullRequestParameters.checkRequestParameters(request);
@@ -386,7 +385,7 @@ public class UserServiceImpl implements UserService {
         var optionalUser = userRepo.findById(currentUserDetails.getID());//TODO: discuss
 
         if(optionalUser.isPresent()){
-            return new RegisterNewUserResponse(true, "User ID already exists", optionalUser.get());
+            return new Response(true, "User ID already exists");
         }
 
         //the User is a new User
@@ -397,7 +396,7 @@ public class UserServiceImpl implements UserService {
         var createCollectableResponse = collectableService.createCollectable(createCollectableRequest);
 
         if(!createCollectableResponse.isSuccess()){
-            return new RegisterNewUserResponse(false, createCollectableResponse.getMessage(), null);
+            return new Response(false, createCollectableResponse.getMessage());
         }
 
         var collectableResponse = createCollectableResponse.getCollectable();
@@ -421,10 +420,10 @@ public class UserServiceImpl implements UserService {
         var check = userRepo.save(newUser);
 
         if(!newUser.equals(check)){
-            return new RegisterNewUserResponse(false, "New User registration failed", null);
+            return new Response(false, "New User registration failed");
         }
 
-        return new RegisterNewUserResponse(true, "New User registered", newUser);
+        return new Response(true, "New User registered");
     }
 
     //GeoCode helper functions

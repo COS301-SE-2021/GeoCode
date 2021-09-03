@@ -6,7 +6,7 @@ import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 /**
  * RegisterNewUserRequest
  */
-public class RegisterNewUserRequest   {
+public class HandleLoginRequest {
     /*
     * The location of the new User
     * Used to set the location of their User Trackable
@@ -18,7 +18,7 @@ public class RegisterNewUserRequest   {
      * Overloaded constructor
      * @param location The location of the User's Trackable
      */
-    public RegisterNewUserRequest(GeoPoint location){
+    public HandleLoginRequest(GeoPoint location){
         this.location = location;
     }
 

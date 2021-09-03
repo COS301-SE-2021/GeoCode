@@ -15,7 +15,7 @@ import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
 import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
-import tech.geocodeapp.geocode.user.request.RegisterNewUserRequest;
+import tech.geocodeapp.geocode.user.request.HandleLoginRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.ArrayList;
@@ -42,13 +42,12 @@ public class LeaderboardServiceImplIT {
         leaderboardService = new LeaderboardServiceImpl(leaderboardRepository, pointRepository, userService);
     }
 
-    private UUID registerNewUser(String username){
+    private void registerNewUser(String username){
         try {
-            return userService.registerNewUser(new RegisterNewUserRequest(new GeoPoint(0.0, 0.0))).getUser().getId();
+            userService.handleLogin(new HandleLoginRequest(new GeoPoint(0.0, 0.0)));
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     @Test

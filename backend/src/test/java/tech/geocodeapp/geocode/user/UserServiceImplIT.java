@@ -15,6 +15,7 @@ import tech.geocodeapp.geocode.event.request.CreateEventRequest;
 import tech.geocodeapp.geocode.event.request.GetCurrentEventStatusRequest;
 import tech.geocodeapp.geocode.event.service.EventServiceImpl;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
@@ -107,23 +108,24 @@ public class UserServiceImplIT {
     private CreateGeoCodeRequest createWinterSchoolGeoCode2Request;
     private CreateGeoCodeRequest createWinterSchoolGeoCode3Request;
 
-    private UUID registerNewUser(String username){
-        RegisterNewUserRequest request = new RegisterNewUserRequest(new GeoPoint(0.0, 0.0));
-        RegisterNewUserResponse response;
+    /**
+     * Pass the current User's user id to be set in the security context
+     * @param userID The user id
+     */
+    private void registerNewUser(UUID userID){
+        //TODO: set username (pass in as parameter)
+
+        HandleLoginRequest request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
+        Response response;
 
         try {
-            response = userService.registerNewUser(request);
+            response = userService.handleLogin(request);
             Assertions.assertTrue(response.isSuccess());
-
-            var userID = response.getUser().getId();
 
             //so do not have to remember to do this each time
             setUser(userID);
-
-            return userID;
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
-            return null;
         }
     }
 
@@ -1261,8 +1263,8 @@ public class UserServiceImplIT {
         validUserId = registerNewUser("validUser");
 
         try {
-            var request = new RegisterNewUserRequest(new GeoPoint(0.0, 0.0));
-            var response = userService.registerNewUser(request);
+            var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
+            var response = userService.handleLogin(request);
 
             Assertions.assertFalse(response.isSuccess());
 
@@ -1279,8 +1281,8 @@ public class UserServiceImplIT {
     public void registerNewUserTestNewUserId(){
         try {
             var newUsername = "bob";
-            var request = new RegisterNewUserRequest(new GeoPoint(0.0, 0.0));
-            var response = userService.registerNewUser(request);
+            var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
+            var response = userService.handleLogin(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("New User registered", response.getMessage());

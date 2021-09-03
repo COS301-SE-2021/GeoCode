@@ -1,12 +1,7 @@
 package tech.geocodeapp.geocode.general.security;
 
-import org.keycloak.KeycloakSecurityContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
-import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
-import tech.geocodeapp.geocode.user.request.RegisterNewUserRequest;
-import tech.geocodeapp.geocode.user.response.GetUserByIdResponse;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import javax.servlet.FilterChain;
@@ -14,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
-import java.util.UUID;
 
 @Component
 public class NewUserInterceptor extends GenericFilterBean {
