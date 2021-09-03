@@ -50,6 +50,10 @@ public interface EventComponent {
 
     void setAvailable(Boolean available);
 
+    boolean isBlocklyEvent();
+
+    void setBlocklyEvent();
+
     /**
      * Getter for time trials used to get the timeLimit variable from {@link TimeTrialEventDecorator}
      */
@@ -79,11 +83,5 @@ public interface EventComponent {
      * Function to calculate the number of points a user should receive for finding the provided geocode.
      */
     int calculatePoints(GeoCode foundGeocode, int stageNumber, UserEventStatus status);
-
-    //mocking check for Blockly event to check that User tests with events still pass (need collectables)
-    //TODO: @Liam remove when you do isBlocklyEvent
-    default boolean isBlocklyEvent(){
-        return false;
-    }
 
 }
