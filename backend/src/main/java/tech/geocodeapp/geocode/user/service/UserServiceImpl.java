@@ -9,6 +9,7 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.security.wrapper.CurrentUserDetails;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
 import tech.geocodeapp.geocode.mission.request.UpdateCompletionRequest;
@@ -38,16 +39,20 @@ public class UserServiceImpl implements UserService {
     @NotNull(message = "Mission Service Implementation may not be null.")
     private final MissionService missionService;
 
+    @NotNull( message = "CurrentUserDetails may not be null." )
+    private final CurrentUserDetails currentUserDetails;
+
     private final String invalidUserIdMessage = "Invalid User id";
     private final UUID trackableTypeUUID = new UUID(0, 0);
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, MissionService missionService) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, MissionService missionService, CurrentUserDetails currentUserDetails) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
         this.pointRepo = pointRepo;
         this.collectableService = collectableService;
         this.missionService = missionService;
+        this.currentUserDetails = currentUserDetails;
     }
 
     /**
@@ -347,7 +352,7 @@ public class UserServiceImpl implements UserService {
      */
     public User getCurrentUser(){
         /* make request to get the current User*/
-        var request = new GetUserByIdRequest(getCurrentUserID());
+        var request = new GetUserByIdRequest(currentUserDetails.getID());
 
         try{
             return getUserById(request).getUser();
@@ -358,21 +363,12 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * @deprecated use CurrentUserDetails.getID()
      *  Gets the current user ID using the Keycloak details
      * @return The current user ID
      */
     public UUID getCurrentUserID(){
-        String uuid = SecurityContextHolder.getContext().getAuthentication().getName();
-        return UUID.fromString(uuid);
-    }
-
-    /**
-     * Returns whether the current user is an Admin
-     * @return true if the current user is an Admin
-     */
-    public boolean currentUserIsAdmin() {
-        var account = (SimpleKeycloakAccount) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        return account.getRoles().contains( "Admin" );
+        return currentUserDetails.getID();
     }
 
     /**
@@ -387,7 +383,7 @@ public class UserServiceImpl implements UserService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the User already exists
-        var optionalUser = userRepo.findById(this.getCurrentUserID());//TODO: response not have the User, exists, request has only the location
+        var optionalUser = userRepo.findById(currentUserDetails.getID());//TODO: discuss
 
         if(optionalUser.isPresent()){
             return new RegisterNewUserResponse(true, "User ID already exists", optionalUser.get());

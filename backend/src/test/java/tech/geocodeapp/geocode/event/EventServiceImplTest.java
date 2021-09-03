@@ -16,6 +16,8 @@ import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.service.*;
 
+import tech.geocodeapp.geocode.general.MockCurrentUserDetails;
+import tech.geocodeapp.geocode.general.security.wrapper.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
 import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
@@ -92,10 +94,10 @@ class EventServiceImplTest {
     GeoCodeService geoCodeService;
 
     /**
-     * The User service accessor
+     * The CurrentUserDetails accessor
      */
-    @Mock( name = "userServiceImpl" )
-    UserService userService;
+    @Mock( name = "currentUserDetailsImpl" )
+    CurrentUserDetails currentUserDetails;
 
     /**
      * The expected exception message for if the given request has invalid attributes
@@ -146,12 +148,12 @@ class EventServiceImplTest {
 
         /* Create the GeoCode and User service */
         geoCodeService = new GeoCodeMockService( geoCodeMockRepo );
-        userService = new UserMockService( userMockRepo );
+        currentUserDetails = new MockCurrentUserDetails();
 
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
-            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, userService );
+            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, currentUserDetails );
             eventService.setGeoCodeService( geoCodeService );
         } catch ( RepoException e ) {
 
@@ -171,7 +173,7 @@ class EventServiceImplTest {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null, userService ) )
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null, currentUserDetails ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }

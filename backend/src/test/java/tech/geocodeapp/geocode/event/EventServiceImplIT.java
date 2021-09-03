@@ -17,6 +17,7 @@ import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.service.*;
 
+import tech.geocodeapp.geocode.general.security.wrapper.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
@@ -93,10 +94,10 @@ class EventServiceImplIT {
     GeoCodeService geoCodeService;
 
     /**
-     * The User service accessor
+     * The CurrentUserDetails accessor
      */
     @Autowired
-    UserService userService;
+    CurrentUserDetails currentUserDetails;
 
     /**
      * The expected exception message for if the given request has invalid attributes
@@ -129,7 +130,7 @@ class EventServiceImplIT {
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
-            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, userService );
+            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, currentUserDetails );
             eventService.setGeoCodeService( geoCodeService );
         } catch ( RepoException e ) {
 
@@ -149,7 +150,7 @@ class EventServiceImplIT {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null, userService ) )
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null, currentUserDetails ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }

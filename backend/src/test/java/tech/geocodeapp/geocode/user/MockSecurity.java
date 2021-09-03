@@ -7,6 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.UUID;
 
+/** @deprecated use MockCurrentUserDetails */
+@Deprecated
 public class MockSecurity {
 
     /* An Authentication object that will hold the current user status. It is reset every time setup() is called */

@@ -15,6 +15,7 @@ import tech.geocodeapp.geocode.event.EventMockRepository;
 import tech.geocodeapp.geocode.event.UserEventStatusMockRepository;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.service.*;
+import tech.geocodeapp.geocode.general.MockCurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.service.*;
@@ -152,9 +153,12 @@ class GeoCodeServiceImplTest {
         lenient().when ( userService.getCurrentUser() ).thenReturn( new User().id( java.util.UUID.randomUUID() ) );
         lenient().when ( userService.getCurrentUserID() ).thenReturn( java.util.UUID.randomUUID() );
 
+        var currentUserDetails = new MockCurrentUserDetails();
+        currentUserDetails.setID( java.util.UUID.randomUUID() );
+
         try {
 
-            eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService, userService );
+            eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService, currentUserDetails );
         } catch ( tech.geocodeapp.geocode.event.exceptions.RepoException e ) {
 
             e.printStackTrace();

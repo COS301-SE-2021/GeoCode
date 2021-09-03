@@ -15,6 +15,7 @@ import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
+import tech.geocodeapp.geocode.general.MockCurrentUserDetails;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
@@ -43,6 +44,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class UserServiceImplTest {
     private UserService userService;
     private UserMockRepository userMockRepo;
+
+    private MockCurrentUserDetails mockCurrentUserDetails;
 
     private User validUser;
 
@@ -134,7 +137,9 @@ public class UserServiceImplTest {
         userMockRepo = new UserMockRepository();
         var collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo, missionService);
 
-        userService = new UserServiceImpl(userMockRepo, collectableMockRepo, new PointMockRepository(), collectableService, missionService);
+        mockCurrentUserDetails = new MockCurrentUserDetails();
+
+        userService = new UserServiceImpl(userMockRepo, collectableMockRepo, new PointMockRepository(), collectableService, missionService, mockCurrentUserDetails);
 
         //save the valid trackable CollectableType
         var trackableCollectableType = new CollectableType();
@@ -290,9 +295,6 @@ public class UserServiceImplTest {
         geoCodeWithCollectables.addCollectablesItem(ballCollectableID);
 
         geoCodeMockRepo.save(geoCodeWithCollectables);
-
-        /* Set up mock security */
-        MockSecurity.setup();
     }
 
     @Test
@@ -1183,7 +1185,7 @@ public class UserServiceImplTest {
 
     @Test
     void getCurrentUserTest() {
-        MockSecurity.setCurrentUserID(validUserId);
+        mockCurrentUserDetails.setID(validUserId);
 
         var returnedUser = userService.getCurrentUser();
         Assertions.assertEquals(validUser, returnedUser);

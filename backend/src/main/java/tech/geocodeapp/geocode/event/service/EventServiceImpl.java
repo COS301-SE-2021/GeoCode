@@ -19,6 +19,7 @@ import tech.geocodeapp.geocode.event.exceptions.*;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 
+import tech.geocodeapp.geocode.general.security.wrapper.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
@@ -73,10 +74,10 @@ public class EventServiceImpl implements EventService {
     private GeoCodeService geoCodeService;
 
     /**
-     * The User service to access the current user
+     * The CurrentUserDetails service to access the details of the current logged-in user
      */
-    @NotNull( message = "User Service Implementation may not be null." )
-    private final UserService userService;
+    @NotNull( message = "CurrentUserDetails may not be null." )
+    private final CurrentUserDetails currentUserDetails;
 
     private final String eventNotFoundMessage = "Event not found";
 
@@ -89,7 +90,7 @@ public class EventServiceImpl implements EventService {
     public EventServiceImpl( EventRepository eventRepo,
                              UserEventStatusRepository userEventStatusRepo,
                              @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService,
-                             @Qualifier( "UserService" ) UserService userService ) throws RepoException {
+                             @Qualifier( "CurrentUserDetails" ) CurrentUserDetails currentUserDetails ) throws RepoException {
 
         if ( ( eventRepo != null ) && ( userEventStatusRepo != null ) ) {
 
@@ -98,7 +99,7 @@ public class EventServiceImpl implements EventService {
             this.userEventStatusRepo = userEventStatusRepo;
 
             this.leaderboardService = Objects.requireNonNull( leaderboardService, "EventService: Leaderboard service must not be null." );
-            this.userService = Objects.requireNonNull( userService, "EventService: User service must not be null." );
+            this.currentUserDetails = Objects.requireNonNull( currentUserDetails, "EventService: CurrentUserDetails service must not be null." );
         } else {
 
             /* The repo does not exist throw an error */
@@ -327,7 +328,7 @@ public class EventServiceImpl implements EventService {
         UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID( request.getEventID(), request.getUserID() );
 
         /* Check whether the current user is requesting for themselves */
-        UUID currentUserID = userService.getCurrentUserID();
+        UUID currentUserID = currentUserDetails.getID();
         if ( !currentUserID.equals( request.getUserID() ) ) {
 
             /* The userID passed in does not match the current user ID. Just return the passed-in user's status */
