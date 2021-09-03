@@ -196,7 +196,7 @@ public class User {
     this.missions.add(missionsItem);
   }
 
-  /*@Override
+  @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
@@ -214,5 +214,5 @@ public class User {
             Objects.equals(this.foundGeocodes, user.foundGeocodes) &&
             Objects.equals(this.ownedGeocodes, user.ownedGeocodes) &&
             Objects.equals(this.missions, user.missions);
-  }*/
+  }
 }

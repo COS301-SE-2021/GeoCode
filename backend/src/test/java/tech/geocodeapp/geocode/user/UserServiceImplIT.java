@@ -1277,7 +1277,7 @@ public class UserServiceImplIT {
             var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
             var response = userService.handleLogin(request);
 
-            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertTrue(response.isSuccess());
 
             var existingUserIdMessage = "User ID already exists";
 
@@ -1292,6 +1292,8 @@ public class UserServiceImplIT {
     public void handleLoginTestNewUserId(){
         try {
             var newUsername = "bob";
+            setUser(newUserId, newUsername, false);
+
             var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
             var response = userService.handleLogin(request);
 
