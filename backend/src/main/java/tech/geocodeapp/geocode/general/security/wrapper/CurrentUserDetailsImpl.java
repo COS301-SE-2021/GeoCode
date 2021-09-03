@@ -13,6 +13,7 @@ public class CurrentUserDetailsImpl implements CurrentUserDetails {
     @Override
     public UUID getID() {
         var uuid = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("uuid: "+uuid);
         return UUID.fromString(uuid);
     }
 

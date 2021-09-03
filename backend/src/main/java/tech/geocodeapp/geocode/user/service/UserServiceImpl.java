@@ -382,6 +382,7 @@ public class UserServiceImpl implements UserService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the User already exists
+        System.out.println("current user id: "+currentUserDetails.getID());
         boolean exists = userRepo.existsById(currentUserDetails.getID());
 
         if(exists){
