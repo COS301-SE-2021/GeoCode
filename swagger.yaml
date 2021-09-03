@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.15"
+  version: "1.5.16"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -311,33 +311,33 @@ paths:
       security:
         - bearerAuth: []
 
-  /User/registerNewUser:
+  /User/handleLogin:
     post:
       tags:
         - "User"
-      summary: "Registers a new User"
-      description: "Registers a new User with the given username"
-      operationId: "registerNewUser"
+      summary: "Handles login of Users"
+      description: "Handles login of Users"
+      operationId: "handleLogin"
       requestBody:
         required: true
-        description: "Request to register a new User"
+        description: "Handles login of Users"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterNewUserRequest'
+              $ref: '#/components/schemas/HandleLoginRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/RegisterNewUserRequest'
+              $ref: '#/components/schemas/HandleLoginRequest'
       responses:
         '200':
           description: "Response for whether the User registration was successful"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegisterNewUserResponse'
+                $ref: '#/components/schemas/HandleLoginResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/RegisterNewUserResponse'
+                $ref: '#/components/schemas/HandleLoginResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -3287,25 +3287,17 @@ components:
           xml:
             name: "GetMyLeaderboardsResponse"
 
-    RegisterNewUserRequest:
+    HandleLoginRequest:
       type: "object"
       required:
-        - userID
-        - username
         - location
       properties:
-        userID:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        username:
-          type: string
         location:
           $ref: "#/components/schemas/GeoPoint"
       xml:
-        name: "RegisterNewUserRequest"
+        name: "HandleLoginRequest"
 
-    RegisterNewUserResponse:
+    HandleLoginResponse:
       allOf:
         - $ref: "#/components/schemas/Response"
         - type: "object"
@@ -3313,7 +3305,7 @@ components:
             message:
               example: "New User registered"
           xml:
-            name: "RegisterNewUserResponse"
+            name: "HandleLoginResponse"
             
     GetMyMissionsRequest:
       type: "object"
