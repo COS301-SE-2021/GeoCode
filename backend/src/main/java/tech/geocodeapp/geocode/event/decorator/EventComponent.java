@@ -58,7 +58,17 @@ public interface EventComponent {
     /**
      * Setter used to set the blocklyEvent variable
      */
-    void setBlocklyEvent();
+    void setBlocklyEvent(boolean blocklyEvent);
+
+    /**
+     * Getter for blockly events used to get the blocklyDetails variable from {@link BlocklyEventDecorator}
+     */
+    String getBlocklyDetails();
+
+    /**
+     * Setter for blockly events used to set the blocklyDetails variable from {@link BlocklyEventDecorator}
+     */
+    void setBlocklyDetails(String blocklyDetails);
 
     /**
      * Getter for time trials used to get the timeLimit variable from {@link TimeTrialEventDecorator}
