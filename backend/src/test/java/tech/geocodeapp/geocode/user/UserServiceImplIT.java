@@ -300,7 +300,7 @@ public class UserServiceImplIT {
      * only created when Event.createEvent creates them
      */
     private void addFirstTwoGeoCodes() throws NullRequestParameterException, InvalidRequestException {
-        validUserId = handleUserLogin("validUser");;
+        validUserId = handleUserLogin("validUser");
 
         firstGeoCodeID = createGeoCode("1", new GeoPoint(10.0, 10.0), Difficulty.HARD);
         firstCollectables = getCollectables(firstGeoCodeID);
@@ -315,7 +315,7 @@ public class UserServiceImplIT {
      * only created when Event.createEvent creates them
      */
     private void addOpenDayGeoCodes() throws NullRequestParameterException, InvalidRequestException {
-        validUserId = handleUserLogin("validUser");;
+        validUserId = handleUserLogin("validUser");
 
         firstGeoCodeID = UUID.randomUUID();
         secondGeoCodeID = UUID.randomUUID();
@@ -408,7 +408,7 @@ public class UserServiceImplIT {
     }
 
     private void addFoundGeoCodesForUser1(){
-        userWithPoints1ID = handleUserLogin("validUser");;
+        userWithPoints1ID = handleUserLogin("validUser");
 
         joinEvents(userWithPoints1ID);
 
@@ -428,7 +428,7 @@ public class UserServiceImplIT {
     }
 
     private void addFoundGeoCodesForUser2() {
-        userWithPoints2ID = handleUserLogin("userWithPoints2");;
+        userWithPoints2ID = handleUserLogin("userWithPoints2");
 
         joinEvents(userWithPoints2ID);
 
@@ -706,7 +706,7 @@ public class UserServiceImplIT {
 
     @Test
     public void getCurrentCollectableTestValidUser() {
-        validUserId = handleUserLogin("validUser");;
+        validUserId = handleUserLogin("validUser");
 
         try{
             /*
@@ -749,7 +749,7 @@ public class UserServiceImplIT {
 
     @Test
     public void getUserTrackableTestValidUser() {
-        validUserId = handleUserLogin("validUser");;
+        validUserId = handleUserLogin("validUser");
 
         try{
             /*
@@ -826,7 +826,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     void getFoundGeoCodesTestInvalidUser() {
-        validUserId = handleUserLogin("validUser");;
+        validUserId = handleUserLogin("validUser");
 
         try{
             /*
@@ -955,7 +955,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void updateLocationTestValidUser() {
-        validUserId = handleUserLogin("validUser");;
+        validUserId = handleUserLogin("validUser");
 
         try{
             /*
@@ -1251,7 +1251,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void getUserByIdTestValidUserId(){
-        validUserId = handleUserLogin("validUser");;
+        validUserId = handleUserLogin("validUser");
 
         try {
             var request = new GetUserByIdRequest(validUserId);
@@ -1271,7 +1271,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void handleLoginTestExistingUserId(){
-        validUserId = handleUserLogin("validUser");;
+        validUserId = handleUserLogin("validUser");
 
         try {
             var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));

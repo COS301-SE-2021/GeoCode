@@ -420,7 +420,8 @@ public class UserServiceImpl implements UserService {
             return new Response(false, "New User registration failed");
         }
 
-        return new Response(true, "New User registered");
+        System.out.println("new user is registered");
+        return new Response(true, "New User registered xxxxxx");
     }
 
     //GeoCode helper functions
