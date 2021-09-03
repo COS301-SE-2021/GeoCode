@@ -199,14 +199,21 @@ public abstract class EventDecorator implements EventComponent {
         return decoratedType.calculatePoints(foundGeocode, stageNumber, status);
     }
 
+    /**
+     * @return the decoratedType's blocklyEvent
+     */
     @Override
     public boolean isBlocklyEvent() {
-        return false;
+        return decoratedType.isBlocklyEvent();
     }
 
+    /**
+     * Sets the decoratedType's blocklyEvent
+     * @param blocklyEvent whether or not the event is a blockly event
+     */
     @Override
     public void setBlocklyEvent(boolean blocklyEvent) {
-
+        decoratedType.setBlocklyEvent(blocklyEvent);
     }
 
     @Override
