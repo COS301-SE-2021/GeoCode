@@ -16,8 +16,6 @@ import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.service.*;
 
-import tech.geocodeapp.geocode.general.MockCurrentUserDetails;
-import tech.geocodeapp.geocode.general.security.wrapper.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
 import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
@@ -93,12 +91,6 @@ class EventServiceImplTest {
     GeoCodeService geoCodeService;
 
     /**
-     * The CurrentUserDetails accessor
-     */
-    @Mock( name = "currentUserDetailsImpl" )
-    CurrentUserDetails currentUserDetails;
-
-    /**
      * The expected exception message for if the given request has invalid attributes
      */
     String reqParamError = "The given request is missing parameter/s.";
@@ -141,9 +133,7 @@ class EventServiceImplTest {
         /* Create the leaderboard service with all the relevant repositories */
         var leaderboardMockRepo = new LeaderboardMockRepository();
         var userRepository = new UserMockRepository();
-
-        currentUserDetails = new MockCurrentUserDetails();
-        var userService = new UserMockService( userRepository, currentUserDetails);
+        var userService = new UserMockService( userRepository );
         var pointMockRepository = new PointMockRepository();
         leaderboardService = new LeaderboardServiceImpl( leaderboardMockRepo, pointMockRepository, userService );
 
@@ -153,7 +143,7 @@ class EventServiceImplTest {
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
-            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, currentUserDetails );
+            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService );
             eventService.setGeoCodeService( geoCodeService );
         } catch ( RepoException e ) {
 
@@ -173,7 +163,7 @@ class EventServiceImplTest {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null, currentUserDetails ) )
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }

@@ -17,7 +17,6 @@ import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.service.*;
 
-import tech.geocodeapp.geocode.general.security.wrapper.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
@@ -26,7 +25,6 @@ import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 
 import tech.geocodeapp.geocode.user.repository.UserRepository;
-import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -94,12 +92,6 @@ class EventServiceImplIT {
     GeoCodeService geoCodeService;
 
     /**
-     * The CurrentUserDetails accessor
-     */
-    @Autowired
-    CurrentUserDetails currentUserDetails;
-
-    /**
      * The expected exception message for if the given request has invalid attributes
      */
     String reqParamError = "The given request is missing parameter/s.";
@@ -130,7 +122,7 @@ class EventServiceImplIT {
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
-            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, currentUserDetails );
+            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService );
             eventService.setGeoCodeService( geoCodeService );
         } catch ( RepoException e ) {
 
@@ -150,7 +142,7 @@ class EventServiceImplIT {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null, currentUserDetails ) )
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }

@@ -8,7 +8,7 @@ import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.general.response.Response;
-import tech.geocodeapp.geocode.general.security.wrapper.CurrentUserDetails;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
 import tech.geocodeapp.geocode.mission.request.UpdateCompletionRequest;
@@ -38,20 +38,16 @@ public class UserServiceImpl implements UserService {
     @NotNull(message = "Mission Service Implementation may not be null.")
     private final MissionService missionService;
 
-    @NotNull( message = "CurrentUserDetails may not be null." )
-    private final CurrentUserDetails currentUserDetails;
-
     private final String invalidUserIdMessage = "Invalid User id";
     private final UUID trackableTypeUUID = new UUID(0, 0);
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
 
-    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, MissionService missionService, CurrentUserDetails currentUserDetails) {
+    public UserServiceImpl(UserRepository userRepo, CollectableRepository collectableRepo, PointRepository pointRepo, CollectableService collectableService, MissionService missionService) {
         this.userRepo = userRepo;
         this.collectableRepo = collectableRepo;
         this.pointRepo = pointRepo;
         this.collectableService = collectableService;
         this.missionService = missionService;
-        this.currentUserDetails = currentUserDetails;
     }
 
     /**
@@ -351,7 +347,7 @@ public class UserServiceImpl implements UserService {
      */
     public User getCurrentUser(){
         /* make request to get the current User*/
-        var request = new GetUserByIdRequest(currentUserDetails.getID());
+        var request = new GetUserByIdRequest(CurrentUserDetails.getID());
 
         try{
             return getUserById(request).getUser();
@@ -367,7 +363,7 @@ public class UserServiceImpl implements UserService {
      * @return The current user ID
      */
     public UUID getCurrentUserID(){
-        return currentUserDetails.getID();
+        return CurrentUserDetails.getID();
     }
 
     /**
@@ -382,15 +378,15 @@ public class UserServiceImpl implements UserService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the User already exists
-        System.out.println("current user id: "+currentUserDetails.getID());
-        boolean exists = userRepo.existsById(currentUserDetails.getID());
+        System.out.println("current user id: "+CurrentUserDetails.getID());
+        boolean exists = userRepo.existsById(CurrentUserDetails.getID());
 
         if(exists){
             return new Response(true, "User ID already exists");
         }
 
         //the User is a new User
-        var newUser = new User(currentUserDetails.getID(), currentUserDetails.getUsername());
+        var newUser = new User(CurrentUserDetails.getID(), CurrentUserDetails.getUsername());
 
         //create the user's trackable object which will always have a Mission
         var createCollectableRequest = new CreateCollectableRequest(trackableTypeUUID, request.getLocation());

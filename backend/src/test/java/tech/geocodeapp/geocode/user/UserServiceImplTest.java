@@ -5,8 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import tech.geocodeapp.geocode.collectable.CollectableMockRepository;
 import tech.geocodeapp.geocode.collectable.CollectableSetMockRepository;
 import tech.geocodeapp.geocode.collectable.CollectableTypeMockRepository;
@@ -15,8 +13,8 @@ import tech.geocodeapp.geocode.collectable.model.CollectableSet;
 import tech.geocodeapp.geocode.collectable.model.CollectableType;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
-import tech.geocodeapp.geocode.general.MockCurrentUserDetails;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
@@ -40,12 +38,9 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith( MockitoExtension.class )
-@MockitoSettings(strictness = Strictness.LENIENT) //to avoid MockSecurity error
 public class UserServiceImplTest {
     private UserService userService;
     private UserMockRepository userMockRepo;
-
-    private MockCurrentUserDetails mockCurrentUserDetails;
 
     private User validUser;
 
@@ -112,13 +107,11 @@ public class UserServiceImplTest {
     }
 
     private void setUser(UUID userID){
-        mockCurrentUserDetails.setID(userID);
+        CurrentUserDetails.injectUserDetails(userID, null, null);
     }
 
     private void setUser(UUID userID, String username, boolean isAdmin){
-        mockCurrentUserDetails.setID(userID);
-        mockCurrentUserDetails.setUsername(username);
-        mockCurrentUserDetails.setAdmin(isAdmin);
+        CurrentUserDetails.injectUserDetails(userID, username, isAdmin);
     }
 
     private UUID handleUserLogin(String username){
@@ -137,7 +130,7 @@ public class UserServiceImplTest {
             Assertions.assertEquals("New User registered", response.getMessage());
             Assertions.assertTrue(response.isSuccess());
 
-            return mockCurrentUserDetails.getID();
+            return CurrentUserDetails.getID();
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
@@ -161,9 +154,7 @@ public class UserServiceImplTest {
         userMockRepo = new UserMockRepository();
         var collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo, missionService);
 
-        mockCurrentUserDetails = new MockCurrentUserDetails();
-
-        userService = new UserServiceImpl(userMockRepo, collectableMockRepo, new PointMockRepository(), collectableService, missionService, mockCurrentUserDetails);
+        userService = new UserServiceImpl(userMockRepo, collectableMockRepo, new PointMockRepository(), collectableService, missionService);
 
         //save the valid trackable CollectableType
         var trackableCollectableType = new CollectableType();
@@ -1219,7 +1210,7 @@ public class UserServiceImplTest {
 
     @Test
     void getCurrentUserTest() {
-        mockCurrentUserDetails.setID(validUserId);
+        CurrentUserDetails.injectUserDetails(validUserId, null, null);
 
         var returnedUser = userService.getCurrentUser();
         Assertions.assertEquals(validUser, returnedUser);

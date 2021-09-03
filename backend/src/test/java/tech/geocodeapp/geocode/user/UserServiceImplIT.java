@@ -14,9 +14,8 @@ import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.event.request.CreateEventRequest;
 import tech.geocodeapp.geocode.event.request.GetCurrentEventStatusRequest;
 import tech.geocodeapp.geocode.event.service.EventServiceImpl;
-import tech.geocodeapp.geocode.general.MockCurrentUserDetails;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.general.response.Response;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
@@ -35,7 +34,6 @@ import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 import tech.geocodeapp.geocode.user.service.UserService;
-import tech.geocodeapp.geocode.user.service.UserServiceImpl;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -45,9 +43,6 @@ import java.util.*;
 public class UserServiceImplIT {
     @Autowired
     private UserService userService;
-
-//    @Autowired
-//    private MockCurrentUserDetails mockCurrentUserDetails;
 
     @Autowired
     CollectableServiceImpl collectableService;
@@ -117,26 +112,16 @@ public class UserServiceImplIT {
 
     }
 
-//    private void setUser(UUID userID){
-//        mockCurrentUserDetails.setID(userID);
-//    }
-//
-//    private void setUser(UUID userID, String username, boolean isAdmin){
-//        mockCurrentUserDetails.setID(userID);
-//        mockCurrentUserDetails.setUsername(username);
-//        mockCurrentUserDetails.setAdmin(isAdmin);
-//    }
+    private void setUser(UUID userID){
+        CurrentUserDetails.injectUserDetails(userID, null, null);
+    }
 
     /**
      * Mocks the User logging in
      * @param userID The id of the User to be set in setCurrentUserID
      */
     private void setUser(UUID userID, String username, boolean isAdmin){
-        MockSecurity.setup();
-        MockSecurity.setCurrentUserID(userID);
-
-        MockSecurity.setCurrentUsername(username);
-        MockSecurity.setCurrentUserIsAdmin(isAdmin);
+        CurrentUserDetails.injectUserDetails(userID, username, isAdmin);
     }
 
     private UUID handleUserLogin(String username){

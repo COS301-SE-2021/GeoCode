@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.UUID;
 
-/** @deprecated use MockCurrentUserDetails */
+/** @deprecated use CurrentUserDetails.injectUserDetails */
 @Deprecated
 public class MockSecurity {
 

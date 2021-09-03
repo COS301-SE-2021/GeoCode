@@ -6,8 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import tech.geocodeapp.geocode.general.MockCurrentUserDetails;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
@@ -34,15 +34,13 @@ public class LeaderboardServiceImplTest {
     private UserRepository userRepository;
     private LeaderboardMockRepository leaderboardMockRepo;
     private PointMockRepository pointMockRepository;
-    private MockCurrentUserDetails mockCurrentUserDetails;
 
     @BeforeEach
     void setup() {
         leaderboardMockRepo = new LeaderboardMockRepository();
         userRepository = new UserMockRepository();
 
-        mockCurrentUserDetails = new MockCurrentUserDetails();
-        userService = new UserMockService(userRepository, mockCurrentUserDetails);
+        userService = new UserMockService(userRepository);
         pointMockRepository = new PointMockRepository();
 
         leaderboardService = new LeaderboardServiceImpl(leaderboardMockRepo, pointMockRepository, userService);
@@ -62,10 +60,10 @@ public class LeaderboardServiceImplTest {
 
     private UUID handleLogin(String username){
         try {
-            mockCurrentUserDetails.setUsername(username);
+            CurrentUserDetails.injectUserDetails(null, username, null);
             userService.handleLogin(new HandleLoginRequest(new GeoPoint(0.0, 0.0)));
 
-            return mockCurrentUserDetails.getID();
+            return CurrentUserDetails.getID();
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }

@@ -2,7 +2,6 @@ package tech.geocodeapp.geocode.leaderboard;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.general.response.Response;
-import tech.geocodeapp.geocode.general.security.wrapper.CurrentUserDetails;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.*;
@@ -14,11 +13,9 @@ import java.util.Optional;
 public class UserMockService implements UserService {
 
     private final UserRepository userRepo;
-    private final CurrentUserDetails currentUserDetails;
 
-    public UserMockService(UserRepository userRepo, CurrentUserDetails currentUserDetails) {
+    public UserMockService(UserRepository userRepo) {
         this.userRepo = userRepo;
-        this.currentUserDetails = currentUserDetails;
     }
 
     @Override
