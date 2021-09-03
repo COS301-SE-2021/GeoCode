@@ -342,7 +342,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     *  Gets the current User using the Keycloak details
+     *  Gets the current User using the Keycloak detailsx
      * @return The current User
      */
     public User getCurrentUser(){
@@ -378,7 +378,6 @@ public class UserServiceImpl implements UserService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the User already exists
-        System.out.println("current user id: "+CurrentUserDetails.getID());
         boolean exists = userRepo.existsById(CurrentUserDetails.getID());
 
         if(exists){
@@ -420,8 +419,7 @@ public class UserServiceImpl implements UserService {
             return new Response(false, "New User registration failed");
         }
 
-        System.out.println("new user is registered");
-        return new Response(true, "New User registered xxxxxx");
+        return new Response(true, "New User registered");
     }
 
     //GeoCode helper functions

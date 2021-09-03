@@ -3,34 +3,42 @@ package tech.geocodeapp.geocode.event;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.GeoCodeApplication;
-
-import tech.geocodeapp.geocode.event.exceptions.*;
+import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
+import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
+import tech.geocodeapp.geocode.event.exceptions.RepoException;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.event.pathfinder.Graph;
-import tech.geocodeapp.geocode.event.repository.*;
+import tech.geocodeapp.geocode.event.repository.EventRepository;
+import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
 import tech.geocodeapp.geocode.event.request.*;
-import tech.geocodeapp.geocode.event.response.*;
-import tech.geocodeapp.geocode.event.service.*;
-
-import tech.geocodeapp.geocode.geocode.model.*;
+import tech.geocodeapp.geocode.event.response.CreateEventResponse;
+import tech.geocodeapp.geocode.event.response.GetEventResponse;
+import tech.geocodeapp.geocode.event.service.EventService;
+import tech.geocodeapp.geocode.event.service.EventServiceImpl;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
-
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
-
 import tech.geocodeapp.geocode.user.repository.UserRepository;
+import tech.geocodeapp.geocode.user.request.HandleLoginRequest;
+import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * This is the integration testing class for the Event subsystem
@@ -106,6 +114,9 @@ class EventServiceImplIT {
      */
     UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
 
+    @Autowired
+    UserService userService;
+
     /**
      * Create the EventServiceImpl with the relevant repositories.
      *
@@ -130,6 +141,33 @@ class EventServiceImplIT {
             e.printStackTrace();
         }
 
+    }
+
+    private void setUser(UUID userID, String username, boolean isAdmin){
+        CurrentUserDetails.injectUserDetails(userID, username, isAdmin);
+    }
+
+    private UUID handleUserLogin(String username){
+        return handleLogin(UUID.randomUUID(), username, false);
+    }
+
+    private UUID handleAdminLogin(String username){
+        return handleLogin(UUID.randomUUID(), username, true);
+    }
+
+    private UUID handleLogin(UUID userID, String username, boolean isAdmin){
+        try {
+            setUser(userID, username, isAdmin);
+            var response = userService.handleLogin(new HandleLoginRequest(new GeoPoint(0.0, 0.0)));
+
+            Assertions.assertEquals("New User registered", response.getMessage());
+            Assertions.assertTrue(response.isSuccess());
+
+            return CurrentUserDetails.getID();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -210,6 +248,8 @@ class EventServiceImplIT {
              * Create a request object
              * and assign values to it
              */
+            var userId = handleAdminLogin("admin_user");
+
             CreateEventRequest request = new CreateEventRequest();
             request.setDescription( "Try get as many as possible" );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
@@ -284,6 +324,7 @@ class EventServiceImplIT {
         try {
 
             /* Insert different random Events into the repository */
+            var userId = handleAdminLogin("admin_user");
             populate( 3 );
 
             /* Populate with a known Event to find*/
@@ -362,6 +403,7 @@ class EventServiceImplIT {
     @Test
     @Order( 7 )
     @DisplayName( "Valid request - getCurrentEventStatus" )
+    @Transactional
     void getCurrentEventStatusTest() {
 
         try {
@@ -369,6 +411,8 @@ class EventServiceImplIT {
             //ToDo finish this
 
             /* Insert different random Events into the repository */
+            var userId = handleAdminLogin("admin_user");
+
             populate( 3 );
 
             /* Populate with a known Event to find*/
