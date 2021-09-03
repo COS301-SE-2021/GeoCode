@@ -216,13 +216,21 @@ public abstract class EventDecorator implements EventComponent {
         decoratedType.setBlocklyEvent(blocklyEvent);
     }
 
+    /**
+     * Gets the blocklyDetails of the decoratedType if applicable
+     * @return the blocklyDetails or null if the event is not that type
+     */
     @Override
     public String getBlocklyDetails() {
-        return null;
+        return decoratedType.getBlocklyDetails();
     }
 
+    /**
+     * sets the decoratedType's blocklyDetails
+     * @param blocklyDetails the blockly details
+     */
     @Override
     public void setBlocklyDetails(String blocklyDetails) {
-
+        decoratedType.setBlocklyDetails(blocklyDetails);
     }
 }
