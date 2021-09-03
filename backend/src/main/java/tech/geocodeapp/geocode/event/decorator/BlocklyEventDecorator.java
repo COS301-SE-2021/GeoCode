@@ -10,4 +10,21 @@ public class BlocklyEventDecorator extends EventDecorator{
     public BlocklyEventDecorator(EventComponent decoratedType) {
         super(decoratedType);
     }
+
+    /**
+     * Getter for the blocklyDetails variable
+     */
+    @Override
+    public String getBlocklyDetails() {
+        return blocklyDetails;
+    }
+
+    /**
+     * Setter for the blocklyDetails variable
+     * @param blocklyDetails the blockly details
+     */
+    @Override
+    public void setBlocklyDetails(String blocklyDetails) {
+        this.blocklyDetails = blocklyDetails;
+    }
 }
