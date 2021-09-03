@@ -19,6 +19,7 @@ public class ConcreteEvent implements EventComponent {
     private LocalDate endDate;
     private List<Leaderboard> leaderboards;
     private Boolean available;
+    private boolean blocklyEvent;
 
     public ConcreteEvent() { }
 
