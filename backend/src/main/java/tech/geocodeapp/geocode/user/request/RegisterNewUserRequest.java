@@ -7,9 +7,6 @@ import tech.geocodeapp.geocode.geocode.model.GeoPoint;
  * RegisterNewUserRequest
  */
 public class RegisterNewUserRequest   {
-    @JsonProperty("username")
-    private String username;
-
     /*
     * The location of the new User
     * Used to set the location of their User Trackable
@@ -19,16 +16,10 @@ public class RegisterNewUserRequest   {
 
     /**
      * Overloaded constructor
-     * @param username The username of the new User
      * @param location The location of the User's Trackable
      */
-    public RegisterNewUserRequest(String username, GeoPoint location){
-        this.username = username;
+    public RegisterNewUserRequest(GeoPoint location){
         this.location = location;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public GeoPoint getLocation() {

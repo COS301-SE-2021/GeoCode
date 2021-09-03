@@ -108,7 +108,7 @@ public class UserServiceImplIT {
     private CreateGeoCodeRequest createWinterSchoolGeoCode3Request;
 
     private UUID registerNewUser(String username){
-        RegisterNewUserRequest request = new RegisterNewUserRequest(username, new GeoPoint(0.0, 0.0));
+        RegisterNewUserRequest request = new RegisterNewUserRequest(new GeoPoint(0.0, 0.0));
         RegisterNewUserResponse response;
 
         try {
@@ -1261,7 +1261,7 @@ public class UserServiceImplIT {
         validUserId = registerNewUser("validUser");
 
         try {
-            var request = new RegisterNewUserRequest( "john", new GeoPoint(0.0, 0.0));
+            var request = new RegisterNewUserRequest(new GeoPoint(0.0, 0.0));
             var response = userService.registerNewUser(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -1279,7 +1279,7 @@ public class UserServiceImplIT {
     public void registerNewUserTestNewUserId(){
         try {
             var newUsername = "bob";
-            var request = new RegisterNewUserRequest(newUsername, new GeoPoint(0.0, 0.0));
+            var request = new RegisterNewUserRequest(new GeoPoint(0.0, 0.0));
             var response = userService.registerNewUser(request);
 
             Assertions.assertTrue(response.isSuccess());

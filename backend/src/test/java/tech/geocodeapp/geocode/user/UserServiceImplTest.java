@@ -110,7 +110,7 @@ public class UserServiceImplTest {
 
     private UUID registerNewUser(String username){
         try {
-            return userService.registerNewUser(new RegisterNewUserRequest(username, new GeoPoint(0.0, 0.0))).getUser().getId();
+            return userService.registerNewUser(new RegisterNewUserRequest(new GeoPoint(0.0, 0.0))).getUser().getId();
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
             return null;
@@ -1041,7 +1041,7 @@ public class UserServiceImplTest {
 
     @Test
     void registerNewUserTestNullParameter(){
-        var request = new RegisterNewUserRequest(null, new GeoPoint(0.0, 0.0));
+        var request = new RegisterNewUserRequest(null);
 
         assertThatThrownBy(() -> userService.registerNewUser(request)).isInstanceOf(NullRequestParameterException.class);
     }
@@ -1049,7 +1049,7 @@ public class UserServiceImplTest {
     @Test
     void registerNewUserTestExistingUserId(){
         try {
-            var request = new RegisterNewUserRequest( "john", new GeoPoint(0.0, 0.0));
+            var request = new RegisterNewUserRequest(new GeoPoint(0.0, 0.0));
             var response = userService.registerNewUser(request);
 
             Assertions.assertFalse(response.isSuccess());
@@ -1063,7 +1063,7 @@ public class UserServiceImplTest {
     void registerNewUserTestNewUserId(){
         try {
             String newUsername = "bob";
-            var request = new RegisterNewUserRequest(newUsername, new GeoPoint(0.0, 0.0));
+            var request = new RegisterNewUserRequest(new GeoPoint(0.0, 0.0));
             var response = userService.registerNewUser(request);
 
             Assertions.assertTrue(response.isSuccess());

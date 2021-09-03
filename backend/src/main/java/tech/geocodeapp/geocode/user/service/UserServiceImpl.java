@@ -387,14 +387,14 @@ public class UserServiceImpl implements UserService {
         checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the User already exists
-        var optionalUser = userRepo.findById(this.getCurrentUserID());//TODO: discuss
+        var optionalUser = userRepo.findById(this.getCurrentUserID());//TODO: response not have the User, exists, request has only the location
 
         if(optionalUser.isPresent()){
             return new RegisterNewUserResponse(true, "User ID already exists", optionalUser.get());
         }
 
         //the User is a new User
-        var newUser = new User(request.getUsername());
+        var newUser = new User();
 
         //create the user's trackable object which will always have a Mission
         var createCollectableRequest = new CreateCollectableRequest(trackableTypeUUID, request.getLocation());

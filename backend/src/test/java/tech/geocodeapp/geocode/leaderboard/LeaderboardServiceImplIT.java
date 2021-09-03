@@ -44,7 +44,7 @@ public class LeaderboardServiceImplIT {
 
     private UUID registerNewUser(String username){
         try {
-            return userService.registerNewUser(new RegisterNewUserRequest(username, new GeoPoint(0.0, 0.0))).getUser().getId();
+            return userService.registerNewUser(new RegisterNewUserRequest(new GeoPoint(0.0, 0.0))).getUser().getId();
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }

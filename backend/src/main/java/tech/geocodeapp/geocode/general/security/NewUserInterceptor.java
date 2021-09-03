@@ -42,6 +42,6 @@ public class NewUserInterceptor extends GenericFilterBean {
 //                return;
 //            }
 //        }
-//        filterChain.doFilter(servletRequest, servletResponse);
+       filterChain.doFilter(servletRequest, servletResponse);
     }
 }

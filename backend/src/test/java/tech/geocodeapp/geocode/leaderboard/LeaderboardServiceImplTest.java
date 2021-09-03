@@ -58,7 +58,14 @@ public class LeaderboardServiceImplTest {
 
     private UUID registerNewUser(String username){
         try {
-            return userService.registerNewUser(new RegisterNewUserRequest(username, new GeoPoint(0.0, 0.0))).getUser().getId();
+            var request = new RegisterNewUserRequest(new GeoPoint(0.0, 0.0));
+            var response = userService.registerNewUser(request);
+
+            Assertions.assertEquals("New User registered", response.getMessage());
+            Assertions.assertTrue(response.isSuccess());
+            Assertions.assertNotNull(response.getUser());
+
+            return response.getUser().getId();
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
@@ -481,6 +488,8 @@ public class LeaderboardServiceImplTest {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
             var userId = registerNewUser("Test user");
+
+            Assertions.assertNotNull(userId);
 
             var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             var pointResponse = leaderboardService.createPoint(createPointRequest);

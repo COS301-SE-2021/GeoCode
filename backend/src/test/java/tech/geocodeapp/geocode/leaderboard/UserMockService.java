@@ -105,7 +105,6 @@ public class UserMockService implements UserService {
     @Override
     public RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException {
         User user = new User();
-        user.setUsername(request.getUsername());
         userRepo.save(user);
         return new RegisterNewUserResponse(true, "New user registered", user);
     }
