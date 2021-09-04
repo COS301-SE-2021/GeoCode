@@ -7,6 +7,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {MockActivatedRoute} from '../../../mocks/MockActivatedRoute';
 import {Router} from '@angular/router';
+import {CustomComponentsModule} from '../../../components/components.module';
 
 describe('FindGeocodePage', () => {
   let component: FindGeocodePage;
@@ -30,7 +31,7 @@ describe('FindGeocodePage', () => {
     TestBed.configureTestingModule({
       declarations: [ FindGeocodePage ],
       providers: [MockActivatedRoute.provider({geocodeID: 'random'}), GeoCodeService],
-      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
+      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, CustomComponentsModule]
     }).compileComponents();
 
     const router = TestBed.inject(Router);

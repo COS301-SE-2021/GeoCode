@@ -6,6 +6,7 @@ import {UserService} from '../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {MockKeycloak} from '../../mocks/MockKeycloak';
+import {CustomComponentsModule} from '../../components/components.module';
 
 describe('ProfilePage', () => {
   let component: ProfilePage;
@@ -29,7 +30,7 @@ describe('ProfilePage', () => {
         UserService,
         MockKeycloak.provider()
       ],
-      imports: [IonicModule.forRoot(), RouterTestingModule.withRoutes([]), HttpClientTestingModule]
+      imports: [IonicModule.forRoot(), RouterTestingModule.withRoutes([]), HttpClientTestingModule, CustomComponentsModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProfilePage);

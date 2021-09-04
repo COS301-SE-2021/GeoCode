@@ -4,7 +4,11 @@
       <div #mapElement class="map"></div>
     </ion-col>
     <ion-col id="infoColumn" [ngClass]="getClass()" size-md="4" size-lg="3" size="12" *ngIf="showInfo">
-      <ng-content></ng-content>
+      <div id="content">
+        <div id="content2">
+          <ng-content></ng-content>
+        </div>
+      </div>
     </ion-col>
   </ion-row>
 </ion-grid>

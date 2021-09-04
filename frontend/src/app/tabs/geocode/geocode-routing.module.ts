@@ -8,7 +8,7 @@ const routes: Routes = [
     component: GeocodePage
   },
   {
-    path: 'create-geocode',
+    path: 'geocode/create',
     loadChildren: () => import('./geocode-create/geocode-create.module').then(m => m.GeocodeCreatePageModule)
   },
   {

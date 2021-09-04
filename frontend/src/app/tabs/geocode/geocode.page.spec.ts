@@ -9,6 +9,7 @@ import {FormsModule} from '@angular/forms';
 import {MockGoogleMapsLoader} from '../../mocks/MockGoogleMapsLoader';
 import {MockKeycloak} from '../../mocks/MockKeycloak';
 import {CustomComponentsModule} from '../../components/components.module';
+import {MockCurrentUserDetails} from '../../mocks/MockCurrentUserDetails';
 
 describe('GeocodePage', () => {
   let component: GeocodePage;
@@ -17,7 +18,7 @@ describe('GeocodePage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodePage ],
-      providers: [AlertController, NavController, GeoCodeService, MockGoogleMapsLoader.provider(), MockKeycloak.provider()],
+      providers: [NavController, GeoCodeService, MockCurrentUserDetails.provider()],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, FormsModule, CustomComponentsModule]
     }).compileComponents();
 
