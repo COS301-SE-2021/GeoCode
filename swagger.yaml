@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.16"
+  version: "1.5.17"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -334,10 +334,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HandleLoginResponse'
+                $ref: '#/components/schemas/Response'
             application/xml:
               schema:
-                $ref: '#/components/schemas/HandleLoginResponse'
+                $ref: '#/components/schemas/Response'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -3036,7 +3036,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GeoCode'
-        pastMissions:
+        missions:
           type: array
           items:
             $ref: '#/components/schemas/Mission'
@@ -3296,16 +3296,6 @@ components:
           $ref: "#/components/schemas/GeoPoint"
       xml:
         name: "HandleLoginRequest"
-
-    HandleLoginResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "New User registered"
-          xml:
-            name: "HandleLoginResponse"
             
     GetMyMissionsRequest:
       type: "object"
