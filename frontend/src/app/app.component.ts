@@ -25,6 +25,11 @@ export class AppComponent implements OnInit {
   ) {
     this.keycloakInstance = this.keycloak.getKeycloakInstance();
 
+    this.keycloakInstance.onAuthSuccess = () => {
+      /* Called by native app */
+      this.callHandleLogin().then().catch();
+    };
+
     App.addListener('appUrlOpen', data => {
       console.log('App opened with URL: ' + data.url);
       if (data.url.includes('geocode://')) {
@@ -41,17 +46,22 @@ export class AppComponent implements OnInit {
     this.mediator.navigationLayoutChanged.send(NavComponent.getCurrentNavigationLayout());
   }
 
+  async callHandleLogin() {
+    const location = await this.locator.getCurrentLocation();
+
+    if (location !== null) {
+      console.log('call handleLogin here');
+
+    } else {
+      alert('Location access is required to use GeoCode.');
+      await this.logout();
+    }
+  }
+
   async ngOnInit() {
     if (this.keycloakInstance.authenticated) {
-      const location = await this.locator.getCurrentLocation();
-
-      if (location !== null) {
-        console.log('call handleLogin here');
-
-      } else {
-        alert('Location access is required to use GeoCode.');
-        await this.logout();
-      }
+      /* Called by web app */
+      await this.callHandleLogin();
 
     } else {
       this.router.navigate(['/welcome']).then().catch();
