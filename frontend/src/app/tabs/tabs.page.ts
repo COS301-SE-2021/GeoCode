@@ -1,7 +1,8 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {IonTabs} from '@ionic/angular';
-import {NavigationLayout, WindowMonitor} from '../services/WindowMonitor';
+import {Mediator} from '../services/Mediator';
+import {NavComponent, NavigationLayout} from '../components/navigation/nav.component';
 
 class TabDefinition {
   name: string;
@@ -28,10 +29,10 @@ export class TabsPage implements OnDestroy {
   private navigationLayout: NavigationLayout;
   private navigationTypeSubscription: Subscription;
 
-  constructor(windowMonitor: WindowMonitor) {
-    this.navigationLayout = windowMonitor.getCurrentNavigationLayout();
+  constructor(mediator: Mediator) {
+    this.navigationLayout = NavComponent.getCurrentNavigationLayout();
 
-    this.navigationTypeSubscription = windowMonitor.onNavigationLayoutChange(layout => {
+    this.navigationTypeSubscription = mediator.navigationLayoutChanged.onReceive(layout => {
       this.navigationLayout = layout;
       console.log(layout);
     });

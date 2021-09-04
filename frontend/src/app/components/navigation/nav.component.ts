@@ -1,6 +1,11 @@
 import {Component, OnDestroy} from '@angular/core';
-import {WindowMonitor, NavigationLayout} from '../../services/WindowMonitor';
 import {Subscription} from 'rxjs';
+import {Mediator} from '../../services/Mediator';
+
+export class NavigationLayout {
+  layout: 'tabs'|'sidebar';
+  compact?: boolean;
+}
 
 @Component({
   selector: 'app-nav',
@@ -12,12 +17,20 @@ export class NavComponent implements OnDestroy {
   public navigationLayout: NavigationLayout;
   private navigationLayoutSubscription: Subscription;
 
-  constructor(windowMonitor: WindowMonitor) {
-    this.navigationLayout = windowMonitor.getCurrentNavigationLayout();
+  constructor(mediator: Mediator) {
+    this.navigationLayout = NavComponent.getCurrentNavigationLayout();
 
-    this.navigationLayoutSubscription = windowMonitor.onNavigationLayoutChange(layout => {
+    this.navigationLayoutSubscription = mediator.navigationLayoutChanged.onReceive(layout => {
       this.navigationLayout = layout;
     });
+  }
+
+  public static getCurrentNavigationLayout(): NavigationLayout {
+    if (window.innerWidth > 1280) {
+      return {layout: 'sidebar', compact: (window.innerHeight < 500)};
+    } else {
+      return {layout: 'tabs'};
+    }
   }
 
   ngOnDestroy() {

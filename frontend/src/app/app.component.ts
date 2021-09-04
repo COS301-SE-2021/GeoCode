@@ -2,10 +2,11 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {KeycloakService} from 'keycloak-angular';
 import {App} from '@capacitor/app';
-import {WindowMonitor} from './services/WindowMonitor';
 import {KeycloakInstance} from 'keycloak-js';
 import {environment} from '../environments/environment';
 import {Locator} from './services/Locator';
+import {Mediator} from './services/Mediator';
+import {NavComponent} from './components/navigation/nav.component';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,7 @@ export class AppComponent implements OnInit {
   constructor(
     private keycloak: KeycloakService,
     private router: Router,
-    private windowMonitor: WindowMonitor,
+    private mediator: Mediator,
     private locator: Locator
   ) {
     this.keycloakInstance = this.keycloak.getKeycloakInstance();
@@ -36,7 +37,8 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:resize')
   private fireResize() {
-    this.windowMonitor.fireResize();
+    this.mediator.windowResized.send(window.innerWidth);
+    this.mediator.navigationLayoutChanged.send(NavComponent.getCurrentNavigationLayout());
   }
 
   async ngOnInit() {
