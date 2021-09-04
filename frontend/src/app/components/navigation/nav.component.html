@@ -1,15 +1,21 @@
 <app-sidebar-layout *ngIf="navigationLayout.layout === 'sidebar'">
   <ng-container *ngTemplateOutlet="header" ngProjectAs="app-nav-header"></ng-container>
+  <ng-container *ngTemplateOutlet="fixedHeader" ngProjectAs="ion-header"></ng-container>
   <ng-container *ngTemplateOutlet="content" ngProjectAs="ion-content"></ng-container>
 </app-sidebar-layout>
 
 <app-tab-layout *ngIf="navigationLayout.layout === 'tabs'">
   <ng-container *ngTemplateOutlet="header" ngProjectAs="app-nav-header"></ng-container>
+  <ng-container *ngTemplateOutlet="fixedHeader" ngProjectAs="ion-header"></ng-container>
   <ng-container *ngTemplateOutlet="content" ngProjectAs="ion-content"></ng-container>
 </app-tab-layout>
 
 <ng-template #header>
   <ng-content select="app-nav-header"></ng-content>
+</ng-template>
+
+<ng-template #fixedHeader>
+  <ng-content select="ion-header"></ng-content>
 </ng-template>
 
 <ng-template #content>
