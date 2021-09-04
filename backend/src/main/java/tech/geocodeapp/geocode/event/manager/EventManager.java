@@ -65,6 +65,11 @@ public class EventManager {
         if(event.getTimeLimit() != null){
             properties.put("timeLimit", event.getTimeLimit().toString());
         }
+        if(event.getBlocklyDetails() != null && event.isBlocklyEvent()){
+            properties.put("blocklyDetails", event.getBlocklyDetails());
+        }
+        converted.setProperties(properties);
+
         return converted;
     }
 }
