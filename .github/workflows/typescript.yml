@@ -8,21 +8,21 @@ on:
 
 jobs:
   build:
-    name: TypeScript Build
+    name: Frontend Build for Web
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Set up files that usually contain environment variables
-        run: |
-            cd frontend/src
-            cp environments/environment.prod.ts environments/environment.ts
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.4.0
         with:
           node-version: '14.17.5'
+      
+      - name: Set up files that usually contain environment variables
+        run: |
+            cd frontend/src
+            cp environments/environment.prod.ts environments/environment.ts
           
       - name: Install Angular CLI
         run: npm install -g @angular/cli@12.2.1
@@ -39,21 +39,21 @@ jobs:
         run: ionic build
 
   frontend-tests:
-    name: TypeScript Tests
+    name: Frontend Jasmine Tests
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Set up files that usually contain environment variables
-        run: |
-            cd frontend/src
-            cp environments/environment.prod.ts environments/environment.ts
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.4.0
         with:
           node-version: '14.17.5'
+      
+      - name: Set up files that usually contain environment variables
+        run: |
+            cd frontend/src
+            cp environments/environment.prod.ts environments/environment.ts
 
       - name: Install Angular CLI
         run: npm install -g @angular/cli@12.2.1
@@ -68,3 +68,66 @@ jobs:
       - name: Run tests
         working-directory: ./frontend
         run: ng test --watch false --browsers=ChromeHeadless
+  
+  android-build:
+    name: Frontend Build for Android
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.4.0
+        with:
+          node-version: '14.17.5'
+        
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11.0.11'
+          distribution: 'adopt'
+      
+      - name: Set up files that usually contain environment variables
+        run: |
+            cd frontend/src
+            cp environments/environment.prod.ts environments/environment.ts
+            cp environments/environment.prod.ts environments/environment.android.ts
+            sudo sed -i "s/googleMapsKey: ''/googleMapsKey: '${{secrets.GOOGLE_MAPS_ANDROID_KEY}}'/g" environments/environment.android.ts
+            sudo sed -i "s/keycloakInitOptions: keycloakWebOptions/keycloakInitOptions: keycloakAndroidOptions/g" environments/environment.android.ts
+          
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli@12.2.1
+        
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli@6.17.0
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build app
+        working-directory: ./frontend
+        run: ionic build --configuration=android
+        
+      - name: Sync Capacitor project
+        working-directory: ./frontend
+        run: npx cap sync android
+      
+      - name: Migrate libraries to AndroidX
+        working-directory: ./frontend
+        run: npx jetify
+        
+      - name: Resync Capacitor project
+        working-directory: ./frontend
+        run: npx cap sync android
+        
+      - name: Build APK with Gradle
+        working-directory: ./frontend/android
+        run: bash ./gradlew build
+      
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: GeoCode
+          path: frontend/android/app/build/outputs/apk/release/*.apk
+      
