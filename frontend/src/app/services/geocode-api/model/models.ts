@@ -92,7 +92,6 @@ export * from './getUserTrackableResponse';
 export * from './getUsersRequest';
 export * from './getUsersResponse';
 export * from './handleLoginRequest';
-export * from './handleLoginResponse';
 export * from './leaderboard';
 export * from './mission';
 export * from './missionType';
