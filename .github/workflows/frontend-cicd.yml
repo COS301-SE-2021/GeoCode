@@ -1,4 +1,4 @@
-name: TypeScript CI
+name: Frontend CI/CD
 
 on:
   push:
@@ -20,9 +20,8 @@ jobs:
           node-version: '14.17.5'
       
       - name: Set up files that usually contain environment variables
-        run: |
-            cd frontend/src
-            cp environments/environment.prod.ts environments/environment.ts
+        working-directory: frontend/src
+        run: cp environments/environment.prod.ts environments/environment.ts
           
       - name: Install Angular CLI
         run: npm install -g @angular/cli@12.2.1
@@ -31,11 +30,11 @@ jobs:
         run: npm install -g @ionic/cli@6.17.0
 
       - name: Install dependencies
-        working-directory: ./frontend
+        working-directory: frontend
         run: npm ci
 
       - name: Build app
-        working-directory: ./frontend
+        working-directory: frontend
         run: ionic build
 
   frontend-tests:
@@ -51,9 +50,8 @@ jobs:
           node-version: '14.17.5'
       
       - name: Set up files that usually contain environment variables
-        run: |
-            cd frontend/src
-            cp environments/environment.prod.ts environments/environment.ts
+        working-directory: frontend/src
+        run: cp environments/environment.prod.ts environments/environment.ts
 
       - name: Install Angular CLI
         run: npm install -g @angular/cli@12.2.1
@@ -62,11 +60,11 @@ jobs:
         run: npm install -g @ionic/cli@6.17.0
 
       - name: Install dependencies
-        working-directory: ./frontend
+        working-directory: frontend
         run: npm ci
 
       - name: Run tests
-        working-directory: ./frontend
+        working-directory: frontend
         run: ng test --watch false --browsers=ChromeHeadless
   
   android-build:
@@ -88,12 +86,13 @@ jobs:
           distribution: 'adopt'
       
       - name: Set up files that usually contain environment variables
+        working-directory: frontend/src
         run: |
-            cd frontend/src
             cp environments/environment.prod.ts environments/environment.ts
             cp environments/environment.prod.ts environments/environment.android.ts
             sudo sed -i "s/googleMapsKey: ''/googleMapsKey: '${{secrets.GOOGLE_MAPS_ANDROID_KEY}}'/g" environments/environment.android.ts
             sudo sed -i "s/keycloakInitOptions: keycloakWebOptions/keycloakInitOptions: keycloakAndroidOptions/g" environments/environment.android.ts
+            sudo sed -i "s/baseRedirectURI: 'https:\/\/geocodeapp.tech\/'/baseRedirectURI: 'geocode:\/\/'/g" environments/environment.android.ts
           
       - name: Install Angular CLI
         run: npm install -g @angular/cli@12.2.1
@@ -102,32 +101,43 @@ jobs:
         run: npm install -g @ionic/cli@6.17.0
 
       - name: Install dependencies
-        working-directory: ./frontend
+        working-directory: frontend
         run: npm ci
 
       - name: Build app
-        working-directory: ./frontend
+        working-directory: frontend
         run: ionic build --configuration=android
         
       - name: Sync Capacitor project
-        working-directory: ./frontend
+        working-directory: frontend
         run: npx cap sync android
       
       - name: Migrate libraries to AndroidX
-        working-directory: ./frontend
+        working-directory: frontend
         run: npx jetify
         
       - name: Resync Capacitor project
-        working-directory: ./frontend
+        working-directory: frontend
         run: npx cap sync android
         
       - name: Build APK with Gradle
-        working-directory: ./frontend/android
+        working-directory: frontend/android
         run: bash ./gradlew build
+        
+      - name: Sign APK
+        uses: r0adkll/sign-android-release@v1
+        id: sign_apk
+        with:
+          releaseDirectory: frontend/android/app/build/outputs/apk/release
+          signingKeyBase64: ${{secrets.ANDROID_SIGNING_KEYSTORE_BASE64}}
+          alias: ${{secrets.ANDROID_SIGNING_KEY_ALIAS}}
+          keyStorePassword: ${{secrets.ANDROID_SIGNING_KEYSTORE_PASSWORD}}
+          
+      - name: Rename APK
+        run: mv ${{steps.sign_apk.outputs.signedReleaseFile}} GeoCode.apk
       
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
-          name: GeoCode
-          path: frontend/android/app/build/outputs/apk/release/*.apk
-      
+          name: GeoCode APK
+          path: GeoCode.apk
