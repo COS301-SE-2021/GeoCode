@@ -18,7 +18,7 @@ describe('GeocodePage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodePage ],
-      providers: [NavController, GeoCodeService, MockCurrentUserDetails.provider()],
+      providers: [NavController, GeoCodeService, MockCurrentUserDetails.provider(), MockGoogleMapsLoader.provider()],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, FormsModule, CustomComponentsModule]
     }).compileComponents();
 

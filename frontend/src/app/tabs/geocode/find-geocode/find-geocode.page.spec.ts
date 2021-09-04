@@ -8,6 +8,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {MockActivatedRoute} from '../../../mocks/MockActivatedRoute';
 import {Router} from '@angular/router';
 import {CustomComponentsModule} from '../../../components/components.module';
+import {MockGoogleMapsLoader} from '../../../mocks/MockGoogleMapsLoader';
 
 describe('FindGeocodePage', () => {
   let component: FindGeocodePage;
@@ -30,7 +31,7 @@ describe('FindGeocodePage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ FindGeocodePage ],
-      providers: [MockActivatedRoute.provider({geocodeID: 'random'}), GeoCodeService],
+      providers: [MockActivatedRoute.provider({geocodeID: 'random'}), GeoCodeService, MockGoogleMapsLoader.provider()],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, CustomComponentsModule]
     }).compileComponents();
 
