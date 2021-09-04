@@ -1,6 +1,8 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
 import {AsynchronouslyInitialisedComponent} from '../async-component-base';
+import {GeoCode, GeoPoint} from '../../services/geocode-api';
+import {Locator} from '../../services/Locator';
 
 @Component({
   selector: 'app-map-and-info',
@@ -15,29 +17,47 @@ export class MapAndInfoComponent extends AsynchronouslyInitialisedComponent impl
   googleMaps;
   map;
 
+  location: GeoPoint;
+  markers = [];
+
   constructor(
-    private mapsLoader: GoogleMapsLoader
+    private mapsLoader: GoogleMapsLoader,
+    private locator: Locator
   ) {
     super();
   }
 
   async ngOnInit() {
     this.googleMaps = await this.mapsLoader.load();
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      await this.loadMap(position.coords.latitude, position.coords.longitude);
-      this.componentLoaded();
-    }, async (positionError) => {
-      await this.loadMap(0, 0);
-      this.componentLoaded();
+    this.location = await this.locator.getCurrentLocation();
+    if (this.location === null) {
+      this.location = { latitude: 0, longitude: 0 };
+    }
+
+    this.map = new this.googleMaps.Map(this.mapElement.nativeElement, {
+      center: { lat: this.location.latitude, lng: this.location.longitude },
+      zoom: 5,
     });
+    this.componentLoaded();
   }
 
-  async loadMap(centreLat, centreLong) {
-    const mapOptions = {
-      center: {lat: centreLat, lng: centreLong},
-      zoom: 5,
-    };
-    this.map = new this.googleMaps.Map(this.mapElement.nativeElement, mapOptions);
+  public placeGeoCodes(geocodes: GeoCode[], onSelect: (geocode: GeoCode) => void) {
+    for(const marker of this.markers){
+      marker.setMap(null);
+    }
+    this.markers=[];
+    for (const geocode of geocodes) {
+      const marker = new this.googleMaps.Marker({
+        position: { lat: geocode.location.latitude, lng: geocode.location.longitude },
+        map: this.map,
+        title: '',
+      });
+      marker.addListener('click', () => {
+        console.log('yeet');
+        onSelect(geocode);
+      });
+      this.markers.push(marker);
+    }
   }
 
   public setInfoVisible(visible: boolean) {
@@ -52,7 +72,11 @@ export class MapAndInfoComponent extends AsynchronouslyInitialisedComponent impl
     return this.googleMaps;
   }
 
-  mapSizeMD() {
+  public getLocation() {
+    return this.location;
+  }
+
+  private mapSizeMD() {
     if (this.showInfo) {
       return 8;
     } else {
@@ -60,7 +84,7 @@ export class MapAndInfoComponent extends AsynchronouslyInitialisedComponent impl
     }
   }
 
-  mapSizeLG() {
+  private mapSizeLG() {
     if (this.showInfo) {
       return 9;
     } else {
@@ -68,7 +92,7 @@ export class MapAndInfoComponent extends AsynchronouslyInitialisedComponent impl
     }
   }
 
-  getClass() {
+  private getClass() {
     if (this.showInfo && !window.matchMedia('(min-width: 768px)').matches) {
       // Only returns if the geocode details are being shown and the screen is small
       return 'splitScreen';
