@@ -1,15 +1,9 @@
 package tech.geocodeapp.geocode.mission.service;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tech.geocodeapp.geocode.collectable.model.Collectable;
-import tech.geocodeapp.geocode.collectable.model.CollectableType;
-import tech.geocodeapp.geocode.collectable.service.CollectableService;
-import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.mission.model.Mission;
 import tech.geocodeapp.geocode.mission.model.MissionType;
 import tech.geocodeapp.geocode.mission.repository.MissionRepository;
@@ -22,20 +16,14 @@ import tech.geocodeapp.geocode.mission.response.GetMissionByIdResponse;
 import tech.geocodeapp.geocode.mission.response.GetProgressResponse;
 import tech.geocodeapp.geocode.user.response.UpdateCompletionResponse;
 
-import javax.annotation.PostConstruct;
-import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.Random;
 
 @Service("MissionService")
 public class MissionServiceImpl implements MissionService{
     private final MissionRepository missionRepo;
 
-    @NotNull(message = "Collectable Service Implementation may not be null.")
-    private CollectableService collectableService;
-
     private final CheckNullRequestParameters checkNullRequestParameters = new CheckNullRequestParameters();
     private final String invalidMissionIdMessage = "Invalid Mission Id";
-    private final String collectableHasMissionMessage = "Collectable already has a Mission";
 
     public MissionServiceImpl(MissionRepository missionRepo) {
         this.missionRepo = missionRepo;
@@ -54,7 +42,7 @@ public class MissionServiceImpl implements MissionService{
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        Optional<Mission> optionalMission = missionRepo.findById(request.getMissionID());
+        var optionalMission = missionRepo.findById(request.getMissionID());
 
         return optionalMission.map(mission -> new GetMissionByIdResponse(true, "The Mission was found", mission)).orElseGet(
                 () -> new GetMissionByIdResponse(false, invalidMissionIdMessage, null));
@@ -69,16 +57,16 @@ public class MissionServiceImpl implements MissionService{
         checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the missionID is invalid
-        Optional<Mission> optionalMission = missionRepo.findById(request.getMissionID());
+        var optionalMission = missionRepo.findById(request.getMissionID());
 
         if(optionalMission.isEmpty()){
             return new GetProgressResponse(false, invalidMissionIdMessage, null);
         }
 
-        Mission mission = optionalMission.get();
+        var mission = optionalMission.get();
 
         //get the progress
-        double progress = (double) (mission.getCompletion() / mission.getAmount());
+        var progress = ((double) mission.getCompletion()) / mission.getAmount();
 
         return new GetProgressResponse(true, "Progress returned", progress);
     }
@@ -96,17 +84,18 @@ public class MissionServiceImpl implements MissionService{
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        Collectable collectable = request.getCollectable();
+        var collectable = request.getCollectable();
 
         //check if the Collectable already has a Mission
-        if(collectable.getMissionID() != null){//TODO: create updateMission to re-assign a Mission [after Demo 3]
+        if(collectable.getMissionID() != null){
+            var collectableHasMissionMessage = "Collectable already has a Mission";
             return new CreateMissionResponse(false, collectableHasMissionMessage, null);
         }
 
-        CollectableType collectableType = collectable.getType();
+        var collectableType = collectable.getType();
 
         //get the MissionType
-        MissionType missionType = MissionType.fromValue(collectableType.getProperties().get("missionType"));
+        var missionType = MissionType.fromValue(collectableType.getProperties().get("missionType"));
 
         /* random allocation of missionType means there is an element of luck involved
         if type is Random - set type to one of the actual types */
@@ -115,10 +104,10 @@ public class MissionServiceImpl implements MissionService{
         }
 
         //create the Mission
-        Mission mission = new Mission();
+        var mission = new Mission();
         mission.setType(missionType);
 
-        int amount = 0;
+        var amount = 0;
 
         switch(missionType){
             case DISTANCE:
@@ -139,7 +128,7 @@ public class MissionServiceImpl implements MissionService{
         mission.setAmount(amount);
 
         //set the location to the Collectables current location
-        GeoPoint location = request.getLocation();
+        var location = request.getLocation();
         mission.setLocation(location);
 
         missionRepo.save(mission);
@@ -160,11 +149,11 @@ public class MissionServiceImpl implements MissionService{
 
         checkNullRequestParameters.checkRequestParameters(request);
 
-        Mission mission = request.getMission();
-        GeoPoint location = request.getLocation();
+        var mission = request.getMission();
+        var location = request.getLocation();
 
         //update the completion for the Mission
-        MissionType missionType = mission.getType();
+        var missionType = mission.getType();
 
         switch(missionType){
             case SWAP:
@@ -178,18 +167,16 @@ public class MissionServiceImpl implements MissionService{
 
                 break;
             case DISTANCE:
-                double addedDistance = mission.getLocation().distanceTo(location);
+                var addedDistance = mission.getLocation().distanceTo(location);
                 mission.setCompletion((int) (mission.getCompletion()+addedDistance));
+
+                //update the Mission's current location
+                mission.setLocation(location);
                 break;
         }
 
         missionRepo.save(mission);
 
         return new UpdateCompletionResponse(true, "Completion updated");
-    }
-
-    @Override
-    public void setCollectableService(CollectableServiceImpl collectableService) {
-        this.collectableService = collectableService;
     }
 }

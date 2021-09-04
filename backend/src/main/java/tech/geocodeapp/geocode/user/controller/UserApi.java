@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,9 +20,7 @@ import tech.geocodeapp.geocode.user.response.*;
 
 import javax.validation.Valid;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T21:02:56.988Z[GMT]")
 @Validated
-@CrossOrigin(origins = "${web_referrer}", maxAge = 3600)
 public interface UserApi {
 
     @Operation(summary = "Get the User with the specified ID", description = "Get the User with the specified ID", security = {
@@ -111,18 +108,6 @@ public interface UserApi {
             consumes = { "application/json", "application/xml" },
             method = RequestMethod.POST)
     ResponseEntity<GetOwnedGeoCodesResponse> getOwnedGeoCodes(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the user's owned GeoCodes", required=true, schema=@Schema()) @Valid @RequestBody GetOwnedGeoCodesRequest body);
-
-    @Operation(summary = "Get all of the users in the system", description = "Get all of the users", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Successfully returned all of the users", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetUsersResponse.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
-    @RequestMapping(value = "/User/getUsers",
-        produces = { "application/json", "application/xml" }, 
-        consumes = { "application/json", "application/xml" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<GetUsersResponse> getUsers(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get all users in the system", required = true, schema = @Schema()) @Valid @RequestBody GetUsersRequest body);
 
     @Operation(summary = "Gets the User's Leaderboard rankings", description = "Gets all the points and ranking for the Leaderboards that the given User is on", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })

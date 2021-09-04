@@ -5,7 +5,6 @@
  */
 package tech.geocodeapp.geocode.collectable.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.request.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,9 +24,7 @@ import tech.geocodeapp.geocode.collectable.response.*;
 
 import javax.validation.Valid;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 @Validated
-@CrossOrigin(origins = "${web_referrer}", maxAge = 3600)
 public interface CollectableApi {
 
     @Operation(summary = "Creates a new Collectable", description = "Create Collectable", security = {
