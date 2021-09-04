@@ -3,16 +3,21 @@ import IQrCodeWithLogo, {BaseOptions} from 'qrcode-with-logos'
 
 @Injectable({ providedIn: 'root' })
 export class QRGenerator {
-  generate(code){
 
-    const qr: BaseOptions ={
+  public download(code) {
+    this.generate(code).downloadImage('qrcode');
+  }
+
+  public async getCanvas(code) {
+    return await this.generate(code).getCanvas();
+  }
+
+  private generate(code): IQrCodeWithLogo {
+    return new IQrCodeWithLogo({
       content: code,
       downloadName: 'qrcode',
-      logo: './assets/images/x.png',
+      logo: './assets/images/MagnifyingGlass Blk.png',
       width: 1500
-    };
-    const qrcode = new IQrCodeWithLogo(qr);
-    qrcode.downloadImage('qrcode');
-
+    });
   }
 }
