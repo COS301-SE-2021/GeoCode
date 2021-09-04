@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.event.manager;
 import tech.geocodeapp.geocode.event.decorator.EventComponent;
 import tech.geocodeapp.geocode.event.factory.AbstractEventFactory;
 import tech.geocodeapp.geocode.event.factory.BasicEventFactory;
+import tech.geocodeapp.geocode.event.factory.BlocklyEventFactory;
 import tech.geocodeapp.geocode.event.factory.TimeTrialEventFactory;
 import tech.geocodeapp.geocode.event.model.Event;
 
@@ -31,6 +32,11 @@ public class EventManager {
         //check if timeLimit property exists and decorate if it does
         if(event.getProperties().containsKey("timeLimit")) {
             factory = new TimeTrialEventFactory();
+            builtEvent = factory.decorateEvent(event, builtEvent);
+        }
+
+        if(event.getProperties().containsKey("blocklyDetails")) {
+            factory = new BlocklyEventFactory();
             builtEvent = factory.decorateEvent(event, builtEvent);
         }
 
