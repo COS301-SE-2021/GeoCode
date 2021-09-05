@@ -154,7 +154,7 @@ public class UserServiceImplTest {
         userMockRepo = new UserMockRepository();
         var collectableService = new CollectableServiceImpl(collectableMockRepo, collectableSetMockRepo, collectableTypeMockRepo, missionService);
 
-        userService = new UserServiceImpl(userMockRepo, collectableMockRepo, new PointMockRepository(), collectableService, missionService);
+        userService = new UserServiceImpl(userMockRepo, collectableMockRepo, pointMockRepo, collectableService, missionService);
 
         //save the valid trackable CollectableType
         var trackableCollectableType = new CollectableType();
