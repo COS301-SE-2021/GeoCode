@@ -1334,25 +1334,6 @@ class GeoCodeServiceImplTest {
         }
     }
 
-    /**
-     * Check the logic used when create a collectable type
-     */
-    @Disabled
-    @Test
-    @Order( 26 )
-    @DisplayName( "Valid request - calculateCollectableType" )
-    void collectableTypeTest() {
-
-        var count = new ArrayList<>();
-
-        var iterations = 1000000;
-        for ( var x = 0; x < iterations; x++ ) {
-
-            var name = geoCodeService.calculateCollectableType( null );
-
-        }
-    }
-
     ////////////////Helper functions////////////////
 
     /**
