@@ -11,7 +11,7 @@ import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import java.util.*;
 
 public class CollectableMockRepository implements CollectableRepository {
-    private static HashMap<java.util.UUID, Collectable> map = new HashMap<java.util.UUID, Collectable>();
+    private HashMap<java.util.UUID, Collectable> map = new HashMap<java.util.UUID, Collectable>();
 
     @Override
     public List<Collectable> findAll() {
