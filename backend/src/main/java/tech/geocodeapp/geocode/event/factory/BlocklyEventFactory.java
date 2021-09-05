@@ -4,6 +4,8 @@ import tech.geocodeapp.geocode.event.decorator.BlocklyEventDecorator;
 import tech.geocodeapp.geocode.event.decorator.EventComponent;
 import tech.geocodeapp.geocode.event.model.Event;
 
+import java.util.Arrays;
+
 public class BlocklyEventFactory extends AbstractEventFactory{
 
     /**
@@ -17,6 +19,8 @@ public class BlocklyEventFactory extends AbstractEventFactory{
         BlocklyEventDecorator toReturn = new BlocklyEventDecorator(eventComponent);
         toReturn.setBlocklyDetails(event.getProperties().get("blocks"));
         toReturn.setBlocklyEvent(true);
+        toReturn.setInputs(Arrays.asList(event.getProperties().get("inputs").split("#")));
+        toReturn.setOutputs(Arrays.asList(event.getProperties().get("outputs").split("#")));
         return toReturn;
     }
 }
