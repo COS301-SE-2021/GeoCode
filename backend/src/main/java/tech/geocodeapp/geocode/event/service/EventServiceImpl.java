@@ -812,8 +812,17 @@ public class EventServiceImpl implements EventService {
             return new GetBlocksResponse( false, "Event is not a Blockly Event" );
         }
 
+        /* check if the User is not participating in the Blockly Event */
+
+        /* Get the UserEventStatus object from the repository */
+        UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID( request.getEventID(), CurrentUserDetails.getID() );
+
+        if( status == null ){
+            return new GetBlocksResponse( false, "User is not participating in the Blockly Event" );
+        }
+
         /* get the blocks that the User has from the UserEventStatus */
-        var details = userEventStatusRepo.findDetailsForEventIDAndUserID( request.getEventID(),  CurrentUserDetails.getID() );
+        var details = status.getDetails();
         List< UUID > blockIDs = new ArrayList<>();
 
         for( var block : details.entrySet() ){
