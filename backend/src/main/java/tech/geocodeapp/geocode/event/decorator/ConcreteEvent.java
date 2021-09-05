@@ -157,4 +157,38 @@ public class ConcreteEvent implements EventComponent {
             default: return 0;
         }
     }
+
+    /**
+     * @return null because the inputs is not contained in the concreteComponent
+     */
+    @Override
+    public List<String> getInputs() {
+        return null;
+    }
+
+    /**
+     * Do nothing in a concrete event
+     * @param inputs unused
+     */
+    @Override
+    public void setInputs(List<String> inputs) {
+
+    }
+
+    /**
+     * @return null because the outputs is not contained in the concreteComponent
+     */
+    @Override
+    public List<String> getOutputs() {
+        return null;
+    }
+
+    /**
+     * Do nothing in a concrete event
+     * @param outputs unused
+     */
+    @Override
+    public void setOutputs(List<String> outputs) {
+
+    }
 }
