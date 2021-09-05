@@ -100,4 +100,23 @@ public interface EventComponent {
      */
     int calculatePoints(GeoCode foundGeocode, int stageNumber, UserEventStatus status);
 
+    /**
+     * Getter for blockly events used to get the inputs variable from {@link BlocklyEventDecorator}
+     */
+    List<String> getInputs();
+
+    /**
+     * Setter for blockly events used to set the inputs variable from {@link BlocklyEventDecorator}
+     */
+    void setInputs(List<String> inputs);
+
+    /**
+     * Getter for blockly events used to get the outputs variable from {@link BlocklyEventDecorator}
+     */
+    List<String> getOutputs();
+
+    /**
+     * Setter for blockly events used to set the outputs variable from {@link BlocklyEventDecorator}
+     */
+    void setOutputs(List<String> outputs);
 }
