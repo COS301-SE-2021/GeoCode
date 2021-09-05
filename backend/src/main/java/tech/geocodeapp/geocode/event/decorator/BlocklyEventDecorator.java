@@ -7,6 +7,8 @@ import java.util.*;
 public class BlocklyEventDecorator extends EventDecorator{
 
     private String blocklyDetails;
+    private List<String> inputs;
+    private List<String> outputs;
 
     /**
      * @param decoratedType the EventComponent to decorate
@@ -32,7 +34,11 @@ public class BlocklyEventDecorator extends EventDecorator{
         this.blocklyDetails = blocklyDetails;
     }
 
-
+    /**
+     * Randomly selects what blockly blocks for an event to give a user and ensures they are not ones already given to them
+     * @param stageNumber The index of the stage that was just completed
+     * @param status The user's current status in an event
+     */
     @Override
     public void handleStageCompletion(int stageNumber, UserEventStatus status) {
 
