@@ -335,22 +335,32 @@ public class EventServiceImpl implements EventService {
 
                 /* Create the decorated event */
                 EventManager manager = new EventManager();
-                EventComponent event = manager.buildEvent( temp.get() );
+                EventComponent eventComponent = manager.buildEvent( temp.get() );
 
                 /* Get the first geocode of the event */
-                UUID nextGeocodeID = event.getGeocodeIDs().get( 0 );
+                UUID nextGeocodeID = eventComponent.getGeocodeIDs().get( 0 );
 
                 /* Create a new status object with the geocodeID set to the first geocode */
                 Map< String, String > details = new HashMap<>();
-                status = new UserEventStatus( UUID.randomUUID(), event.getID(), currentUserID, nextGeocodeID, details );
-                event.handleEventStart( status );
+
+                /*
+                 * if the event is a Blockly event,
+                 * add the block ids for the Event and set all the found flags to false
+                 */
+                if( eventComponent.isBlocklyEvent() ){
+                    List< UUID > blockIDs = new ArrayList<>(); // eventComponent.getBlockIDs
+                    blockIDs.forEach( blockID -> details.put( blockID.toString(), "false" ) );
+                }
+
+                status = new UserEventStatus( UUID.randomUUID(), eventComponent.getID(), currentUserID, nextGeocodeID, details );
+                eventComponent.handleEventStart( status );
 
                 /* Create the user's points if the event has a leaderboard */
-                if ( event.getLeaderboards().size() > 0 ) {
+                if ( eventComponent.getLeaderboards().size() > 0 ) {
 
                     try {
 
-                        UUID leaderboardID = event.getLeaderboards().get( 0 ).getId();
+                        UUID leaderboardID = eventComponent.getLeaderboards().get( 0 ).getId();
                         CreatePointRequest pointRequest = new CreatePointRequest( 0, currentUserID, leaderboardID );
                         PointResponse pointResponse = leaderboardService.createPoint( pointRequest );
 
