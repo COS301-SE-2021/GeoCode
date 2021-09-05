@@ -740,7 +740,47 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public SubmitBlocklyCodeResponse submitBlocklyCode(SubmitBlocklyCodeRequest request) throws InvalidRequestException {
-        return null;
+        /* Validate the request */
+        if( request == null ){
+            throw new InvalidRequestException( true );
+        }
+
+        if( request.getEventID() == null || request.getCode() == null ){
+            throw new InvalidRequestException();
+        }
+
+        /* check if the eventID is invalid */
+        boolean eventExists = eventRepo.existsById( request.getEventID() );
+
+        if( !eventExists ){
+            return new SubmitBlocklyCodeResponse( false, eventNotFoundMessage );
+        }
+
+        /* check if the Event is not a BlocklyEvent */
+        Event event = eventRepo.findById( request.getEventID() ).get();
+
+        EventManager eventManager = new EventManager();
+        EventComponent eventComponent = eventManager.buildEvent( event );
+
+        if( !eventComponent.isBlocklyEvent() ){
+            return new SubmitBlocklyCodeResponse( false, "Event is not a Blockly Event" );
+        }
+
+        //TODO: run the JS code and mark it
+        int numTestCases = 0; // eventComponent.getNumTestCases()
+
+        List< String > actualCaseOutputs = new ArrayList<>(); // runJSCode( request.getCode() )
+
+        /* get the outputs for each test case */
+        List< String > correctCaseOutputs = new ArrayList<>(); // eventComponent.getOutputs()
+
+        List< Boolean > passedCases = new ArrayList<>();
+
+        for( int i = 0; i < numTestCases; ++i ){
+            passedCases.add( actualCaseOutputs.get( i ).equals( correctCaseOutputs.get( i ) ) );
+        }
+
+        return new SubmitBlocklyCodeResponse( true, "Blockly code successfully submitted", passedCases);
     }
 
     /*---------- Post Construct services ----------*/
