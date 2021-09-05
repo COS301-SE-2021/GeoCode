@@ -169,4 +169,9 @@ public class UserEventStatusMockRepository implements UserEventStatusRepository 
         return null;
     }
 
+    @Override
+    public Map<String, String> findDetailsForEventIDAndUserID(UUID eventID, UUID userID) {
+        return null;
+    }
+
 }

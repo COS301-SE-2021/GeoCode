@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -16,5 +17,9 @@ public interface UserEventStatusRepository extends JpaRepository<UserEventStatus
 
     @Query("SELECT p from UserEventStatus p WHERE p.eventID = ?1 AND p.userID = ?2")
     UserEventStatus findStatusByEventIDAndUserID(UUID eventID, UUID userID);
+
+    @Query("SELECT p.details from UserEventStatus p WHERE p.eventID = ?1 AND p.userID = ?2")
+    Map< String, String > findDetailsForEventIDAndUserID(UUID eventID, UUID userID);
+
 
 }

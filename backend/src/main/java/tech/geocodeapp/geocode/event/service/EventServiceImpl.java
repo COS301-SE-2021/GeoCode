@@ -796,7 +796,43 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public GetBlocksResponse getBlocks(GetBlocksRequest request) throws InvalidRequestException {
-        return null;
+        /* Validate the request */
+        if( request == null ){
+            throw new InvalidRequestException( true );
+        }
+
+        if( request.getEventID() == null ){
+            throw new InvalidRequestException();
+        }
+
+        /* check if the eventID is invalid */
+        boolean eventExists = eventRepo.existsById( request.getEventID() );
+
+        if( !eventExists ){
+            return new GetBlocksResponse( false, eventNotFoundMessage );
+        }
+
+        /* check if the Event is not a BlocklyEvent */
+        Event event = eventRepo.findById( request.getEventID() ).get();
+
+        EventManager eventManager = new EventManager();
+        EventComponent eventComponent = eventManager.buildEvent( event );
+
+        if( !eventComponent.isBlocklyEvent() ){
+            return new GetBlocksResponse( false, "Event is not a Blockly Event" );
+        }
+
+        /* get the blocks that the User has from the UserEventStatus */
+        var details = userEventStatusRepo.findDetailsForEventIDAndUserID( request.getEventID(), null);
+        List< UUID > blockIDs = new ArrayList<>();
+
+        for( var block : details.entrySet() ){
+            if( block.getValue().equals( "true" ) ){
+                blockIDs.add( UUID.fromString( block.getKey() ) );
+            }
+        }
+
+        return new GetBlocksResponse( true, "Blocks successfully returned", blockIDs );
     }
 
     /*---------- Post Construct services ----------*/
