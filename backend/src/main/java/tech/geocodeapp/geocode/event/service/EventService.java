@@ -130,6 +130,17 @@ public interface EventService {
     SubmitBlocklyCodeResponse submitBlocklyCode( SubmitBlocklyCodeRequest request ) throws InvalidRequestException;
 
     /**
+     * Getting the Blockly blocks for the current User for a Blockly Event
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return The Blockly blocks for the current User
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetBlocksResponse getBlocks( GetBlocksRequest request ) throws InvalidRequestException;
+
+    /**
      * Post construct the GeoCode service, this avoids a circular dependency
      *
      * @param geoCodeService the service to be set

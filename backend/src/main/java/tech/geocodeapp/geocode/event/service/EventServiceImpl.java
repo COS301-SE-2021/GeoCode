@@ -769,6 +769,8 @@ public class EventServiceImpl implements EventService {
         //TODO: run the JS code and mark it
         int numTestCases = 0; // eventComponent.getNumTestCases()
 
+        List< String > caseInputs = new ArrayList<>(); // eventComponent.getInputs()
+
         List< String > actualCaseOutputs = new ArrayList<>(); // runJSCode( request.getCode() )
 
         /* get the outputs for each test case */
@@ -781,6 +783,20 @@ public class EventServiceImpl implements EventService {
         }
 
         return new SubmitBlocklyCodeResponse( true, "Blockly code successfully submitted", passedCases);
+    }
+
+    /**
+     * Getting the Blockly blocks for the current User for a Blockly Event
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return The Blockly blocks for the current User
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetBlocksResponse getBlocks(GetBlocksRequest request) throws InvalidRequestException {
+        return null;
     }
 
     /*---------- Post Construct services ----------*/
