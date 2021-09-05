@@ -833,15 +833,10 @@ public class EventServiceImpl implements EventService {
 
         /* get the blocks that the User has from the UserEventStatus */
         var details = status.getDetails();
-        List< UUID > blockIDs = new ArrayList<>();
+        var blocks = details.get("blocks");
 
-        for( var block : details.entrySet() ){
-            if( block.getValue().equals( "true" ) ){
-                blockIDs.add( UUID.fromString( block.getKey() ) );
-            }
-        }
-
-        return new GetBlocksResponse( true, "Blocks successfully returned", blockIDs );
+        List< String > blockNames = new ArrayList<String>(Arrays.asList(blocks.split(",")));
+        return new GetBlocksResponse( true, "Blocks successfully returned", blockNames );
     }
 
     /*---------- Post Construct services ----------*/

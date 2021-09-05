@@ -8,7 +8,7 @@ public class GetBlocksResponse extends Response {
     /**
      * The ids for the Blocks that the User has found
      */
-    private List<UUID> blockIDs;
+    private List<String> blockNames;
 
     /**
      * Overload Constructor
@@ -20,17 +20,17 @@ public class GetBlocksResponse extends Response {
     /**
      * Overload Constructor
      */
-    public GetBlocksResponse(boolean success, String message, List<UUID> blockIDs){
+    public GetBlocksResponse(boolean success, String message, List<String> blockNames){
         super(success, message);
 
-        this.blockIDs = blockIDs;
+        this.blockNames = blockNames;
     }
 
-    public List<UUID> getBlockIDs() {
-        return blockIDs;
+    public List<String> getBlockNames() {
+        return blockNames;
     }
 
-    public void setBlockIDs(List<UUID> blockIDs) {
-        this.blockIDs = blockIDs;
+    public void setBlockNames(List<String> blockNames) {
+        this.blockNames = blockNames;
     }
 }
