@@ -40,25 +40,23 @@ public class BlocklyEventDecorator extends EventDecorator{
         int totalStages = this.getGeocodeIDs().size();
         var blocks = this.blocklyDetails.split("#");
         int totalBlocks = blocks.length;
-
-        //check if blocks can be evenly spread across stages
-       if(totalBlocks % totalStages == 0) {
-           var blocksPerStage = totalBlocks/totalStages;
-           var count = 0;
-           while(count < blocksPerStage) {
-               var random = new Random().nextInt(totalBlocks);
-               List<String> foundBlocks = Arrays.asList(status.getDetails().get("blocklyDetails").split("#"));
-               if(!foundBlocks.contains(blocks[random])) {
-                   String userBlocks = status.getDetails().get("blocklyDetails");
-                   userBlocks += "#" + blocks[random];
-                   Map<String, String> temp = status.getDetails();
-                   temp.replace("blocklyDetails", userBlocks);
-                   status.setDetails(temp);
-                   count++;
-               }
-           }
-       }else{
-
-       }
+        int numberOfBlocks = totalBlocks/totalStages;
+        int remainderBlocks = totalBlocks % totalStages;
+        if(remainderBlocks != 0 && stageNumber <= remainderBlocks) {
+            numberOfBlocks++;
+        }
+        var count = 0;
+        while(count < numberOfBlocks) {
+            var random = new Random().nextInt(totalBlocks);
+            List<String> foundBlocks = Arrays.asList(status.getDetails().get("blocklyDetails").split("#"));
+            if(!foundBlocks.contains(blocks[random])) {
+                String userBlocks = status.getDetails().get("blocklyDetails");
+                userBlocks += "#" + blocks[random];
+                Map<String, String> temp = status.getDetails();
+                temp.replace("blocklyDetails", userBlocks);
+                status.setDetails(temp);
+                count++;
+            }
+        }
     }
 }
