@@ -2,6 +2,7 @@ package tech.geocodeapp.geocode.event.service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
@@ -107,6 +108,7 @@ public class EventServiceImpl implements EventService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
+    @Transactional
     public CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
@@ -834,7 +836,7 @@ public class EventServiceImpl implements EventService {
         var details = status.getDetails();
         var blocks = details.get("blocks");
 
-        List< String > blockNames = new ArrayList<String>(Arrays.asList(blocks.split(",")));
+        List< String > blockNames = new ArrayList<String>(Arrays.asList(blocks.split("#")));
         return new GetBlocksResponse( true, "Blocks successfully returned", blockNames );
     }
 

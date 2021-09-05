@@ -48,12 +48,12 @@ public class BlocklyEventDecorator extends EventDecorator{
         var count = 0;
         while(count < numberOfBlocks) {
             var random = new Random().nextInt(totalBlocks);
-            List<String> foundBlocks = Arrays.asList(status.getDetails().get("blocklyDetails").split("#"));
+            List<String> foundBlocks = Arrays.asList(status.getDetails().get("blocks").split("#"));
             if(!foundBlocks.contains(blocks[random])) {
-                String userBlocks = status.getDetails().get("blocklyDetails");
+                String userBlocks = status.getDetails().get("blocks");
                 userBlocks += "#" + blocks[random];
                 Map<String, String> temp = status.getDetails();
-                temp.replace("blocklyDetails", userBlocks);
+                temp.replace("blocks", userBlocks);
                 status.setDetails(temp);
                 count++;
             }

@@ -35,7 +35,7 @@ public class EventManager {
             builtEvent = factory.decorateEvent(event, builtEvent);
         }
 
-        if(event.getProperties().containsKey("blocklyDetails")) {
+        if(event.getProperties().containsKey("blocks")) {
             factory = new BlocklyEventFactory();
             builtEvent = factory.decorateEvent(event, builtEvent);
         }
@@ -66,7 +66,7 @@ public class EventManager {
             properties.put("timeLimit", event.getTimeLimit().toString());
         }
         if(event.getBlocklyDetails() != null && event.isBlocklyEvent()){
-            properties.put("blocklyDetails", event.getBlocklyDetails());
+            properties.put("blocks", event.getBlocklyDetails());
         }
         converted.setProperties(properties);
 

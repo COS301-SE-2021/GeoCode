@@ -15,7 +15,7 @@ public class BlocklyEventFactory extends AbstractEventFactory{
     @Override
     public EventComponent decorateEvent(Event event, EventComponent eventComponent) {
         BlocklyEventDecorator toReturn = new BlocklyEventDecorator(eventComponent);
-        toReturn.setBlocklyDetails(event.getProperties().get("blocklyDetails"));
+        toReturn.setBlocklyDetails(event.getProperties().get("blocks"));
         toReturn.setBlocklyEvent(true);
         return toReturn;
     }
