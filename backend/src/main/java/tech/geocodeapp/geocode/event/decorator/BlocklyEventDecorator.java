@@ -35,6 +35,40 @@ public class BlocklyEventDecorator extends EventDecorator{
     }
 
     /**
+     * Getter for the inputs variable
+     */
+    @Override
+    public List<String> getInputs() {
+        return inputs;
+    }
+
+    /**
+     * Setter for the inputs variable
+     * @param inputs the inputs used
+     */
+    @Override
+    public void setInputs(List<String> inputs) {
+        this.inputs = inputs;
+    }
+
+    /**
+     * Getter for the outputs variable
+     */
+    @Override
+    public List<String> getOutputs() {
+        return outputs;
+    }
+
+    /**
+     * Setter for the outputs variable
+     * @param outputs the expected outputs of the event
+     */
+    @Override
+    public void setOutputs(List<String> outputs) {
+        this.outputs = outputs;
+    }
+
+    /**
      * Randomly selects what blockly blocks for an event to give a user and ensures they are not ones already given to them
      * @param stageNumber The index of the stage that was just completed
      * @param status The user's current status in an event
