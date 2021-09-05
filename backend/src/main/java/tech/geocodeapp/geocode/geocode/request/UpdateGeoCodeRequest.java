@@ -3,7 +3,6 @@ package tech.geocodeapp.geocode.geocode.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
-import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -28,12 +27,6 @@ public class UpdateGeoCodeRequest {
      */
     @JsonProperty( "description" )
     private String description = null;
-
-    /**
-     * The latitude of the location of the GeoCode in the real world
-     */
-    @JsonProperty( "location" )
-    private GeoPoint location = null;
 
     /**
      * The list of hints provided by the user who created the GeoCode
@@ -67,15 +60,13 @@ public class UpdateGeoCodeRequest {
      *
      * @param geoCodeID The unique ID of a GeoCode in the database
      * @param description The description of where the GeoCode is and what it involves
-     * @param location    The location of the GeoCode in the real world
      * @param hints       The list of hints provided by the user who created the GeoCode to help a user searching for the GeoCode find it
      * @param difficulty  The level of difficulty to find a GeoCode in the real world
      * @param available   If the GeoCode is active in the system
      */
-    public UpdateGeoCodeRequest( UUID geoCodeID, String description, GeoPoint location, List< String > hints, Difficulty difficulty, Boolean available ) {
+    public UpdateGeoCodeRequest( UUID geoCodeID, String description, List< String > hints, Difficulty difficulty, Boolean available ) {
 
         this.description = description;
-        this.location = location;
         this.hints = hints;
         this.difficulty = difficulty;
         this.available = available;
@@ -146,39 +137,6 @@ public class UpdateGeoCodeRequest {
     public void setDescription( String description ) {
 
         this.description = description;
-    }
-
-    /**
-     * Sets the location attribute to the specified value
-     *
-     * @param location the value the attribute should be set to
-     *
-     * @return the request after the location has been changed
-     */
-    public UpdateGeoCodeRequest location( GeoPoint location ) {
-
-        this.location = location;
-        return this;
-    }
-
-    /**
-     * Gets the saved location attribute
-     *
-     * @return the stored location attribute
-     */
-    public GeoPoint getLocation() {
-
-        return location;
-    }
-
-    /**
-     * Sets the location attribute to the specified value
-     *
-     * @param location the value the location should be set to
-     */
-    public void setLocation( GeoPoint location ) {
-
-        this.location = location;
     }
 
     /**
@@ -316,7 +274,6 @@ public class UpdateGeoCodeRequest {
 
         var createGeoCodeRequest = ( UpdateGeoCodeRequest ) obj;
         return  Objects.equals( this.description, createGeoCodeRequest.description ) &&
-                Objects.equals( this.location, createGeoCodeRequest.location ) &&
                 Objects.equals( this.hints, createGeoCodeRequest.hints ) &&
                 Objects.equals( this.difficulty, createGeoCodeRequest.difficulty ) &&
                 Objects.equals( this.geoCodeID, createGeoCodeRequest.geoCodeID ) &&
@@ -331,7 +288,7 @@ public class UpdateGeoCodeRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash( description, location, hints, difficulty, available, geoCodeID );
+        return Objects.hash( description, hints, difficulty, available, geoCodeID );
     }
 
     /**
@@ -344,7 +301,6 @@ public class UpdateGeoCodeRequest {
 
         return "class CreateGeoCodeRequest {\n" +
                 "    description: " + toIndentedString( description ) + "\n" +
-                "    location: " + toIndentedString( location ) + "\n" +
                 "    hints: " + toIndentedString( hints ) + "\n" +
                 "    difficulty: " + toIndentedString( difficulty ) + "\n" +
                 "    available: " + toIndentedString( available ) + "\n" +

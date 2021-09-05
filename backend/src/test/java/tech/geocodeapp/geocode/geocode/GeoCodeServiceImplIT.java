@@ -7,9 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.lenient;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
@@ -96,6 +93,16 @@ class GeoCodeServiceImplIT {
      * This is used to have a static known UUID
      */
     UUID userID = UUID.fromString( "f479228d-8a4a-4b90-ba86-abccadec5085" );
+
+    /**
+     * This is used to have a static known UUID
+     */
+    UUID geoCodeID = java.util.UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
+
+    /**
+     * This is used to have a static known location
+     */
+    GeoPoint locate = new GeoPoint( 10.2587 , 40.336981 );
 
     /**
      * Create the GeoCodeServiceImpl with the relevant repositories.
@@ -364,9 +371,6 @@ class GeoCodeServiceImplIT {
     @DisplayName( "Custom query repository handling - findGeoCodeWithQRCode" )
     void findGeoCodeWithQRCodeTest() {
 
-        var geoCodeID = java.util.UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
-
-
         /* Create the GeoCode to locate */
         var geoCode = new GeoCode();
         geoCode.setId( geoCodeID );
@@ -416,9 +420,6 @@ class GeoCodeServiceImplIT {
     @Order( 1 )
     @DisplayName( "Custom query repository handling - findGeoCodeAtLocation" )
     void findGeoCodeAtLocationTest() {
-
-        var geoCodeID = java.util.UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
-        var locate = new GeoPoint( 10.2587 , 40.336981 );
 
         /* Create the GeoCode to locate */
         var geoCode = new GeoCode();
@@ -470,9 +471,6 @@ class GeoCodeServiceImplIT {
     @Order( 1 )
     @DisplayName( "Custom query repository handling - findGeoCode" )
     void findGeoCodeWithoutEventIDTest() {
-
-        var geoCodeID = java.util.UUID.fromString( "f3bd09b3-e4b0-483f-9a08-8191a23e71a0" );
-        var locate = new GeoPoint( 10.2587 , 40.336981 );
 
         /* Create the GeoCode to locate */
         var geoCode = new GeoCode();
@@ -659,7 +657,6 @@ class GeoCodeServiceImplIT {
         request.setDescription( null );
         request.setDifficulty( Difficulty.INSANE );
         request.setHints( null );
-        request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.updateGeoCode( request ) )
@@ -684,7 +681,6 @@ class GeoCodeServiceImplIT {
         request.setDescription( null );
         request.setDifficulty( null );
         request.setHints( null );
-        request.setLocation( null );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.updateGeoCode( request ) )
@@ -718,7 +714,6 @@ class GeoCodeServiceImplIT {
             hints.add( "secret " );
             hints.add( "hint." );
             request.setHints( hints );
-            request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
 
             var response = geoCodeService.updateGeoCode( request );
 
@@ -1217,7 +1212,7 @@ class GeoCodeServiceImplIT {
     void getGeoCodesByLocationTest() {
 
         /* Create a GeoCode */
-        populateUsingDirectInsert( 1 );
+        populateWithCreateGeoCode( 1 );
         List< GeoCode > temp = repo.findAll();
 
         try {
@@ -1388,20 +1383,20 @@ class GeoCodeServiceImplIT {
      * Check the logic used when create a collectable type
      */
     @Disabled
-    @Test
-    @Order( 26 )
-    @DisplayName( "Valid request - calculateCollectableType" )
-    void collectableTypeTest() {
-
-        var count = new ArrayList<>();
-
-        var iterations = 1000000;
-        for ( var x = 0; x < iterations; x++ ) {
-
-            var name = geoCodeService.calculateCollectableType( null );
-
-        }
-    }
+//    @Test
+//    @Order( 26 )
+//    @DisplayName( "Valid request - calculateCollectableType" )
+//    void collectableTypeTest() {
+//
+//        var count = new ArrayList<>();
+//
+//        var iterations = 1000000;
+//        for ( var x = 0; x < iterations; x++ ) {
+//
+//            var name = geoCodeService.calculateCollectableType( null );
+//
+//        }
+//    }
 
     ////////////////Helper functions////////////////
 
