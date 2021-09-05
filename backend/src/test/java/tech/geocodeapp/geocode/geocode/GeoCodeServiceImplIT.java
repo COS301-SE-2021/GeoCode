@@ -659,7 +659,6 @@ class GeoCodeServiceImplIT {
         request.setDescription( null );
         request.setDifficulty( Difficulty.INSANE );
         request.setHints( null );
-        request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.updateGeoCode( request ) )
@@ -684,7 +683,6 @@ class GeoCodeServiceImplIT {
         request.setDescription( null );
         request.setDifficulty( null );
         request.setHints( null );
-        request.setLocation( null );
 
         /* Null parameter request check */
         assertThatThrownBy( () -> geoCodeService.updateGeoCode( request ) )
@@ -718,7 +716,6 @@ class GeoCodeServiceImplIT {
             hints.add( "secret " );
             hints.add( "hint." );
             request.setHints( hints );
-            request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
 
             var response = geoCodeService.updateGeoCode( request );
 
