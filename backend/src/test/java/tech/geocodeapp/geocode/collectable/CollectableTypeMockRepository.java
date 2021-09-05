@@ -12,7 +12,7 @@ import java.util.*;
 
 public class CollectableTypeMockRepository implements CollectableTypeRepository {
 
-    private static HashMap<java.util.UUID, CollectableType> map = new HashMap<java.util.UUID, CollectableType>();
+    private HashMap<java.util.UUID, CollectableType> map = new HashMap<java.util.UUID, CollectableType>();
 
     @Override
     public List<CollectableType> getCollectableTypesByRarity(Rarity rarity) {
