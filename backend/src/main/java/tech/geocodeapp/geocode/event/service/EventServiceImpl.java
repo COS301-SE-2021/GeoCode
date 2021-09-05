@@ -813,7 +813,7 @@ public class EventServiceImpl implements EventService {
         }
 
         /* get the blocks that the User has from the UserEventStatus */
-        var details = userEventStatusRepo.findDetailsForEventIDAndUserID( request.getEventID(), null);
+        var details = userEventStatusRepo.findDetailsForEventIDAndUserID( request.getEventID(),  CurrentUserDetails.getID() );
         List< UUID > blockIDs = new ArrayList<>();
 
         for( var block : details.entrySet() ){
