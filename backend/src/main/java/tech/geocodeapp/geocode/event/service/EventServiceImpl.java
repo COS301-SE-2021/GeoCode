@@ -348,8 +348,7 @@ public class EventServiceImpl implements EventService {
                  * add the block ids for the Event and set all the found flags to false
                  */
                 if( eventComponent.isBlocklyEvent() ){
-                    List< UUID > blockIDs = new ArrayList<>(); // eventComponent.getBlockIDs
-                    blockIDs.forEach( blockID -> details.put( blockID.toString(), "false" ) );
+                    details.put("blocks", "");
                 }
 
                 status = new UserEventStatus( UUID.randomUUID(), eventComponent.getID(), currentUserID, nextGeocodeID, details );
