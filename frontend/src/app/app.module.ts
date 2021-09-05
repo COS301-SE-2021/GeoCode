@@ -11,9 +11,17 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {environment} from '../environments/environment';
 import {RequestInterceptor} from './services/RequestInterceptor';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
-import {IonicStorageModule} from '@ionic/storage-angular';
+import {IonicStorageModule, Storage} from '@ionic/storage-angular';
 
-const initializeKeycloak = (keycloak: KeycloakService) => async () => {
+const initializeKeycloak = (keycloak: KeycloakService, storage: Storage) => async () => {
+
+  await storage.create();
+  const token = await storage.get('token');
+  const refreshToken = await storage.get('refreshToken');
+
+  if (token != null) { environment.keycloakInitOptions.token = token; }
+  if (refreshToken != null) { environment.keycloakInitOptions.refreshToken = refreshToken; }
+
   await keycloak.init({
     config: {
       url: 'https://geocodeapp.tech:8100/auth',
@@ -23,6 +31,10 @@ const initializeKeycloak = (keycloak: KeycloakService) => async () => {
     initOptions: environment.keycloakInitOptions,
     enableBearerInterceptor: false
   });
+
+  if (token != null) { delete environment.keycloakInitOptions.token; }
+  if (refreshToken != null) { delete environment.keycloakInitOptions.refreshToken; }
+
 };
 
 @NgModule({
@@ -41,7 +53,7 @@ const initializeKeycloak = (keycloak: KeycloakService) => async () => {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: BASE_PATH, useValue: environment.serverAddress+'/api' },
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
-    { provide: APP_INITIALIZER, useFactory: initializeKeycloak, multi: true, deps: [KeycloakService] },
+    { provide: APP_INITIALIZER, useFactory: initializeKeycloak, multi: true, deps: [KeycloakService, Storage] },
   ],
   bootstrap: [AppComponent]
 })

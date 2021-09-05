@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {Subject, Subscription} from 'rxjs';
-import {NavigationLayout} from '../components/navigation/nav.component';
 
 class MediatorMessage<T> {
 
@@ -21,7 +20,6 @@ export class Mediator {
 
   /* Add more mediator messages below */
   public readonly windowResized = new MediatorMessage<number>();
-  public readonly navigationLayoutChanged = new MediatorMessage<NavigationLayout>();
   //public readonly geocodeCreated = new MediatorMessage<GeoCode>();
 
 }

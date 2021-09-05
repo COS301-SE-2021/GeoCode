@@ -13,4 +13,6 @@ export class MockCurrentUserDetails {
   public getUsername = () => '';
   public getToken = () => '';
 
+  async logout() {}
+
 }

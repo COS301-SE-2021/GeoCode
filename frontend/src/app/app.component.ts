@@ -3,10 +3,11 @@ import {Router} from '@angular/router';
 import {KeycloakService} from 'keycloak-angular';
 import {App} from '@capacitor/app';
 import {KeycloakInstance} from 'keycloak-js';
-import {environment} from '../environments/environment';
 import {Locator} from './services/Locator';
 import {Mediator} from './services/Mediator';
-import {NavComponent} from './components/navigation/nav.component';
+import {Storage} from '@ionic/storage-angular';
+import {Platform} from '@ionic/angular';
+import {CurrentUserDetails} from './services/CurrentUserDetails';
 
 @Component({
   selector: 'app-root',
@@ -21,13 +22,29 @@ export class AppComponent implements OnInit {
     private keycloak: KeycloakService,
     private router: Router,
     private mediator: Mediator,
-    private locator: Locator
+    private locator: Locator,
+    private storage: Storage,
+    private platform: Platform,
+    private currentUser: CurrentUserDetails
   ) {
     this.keycloakInstance = this.keycloak.getKeycloakInstance();
 
     this.keycloakInstance.onAuthSuccess = () => {
       /* Called by native app */
-      this.callHandleLogin().then().catch();
+      this.handleLogin().then().catch();
+    };
+
+    this.keycloakInstance.onAuthRefreshSuccess = () => {
+      this.saveCredentials().then().catch();
+    };
+
+    this.keycloakInstance.onTokenExpired = () => {
+      console.log('token expired');
+    };
+
+    this.keycloakInstance.onAuthLogout = () => {
+      /* Force close to reset keycloak and prevent issues when logging in again */
+      App.exitApp();
     };
 
     App.addListener('appUrlOpen', data => {
@@ -40,16 +57,19 @@ export class AppComponent implements OnInit {
     });
   }
 
-  @HostListener('window:resize')
-  private fireResize() {
-    this.mediator.windowResized.send(window.innerWidth);
-    this.mediator.navigationLayoutChanged.send(NavComponent.getCurrentNavigationLayout());
+  async saveCredentials() {
+    if (this.platform.is('capacitor')) {
+      await this.storage.set('token', this.keycloakInstance.token);
+      await this.storage.set('refreshToken', this.keycloakInstance.refreshToken);
+    }
   }
 
-  async callHandleLogin() {
+  async handleLogin() {
     const location = await this.locator.getCurrentLocation();
 
     if (location !== null) {
+      await this.saveCredentials();
+
       console.log('call handleLogin here');
 
     } else {
@@ -58,17 +78,17 @@ export class AppComponent implements OnInit {
     }
   }
 
+  async logout() {
+    await this.currentUser.logout();
+  }
+
   async ngOnInit() {
     if (this.keycloakInstance.authenticated) {
       /* Called by web app */
-      await this.callHandleLogin();
+      await this.handleLogin();
 
     } else {
       this.router.navigate(['/welcome']).then().catch();
     }
-  }
-
-  async logout() {
-    await this.keycloak.logout(environment.baseRedirectURI+'welcome');
   }
 }

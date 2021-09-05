@@ -7,6 +7,8 @@ import {KeycloakService} from 'keycloak-angular';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {CustomComponentsModule} from './components/components.module';
+import {Storage} from '@ionic/storage-angular';
+import {MockCurrentUserDetails} from './mocks/MockCurrentUserDetails';
 
 describe('AppComponent', () => {
 
@@ -20,7 +22,9 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       providers: [
-        { provide: KeycloakService, useValue: mockKeycloak }
+        { provide: KeycloakService, useValue: mockKeycloak },
+        Storage,
+        MockCurrentUserDetails.provider()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [RouterTestingModule, CustomComponentsModule]

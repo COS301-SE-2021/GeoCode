@@ -53,7 +53,6 @@ export class MapAndInfoComponent extends AsynchronouslyInitialisedComponent impl
         title: '',
       });
       marker.addListener('click', () => {
-        console.log('yeet');
         onSelect(geocode);
       });
       this.markers.push(marker);
