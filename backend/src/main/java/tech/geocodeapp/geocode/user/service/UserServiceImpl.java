@@ -1,7 +1,5 @@
 package tech.geocodeapp.geocode.user.service;
 
-import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.collectable.repository.CollectableRepository;
 import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
@@ -9,7 +7,8 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.general.CheckNullRequestParameters;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+import tech.geocodeapp.geocode.general.response.Response;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.mission.request.GetMissionByIdRequest;
 import tech.geocodeapp.geocode.mission.request.UpdateCompletionRequest;
@@ -343,12 +342,12 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     *  Gets the current User using the Keycloak details
+     *  Gets the current User using the Keycloak detailsx
      * @return The current User
      */
     public User getCurrentUser(){
         /* make request to get the current User*/
-        var request = new GetUserByIdRequest(getCurrentUserID());
+        var request = new GetUserByIdRequest(CurrentUserDetails.getID());
 
         try{
             return getUserById(request).getUser();
@@ -359,49 +358,41 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * @deprecated use CurrentUserDetails.getID()
      *  Gets the current user ID using the Keycloak details
      * @return The current user ID
      */
     public UUID getCurrentUserID(){
-        String uuid = SecurityContextHolder.getContext().getAuthentication().getName();
-        return UUID.fromString(uuid);
-    }
-
-    /**
-     * Returns whether the current user is an Admin
-     * @return true if the current user is an Admin
-     */
-    public boolean currentUserIsAdmin() {
-        var account = (SimpleKeycloakAccount) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        return account.getRoles().contains( "Admin" );
+        return CurrentUserDetails.getID();
     }
 
     /**
      * Registers a new user
      * @param request The id for the User
      */
-    public RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException{
+    public Response handleLogin(HandleLoginRequest request) throws NullRequestParameterException{
         if(request == null){
-            return new RegisterNewUserResponse(false, "The RegisterNewUserRequest object passed was NULL", null);
+            return new Response(false, "The HandleLoginRequest object passed was NULL");
         }
 
         checkNullRequestParameters.checkRequestParameters(request);
 
         //check if the User already exists
-        boolean exists = userRepo.existsById(request.getUserID());
+        boolean exists = userRepo.existsById(CurrentUserDetails.getID());
 
         if(exists){
-            return new RegisterNewUserResponse(false, "User ID already exists", null);
+            return new Response(true, "User ID already exists");
         }
 
-        var newUser = new User(request.getUserID(), request.getUsername());
+        //the User is a new User
+        var newUser = new User(CurrentUserDetails.getID(), CurrentUserDetails.getUsername());
 
         //create the user's trackable object which will always have a Mission
-        var createCollectableRequest = new CreateCollectableRequest(trackableTypeUUID, new GeoPoint(0.0, 0.0));
+        var createCollectableRequest = new CreateCollectableRequest(trackableTypeUUID, request.getLocation());
         var createCollectableResponse = collectableService.createCollectable(createCollectableRequest);
 
         if(!createCollectableResponse.isSuccess()){
-            return new RegisterNewUserResponse(false, createCollectableResponse.getMessage(), null);
+            return new Response(false, createCollectableResponse.getMessage());
         }
 
         var collectableResponse = createCollectableResponse.getCollectable();
@@ -421,9 +412,14 @@ public class UserServiceImpl implements UserService {
 
         this.addToMyMissions(new AddToMyMissionsRequest(newUser, mission));
 
-        userRepo.save(newUser);
+        /* check that the new User was successfully saved */
+        var check = userRepo.save(newUser);
 
-        return new RegisterNewUserResponse(true, "New User registered", newUser);
+        if(!newUser.equals(check)){
+            return new Response(false, "New User registration failed");
+        }
+
+        return new Response(true, "New User registered");
     }
 
     //GeoCode helper functions

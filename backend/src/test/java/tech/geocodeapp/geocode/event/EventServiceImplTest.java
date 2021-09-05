@@ -28,7 +28,6 @@ import tech.geocodeapp.geocode.leaderboard.UserMockService;
 import tech.geocodeapp.geocode.leaderboard.service.*;
 import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
-import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -92,12 +91,6 @@ class EventServiceImplTest {
     GeoCodeService geoCodeService;
 
     /**
-     * The User service accessor
-     */
-    @Mock( name = "userServiceImpl" )
-    UserService userService;
-
-    /**
      * The expected exception message for if the given request has invalid attributes
      */
     String reqParamError = "The given request is missing parameter/s.";
@@ -146,12 +139,11 @@ class EventServiceImplTest {
 
         /* Create the GeoCode and User service */
         geoCodeService = new GeoCodeMockService( geoCodeMockRepo );
-        userService = new UserMockService( userMockRepo );
 
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
-            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, userService );
+            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService );
             eventService.setGeoCodeService( geoCodeService );
         } catch ( RepoException e ) {
 
@@ -171,7 +163,7 @@ class EventServiceImplTest {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null, userService ) )
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }

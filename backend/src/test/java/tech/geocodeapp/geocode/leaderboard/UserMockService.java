@@ -1,7 +1,9 @@
 package tech.geocodeapp.geocode.leaderboard;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
+import tech.geocodeapp.geocode.general.response.Response;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.*;
@@ -93,24 +95,16 @@ public class UserMockService implements UserService {
         return null;
     }
 
-    @Override
-    public boolean currentUserIsAdmin() {
-        return false;
-    }
-
     /**
      * Only set userId and username for the purpose of this mock as nothing else is required by the leaderboard subsystems unit tests
      * @param request a request with the userId and username of the new user
      * @return the response indicating success or failure
-     * @throws NullRequestParameterException
      */
     @Override
-    public RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException {
-        User user = new User();
-        user.setId(request.getUserID());
-        user.setUsername(request.getUsername());
+    public Response handleLogin(HandleLoginRequest request) throws NullRequestParameterException {
+        User user = new User(CurrentUserDetails.getID(), CurrentUserDetails.getUsername());
         userRepo.save(user);
-        return new RegisterNewUserResponse(true, "New user registered", user);
+        return new Response(true, "New User registered");
     }
 
     @Override

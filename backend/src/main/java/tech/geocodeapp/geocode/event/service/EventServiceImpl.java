@@ -18,7 +18,7 @@ import tech.geocodeapp.geocode.event.response.*;
 import tech.geocodeapp.geocode.event.exceptions.*;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
@@ -33,8 +33,6 @@ import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetPointForUserRequest;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
-
-import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.*;
 
@@ -72,12 +70,6 @@ public class EventServiceImpl implements EventService {
     @NotNull( message = "GeoCode Service Implementation may not be null." )
     private GeoCodeService geoCodeService;
 
-    /**
-     * The User service to access the current user
-     */
-    @NotNull( message = "User Service Implementation may not be null." )
-    private final UserService userService;
-
     private final String eventNotFoundMessage = "Event not found";
 
     /**
@@ -88,8 +80,7 @@ public class EventServiceImpl implements EventService {
      */
     public EventServiceImpl( EventRepository eventRepo,
                              UserEventStatusRepository userEventStatusRepo,
-                             @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService,
-                             @Qualifier( "UserService" ) UserService userService ) throws RepoException {
+                             @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService ) throws RepoException {
 
         if ( ( eventRepo != null ) && ( userEventStatusRepo != null ) ) {
 
@@ -98,7 +89,6 @@ public class EventServiceImpl implements EventService {
             this.userEventStatusRepo = userEventStatusRepo;
 
             this.leaderboardService = Objects.requireNonNull( leaderboardService, "EventService: Leaderboard service must not be null." );
-            this.userService = Objects.requireNonNull( userService, "EventService: User service must not be null." );
         } else {
 
             /* The repo does not exist throw an error */
@@ -327,7 +317,7 @@ public class EventServiceImpl implements EventService {
         UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID( request.getEventID(), request.getUserID() );
 
         /* Check whether the current user is requesting for themselves */
-        UUID currentUserID = userService.getCurrentUserID();
+        UUID currentUserID = CurrentUserDetails.getID();
         if ( !currentUserID.equals( request.getUserID() ) ) {
 
             /* The userID passed in does not match the current user ID. Just return the passed-in user's status */
