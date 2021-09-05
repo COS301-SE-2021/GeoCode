@@ -65,8 +65,26 @@ public class EventManager {
         if(event.getTimeLimit() != null){
             properties.put("timeLimit", event.getTimeLimit().toString());
         }
-        if(event.getBlocklyDetails() != null && event.isBlocklyEvent()){
-            properties.put("blocks", event.getBlocklyDetails());
+        if(event.isBlocklyEvent()){
+            if(event.getBlocklyDetails() != null){
+                properties.put("blocks", event.getBlocklyDetails());
+            }
+            if(event.getInputs() != null){
+                var tempInputs = event.getInputs();
+                String inputs = tempInputs.get(0);
+                for (int i = 1; i < tempInputs.size(); i++) {
+                    inputs += "#" + tempInputs.get(i);
+                }
+                properties.put("inputs", inputs);
+            }
+            if(event.getOutputs() != null){
+                var tempOutputs = event.getOutputs();
+                String outputs = tempOutputs.get(0);
+                for (int i = 1; i < tempOutputs.size(); i++) {
+                    outputs += "#" + tempOutputs.get(i);
+                }
+                properties.put("outputs", outputs);
+            }
         }
         converted.setProperties(properties);
 
