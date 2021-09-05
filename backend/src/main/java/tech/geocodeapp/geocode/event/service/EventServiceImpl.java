@@ -729,6 +729,20 @@ public class EventServiceImpl implements EventService {
         return new CreateLeaderboardResponse( true );
     }
 
+    /**
+     * Submitting an attempt for a Blockly Event.
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified SubmitBlocklyCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public SubmitBlocklyCodeResponse submitBlocklyCode(SubmitBlocklyCodeRequest request) throws InvalidRequestException {
+        return null;
+    }
+
     /*---------- Post Construct services ----------*/
 
     /**

@@ -120,6 +120,16 @@ public interface EventService {
     CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) throws InvalidRequestException;
 
     /**
+     * Submitting an attempt for a Blockly Event.
+     * @param request the attributes the response should be created from
+     *
+     * @return the newly created response instance from the specified SubmitBlocklyCodeRequest
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    SubmitBlocklyCodeResponse submitBlocklyCode( SubmitBlocklyCodeRequest request ) throws InvalidRequestException;
+
+    /**
      * Post construct the GeoCode service, this avoids a circular dependency
      *
      * @param geoCodeService the service to be set
