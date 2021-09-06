@@ -163,6 +163,33 @@ public class EventServiceImpl implements EventService {
             if( !properties.containsKey("blocks") ){
                 return new CreateEventResponse( false, "Block types were not specified for the Blockly Event" );
             }
+
+            /* check that the inputs are in the correct format */
+            var inputCases = new ArrayList<>(Arrays.asList( properties.get("inputs").split("#") ));
+
+            for(var inputCase : inputCases){
+                var pairs = new ArrayList<>(Arrays.asList( inputCase.split(",") ));
+
+                for(var pair : pairs){
+                    var parts = pair.split("=");
+
+                    if( parts.length != 2 ){
+                        return new CreateEventResponse( false, "Incorrect syntax for specifying inputs for a Blockly Event" );
+                    }
+                }
+            }
+
+            /* check that outputs were provided */
+            if( properties.get("outputs").equals("") ){
+                return new CreateEventResponse( false,  "Outputs were not provided for the Blockly Event" );
+            }
+
+            var outputCases = new ArrayList<String>(Arrays.asList( properties.get("outputs").split("#") ));
+
+            /* check that the number of input cases and output cases are the same */
+            if( inputCases.size() != outputCases.size() ){
+                return new CreateEventResponse( false, "Number of input cases and output cases must be the same for a Blockly Event" );
+            }
         }
 
         /* Create the new Event object with the specified attributes */
