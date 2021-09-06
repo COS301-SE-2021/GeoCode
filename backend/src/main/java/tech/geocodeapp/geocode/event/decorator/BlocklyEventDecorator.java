@@ -3,6 +3,7 @@ package tech.geocodeapp.geocode.event.decorator;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BlocklyEventDecorator extends EventDecorator{
 
@@ -85,18 +86,26 @@ public class BlocklyEventDecorator extends EventDecorator{
         if(remainderBlocks != 0 && stageNumber <= remainderBlocks) {
             numberOfBlocks++;
         }
+
         var count = 0;
+
+        String blockString = status.getDetails().get("blocks");
+        List<String> foundBlocks = Arrays.asList(blockString.split("#"));
+        String userBlocks = blockString;
+
         while(count < numberOfBlocks) {
             var random = new Random().nextInt(totalBlocks);
-            List<String> foundBlocks = Arrays.asList(status.getDetails().get("blocks").split("#"));
+
             if(!foundBlocks.contains(blocks[random])) {
-                String userBlocks = status.getDetails().get("blocks");
+                foundBlocks.add(blocks[random]);
                 userBlocks += "#" + blocks[random];
-                Map<String, String> temp = status.getDetails();
-                temp.replace("blocks", userBlocks);
-                status.setDetails(temp);
                 count++;
             }
         }
+
+        Map<String, String> temp = new HashMap<>();
+        temp.put("blocks", userBlocks);
+
+        status.setDetails(temp);
     }
 }
