@@ -6,6 +6,8 @@ import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 
+import java.util.List;
+
 /**
  * This is the main interface is for the Event subsystem,
  * it is used to call the relevant use cases to create, manipulate and delete Event.
@@ -139,6 +141,17 @@ public interface EventService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     GetBlocksResponse getBlocks( GetBlocksRequest request ) throws InvalidRequestException;
+
+    ///// Blockly helper functions /////
+
+    /**
+     * Runs the provided JavaScript code that was generated on front-end from the User's Blockly code
+     * @param caseInputs
+     * @param correctCaseOutputs
+     * @param code The JavaScript code
+     * @return
+     */
+    List<Boolean> runJavaScriptCode(List<String> caseInputs, List<String> correctCaseOutputs, String code);
 
     /**
      * Post construct the GeoCode service, this avoids a circular dependency

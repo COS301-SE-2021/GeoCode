@@ -6,6 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
+import javax.script.Bindings;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.validation.constraints.NotNull;
 
 import tech.geocodeapp.geocode.event.decorator.EventComponent;
@@ -35,6 +39,9 @@ import tech.geocodeapp.geocode.leaderboard.request.GetPointForUserRequest;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.StringWriter;
 import java.util.*;
 
 /**
@@ -785,20 +792,17 @@ public class EventServiceImpl implements EventService {
             return new SubmitBlocklyCodeResponse( false, "Event is not a Blockly Event" );
         }
 
-        //TODO: run the JS code and mark it
         int numTestCases = 0; // eventComponent.getNumTestCases()
 
-        List< String > caseInputs = new ArrayList<>(); // eventComponent.getInputs()
-
-        List< String > actualCaseOutputs = new ArrayList<>(); // runJSCode( request.getCode() )
+        var caseInputs = new ArrayList<String>(); // eventComponent.getInputs()
 
         /* get the outputs for each test case */
-        List< String > correctCaseOutputs = new ArrayList<>(); // eventComponent.getOutputs()
+        var correctCaseOutputs = new ArrayList<String>(); // eventComponent.getOutputs()
 
-        List< Boolean > passedCases = new ArrayList<>();
+        var passedCases = runJavaScriptCode(caseInputs, correctCaseOutputs, request.getCode() );
 
-        for( int i = 0; i < numTestCases; ++i ){
-            passedCases.add( actualCaseOutputs.get( i ).equals( correctCaseOutputs.get( i ) ) );
+        if( passedCases == null ){
+            return new SubmitBlocklyCodeResponse( false, "Error executing JavaScript code for the Blockly Event" );
         }
 
         return new SubmitBlocklyCodeResponse( true, "Blockly code successfully submitted", passedCases);
@@ -856,6 +860,58 @@ public class EventServiceImpl implements EventService {
 
         List< String > blockNames = new ArrayList<String>(Arrays.asList(blocks.split("#")));
         return new GetBlocksResponse( true, "Blocks successfully returned", blockNames );
+    }
+
+    /**
+     * Runs the provided JavaScript code that was generated on front-end from the User's Blockly code
+     * @param caseInputs
+     * @param correctCaseOutputs
+     * @param code The JavaScript code
+     * @return A list of whether the code passed each test case
+     */
+    public List<Boolean> runJavaScriptCode(List<String> caseInputs, List<String> correctCaseOutputs, String code){
+        var manager = new ScriptEngineManager();
+        var engine = manager.getEngineByName("nashorn");
+        //ScriptEngine engine = new ScriptEngineManager().getEngineByName("graal.js");
+
+        /* check if the code passes each input case */
+        var passedCases = new ArrayList<Boolean>();
+
+        for( int i = 0; i < caseInputs.size(); ++i ){
+            var caseInput = caseInputs.get( i );
+
+            /* bind the input values to their respective variables */
+            var inputBindings = engine.createBindings();
+
+            var parts = caseInput.split("=");
+            var variable = parts[0];
+            var value = parts[1];
+
+            inputBindings.put(variable, value);
+
+            try {
+                /* create a StringWriter to get the output of the code */
+                var stringWriter = new StringWriter();
+                engine.getContext().setWriter(stringWriter);
+
+                var result = engine.eval( code, inputBindings );
+
+                var output = stringWriter.toString().replaceAll(System.getProperty("line.separator"), "\n");
+
+                System.out.println("captured output:\n"+output);
+
+                boolean passed = output.equals( correctCaseOutputs.get( i ) );
+                System.out.println("case "+(i+1)+": "+passed);
+                System.out.println();
+
+                passedCases.add( passed );
+            } catch (ScriptException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        return passedCases;
     }
 
     /*---------- Post Construct services ----------*/

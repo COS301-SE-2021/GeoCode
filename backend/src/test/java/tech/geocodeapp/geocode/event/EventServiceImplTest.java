@@ -30,10 +30,7 @@ import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This is the unit testing class for the Event subsystem
@@ -792,6 +789,25 @@ class EventServiceImplTest {
 
         Assertions.assertEquals( expected, result );
 
+    }
+
+    @Test
+    @Order( 10 )
+    @DisplayName( "testing running JavaScript code" )
+    void runJavaScriptCode() {
+        var caseInputs = new ArrayList<String>(Arrays.asList(
+                "x=5", "x=2"
+        ));
+
+        var correctCaseOutputs = new ArrayList<String>(Arrays.asList(
+                "hello world\n5\n", "hello world\n2\n"
+        ));
+
+        String code = "var greeting='hello world';" +
+                "print(greeting); print(x);";
+
+        //TODO: make runJavaScriptCode private and test using submitBlocklyCode once decorator functions are implemented
+        eventService.runJavaScriptCode( caseInputs, correctCaseOutputs, code );
     }
 
     ////////////////Helper functions////////////////
