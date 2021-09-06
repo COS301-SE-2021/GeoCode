@@ -10,10 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface UserEventStatus { 
-    id: string;
+export interface GetBlocksRequest { 
     eventID: string;
-    userID: string;
-    geocodeID: string;
-    details: { [key: string]: string; };
 }

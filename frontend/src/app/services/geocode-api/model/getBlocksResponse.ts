@@ -9,11 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ModelObject } from './modelObject';
+import { Response } from './response';
 
-export interface UserEventStatus { 
-    id: string;
-    eventID: string;
-    userID: string;
-    geocodeID: string;
-    details: { [key: string]: string; };
+export interface GetBlocksResponse extends Response { 
+    message?: any;
+    blockNames?: Array<string>;
 }

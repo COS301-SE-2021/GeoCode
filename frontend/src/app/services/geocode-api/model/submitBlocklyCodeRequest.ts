@@ -10,10 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface UserEventStatus { 
-    id: string;
+export interface SubmitBlocklyCodeRequest { 
     eventID: string;
-    userID: string;
-    geocodeID: string;
-    details: { [key: string]: string; };
+    code: string;
 }
