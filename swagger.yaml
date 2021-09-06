@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.17"
+  version: "1.5.18"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -1742,6 +1742,88 @@ paths:
             application/xml:
               schema:
                 $ref: "#/components/schemas/CreateLeaderboardResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+        
+  /Event/submitBlocklyCode:
+    post:
+      tags:
+        - "Event"
+      summary: "Submit code for a Blockly Event"
+      description: "Submit code for a Blockly Event"
+      operationId: "submitBlocklyCode"
+      requestBody:
+        required: true
+        description: "Request to submit code for a Blockly Event"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitBlocklyCodeRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/SubmitBlocklyCodeRequest"
+      responses:
+        '200':
+          description: "Return the results for whether the code passed each use case"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitBlocklyCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/SubmitBlocklyCodeResponse"
+        '404':
+          description: "Invalid details for submitting Blockly code"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitBlocklyCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/SubmitBlocklyCodeResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+        
+  /Event/getBlocks:
+    post:
+      tags:
+        - "Event"
+      summary: "Gets the User's blocks for a Blockly Event"
+      description: "Gets the User's blocks for a Blockly Event"
+      operationId: "getBlocks"
+      requestBody:
+        required: true
+        description: "Request to get the User's blocks for a Blockly Event"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetBlocksRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetBlocksRequest"
+      responses:
+        '200':
+          description: "Return the User's blocks for a Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetBlocksResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetBlocksResponse"
+        '404':
+          description: "Failed to return the User's blocks for that Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetBlocksResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetBlocksResponse"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
       security:
@@ -3783,6 +3865,59 @@ components:
                 $ref: "#/components/schemas/Event"
           xml:
             name: "GetEventsByLocationResponse"
+            
+    SubmitBlocklyCodeRequest:
+      type: "object"
+      required:
+        - eventID
+        - code
+      properties:
+        eventID:
+          type: string
+          format: uuid
+        code:
+          type: string
+      xml:
+        name: "SubmitBlocklyCodeRequest"
+    
+    SubmitBlocklyCodeResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "Blockly code successfully submitted"
+            passedCases:
+              type: array
+              items:
+                type: boolean
+          xml:
+            name: "SubmitBlocklyCodeResponse"
+            
+    GetBlocksRequest:
+      type: "object"
+      required:
+        - eventID
+      properties:
+        eventID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetBlocksRequest"
+        
+    GetBlocksResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "Blocks successfully returned"
+            blockNames:
+              type: array
+              items:
+                type: string
+          xml:
+            name: "GetBlocksResponse"
 
     GetLeaderboardByIDRequest:
       type: "object"
