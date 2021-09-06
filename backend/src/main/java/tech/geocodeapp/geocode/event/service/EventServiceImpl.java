@@ -140,13 +140,31 @@ public class EventServiceImpl implements EventService {
             return new CreateEventResponse( false, e.getMessage() );
         }
 
+        /* check if the Event is a Blockly Event */
+        var properties = request.getProperties();
+
+        if( properties.containsKey("inputs") || properties.containsKey("outputs") || properties.containsKey("blocks") ){
+            /* check if all properties were specified */
+            if( !properties.containsKey("inputs") ){
+                return new CreateEventResponse( false, "Input values were not specified for the Blockly Event" );
+            }
+
+            if( !properties.containsKey("outputs") ){
+                return new CreateEventResponse( false, "Outputs were not specified for the Blockly Event" );
+            }
+
+            if( !properties.containsKey("blocks") ){
+                return new CreateEventResponse( false, "Block types were not specified for the Blockly Event" );
+            }
+        }
+
         /* Create the new Event object with the specified attributes */
         UUID eventID = UUID.randomUUID();
 
         /* set the geoCodeIDs to null for now, set it once the GeoCodeIDs have been stored */
         var event = new Event( eventID, request.getName(), request.getDescription(),
                 request.getLocation(), null, request.getBeginDate(), request.getEndDate(),
-                leaderboard, request.getProperties() );
+                leaderboard, properties );
 
         /* Check the availability of the Event */
         if ( request.isAvailable() == null ) {
