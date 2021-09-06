@@ -116,4 +116,28 @@ public class EventApiController implements EventApi {
         }
     }
 
+    public ResponseEntity<SubmitBlocklyCodeResponse> submitBlocklyCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to submit code for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody SubmitBlocklyCodeRequest body) throws InvalidRequestException {
+        SubmitBlocklyCodeResponse response = eventService.submitBlocklyCode( body );
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
+    }
+
+    public ResponseEntity<GetBlocksResponse> getBlocks(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the User's blocks for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody GetBlocksRequest body) throws InvalidRequestException {
+        GetBlocksResponse response = eventService.getBlocks( body );
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
+    }
+
 }

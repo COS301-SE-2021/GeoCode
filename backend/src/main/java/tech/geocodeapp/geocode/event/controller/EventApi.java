@@ -129,5 +129,35 @@ public interface EventApi {
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
     ResponseEntity<GetEventResponse> getEvent(@Parameter(in = ParameterIn.DEFAULT, description = "Get a specified Event that is stored in the repository", required=true, schema=@Schema()) @Valid @RequestBody GetEventRequest body) throws InvalidRequestException;
+
+    @Operation(summary = "Submit code for a Blockly Event", description = "Submit code for a Blockly Event", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Event" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Return the results for whether the code passed each use case", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SubmitBlocklyCodeResponse.class))),
+
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
+
+            @ApiResponse(responseCode = "404", description = "Invalid details for submitting Blockly code", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SubmitBlocklyCodeResponse.class))) })
+    @RequestMapping(value = "/Event/submitBlocklyCode",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" },
+            method = RequestMethod.POST)
+    ResponseEntity<SubmitBlocklyCodeResponse> submitBlocklyCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to submit code for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody SubmitBlocklyCodeRequest body) throws InvalidRequestException;
+
+    @Operation(summary = "Gets the User's blocks for a Blockly Event", description = "Gets the User's blocks for a Blockly Event", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Event" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Return the User's blocks for a Blockly Event", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetBlocksResponse.class))),
+
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
+
+            @ApiResponse(responseCode = "404", description = "Failed to return the User's blocks for that Blockly Event", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetBlocksResponse.class))) })
+    @RequestMapping(value = "/Event/getBlocks",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" },
+            method = RequestMethod.POST)
+    ResponseEntity<GetBlocksResponse> getBlocks(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the User's blocks for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody GetBlocksRequest body) throws InvalidRequestException;
+
+
 }
 
