@@ -792,12 +792,10 @@ public class EventServiceImpl implements EventService {
             return new SubmitBlocklyCodeResponse( false, "Event is not a Blockly Event" );
         }
 
-        int numTestCases = 0; // eventComponent.getNumTestCases()
-
-        var caseInputs = new ArrayList<String>(); // eventComponent.getInputs()
+        var caseInputs = eventComponent.getInputs();
 
         /* get the outputs for each test case */
-        var correctCaseOutputs = new ArrayList<String>(); // eventComponent.getOutputs()
+        var correctCaseOutputs = eventComponent.getOutputs();
 
         var passedCases = runJavaScriptCode(caseInputs, correctCaseOutputs, request.getCode() );
 
@@ -864,8 +862,8 @@ public class EventServiceImpl implements EventService {
 
     /**
      * Runs the provided JavaScript code that was generated on front-end from the User's Blockly code
-     * @param caseInputs
-     * @param correctCaseOutputs
+     * @param caseInputs The inputs in the form variable=value
+     * @param correctCaseOutputs The correct test case outputs
      * @param code The JavaScript code
      * @return A list of whether the code passed each test case
      */
