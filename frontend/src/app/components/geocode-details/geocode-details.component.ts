@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {KeycloakService} from 'keycloak-angular';
 import {
   GeoCode,
   GeoCodeService,
@@ -8,8 +7,7 @@ import {
 } from '../../services/geocode-api';
 import {ModalController, NavController} from '@ionic/angular';
 import {QRGenerator} from '../../services/QRGenerator';
-import {CreateGeocodeComponent} from "../../tabs/events/events-create/create-geocode/create-geocode.component";
-import {GeocodeUpdateComponent} from "../../tabs/profile/geocodes/geocode-update/geocode-update.component";
+import {GeocodeUpdateComponent} from '../../tabs/profile/geocodes/geocode-update/geocode-update.component';
 
 @Component({
   selector: 'app-geocode-details',
@@ -19,13 +17,15 @@ import {GeocodeUpdateComponent} from "../../tabs/profile/geocodes/geocode-update
 export class GeocodeDetailsComponent implements OnInit {
 
   @Input() geocode: GeoCode;
-  @Input() parent: Component;
+  @Input() closeFunction: (() => void) = null;
+  @Input() showFindGeoCode = false;
+  @Input() showUpdateAvailability = false;
   @Input() showQR = false;
+  @Input() showEdit = false;
 
   constructor(
     private modalController: ModalController,
     private geocodeService: GeoCodeService,
-    private keycloak: KeycloakService,
     private navCtrl: NavController,
     private qrGenerator: QRGenerator
   ) { }
@@ -34,7 +34,7 @@ export class GeocodeDetailsComponent implements OnInit {
 
   //Navigate to findGeoCode page
   async findGeoCode(){
-    await this.navCtrl.navigateForward('/explore/open/'+this.geocode.id,{ state: {geocode: this.geocode} });
+    await this.navCtrl.navigateForward('/explore/geocode/'+this.geocode.id,{ state: {geocode: this.geocode} });
   }
 
   //Call Geocode service and update Availability
@@ -51,16 +51,12 @@ export class GeocodeDetailsComponent implements OnInit {
     });
   }
 
-  isAdmin() {
-    return this.keycloak.isUserInRole('Admin');
-  }
-
   openInMaps() {
     window.open('https://www.google.com/maps/search/?api=1&query='+this.geocode.location.latitude+'%2C'+this.geocode.location.longitude);
   }
 
   getQR() {
-    this.qrGenerator.generate(this.geocode.qrCode);
+    this.qrGenerator.download(this.geocode.qrCode);
   }
 
   async updateGeocode(geocode) {

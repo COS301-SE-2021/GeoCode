@@ -43,7 +43,7 @@
     "keycloak-angular": "^8.3.0",
     "keycloak-js": "npm:keycloak-ionic@^13.0.0",
     "ngx-blockly": "^10.1.4",
-    "qrcode-with-logos": "^1.0.3",
+    "qr-code-styling": "^1.5.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"

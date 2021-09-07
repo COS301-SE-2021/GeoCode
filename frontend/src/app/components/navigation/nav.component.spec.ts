@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { NavComponent } from './nav.component';
+import {NavigationLayoutsModule} from './layouts/navigation-layouts.module';
 
 describe('NavComponent', () => {
   let component: NavComponent;
@@ -10,7 +11,7 @@ describe('NavComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ NavComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot(), NavigationLayoutsModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(NavComponent);

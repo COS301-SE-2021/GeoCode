@@ -1,26 +1,13 @@
-import {Component, OnDestroy} from '@angular/core';
-import {WindowMonitor, NavigationLayout} from '../../services/WindowMonitor';
-import {Subscription} from 'rxjs';
+import {Component} from '@angular/core';
+import {NavigationLayout} from '../../services/NavigationLayout';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
 })
-export class NavComponent implements OnDestroy {
+export class NavComponent {
 
-  protected navigationLayout: NavigationLayout;
-  private navigationLayoutSubscription: Subscription;
+  constructor(public navigationLayout: NavigationLayout) { }
 
-  constructor(windowMonitor: WindowMonitor) {
-    this.navigationLayout = windowMonitor.getCurrentNavigationLayout();
-
-    this.navigationLayoutSubscription = windowMonitor.onNavigationLayoutChange(layout => {
-      this.navigationLayout = layout;
-    });
-  }
-
-  ngOnDestroy() {
-    this.navigationLayoutSubscription.unsubscribe();
-  }
 }

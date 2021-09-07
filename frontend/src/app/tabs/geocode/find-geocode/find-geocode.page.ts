@@ -1,11 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {GeoCode, GeoCodeService} from '../../../services/geocode-api';
-import {AlertController, NavController} from '@ionic/angular';
-import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
-import {QRScanner} from '../../../services/QRScanner';
 import {MapAndInfoComponent} from '../../../components/map-and-info/map-and-info.component';
-import {zip} from 'rxjs';
 
 @Component({
   selector: 'app-find-geocode',
@@ -37,31 +33,27 @@ export class FindGeocodePage implements AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
-    this.mapAndInfo.loadedState$.subscribe(async () => {
+  async ngAfterViewInit() {
+    await this.mapAndInfo.load();
 
-      if (this.geocode === null) {
-        this.geocode = (await this.geocodeService.getGeoCode({geoCodeID: this.geocodeID}).toPromise()).foundGeoCode;
-        console.log(this.geocode);
-      }
+    if (this.geocode === null) {
+      this.geocode = (await this.geocodeService.getGeoCode({geoCodeID: this.geocodeID}).toPromise()).foundGeoCode;
+      console.log(this.geocode);
+    }
 
-      this.map = this.mapAndInfo.getMap();
-      this.googleMaps = this.mapAndInfo.getGoogleMaps();
+    this.map = this.mapAndInfo.getMap();
+    this.googleMaps = this.mapAndInfo.getGoogleMaps();
 
-      console.log(this.map);
-      console.log(this.googleMaps);
+    const latLng = {lat: this.geocode.location.latitude, lng: this.geocode.location.longitude}
 
-      const latLng = {lat: this.geocode.location.latitude, lng: this.geocode.location.longitude}
+    this.map.setOptions({
+      center: latLng,
+      zoom: 18
+    });
 
-      this.map.setOptions({
-        center: latLng,
-        zoom: 18
-      });
-
-      new this.googleMaps.Marker({
-        position: latLng,
-        map: this.map
-      });
+    new this.googleMaps.Marker({
+      position: latLng,
+      map: this.map
     });
   }
 

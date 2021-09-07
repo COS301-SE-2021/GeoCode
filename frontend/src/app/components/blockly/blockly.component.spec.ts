@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { BlocklyComponent } from './blockly.component';
+import {NgxBlocklyModule} from 'ngx-blockly';
 
 describe('BlocklyComponent', () => {
   let component: BlocklyComponent;
@@ -10,7 +11,7 @@ describe('BlocklyComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ BlocklyComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot(), NgxBlocklyModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(BlocklyComponent);

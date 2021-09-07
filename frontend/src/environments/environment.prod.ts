@@ -8,8 +8,7 @@ const keycloakWebOptions: KeycloakInitOptions = {
 
 const keycloakAndroidOptions: KeycloakInitOptions = {
   adapter: 'capacitor',
-  responseMode: 'query',
-  enableLogging: true
+  responseMode: 'query'
 };
 
 export const environment = {

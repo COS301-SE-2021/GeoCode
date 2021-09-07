@@ -1,16 +1,8 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import { NavController } from '@ionic/angular';
-import {NavigationExtras} from '@angular/router';
-import {
-  GeoCodeService,
-  GetGeoCodesByDifficultyResponse,
-  GetGeoCodesResponse,
-  UpdateAvailabilityRequest,
-  UpdateAvailabilityResponse,
-  GetGeoCodesByDifficultyRequest, GeoCode
-} from '../../services/geocode-api';
-import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
-import {KeycloakService} from 'keycloak-angular';
+import {GeoCodeService, GeoCode, Difficulty} from '../../services/geocode-api';
+import {MapAndInfoComponent} from '../../components/map-and-info/map-and-info.component';
+import {CurrentUserDetails} from '../../services/CurrentUserDetails';
 
 @Component({
   selector: 'app-geocode',
@@ -18,201 +10,95 @@ import {KeycloakService} from 'keycloak-angular';
   styleUrls: ['./geocode.page.scss'],
 })
 
-export class GeocodePage implements AfterViewInit  {
-  @ViewChild('mapElement',{static:false}) mapElement;
-  googleMaps;
-  mapOptions;
-  map;
-  mapMarker;
-  markers= [];
+export class GeocodePage implements AfterViewInit {
+
+  @ViewChild('mapAndInfo', {static: false}) mapAndInfo: MapAndInfoComponent;
+
   geocodes: GeoCode[] = [];
-  selected=[];
-  isHidden=true;
-  height='60%';
+  selectedGeocode: GeoCode = null;
   listView = false;
 
+  selectedDifficulties: {[diff: string]: boolean} = {
+    /* eslint-disable @typescript-eslint/naming-convention */
+    EASY: true,
+    MEDIUM: true,
+    HARD: true,
+    INSANE: true
+    /* eslint-enable @typescript-eslint/naming-convention */
+  };
 
   constructor(
     private navCtrl: NavController,
     private geocodeApi: GeoCodeService,
-    private mapsLoader: GoogleMapsLoader,
-    private keycloak: KeycloakService
-  ) {
-    this.geocodes = [];
-    this.selected= this.geocodes;
-    this.close();
-  }
-
-  //Create map and add mapmarkers of geocodes
-  loadMap(latitude: number, longitude: number){
-    this.markers= [];
-    this.mapOptions = {
-      center: {lat: latitude, lng: longitude},
-      zoom: 10,
-    };
-    this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
-
-  }
+    private currentUser: CurrentUserDetails,
+  ) {}
 
   async ngAfterViewInit() {
-    this.googleMaps = await this.mapsLoader.load();
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      await this.loadMap(position.coords.latitude, position.coords.longitude);
-      this.getAllMap();
-    }, async (positionError) => {
-      await this.loadMap(0, 0);
-      this.getAllMap();
-    });
+    await this.mapAndInfo.load();
+    this.mapAndInfo.getMap().setZoom(10);
+
+    const unsortedGeocodes = (await this.geocodeApi.getGeoCodes().toPromise()).geocodes;
+    this.geocodes = this.sortGeocodes(unsortedGeocodes);
+    this.placeGeocodes();
   }
 
-
-  //Add geocode to selected array to display its contents to user
-  addToSelected(geocode){
-    this.selected= [];
-    this.selected.push(geocode);
-    this.isHidden=false;
-    this.height='60%';
+  showDetails(g: GeoCode) {
+    this.selectedGeocode = g;
+    this.mapAndInfo.setInfoVisible(g != null);
   }
 
-  //Navigate to findGeoCode page
-  async findGeoCode(geocode){
-    await this.navCtrl.navigateForward('/explore/geocode/'+geocode.id,{ state: {geocode} });
-  }
-
-  //Call Geocode service and update Availability
-  updateAvailability(geocode){
-    //create request object to update the availability
-    const request: UpdateAvailabilityRequest={
-      geoCodeID: geocode.id,
-      available: geocode.available
-    };
-
-    //Call the geocodeAPI and send request to controller and log any errors
-    this.geocodeApi.updateAvailability(request).subscribe((response: UpdateAvailabilityResponse)=>{},(error)=>{
-      console.log(error);
-    });
-
-  }
-  //Get all geocodes no matter the difficulty
-  getAllMap(){
-    this.geocodeApi.getGeoCodes().subscribe((response: GetGeoCodesResponse)=>{
-      this.geocodes=response.geocodes;
-      this.selected=[];
-
-      //Add markers to map
-      for(const code of this.geocodes){
-        const marker=new this.googleMaps.Marker({
-          position: {lat: parseFloat(String(code.location.latitude)), lng:parseFloat( String(code.location.longitude))},
-          map: this.map,
-          title: '',
-        });
-
-        this.markers.push(marker);
-        //Add listener to marker to display marker contents when clicked
-        marker.addListener('click' , ()=> {
-          this.addToSelected(code);
-        });
-      }
-
-    },(error)=>{
-      console.log(error);
-    });
-  }
-
-  //Get all geocodes that have Easy Difficulty
-  easyMap(){
-    this.clearMarkers();
-    const request: GetGeoCodesByDifficultyRequest={
-      difficulty: 'EASY'
-    };
-    this.loadFilterMap(request);
-  }
-
-  //Get all geocodes that are medium difficulty
-  mediumMap(){
-    this.clearMarkers();
-    const request: GetGeoCodesByDifficultyRequest={
-      difficulty: 'MEDIUM'
-    };
-    this.loadFilterMap(request);
-  }
-
-  //get all geocodes with difficult difficulty
-  hardMap(){
-    this.clearMarkers();
-    const request: GetGeoCodesByDifficultyRequest={
-      difficulty: 'HARD'
-    };
-    this.loadFilterMap(request);
-  }
-
-  //Get all geocodes with insane difficulty
-  insaneMap(){
-    this.clearMarkers();
-    const request: GetGeoCodesByDifficultyRequest={
-      difficulty: 'INSANE'
-    };
-    this.loadFilterMap(request);
-  }
-
-  //Load map based on passed in request object created in one of the map functions
-  loadFilterMap(request){
-
-    // this.mapOptions = {
-    //   center: {lat: -25.75625115327836, lng: 28.235629260918344},
-    //   zoom: 15,
-    // };
-
-    this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
-    this.geocodeApi.getGeoCodesByDifficulty(request).subscribe((response: GetGeoCodesByDifficultyResponse)=>{
-
-      this.geocodes=response.geocodes;
-      this.selected=[];
-
-      //Add all geocodes locations to map
-      for(const code of this.geocodes){
-        const marker=new this.googleMaps.Marker({
-          position: {lat: parseFloat(String(code.location.latitude)), lng:parseFloat( String(code.location.longitude))},
-          map: this.map,
-          title: '',
-        });
-
-        this.markers.push(marker);
-
-        //Add listener event for when geocode selected to display its contents
-        marker.addListener('click' , ()=> {
-          this.addToSelected(code);
-        });
-
-      }
-    },(error)=>{
-      console.log(error);
-    });
-  }
-
-  //Clear all markers from the map
-  clearMarkers(){
-    for(const marker of this.markers){
-      marker.setMap(null);
-    }
-    this.markers=[];
-  }
-
-  close(){
-    this.isHidden=true;
-    this.height='90%';
-  }
-
-  openInMaps(geocode: GeoCode) {
-    window.open('https://www.google.com/maps/search/?api=1&query='+geocode.location.latitude+'%2C'+geocode.location.longitude);
-  }
-
-  isAdmin() {
-    return this.keycloak.isUserInRole('Admin');
-  }
+  closeDetails = () => this.showDetails(null);
 
   toggleList(){
-  this.listView= !this.listView;
+    this.listView= !this.listView;
   }
 
+  getDifficulties = () => Object.keys(Difficulty);
+
+  toggleDifficulty(diff: string) {
+    this.selectedDifficulties[diff] = !this.selectedDifficulties[diff];
+    this.placeGeocodes();
+  }
+
+  selectedDifficultyGeoCodes() {
+    return this.geocodes.filter(g => this.selectedDifficulties[g.difficulty]);
+  }
+
+  placeGeocodes() {
+    const filtered = this.selectedDifficultyGeoCodes();
+    this.mapAndInfo.placeGeoCodes(filtered, geocode => {
+      this.showDetails(geocode);
+    });
+  }
+
+  sortGeocodes(geocodes: GeoCode[]): GeoCode[] {
+    class Temp {
+      geocode: GeoCode;
+      distance: number;
+    }
+    const radians = (degrees: number) => degrees * Math.PI/180;
+
+    const location = this.mapAndInfo.getLocation();
+    const locLat = radians(location.latitude);
+    const locLong = radians(location.longitude);
+
+    const geocodesWithDistances: Temp[] = [];
+    for (const geocode of geocodes) {
+      const gcLat = radians(geocode.location.latitude);
+      const gcLong = radians(geocode.location.longitude);
+      const dLat = locLat - gcLat;
+      const dLong = locLong - gcLong;
+      const a = Math.pow(Math.sin(dLat/2), 2) + Math.cos(locLat)*Math.cos(gcLat)*Math.pow(Math.sin(dLong/2), 2);
+      const c = 2 * Math.asin(Math.sqrt(a));
+      const distance = c*6371;
+      geocodesWithDistances.push({geocode, distance});
+    }
+    const sorted = geocodesWithDistances.sort((a, b) => a.distance - b.distance);
+
+    const output: GeoCode[] = [];
+    for (const item of sorted) {
+      output.push(item.geocode);
+    }
+    return output;
+  }
 }

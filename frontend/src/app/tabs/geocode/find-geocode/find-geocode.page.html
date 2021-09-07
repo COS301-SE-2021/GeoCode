@@ -11,7 +11,35 @@
 
   <ion-content>
     <app-map-and-info #mapAndInfo [showInfo]="true">
-      <div *ngIf="geocode !== null">
+      <div *ngIf="geocode !== null" id="details">
+        <ion-card color="card">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-card-title>Difficulty</ion-card-title>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-label>{{geocode.difficulty}}</ion-label>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card>
+        <ion-card color="card">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-card-title>Hints</ion-card-title>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngFor="let hint of geocode.hints">
+              <ion-col>
+                <ion-label>{{hint}}</ion-label>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card>
         <ion-card color="card">
           <ion-grid>
             <ion-row>
@@ -38,34 +66,6 @@
                   <ion-input #QR placeholder="Enter Text Code" type="text"></ion-input>
                   <ion-button slot="end" color="button" (click)="openTextQR(QR.value)">Submit</ion-button>
                 </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card>
-        <ion-card color="card">
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <ion-card-title>Difficulty</ion-card-title>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col>
-                <ion-label>{{geocode.difficulty}}</ion-label>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card>
-        <ion-card color="card">
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <ion-card-title>Hints</ion-card-title>
-              </ion-col>
-            </ion-row>
-            <ion-row *ngFor="let hint of geocode.hints">
-              <ion-col>
-                <ion-label>{{hint}}</ion-label>
               </ion-col>
             </ion-row>
           </ion-grid>

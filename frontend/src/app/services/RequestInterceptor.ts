@@ -14,7 +14,7 @@ export class RequestInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (request.url.includes(environment.serverAddress)) {
       const kc = this.keycloak.getKeycloakInstance()
-      from(kc.updateToken(30));
+      //from(kc.updateToken(30));
       const newRequest = request.clone({
         headers: request.headers.set('Authorization', 'Bearer '+kc.token)
       });

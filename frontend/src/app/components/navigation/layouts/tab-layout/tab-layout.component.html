@@ -1,4 +1,7 @@
 <div class="ion-page">
-  <ng-content select="app-nav-header"></ng-content>
+  <div id="appHeader">
+    <ng-content select="app-nav-header"></ng-content>
+  </div>
+  <ng-content select="ion-header"></ng-content>
   <ng-content select="ion-content"></ng-content>
 </div>

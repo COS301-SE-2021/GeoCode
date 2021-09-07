@@ -6,6 +6,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {MockGoogleMapsLoader} from '../../mocks/MockGoogleMapsLoader';
 import {EventService} from '../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {CustomComponentsModule} from '../../components/components.module';
 
 describe('EventsPage', () => {
   let component: EventsPage;
@@ -15,7 +16,7 @@ describe('EventsPage', () => {
     TestBed.configureTestingModule({
       declarations: [ EventsPage ],
       providers: [MockGoogleMapsLoader.provider(), EventService],
-      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
+      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, CustomComponentsModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(EventsPage);

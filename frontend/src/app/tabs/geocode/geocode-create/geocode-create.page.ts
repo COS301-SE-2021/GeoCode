@@ -4,7 +4,6 @@ import {NavController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {QRGenerator} from '../../../services/QRGenerator';
 import {GeoPoint} from '../../../services/geocode-api';
-import IQrCodeWithLogo, {BaseOptions} from 'qrcode-with-logos';
 let map;
 @Component({
   selector: 'app-geocode-create',
@@ -76,7 +75,7 @@ request: CreateGeoCodeRequest= {
     this.geocodeAPI.createGeoCode(this.request)
       .subscribe((response: CreateGeoCodeResponse) =>{
         console.log(response);
-        this.qr.generate(response.qrCode);
+        this.qr.download(response.qrCode);
         this.navCtrl.navigateBack('/explore').then().catch();
       });
   }

@@ -7,7 +7,7 @@
     </ion-tab-button>
   </ion-tab-bar>
 
-  <img src="/assets/images/logo.png" [ngClass]="{'hidden': navigationLayout.layout === 'tabs' || navigationLayout.compact}">
+  <img src="/assets/images/GeoCode LogoWhiteX.svg" [ngClass]="{'hidden': navigationLayout.layout === 'tabs' || navigationLayout.compact}">
 
   <ion-list [ngClass]="{'hidden': navigationLayout.layout === 'tabs'}">
     <ion-item button *ngFor="let tab of tabList" (click)="tabs.select(tab.internalName)" [ngClass]="{'selected': isSelected(tab)}">

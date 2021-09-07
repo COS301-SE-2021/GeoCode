@@ -5,6 +5,7 @@ import { GeocodeUpdateComponent } from './geocode-update.component';
 import {FormsModule} from "@angular/forms";
 import {RouterTestingModule} from "@angular/router/testing";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {GeoCodeService} from '../../../../services/geocode-api';
 
 describe('GeocodeUpdateComponent', () => {
   let component: GeocodeUpdateComponent;
@@ -13,6 +14,7 @@ describe('GeocodeUpdateComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodeUpdateComponent ],
+      providers: [ GeoCodeService ],
       imports: [IonicModule.forRoot(), FormsModule, RouterTestingModule, HttpClientTestingModule]
     }).compileComponents();
 

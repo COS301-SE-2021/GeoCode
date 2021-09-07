@@ -7,6 +7,8 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {MockKeycloak} from '../../../mocks/MockKeycloak';
 import {CustomComponentsModule} from '../../../components/components.module';
+import {MockGoogleMapsLoader} from '../../../mocks/MockGoogleMapsLoader';
+import {MockCurrentUserDetails} from '../../../mocks/MockCurrentUserDetails';
 
 describe('UserGeocodesPage', () => {
   let component: UserGeocodesPage;
@@ -18,7 +20,9 @@ describe('UserGeocodesPage', () => {
       providers: [
         GeoCodeService,
         UserService,
-        MockKeycloak.provider()
+        MockKeycloak.provider(),
+        MockGoogleMapsLoader.provider(),
+        MockCurrentUserDetails.provider()
       ],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, CustomComponentsModule]
     }).compileComponents();
