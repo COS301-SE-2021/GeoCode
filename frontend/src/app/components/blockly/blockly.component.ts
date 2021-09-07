@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {NgxBlocklyComponent} from 'ngx-blockly';
 import * as Blockly from 'blockly';
 import * as BlocklyJsGenerator from 'blockly/javascript';
 
@@ -10,13 +11,15 @@ import * as BlocklyJsGenerator from 'blockly/javascript';
 export class BlocklyComponent implements AfterViewInit {
 
   @ViewChild('blocklyDiv', {static:false}) blocklyDiv: ElementRef<HTMLDivElement>;
-  private workspace: Blockly.WorkspaceSvg = null;
-  private toolbox: Blockly.utils.toolbox.ToolboxInfo = {
+  //@ViewChild('ngxBlockly', {static:false}) ngxBlockly: NgxBlocklyComponent;
+
+  workspace: Blockly.WorkspaceSvg = null;
+  toolbox: Blockly.utils.toolbox.ToolboxInfo = {
     kind: 'flyoutToolbox',
     contents: []
   };
 
-  private config: Blockly.BlocklyOptions = {
+  config: Blockly.BlocklyOptions = {
     readOnly: false,
     trashcan: true,
     move: {
@@ -31,6 +34,7 @@ export class BlocklyComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.workspace = Blockly.inject(this.blocklyDiv.nativeElement, this.config);
+    //this.workspace = this.ngxBlockly.workspace;
     this.addToToolbox('controls_if');
     this.addToToolbox('controls_whileUntil');
   }

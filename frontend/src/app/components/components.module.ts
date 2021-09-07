@@ -10,15 +10,17 @@ import {NavHeaderComponent} from './navigation/elements/nav-header/nav-header.co
 import {NavToolbarComponent} from './navigation/elements/nav-toolbar/nav-toolbar.component';
 import {NavigationLayoutsModule} from './navigation/layouts/navigation-layouts.module';
 import {BlocklyComponent} from './blockly/blockly.component';
+import {NgxBlocklyModule} from 'ngx-blockly';
 
 @NgModule({
   declarations: [MapAndInfoComponent, GeocodeDetailsComponent, NavComponent, NavHeaderComponent, NavToolbarComponent, BlocklyComponent],
   imports: [
-      CommonModule,
-      IonicModule,
-      FormsModule,
-      FormsModule,
-      NavigationLayoutsModule
+    CommonModule,
+    IonicModule,
+    FormsModule,
+    FormsModule,
+    NavigationLayoutsModule,
+    NgxBlocklyModule
   ],
   exports: [MapAndInfoComponent, GeocodeDetailsComponent, NavComponent, NavHeaderComponent, NavToolbarComponent, BlocklyComponent]
 })
