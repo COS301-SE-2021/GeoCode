@@ -805,6 +805,8 @@ public class EventServiceImpl implements EventService {
         /* check if the eventID is invalid */
         boolean eventExists = eventRepo.existsById( request.getEventID() );
 
+        System.out.println("eventID when submitting the code: "+request.getEventID());
+
         if( !eventExists ){
             return new SubmitBlocklyCodeResponse( false, eventNotFoundMessage );
         }

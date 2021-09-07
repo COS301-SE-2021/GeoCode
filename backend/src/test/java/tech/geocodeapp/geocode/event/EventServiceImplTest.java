@@ -799,7 +799,7 @@ class EventServiceImplTest {
         var geoCodesToFindRequests = new ArrayList<CreateGeoCodeRequest>();
 
         var createFirstGeoCodeRequest = new CreateGeoCodeRequest(UUID.randomUUID(), "", new GeoPoint(0.0, 0.0),
-                new ArrayList<>(), Difficulty.EASY, true);
+                new ArrayList<>(List.of("Hint 1")), Difficulty.EASY, true);
 
         geoCodesToFindRequests.add(createFirstGeoCodeRequest);
 
@@ -813,7 +813,7 @@ class EventServiceImplTest {
                 "hello world\n5\n0\n1\n", "hello world\n2\n"
         ));
 
-        String code = "var greeting='hello world';" +
+        String correctCode = "var greeting='hello world';" +
                 "print(greeting); print(x);"+
                 "for(var i=0; i<y; ++i){"+
                 "   print(i);" +
@@ -821,7 +821,7 @@ class EventServiceImplTest {
 
         var inputs = String.join("#", caseInputs);
         var outputs = String.join("#", correctCaseOutputs);
-        var blocks = String.join("#", code);
+        var blocks = String.join("#", correctCode);
 
         properties.put("inputs", inputs);
         properties.put("outputs", outputs);
@@ -832,15 +832,17 @@ class EventServiceImplTest {
 
         var createEventResponse = eventService.createEvent(createEventRequest);
 
+        Assertions.assertEquals("Event created", createEventResponse.getMessage());
         Assertions.assertTrue(createEventResponse.isSuccess());
 
         var eventID = createEventResponse.getEventID();
+        System.out.println("eventID: "+eventID);
 
-        var submitBlocklyCodeRequest = new SubmitBlocklyCodeRequest(eventID, code);
+        var submitBlocklyCodeRequest = new SubmitBlocklyCodeRequest(eventID, correctCode);
         var submitBlocklyCodeResponse = eventService.submitBlocklyCode(submitBlocklyCodeRequest);
 
-        Assertions.assertTrue(submitBlocklyCodeResponse.isSuccess());
         Assertions.assertEquals("Blockly code successfully submitted", submitBlocklyCodeResponse.getMessage());
+        Assertions.assertTrue(submitBlocklyCodeResponse.isSuccess());
 
         var passedCases = submitBlocklyCodeResponse.getPassedCases();
         Assertions.assertNotNull(passedCases);
