@@ -14,11 +14,11 @@ import {BlocklyComponent} from './blockly/blockly.component';
 @NgModule({
   declarations: [MapAndInfoComponent, GeocodeDetailsComponent, NavComponent, NavHeaderComponent, NavToolbarComponent, BlocklyComponent],
   imports: [
-    CommonModule,
-    IonicModule,
-    FormsModule,
-    FormsModule,
-    NavigationLayoutsModule
+      CommonModule,
+      IonicModule,
+      FormsModule,
+      FormsModule,
+      NavigationLayoutsModule
   ],
   exports: [MapAndInfoComponent, GeocodeDetailsComponent, NavComponent, NavHeaderComponent, NavToolbarComponent, BlocklyComponent]
 })
