@@ -18,6 +18,7 @@ import {AlertController} from '@ionic/angular';
 export class OpenGeocodePage implements AfterViewInit {
 
   @ViewChild('iframe',{static:false}) iframe: ElementRef<HTMLIFrameElement>;
+  iFrameWindow: Window;
   iFrameDocument: Document;
   collectableEntities: CollectableData[] = [];
   collectables: CollectableResponse[] = [];
@@ -62,18 +63,27 @@ export class OpenGeocodePage implements AfterViewInit {
     await Promise.all(promises);
   }
 
-  async loadIframeDocument(): Promise<Document> {
-    return new Promise<Document>(resolve => {
+  async loadIframe(): Promise<void> {
+    return new Promise<void>(resolve => {
       this.iframe.nativeElement.onload = () => {
-        resolve(this.iframe.nativeElement.contentDocument);
+        this.iFrameWindow = this.iframe.nativeElement.contentWindow;
+        this.iFrameDocument = this.iframe.nativeElement.contentDocument;
+        resolve();
       };
     });
   }
 
   async ngAfterViewInit() {
     if (this.useAR) {
-      this.iFrameDocument = await this.loadIframeDocument();
-      this.qrCode = await this.scanQR();
+      await this.loadIframe();
+      while (this.qrCode === null) {
+        const temp = await this.scanQR();
+        console.log('read: '+temp);
+        if (temp.startsWith('https://geocodeapp.tech/g/')) {
+          this.qrCode = temp.substring(26);
+          console.log('code: '+this.qrCode);
+        }
+      }
     }
 
     const response = await this.geocodeService.getCollectablesInGeoCodeByQRCode({geoCodeID: this.geocodeID, qrCode: this.qrCode}).toPromise();
@@ -91,8 +101,9 @@ export class OpenGeocodePage implements AfterViewInit {
     const scene = this.iFrameDocument.getElementById('scene');
 
     const marker = this.createElement('a-marker', {
-      pattern: 'hiro',
-      cursor: 'rayOrigin: mouse'
+      type: 'pattern',
+      url: '/assets/qr-code-ar-marker.patt',
+      cursor: 'rayOrigin: mouse',
     });
 
     for (const collectable of this.collectableEntities) {
