@@ -146,12 +146,18 @@ public interface EventService {
 
     /**
      * Runs the provided JavaScript code that was generated on front-end from the User's Blockly code
-     * @param caseInputs
-     * @param correctCaseOutputs
+     *
+     * @param caseInputs The inputs in the form variable1=value1,variable2=value2
+     *
+     * @param correctCaseOutputs The correct test case outputs
+     *
      * @param code The JavaScript code
-     * @return
+     *
+     * @return A list of whether the code passed each test case
      */
-    List<Boolean> runJavaScriptCode(List<String> caseInputs, List<String> correctCaseOutputs, String code);
+    private List<Boolean> runJavaScriptCode(List<String> caseInputs, List<String> correctCaseOutputs, String code) {
+        return null;
+    }
 
     /**
      * Post construct the GeoCode service, this avoids a circular dependency

@@ -889,15 +889,18 @@ public class EventServiceImpl implements EventService {
 
     /**
      * Runs the provided JavaScript code that was generated on front-end from the User's Blockly code
-     * @param caseInputs The inputs in the form variable=value
+     *
+     * @param caseInputs The inputs in the form variable1=value1,variable2=value2
+     *
      * @param correctCaseOutputs The correct test case outputs
+     *
      * @param code The JavaScript code
+     *
      * @return A list of whether the code passed each test case
      */
-    public List<Boolean> runJavaScriptCode(List<String> caseInputs, List<String> correctCaseOutputs, String code){
+    private List<Boolean> runJavaScriptCode(List<String> caseInputs, List<String> correctCaseOutputs, String code){
         var manager = new ScriptEngineManager();
         var engine = manager.getEngineByName("nashorn");
-        //ScriptEngine engine = new ScriptEngineManager().getEngineByName("graal.js");
 
         /* check if the code passes each input case */
         var passedCases = new ArrayList<Boolean>();
@@ -905,14 +908,19 @@ public class EventServiceImpl implements EventService {
         for( int i = 0; i < caseInputs.size(); ++i ){
             var caseInput = caseInputs.get( i );
 
+            /* bind to the given values to each variable */
+            var pairs = new ArrayList<>(Arrays.asList(caseInput.split(",")));
+
             /* bind the input values to their respective variables */
             var inputBindings = engine.createBindings();
 
-            var parts = caseInput.split("=");
-            var variable = parts[0];
-            var value = parts[1];
+            for(var pair : pairs){
+                var parts = pair.split("=");
+                var variable = parts[0];
+                var value = parts[1];
 
-            inputBindings.put(variable, value);
+                inputBindings.put(variable, value);
+            }
 
             try {
                 /* create a StringWriter to get the output of the code */

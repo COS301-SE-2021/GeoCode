@@ -772,7 +772,7 @@ class EventServiceImplTest {
         GeoCode gc3 = new GeoCode().id( UUID.randomUUID() ).location( new GeoPoint( 10, -1 ) ); //4th
         GeoCode gc4 = new GeoCode().id( UUID.randomUUID() ).location( new GeoPoint( 0, 0 ) ); //1st
 
-        List< GeoCode > geoCodes = new ArrayList< GeoCode >();
+        List< GeoCode > geoCodes = new ArrayList<>();
             geoCodes.add( gc1 );
             geoCodes.add( gc2 );
             geoCodes.add( gc3 );
@@ -793,21 +793,64 @@ class EventServiceImplTest {
 
     @Test
     @Order( 10 )
-    @DisplayName( "testing running JavaScript code" )
-    void runJavaScriptCode() {
-        var caseInputs = new ArrayList<String>(Arrays.asList(
-                "x=5", "x=2"
+    @DisplayName( "submitting Blockly code" )
+    void submitBlocklyCode() throws InvalidRequestException {
+        /* create the Blockly Event */
+        var geoCodesToFindRequests = new ArrayList<CreateGeoCodeRequest>();
+
+        var createFirstGeoCodeRequest = new CreateGeoCodeRequest(UUID.randomUUID(), "", new GeoPoint(0.0, 0.0),
+                new ArrayList<>(), Difficulty.EASY, true);
+
+        geoCodesToFindRequests.add(createFirstGeoCodeRequest);
+
+        var properties = new HashMap<String, String>();
+
+        var caseInputs = new ArrayList<>(Arrays.asList(
+                "x=5,y=2,z=3", "x=2,y=0"
         ));
 
-        var correctCaseOutputs = new ArrayList<String>(Arrays.asList(
-                "hello world\n5\n", "hello world\n2\n"
+        var correctCaseOutputs = new ArrayList<>(Arrays.asList(
+                "hello world\n5\n0\n1\n", "hello world\n2\n"
         ));
 
         String code = "var greeting='hello world';" +
-                "print(greeting); print(x);";
+                "print(greeting); print(x);"+
+                "for(var i=0; i<y; ++i){"+
+                "   print(i);" +
+                "}";
 
-        //TODO: make runJavaScriptCode private and test using submitBlocklyCode once decorator functions are implemented
-        eventService.runJavaScriptCode( caseInputs, correctCaseOutputs, code );
+        var inputs = String.join("#", caseInputs);
+        var outputs = String.join("#", correctCaseOutputs);
+        var blocks = String.join("#", code);
+
+        properties.put("inputs", inputs);
+        properties.put("outputs", outputs);
+        properties.put("blocks", blocks);
+
+        var createEventRequest = new CreateEventRequest("Blockly Event 1", "First Blockly Event", new GeoPoint(0.0, 0.0),
+                LocalDate.now(), LocalDate.now().plusDays(2), geoCodesToFindRequests, OrderLevels.GIVEN, properties);
+
+        var createEventResponse = eventService.createEvent(createEventRequest);
+
+        Assertions.assertTrue(createEventResponse.isSuccess());
+
+        var eventID = createEventResponse.getEventID();
+
+        var submitBlocklyCodeRequest = new SubmitBlocklyCodeRequest(eventID, code);
+        var submitBlocklyCodeResponse = eventService.submitBlocklyCode(submitBlocklyCodeRequest);
+
+        Assertions.assertTrue(submitBlocklyCodeResponse.isSuccess());
+        Assertions.assertEquals("Blockly code successfully submitted", submitBlocklyCodeResponse.getMessage());
+
+        var passedCases = submitBlocklyCodeResponse.getPassedCases();
+        Assertions.assertNotNull(passedCases);
+        Assertions.assertEquals(caseInputs.size(), passedCases.size());
+
+        for(var i=0; i<passedCases.size(); ++i){
+            if(!passedCases.get(i)){
+                Assertions.fail("failed case: "+(i+1));
+            }
+        }
     }
 
     ////////////////Helper functions////////////////
