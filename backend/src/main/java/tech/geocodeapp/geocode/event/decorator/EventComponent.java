@@ -80,4 +80,10 @@ public interface EventComponent {
      */
     int calculatePoints(GeoCode foundGeocode, int stageNumber, UserEventStatus status);
 
+    //mocking check for Blockly event to check that User tests with events still pass (need collectables)
+    //TODO: @Liam remove when you do isBlocklyEvent
+    default boolean isBlocklyEvent(){
+        return false;
+    }
+
 }

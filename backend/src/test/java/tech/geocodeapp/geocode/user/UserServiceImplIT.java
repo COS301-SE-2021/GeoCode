@@ -15,6 +15,7 @@ import tech.geocodeapp.geocode.event.request.CreateEventRequest;
 import tech.geocodeapp.geocode.event.request.GetCurrentEventStatusRequest;
 import tech.geocodeapp.geocode.event.service.EventServiceImpl;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
@@ -56,11 +57,10 @@ public class UserServiceImplIT {
     EventServiceImpl eventService;
 
     private final UUID invalidUserId = UUID.randomUUID();
-    private final UUID validUserId = UUID.randomUUID();
+    private UUID validUserId;
     private final UUID newUserId = UUID.randomUUID();
-    private final UUID noPointsUserId = UUID.randomUUID();
-    private final UUID userWithPoints1ID = UUID.randomUUID();
-    private final UUID userWithPoints2ID = UUID.randomUUID();
+    private UUID userWithPoints1ID;
+    private UUID userWithPoints2ID;
 
     private User userWithPoints1;
     private User userWithPoints2;
@@ -91,30 +91,60 @@ public class UserServiceImplIT {
     private CollectableType firstFoundCollectableType;
     private CollectableType secondFoundCollectableType;
 
-    private UUID winterSchoolGeoCode1ID;
-    private UUID winterSchoolGeoCode2ID;
-    private UUID winterSchoolGeoCode3ID;
-
     private boolean openDayEvent;
     private UUID openDayEventID;
 
     private boolean winterSchoolEvent;
     private UUID winterSchoolEventID;
 
-    void registerNewUser(UUID userID, String username){
-        var request = new RegisterNewUserRequest(userID, username);
-        RegisterNewUserResponse response;
+    private UUID winterSchoolGeoCode1ID;
+    private UUID winterSchoolGeoCode2ID;
+    private UUID winterSchoolGeoCode3ID;
 
+    private CreateGeoCodeRequest createFirstGeoCodeRequest;
+    private CreateGeoCodeRequest createSecondGeoCodeRequest;
+
+    private CreateGeoCodeRequest createWinterSchoolGeoCode1Request;
+    private CreateGeoCodeRequest createWinterSchoolGeoCode2Request;
+    private CreateGeoCodeRequest createWinterSchoolGeoCode3Request;
+
+    public UserServiceImplIT() {
+
+    }
+
+    private void setUser(UUID userID){
+        CurrentUserDetails.injectUserDetails(userID, null, null);
+    }
+
+    /**
+     * Mocks the User logging in
+     * @param userID The id of the User to be set in setCurrentUserID
+     */
+    private void setUser(UUID userID, String username, boolean isAdmin){
+        CurrentUserDetails.injectUserDetails(userID, username, isAdmin);
+    }
+
+    private UUID handleUserLogin(String username){
+        return handleLogin(UUID.randomUUID(), username, false);
+    }
+
+    private UUID handleAdminLogin(String username){
+        return handleLogin(UUID.randomUUID(), username, true);
+    }
+
+    private UUID handleLogin(UUID userID, String username, boolean isAdmin){
         try {
-            response = userService.registerNewUser(request);
+            setUser(userID, username, isAdmin);
+            var response = userService.handleLogin(new HandleLoginRequest(new GeoPoint(0.0, 0.0)));
+
+            Assertions.assertEquals("New User registered", response.getMessage());
             Assertions.assertTrue(response.isSuccess());
 
-            //so do not have to remember to do this each time
-            setUser(userID);
-
+            return userID;
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     UUID createCollectableSet(String name, String description){
@@ -199,14 +229,18 @@ public class UserServiceImplIT {
     }
 
     private UUID createEvent(String name, String description, GeoPoint location,
-                              LocalDate beginDate, LocalDate endDate,
-                              List<UUID> geoCodesToFind, OrderLevels orderBy, Map<String, String> properties) throws tech.geocodeapp.geocode.event.exceptions.InvalidRequestException {
+                             LocalDate beginDate, LocalDate endDate,
+                             List<CreateGeoCodeRequest> createGeoCodesToFind, OrderLevels orderBy, Map<String, String> properties) throws tech.geocodeapp.geocode.event.exceptions.InvalidRequestException {
 
         var createEventRequest = new CreateEventRequest(name, description, location,
                 beginDate, endDate,
-                geoCodesToFind, orderBy, properties);
+                createGeoCodesToFind, orderBy, properties);
 
         var createEventResponse = eventService.createEvent(createEventRequest);
+
+        Assertions.assertEquals("Event created", createEventResponse.getMessage());
+        Assertions.assertTrue(createEventResponse.isSuccess());
+        Assertions.assertNotNull(createEventResponse.getEventID());
         return createEventResponse.getEventID();
     }
 
@@ -243,14 +277,7 @@ public class UserServiceImplIT {
         }
     }
 
-    /**
-     * Mocks the User logging in
-     * @param userID The id of the User to be set in setCurrentUserID
-     */
-    private void setUser(UUID userID){
-        MockSecurity.setup();
-        MockSecurity.setCurrentUserID(userID);
-    }
+
 
     private UUID createGeoCode(String description, GeoPoint location, Difficulty difficulty) {
         List<String> hints = new ArrayList<>();
@@ -267,14 +294,57 @@ public class UserServiceImplIT {
         return createGeoCodeResponse.getGeoCodeID();
     }
 
+    /**
+     * Actually creates the first 2 GeoCodes - for the tests where they are not part of an Event
+     * so the GeoCodes are created, but for an Event the requests are made so that the GeoCodes are
+     * only created when Event.createEvent creates them
+     */
     private void addFirstTwoGeoCodes() throws NullRequestParameterException, InvalidRequestException {
-        registerNewUser(validUserId, "validUser");
+        validUserId = handleUserLogin("validUser");
 
         firstGeoCodeID = createGeoCode("1", new GeoPoint(10.0, 10.0), Difficulty.HARD);
         firstCollectables = getCollectables(firstGeoCodeID);
 
         secondGeoCodeID = createGeoCode("2", new GeoPoint(10.0, 10.0), Difficulty.INSANE);
         secondCollectables = getCollectables(secondGeoCodeID);
+    }
+
+    /**
+     * Create the CreateGeoCodeRequest objects
+     * so the GeoCodes are created, but for an Event the requests are made so that the GeoCodes are
+     * only created when Event.createEvent creates them
+     */
+    private void addOpenDayGeoCodes() throws NullRequestParameterException, InvalidRequestException {
+        validUserId = handleUserLogin("validUser");
+
+        firstGeoCodeID = UUID.randomUUID();
+        secondGeoCodeID = UUID.randomUUID();
+
+        System.out.println("firstGeoCodeID: "+firstGeoCodeID);
+        System.out.println("secondGeoCodeID: "+secondGeoCodeID);
+
+        createFirstGeoCodeRequest = new CreateGeoCodeRequest(firstGeoCodeID, "1", new GeoPoint(10.0, 10.0), new ArrayList<>(),
+                Difficulty.HARD, true);
+
+        createSecondGeoCodeRequest = new CreateGeoCodeRequest(secondGeoCodeID, "2", new GeoPoint(10.0, 10.0), new ArrayList<>(),
+                Difficulty.INSANE, true);
+    }
+
+    /**
+     * Create the CreateGeoCodeRequest objects for the WinterSchool Event
+     */
+    private void addWinterSchoolGeoCodes(){
+        winterSchoolGeoCode1ID = UUID.randomUUID();
+        createWinterSchoolGeoCode1Request = new CreateGeoCodeRequest(winterSchoolGeoCode1ID, "winterSchool1", new GeoPoint(0.0, 0.0),
+                new ArrayList<>(), Difficulty.EASY, true);
+
+        winterSchoolGeoCode2ID = UUID.randomUUID();
+        createWinterSchoolGeoCode2Request = new CreateGeoCodeRequest(winterSchoolGeoCode2ID, "winterSchool2", new GeoPoint(0.0, 0.0),
+                new ArrayList<>(), Difficulty.INSANE, true);
+
+        winterSchoolGeoCode3ID = UUID.randomUUID();
+        createWinterSchoolGeoCode3Request = new CreateGeoCodeRequest(winterSchoolGeoCode3ID, "winterSchool3", new GeoPoint(0.0, 0.0),
+                new ArrayList<>(), Difficulty.HARD, true);
     }
 
     private void createCollectableTypes(){
@@ -305,6 +375,9 @@ public class UserServiceImplIT {
     }
 
     private void joinEvent(UUID eventID, UUID userID){
+        Assertions.assertNotNull(eventID);
+        Assertions.assertNotNull(userID);
+
         /*
         getTheEventStatus to make sure the EventStatus is saved so that when calling swapCollectables
         the User is participating in the Event
@@ -335,7 +408,7 @@ public class UserServiceImplIT {
     }
 
     private void addFoundGeoCodesForUser1(){
-        registerNewUser(userWithPoints1ID, "userWithPoints1");
+        userWithPoints1ID = handleUserLogin("validUser");
 
         joinEvents(userWithPoints1ID);
 
@@ -355,7 +428,7 @@ public class UserServiceImplIT {
     }
 
     private void addFoundGeoCodesForUser2() {
-        registerNewUser(userWithPoints2ID, "userWithPoints2");
+        userWithPoints2ID = handleUserLogin("userWithPoints2");
 
         joinEvents(userWithPoints2ID);
 
@@ -468,24 +541,32 @@ public class UserServiceImplIT {
 
     private void createOpenDayEvent() throws NullRequestParameterException, InvalidRequestException {
         openDayEvent = true;
-        
-        //create an Event's GeoCodes
-        addFirstTwoGeoCodes();
 
-        List<UUID> openDayGeoCodeIDs = new ArrayList<>();
-        openDayGeoCodeIDs.add(firstGeoCodeID);
-        openDayGeoCodeIDs.add(secondGeoCodeID);
+        //create an Event's GeoCodes
+        addOpenDayGeoCodes();
+
+        List<CreateGeoCodeRequest> createOpenDayGeoCodeRequests = new ArrayList<>();
+        createOpenDayGeoCodeRequests.add(createFirstGeoCodeRequest);
+        createOpenDayGeoCodeRequests.add(createSecondGeoCodeRequest);
 
         try {
             openDayEventID = createEvent(openDayEventName, openDayEventName, new GeoPoint(0.0, 0.0),
-                    LocalDate.now(), LocalDate.now().plusDays(1), openDayGeoCodeIDs, OrderLevels.GIVEN, new HashMap<>());
+                    LocalDate.now(), LocalDate.now().plusDays(1), createOpenDayGeoCodeRequests, OrderLevels.GIVEN, new HashMap<>());
         } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
             e.printStackTrace();
+            return;
         }
+
+        /* get the Collectables for the 2 GeoCodes in the Event
+        * must do this after the event is created since the GeoCodes are only created
+        * in Event.createEvent
+         */
+        firstCollectables = getCollectables(firstGeoCodeID);
+        secondCollectables = getCollectables(secondGeoCodeID);
     }
 
     private void addFoundGeoCodesForUser1WinterSchool() {
-        setUser(userWithPoints1ID);
+        setUser(userWithPoints1ID, "userWithPoints1", false);
         joinEvents(userWithPoints1ID);
 
         //this User finds 2 GeoCodes
@@ -494,7 +575,7 @@ public class UserServiceImplIT {
     }
 
     private void addFoundGeoCodesForUser2WinterSchool() {
-        setUser(userWithPoints2ID);
+        setUser(userWithPoints2ID, "userWithPoints2", false);
         joinEvents(userWithPoints2ID);
 
         //this User finds all 3 GeoCodes
@@ -514,21 +595,19 @@ public class UserServiceImplIT {
         winterSchoolEvent = true;
 
         //create GeoCodes
-        setUser(validUserId);
+        setUser(validUserId, "validUser", false);
 
-        winterSchoolGeoCode1ID = createGeoCode("winterSchool1", new GeoPoint(0.0, 0.0), Difficulty.EASY);
-        winterSchoolGeoCode2ID = createGeoCode("winterSchool2", new GeoPoint(0.0, 0.0), Difficulty.INSANE);
-        winterSchoolGeoCode3ID = createGeoCode("winterSchool3", new GeoPoint(0.0, 0.0), Difficulty.HARD);
+        addWinterSchoolGeoCodes();
 
         //create the Event
-        List<UUID> winterSchoolGeoCodeIDs = new ArrayList<>();
-        winterSchoolGeoCodeIDs.add(winterSchoolGeoCode1ID);
-        winterSchoolGeoCodeIDs.add(winterSchoolGeoCode2ID);
-        winterSchoolGeoCodeIDs.add(winterSchoolGeoCode3ID);
+        List<CreateGeoCodeRequest> winterSchoolCreateGeoCodeRequests = new ArrayList<>();
+        winterSchoolCreateGeoCodeRequests.add(createWinterSchoolGeoCode1Request);
+        winterSchoolCreateGeoCodeRequests.add(createWinterSchoolGeoCode2Request);
+        winterSchoolCreateGeoCodeRequests.add(createWinterSchoolGeoCode3Request);
 
         try {
             winterSchoolEventID = createEvent(winterSchoolEventName, winterSchoolEventName, new GeoPoint(0.0, 0.0),
-                    LocalDate.now(), LocalDate.now().plusDays(3), winterSchoolGeoCodeIDs, OrderLevels.DIFFICULTY, new HashMap<>());
+                    LocalDate.now(), LocalDate.now().plusDays(3), winterSchoolCreateGeoCodeRequests, OrderLevels.DIFFICULTY, new HashMap<>());
         } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
             e.printStackTrace();
         }
@@ -552,6 +631,10 @@ public class UserServiceImplIT {
 
             var missionType = MissionType.fromValue(collectableType.getProperties().get("missionType"));
 
+            for(var mission : missions){
+                System.out.println(mission.getType());
+            }
+
             //check the details
             Assertions.assertTrue(missions.stream().anyMatch(mission ->
                     mission != null &&
@@ -572,7 +655,7 @@ public class UserServiceImplIT {
      */
     private void checkUserLeaderboardDetails(User user, List<String> eventNames, List<Integer> correctRankings){
         var userID = user.getId();
-        setUser(userID);
+        setUser(userID, user.getUsername(), false);
 
         var getMyLeaderboardsRequest = new GetMyLeaderboardsRequest(userID);
 
@@ -623,7 +706,7 @@ public class UserServiceImplIT {
 
     @Test
     public void getCurrentCollectableTestValidUser() {
-        registerNewUser(validUserId, "validUser");
+        validUserId = handleUserLogin("validUser");
 
         try{
             /*
@@ -666,7 +749,7 @@ public class UserServiceImplIT {
 
     @Test
     public void getUserTrackableTestValidUser() {
-        registerNewUser(validUserId, "validUser");
+        validUserId = handleUserLogin("validUser");
 
         try{
             /*
@@ -721,7 +804,7 @@ public class UserServiceImplIT {
              Create a request object
              and assign values to it
            */
-            setUser(userWithPoints1ID);
+            setUser(userWithPoints1ID, "userWithPoints1", false);
 
             var request = new GetFoundCollectableTypesRequest(userWithPoints1ID);
 
@@ -743,7 +826,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     void getFoundGeoCodesTestInvalidUser() {
-        registerNewUser(validUserId, "validUser");
+        validUserId = handleUserLogin("validUser");
 
         try{
             /*
@@ -773,7 +856,7 @@ public class UserServiceImplIT {
              Create a request object
              and assign values to it
            */
-            setUser(userWithPoints1ID);
+            setUser(userWithPoints1ID, "userWithPoints1", false);
 
             var request = new GetFoundGeoCodesRequest(userWithPoints1ID);
 
@@ -825,7 +908,7 @@ public class UserServiceImplIT {
              Create a request object
              and assign values to it
            */
-            setUser(validUserId);
+            setUser(validUserId, "validUser", false);
 
             var request = new GetOwnedGeoCodesRequest();
             request.setUserID(validUserId);
@@ -838,6 +921,7 @@ public class UserServiceImplIT {
             var ownedGeoCodeIDs = response.getGeocodeIDs();
 
             Assertions.assertNotNull(ownedGeoCodeIDs);
+
             Assertions.assertEquals(2, ownedGeoCodeIDs.size());
             Assertions.assertTrue(ownedGeoCodeIDs.contains(firstGeoCodeID));
             Assertions.assertTrue(ownedGeoCodeIDs.contains(secondGeoCodeID));
@@ -871,7 +955,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void updateLocationTestValidUser() {
-        registerNewUser(validUserId, "validUser");
+        validUserId = handleUserLogin("validUser");
 
         try{
             /*
@@ -922,7 +1006,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     void getMyLeaderboardsTestUserWithNoPoints(){
-        registerNewUser(noPointsUserId, "noPointsUser");
+        UUID noPointsUserId = handleUserLogin("noPointsUserId");
 
         var request = new GetMyLeaderboardsRequest();
         request.setUserID(noPointsUserId);
@@ -1053,13 +1137,13 @@ public class UserServiceImplIT {
         addFoundGeoCodesForUser1();
 
         //set to the admin user to create this GeoCode
-        setUser(validUserId);
+        setUser(validUserId, "validUser", false);
 
         thirdGeoCodeID = createGeoCode("3", new GeoPoint(0.0, 0.0), Difficulty.EASY);
 
         var thirdCollectables = getCollectables(thirdGeoCodeID);
 
-        setUser(userWithPoints1ID);
+        setUser(userWithPoints1ID, "userWithPoints1", false);
 
         Assertions.assertNotNull(thirdCollectables);
 
@@ -1167,7 +1251,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void getUserByIdTestValidUserId(){
-        registerNewUser(validUserId, "validUser");
+        validUserId = handleUserLogin("validUser");
 
         try {
             var request = new GetUserByIdRequest(validUserId);
@@ -1186,14 +1270,14 @@ public class UserServiceImplIT {
 
     @Test
     @Transactional
-    public void registerNewUserTestExistingUserId(){
-        registerNewUser(validUserId, "validUser");
+    public void handleLoginTestExistingUserId(){
+        validUserId = handleUserLogin("validUser");
 
         try {
-            var request = new RegisterNewUserRequest(validUserId, "john");
-            var response = userService.registerNewUser(request);
+            var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
+            var response = userService.handleLogin(request);
 
-            Assertions.assertFalse(response.isSuccess());
+            Assertions.assertTrue(response.isSuccess());
 
             var existingUserIdMessage = "User ID already exists";
 
@@ -1205,11 +1289,13 @@ public class UserServiceImplIT {
 
     @Test
     @Transactional
-    public void registerNewUserTestNewUserId(){
+    public void handleLoginTestNewUserId(){
         try {
             var newUsername = "bob";
-            var request = new RegisterNewUserRequest(newUserId, newUsername);
-            var response = userService.registerNewUser(request);
+            setUser(newUserId, newUsername, false);
+
+            var request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
+            var response = userService.handleLogin(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("New User registered", response.getMessage());
@@ -1283,7 +1369,7 @@ public class UserServiceImplIT {
         addFirstTwoGeoCodes();
         addFoundGeoCodesForUser1();
 
-        setUser(userWithPoints1ID);
+        setUser(userWithPoints1ID, "userWithPoints1", false);
         var request = new GetMyMissionsRequest(userWithPoints1ID);
 
         try {

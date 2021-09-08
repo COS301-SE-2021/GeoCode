@@ -14,7 +14,7 @@ import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 
 public class UserMockRepository implements UserRepository {
-    private static final HashMap<UUID, User> map = new HashMap<>();
+    private final HashMap<UUID, User> map = new HashMap<>();
 
     @Override
     public List<User> findAll() {
