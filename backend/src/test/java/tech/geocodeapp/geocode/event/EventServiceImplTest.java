@@ -878,6 +878,8 @@ class EventServiceImplTest {
 
             request.setOrderBy( OrderLevels.GIVEN );
 
+            request.setProperties( new HashMap<>() );
+
             eventService.createEvent( request );
 
         } catch ( InvalidRequestException e ) {
