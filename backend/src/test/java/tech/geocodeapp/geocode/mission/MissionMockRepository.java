@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class MissionMockRepository implements MissionRepository {
-    private static final HashMap<UUID, Mission> map = new HashMap<>();
+    private final HashMap<UUID, Mission> map = new HashMap<>();
 
     @Override
     public List<Mission> findAll() {

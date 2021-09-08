@@ -352,9 +352,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* No GeoCode */
             throw new InvalidRequestException();
-        } else if ( ( request.getLocation() == null ) && ( request.getHints() == null ) &&
-                ( request.getDifficulty() == null ) && ( request.getDescription() == null ) &&
-                ( request.isAvailable() == null ) ) {
+        } else if ( ( request.getHints() == null ) && ( request.getDifficulty() == null ) &&
+                ( request.getDescription() == null ) && ( request.isAvailable() == null ) ) {
 
             /* No attribute specified to update */
             throw new InvalidRequestException();
@@ -373,19 +372,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             return new UpdateGeoCodeResponse( false, "The GeoCode was not found" );
         }
 
-        /* Create the response to return */
-        UpdateGeoCodeResponse response = new UpdateGeoCodeResponse();
-
         /* Determine which attribute to update and update it */
-        if ( request.getLocation() != null ) {
-
-            updateGeoCode.setLocation( request.getLocation() );
-        }
         if( request.getHints() != null ) {
 
             updateGeoCode.setHints( request.getHints() );
         }
-        if ( request.getDifficulty() != null ) {
+        if ( ( request.getDifficulty() != null ) && ( updateGeoCode.getEventID() == null ) ) {
 
             updateGeoCode.setDifficulty( request.getDifficulty() );
         }
@@ -399,7 +391,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         var checkGeoCode = geoCodeRepo.save( updateGeoCode );
-        if ( ( checkGeoCode == null ) || ( !checkGeoCode.getId().equals( request.getGeoCodeID() ) )  ) {
+        if ( !checkGeoCode.getId().equals( request.getGeoCodeID() ) ) {
 
             return new UpdateGeoCodeResponse( false, "The GeoCode could not be update" );
         }
