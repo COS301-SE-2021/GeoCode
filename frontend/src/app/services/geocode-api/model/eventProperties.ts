@@ -9,7 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GetEventDetailsByIDRequest } from './getEventDetailsByIDRequest';
+import { Block } from './block';
+import { TestCase } from './testCase';
 
-export interface GetBlocksRequest extends GetEventDetailsByIDRequest { 
-}
+export type EventProperties = Map;

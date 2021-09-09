@@ -19,6 +19,8 @@ import { Observable }                                        from 'rxjs';
 
 import { ChangeAvailabilityRequest } from '../model/changeAvailabilityRequest';
 import { ChangeAvailabilityResponse } from '../model/changeAvailabilityResponse';
+import { CheckOutputRequest } from '../model/checkOutputRequest';
+import { CheckOutputResponse } from '../model/checkOutputResponse';
 import { CreateEventRequest } from '../model/createEventRequest';
 import { CreateEventResponse } from '../model/createEventResponse';
 import { CreateLeaderboardRequest } from '../model/createLeaderboardRequest';
@@ -36,8 +38,8 @@ import { GetEventRequest } from '../model/getEventRequest';
 import { GetEventResponse } from '../model/getEventResponse';
 import { GetEventsByLocationRequest } from '../model/getEventsByLocationRequest';
 import { GetEventsByLocationResponse } from '../model/getEventsByLocationResponse';
-import { SubmitBlocklyCodeRequest } from '../model/submitBlocklyCodeRequest';
-import { SubmitBlocklyCodeResponse } from '../model/submitBlocklyCodeResponse';
+import { GetInputsRequest } from '../model/getInputsRequest';
+import { GetInputsResponse } from '../model/getInputsResponse';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -121,6 +123,62 @@ export class EventService {
         }
 
         return this.httpClient.request<ChangeAvailabilityResponse>('post',`${this.basePath}/Event/changeAvailability`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Checks the output values for the Blockly Event
+     * Checks whether the output provided matches the correct output for the given Blockly Event
+     * @param body Request to check the output values for a Blockly Event
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public checkOutput(body: CheckOutputRequest, observe?: 'body', reportProgress?: boolean): Observable<CheckOutputResponse>;
+    public checkOutput(body: CheckOutputRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CheckOutputResponse>>;
+    public checkOutput(body: CheckOutputRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CheckOutputResponse>>;
+    public checkOutput(body: CheckOutputRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling checkOutput.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<CheckOutputResponse>('post',`${this.basePath}/Event/checkOutput`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -624,19 +682,19 @@ export class EventService {
     }
 
     /**
-     * Submit code for a Blockly Event
-     * Submit code for a Blockly Event
-     * @param body Request to submit code for a Blockly Event
+     * Gets the input values for the Blockly Event
+     * Gets the input values for the Blockly Event&#x27;s test cases
+     * @param body Request to get the input values for a Blockly Event
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public submitBlocklyCode(body: SubmitBlocklyCodeRequest, observe?: 'body', reportProgress?: boolean): Observable<SubmitBlocklyCodeResponse>;
-    public submitBlocklyCode(body: SubmitBlocklyCodeRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SubmitBlocklyCodeResponse>>;
-    public submitBlocklyCode(body: SubmitBlocklyCodeRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SubmitBlocklyCodeResponse>>;
-    public submitBlocklyCode(body: SubmitBlocklyCodeRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getInputs(body: GetInputsRequest, observe?: 'body', reportProgress?: boolean): Observable<GetInputsResponse>;
+    public getInputs(body: GetInputsRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GetInputsResponse>>;
+    public getInputs(body: GetInputsRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GetInputsResponse>>;
+    public getInputs(body: GetInputsRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling submitBlocklyCode.');
+            throw new Error('Required parameter body was null or undefined when calling getInputs.');
         }
 
         let headers = this.defaultHeaders;
@@ -668,7 +726,7 @@ export class EventService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<SubmitBlocklyCodeResponse>('post',`${this.basePath}/Event/submitBlocklyCode`,
+        return this.httpClient.request<GetInputsResponse>('post',`${this.basePath}/Event/getInputs`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

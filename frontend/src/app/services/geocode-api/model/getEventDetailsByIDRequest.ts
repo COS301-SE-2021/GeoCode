@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface SubmitBlocklyCodeRequest { 
+export interface GetEventDetailsByIDRequest { 
     eventID: string;
-    code: string;
 }

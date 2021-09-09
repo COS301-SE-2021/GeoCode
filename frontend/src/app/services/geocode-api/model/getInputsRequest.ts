@@ -9,19 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { EventProperties } from './eventProperties';
-import { GeoPoint } from './geoPoint';
-import { Leaderboard } from './leaderboard';
+import { GetEventDetailsByIDRequest } from './getEventDetailsByIDRequest';
 
-export interface Event { 
-    id: string;
-    name: string;
-    description: string;
-    location: GeoPoint;
-    geocodeIDs: Array<string>;
-    beginDate: string;
-    endDate: string;
-    leaderboards: Array<Leaderboard>;
-    available: boolean;
-    properties: EventProperties;
+export interface GetInputsRequest extends GetEventDetailsByIDRequest { 
 }
