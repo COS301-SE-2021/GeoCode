@@ -147,58 +147,13 @@ public class EventServiceImpl implements EventService {
             return new CreateEventResponse( false, e.getMessage() );
         }
 
-        /* check if the Event is a Blockly Event */
-        var properties = request.getProperties();
-
-        if( properties.containsKey("inputs") || properties.containsKey("outputs") || properties.containsKey("blocks") ){
-            /* check if all properties were specified */
-            if( !properties.containsKey("inputs") ){
-                return new CreateEventResponse( false, "Input values were not specified for the Blockly Event" );
-            }
-
-            if( !properties.containsKey("outputs") ){
-                return new CreateEventResponse( false, "Outputs were not specified for the Blockly Event" );
-            }
-
-            if( !properties.containsKey("blocks") ){
-                return new CreateEventResponse( false, "Block types were not specified for the Blockly Event" );
-            }
-
-            /* check that the inputs are in the correct format */
-            var inputCases = new ArrayList<>(Arrays.asList( properties.get("inputs").split("#") ));
-
-            for(var inputCase : inputCases){
-                var pairs = new ArrayList<>(Arrays.asList( inputCase.split(",") ));
-
-                for(var pair : pairs){
-                    var parts = pair.split("=");
-
-                    if( parts.length != 2 ){
-                        return new CreateEventResponse( false, "Incorrect syntax for specifying inputs for a Blockly Event" );
-                    }
-                }
-            }
-
-            /* check that outputs were provided */
-            if( properties.get("outputs").equals("") ){
-                return new CreateEventResponse( false,  "Outputs were not provided for the Blockly Event" );
-            }
-
-            var outputCases = new ArrayList<String>(Arrays.asList( properties.get("outputs").split("#") ));
-
-            /* check that the number of input cases and output cases are the same */
-            if( inputCases.size() != outputCases.size() ){
-                return new CreateEventResponse( false, "Number of input cases and output cases must be the same for a Blockly Event" );
-            }
-        }
-
         /* Create the new Event object with the specified attributes */
         UUID eventID = UUID.randomUUID();
 
         /* set the geoCodeIDs to null for now, set it once the GeoCodeIDs have been stored */
         var event = new Event( eventID, request.getName(), request.getDescription(),
                 request.getLocation(), null, request.getBeginDate(), request.getEndDate(),
-                leaderboard, properties );
+                leaderboard, request.getProperties() );
 
         /* Check the availability of the Event */
         if ( request.isAvailable() == null ) {
@@ -214,6 +169,33 @@ public class EventServiceImpl implements EventService {
         /* Create the EventComponent to pass to the createGeoCode function */
         EventManager eventManager = new EventManager();
         EventComponent eventComponent = eventManager.buildEvent(event);
+
+        /* check if the Event is a Blockly Event */
+        var properties = request.getProperties();
+
+        if(eventComponent.isBlocklyEvent()){
+            /* check if all properties were specified */
+            if( !properties.containsKey("testCases") ){
+                return new CreateEventResponse( false, "Input values were not specified for the Blockly Event" );
+            }
+
+            if( !properties.containsKey("blocks") ){
+                return new CreateEventResponse( false, "Block types were not specified for the Blockly Event" );
+            }
+
+            /* check the test cases are in the correct format */
+            var testCases = properties.get("testCases");
+
+            for(var testCase : testCases){
+                if(!testCase.containsKey("inputs")){
+                    return new CreateEventResponse(false, "Not all of the inputs were specified");
+                }
+
+                if(!testCase.containsKey("outputs")){
+                    return new CreateEventResponse(false, "Not all of the outputs were specified");
+                }
+            }
+        }
 
         /* Store the list of GeoCode UUIDs to create a Level on */
         List<CreateGeoCodeRequest> createGeoCodeRequests = request.getCreateGeoCodesToFind();
