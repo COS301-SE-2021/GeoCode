@@ -312,7 +312,7 @@ public class EventServiceImpl implements EventService {
             response = temp.map(
 
                     /* Indicate the Event was found and return it */
-                    event -> new GetEventResponse( true, "Event found", event )
+                    event -> new GetEventResponse( true, "Event found", event.getPublicDetails() )
                                ).orElseGet(
 
                     /* Indicate the Event was not found */
