@@ -759,6 +759,56 @@ public class EventServiceImpl implements EventService {
         return new GetInputsResponse(true, "Inputs successfully returned for the Blockly Event", inputs);
     }
 
+    /**
+     * Checks the output that the User's code generated (i.e the JavaScript code that was converted from the BLockly blocks)
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return The number of test cases that the User passed
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public CheckOutputResponse checkOutput(CheckOutputRequest request) throws InvalidRequestException {
+        /* validate the request */
+        if(request == null){
+            throw new InvalidRequestException(true);
+        }
+
+        if(request.getEventID() == null || request.getOutputs() == null){
+            throw new InvalidRequestException();
+        }
+
+        try{
+            var event = eventRepo.findById(request.getEventID()).get();
+
+            var eventManager = new EventManager();
+            var eventComponent = eventManager.buildEvent(event);
+
+            var userOutputs = request.getOutputs();
+            var correctOutputs = eventComponent.getOutputs();
+
+            /* count the number of test cases that the output matched on */
+            var count = 0;
+            var numTestCases = correctOutputs.size();
+
+            for(int i = 0; i < numTestCases; ++i){
+                if(!userOutputs.get(i).equals(correctOutputs.get(i))){
+                    ++count;
+                }
+            }
+
+            if(count < numTestCases){
+                return new CheckOutputResponse(true, "You passed "+count+" out of the "+numTestCases+" test cases");
+            }
+
+            return new CheckOutputResponse(true, "You passed all of the test cases");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new CheckOutputResponse(false, "Invalid request");
+        }
+    }
+
     //// Blockly Helper Functions ////
 
     /**

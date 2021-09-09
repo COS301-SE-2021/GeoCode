@@ -133,6 +133,17 @@ public interface EventService {
     GetInputsResponse getInputs( GetInputsRequest request ) throws InvalidRequestException;
 
     /**
+     * Checks the output that the User's code generated (i.e the JavaScript code that was converted from the BLockly blocks)
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return The number of test cases that the User passed
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    CheckOutputResponse checkOutput( CheckOutputRequest request ) throws InvalidRequestException;
+
+    /**
      * Post construct the GeoCode service, this avoids a circular dependency
      *
      * @param geoCodeService the service to be set
