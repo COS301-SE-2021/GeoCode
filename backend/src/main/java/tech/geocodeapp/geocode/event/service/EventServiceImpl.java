@@ -2,26 +2,23 @@ package tech.geocodeapp.geocode.event.service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.stereotype.Service;
-import javax.persistence.EntityNotFoundException;
-import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.validation.constraints.NotNull;
-
 import tech.geocodeapp.geocode.event.decorator.EventComponent;
-import tech.geocodeapp.geocode.event.pathfinder.Graph;
+import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
+import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
+import tech.geocodeapp.geocode.event.exceptions.RepoException;
 import tech.geocodeapp.geocode.event.manager.EventManager;
-import tech.geocodeapp.geocode.event.model.*;
+import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.model.OrderLevels;
+import tech.geocodeapp.geocode.event.model.UserEventStatus;
+import tech.geocodeapp.geocode.event.pathfinder.Graph;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
-import tech.geocodeapp.geocode.event.exceptions.*;
-
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
@@ -31,7 +28,6 @@ import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
-
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
@@ -39,9 +35,8 @@ import tech.geocodeapp.geocode.leaderboard.request.GetPointForUserRequest;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.io.StringWriter;
+import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 /**
@@ -727,6 +722,52 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public GetBlocksResponse getBlocks(GetBlocksRequest request) throws InvalidRequestException {
+        var checkEventAndUserResponse = checkEventAndUser(request, true, false);
+
+        if(!checkEventAndUserResponse.isSuccess()){
+            return new GetBlocksResponse(false, checkEventAndUserResponse.getMessage());
+        }
+
+        /* get the blocks that the User has from the UserEventStatus */
+        var status = checkEventAndUserResponse.getStatus();
+        var details = status.getDetails();
+        var blocks = details.get("blocks");
+
+        List< String > blockNames = new ArrayList<String>(Arrays.asList(blocks.split("#")));
+        return new GetBlocksResponse( true, "Blocks successfully returned", blockNames );
+    }
+
+    /**
+     * Gets the input cases (the variables and their values) for the given Blockly Event
+     *
+     * @param request the attributes the response should be created from
+     * @return The input cases for the Blockly Event
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetInputsResponse getInputs(GetInputsRequest request) throws InvalidRequestException {
+        var checkEventAndUserResponse = checkEventAndUser(request, false, true);
+
+        if(!checkEventAndUserResponse.isSuccess()){
+            return new GetInputsResponse(false, checkEventAndUserResponse.getMessage());
+        }
+
+        /* return the inputs for the Event */
+        var eventComponent = checkEventAndUserResponse.getEventComponent();
+        var inputs = eventComponent.getInputs();
+
+        return new GetInputsResponse(true, "Inputs successfully returned for the Blockly Event", inputs);
+    }
+
+    //// Blockly Helper Functions ////
+
+    /**
+     * checks the given request is valid, the event is valid and that the user is participating in the given event
+     *
+     * @param request The request to check
+     * @param needStatus Whether the calling function needs the UserEventStatus to be returned
+     */
+    private CheckEventAndUserResponse checkEventAndUser(GetEventDetailsByIDRequest request, boolean needStatus, boolean needEventComponent) throws InvalidRequestException {
         /* Validate the request */
         if( request == null ){
             throw new InvalidRequestException( true );
@@ -740,7 +781,7 @@ public class EventServiceImpl implements EventService {
         boolean eventExists = eventRepo.existsById( request.getEventID() );
 
         if( !eventExists ){
-            return new GetBlocksResponse( false, eventNotFoundMessage );
+            return new CheckEventAndUserResponse( false, eventNotFoundMessage );
         }
 
         /* check if the Event is not a BlocklyEvent */
@@ -750,7 +791,7 @@ public class EventServiceImpl implements EventService {
         EventComponent eventComponent = eventManager.buildEvent( event );
 
         if( !eventComponent.isBlocklyEvent() ){
-            return new GetBlocksResponse( false, "Event is not a Blockly Event" );
+            return new CheckEventAndUserResponse( false, "Event is not a Blockly Event" );
         }
 
         /* check if the User is not participating in the Blockly Event */
@@ -759,75 +800,22 @@ public class EventServiceImpl implements EventService {
         UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID( request.getEventID(), CurrentUserDetails.getID() );
 
         if( status == null ){
-            return new GetBlocksResponse( false, "User is not participating in the Blockly Event" );
+            return new CheckEventAndUserResponse( false, "User is not participating in the Blockly Event" );
         }
 
-        /* get the blocks that the User has from the UserEventStatus */
-        var details = status.getDetails();
-        var blocks = details.get("blocks");
+        var response = new CheckEventAndUserResponse(true, "Valid request");
 
-        List< String > blockNames = new ArrayList<String>(Arrays.asList(blocks.split("#")));
-        return new GetBlocksResponse( true, "Blocks successfully returned", blockNames );
-    }
-
-    /**
-     * Runs the provided JavaScript code that was generated on front-end from the User's Blockly code
-     *
-     * @param caseInputs The inputs in the form variable1=value1,variable2=value2
-     *
-     * @param correctCaseOutputs The correct test case outputs
-     *
-     * @param code The JavaScript code
-     *
-     * @return A list of whether the code passed each test case
-     */
-    private List<Boolean> runJavaScriptCode(List<String> caseInputs, List<String> correctCaseOutputs, String code){
-        var manager = new ScriptEngineManager();
-        var engine = manager.getEngineByName("nashorn");
-
-        /* check if the code passes each input case */
-        var passedCases = new ArrayList<Boolean>();
-
-        for( int i = 0; i < caseInputs.size(); ++i ){
-            var caseInput = caseInputs.get( i );
-
-            /* bind to the given values to each variable */
-            var pairs = new ArrayList<>(Arrays.asList(caseInput.split(",")));
-
-            /* bind the input values to their respective variables */
-            var inputBindings = engine.createBindings();
-
-            for(var pair : pairs){
-                var parts = pair.split("=");
-                var variable = parts[0];
-                var value = parts[1];
-
-                inputBindings.put(variable, value);
-            }
-
-            try {
-                /* create a StringWriter to get the output of the code */
-                var stringWriter = new StringWriter();
-                engine.getContext().setWriter(stringWriter);
-
-                var result = engine.eval( code, inputBindings );
-
-                var output = stringWriter.toString().replaceAll(System.getProperty("line.separator"), "\n");
-
-                System.out.println("captured output:\n"+output);
-
-                boolean passed = output.equals( correctCaseOutputs.get( i ) );
-                System.out.println("case "+(i+1)+": "+passed);
-                System.out.println();
-
-                passedCases.add( passed );
-            } catch (ScriptException e) {
-                e.printStackTrace();
-                return null;
-            }
+        /* only give the calling function the status if needed */
+        if(needStatus){
+            response.setStatus(status);
         }
 
-        return passedCases;
+        /* only give the calling function the eventComponent if needed */
+        if(needEventComponent){
+            response.setEventComponent(eventComponent);
+        }
+
+        return response;
     }
 
     /*---------- Post Construct services ----------*/

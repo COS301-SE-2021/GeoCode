@@ -122,6 +122,17 @@ public interface EventService {
     GetBlocksResponse getBlocks( GetBlocksRequest request ) throws InvalidRequestException;
 
     /**
+     * Gets the input cases (the variables and their values) for the given Blockly Event
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return The input cases for the Blockly Event
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetInputsResponse getInputs( GetInputsRequest request ) throws InvalidRequestException;
+
+    /**
      * Post construct the GeoCode service, this avoids a circular dependency
      *
      * @param geoCodeService the service to be set
