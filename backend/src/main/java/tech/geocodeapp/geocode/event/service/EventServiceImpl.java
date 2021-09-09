@@ -186,15 +186,15 @@ public class EventServiceImpl implements EventService {
             /* check the test cases are in the correct format */
             var testCases = properties.get("testCases");
 
-            for(var testCase : testCases){
-                if(!testCase.containsKey("inputs")){
-                    return new CreateEventResponse(false, "Not all of the inputs were specified");
-                }
-
-                if(!testCase.containsKey("outputs")){
-                    return new CreateEventResponse(false, "Not all of the outputs were specified");
-                }
-            }
+//            for(var testCase : testCases){
+//                if(!testCase.containsKey("inputs")){
+//                    return new CreateEventResponse(false, "Not all of the inputs were specified");
+//                }
+//
+//                if(!testCase.containsKey("outputs")){
+//                    return new CreateEventResponse(false, "Not all of the outputs were specified");
+//                }
+//            }
         }
 
         /* Store the list of GeoCode UUIDs to create a Level on */

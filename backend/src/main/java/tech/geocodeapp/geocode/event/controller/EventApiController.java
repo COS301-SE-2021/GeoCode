@@ -44,11 +44,6 @@ public class EventApiController implements EventApi {
         }
     }
 
-    public ResponseEntity< CreateLeaderboardResponse > createLeaderBoard( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Leaderboard for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateLeaderboardRequest body ) {
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
-    }
-
     @Override
     public ResponseEntity<GetCurrentEventStatusResponse> getCurrentEventStatus(GetCurrentEventStatusRequest body ) throws InvalidRequestException {
 
@@ -106,18 +101,6 @@ public class EventApiController implements EventApi {
     public ResponseEntity< GetEventResponse > getEvent( GetEventRequest body ) throws InvalidRequestException {
 
         GetEventResponse response = eventService.getEvent( body );
-
-        if ( ( response != null ) ) {
-
-            return new ResponseEntity<>( response, HttpStatus.OK );
-        } else {
-
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
-        }
-    }
-
-    public ResponseEntity<SubmitBlocklyCodeResponse> submitBlocklyCode(@Parameter(in = ParameterIn.DEFAULT, description = "Request to submit code for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody SubmitBlocklyCodeRequest body) throws InvalidRequestException {
-        SubmitBlocklyCodeResponse response = eventService.submitBlocklyCode( body );
 
         if ( ( response != null ) ) {
 
