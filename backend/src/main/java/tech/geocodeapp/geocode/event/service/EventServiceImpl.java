@@ -612,7 +612,7 @@ public class EventServiceImpl implements EventService {
 
             /* Check if the event is close enough to the given point */
             if ( distance <= request.getRadius() ) {
-                foundEvents.add( event );
+                foundEvents.add( event.getPublicDetails() );
             }
         }
 
@@ -628,6 +628,11 @@ public class EventServiceImpl implements EventService {
     public GetAllEventsResponse getAllEvents() {
 
         var temp = eventRepo.findAll();
+
+        /* remove the list of GeoCode IDs and the properties map from the events */
+        for(var event: temp){
+            event.removePrivateDetails();
+        }
 
         return new GetAllEventsResponse( true, "All Events returned", temp );
     }
@@ -704,7 +709,7 @@ public class EventServiceImpl implements EventService {
                  * The current Event is the same
                  * therefore add it to the list
                  */
-                foundEvents.add( event );
+                foundEvents.add( event.getPublicDetails() );
             }
         }
 

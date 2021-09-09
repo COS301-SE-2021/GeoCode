@@ -621,11 +621,19 @@ public class Event {
 
     /**
      * Nulls out the details for an Event that should not be seen by non-admin Users
+     */
+    public void removePrivateDetails(){
+        this.geocodeIDs = null;
+        this.properties = null;
+    }
+
+    /**
+     * Nulls out the details for an Event that should not be seen by non-admin Users
+     * and returns the Event
      * @return The event with the details nulled out
      */
     public Event getPublicDetails() {
-        this.geocodeIDs = null;
-        this.properties = null;
+        this.removePrivateDetails();
         return this;
     }
 }
