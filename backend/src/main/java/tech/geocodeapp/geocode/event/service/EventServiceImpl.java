@@ -1,10 +1,14 @@
 package tech.geocodeapp.geocode.event.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.event.blockly.Block;
+import tech.geocodeapp.geocode.event.blockly.TestCase;
 import tech.geocodeapp.geocode.event.decorator.EventComponent;
 import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
@@ -112,7 +116,6 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException {
-
         /* Validate the request */
         if ( request == null ) {
 
@@ -161,36 +164,35 @@ public class EventServiceImpl implements EventService {
             event.setAvailable( request.isAvailable() );
         }
 
-        /* Create the EventComponent to pass to the createGeoCode function */
-        EventManager eventManager = new EventManager();
-        EventComponent eventComponent = eventManager.buildEvent(event);
-
         /* check if the Event is a Blockly Event */
         var properties = request.getProperties();
 
-        if(eventComponent.isBlocklyEvent()){
+        if(properties.containsKey("testCases") || properties.containsKey("blocks")){
             /* check if all properties were specified */
             if( !properties.containsKey("testCases") ){
-                return new CreateEventResponse( false, "Input values were not specified for the Blockly Event" );
+                return new CreateEventResponse( false, "Test cases were not specified for the Blockly Event" );
             }
 
             if( !properties.containsKey("blocks") ){
                 return new CreateEventResponse( false, "Block types were not specified for the Blockly Event" );
             }
 
-            /* check the test cases are in the correct format */
-            var testCases = properties.get("testCases");
+            /* check the test cases and block information are in the correct format */
+            try {
+                final ObjectMapper objectMapper = new ObjectMapper();
 
-//            for(var testCase : testCases){
-//                if(!testCase.containsKey("inputs")){
-//                    return new CreateEventResponse(false, "Not all of the inputs were specified");
-//                }
-//
-//                if(!testCase.containsKey("outputs")){
-//                    return new CreateEventResponse(false, "Not all of the outputs were specified");
-//                }
-//            }
+                var testCases = objectMapper.readValue(properties.get("testCases"), TestCase[].class);
+
+                var blocks = objectMapper.readValue(properties.get("blocks"), Block[].class);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return new CreateEventResponse(false, "Invalid format provided for the Blockly Event's properties");
+            }
         }
+
+        /* Create the EventComponent to pass to the createGeoCode function */
+        EventManager eventManager = new EventManager();
+        EventComponent eventComponent = eventManager.buildEvent(event);
 
         /* Store the list of GeoCode UUIDs to create a Level on */
         List<CreateGeoCodeRequest> createGeoCodeRequests = request.getCreateGeoCodesToFind();
