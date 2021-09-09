@@ -1,12 +1,12 @@
 package tech.geocodeapp.geocode.event.service;
 
+import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
+import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
-import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
-
-import java.util.List;
 
 /**
  * This is the main interface is for the Event subsystem,
@@ -111,27 +111,6 @@ public interface EventService {
     GetEventsByLocationResponse getEventsByLocation( GetEventsByLocationRequest request ) throws InvalidRequestException;
 
     /**
-     * Create a new Leaderboard for an Event
-     *
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) throws InvalidRequestException;
-
-    /**
-     * Submitting an attempt for a Blockly Event.
-     * @param request the attributes the response should be created from
-     *
-     * @return the newly created response instance from the specified SubmitBlocklyCodeRequest
-     *
-     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
-     */
-    SubmitBlocklyCodeResponse submitBlocklyCode( SubmitBlocklyCodeRequest request ) throws InvalidRequestException;
-
-    /**
      * Getting the Blockly blocks for the current User for a Blockly Event
      *
      * @param request the attributes the response should be created from
@@ -141,23 +120,6 @@ public interface EventService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     GetBlocksResponse getBlocks( GetBlocksRequest request ) throws InvalidRequestException;
-
-    ///// Blockly helper functions /////
-
-    /**
-     * Runs the provided JavaScript code that was generated on front-end from the User's Blockly code
-     *
-     * @param caseInputs The inputs in the form variable1=value1,variable2=value2
-     *
-     * @param correctCaseOutputs The correct test case outputs
-     *
-     * @param code The JavaScript code
-     *
-     * @return A list of whether the code passed each test case
-     */
-    private List<Boolean> runJavaScriptCode(List<String> caseInputs, List<String> correctCaseOutputs, String code) {
-        return null;
-    }
 
     /**
      * Post construct the GeoCode service, this avoids a circular dependency

@@ -694,63 +694,6 @@ class EventServiceImplTest {
     }
 
     /**
-     * Check how the use case handles the request being null
-     */
-    @Test
-    @Order( 5 )
-    @DisplayName( "Null repository handling - createLeaderBoard" )
-    void createLeaderBoardNullRequestTest() {
-
-        /* Null request check */
-        assertThatThrownBy( () -> eventService.createLeaderBoard( null ) )
-                .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( reqEmptyError );
-    }
-
-    /**
-     * Check how the use case handles an invalid request
-     */
-    @Test
-    @Order( 6 )
-    @DisplayName( "Invalid repository attribute handling - createLeaderBoard" )
-    void createLeaderBoardInvalidRequestTest() {
-
-        /*
-         * Create a request object
-         * and assign values to it
-         */
-        CreateLeaderboardRequest request = new CreateLeaderboardRequest();
-        request.setEventID( null );
-
-        /* Null parameter request check */
-        assertThatThrownBy( () -> eventService.createLeaderBoard( request ) )
-                .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( reqParamError );
-    }
-
-    /**
-     * Using valid data does the createLeaderBoard use case test
-     * complete successfully
-     */
-    @Test
-    @Order( 7 )
-    @DisplayName( "Valid request - createLeaderBoard" )
-    void createLeaderBoardTest() {
-
-        try {
-            //ToDo finish this
-            CreateLeaderboardRequest request = new CreateLeaderboardRequest();
-            request.setEventID( null );
-
-            var event = eventService.createLeaderBoard( request );
-        } catch ( InvalidRequestException e ) {
-
-            /* An error occurred, print the stack to identify */
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Using valid data does the setGeoCodeService use case test
      * complete successfully
      */
@@ -789,70 +732,6 @@ class EventServiceImplTest {
 
         Assertions.assertEquals( expected, result );
 
-    }
-
-    @Test
-    @Order( 10 )
-    @DisplayName( "submitting Blockly code" )
-    void submitBlocklyCode() throws InvalidRequestException {
-        /* create the Blockly Event */
-        var geoCodesToFindRequests = new ArrayList<CreateGeoCodeRequest>();
-
-        var createFirstGeoCodeRequest = new CreateGeoCodeRequest(UUID.randomUUID(), "", new GeoPoint(0.0, 0.0),
-                new ArrayList<>(List.of("Hint 1")), Difficulty.EASY, true);
-
-        geoCodesToFindRequests.add(createFirstGeoCodeRequest);
-
-        var properties = new HashMap<String, String>();
-
-        var caseInputs = new ArrayList<>(Arrays.asList(
-                "x=5,y=2,z=3", "x=2,y=0"
-        ));
-
-        var correctCaseOutputs = new ArrayList<>(Arrays.asList(
-                "hello world\n5\n0\n1\n", "hello world\n2\n"
-        ));
-
-        String correctCode = "var greeting='hello world';" +
-                "print(greeting); print(x);"+
-                "for(var i=0; i<y; ++i){"+
-                "   print(i);" +
-                "}";
-
-        var inputs = String.join("#", caseInputs);
-        var outputs = String.join("#", correctCaseOutputs);
-        var blocks = String.join("#", correctCode);
-
-        properties.put("inputs", inputs);
-        properties.put("outputs", outputs);
-        properties.put("blocks", blocks);
-
-        var createEventRequest = new CreateEventRequest("Blockly Event 1", "First Blockly Event", new GeoPoint(0.0, 0.0),
-                LocalDate.now(), LocalDate.now().plusDays(2), geoCodesToFindRequests, OrderLevels.GIVEN, properties);
-
-        var createEventResponse = eventService.createEvent(createEventRequest);
-
-        Assertions.assertEquals("Event created", createEventResponse.getMessage());
-        Assertions.assertTrue(createEventResponse.isSuccess());
-
-        var eventID = createEventResponse.getEventID();
-        System.out.println("eventID: "+eventID);
-
-        var submitBlocklyCodeRequest = new SubmitBlocklyCodeRequest(eventID, correctCode);
-        var submitBlocklyCodeResponse = eventService.submitBlocklyCode(submitBlocklyCodeRequest);
-
-        Assertions.assertEquals("Blockly code successfully submitted", submitBlocklyCodeResponse.getMessage());
-        Assertions.assertTrue(submitBlocklyCodeResponse.isSuccess());
-
-        var passedCases = submitBlocklyCodeResponse.getPassedCases();
-        Assertions.assertNotNull(passedCases);
-        Assertions.assertEquals(caseInputs.size(), passedCases.size());
-
-        for(var i=0; i<passedCases.size(); ++i){
-            if(!passedCases.get(i)){
-                Assertions.fail("failed case: "+(i+1));
-            }
-        }
     }
 
     ////////////////Helper functions////////////////
