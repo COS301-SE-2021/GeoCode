@@ -128,30 +128,13 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        /* Hold the created leaderboards */
-        var leaderboard = new ArrayList< Leaderboard >();
-        try {
-
-            /*
-             * Create the request to the leaderboard service
-             * and store the response
-             */
-            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() );
-            var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
-
-            leaderboard.add( hold );
-        } catch ( NullRequestParameterException e ) {
-
-            return new CreateEventResponse( false, e.getMessage() );
-        }
-
         /* Create the new Event object with the specified attributes */
         UUID eventID = UUID.randomUUID();
 
         /* set the geoCodeIDs to null for now, set it once the GeoCodeIDs have been stored */
         var event = new Event( eventID, request.getName(), request.getDescription(),
                 request.getLocation(), null, request.getBeginDate(), request.getEndDate(),
-                leaderboard, request.getProperties() );
+                null, request.getProperties() );
 
         /* Check the availability of the Event */
         if ( request.isAvailable() == null ) {
@@ -191,6 +174,13 @@ public class EventServiceImpl implements EventService {
 
                 var testCases = objectMapper.readValue(properties.get("testCases"), TestCase[].class);
                 var blocks = objectMapper.readValue(properties.get("blocks"), Block[].class);
+
+                /* check that the number of block types is at least the number stages in the event
+                * so that at least 1 block type can be allocated at each stage of the event
+                *  */
+                if(blocks.length < request.getCreateGeoCodesToFind().size()){
+                    return new CreateEventResponse(false, "The number of block types must be at least the number of GeoCodes in the Blockly Event");
+                }
 
                 /* check the input arrays are of the same size */
                 int numInputValues = testCases[0].getInputs().length;
@@ -276,6 +266,29 @@ public class EventServiceImpl implements EventService {
 
         /* set the GeoCode ids now that we have them after the GeoCodes have been created */
         event.setGeocodeIDs(geoCodeIDs);
+
+        /* Hold the created leaderboards */
+        var leaderboards = new ArrayList< Leaderboard >();
+
+        try {
+
+            /*
+             * Create the request to the leaderboard service
+             * and store the response
+             */
+            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() );
+            var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
+
+            leaderboards.add( hold );
+        } catch ( NullRequestParameterException e ) {
+
+            return new CreateEventResponse( false, e.getMessage() );
+        }
+
+        /* set the leaderboard now that we now the details of the Event are correct
+        * and the details for creating the GeoCodes are also correct
+        * */
+        event.setLeaderboards(leaderboards);
 
         /*
          * Save the newly create Event
