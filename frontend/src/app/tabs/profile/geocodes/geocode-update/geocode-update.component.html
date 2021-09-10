@@ -11,22 +11,30 @@
 
   <ion-item>
     <ion-label>Description</ion-label>
-    <ion-input type="text" (ionBlur)="updateDescription($event)"> </ion-input>
+    <ion-input type="text" (ionBlur)="updateDescription($event)" value="{{updateRequest.description}}"></ion-input>
   </ion-item>
 
-  <ion-item>
-    <ion-label>Hint 1</ion-label>
-    <ion-input type="text" (ionBlur)="updateHints($event)"> </ion-input>
-  </ion-item>
+    <ion-list>
+      <ion-button (click)="addHint()">Add Hint +</ion-button>
+<!--      <ng-template [ngFor]="let hint of updateRequest.hints">-->
+<!--        <ion-item  >-->
+<!--          <ion-label>Hint</ion-label>-->
+<!--          <ion-input type="text" (ionBlur)="updateHints($event,hint)" value="{{hint}} "> </ion-input>-->
+<!--        </ion-item>-->
+<!--      </ng-template>-->
+<!--      <div *ngFor="let hint of updateRequest.hints">-->
+<!--        <ion-item  >-->
+<!--          <ion-label>Hint</ion-label>-->
+<!--          <ion-input type="text" (ionBlur)="updateHints($event,hint)" value="{{hint}} "> </ion-input>-->
+<!--        </ion-item>-->
+<!--      </div>-->
 
-  <ion-item>
-    <ion-label>Hint 2</ion-label>
-    <ion-input type="text" (ionBlur)="updateHints($event)"> </ion-input>
-  </ion-item>
+    </ion-list>
+
 
   <ion-item>
     <ion-label>Difficulty</ion-label>
-    <ion-select  placeholder="Select One" #Diff (ionChange)="updateDifficulty(Diff.value)">
+    <ion-select  placeholder="Select One" #Diff (ionChange)="updateDifficulty(Diff.value)" value="{{updateRequest.difficulty}}">
       <ion-select-option value="EASY">Easy</ion-select-option>
       <ion-select-option value="MEDIUM">Medium</ion-select-option>
       <ion-select-option value="HARD">Hard</ion-select-option>
