@@ -37,12 +37,7 @@
               }
             ],
             "styles": ["src/theme/variables.scss", "src/global.scss"],
-            "scripts": [
-              "node_modules/ngx-blockly/scripts/blockly/blockly_compressed.js",
-              "node_modules/ngx-blockly/scripts/blockly/blocks_compressed.js",
-              "node_modules/ngx-blockly/scripts/blockly/python_compressed.js",
-              "node_modules/ngx-blockly/scripts/blockly/msg/js/en.js"
-            ],
+            "scripts": [],
             "aot": false,
             "vendorChunk": true,
             "extractLicenses": false,
@@ -119,12 +114,7 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "styles": [],
-            "scripts": [
-              "node_modules/ngx-blockly/scripts/blockly/blockly_compressed.js",
-              "node_modules/ngx-blockly/scripts/blockly/blocks_compressed.js",
-              "node_modules/ngx-blockly/scripts/blockly/python_compressed.js",
-              "node_modules/ngx-blockly/scripts/blockly/msg/js/en.js"
-            ],
+            "scripts": [],
             "assets": [
               {
                 "glob": "favicon.ico",
