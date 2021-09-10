@@ -10,6 +10,7 @@ public class BlocklyEventDecorator extends EventDecorator{
     private Block[] blocks;
     private String[][] inputs;
     private String[] outputs;
+    private String problemDescription;
 
     /**
      * @param decoratedType the EventComponent to decorate
@@ -70,6 +71,16 @@ public class BlocklyEventDecorator extends EventDecorator{
         this.outputs = outputs;
     }
 
+    @Override
+    public void setProblemDescription(String problemDescription){
+        this.problemDescription = problemDescription;
+    }
+
+    @Override
+    public String getProblemDescription(){
+        return this.problemDescription;
+    }
+
     /**
      * Randomly selects what blockly blocks for an event to give a user and ensures they are not ones already given to them
      * @param stageNumber The index of the stage that was just completed
@@ -93,6 +104,7 @@ public class BlocklyEventDecorator extends EventDecorator{
         List<String> foundBlocks = Arrays.asList(blockString.split("#"));
         String userBlocks = blockString;
 
+        //TODO: multiple instances of each type of block
         while(count < numberOfBlocks) {
             var random = new Random().nextInt(totalBlocks);
             var currentType = this.blocks[random].getType();

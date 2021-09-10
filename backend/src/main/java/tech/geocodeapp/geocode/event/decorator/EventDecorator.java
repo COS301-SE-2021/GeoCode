@@ -8,6 +8,7 @@ import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class EventDecorator implements EventComponent {
     //the decorated EventComponent
@@ -23,7 +24,7 @@ public abstract class EventDecorator implements EventComponent {
     /**
      * @return the value returned by decoratedType's getID() method
      */
-    public java.util.UUID getID() {
+    public UUID getID() {
         return decoratedType.getID();
     }
 
@@ -31,7 +32,7 @@ public abstract class EventDecorator implements EventComponent {
      * Sets the decoratedType's name variable
      * @param id the id of the Event
      */
-    public void setID(java.util.UUID id) { decoratedType.setID(id); }
+    public void setID(UUID id) { decoratedType.setID(id); }
 
     /**
      * @return the value returned by decoratedType's getName() method
@@ -81,7 +82,7 @@ public abstract class EventDecorator implements EventComponent {
     /**
      * @return the id of the decoratedType
      */
-    public List<java.util.UUID> getGeocodeIDs() {
+    public List<UUID> getGeocodeIDs() {
         return decoratedType.getGeocodeIDs();
     }
 
@@ -89,7 +90,7 @@ public abstract class EventDecorator implements EventComponent {
      * Sets the decoratedType's list of geocode IDs
      * @param ids the list of ids
      */
-    public void setGeocodeIDs(List<java.util.UUID> ids) {
+    public void setGeocodeIDs(List<UUID> ids) {
         decoratedType.setGeocodeIDs(ids);
     }
 
@@ -245,7 +246,7 @@ public abstract class EventDecorator implements EventComponent {
     }
 
     /**
-     * Sets the decoratedType's inputs
+     * Sets the decoratedType's inputs if applicable
      * @param inputs the inputs used
      */
     @Override
@@ -263,11 +264,29 @@ public abstract class EventDecorator implements EventComponent {
     }
 
     /**
-     * Sets the decoratedType's outputs
+     * Sets the decoratedType's outputs if applicable
      * @param outputs the expected outputs of the event
      */
     @Override
     public void setOutputs(String[] outputs) {
         decoratedType.setOutputs(outputs);
+    }
+
+    /**
+     * Sets the problem description if applicable
+     * @param problemDescription The problem description
+     */
+    @Override
+    public void setProblemDescription(String problemDescription) {
+        decoratedType.setProblemDescription(problemDescription);
+    }
+
+    /**
+     * Gets the problem description if applicable
+     * @return The problem description
+     */
+    @Override
+    public String getProblemDescription() {
+        return decoratedType.getProblemDescription();
     }
 }

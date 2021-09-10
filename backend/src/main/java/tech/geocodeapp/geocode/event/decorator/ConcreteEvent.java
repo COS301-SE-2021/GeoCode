@@ -192,4 +192,22 @@ public class ConcreteEvent implements EventComponent {
     public void setOutputs(String[] outputs) {
 
     }
+
+    /**
+     * Do nothing in a concrete event
+     *
+     * @param problemDescription unused
+     */
+    @Override
+    public void setProblemDescription(String problemDescription) {
+
+    }
+
+    /**
+     * @return null because the outputs is not contained in the concreteComponent
+     */
+    @Override
+    public String getProblemDescription() {
+        return null;
+    }
 }

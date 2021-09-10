@@ -126,4 +126,16 @@ public interface EventComponent {
      * @param outputs The output for each test case
      */
     void setOutputs(String[] outputs);
+
+    /**
+     * Sets the problem description if applicable
+     * @param problemDescription The problem description
+     */
+    void setProblemDescription(String problemDescription);
+
+    /**
+     * Gets the problem description if applicable
+     * @return The problem description
+     */
+    String getProblemDescription();
 }

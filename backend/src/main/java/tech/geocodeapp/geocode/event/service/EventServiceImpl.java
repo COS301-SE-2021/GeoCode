@@ -167,8 +167,12 @@ public class EventServiceImpl implements EventService {
         /* check if the Event is a Blockly Event */
         var properties = request.getProperties();
 
-        if(properties.containsKey("testCases") || properties.containsKey("blocks")){
+        if(!properties.isEmpty()){
             /* check if all properties were specified */
+            if( !properties.containsKey("problem_description") ){
+                return new CreateEventResponse( false, " not specified for the Blockly Event");
+            }
+
             if( !properties.containsKey("testCases") ){
                 return new CreateEventResponse( false, "Test cases were not specified for the Blockly Event" );
             }
@@ -182,7 +186,6 @@ public class EventServiceImpl implements EventService {
                 final ObjectMapper objectMapper = new ObjectMapper();
 
                 var testCases = objectMapper.readValue(properties.get("testCases"), TestCase[].class);
-
                 var blocks = objectMapper.readValue(properties.get("blocks"), Block[].class);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
