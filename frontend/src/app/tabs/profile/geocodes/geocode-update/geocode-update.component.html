@@ -16,18 +16,12 @@
 
     <ion-list>
       <ion-button (click)="addHint()">Add Hint +</ion-button>
-<!--      <ng-template [ngFor]="let hint of updateRequest.hints">-->
-<!--        <ion-item  >-->
-<!--          <ion-label>Hint</ion-label>-->
-<!--          <ion-input type="text" (ionBlur)="updateHints($event,hint)" value="{{hint}} "> </ion-input>-->
-<!--        </ion-item>-->
-<!--      </ng-template>-->
-<!--      <div *ngFor="let hint of updateRequest.hints">-->
-<!--        <ion-item  >-->
-<!--          <ion-label>Hint</ion-label>-->
-<!--          <ion-input type="text" (ionBlur)="updateHints($event,hint)" value="{{hint}} "> </ion-input>-->
-<!--        </ion-item>-->
-<!--      </div>-->
+      <div *ngFor="let hint of updateRequest.hints">
+        <ion-item>
+          <ion-label>Hint</ion-label>
+          <ion-input type="text" (ionBlur)="updateHints($event,hint)" value="{{hint}} "> </ion-input>
+        </ion-item>
+      </div>
 
     </ion-list>
 

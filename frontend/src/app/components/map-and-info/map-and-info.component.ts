@@ -37,6 +37,7 @@ export class MapAndInfoComponent extends AsynchronouslyInitialisedComponent impl
     this.map = new this.googleMaps.Map(this.mapElement.nativeElement, {
       center: { lat: this.location.latitude, lng: this.location.longitude },
       zoom: 5,
+      streetViewControl: false
     });
     this.componentLoaded();
   }
