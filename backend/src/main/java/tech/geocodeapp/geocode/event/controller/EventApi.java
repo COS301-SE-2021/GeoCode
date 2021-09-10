@@ -130,6 +130,33 @@ public interface EventApi {
             method = RequestMethod.POST)
     ResponseEntity<GetBlocksResponse> getBlocks(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the User's blocks for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody GetBlocksRequest body) throws InvalidRequestException;
 
+    @Operation(summary = "Gets the input values for the Blockly Event", description = "Gets the input values for the Blockly Event's test cases", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Event" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Return the input values for a Blockly Event", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetInputsResponse.class))),
+
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
+
+            @ApiResponse(responseCode = "404", description = "Failed to return the input values for the Blockly Event", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetInputsResponse.class))) })
+    @RequestMapping(value = "/Event/getInputs",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" },
+            method = RequestMethod.POST)
+    ResponseEntity<GetInputsResponse> getInputs(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the input values for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody GetInputsRequest body) throws InvalidRequestException;
+
+    @Operation(summary = "Checks the output values for the Blockly Event", description = "Checks whether the output provided matches the correct output for the given Blockly Event", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Event" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Return whether the output was correct for all of the test cases for a Blockly Event", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CheckOutputResponse.class))),
+
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
+
+            @ApiResponse(responseCode = "404", description = "Failed to check the output given for the Blockly Event", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CheckOutputResponse.class))) })
+    @RequestMapping(value = "/Event/checkOutput",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" },
+            method = RequestMethod.POST)
+    ResponseEntity<CheckOutputResponse> checkOutput(@Parameter(in = ParameterIn.DEFAULT, description = "Request to check the output values for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody CheckOutputRequest body) throws InvalidRequestException;
 
 }
 

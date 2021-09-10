@@ -123,4 +123,27 @@ public class EventApiController implements EventApi {
         }
     }
 
+    public ResponseEntity<CheckOutputResponse> checkOutput(@Parameter(in = ParameterIn.DEFAULT, description = "Request to check the output values for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody CheckOutputRequest body) throws InvalidRequestException {
+        CheckOutputResponse response = eventService.checkOutput( body );
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
+    }
+
+    public ResponseEntity<GetInputsResponse> getInputs(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the input values for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody GetInputsRequest body) throws InvalidRequestException {
+        GetInputsResponse response = eventService.getInputs( body );
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
+    }
 }
