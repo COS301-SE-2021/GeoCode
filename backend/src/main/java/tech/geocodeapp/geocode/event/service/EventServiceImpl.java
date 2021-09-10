@@ -34,6 +34,7 @@ import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
+import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetPointForUserRequest;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
@@ -276,7 +277,7 @@ public class EventServiceImpl implements EventService {
              * Create the request to the leaderboard service
              * and store the response
              */
-            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() );
+            var leaderboardRequest = new CreateLeaderboardRequest( request.getName() );
             var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
 
             leaderboards.add( hold );
