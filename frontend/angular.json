@@ -51,8 +51,7 @@
             "optimization": false,
             "namedChunks": true,
             "allowedCommonJsDependencies": [
-              "keycloak-js",
-              "qrcode-with-logos"
+              "keycloak-js"
             ]
           },
           "configurations": {

@@ -8,6 +8,7 @@ import {Mediator} from './services/Mediator';
 import {Storage} from '@ionic/storage-angular';
 import {Platform} from '@ionic/angular';
 import {CurrentUserDetails} from './services/CurrentUserDetails';
+import {QRGenerator} from './services/QRGenerator';
 
 @Component({
   selector: 'app-root',

@@ -11,7 +11,7 @@
 
   <ion-content>
     <app-map-and-info #mapAndInfo [showInfo]="true">
-      <div *ngIf="geocode !== null">
+      <div *ngIf="geocode !== null" id="details">
         <ion-card color="card">
           <ion-grid>
             <ion-row>
