@@ -7,8 +7,6 @@ import tech.geocodeapp.geocode.event.factory.BlocklyEventFactory;
 import tech.geocodeapp.geocode.event.factory.TimeTrialEventFactory;
 import tech.geocodeapp.geocode.event.model.Event;
 
-import java.util.HashMap;
-
 public class EventManager {
 
     /**
@@ -41,38 +39,5 @@ public class EventManager {
         }
 
         return builtEvent;
-    }
-
-    /**
-     * Converts an {@link EventComponent} to an {@link Event} for use in other backend systems
-     * @param eventComponent The {@link EventComponent} to convert
-     * @return the converted {@link Event}
-     */
-    public Event convertToEvent(EventComponent eventComponent){
-        Event converted = new Event();
-        converted.setId(eventComponent.getID());
-        converted.setName(eventComponent.getName());
-        converted.setDescription(eventComponent.getDescription());
-        converted.setLocation(eventComponent.getLocation());
-        converted.setGeocodeIDs(eventComponent.getGeocodeIDs());
-        converted.setBeginDate(eventComponent.getBeginDate());
-        converted.setEndDate(eventComponent.getEndDate());
-        converted.setLeaderboards(eventComponent.getLeaderboards());
-        converted.setAvailable(eventComponent.isAvailable());
-
-        //check what properties apply and add them to a hashmap
-        HashMap<String, String> properties = new HashMap<>();
-
-        if(eventComponent.getTimeLimit() != null){
-            properties.put("timeLimit", eventComponent.getTimeLimit().toString());
-        }
-
-        if(eventComponent.isBlocklyEvent()){
-            //TODO: see if this is needed
-        }
-
-        converted.setProperties(properties);
-
-        return converted;
     }
 }

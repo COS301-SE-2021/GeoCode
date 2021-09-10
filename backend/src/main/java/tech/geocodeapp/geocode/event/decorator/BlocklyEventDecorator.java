@@ -89,33 +89,49 @@ public class BlocklyEventDecorator extends EventDecorator{
     @Override
     public void handleStageCompletion(int stageNumber, UserEventStatus status) {
 
-        //store number of stages and number of blocks
+        /* store number of stages and number of blocks */
         int totalStages = this.getGeocodeIDs().size();
-        int totalBlocks = this.blocks.length;
-        int numberOfBlocks = totalBlocks/totalStages;
-        int remainderBlocks = totalBlocks % totalStages;
-        if(remainderBlocks != 0 && stageNumber <= remainderBlocks) {
-            numberOfBlocks++;
+        int totalBlockTypes = this.blocks.length;
+
+        /* start with an equal number of block types are given to the User at each stage */
+        int numberOfBlockTypes = totalBlockTypes/totalStages;
+        int remainderBlockTypes = totalBlockTypes % totalStages;
+
+        /*
+         * if the number of blocks does not perfectly divide into the number of stages then
+         * the first remainderBlockTypes stages gets an extra block type
+         *
+         * eg:
+         * if we have 10 block types and 4 stages (GeoCodes) in the Event then
+         * the first 10 % 4 = 2 stages gets 10/4 + 1 = 2 + 1 = 3 block types
+         * and the last 2 stages get 10/4 = 2 block types
+         */
+        if(remainderBlockTypes != 0 && stageNumber <= remainderBlockTypes) {
+            numberOfBlockTypes++;
         }
 
-        var count = 0;
-
+        /* get which block types the User has found so far */
         String blockString = status.getDetails().get("blocks");
-        List<String> foundBlocks = Arrays.asList(blockString.split("#"));
+        List<String> foundBlockTypes = Arrays.asList(blockString.split("#"));
         String userBlocks = blockString;
 
-        //TODO: multiple instances of each type of block
-        while(count < numberOfBlocks) {
-            var random = new Random().nextInt(totalBlocks);
+        /* allocate numberOfBlockTypes random block types to the User */
+        var count = 0;
+
+        while(count < numberOfBlockTypes) {
+            /* get random type */
+            var random = new Random().nextInt(totalBlockTypes);
             var currentType = this.blocks[random].getType();
 
-            if(!foundBlocks.contains(currentType)) {
-                foundBlocks.add(currentType);
-                userBlocks += "#" + this.blocks[random];
+            /* add if new block type */
+            if(!foundBlockTypes.contains(currentType)) {
+                foundBlockTypes.add(currentType);
+                userBlocks += "#" + currentType;
                 count++;
             }
         }
 
+        /* update the hashmap */
         Map<String, String> temp = new HashMap<>();
         temp.put("blocks", userBlocks);
 
