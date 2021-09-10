@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {GeoCodeService, UpdateGeoCodeRequest, UpdateGeoCodeResponse} from '../../../../services/geocode-api';
-import {AlertController} from "@ionic/angular";
+import {AlertController} from '@ionic/angular';
 
 @Component({
   selector: 'app-geocode-update',
@@ -32,8 +32,9 @@ export class GeocodeUpdateComponent implements OnInit {
     this.updateRequest.description = $event.detail.value;
   }
 
-  updateHints($event){
-
+  updateHints($event,hint){
+    console.log(this.updateRequest.hints.indexOf(hint));
+    this.updateRequest.hints[this.updateRequest.hints.indexOf(hint)] = $event.target.value;
   }
 
   updateDifficulty($event){
