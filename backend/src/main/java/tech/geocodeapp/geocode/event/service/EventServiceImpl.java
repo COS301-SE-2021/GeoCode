@@ -880,15 +880,6 @@ public class EventServiceImpl implements EventService {
     public void setGeoCodeService( GeoCodeService geoCodeService ) {
 
         this.geoCodeService = geoCodeService;
-
-
-        //        GetGeoCodesResponse r = geoCodeService.getAllGeoCodes();
-        //        GeoPoint start = new GeoPoint(25, 25);
-        //        for (GeoCode g: r.getGeocodes()) {
-        //            System.out.println(g.getDescription()+", "+g.getLocation().getLatitude()+", "+g.getLocation().getLongitude());
-        //        }
-        //        List<UUID> output = Graph.getOptimalGeocodeIDOrder(r.getGeocodes(), start);
-        //        System.out.println(output);
     }
 
     /*-------------------------------------*/

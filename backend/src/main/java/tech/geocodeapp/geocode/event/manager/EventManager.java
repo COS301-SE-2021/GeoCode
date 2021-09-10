@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.event.manager;
 
-import tech.geocodeapp.geocode.event.blockly.Block;
 import tech.geocodeapp.geocode.event.decorator.EventComponent;
 import tech.geocodeapp.geocode.event.factory.AbstractEventFactory;
 import tech.geocodeapp.geocode.event.factory.BasicEventFactory;
@@ -46,65 +45,30 @@ public class EventManager {
 
     /**
      * Converts an {@link EventComponent} to an {@link Event} for use in other backend systems
-     * @param event The {@link EventComponent} to convert
+     * @param eventComponent The {@link EventComponent} to convert
      * @return the converted {@link Event}
      */
-    public Event convertToEvent(EventComponent event){
+    public Event convertToEvent(EventComponent eventComponent){
         Event converted = new Event();
-        converted.setId(event.getID());
-        converted.setName(event.getName());
-        converted.setDescription(event.getDescription());
-        converted.setLocation(event.getLocation());
-        converted.setGeocodeIDs(event.getGeocodeIDs());
-        converted.setBeginDate(event.getBeginDate());
-        converted.setEndDate(event.getEndDate());
-        converted.setLeaderboards(event.getLeaderboards());
-        converted.setAvailable(event.isAvailable());
+        converted.setId(eventComponent.getID());
+        converted.setName(eventComponent.getName());
+        converted.setDescription(eventComponent.getDescription());
+        converted.setLocation(eventComponent.getLocation());
+        converted.setGeocodeIDs(eventComponent.getGeocodeIDs());
+        converted.setBeginDate(eventComponent.getBeginDate());
+        converted.setEndDate(eventComponent.getEndDate());
+        converted.setLeaderboards(eventComponent.getLeaderboards());
+        converted.setAvailable(eventComponent.isAvailable());
 
         //check what properties apply and add them to a hashmap
         HashMap<String, String> properties = new HashMap<>();
 
-        if(event.getTimeLimit() != null){
-            properties.put("timeLimit", event.getTimeLimit().toString());
+        if(eventComponent.getTimeLimit() != null){
+            properties.put("timeLimit", eventComponent.getTimeLimit().toString());
         }
 
-        if(event.isBlocklyEvent()){
-            /* blocks */
-            Block[] blocks = event.getBlocks();
-            String blocksString = blocks[0].getBlockString();
-            int numTestCases = blocks.length;
-
-            for(int i = 1; i < numTestCases; ++i){
-                blocksString += "#" + blocks[i].getBlockString();
-            }
-
-            properties.put("blocks", blocksString);
-
-            /* inputs */
-            var inputs = event.getInputs();
-            String inputsString = "";
-
-            for(int i = 0; i < numTestCases; ++i){
-                for(int j = 0; j < inputs[i].length-1; ++i){
-                    inputsString += inputs[i][j] + ",";
-                }
-
-                inputsString += inputs[i][inputs[i].length-1] + "#";
-            }
-
-            inputsString = inputsString.substring(0, inputsString.length()-1);
-
-            properties.put("inputs", inputsString);
-
-            /* outputs */
-            var outputs = event.getOutputs();
-            String outputsString = outputs[0];
-
-            for (int i = 1; i < numTestCases; ++i) {
-                outputsString += "#" + outputs[i];
-            }
-
-            properties.put("outputs", outputsString);
+        if(eventComponent.isBlocklyEvent()){
+            //TODO: see if this is needed
         }
 
         converted.setProperties(properties);
