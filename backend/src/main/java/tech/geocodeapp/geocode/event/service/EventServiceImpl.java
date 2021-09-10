@@ -181,15 +181,28 @@ public class EventServiceImpl implements EventService {
                 return new CreateEventResponse( false, "Block types were not specified for the Blockly Event" );
             }
 
+            if(properties.get("problem_description").strip().equals("")){
+                return new CreateEventResponse(false, "An empty problem description was given for the Blockly Event");
+            }
+
             /* check the test cases and block information are in the correct format */
             try {
                 final ObjectMapper objectMapper = new ObjectMapper();
 
                 var testCases = objectMapper.readValue(properties.get("testCases"), TestCase[].class);
                 var blocks = objectMapper.readValue(properties.get("blocks"), Block[].class);
+
+                /* check the input arrays are of the same size */
+                int numInputValues = testCases[0].getInputs().length;
+
+                for(int i = 1; i < testCases.length; ++i){
+                    if(testCases[i].getInputs().length != numInputValues){
+                        return new CreateEventResponse(false, "The number of input values for each test case must be the same");
+                    }
+                }
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
-                return new CreateEventResponse(false, "Invalid format provided for the Blockly Event's properties");
+                return new CreateEventResponse(false, "Invalid format provided for the Blockly Event's properties: "+e.getMessage());
             }
         }
 

@@ -1,5 +1,7 @@
 package tech.geocodeapp.geocode.event.blockly;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 public class TestCase {
     /**
      * The inputs for the test case
@@ -16,7 +18,7 @@ public class TestCase {
      * @param inputs The inputs for the test case
      * @param output The output for the test case
      */
-    public TestCase(String[] inputs, String output) {
+    public TestCase(String[] inputs, String output) throws Exception {
         this.inputs = inputs;
         this.output = output;
     }
