@@ -2,13 +2,11 @@ package tech.geocodeapp.geocode.event.response;
 
 import tech.geocodeapp.geocode.general.response.Response;
 
-import java.util.List;
-
 public class GetInputsResponse extends Response {
     /**
      * The input cases for the Blockly Event
      */
-    private List<String> inputs;
+    private String[][] inputs;
 
     /**
      * Overloaded Constructor
@@ -20,17 +18,17 @@ public class GetInputsResponse extends Response {
     /**
      * Overloaded Constructor
      */
-    public GetInputsResponse(boolean success, String message, List<String> inputs){
+    public GetInputsResponse(boolean success, String message, String[][] inputs){
         super(success, message);
 
         this.inputs = inputs;
     }
 
-    public List<String> getInputs() {
+    public String[][] getInputs() {
         return inputs;
     }
 
-    public void setInputs(List<String> inputs) {
+    public void setInputs(String[][] inputs) {
         this.inputs = inputs;
     }
 }

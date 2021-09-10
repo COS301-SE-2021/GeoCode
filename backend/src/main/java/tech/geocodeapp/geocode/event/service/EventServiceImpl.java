@@ -735,7 +735,7 @@ public class EventServiceImpl implements EventService {
         var details = status.getDetails();
         var blocks = details.get("blocks");
 
-        List< String > blockNames = new ArrayList<String>(Arrays.asList(blocks.split("#")));
+        List< String > blockNames = new ArrayList<>(Arrays.asList(blocks.split("#")));//TODO: change to get w/ correct format (if format changes)
         return new GetBlocksResponse( true, "Blocks successfully returned", blockNames );
     }
 
@@ -792,10 +792,10 @@ public class EventServiceImpl implements EventService {
 
             /* count the number of test cases that the output matched on */
             var count = 0;
-            var numTestCases = correctOutputs.size();
+            var numTestCases = correctOutputs.length;
 
             for(int i = 0; i < numTestCases; ++i){
-                if(!userOutputs.get(i).equals(correctOutputs.get(i))){
+                if(!userOutputs.get(i).equals(correctOutputs[i])){
                     ++count;
                 }
             }

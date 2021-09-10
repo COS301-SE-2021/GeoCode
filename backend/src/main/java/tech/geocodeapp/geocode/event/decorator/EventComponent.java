@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.event.decorator;
 
+import tech.geocodeapp.geocode.event.blockly.Block;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
@@ -62,13 +63,15 @@ public interface EventComponent {
 
     /**
      * Getter for blockly events used to get the blocklyDetails variable from {@link BlocklyEventDecorator}
+     * @return The blocks for the event
      */
-    String getBlocklyDetails();
+    Block[] getBlocks();
 
     /**
      * Setter for blockly events used to set the blocklyDetails variable from {@link BlocklyEventDecorator}
+     * @param blocks Array of blocks for the event
      */
-    void setBlocklyDetails(String blocklyDetails);
+    void setBlocks(Block[] blocks);
 
     /**
      * Getter for time trials used to get the timeLimit variable from {@link TimeTrialEventDecorator}
@@ -102,21 +105,25 @@ public interface EventComponent {
 
     /**
      * Getter for blockly events used to get the inputs variable from {@link BlocklyEventDecorator}
+     * @return The input values for each test case
      */
-    List<String> getInputs();
+    String[][] getInputs();
 
     /**
      * Setter for blockly events used to set the inputs variable from {@link BlocklyEventDecorator}
+     * @param inputs The input values for each test case
      */
-    void setInputs(List<String> inputs);
+    void setInputs(String[][] inputs);
 
     /**
      * Getter for blockly events used to get the outputs variable from {@link BlocklyEventDecorator}
+     * @return The output for each test case
      */
-    List<String> getOutputs();
+    String[] getOutputs();
 
     /**
      * Setter for blockly events used to set the outputs variable from {@link BlocklyEventDecorator}
+     * @param outputs The output for each test case
      */
-    void setOutputs(List<String> outputs);
+    void setOutputs(String[] outputs);
 }

@@ -1,15 +1,15 @@
 package tech.geocodeapp.geocode.event.decorator;
 
+import tech.geocodeapp.geocode.event.blockly.Block;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BlocklyEventDecorator extends EventDecorator{
 
-    private String blocklyDetails;
-    private List<String> inputs;
-    private List<String> outputs;
+    private Block[] blocks;
+    private String[][] inputs;
+    private String[] outputs;
 
     /**
      * @param decoratedType the EventComponent to decorate
@@ -22,24 +22,25 @@ public class BlocklyEventDecorator extends EventDecorator{
      * Getter for the blocklyDetails variable
      */
     @Override
-    public String getBlocklyDetails() {
-        return blocklyDetails;
+    public Block[] getBlocks() {
+        return blocks;
     }
 
     /**
      * Setter for the blocklyDetails variable
-     * @param blocklyDetails the blockly details
+     * @param blocks the blockly details
      */
     @Override
-    public void setBlocklyDetails(String blocklyDetails) {
-        this.blocklyDetails = blocklyDetails;
+    public void setBlocks(Block[] blocks) {
+        this.blocks = blocks;
     }
 
     /**
      * Getter for the inputs variable
+     * @return The inputs for each test case
      */
     @Override
-    public List<String> getInputs() {
+    public String[][] getInputs() {
         return inputs;
     }
 
@@ -48,7 +49,7 @@ public class BlocklyEventDecorator extends EventDecorator{
      * @param inputs the inputs used
      */
     @Override
-    public void setInputs(List<String> inputs) {
+    public void setInputs(String[][] inputs) {
         this.inputs = inputs;
     }
 
@@ -56,7 +57,7 @@ public class BlocklyEventDecorator extends EventDecorator{
      * Getter for the outputs variable
      */
     @Override
-    public List<String> getOutputs() {
+    public String[] getOutputs() {
         return outputs;
     }
 
@@ -65,7 +66,7 @@ public class BlocklyEventDecorator extends EventDecorator{
      * @param outputs the expected outputs of the event
      */
     @Override
-    public void setOutputs(List<String> outputs) {
+    public void setOutputs(String[] outputs) {
         this.outputs = outputs;
     }
 
@@ -79,8 +80,7 @@ public class BlocklyEventDecorator extends EventDecorator{
 
         //store number of stages and number of blocks
         int totalStages = this.getGeocodeIDs().size();
-        var blocks = this.blocklyDetails.split("#");
-        int totalBlocks = blocks.length;
+        int totalBlocks = this.blocks.length;
         int numberOfBlocks = totalBlocks/totalStages;
         int remainderBlocks = totalBlocks % totalStages;
         if(remainderBlocks != 0 && stageNumber <= remainderBlocks) {
@@ -95,10 +95,11 @@ public class BlocklyEventDecorator extends EventDecorator{
 
         while(count < numberOfBlocks) {
             var random = new Random().nextInt(totalBlocks);
+            var currentType = this.blocks[random].getType();
 
-            if(!foundBlocks.contains(blocks[random])) {
-                foundBlocks.add(blocks[random]);
-                userBlocks += "#" + blocks[random];
+            if(!foundBlocks.contains(currentType)) {
+                foundBlocks.add(currentType);
+                userBlocks += "#" + this.blocks[random];
                 count++;
             }
         }

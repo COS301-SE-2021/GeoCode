@@ -36,4 +36,8 @@ public class Block {
     public void setMaxInstances(int maxInstances) {
         this.maxInstances = maxInstances;
     }
+
+    public String getBlockString(){
+        return this.type + ":" + this.maxInstances;
+    }
 }

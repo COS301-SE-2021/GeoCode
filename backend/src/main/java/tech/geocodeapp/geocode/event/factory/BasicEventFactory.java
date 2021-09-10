@@ -1,11 +1,8 @@
 package tech.geocodeapp.geocode.event.factory;
 
-import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.event.decorator.ConcreteEvent;
 import tech.geocodeapp.geocode.event.decorator.EventComponent;
 import tech.geocodeapp.geocode.event.model.Event;
-
-import java.util.UUID;
 
 public class BasicEventFactory extends AbstractEventFactory {
 

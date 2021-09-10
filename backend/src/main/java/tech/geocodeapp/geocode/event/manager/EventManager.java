@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.event.manager;
 
+import tech.geocodeapp.geocode.event.blockly.Block;
 import tech.geocodeapp.geocode.event.decorator.EventComponent;
 import tech.geocodeapp.geocode.event.factory.AbstractEventFactory;
 import tech.geocodeapp.geocode.event.factory.BasicEventFactory;
@@ -62,30 +63,50 @@ public class EventManager {
 
         //check what properties apply and add them to a hashmap
         HashMap<String, String> properties = new HashMap<>();
+
         if(event.getTimeLimit() != null){
             properties.put("timeLimit", event.getTimeLimit().toString());
         }
+
         if(event.isBlocklyEvent()){
-            if(event.getBlocklyDetails() != null){
-                properties.put("blocks", event.getBlocklyDetails());
+            /* blocks */
+            Block[] blocks = event.getBlocks();
+            String blocksString = blocks[0].getBlockString();
+            int numTestCases = blocks.length;
+
+            for(int i = 1; i < numTestCases; ++i){
+                blocksString += "#" + blocks[i].getBlockString();
             }
-            if(event.getInputs() != null){
-                var tempInputs = event.getInputs();
-                String inputs = tempInputs.get(0);
-                for (int i = 1; i < tempInputs.size(); i++) {
-                    inputs += "#" + tempInputs.get(i);
+
+            properties.put("blocks", blocksString);
+
+            /* inputs */
+            var inputs = event.getInputs();
+            String inputsString = "";
+
+            for(int i = 0; i < numTestCases; ++i){
+                for(int j = 0; j < inputs[i].length-1; ++i){
+                    inputsString += inputs[i][j] + ",";
                 }
-                properties.put("inputs", inputs);
+
+                inputsString += inputs[i][inputs[i].length-1] + "#";
             }
-            if(event.getOutputs() != null){
-                var tempOutputs = event.getOutputs();
-                String outputs = tempOutputs.get(0);
-                for (int i = 1; i < tempOutputs.size(); i++) {
-                    outputs += "#" + tempOutputs.get(i);
-                }
-                properties.put("outputs", outputs);
+
+            inputsString = inputsString.substring(0, inputsString.length()-1);
+
+            properties.put("inputs", inputsString);
+
+            /* outputs */
+            var outputs = event.getOutputs();
+            String outputsString = outputs[0];
+
+            for (int i = 1; i < numTestCases; ++i) {
+                outputsString += "#" + outputs[i];
             }
+
+            properties.put("outputs", outputsString);
         }
+
         converted.setProperties(properties);
 
         return converted;

@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.event.decorator;
 
+import tech.geocodeapp.geocode.event.blockly.Block;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
@@ -221,17 +222,17 @@ public abstract class EventDecorator implements EventComponent {
      * @return the blocklyDetails or null if the event is not that type
      */
     @Override
-    public String getBlocklyDetails() {
-        return decoratedType.getBlocklyDetails();
+    public Block[] getBlocks() {
+        return decoratedType.getBlocks();
     }
 
     /**
      * Sets the decoratedType's blocklyDetails
-     * @param blocklyDetails the blockly details
+     * @param blocks the blockly details
      */
     @Override
-    public void setBlocklyDetails(String blocklyDetails) {
-        decoratedType.setBlocklyDetails(blocklyDetails);
+    public void setBlocks(Block[] blocks) {
+        decoratedType.setBlocks(blocks);
     }
 
     /**
@@ -239,7 +240,7 @@ public abstract class EventDecorator implements EventComponent {
      * @return the inputs or null if the event is not that type
      */
     @Override
-    public List<String> getInputs() {
+    public String[][] getInputs() {
         return decoratedType.getInputs();
     }
 
@@ -248,7 +249,7 @@ public abstract class EventDecorator implements EventComponent {
      * @param inputs the inputs used
      */
     @Override
-    public void setInputs(List<String> inputs) {
+    public void setInputs(String[][] inputs) {
         decoratedType.setInputs(inputs);
     }
 
@@ -257,7 +258,7 @@ public abstract class EventDecorator implements EventComponent {
      * @return the outputs or null if the event is not that type
      */
     @Override
-    public List<String> getOutputs() {
+    public String[] getOutputs() {
         return decoratedType.getOutputs();
     }
 
@@ -266,7 +267,7 @@ public abstract class EventDecorator implements EventComponent {
      * @param outputs the expected outputs of the event
      */
     @Override
-    public void setOutputs(List<String> outputs) {
+    public void setOutputs(String[] outputs) {
         decoratedType.setOutputs(outputs);
     }
 }

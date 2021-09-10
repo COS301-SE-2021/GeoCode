@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.event.decorator;
 
+import tech.geocodeapp.geocode.event.blockly.Block;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
@@ -91,16 +92,16 @@ public class ConcreteEvent implements EventComponent {
      * @return null because blocklyDetails are not contained in the concreteComponent
      */
     @Override
-    public String getBlocklyDetails() {
+    public Block[] getBlocks() {
         return null;
     }
 
     /**
      * Do nothing because the blocklyDetails are not contained in the concreteComponent
-     * @param blocklyDetails unused
+     * @param blocks unused
      */
     @Override
-    public void setBlocklyDetails(String blocklyDetails) {
+    public void setBlocks(Block[] blocks) {
 
     }
 
@@ -162,7 +163,7 @@ public class ConcreteEvent implements EventComponent {
      * @return null because the inputs is not contained in the concreteComponent
      */
     @Override
-    public List<String> getInputs() {
+    public String[][] getInputs() {
         return null;
     }
 
@@ -171,7 +172,7 @@ public class ConcreteEvent implements EventComponent {
      * @param inputs unused
      */
     @Override
-    public void setInputs(List<String> inputs) {
+    public void setInputs(String[][] inputs) {
 
     }
 
@@ -179,7 +180,7 @@ public class ConcreteEvent implements EventComponent {
      * @return null because the outputs is not contained in the concreteComponent
      */
     @Override
-    public List<String> getOutputs() {
+    public String[] getOutputs() {
         return null;
     }
 
@@ -188,7 +189,7 @@ public class ConcreteEvent implements EventComponent {
      * @param outputs unused
      */
     @Override
-    public void setOutputs(List<String> outputs) {
+    public void setOutputs(String[] outputs) {
 
     }
 }
