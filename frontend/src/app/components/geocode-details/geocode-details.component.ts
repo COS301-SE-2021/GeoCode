@@ -5,9 +5,10 @@ import {
   UpdateAvailabilityRequest,
   UpdateAvailabilityResponse
 } from '../../services/geocode-api';
-import {ModalController, NavController} from '@ionic/angular';
+import {ModalController} from '@ionic/angular';
 import {QRGenerator} from '../../services/QRGenerator';
 import {GeocodeUpdateComponent} from '../../tabs/profile/geocodes/geocode-update/geocode-update.component';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-geocode-details',
@@ -26,7 +27,8 @@ export class GeocodeDetailsComponent implements OnInit {
   constructor(
     private modalController: ModalController,
     private geocodeService: GeoCodeService,
-    private navCtrl: NavController,
+    private router: Router,
+    private route: ActivatedRoute,
     private qrGenerator: QRGenerator
   ) { }
 
@@ -34,7 +36,12 @@ export class GeocodeDetailsComponent implements OnInit {
 
   //Navigate to findGeoCode page
   async findGeoCode(){
-    await this.navCtrl.navigateForward('/explore/geocode/'+this.geocode.id,{ state: {geocode: this.geocode} });
+    await this.router.navigate(['geocode/'+this.geocode.id], {
+      relativeTo: this.route,
+      state: {
+        geocode: this.geocode
+      }
+    });
   }
 
   //Call Geocode service and update Availability

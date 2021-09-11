@@ -12,6 +12,11 @@ const routes: Routes = [
     path: 'geocode/:geocodeID',
     loadChildren: () => import('../../geocode/find-geocode/find-geocode.module').then(m => m.FindGeocodePageModule)
   },
+  {
+    path: 'blockly',
+    loadChildren: () => import('./events-blockly/events-blockly.module').then( m => m.EventsBlocklyPageModule)
+  },
+
 ];
 
 @NgModule({

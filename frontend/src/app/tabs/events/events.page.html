@@ -6,8 +6,8 @@
     </app-nav-toolbar>
   </app-nav-header>
 
-  <ion-content>
-    <div  slot="fixed" class="horizontalscroll" >
+  <ion-header>
+    <div class="horizontalscroll" >
       <div class="items" >
         <ion-row>
           <ion-col id="button-col"><ion-select id="button"  value='{radius}' placeholder= "Select Radius" (ionChange)="radius($event)">
@@ -23,57 +23,65 @@
           </ion-col>
         </ion-row>
 
+      </div>
     </div>
-  </div>
-<br><br><br>
-  <div #mapElement [style.height]="height" class="map" [hidden]="listView"></div>
-  <div id="listView" [hidden]="!listView">
-    <ion-card *ngFor="let event of events" class="eventList">
-      <ion-header>
-        <ion-title id="card-title">
-          {{event.name}}
-        </ion-title>
-      </ion-header>
-      <ion-card-content>
-        <ion-row class="row"  class="heading">
-          Description
-        </ion-row>
-        <ion-row class="row">
-          {{event.description}}
-        </ion-row>
-        <ion-button id="button" color="button" (click)="goToEvent(event)">Join Event</ion-button>
-        <ion-button id="button" color="button" (click)="goToLeaderBoard(event)">LeaderBoard</ion-button>
+  </ion-header>
 
-      </ion-card-content>
-    </ion-card>
-  </div>
-  <div  id ="eventDetails" [hidden]="isHidden">
+  <ion-content>
 
-    <ion-card *ngFor="let event of selected">
-      <div  id="close-button"><ion-button id="close" color="white" (click)="close()">X</ion-button></div>
-      <ion-header>
-        <ion-title id="card-title">
-          {{event.name}}
-        </ion-title>
-      </ion-header>
-      <ion-card-content>
-        <ion-row class="row"  class="heading">
-         Description
-        </ion-row>
-        <ion-row class="row">
-        {{event.description}}
-        </ion-row>
-        <ion-button id="button" color="button" (click)="goToEvent(event)">Join Event</ion-button>
-        <ion-button id="button" color="button" (click)="goToLeaderBoard(event)">LeaderBoard</ion-button>
-      </ion-card-content>
-    </ion-card>
-  </div>
+    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+      <ion-fab-button color="button" [routerLink]="['create']">
+        <ion-icon  name="add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
 
-  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button color="button" [routerLink]="['create']">
-      <ion-icon  name="add-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+    <app-map-and-info #mapAndInfo [hidden]="listView">
+
+      <ion-card *ngIf="selected !== null">
+        <div  id="close-button">
+          <ion-button id="close" color="white" (click)="close()">X</ion-button>
+        </div>
+        <ion-header>
+          <ion-title id="card-title">
+            {{selected.name}}
+          </ion-title>
+        </ion-header>
+        <ion-card-content>
+          <ion-row class="row"  class="heading">
+            Description
+          </ion-row>
+          <ion-row class="row">
+            {{selected.description}}
+          </ion-row>
+          <ion-button id="button" color="button" (click)="goToEvent(selected)">Join Event</ion-button>
+          <ion-button id="button" color="button" (click)="goToLeaderBoard(selected)">LeaderBoard</ion-button>
+        </ion-card-content>
+      </ion-card>
+
+    </app-map-and-info>
+
+    <div id="listView" [hidden]="!listView">
+
+      <ion-card *ngFor="let event of events" class="eventList">
+        <ion-header>
+          <ion-title id="card-title">
+            {{event.name}}
+          </ion-title>
+        </ion-header>
+        <ion-card-content>
+          <ion-row class="row"  class="heading">
+            Description
+          </ion-row>
+          <ion-row class="row">
+            {{event.description}}
+          </ion-row>
+          <ion-button id="button" color="button" (click)="goToEvent(event)">Join Event</ion-button>
+          <ion-button id="button" color="button" (click)="goToLeaderBoard(event)">LeaderBoard</ion-button>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
 </ion-content>
 
 </app-nav>

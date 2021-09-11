@@ -453,7 +453,12 @@ public class EventServiceImpl implements EventService {
             try {
 
                 GetGeoCodeResponse getGeoCodeResponse = geoCodeService.getGeoCode( new GetGeoCodeRequest( geocodeID ) );
-                return new GetCurrentEventStatusResponse( true, "Status returned", status, getGeoCodeResponse.getFoundGeoCode() );
+                GeoCode geocode = getGeoCodeResponse.getFoundGeoCode();
+                geocode.setCollectables(null);
+                geocode.setHints(null);
+                geocode.setCreatedBy(null);
+                geocode.setQrCode(null);
+                return new GetCurrentEventStatusResponse( true, "Status returned", status, geocode );
             } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
 
                 return new GetCurrentEventStatusResponse( false, e.getMessage(), null, null );

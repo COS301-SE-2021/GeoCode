@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: EventsCreatePage
+  },  {
+    path: 'events-create-blockly',
+    loadChildren: () => import('./events-create-blockly/events-create-blockly.module').then( m => m.EventsCreateBlocklyPageModule)
   }
+
 ];
 
 @NgModule({
