@@ -887,7 +887,7 @@ paths:
       security:
         - bearerAuth: []
 
-  /GeoCode/updatedGeoCode:
+  /GeoCode/updateGeoCode:
     post:
       tags:
         - "GeoCode"
@@ -3627,18 +3627,7 @@ components:
           type: boolean
           example: True
         properties:
-          type: object
-          additionalProperties:
-            type: string
-          properties:
-            testCases:
-              type: array
-              items:
-                $ref: "#/components/schemas/TestCase"
-            blocks:
-              type: array
-              items:
-                $ref: "#/components/schemas/Block"
+          $ref: "#/components/schemas/EventProperties"
       xml:
         name: "Event"
         
@@ -4189,3 +4178,19 @@ components:
               example: "054463f2-2f7c-4864-8130-68e5aa79ee7f.png"
           xml:
             name: "CreateImageResponse"
+            
+    EventProperties:
+      type: object
+      properties:
+        timeLimit:
+          type: number
+        problem_description:
+          type: string
+        testCases:
+          type: array
+          items:
+            $ref: "#/components/schemas/TestCase"
+        blocks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Block"
