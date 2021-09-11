@@ -719,63 +719,6 @@ class EventServiceImplIT {
     }
 
     /**
-     * Check how the use case handles the request being null
-     */
-    @Test
-    @Order( 5 )
-    @DisplayName( "Null repository handling - createLeaderBoard" )
-    void createLeaderBoardNullRequestTest() {
-
-        /* Null request check */
-        assertThatThrownBy( () -> eventService.createLeaderBoard( null ) )
-                .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( reqEmptyError );
-    }
-
-    /**
-     * Check how the use case handles an invalid request
-     */
-    @Test
-    @Order( 6 )
-    @DisplayName( "Invalid repository attribute handling - createLeaderBoard" )
-    void createLeaderBoardInvalidRequestTest() {
-
-        /*
-         * Create a request object
-         * and assign values to it
-         */
-        CreateLeaderboardRequest request = new CreateLeaderboardRequest();
-        request.setEventID( null );
-
-        /* Null parameter request check */
-        assertThatThrownBy( () -> eventService.createLeaderBoard( request ) )
-                .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( reqParamError );
-    }
-
-    /**
-     * Using valid data does the createLeaderBoard use case test
-     * complete successfully
-     */
-    @Test
-    @Order( 7 )
-    @DisplayName( "Valid request - createLeaderBoard" )
-    void createLeaderBoardTest() {
-
-        try {
-            //ToDo finish this
-            CreateLeaderboardRequest request = new CreateLeaderboardRequest();
-            request.setEventID( null );
-
-            var event = eventService.createLeaderBoard( request );
-        } catch ( InvalidRequestException e ) {
-
-            /* An error occurred, print the stack to identify */
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Using valid data does the setGeoCodeService use case test
      * complete successfully
      */
