@@ -11,7 +11,7 @@ import java.util.*;
 
 public class CollectableSetMockRepository implements CollectableSetRepository {
 
-    private static HashMap<UUID, CollectableSet> map = new HashMap<UUID, CollectableSet>();
+    private HashMap<UUID, CollectableSet> map = new HashMap<UUID, CollectableSet>();
 
     @Override
     public List<CollectableSet> findAll() {

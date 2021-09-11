@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.user.service;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
@@ -51,10 +52,11 @@ public interface UserService {
     User getCurrentUser();
 
     //U1.14 getCurrentUserID
+    /** @deprecated use CurrentUserDetails.getID() */
     java.util.UUID getCurrentUserID();
 
     //U1.15 registerNewUser
-    RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException;
+    Response handleLogin(HandleLoginRequest request) throws NullRequestParameterException;
 
     //GeoCode helper functions
 

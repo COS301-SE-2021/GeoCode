@@ -12,4 +12,9 @@
 import { Block } from './block';
 import { TestCase } from './testCase';
 
-export type EventProperties = Map;
+export interface EventProperties { 
+    timeLimit?: number;
+    problemDescription?: string;
+    testCases?: Array<TestCase>;
+    blocks?: Array<Block>;
+}
