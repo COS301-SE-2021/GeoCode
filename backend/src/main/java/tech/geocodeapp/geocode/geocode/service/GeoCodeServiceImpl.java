@@ -91,6 +91,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
     @Min( 4 )
     private static final int QR_SIZE = 8;
 
+    private String invalidGeoCodeIdMessage = "Invalid GeoCode ID";
+
     /**
      * Overloaded Constructor
      *
@@ -196,12 +198,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                     } else {
 
                         /* Exception thrown when trying to get Collectable */
-                        return new CreateGeoCodeResponse(false);
+                        return new CreateGeoCodeResponse(false, "Collectable Type not found");
                     }
                 } else {
 
                     /* Exception thrown when trying to get Collectable */
-                    return new CreateGeoCodeResponse(false);
+                    return new CreateGeoCodeResponse(false, "Collectable Types not found");
                 }
 
                 CreateCollectableResponse collectableResponse;
@@ -212,7 +214,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 } catch (NullRequestParameterException e) {
 
                     /* Exception thrown therefore creation failed */
-                    return new CreateGeoCodeResponse(false);
+                    return new CreateGeoCodeResponse(false, e.getMessage());
                 }
 
                 /* Building a collectable from a collectable response */
@@ -280,7 +282,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             if ( !newGeoCode.equals( check ) ) {
 
                 /* Saved GeoCode not the same therefore creation failed */
-                return new CreateGeoCodeResponse( false );
+                return new CreateGeoCodeResponse( false, "The GeoCode did not save properly" );
             }
 
             /*
@@ -291,12 +293,12 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 userService.addToOwnedGeoCodes(ownedGeoCodesRequest);
             } catch (NullRequestParameterException e) {
 
-                return new CreateGeoCodeResponse(false);
+                return new CreateGeoCodeResponse(false, e.getMessage());
             }
         } catch ( IllegalArgumentException error ) {
 
             /* Exception thrown therefore creation failed */
-            return new CreateGeoCodeResponse( false );
+            return new CreateGeoCodeResponse( false, error.getMessage() );
         }
 
         /*
@@ -317,7 +319,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
             if ( temp.get().getId().equals( id ) ) {
 
                 /* Set the attributes as the creation was successful */
-                response = new CreateGeoCodeResponse( true, id, qr.toString() );
+                response = new CreateGeoCodeResponse( true, "GeoCode created", id, qr.toString() );
             } else {
 
                 /* An error occurred since the ID's are not identical */
@@ -397,7 +399,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Return the GeoCode was successfully updated */
-        return new UpdateGeoCodeResponse( true );
+        return new UpdateGeoCodeResponse( true, "GeoCode updated" );
     }
 
     /**
@@ -850,7 +852,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         Optional< GeoCode > target = geoCodeRepo.findById( request.getTargetGeoCodeID() );
         if ( target.isEmpty() ) {
 
-            return new SwapCollectablesResponse( false );
+            return new SwapCollectablesResponse( false, invalidGeoCodeIdMessage );
         }
 
         /* Get the stored GeoCode */
@@ -864,7 +866,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         var userID = user.getId();
         if ( ( userID == null ) || ( geocode.getCreatedBy().equals( userID ) ) ) {
 
-            return new SwapCollectablesResponse( false );
+            //TODO: split the OR into 2 cases
+            return new SwapCollectablesResponse( false,  );
         }
 
         /* Find the target collectable in the GeoCode */
