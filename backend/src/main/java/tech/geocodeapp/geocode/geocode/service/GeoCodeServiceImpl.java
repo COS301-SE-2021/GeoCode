@@ -16,11 +16,16 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
+import tech.geocodeapp.geocode.event.decorator.EventComponent;
 import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
 import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
+import tech.geocodeapp.geocode.event.manager.EventManager;
+import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.request.GetEventRequest;
 import tech.geocodeapp.geocode.event.service.EventService;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.exceptions.RepoException;
@@ -163,7 +168,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         * So only Collectables if the current GeoCode is not part of a
         * Blockly Event
         * */
-        if( eventComponent == null || !eventComponent.isBlocklyEvent() ) {//TODO: put back in once Blockly Event decorator is done: || !eventComponent.isBlocklyEvent()
+        if( eventComponent == null || !eventComponent.isBlocklyEvent() ) {
             /* Get all the stored Collectables */
             var collectableTypes = collectableService.getCollectableTypes();
 
@@ -708,6 +713,22 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
                 /* Set the response to save the found collectables */
                 response.setStoredCollectable( storedCollectable );
+
+                /* if the Event is a Blockly Event, move to the next stage */
+                GeoCode geocode = temp.get();
+
+                try {
+                    Event event = eventService.getEvent(new GetEventRequest(geocode.getEventID())).getFoundEvent();
+
+                    EventManager eventManager = new EventManager();
+                    EventComponent eventComponent = eventManager.buildEvent(event);
+
+                    if(eventComponent.isBlocklyEvent()){
+                        eventService.nextStage( geocode, CurrentUserDetails.getID() );
+                    }
+                } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException | NotFoundException | MismatchedParametersException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

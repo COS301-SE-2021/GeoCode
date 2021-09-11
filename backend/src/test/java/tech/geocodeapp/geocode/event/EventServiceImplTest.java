@@ -30,10 +30,7 @@ import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This is the unit testing class for the Event subsystem
@@ -697,63 +694,6 @@ class EventServiceImplTest {
     }
 
     /**
-     * Check how the use case handles the request being null
-     */
-    @Test
-    @Order( 5 )
-    @DisplayName( "Null repository handling - createLeaderBoard" )
-    void createLeaderBoardNullRequestTest() {
-
-        /* Null request check */
-        assertThatThrownBy( () -> eventService.createLeaderBoard( null ) )
-                .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( reqEmptyError );
-    }
-
-    /**
-     * Check how the use case handles an invalid request
-     */
-    @Test
-    @Order( 6 )
-    @DisplayName( "Invalid repository attribute handling - createLeaderBoard" )
-    void createLeaderBoardInvalidRequestTest() {
-
-        /*
-         * Create a request object
-         * and assign values to it
-         */
-        CreateLeaderboardRequest request = new CreateLeaderboardRequest();
-        request.setEventID( null );
-
-        /* Null parameter request check */
-        assertThatThrownBy( () -> eventService.createLeaderBoard( request ) )
-                .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( reqParamError );
-    }
-
-    /**
-     * Using valid data does the createLeaderBoard use case test
-     * complete successfully
-     */
-    @Test
-    @Order( 7 )
-    @DisplayName( "Valid request - createLeaderBoard" )
-    void createLeaderBoardTest() {
-
-        try {
-            //ToDo finish this
-            CreateLeaderboardRequest request = new CreateLeaderboardRequest();
-            request.setEventID( null );
-
-            var event = eventService.createLeaderBoard( request );
-        } catch ( InvalidRequestException e ) {
-
-            /* An error occurred, print the stack to identify */
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Using valid data does the setGeoCodeService use case test
      * complete successfully
      */
@@ -775,7 +715,7 @@ class EventServiceImplTest {
         GeoCode gc3 = new GeoCode().id( UUID.randomUUID() ).location( new GeoPoint( 10, -1 ) ); //4th
         GeoCode gc4 = new GeoCode().id( UUID.randomUUID() ).location( new GeoPoint( 0, 0 ) ); //1st
 
-        List< GeoCode > geoCodes = new ArrayList< GeoCode >();
+        List< GeoCode > geoCodes = new ArrayList<>();
             geoCodes.add( gc1 );
             geoCodes.add( gc2 );
             geoCodes.add( gc3 );
@@ -816,6 +756,8 @@ class EventServiceImplTest {
             request.setCreateGeoCodesToFind( createGeoCodeRequests );
 
             request.setOrderBy( OrderLevels.GIVEN );
+
+            request.setProperties( new HashMap<>() );
 
             eventService.createEvent( request );
 

@@ -164,7 +164,7 @@ public class EventMockRepository implements EventRepository {
     @Override
     public boolean existsById( UUID uuid ) {
 
-        return false;
+        return map.containsKey(uuid);
     }
 
     /**
