@@ -887,7 +887,7 @@ paths:
       security:
         - bearerAuth: []
 
-  /GeoCode/updateGeoCode:
+  /GeoCode/updatedGeoCode:
     post:
       tags:
         - "GeoCode"
