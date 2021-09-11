@@ -1,16 +1,14 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {
-  CreateEventRequest, CreateEventResponse, CreateGeoCodeRequest,
-  CreateGeoCodeResponse,
+  CreateEventRequest,
+  CreateEventResponse,
   EventService,
-  GeoCode,
   GeoCodeService
 } from '../../../services/geocode-api';
 import {ModalController, NavController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
-import {QRGenerator} from '../../../services/QRGenerator';
 import {BlocklyComponent} from '../../../components/blockly/blockly.component';
 
 @Component({
@@ -35,9 +33,7 @@ export class EventsCreatePage implements AfterViewInit  {
   minDate;
   minEndDate;
   timeLimit=0;
-  timeday =0;
-  timehours =0;
-  timeMin =0;
+
   // @ts-ignore
   request: CreateEventRequest = {
     beginDate: '',
@@ -55,8 +51,7 @@ export class EventsCreatePage implements AfterViewInit  {
                     private geocodeApi: GeoCodeService,
                     private mapsLoader: GoogleMapsLoader,
                     private toastController: ToastController,
-                    private eventApi: EventService,
-                    private qrGenerator: QRGenerator) {
+                    private eventApi: EventService) {
 
   }
 
@@ -89,20 +84,7 @@ export class EventsCreatePage implements AfterViewInit  {
     const { data } = await modal.onDidDismiss();
     if (data != null) {
       this.geocodes.push(data);
-      this.geocodeApi.createGeoCode(data)
-        .subscribe(async (response: CreateGeoCodeResponse) =>{
-            const toast =  await this.toastController.create({
-              message: 'GeoCode Created',
-              duration: 2000
-            });
-            await toast.present();
-          // @ts-ignore
-            this.request.geoCodesToFind.push(response.geoCodeID);
-            //create QR code image
-          if(response.success){
-            this.qrGenerator.download(response.qrCode);
-          }
-        });
+      this.request.createGeoCodesToFind.push(data);
     }
   }
 
@@ -122,10 +104,10 @@ export class EventsCreatePage implements AfterViewInit  {
 
   eventType($event){
     this.type=$event.detail.value;
-    if($event.detail.value =='timetrial'){
+    if($event.detail.value ==='timetrial'){
       this.challengeHidden=true;
       this.timeHidden=false;
-    }else if($event.detail.value == 'challenge'){
+    }else if($event.detail.value === 'challenge'){
       this.challengeHidden=false;
       this.timeHidden=true;
     }else{
@@ -149,16 +131,11 @@ export class EventsCreatePage implements AfterViewInit  {
     this.request.endDate=date.toISOString().split('T')[0];
   }
 
-  showGeoCodes(){
-
-  }
-
   createEvent(){
-    // eslint-disable-next-line eqeqeq
-    if(this.type=='challenge'){
-      // to be implemented in demo 4 wow factor
-      // eslint-disable-next-line eqeqeq
-    }else if(this.type =='timetrial'){
+
+    if(this.type==='challenge'){
+
+    }else if(this.type ==='timetrial'){
       this.request.properties.timeLimit=this.timeLimit +'';
     }
     console.log(this.request);
