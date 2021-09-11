@@ -66,11 +66,11 @@ export class GeocodeDetailsComponent implements OnInit {
     this.qrGenerator.download(this.geocode.qrCode);
   }
 
-  async updateGeocode(geocode) {
+  async updateGeocode() {
     const modal = await this.modalController.create({
       component: GeocodeUpdateComponent,
       swipeToClose: true,
-      componentProps: {}
+      componentProps: {geocode:this.geocode}
     });
     await modal.present();
     const {data} = await modal.onDidDismiss();

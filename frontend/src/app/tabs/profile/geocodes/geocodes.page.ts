@@ -108,6 +108,9 @@ export class UserGeocodesPage implements AfterViewInit {
 
   closeDetails = () => this.showDetails(null);
 
+  createdGeoCode(){
+    return (this.showing === 'created');
+  }
   shouldShowQR() {
     return (this.showing === 'created');
   }

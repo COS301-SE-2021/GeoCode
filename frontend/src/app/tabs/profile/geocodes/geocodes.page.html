@@ -22,7 +22,7 @@
 
   <ion-content>
     <app-map-and-info #mapAndInfo>
-      <app-geocode-details [closeFunction]="closeDetails" [geocode]="detailedGeoCode" [showQR]="shouldShowQR()"></app-geocode-details>
+      <app-geocode-details [closeFunction]="closeDetails" [geocode]="detailedGeoCode" [showQR]="shouldShowQR()" [showEdit]="createdGeoCode()"></app-geocode-details>
     </app-map-and-info>
 
   </ion-content>
