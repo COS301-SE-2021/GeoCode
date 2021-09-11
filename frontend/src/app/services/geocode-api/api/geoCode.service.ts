@@ -842,7 +842,7 @@ export class GeoCodeService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<UpdateGeoCodeResponse>('post',`${this.basePath}/GeoCode/updatedGeoCode`,
+        return this.httpClient.request<UpdateGeoCodeResponse>('post',`${this.basePath}/GeoCode/updateGeoCode`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
