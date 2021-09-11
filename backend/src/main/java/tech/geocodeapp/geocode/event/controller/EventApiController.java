@@ -44,11 +44,6 @@ public class EventApiController implements EventApi {
         }
     }
 
-    public ResponseEntity< CreateLeaderboardResponse > createLeaderBoard( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new Leaderboard for an Event", required = true, schema = @Schema() ) @Valid @RequestBody CreateLeaderboardRequest body ) {
-
-        return new ResponseEntity<>( HttpStatus.NOT_IMPLEMENTED );
-    }
-
     @Override
     public ResponseEntity<GetCurrentEventStatusResponse> getCurrentEventStatus(GetCurrentEventStatusRequest body ) throws InvalidRequestException {
 
@@ -116,4 +111,39 @@ public class EventApiController implements EventApi {
         }
     }
 
+    public ResponseEntity<GetBlocksResponse> getBlocks(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the User's blocks for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody GetBlocksRequest body) throws InvalidRequestException {
+        GetBlocksResponse response = eventService.getBlocks( body );
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
+    }
+
+    public ResponseEntity<CheckOutputResponse> checkOutput(@Parameter(in = ParameterIn.DEFAULT, description = "Request to check the output values for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody CheckOutputRequest body) throws InvalidRequestException {
+        CheckOutputResponse response = eventService.checkOutput( body );
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
+    }
+
+    public ResponseEntity<GetInputsResponse> getInputs(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the input values for a Blockly Event", required=true, schema=@Schema()) @Valid @RequestBody GetInputsRequest body) throws InvalidRequestException {
+        GetInputsResponse response = eventService.getInputs( body );
+
+        if ( ( response != null ) ) {
+
+            return new ResponseEntity<>( response, HttpStatus.OK );
+        } else {
+
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
+    }
 }
