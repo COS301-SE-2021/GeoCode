@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.17"
+  version: "1.5.18"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -1742,6 +1742,129 @@ paths:
             application/xml:
               schema:
                 $ref: "#/components/schemas/CreateLeaderboardResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+        
+  /Event/getBlocks:
+    post:
+      tags:
+        - "Event"
+      summary: "Gets the User's blocks for a Blockly Event"
+      description: "Gets the User's blocks for a Blockly Event"
+      operationId: "getBlocks"
+      requestBody:
+        required: true
+        description: "Request to get the User's blocks for a Blockly Event"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetBlocksRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetBlocksRequest"
+      responses:
+        '200':
+          description: "Return the User's blocks for a Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetBlocksResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetBlocksResponse"
+        '404':
+          description: "Failed to return the User's blocks for that Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetBlocksResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetBlocksResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+        
+  /Event/getInputs:
+    post:
+      tags:
+        - "Event"
+      summary: "Gets the input values for the Blockly Event"
+      description: "Gets the input values for the Blockly Event's test cases"
+      operationId: "getInputs"
+      requestBody:
+        required: true
+        description: "Request to get the input values for a Blockly Event"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetInputsRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetInputsRequest"
+      responses:
+        '200':
+          description: "Return the input values for a Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetInputsResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetInputsResponse"
+        '404':
+          description: "Failed to return the input values for the Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetInputsResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetInputsResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+        
+  /Event/checkOutput:
+    post:
+      tags:
+        - "Event"
+      summary: "Checks the output values for the Blockly Event"
+      description: "Checks whether the output provided matches the correct output for the given Blockly Event"
+      operationId: "checkOutput"
+      requestBody:
+        required: true
+        description: "Request to check the output values for a Blockly Event"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckOutputRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/CheckOutputRequest"
+      responses:
+        '200':
+          description: "Return whether the output was correct for all of the test cases for a Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckOutputResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/CheckOutputResponse"
+        '404':
+          description: "Failed to check the output given for the Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckOutputResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/CheckOutputResponse"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
       security:
@@ -3507,6 +3630,15 @@ components:
           type: object
           additionalProperties:
             type: string
+          properties:
+            testCases:
+              type: array
+              items:
+                $ref: "#/components/schemas/TestCase"
+            blocks:
+              type: array
+              items:
+                $ref: "#/components/schemas/Block"
       xml:
         name: "Event"
         
@@ -3783,6 +3915,111 @@ components:
                 $ref: "#/components/schemas/Event"
           xml:
             name: "GetEventsByLocationResponse"
+            
+    GetBlocksRequest:
+      allOf:
+        - $ref: "#/components/schemas/GetEventDetailsByIDRequest"
+        - type: "object"
+      xml:
+        name: "GetBlocksRequest"
+        
+    GetBlocksResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "Blocks successfully returned"
+            blockNames:
+              type: array
+              items:
+                type: string
+          xml:
+            name: "GetBlocksResponse"
+    
+    TestCase:
+      type: "object"
+      required:
+        - inputs
+        - output
+      properties:
+        inputs:
+          type: array
+          items:
+            type: string
+        output:
+          type: string
+      xml:
+        name: "TestCase"
+          
+    Block:
+      type: "object"
+      required:
+        - type
+        - maxInstances
+      properties:
+        type:
+          type: string
+        maxInstances:
+          type: integer
+      xml:
+        name: "Block"
+        
+    GetEventDetailsByIDRequest:
+      type: "object"
+      required:
+        - eventID
+      properties:
+        eventID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetEventDetailsByIDRequest"
+        
+    GetInputsRequest:
+     allOf:
+        - $ref: "#/components/schemas/GetEventDetailsByIDRequest"
+        - type: "object"
+          xml:
+            name: "GetInputsRequest"
+    
+    GetInputsResponse:
+      type: "object"
+      required:
+        - inputs
+      properties:
+        inputs:
+          type: array
+          items:
+            type: string
+      xml:
+        name: "GetInputsResponse"
+        
+    CheckOutputRequest:
+      type: "object"
+      required:
+        - eventID
+        - outputs
+      properties:
+        eventID:
+          type: string
+          format: uuid
+        outputs:
+          type: array
+          items:
+            type: string
+      xml:
+        name: "CheckOutputRequest"
+    
+    CheckOutputResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "You passed all of the test cases"
+          xml:
+            name: "CheckOutputResponse"
 
     GetLeaderboardByIDRequest:
       type: "object"
