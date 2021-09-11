@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.event.decorator;
 
+import tech.geocodeapp.geocode.event.blockly.Block;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
@@ -51,6 +52,28 @@ public interface EventComponent {
     void setAvailable(Boolean available);
 
     /**
+     * Getter for checking if the event is a normal event or a blockly one
+     */
+    boolean isBlocklyEvent();
+
+    /**
+     * Setter used to set the blocklyEvent variable
+     */
+    void setBlocklyEvent(boolean blocklyEvent);
+
+    /**
+     * Getter for blockly events used to get the blocklyDetails variable from {@link BlocklyEventDecorator}
+     * @return The blocks for the event
+     */
+    Block[] getBlocks();
+
+    /**
+     * Setter for blockly events used to set the blocklyDetails variable from {@link BlocklyEventDecorator}
+     * @param blocks Array of blocks for the event
+     */
+    void setBlocks(Block[] blocks);
+
+    /**
      * Getter for time trials used to get the timeLimit variable from {@link TimeTrialEventDecorator}
      */
     Integer getTimeLimit();
@@ -80,4 +103,39 @@ public interface EventComponent {
      */
     int calculatePoints(GeoCode foundGeocode, int stageNumber, UserEventStatus status);
 
+    /**
+     * Getter for blockly events used to get the inputs variable from {@link BlocklyEventDecorator}
+     * @return The input values for each test case
+     */
+    String[][] getInputs();
+
+    /**
+     * Setter for blockly events used to set the inputs variable from {@link BlocklyEventDecorator}
+     * @param inputs The input values for each test case
+     */
+    void setInputs(String[][] inputs);
+
+    /**
+     * Getter for blockly events used to get the outputs variable from {@link BlocklyEventDecorator}
+     * @return The output for each test case
+     */
+    String[] getOutputs();
+
+    /**
+     * Setter for blockly events used to set the outputs variable from {@link BlocklyEventDecorator}
+     * @param outputs The output for each test case
+     */
+    void setOutputs(String[] outputs);
+
+    /**
+     * Sets the problem description if applicable
+     * @param problemDescription The problem description
+     */
+    void setProblemDescription(String problemDescription);
+
+    /**
+     * Gets the problem description if applicable
+     * @return The problem description
+     */
+    String getProblemDescription();
 }

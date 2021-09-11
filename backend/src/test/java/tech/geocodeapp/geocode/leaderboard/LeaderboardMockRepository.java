@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class LeaderboardMockRepository implements LeaderboardRepository {
-    private static final HashMap<UUID, Leaderboard> map = new HashMap<>();
+    private final HashMap<UUID, Leaderboard> map = new HashMap<>();
 
     @Override
     @NonNull

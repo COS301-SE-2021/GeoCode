@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class PointMockRepository implements PointRepository {
-    private static final HashMap<UUID, Point> map = new HashMap<>();
+    private final HashMap<UUID, Point> map = new HashMap<>();
 
     @Override
     public List<Point> findAllByLeaderboardID(UUID leaderboardID) {

@@ -1,11 +1,8 @@
 package tech.geocodeapp.geocode.event.factory;
 
-import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.event.decorator.ConcreteEvent;
 import tech.geocodeapp.geocode.event.decorator.EventComponent;
 import tech.geocodeapp.geocode.event.model.Event;
-
-import java.util.UUID;
 
 public class BasicEventFactory extends AbstractEventFactory {
 
@@ -29,6 +26,7 @@ public class BasicEventFactory extends AbstractEventFactory {
         toReturn.setEndDate(event.getEndDate());
         toReturn.setLeaderboards(event.getLeaderboards());
         toReturn.setAvailable(event.isAvailable());
+        toReturn.setBlocklyEvent(false);
 
         return toReturn;
     }

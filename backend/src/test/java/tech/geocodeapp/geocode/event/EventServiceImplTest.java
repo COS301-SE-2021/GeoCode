@@ -19,6 +19,7 @@ import tech.geocodeapp.geocode.event.service.*;
 import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
 import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 
 import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
@@ -27,13 +28,9 @@ import tech.geocodeapp.geocode.leaderboard.UserMockService;
 import tech.geocodeapp.geocode.leaderboard.service.*;
 import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
-import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This is the unit testing class for the Event subsystem
@@ -91,12 +88,6 @@ class EventServiceImplTest {
     GeoCodeService geoCodeService;
 
     /**
-     * The User service accessor
-     */
-    @Mock( name = "userServiceImpl" )
-    UserService userService;
-
-    /**
      * The expected exception message for if the given request has invalid attributes
      */
     String reqParamError = "The given request is missing parameter/s.";
@@ -145,12 +136,11 @@ class EventServiceImplTest {
 
         /* Create the GeoCode and User service */
         geoCodeService = new GeoCodeMockService( geoCodeMockRepo );
-        userService = new UserMockService( userMockRepo );
 
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
-            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, userService );
+            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService );
             eventService.setGeoCodeService( geoCodeService );
         } catch ( RepoException e ) {
 
@@ -170,7 +160,7 @@ class EventServiceImplTest {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null, userService ) )
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }
@@ -226,12 +216,12 @@ class EventServiceImplTest {
         try {
 
             /* Create mock geocodes to add to the event */
-            GeoCode gc1 = new GeoCode().id( UUID.randomUUID() );
-            GeoCode gc2 = new GeoCode().id( UUID.randomUUID() );
-            GeoCode gc3 = new GeoCode().id( UUID.randomUUID() );
-            geoCodeMockRepo.save( gc1 );
-            geoCodeMockRepo.save( gc2 );
-            geoCodeMockRepo.save( gc3 );
+//            GeoCode gc1 = new GeoCode().id( UUID.randomUUID() );
+//            GeoCode gc2 = new GeoCode().id( UUID.randomUUID() );
+//            GeoCode gc3 = new GeoCode().id( UUID.randomUUID() );
+//            geoCodeMockRepo.save( gc1 );
+//            geoCodeMockRepo.save( gc2 );
+//            geoCodeMockRepo.save( gc3 );
 
             /*
              * Create a request object
@@ -243,11 +233,10 @@ class EventServiceImplTest {
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
             request.setEndDate( LocalDate.parse( "2020-05-21" ) );
-            List< UUID > geoCodesToFind = new ArrayList<>();
-                geoCodesToFind.add( gc1.getId() );
-                geoCodesToFind.add( gc2.getId() );
-                geoCodesToFind.add( gc3.getId() );
-            request.setGeoCodesToFind( geoCodesToFind );
+
+            List< CreateGeoCodeRequest > createGeoCodeRequests = new ArrayList<>();
+            request.setCreateGeoCodesToFind( createGeoCodeRequests );
+
             request.setOrderBy( OrderLevels.GIVEN );
             request.setProperties( new HashMap<>() );
 
@@ -705,63 +694,6 @@ class EventServiceImplTest {
     }
 
     /**
-     * Check how the use case handles the request being null
-     */
-    @Test
-    @Order( 5 )
-    @DisplayName( "Null repository handling - createLeaderBoard" )
-    void createLeaderBoardNullRequestTest() {
-
-        /* Null request check */
-        assertThatThrownBy( () -> eventService.createLeaderBoard( null ) )
-                .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( reqEmptyError );
-    }
-
-    /**
-     * Check how the use case handles an invalid request
-     */
-    @Test
-    @Order( 6 )
-    @DisplayName( "Invalid repository attribute handling - createLeaderBoard" )
-    void createLeaderBoardInvalidRequestTest() {
-
-        /*
-         * Create a request object
-         * and assign values to it
-         */
-        CreateLeaderboardRequest request = new CreateLeaderboardRequest();
-        request.setEventID( null );
-
-        /* Null parameter request check */
-        assertThatThrownBy( () -> eventService.createLeaderBoard( request ) )
-                .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( reqParamError );
-    }
-
-    /**
-     * Using valid data does the createLeaderBoard use case test
-     * complete successfully
-     */
-    @Test
-    @Order( 7 )
-    @DisplayName( "Valid request - createLeaderBoard" )
-    void createLeaderBoardTest() {
-
-        try {
-            //ToDo finish this
-            CreateLeaderboardRequest request = new CreateLeaderboardRequest();
-            request.setEventID( null );
-
-            var event = eventService.createLeaderBoard( request );
-        } catch ( InvalidRequestException e ) {
-
-            /* An error occurred, print the stack to identify */
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Using valid data does the setGeoCodeService use case test
      * complete successfully
      */
@@ -783,7 +715,7 @@ class EventServiceImplTest {
         GeoCode gc3 = new GeoCode().id( UUID.randomUUID() ).location( new GeoPoint( 10, -1 ) ); //4th
         GeoCode gc4 = new GeoCode().id( UUID.randomUUID() ).location( new GeoPoint( 0, 0 ) ); //1st
 
-        List< GeoCode > geoCodes = new ArrayList< GeoCode >();
+        List< GeoCode > geoCodes = new ArrayList<>();
             geoCodes.add( gc1 );
             geoCodes.add( gc2 );
             geoCodes.add( gc3 );
@@ -813,27 +745,19 @@ class EventServiceImplTest {
     private void populate( int size ) {
 
         try {
-            /* Create mock geocodes */
-            GeoCode gc1 = new GeoCode().id( UUID.randomUUID() );
-            GeoCode gc2 = new GeoCode().id( UUID.randomUUID() );
-            GeoCode gc3 = new GeoCode().id( UUID.randomUUID() );
-            geoCodeMockRepo.save( gc1 );
-            geoCodeMockRepo.save( gc2 );
-            geoCodeMockRepo.save( gc3 );
-
-
             CreateEventRequest request = new CreateEventRequest();
             request.setDescription( "Try get as many as possible" );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
             request.setEndDate( LocalDate.parse( "2020-05-21" ) );
-            List< UUID > geoCodesToFind = new ArrayList<>();
-            geoCodesToFind.add( gc1.getId() );
-            geoCodesToFind.add( gc2.getId() );
-            geoCodesToFind.add( gc3.getId() );
-            request.setGeoCodesToFind( geoCodesToFind );
+
+            List< CreateGeoCodeRequest > createGeoCodeRequests = new ArrayList<>();
+            request.setCreateGeoCodesToFind( createGeoCodeRequests );
+
             request.setOrderBy( OrderLevels.GIVEN );
+
+            request.setProperties( new HashMap<>() );
 
             eventService.createEvent( request );
 

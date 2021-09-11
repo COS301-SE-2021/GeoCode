@@ -619,4 +619,21 @@ public class Event {
         return o.toString().replace( "\n", "\n    " );
     }
 
+    /**
+     * Nulls out the details for an Event that should not be seen by non-admin Users
+     */
+    public void removePrivateDetails(){
+        this.geocodeIDs = null;
+        this.properties = null;
+    }
+
+    /**
+     * Nulls out the details for an Event that should not be seen by non-admin Users
+     * and returns the Event
+     * @return The event with the details nulled out
+     */
+    public Event getPublicDetails() {
+        this.removePrivateDetails();
+        return this;
+    }
 }
