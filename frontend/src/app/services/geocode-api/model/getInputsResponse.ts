@@ -11,5 +11,5 @@
  */
 
 export interface GetInputsResponse { 
-    inputs: Array<string>;
+    inputs: Array<Array<string>>;
 }

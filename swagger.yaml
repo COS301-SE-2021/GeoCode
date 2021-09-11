@@ -3980,7 +3980,9 @@ components:
         inputs:
           type: array
           items:
-            type: string
+            type: array
+            items:
+              type: string
       xml:
         name: "GetInputsResponse"
         
