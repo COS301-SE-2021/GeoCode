@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {GeoCodeService, UpdateGeoCodeRequest, UpdateGeoCodeResponse} from '../../../../services/geocode-api';
-import {AlertController, ToastController} from '@ionic/angular';
+import {AlertController, ModalController, ToastController} from '@ionic/angular';
 
 @Component({
   selector: 'app-geocode-update',
@@ -17,7 +17,7 @@ export class GeocodeUpdateComponent implements OnInit {
     hints: [],
     location: {latitude:0,longitude:0}
   };
-  constructor( private toastController: ToastController,private geocodeAPI: GeoCodeService, private alertCtrl: AlertController) { }
+  constructor( private modalController: ModalController,private toastController: ToastController,private geocodeAPI: GeoCodeService, private alertCtrl: AlertController) { }
 
   ngOnInit() {
     this.updateRequest.available = this.geocode.available;
@@ -41,9 +41,24 @@ export class GeocodeUpdateComponent implements OnInit {
     this.updateRequest.difficulty=$event.detail.value;
   }
 
-  updateGeoCode(){
-    this.geocodeAPI.updateGeoCode(this.updateRequest).subscribe((response: UpdateGeoCodeResponse)=>{
-      console.log(response);
+  async updateGeoCode(){
+    this.geocodeAPI.updateGeoCode(this.updateRequest).subscribe(async (response: UpdateGeoCodeResponse)=>{
+      if(!response.success){
+        const toast =  await this.toastController.create({
+          message: 'Error updating geocode ',
+          duration: 2000
+        });
+        await toast.present();
+      }else{
+        const toast =  await this.toastController.create({
+          message: 'Succesfully updated geocode',
+          duration: 2000
+        });
+        await toast.present();
+        this.modalController.dismiss({
+          dismissed: true
+        });
+      }
     });
   }
 
@@ -101,5 +116,11 @@ export class GeocodeUpdateComponent implements OnInit {
         await toast.present();
       }
     }
+  }
+
+  close(){
+    this.modalController.dismiss({
+      dismissed:true
+    });
   }
 }
