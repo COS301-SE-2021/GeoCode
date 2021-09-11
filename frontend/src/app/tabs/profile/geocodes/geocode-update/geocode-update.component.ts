@@ -42,7 +42,6 @@ export class GeocodeUpdateComponent implements OnInit {
   }
 
   updateGeoCode(){
-
     this.geocodeAPI.updateGeoCode(this.updateRequest).subscribe((response: UpdateGeoCodeResponse)=>{
       console.log(response);
     });
