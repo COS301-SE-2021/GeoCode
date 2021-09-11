@@ -9,24 +9,32 @@
     </app-nav-toolbar>
   </app-nav-header>
 
-  <ion-header>
-    <ion-grid>
-      <ion-row *ngIf="event !== null">
-        <ion-col size="6">  <ion-title id="time-name">{{event.name}}</ion-title></ion-col>
-        <ion-col size="6">  <ion-button color="button" class="leaderBoardButton" (click)="openLeaderBoard()">Leaderboard</ion-button></ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-header>
-
   <ion-content>
     <app-map-and-info #mapAndInfo [showInfo]="true">
-      <app-geocode-details *ngIf="geocode !== null" [geocode]="geocode" [showFindGeoCode]="true"></app-geocode-details>
-      <ion-card *ngIf="status !== null && (status.details.hasOwnProperty('blocks') || true)">
-        <ion-button expand="block">
-          <ion-icon name="extension-puzzle-outline"></ion-icon>
-          <ion-label>Open Blockly Editor</ion-label>
-        </ion-button>
+      <ion-card *ngIf="event !== null" color="card">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-card-title>{{event.name}}</ion-card-title>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-button color="button" expand="block" (click)="openLeaderBoard()">
+                <ion-icon name="list-outline"></ion-icon>
+                <ion-label>View Leaderboard</ion-label>
+              </ion-button>
+            </ion-col>
+            <ion-col *ngIf="(status !== null && status.details.hasOwnProperty('blocks')) || true">
+              <ion-button color="button" expand="block" (click)="openBlockly()">
+                <ion-icon name="extension-puzzle-outline"></ion-icon>
+                <ion-label>Open Blockly Editor</ion-label>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-card>
+      <app-geocode-details *ngIf="geocode !== null" [geocode]="geocode" [showFindGeoCode]="true"></app-geocode-details>
     </app-map-and-info>
   </ion-content>
 

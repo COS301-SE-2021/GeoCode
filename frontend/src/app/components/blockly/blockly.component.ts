@@ -1,18 +1,24 @@
-import {AfterViewInit, Component, ElementRef, Input, ViewChild} from '@angular/core';
-import {NgxBlocklyComponent} from 'ngx-blockly';
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild} from '@angular/core';
 import * as Blockly from 'blockly';
 import * as BlocklyJsGenerator from 'blockly/javascript';
 import Interpreter from 'js-interpreter';
-import {GeoCode} from '../../services/geocode-api';
+import {Storage} from '@ionic/storage-angular';
+import {AlertController} from '@ionic/angular';
+import DarkTheme from '@blockly/theme-dark';
+import {Mediator} from '../../services/Mediator';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-blockly',
   templateUrl: './blockly.component.html',
   styleUrls: ['./blockly.component.scss'],
 })
-export class BlocklyComponent implements AfterViewInit {
+export class BlocklyComponent implements AfterViewInit, OnDestroy {
 
-  @Input() toolboxBlocks: string[] = null;
+  @Input() toolboxBlocks: {[blockName: string]: number} = null;
+  @Input() inputFunction: (promptRequest: string) => string = prompt;
+  @Input() outputFunction: (output: string) => void = alert;
+  @Input() savedProgramID: string = null;
 
   @ViewChild('blocklyDiv', {static:false}) blocklyDiv: ElementRef<HTMLDivElement>;
   //@ViewChild('ngxBlockly', {static:false}) ngxBlockly: NgxBlocklyComponent;
@@ -32,9 +38,20 @@ export class BlocklyComponent implements AfterViewInit {
       wheel: true
     },
     toolbox: this.toolbox,
+    theme: this.getTheme(window.matchMedia('(prefers-color-scheme: dark)').matches)
   };
 
-  constructor() {}
+  themeSubscription: Subscription;
+
+  constructor(
+    private storage: Storage,
+    private alertCtrl: AlertController,
+    mediator: Mediator
+  ) {
+    this.themeSubscription = mediator.themeChanged.onReceive((isDark) => {
+      this.workspace.setTheme(this.getTheme(isDark));
+    });
+  }
 
   async ngAfterViewInit() {
     if (this.toolboxBlocks !== null) {
@@ -47,21 +64,87 @@ export class BlocklyComponent implements AfterViewInit {
     console.log(this.workspace.isVisible());
     //this.workspace = this.ngxBlockly.workspace;
     //window.dispatchEvent(new Event('resize'));
-    setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
+    setTimeout(() => this.forceResize(), 500);
+
+    // May need to call this inside the timeout
+    if (this.savedProgramID !== null) {
+      await this.getProgramFromStorage();
+    }
   }
 
-  runProgram() {
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
+  }
+
+  setProgramBlocks(blockXML: string) {
+    const dom = Blockly.Xml.textToDom(blockXML);
+    Blockly.Xml.domToWorkspace(dom, this.workspace);
+  }
+
+  getProgramBlocks(): string {
+    const dom = Blockly.Xml.workspaceToDom(this.workspace);
+    return Blockly.Xml.domToText(dom);
+  }
+
+  async getProgramFromStorage() {
+    console.log('checking for saved program');
+    const blockXML = await this.storage.get(this.savedProgramID);
+    if (blockXML) {
+      console.log('setting saved program');
+      this.setProgramBlocks(blockXML);
+    } else {
+      console.log('no saved program found');
+    }
+  }
+
+  async saveProgramToStorage() {
+    console.log('saving program');
+    const blockXML = this.getProgramBlocks();
+    await this.storage.set(this.savedProgramID, blockXML);
+  }
+
+  async clearAllBlocksPrompt() {
+    if (prompt) {
+      const alert = await this.alertCtrl.create({
+        header: 'Clear All Blocks',
+        subHeader: 'Are you sure you want to clear all blocks?',
+        message: 'This action is irreversible!',
+        buttons: [
+          { text: 'No, Cancel', role: 'cancel' },
+          { text: 'Yes, Clear', handler: () => this.clearAllBlocks() }
+        ]
+      });
+      await alert.present();
+    }
+  }
+
+  async clearAllBlocks() {
+    console.log('Clearing blocks');
+    this.workspace.clear();
+    if (this.savedProgramID !== null) {
+      await this.saveProgramToStorage();
+    }
+  }
+
+  async generateAndRunProgram() {
     const code = this.generateCode();
     console.log(code);
+    if (this.savedProgramID !== null) {
+      await this.saveProgramToStorage();
+    }
+    this.runProgram(code);
+  }
+
+  runProgram(code: string) {
     const interpreter = new Interpreter(code, (interpreter2, scope) => {
       const alertWrapper = (text) => {
         text = text ? text.toString() : '';
-        alert(text);
+        this.outputFunction(text);
       };
       interpreter2.setProperty(scope, 'alert', interpreter2.createNativeFunction(alertWrapper));
       const promptWrapper = (text) => {
         text = text ? text.toString() : '';
-        prompt(text);
+        return this.inputFunction(text);
       };
       interpreter2.setProperty(scope, 'prompt', interpreter2.createNativeFunction(promptWrapper));
     });
@@ -75,12 +158,17 @@ export class BlocklyComponent implements AfterViewInit {
     }
   }
 
-  generateCode(): string {
+  generateCode() {
     return BlocklyJsGenerator.workspaceToCode(this.workspace);
   }
 
+  setToolboxVisibility(visibility: boolean) {
+    this.workspace.getToolbox().setVisible(visibility);
+    this.forceResize();
+  }
+
   async readInputToolbox() {
-    for (const blockName of this.toolboxBlocks) {
+    for (const [blockName, maxInstances] of Object.entries(this.toolboxBlocks)) {
       // @ts-ignore
       this.toolbox.contents.push({
         kind: 'block',
@@ -105,6 +193,18 @@ export class BlocklyComponent implements AfterViewInit {
       };
       req.send(null); // return control
     });
+  }
+
+  private forceResize() {
+    window.dispatchEvent(new Event('resize'));
+  }
+
+  private getTheme(isDark: boolean): Blockly.Theme {
+    if (isDark) {
+      return DarkTheme;
+    } else {
+      return null;
+    }
   }
 
 }

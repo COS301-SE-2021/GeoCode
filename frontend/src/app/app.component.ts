@@ -8,7 +8,7 @@ import {Mediator} from './services/Mediator';
 import {Storage} from '@ionic/storage-angular';
 import {Platform} from '@ionic/angular';
 import {CurrentUserDetails} from './services/CurrentUserDetails';
-import {QRGenerator} from './services/QRGenerator';
+import {UserService} from './services/geocode-api';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +26,8 @@ export class AppComponent implements OnInit {
     private locator: Locator,
     private storage: Storage,
     private platform: Platform,
-    private currentUser: CurrentUserDetails
+    private currentUser: CurrentUserDetails,
+    private userService: UserService
   ) {
     this.keycloakInstance = this.keycloak.getKeycloakInstance();
 
@@ -56,6 +57,10 @@ export class AppComponent implements OnInit {
         this.router.navigate([target]).then().catch();
       }
     });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+      this.mediator.themeChanged.send(event.matches);
+    });
   }
 
   async saveCredentials() {
@@ -71,7 +76,11 @@ export class AppComponent implements OnInit {
     if (location !== null) {
       await this.saveCredentials();
 
-      console.log('call handleLogin here');
+      const response = await this.userService.handleLogin({location}).toPromise();
+      if (!response.success) {
+        console.log('Failed handleLogin. Logging out...');
+        await this.logout();
+      }
 
     } else {
       alert('Location access is required to use GeoCode.');

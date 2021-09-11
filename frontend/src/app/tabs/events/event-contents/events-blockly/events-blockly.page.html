@@ -1,16 +1,48 @@
 <app-nav>
 
   <app-nav-header>
-    <ion-toolbar>
+    <app-nav-toolbar>
       <ion-buttons slot="start">
         <ion-back-button defaultHref="events"></ion-back-button>
       </ion-buttons>
       <ion-title>Blockly</ion-title>
-    </ion-toolbar>
+    </app-nav-toolbar>
   </app-nav-header>
 
+  <ion-header *ngIf="event !== null">
+    <div class="horizontalscroll">
+      <ion-button color="button" (click)="this.toggleToolbox()">
+        <ion-icon name="extension-puzzle-outline"></ion-icon>
+        <ion-label *ngIf="!toolboxVisible">Show Toolbox</ion-label>
+        <ion-label *ngIf="toolboxVisible">Hide Toolbox</ion-label>
+      </ion-button>
+      <ion-button color="button" (click)="viewDescription()">
+        <ion-icon name="reader-outline"></ion-icon>
+        <ion-label>View Challenge</ion-label>
+      </ion-button>
+      <ion-button color="success" (click)="blockly.generateAndRunProgram()">
+        <ion-icon name="play-outline"></ion-icon>
+        <ion-label>Run</ion-label>
+      </ion-button>
+      <ion-button color="success" (click)="submitOutput()">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        <ion-label>Submit</ion-label>
+      </ion-button>
+      <ion-button color="danger" (click)="blockly.clearAllBlocksPrompt()">
+        <ion-icon name="trash-outline"></ion-icon>
+        <ion-label>Clear All</ion-label>
+      </ion-button>
+    </div>
+  </ion-header>
+
   <ion-content>
-    <app-blockly></app-blockly>
+    <app-blockly #blockly
+      *ngIf="status !== null"
+      [toolboxBlocks]="null"
+      [inputFunction]="blocklyInput"
+      [outputFunction]="blocklyOutput"
+      [savedProgramID]="eventID"
+    ></app-blockly>
   </ion-content>
 
 </app-nav>

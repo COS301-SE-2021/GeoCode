@@ -19,6 +19,7 @@
     "@angular/platform-browser": "~12.2.1",
     "@angular/platform-browser-dynamic": "~12.2.1",
     "@angular/router": "~12.2.1",
+    "@blockly/theme-dark": "^2.0.6",
     "@capacitor/android": "3.2.0",
     "@capacitor/app": "^1.0.2",
     "@capacitor/camera": "^1.0.4",

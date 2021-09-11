@@ -106,5 +106,14 @@ export class EventContentsPage implements AfterViewInit {
     await this.navCtrl.navigateForward('/events/'+this.eventID+'/leaderboard', {state: {event}});
   }
 
+  async openBlockly() {
+    await this.navCtrl.navigateForward('/events/'+this.eventID+'/blockly', {
+      state: {
+        event: this.event,
+        status: this.status
+      }
+    });
+  }
+
 
 }

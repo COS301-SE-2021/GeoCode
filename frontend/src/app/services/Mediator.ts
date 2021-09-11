@@ -20,6 +20,7 @@ export class Mediator {
 
   /* Add more mediator messages below */
   public readonly windowResized = new MediatorMessage<number>();
+  public readonly themeChanged = new MediatorMessage<boolean>();
   //public readonly geocodeCreated = new MediatorMessage<GeoCode>();
 
 }
