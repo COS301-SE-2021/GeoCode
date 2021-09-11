@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {GeoCodeService, UpdateGeoCodeRequest, UpdateGeoCodeResponse} from '../../../../services/geocode-api';
-import {AlertController} from '@ionic/angular';
+import {AlertController, ToastController} from '@ionic/angular';
 
 @Component({
   selector: 'app-geocode-update',
@@ -17,7 +17,7 @@ export class GeocodeUpdateComponent implements OnInit {
     hints: [],
     location: {latitude:0,longitude:0}
   };
-  constructor(private geocodeAPI: GeoCodeService, private alertCtrl: AlertController) { }
+  constructor( private toastController: ToastController,private geocodeAPI: GeoCodeService, private alertCtrl: AlertController) { }
 
   ngOnInit() {
     this.updateRequest.available = this.geocode.available;
@@ -84,4 +84,23 @@ export class GeocodeUpdateComponent implements OnInit {
 
   }
 
+ async deleteHint(hint){
+    if(this.updateRequest.hints.length <2){
+      const toast =  await this.toastController.create({
+        message: 'Must have at least one hint ',
+        duration: 2000
+      });
+      await toast.present();
+    }else{
+      if(this.updateRequest.hints.indexOf(hint)>-1){
+        this.updateRequest.hints.splice(this.updateRequest.hints.indexOf(hint),1);
+      }else {
+        const toast = await this.toastController.create({
+          message: 'Error deleting hint ',
+          duration: 2000
+        });
+        await toast.present();
+      }
+    }
+  }
 }
