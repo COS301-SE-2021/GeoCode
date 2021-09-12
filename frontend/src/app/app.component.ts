@@ -76,8 +76,13 @@ export class AppComponent implements OnInit {
     if (location !== null) {
       await this.saveCredentials();
 
-      const response = await this.userService.handleLogin({location}).toPromise();
-      if (!response.success) {
+      try {
+        const response = await this.userService.handleLogin({location}).toPromise();
+        if (!response.success) {
+          console.log('Failed handleLogin. Logging out...');
+          await this.logout();
+        }
+      } catch(e) {
         console.log('Failed handleLogin. Logging out...');
         await this.logout();
       }
