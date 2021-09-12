@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.18"
+  version: "1.5.19"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -3627,7 +3627,9 @@ components:
           type: boolean
           example: True
         properties:
-          $ref: "#/components/schemas/EventProperties"
+          type: object
+          additionalProperties:
+            type: string
       xml:
         name: "Event"
         
@@ -4180,19 +4182,3 @@ components:
               example: "054463f2-2f7c-4864-8130-68e5aa79ee7f.png"
           xml:
             name: "CreateImageResponse"
-            
-    EventProperties:
-      type: object
-      properties:
-        timeLimit:
-          type: number
-        problem_description:
-          type: string
-        testCases:
-          type: array
-          items:
-            $ref: "#/components/schemas/TestCase"
-        blocks:
-          type: array
-          items:
-            $ref: "#/components/schemas/Block"
