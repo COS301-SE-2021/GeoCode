@@ -1,0 +1,16 @@
+.horizontalscroll {
+  position: relative;
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  height: auto;
+  white-space: nowrap;
+}
+
+.inputLead {
+  color: var(--ion-color-main)
+}
+
+ion-row {
+  white-space: pre
+}

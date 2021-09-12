@@ -76,14 +76,26 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     this.themeSubscription.unsubscribe();
   }
 
-  setProgramBlocks(blockXML: string) {
+  setWorkspace(blockXML: string) {
     const dom = Blockly.Xml.textToDom(blockXML);
     Blockly.Xml.domToWorkspace(dom, this.workspace);
   }
 
-  getProgramBlocks(): string {
+  getWorkspace(): string {
     const dom = Blockly.Xml.workspaceToDom(this.workspace);
     return Blockly.Xml.domToText(dom);
+  }
+
+  getProgramBlocks(): {[key: string]: number} {
+    const output = {};
+    const blocks = this.workspace.getAllBlocks(true);
+    for (const block of blocks) {
+      if (!output.hasOwnProperty(block.type)) {
+        output[block.type] = 0;
+      }
+      output[block.type]++;
+    }
+    return output;
   }
 
   async getProgramFromStorage() {
@@ -91,7 +103,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     const blockXML = await this.storage.get(this.savedProgramID);
     if (blockXML) {
       console.log('setting saved program');
-      this.setProgramBlocks(blockXML);
+      this.setWorkspace(blockXML);
     } else {
       console.log('no saved program found');
     }
@@ -99,23 +111,21 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
 
   async saveProgramToStorage() {
     console.log('saving program');
-    const blockXML = this.getProgramBlocks();
+    const blockXML = this.getWorkspace();
     await this.storage.set(this.savedProgramID, blockXML);
   }
 
   async clearAllBlocksPrompt() {
-    if (prompt) {
-      const alert = await this.alertCtrl.create({
-        header: 'Clear All Blocks',
-        subHeader: 'Are you sure you want to clear all blocks?',
-        message: 'This action is irreversible!',
-        buttons: [
-          { text: 'No, Cancel', role: 'cancel' },
-          { text: 'Yes, Clear', handler: () => this.clearAllBlocks() }
-        ]
-      });
-      await alert.present();
-    }
+    const alert = await this.alertCtrl.create({
+      header: 'Clear All Blocks',
+      subHeader: 'Are you sure you want to clear all blocks?',
+      message: 'This action is irreversible!',
+      buttons: [
+        { text: 'No, Cancel', role: 'cancel' },
+        { text: 'Yes, Clear', handler: () => this.clearAllBlocks() }
+      ]
+    });
+    await alert.present();
   }
 
   async clearAllBlocks() {

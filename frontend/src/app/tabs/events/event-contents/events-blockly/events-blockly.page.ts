@@ -73,6 +73,7 @@ export class EventsBlocklyPage implements OnInit {
       this.blockly.runProgram(code);
       caseOutputs.push(this.outputs.join('\n'));
     }
+    this.submitting = false;
 
     const response = await this.eventApi.checkOutput({eventID: this.eventID, outputs: caseOutputs}).toPromise();
     if (response.success) {
@@ -93,6 +94,7 @@ export class EventsBlocklyPage implements OnInit {
 
   blocklyInput = (promptRequest: string) => {
     if (this.submitting) {
+      this.outputs.push(promptRequest);
       return this.inputs.shift();
     } else {
       return prompt(promptRequest);
