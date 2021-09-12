@@ -129,6 +129,10 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
+        if( request.getCreateGeoCodesToFind().isEmpty() ){
+            return new CreateEventResponse( false, "Cannot create an Event without GeoCodes" );
+        }
+
         /* Create the new Event object with the specified attributes */
         UUID eventID = UUID.randomUUID();
 

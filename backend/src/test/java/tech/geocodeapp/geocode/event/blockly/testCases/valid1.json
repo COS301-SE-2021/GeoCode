@@ -4,7 +4,7 @@
       "output": "abc"
     },
     {
-      "inputs": [ "abc", "def" ],
+      "inputs": [ "ghi", "j" ],
       "output": "abc"
     }
   ]

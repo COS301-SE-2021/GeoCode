@@ -1,39 +1,51 @@
 package tech.geocodeapp.geocode.event;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import tech.geocodeapp.geocode.event.pathfinder.Graph;
-import tech.geocodeapp.geocode.event.exceptions.*;
+import tech.geocodeapp.geocode.event.blockly.TestCase;
+import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
+import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
+import tech.geocodeapp.geocode.event.exceptions.RepoException;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
+import tech.geocodeapp.geocode.event.pathfinder.Graph;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
 import tech.geocodeapp.geocode.event.request.*;
-import tech.geocodeapp.geocode.event.response.*;
-import tech.geocodeapp.geocode.event.service.*;
-
+import tech.geocodeapp.geocode.event.response.CreateEventResponse;
+import tech.geocodeapp.geocode.event.response.GetEventResponse;
+import tech.geocodeapp.geocode.event.service.EventService;
+import tech.geocodeapp.geocode.event.service.EventServiceImpl;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.GeoCodeMockRepository;
-import tech.geocodeapp.geocode.geocode.model.*;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
-
 import tech.geocodeapp.geocode.leaderboard.LeaderboardMockRepository;
 import tech.geocodeapp.geocode.leaderboard.PointMockRepository;
 import tech.geocodeapp.geocode.leaderboard.UserMockService;
-import tech.geocodeapp.geocode.leaderboard.service.*;
+import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
+import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
 import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
+import tech.geocodeapp.geocode.user.request.HandleLoginRequest;
+import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * This is the unit testing class for the Event subsystem
@@ -91,6 +103,12 @@ class EventServiceImplTest {
     GeoCodeService geoCodeService;
 
     /**
+     * The User service accessor
+     */
+    @Mock( name = "UserServiceImpl" )
+    private UserService userService;
+
+    /**
      * The expected exception message for if the given request has invalid attributes
      */
     String reqParamError = "The given request is missing parameter/s.";
@@ -115,6 +133,8 @@ class EventServiceImplTest {
     private HashMap<String, String> blocklyEventProperties;
     private UUID blocklyEventID;
 
+    private final String eventNotFoundMessage = "Event not found";
+
     /**
      * Create the EventServiceImpl with the relevant repositories.
      *
@@ -138,7 +158,7 @@ class EventServiceImplTest {
         /* Create the leaderboard service with all the relevant repositories */
         var leaderboardMockRepo = new LeaderboardMockRepository();
         var userRepository = new UserMockRepository();
-        var userService = new UserMockService( userRepository );
+        userService = new UserMockService( userRepository );
         var pointMockRepository = new PointMockRepository();
         leaderboardService = new LeaderboardServiceImpl( leaderboardMockRepo, pointMockRepository, userService );
 
@@ -743,7 +763,6 @@ class EventServiceImplTest {
     }
 
     @Test
-    @Order( 10 )
     @DisplayName( "create blockly event - empty properties" )
     void createBlocklyEventEmptyProperties() {
         /*
@@ -757,7 +776,6 @@ class EventServiceImplTest {
     }
 
     @Test
-    @Order( 11 )
     @DisplayName( "create blockly event - no problem description" )
     void createBlocklyEventNoProblemDescription() {
         createBlocklyEventRequest();
@@ -771,7 +789,6 @@ class EventServiceImplTest {
     }
 
     @Test
-    @Order( 12 )
     @DisplayName( "create blockly event - no testCases" )
     void createBlocklyEvent() {
         createBlocklyEventRequest();
@@ -784,7 +801,6 @@ class EventServiceImplTest {
         Assertions.assertEquals("Test cases were not specified for the Blockly Event", createBlocklyEventResponse.getMessage());
     }
     @Test
-    @Order( 13 )
     @DisplayName( "create blockly event - no blocks" )
     void createBlocklyEventNoBlocks() {
         createBlocklyEventRequest();
@@ -799,7 +815,6 @@ class EventServiceImplTest {
     }
 
     @Test
-    @Order( 14 )
     @DisplayName( "create blockly event - empty problem description" )
     void createBlocklyEventEmptyProblemDescription() {
         createBlocklyEventRequest();
@@ -815,7 +830,6 @@ class EventServiceImplTest {
     }
 
     @Test
-    @Order( 15 )
     @DisplayName( "create blockly event - invalid format for the test cases" )
     void createBlocklyEventInvalidTestCaseFormat() {
         createBlocklyEventRequest();
@@ -832,7 +846,6 @@ class EventServiceImplTest {
     }
 
     @Test
-    @Order( 16 )
     @DisplayName( "create blockly event - invalid format for the blocks" )
     void createBlocklyEventInvalidBlocksFormat() {
         createBlocklyEventRequest();
@@ -848,7 +861,6 @@ class EventServiceImplTest {
     }
 
     @Test
-    @Order( 17 )
     @DisplayName( "create blockly event - fewer blocks than stages (geocodes)" )
     void createBlocklyEventTooFewBlocks() {
         createBlocklyEventRequest();
@@ -864,7 +876,6 @@ class EventServiceImplTest {
     }
 
     @Test
-    @Order( 18 )
     @DisplayName( "create blockly event - inconsistent number of input values" )
     void createBlocklyEventInconsistentNumberOfInputs() {
         createBlocklyEventRequest();
@@ -880,14 +891,12 @@ class EventServiceImplTest {
     }
 
     @Test
-    @Order( 19 )
     @DisplayName( "create blockly event - valid properties" )
     void createBlocklyEventValidProperties() {
         createValidBlocklyEvent();
     }
 
     @Test
-    @Order( 20 )
     @DisplayName( "get blockly event" )
     void getBlocklyEvent() throws InvalidRequestException {
         createValidBlocklyEvent();
@@ -904,7 +913,150 @@ class EventServiceImplTest {
         Assertions.assertNull(event.getProperties());
     }
 
+    @Test
+    @DisplayName( "Null request handling - getInputs" )
+    void getInputsNullRequest(){
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.getInputs( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
 
+    @Test
+    @DisplayName( "get blockly inputs - null event id" )
+    void getInputsNullEventID(){
+        /* Null parameter check */
+        var request = new GetInputsRequest();
+        request.setEventID(null);
+
+        assertThatThrownBy( () -> eventService.getInputs( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    @Test
+    @DisplayName( "get blockly inputs - invalid event id" )
+    void getInputsInvalidEventID() throws InvalidRequestException {
+        /* Null parameter check */
+        var request = new GetInputsRequest();
+        request.setEventID(UUID.randomUUID());
+
+        var response = eventService.getInputs(request);
+
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals(eventNotFoundMessage, response.getMessage());
+    }
+
+    @Test
+    @DisplayName( "get blockly inputs - not a blockly event" )
+    void getInputsNotBlocklyEvent() throws InvalidRequestException {
+        var id = createEvent();
+
+        var request = new GetInputsRequest();
+        request.setEventID(id);
+
+        var response = eventService.getInputs(request);
+
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals("Event is not a Blockly Event", response.getMessage());
+    }
+
+    @Test
+    @DisplayName( "get blockly inputs - user not participating in the blockly event" )
+    void getInputsUserNotInEvent() throws InvalidRequestException {
+        createValidBlocklyEvent();
+        handleUserLogin("user1");
+
+        var request = new GetInputsRequest();
+        request.setEventID(blocklyEventID);
+
+        var response = eventService.getInputs(request);
+
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals("User is not participating in the Blockly Event", response.getMessage());
+    }
+
+    @Test
+    @DisplayName( "get blockly inputs - user is participating in the blockly event" )
+    void getInputs() throws InvalidRequestException, IOException {
+        createValidBlocklyEvent();
+        var user1ID = handleUserLogin("user1");
+
+        joinEvent(blocklyEventID, user1ID);
+
+        var request = new GetInputsRequest();
+        request.setEventID(blocklyEventID);
+
+        var response = eventService.getInputs(request);
+
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertEquals("Inputs successfully returned for the Blockly Event", response.getMessage());
+
+        /* check that the input values were stored correctly and have not been modified since then */
+        var objectMapper = new ObjectMapper();
+        var testCases = objectMapper.readValue(readFile("testCases", "valid1"), TestCase[].class);
+
+        int numTestCases = testCases.length;
+        String[][] inputs = new String[numTestCases][];
+
+        for(int i = 0; i < numTestCases; ++i){
+            inputs[i] = testCases[i].getInputs();
+        }
+
+        Assertions.assertTrue(Arrays.deepEquals(inputs, response.getInputs()));
+    }
+
+
+
+    private void joinEvent(UUID eventID, UUID userID){
+        Assertions.assertNotNull(eventID);
+        Assertions.assertNotNull(userID);
+
+        /*
+        getTheEventStatus to make sure the EventStatus is saved so that when calling swapCollectables
+        the User is participating in the Event
+        */
+        try {
+            var getCurrentEventStatusRequest = new GetCurrentEventStatusRequest(eventID, userID);
+            var getCurrentEventStatusResponse = eventService.getCurrentEventStatus(getCurrentEventStatusRequest);
+
+            Assertions.assertTrue(getCurrentEventStatusResponse.isSuccess());
+            Assertions.assertEquals("Status returned", getCurrentEventStatusResponse.getMessage());
+        } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Mocks the User logging in
+     * @param userID The id of the User to be set in setCurrentUserID
+     */
+    private void setUser(UUID userID, String username, boolean isAdmin){
+        CurrentUserDetails.injectUserDetails(userID, username, isAdmin);
+    }
+
+    private UUID handleUserLogin(String username){
+        return handleLogin(UUID.randomUUID(), username, false);
+    }
+
+    private UUID handleAdminLogin(String username){
+        return handleLogin(UUID.randomUUID(), username, true);
+    }
+
+    private UUID handleLogin(UUID userID, String username, boolean isAdmin){
+        try {
+            setUser(userID, username, isAdmin);
+            var response = userService.handleLogin(new HandleLoginRequest(new GeoPoint(0.0, 0.0)));
+
+            Assertions.assertEquals("New User registered", response.getMessage());
+            Assertions.assertTrue(response.isSuccess());
+
+            return userID;
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     private void createValidBlocklyEvent(){
         createBlocklyEventRequest();
@@ -919,26 +1071,6 @@ class EventServiceImplTest {
         Assertions.assertEquals("Event created", createBlocklyEventResponse.getMessage());
     }
 
-
-    /*
-    @Test
-    @Order( 1 )
-    @DisplayName( "create blockly event - " )
-    void createBlocklyEvent() {
-        createBlocklyEventRequest();
-
-        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
-        addBlocklyEventProperty("testCases", "");
-        addBlocklyEventProperty("blocks", "");
-        addBlocklyEventProperty("", "");
-
-        createBlocklyEventResponse();
-
-        Assertions.assertFalse(createBlocklyEventResponse.isSuccess());
-        Assertions.assertEquals("", createBlocklyEventResponse.getMessage());
-    }
-     */
-
     ////////////////Helper functions////////////////
 
     /**
@@ -950,28 +1082,39 @@ class EventServiceImplTest {
     private void populate( int size ) {
 
         try {
-            CreateEventRequest request = new CreateEventRequest();
-            request.setDescription( "Try get as many as possible" );
-            request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
-            request.setName( "Super Sport" );
-            request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
-            request.setEndDate( LocalDate.parse( "2020-05-21" ) );
-
-            List< CreateGeoCodeRequest > createGeoCodeRequests = new ArrayList<>();
-            request.setCreateGeoCodesToFind( createGeoCodeRequests );
-
-            request.setOrderBy( OrderLevels.GIVEN );
-
-            request.setProperties( new HashMap<>() );
-
-            eventService.createEvent( request );
-
+            for(int i = 0 ; i < size; ++i){
+                createEvent();
+            }
         } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
         }
 
+    }
+
+    private UUID createEvent() throws InvalidRequestException {
+        var request = new CreateEventRequest();
+        request.setDescription( "Try get as many as possible" );
+        request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
+        request.setName( "Super Sport" );
+        request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
+        request.setEndDate( LocalDate.parse( "2020-05-21" ) );
+
+        List< CreateGeoCodeRequest > createGeoCodeRequests = new ArrayList<>();
+
+        createGeoCodeRequests.add(new CreateGeoCodeRequest("", new GeoPoint(0.0, 0.0), new ArrayList<>(List.of("")),
+                Difficulty.EASY, true));
+
+        request.setCreateGeoCodesToFind( createGeoCodeRequests );
+
+        request.setOrderBy( OrderLevels.GIVEN );
+
+        request.setProperties( new HashMap<>() );
+
+        var response  = eventService.createEvent( request );
+
+        return response.getEventID();
     }
 
     /**
@@ -1033,14 +1176,29 @@ class EventServiceImplTest {
         blocklyEventProperties.put(key, value);
     }
 
+    /**
+     * Sets a Blockly Event's property to a string representation
+     * of the provided JSON file's contents
+     * @param property The key in the hash map
+     * @param fileName Then file name
+     */
     private void setPropertyFromFile(String property, String fileName){
         try {
-            String contents = new String(Files.readAllBytes(Paths.get("src/test/java/tech/geocodeapp/geocode/event/blockly/"+property+"/"+fileName+".json")));
+            String contents = readFile(property, fileName);
             //System.out.println(contents);
             addBlocklyEventProperty(property, contents);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Returns the contents of the file as a String
+     * @param property The key in the hash map
+     * @param fileName Then file name
+     */
+    private String readFile(String property, String fileName) throws IOException {
+        return new String(Files.readAllBytes(Paths.get("src/test/java/tech/geocodeapp/geocode/event/blockly/"+property+"/"+fileName+".json")));
     }
 
     /**
