@@ -902,8 +902,8 @@ class EventServiceImplTest {
 
         createBlocklyEventResponse();
 
-        Assertions.assertFalse(createBlocklyEventResponse.isSuccess());
-        Assertions.assertEquals("The number of input values for each test case must be the same", createBlocklyEventResponse.getMessage());
+        Assertions.assertTrue(createBlocklyEventResponse.isSuccess());
+        Assertions.assertEquals("Event created", createBlocklyEventResponse.getMessage());
     }
 
     @Test

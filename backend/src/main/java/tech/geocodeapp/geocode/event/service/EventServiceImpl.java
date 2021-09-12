@@ -204,15 +204,6 @@ public class EventServiceImpl implements EventService {
             if(blocks.length < request.getCreateGeoCodesToFind().size()){
                 return new CreateEventResponse(false, "The number of block types must be at least the number of GeoCodes in the Blockly Event");
             }
-
-            /* check the input arrays are of the same size */
-            int numInputValues = testCases[0].getInputs().length;
-
-            for(int i = 1; i < testCases.length; ++i){
-                if(testCases[i].getInputs().length != numInputValues){
-                    return new CreateEventResponse(false, "The number of input values for each test case must be the same");
-                }
-            }
         }
 
         /* Create the EventComponent to pass to the createGeoCode function */
