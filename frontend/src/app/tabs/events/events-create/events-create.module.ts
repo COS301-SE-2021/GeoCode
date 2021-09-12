@@ -10,6 +10,7 @@ import { EventsCreatePage } from './events-create.page';
 import {CreateGeocodeComponent} from '../../../components/create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
 import {CustomComponentsModule} from '../../../components/components.module';
+import {EventsCreateBlocklyComponent} from './events-create-blockly/events-create-blockly.component';
 
 
 
@@ -21,6 +22,6 @@ import {CustomComponentsModule} from '../../../components/components.module';
         EventsCreatePageRoutingModule,
         CustomComponentsModule
     ],
-  declarations: [EventsCreatePage,CreateGeocodeComponent,EventLocationComponent]
+  declarations: [EventsCreatePage,CreateGeocodeComponent,EventLocationComponent,EventsCreateBlocklyComponent]
 })
 export class EventsCreatePageModule {}

@@ -10,6 +10,7 @@ import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {CreateGeocodeComponent} from '../../../components/create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
 import {BlocklyComponent} from '../../../components/blockly/blockly.component';
+import {EventsCreateBlocklyComponent} from './events-create-blockly/events-create-blockly.component';
 
 @Component({
   selector: 'app-events-create',
@@ -162,7 +163,7 @@ export class EventsCreatePage implements AfterViewInit  {
 
  async  createBlockly(){
     const modal = await this.modalController.create({
-      component: BlocklyComponent,
+      component: EventsCreateBlocklyComponent,
       swipeToClose: true,
       componentProps: {}
     });
