@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {CreateGeoCodeRequest, CreateGeoCodeResponse, GeoCodeService, GeoPoint} from '../../../../services/geocode-api';
+import {CreateGeoCodeRequest, CreateGeoCodeResponse, GeoCodeService, GeoPoint} from '../../services/geocode-api';
 import {ModalController, NavController} from '@ionic/angular';
-import {GoogleMapsLoader} from '../../../../services/GoogleMapsLoader';
+import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
 
 let map;
 @Component({

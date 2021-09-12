@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { CreateGeocodeComponent } from './create-geocode.component';
-import {MockGoogleMapsLoader} from '../../../../mocks/MockGoogleMapsLoader';
+import {MockGoogleMapsLoader} from '../../mocks/MockGoogleMapsLoader';
 import {RouterTestingModule} from '@angular/router/testing';
 
 describe('CreateGeocodeComponent', () => {

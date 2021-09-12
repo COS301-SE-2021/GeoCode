@@ -7,7 +7,7 @@ import {
 } from '../../../services/geocode-api';
 import {ModalController, NavController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
-import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
+import {CreateGeocodeComponent} from '../../../components/create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
 import {BlocklyComponent} from '../../../components/blockly/blockly.component';
 
@@ -169,6 +169,7 @@ export class EventsCreatePage implements AfterViewInit  {
     });
     await modal.present();
     const { data } = await modal.onDidDismiss();
+
   }
 
 }

@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { EventsCreatePageRoutingModule } from './events-create-routing.module';
 
 import { EventsCreatePage } from './events-create.page';
-import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
+import {CreateGeocodeComponent} from '../../../components/create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
 import {CustomComponentsModule} from '../../../components/components.module';
 
