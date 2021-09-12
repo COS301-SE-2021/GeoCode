@@ -3,28 +3,33 @@ package tech.geocodeapp.geocode.event;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.GeoCodeApplication;
-
-import tech.geocodeapp.geocode.collectable.model.Collectable;
-import tech.geocodeapp.geocode.event.exceptions.*;
+import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
+import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
+import tech.geocodeapp.geocode.event.exceptions.RepoException;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.event.pathfinder.Graph;
-import tech.geocodeapp.geocode.event.repository.*;
+import tech.geocodeapp.geocode.event.repository.EventRepository;
+import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
 import tech.geocodeapp.geocode.event.request.*;
-import tech.geocodeapp.geocode.event.response.*;
-import tech.geocodeapp.geocode.event.service.*;
-
-import tech.geocodeapp.geocode.geocode.model.*;
+import tech.geocodeapp.geocode.event.response.CreateEventResponse;
+import tech.geocodeapp.geocode.event.response.GetEventResponse;
+import tech.geocodeapp.geocode.event.service.EventService;
+import tech.geocodeapp.geocode.event.service.EventServiceImpl;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
+import tech.geocodeapp.geocode.geocode.model.Difficulty;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
+import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
-
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
-
 import tech.geocodeapp.geocode.user.repository.UserRepository;
+import tech.geocodeapp.geocode.user.request.HandleLoginRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.time.LocalDate;
@@ -32,6 +37,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * This is the integration testing class for the Event subsystem
@@ -93,12 +100,6 @@ class EventServiceImplIT {
     GeoCodeService geoCodeService;
 
     /**
-     * The User service accessor
-     */
-    @Autowired
-    UserService userService;
-
-    /**
      * The expected exception message for if the given request has invalid attributes
      */
     String reqParamError = "The given request is missing parameter/s.";
@@ -112,6 +113,9 @@ class EventServiceImplIT {
      * This is used to have a static known UUID
      */
     UUID eventID = UUID.fromString( "db91e6ee-f5b6-11eb-9a03-0242ac130003" );
+
+    @Autowired
+    UserService userService;
 
     /**
      * Create the EventServiceImpl with the relevant repositories.
@@ -129,7 +133,7 @@ class EventServiceImplIT {
         try {
 
             /* Create a new EventServiceImpl instance to access the different use cases */
-            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService, userService );
+            eventService = new EventServiceImpl( eventRepo, userEventStatusRepo, leaderboardService );
             eventService.setGeoCodeService( geoCodeService );
         } catch ( RepoException e ) {
 
@@ -137,6 +141,33 @@ class EventServiceImplIT {
             e.printStackTrace();
         }
 
+    }
+
+    private void setUser(UUID userID, String username, boolean isAdmin){
+        CurrentUserDetails.injectUserDetails(userID, username, isAdmin);
+    }
+
+    private UUID handleUserLogin(String username){
+        return handleLogin(UUID.randomUUID(), username, false);
+    }
+
+    private UUID handleAdminLogin(String username){
+        return handleLogin(UUID.randomUUID(), username, true);
+    }
+
+    private UUID handleLogin(UUID userID, String username, boolean isAdmin){
+        try {
+            setUser(userID, username, isAdmin);
+            var response = userService.handleLogin(new HandleLoginRequest(new GeoPoint(0.0, 0.0)));
+
+            Assertions.assertEquals("New User registered", response.getMessage());
+            Assertions.assertTrue(response.isSuccess());
+
+            return CurrentUserDetails.getID();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -149,7 +180,7 @@ class EventServiceImplIT {
     void RepositoryNullTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null, userService ) )
+        assertThatThrownBy( () -> eventService = new EventServiceImpl( null, userEventStatusRepo, null ) )
                 .isInstanceOf( RepoException.class )
                 .hasMessageContaining( "The given repository does not exist." );
     }
@@ -205,25 +236,27 @@ class EventServiceImplIT {
 
         try {
 
-            /* Create mock geocodes to add to the event */
-            List<UUID> geoCodesToFind = new ArrayList<>();
+            /* Create GeoCodes to add to the event */
+            List<CreateGeoCodeRequest> createGeoCodeRequests = new ArrayList<>();
+
             for (int i = 0; i < 3; i++) {
-                GeoCode gc = new GeoCode( UUID.randomUUID(), Difficulty.EASY, true, "", new ArrayList<String>(), new ArrayList<UUID>(), "", new GeoPoint(0, 0), UUID.randomUUID() );
-                gc = geoCodeRepo.save(gc);
-                geoCodesToFind.add(gc.getId());
+                var createGeoCodeRequest = new CreateGeoCodeRequest( "", new GeoPoint(0, 0), new ArrayList<String>(), Difficulty.EASY, true );
+                createGeoCodeRequests.add(createGeoCodeRequest);
             }
 
             /*
              * Create a request object
              * and assign values to it
              */
+            var userId = handleAdminLogin("admin_user");
+
             CreateEventRequest request = new CreateEventRequest();
             request.setDescription( "Try get as many as possible" );
             request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
             request.setEndDate( LocalDate.parse( "2020-05-21" ) );
-            request.setGeoCodesToFind( geoCodesToFind );
+            request.setCreateGeoCodesToFind( createGeoCodeRequests );
             request.setOrderBy( OrderLevels.GIVEN );
             request.setProperties( new HashMap<>() );
 
@@ -291,6 +324,7 @@ class EventServiceImplIT {
         try {
 
             /* Insert different random Events into the repository */
+            var userId = handleAdminLogin("admin_user");
             populate( 3 );
 
             /* Populate with a known Event to find*/
@@ -369,6 +403,7 @@ class EventServiceImplIT {
     @Test
     @Order( 7 )
     @DisplayName( "Valid request - getCurrentEventStatus" )
+    @Transactional
     void getCurrentEventStatusTest() {
 
         try {
@@ -376,6 +411,8 @@ class EventServiceImplIT {
             //ToDo finish this
 
             /* Insert different random Events into the repository */
+            var userId = handleAdminLogin("admin_user");
+
             populate( 3 );
 
             /* Populate with a known Event to find*/
@@ -682,63 +719,6 @@ class EventServiceImplIT {
     }
 
     /**
-     * Check how the use case handles the request being null
-     */
-    @Test
-    @Order( 5 )
-    @DisplayName( "Null repository handling - createLeaderBoard" )
-    void createLeaderBoardNullRequestTest() {
-
-        /* Null request check */
-        assertThatThrownBy( () -> eventService.createLeaderBoard( null ) )
-                .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( reqEmptyError );
-    }
-
-    /**
-     * Check how the use case handles an invalid request
-     */
-    @Test
-    @Order( 6 )
-    @DisplayName( "Invalid repository attribute handling - createLeaderBoard" )
-    void createLeaderBoardInvalidRequestTest() {
-
-        /*
-         * Create a request object
-         * and assign values to it
-         */
-        CreateLeaderboardRequest request = new CreateLeaderboardRequest();
-        request.setEventID( null );
-
-        /* Null parameter request check */
-        assertThatThrownBy( () -> eventService.createLeaderBoard( request ) )
-                .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( reqParamError );
-    }
-
-    /**
-     * Using valid data does the createLeaderBoard use case test
-     * complete successfully
-     */
-    @Test
-    @Order( 7 )
-    @DisplayName( "Valid request - createLeaderBoard" )
-    void createLeaderBoardTest() {
-
-        try {
-            //ToDo finish this
-            CreateLeaderboardRequest request = new CreateLeaderboardRequest();
-            request.setEventID( null );
-
-            var event = eventService.createLeaderBoard( request );
-        } catch ( InvalidRequestException e ) {
-
-            /* An error occurred, print the stack to identify */
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Using valid data does the setGeoCodeService use case test
      * complete successfully
      */
@@ -792,11 +772,11 @@ class EventServiceImplIT {
         try {
 
             /* Create mock geocodes */
-            List<UUID> geoCodesToFind = new ArrayList<>();
+            List<CreateGeoCodeRequest> createGeoCodeRequests = new ArrayList<>();
+
             for (int i = 0; i < 3; i++) {
-                GeoCode gc = new GeoCode( UUID.randomUUID(), Difficulty.EASY, true, "", new ArrayList<String>(), new ArrayList<UUID>(), "", new GeoPoint(0, 0), UUID.randomUUID() );
-                gc = geoCodeRepo.save(gc);
-                geoCodesToFind.add(gc.getId());
+                var createGeoCodeRequest = new CreateGeoCodeRequest( "", new GeoPoint(0, 0), new ArrayList<String>(), Difficulty.EASY, true );
+                createGeoCodeRequests.add(createGeoCodeRequest);
             }
 
             CreateEventRequest request = new CreateEventRequest();
@@ -805,7 +785,7 @@ class EventServiceImplIT {
             request.setName( "Super Sport" );
             request.setBeginDate( LocalDate.parse( "2020-01-08" ) );
             request.setEndDate( LocalDate.parse( "2020-05-21" ) );
-            request.setGeoCodesToFind( geoCodesToFind );
+            request.setCreateGeoCodesToFind( createGeoCodeRequests );
             request.setOrderBy( OrderLevels.GIVEN );
 
             eventService.createEvent( request );

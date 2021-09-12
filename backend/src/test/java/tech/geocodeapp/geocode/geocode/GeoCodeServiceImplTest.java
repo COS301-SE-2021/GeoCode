@@ -15,6 +15,7 @@ import tech.geocodeapp.geocode.event.EventMockRepository;
 import tech.geocodeapp.geocode.event.UserEventStatusMockRepository;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.service.*;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.service.*;
@@ -152,9 +153,11 @@ class GeoCodeServiceImplTest {
         lenient().when ( userService.getCurrentUser() ).thenReturn( new User().id( java.util.UUID.randomUUID() ) );
         lenient().when ( userService.getCurrentUserID() ).thenReturn( java.util.UUID.randomUUID() );
 
+        CurrentUserDetails.injectUserDetails(java.util.UUID.randomUUID(), null, null);
+
         try {
 
-            eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService, userService );
+            eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService );
         } catch ( tech.geocodeapp.geocode.event.exceptions.RepoException e ) {
 
             e.printStackTrace();
@@ -1111,7 +1114,7 @@ class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertTrue( response.isIsSuccess() );
+            Assertions.assertTrue( response.isSuccess() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */
@@ -1328,25 +1331,6 @@ class GeoCodeServiceImplTest {
 
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * Check the logic used when create a collectable type
-     */
-    @Disabled
-    @Test
-    @Order( 26 )
-    @DisplayName( "Valid request - calculateCollectableType" )
-    void collectableTypeTest() {
-
-        var count = new ArrayList<>();
-
-        var iterations = 1000000;
-        for ( var x = 0; x < iterations; x++ ) {
-
-            var name = geoCodeService.calculateCollectableType( null );
-
         }
     }
 
