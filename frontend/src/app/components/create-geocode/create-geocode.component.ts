@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CreateGeoCodeRequest, CreateGeoCodeResponse, GeoCodeService, GeoPoint} from '../../services/geocode-api';
-import {ModalController,  ToastController} from '@ionic/angular';
+import {AlertController, ModalController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
 import {input} from '@ionic/cli/lib/color';
 import {QRGenerator} from '../../services/QRGenerator';
@@ -33,7 +33,8 @@ export class CreateGeocodeComponent implements AfterViewInit {
               private toastController: ToastController,
               private geocodeAPI: GeoCodeService,
               private modalController: ModalController,
-              private mapsLoader: GoogleMapsLoader) {}
+              private mapsLoader: GoogleMapsLoader,
+              private alertController: AlertController) {}
 
   //create map
   initMap() {
@@ -43,8 +44,6 @@ export class CreateGeocodeComponent implements AfterViewInit {
         zoom: 15,
       };
       // Create a map after the view is ready and the native platform is ready.
-
-
       map = new this.googleMaps.Map(this.mapElement.nativeElement, this.mapOptions);
 
       //Add event listeners to map
@@ -57,8 +56,6 @@ export class CreateGeocodeComponent implements AfterViewInit {
         zoom: 15,
       };
       // Create a map after the view is ready and the native platform is ready.
-
-
       map = new this.googleMaps.Map(this.mapElement.nativeElement, this.mapOptions);
 
       //Add event listeners to map
@@ -66,9 +63,6 @@ export class CreateGeocodeComponent implements AfterViewInit {
         this.placeMarker(event.latLng);
       });
     });
-
-
-
   };
 
   //create map
@@ -86,13 +80,11 @@ export class CreateGeocodeComponent implements AfterViewInit {
 
   //create the geocode and update the remaining fields
   async createGeoCode(){
+    this.locations=this.marker.getPosition();
+    this.request.location.longitude=this.locations.lng();
+    this.request.location.latitude=this.locations.lat();
     if(this.eventGeoCode){
-      this.locations=this.marker.getPosition();
-      this.request.location.longitude=this.locations.lng();
-      this.request.location.latitude=this.locations.lat();
-      this.request.hints=this.hints;
-      this.request.difficulty = this.difficulty;
-      this.dismiss(this.request);
+      await this.dismiss(this.request);
     }else{
       this.geocodeAPI.createGeoCode(this.request).subscribe(async (response: CreateGeoCodeResponse) =>{
         if(!response.success){
@@ -101,7 +93,7 @@ export class CreateGeocodeComponent implements AfterViewInit {
             duration: 2000
           });
           await toast.present();
-          this.dismiss(null);
+          await this.dismiss(null);
         }else{
           const toast =  await this.toastController.create({
             message: 'GeoCode created',
@@ -109,7 +101,7 @@ export class CreateGeocodeComponent implements AfterViewInit {
           });
           await toast.present();
           this.qrGenerator.download(response.qrCode);
-          this.dismiss(null);
+          await this.dismiss(null);
         }
       });
     }
@@ -120,12 +112,12 @@ export class CreateGeocodeComponent implements AfterViewInit {
 
   //update difficulty field for request
   updateDifficulty(event){
-    this.difficulty=event;
+    this.request.difficulty=event;
   }
 
-  //update hints array with profile input
-  updateHints(event){
-    this.hints.push(event.target.value);
+  updateHints($event,hint){
+    console.log(this.request.hints.indexOf(hint));
+    this.request.hints[this.request.hints.indexOf(hint)] = $event.target.value;
   }
 
   //Place map marker based on user click listener
@@ -137,6 +129,62 @@ export class CreateGeocodeComponent implements AfterViewInit {
       }
     );
    // map.setCenter(location);
+  }
+
+  async addHint() {
+
+    const alert = this.alertController.create({
+      header: 'Add Hint',
+      message: 'Please enter a hint description',
+      inputs: [
+        {
+          name: 'hint',
+          placeholder: 'hint'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            if (data.hint === '') {
+
+            } else {
+              console.log(data.hint);
+              this.request.hints.push(data.hint);
+            }
+          }
+        }
+      ]
+    });
+    (await alert).present();
+
+  }
+
+  async deleteHint(hint){
+    if(this.request.hints.length <2){
+      const toast =  await this.toastController.create({
+        message: 'Must have at least one hint ',
+        duration: 2000
+      });
+      await toast.present();
+    }else{
+      if(this.request.hints.indexOf(hint)>-1){
+        this.request.hints.splice(this.request.hints.indexOf(hint),1);
+      }else {
+        const toast = await this.toastController.create({
+          message: 'Error deleting hint ',
+          duration: 2000
+        });
+        await toast.present();
+      }
+    }
   }
 
 }
