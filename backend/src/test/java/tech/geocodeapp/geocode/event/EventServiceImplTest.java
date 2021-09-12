@@ -113,6 +113,7 @@ class EventServiceImplTest {
     private CreateEventRequest createBlocklyEventRequest;
     private CreateEventResponse createBlocklyEventResponse;
     private HashMap<String, String> blocklyEventProperties;
+    private UUID blocklyEventID;
 
     /**
      * Create the EventServiceImpl with the relevant repositories.
@@ -882,6 +883,30 @@ class EventServiceImplTest {
     @Order( 19 )
     @DisplayName( "create blockly event - valid properties" )
     void createBlocklyEventValidProperties() {
+        createValidBlocklyEvent();
+    }
+
+    @Test
+    @Order( 20 )
+    @DisplayName( "get blockly event" )
+    void getBlocklyEvent() throws InvalidRequestException {
+        createValidBlocklyEvent();
+
+        var request = new GetEventRequest(blocklyEventID);
+        var response = eventService.getEvent(request);
+
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertEquals("Event found", response.getMessage());
+
+        var event = response.getFoundEvent();
+        Assertions.assertNotNull(event);
+        Assertions.assertNull(event.getGeocodeIDs());
+        Assertions.assertNull(event.getProperties());
+    }
+
+
+
+    private void createValidBlocklyEvent(){
         createBlocklyEventRequest();
 
         addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
@@ -893,8 +918,6 @@ class EventServiceImplTest {
         Assertions.assertTrue(createBlocklyEventResponse.isSuccess());
         Assertions.assertEquals("Event created", createBlocklyEventResponse.getMessage());
     }
-
-
 
 
     /*
@@ -993,8 +1016,9 @@ class EventServiceImplTest {
     private void createBlocklyEventResponse(){
         try {
             createBlocklyEventRequest.setProperties(blocklyEventProperties);
-
             createBlocklyEventResponse = eventService.createEvent(createBlocklyEventRequest);
+
+            blocklyEventID = createBlocklyEventResponse.getEventID();
         } catch (InvalidRequestException e) {
             e.printStackTrace();
         }
