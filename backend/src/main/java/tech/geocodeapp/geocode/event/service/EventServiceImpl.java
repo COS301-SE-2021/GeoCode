@@ -79,7 +79,7 @@ public class EventServiceImpl implements EventService {
     private GeoCodeService geoCodeService;
 
     private final String eventNotFoundMessage = "Event not found";
-    private String notBlocklyEventMsg = "Event is not a Blockly Event";
+    private final String notBlocklyEventMsg = "Event is not a Blockly Event";
 
     /**
      * Overloaded Constructor
@@ -156,7 +156,11 @@ public class EventServiceImpl implements EventService {
         /* check if the Event is a Blockly Event */
         var properties = request.getProperties();
 
-        if(!properties.isEmpty()){
+        if(properties.containsKey("timeLimit")) {
+            if(properties.size() > 1){
+                return new CreateEventResponse(false, "Time trials only specify the time limit in the extra properties");
+            }
+        }else if(!properties.isEmpty()){
             /* check if all properties were specified */
             if( !properties.containsKey("problem_description") ){
                 return new CreateEventResponse( false, "Problem description not specified for the Blockly Event");
@@ -846,37 +850,45 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        try{
-            var event = eventRepo.findById(request.getEventID()).get();
+        boolean exists = eventRepo.existsById(request.getEventID());
 
-            var eventManager = new EventManager();
-            var eventComponent = eventManager.buildEvent(event);
-
-            if( !eventComponent.isBlocklyEvent() ){
-                return new CheckOutputResponse(false, notBlocklyEventMsg );
-            }
-
-            var userOutputs = request.getOutputs();
-            var correctOutputs = eventComponent.getOutputs();
-
-            /* count the number of test cases that the output matched on */
-            var count = 0;
-            var numTestCases = correctOutputs.length;
-
-            for(int i = 0; i < numTestCases; ++i){
-                if(!userOutputs.get(i).equals(correctOutputs[i])){
-                    ++count;
-                }
-            }
-
-            if(count < numTestCases){
-                return new CheckOutputResponse(true, "You passed "+count+" out of the "+numTestCases+" test cases");
-            }
-
-            return new CheckOutputResponse(true, "You passed all of the test cases");
-        } catch (Exception e) {
-            return new CheckOutputResponse(false, "Invalid request");
+        if(!exists){
+            return new CheckOutputResponse(false, eventNotFoundMessage);
         }
+
+        var event = eventRepo.findById(request.getEventID()).get();
+
+        var eventManager = new EventManager();
+        var eventComponent = eventManager.buildEvent(event);
+
+        if( !eventComponent.isBlocklyEvent() ){
+            return new CheckOutputResponse(false, notBlocklyEventMsg );
+        }
+
+        var userOutputs = request.getOutputs();
+        var correctOutputs = eventComponent.getOutputs();
+
+        /* count the number of test cases that the output matched on */
+        var numTestCases = correctOutputs.length;
+
+        /* check that the number of test cases is correct */
+        if( userOutputs.size() != numTestCases ){
+            return new CheckOutputResponse( false, "The number of output test cases provided was incorrect" );
+        }
+
+        var count = 0;
+
+        for(int i = 0; i < numTestCases; ++i){
+            if( userOutputs.get(i).equals(correctOutputs[i]) ){
+                ++count;
+            }
+        }
+
+        if(count < numTestCases){
+            return new CheckOutputResponse(true, "You passed "+count+" out of the "+numTestCases+" test cases");
+        }
+
+        return new CheckOutputResponse(true, "You passed all of the test cases");
     }
 
     //// Blockly Helper Functions ////

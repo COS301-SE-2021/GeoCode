@@ -40,6 +40,7 @@ import tech.geocodeapp.geocode.user.request.HandleLoginRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -134,6 +135,7 @@ class EventServiceImplTest {
     private UUID blocklyEventID;
 
     private final String eventNotFoundMessage = "Event not found";
+    private String notBlocklyEventMsg = "Event is not a Blockly Event";
 
     /**
      * Create the EventServiceImpl with the relevant repositories.
@@ -263,6 +265,10 @@ class EventServiceImplTest {
             request.setEndDate( LocalDate.parse( "2020-05-21" ) );
 
             List< CreateGeoCodeRequest > createGeoCodeRequests = new ArrayList<>();
+
+            createGeoCodeRequests.add(new CreateGeoCodeRequest("", new GeoPoint(0.0, 0.0), new ArrayList<>(List.of("")),
+                    Difficulty.EASY, true));
+
             request.setCreateGeoCodesToFind( createGeoCodeRequests );
 
             request.setOrderBy( OrderLevels.GIVEN );
@@ -931,7 +937,7 @@ class EventServiceImplTest {
 
         assertThatThrownBy( () -> eventService.getInputs( request ) )
                 .isInstanceOf( InvalidRequestException.class )
-                .hasMessageContaining( reqEmptyError );
+                .hasMessage( "The given request is missing parameter/s." );
     }
 
     @Test
@@ -1044,16 +1050,123 @@ class EventServiceImplTest {
 
     @Test
     @DisplayName("check output - invalid event id")
-    void checkOutputInvalidEventID(){
+    void checkOutputInvalidEventID() throws InvalidRequestException {
         user1InBlocklyEvent();
 
         var request = new CheckOutputRequest();
         request.setEventID(UUID.randomUUID());
         request.setOutputs(new ArrayList<>());
 
-        assertThatThrownBy( () -> eventService.checkOutput( request ) )
-                .isInstanceOf( Exception.class )
-                .hasMessageContaining( reqParamError );
+        var response = eventService.checkOutput(request);
+
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals(eventNotFoundMessage, response.getMessage());
+    }
+
+    @Test
+    @DisplayName("check output - not a blockly event")
+    void checkOutputNotABlocklyEvent() throws InvalidRequestException {
+        var id = createEvent();
+
+        var request = new CheckOutputRequest();
+        request.setEventID(id);
+        request.setOutputs(new ArrayList<>());
+
+        var response = eventService.checkOutput(request);
+
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals(notBlocklyEventMsg, response.getMessage());
+    }
+
+    @Test
+    @DisplayName("check output - too few output test cases")
+    void checkOutputTooFewOutputTestCases() throws InvalidRequestException {
+        user1InBlocklyEvent();
+
+        var request = new CheckOutputRequest();
+        request.setEventID(blocklyEventID);
+
+        /* only 1 output case instead of the full 2 */
+        request.setOutputs(new ArrayList<>(List.of("output1")));
+
+        var response = eventService.checkOutput(request);
+
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals("The number of output test cases provided was incorrect", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("check output - too many output test cases")
+    void checkOutputTooManyOutputTestCases() throws InvalidRequestException {
+        user1InBlocklyEvent();
+
+        var request = new CheckOutputRequest();
+        request.setEventID(blocklyEventID);
+
+        /* only 1 output case instead of the full 2 */
+        request.setOutputs(new ArrayList<>(Arrays.asList("output1", "output2", "output3")));
+
+        var response = eventService.checkOutput(request);
+
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals("The number of output test cases provided was incorrect", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("check output - passed no test cases")
+    void checkOutputPassedNone() throws InvalidRequestException {
+        user1InBlocklyEvent();
+
+        var request = new CheckOutputRequest();
+        request.setEventID(blocklyEventID);
+
+        var outputs = new ArrayList<>(Arrays.asList("output1", "output2"));
+        var numTestCases = outputs.size();
+
+        request.setOutputs(outputs);
+
+        var response = eventService.checkOutput(request);
+
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertEquals("You passed 0 out of the "+numTestCases+" test cases", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("check output - passed some test cases")
+    void checkOutputPassedSome() throws InvalidRequestException, IOException {
+        user1InBlocklyEvent();
+
+        var request = new CheckOutputRequest();
+        request.setEventID(blocklyEventID);
+
+        var outputs = new ArrayList<>(Arrays.asList("abc", "output2"));
+        var numTestCases = outputs.size();
+
+        request.setOutputs(outputs);
+
+        var response = eventService.checkOutput(request);
+
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertEquals("You passed 1 out of the "+numTestCases+" test cases", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("check output - passed all test cases")
+    void checkOutputPassedAll() throws InvalidRequestException, IOException {
+        user1InBlocklyEvent();
+
+        var request = new CheckOutputRequest();
+        request.setEventID(blocklyEventID);
+
+        var outputs = new ArrayList<>(Arrays.asList("abc", "test"));
+        var numTestCases = outputs.size();
+
+        request.setOutputs(outputs);
+
+        var response = eventService.checkOutput(request);
+
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertEquals("You passed all of the test cases", response.getMessage());
     }
 
     private void user1InBlocklyEvent(){
