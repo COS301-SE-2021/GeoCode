@@ -23,7 +23,7 @@ public class GeoCodeMockService implements GeoCodeService {
         var geocode = new GeoCode();
         geocode.setId(request.getId());
 
-        return new CreateGeoCodeResponse(true, geocode.getId(), "");
+        return new CreateGeoCodeResponse(true, "CreateGeoCode", geocode.getId(), "");
     }
 
     /**
