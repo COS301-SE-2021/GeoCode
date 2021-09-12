@@ -1,7 +1,9 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CreateGeoCodeRequest, CreateGeoCodeResponse, GeoCodeService, GeoPoint} from '../../services/geocode-api';
-import {ModalController, NavController} from '@ionic/angular';
+import {ModalController,  ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
+import {input} from '@ionic/cli/lib/color';
+import {QRGenerator} from '../../services/QRGenerator';
 
 let map;
 @Component({
@@ -11,6 +13,7 @@ let map;
 })
 export class CreateGeocodeComponent implements AfterViewInit {
   @ViewChild('mapElement',{static:false}) mapElement;
+  @Input() eventGeoCode: false;
   googleMaps;
   locations;
   mapOptions;
@@ -20,15 +23,17 @@ export class CreateGeocodeComponent implements AfterViewInit {
   geoLocation: GeoPoint={latitude:0,longitude:0};
 //Request object to be updated as fields change
   request: CreateGeoCodeRequest= {
-    description: 'Testing insert',
+    description: '',
     available: true,
     difficulty:'EASY',
-    hints:['Hint1','Hint2'],
+    hints:[],
     location:{latitude:0,longitude:0}
-
   };
-
-  constructor( private modalController: ModalController, private mapsLoader: GoogleMapsLoader) {}
+  constructor(private qrGenerator: QRGenerator,
+              private toastController: ToastController,
+              private geocodeAPI: GeoCodeService,
+              private modalController: ModalController,
+              private mapsLoader: GoogleMapsLoader) {}
 
   //create map
   initMap() {
@@ -80,14 +85,34 @@ export class CreateGeocodeComponent implements AfterViewInit {
   }
 
   //create the geocode and update the remaining fields
-  createGeoCode(){
-    this.locations=this.marker.getPosition();
-    this.request.location.longitude=this.locations.lng();
-    this.request.location.latitude=this.locations.lat();
-    this.request.hints=this.hints;
-    this.request.difficulty = this.difficulty;
-    this.dismiss(this.request);
-
+  async createGeoCode(){
+    if(this.eventGeoCode){
+      this.locations=this.marker.getPosition();
+      this.request.location.longitude=this.locations.lng();
+      this.request.location.latitude=this.locations.lat();
+      this.request.hints=this.hints;
+      this.request.difficulty = this.difficulty;
+      this.dismiss(this.request);
+    }else{
+      this.geocodeAPI.createGeoCode(this.request).subscribe(async (response: CreateGeoCodeResponse) =>{
+        if(!response.success){
+          const toast =  await this.toastController.create({
+            message: 'Error creating geocode ',
+            duration: 2000
+          });
+          await toast.present();
+          this.dismiss(null);
+        }else{
+          const toast =  await this.toastController.create({
+            message: 'GeoCode created',
+            duration: 2000
+          });
+          await toast.present();
+          this.qrGenerator.download(response.qrCode);
+          this.dismiss(null);
+        }
+      });
+    }
   }
   async dismiss(req) {
     await this.modalController.dismiss(req);
