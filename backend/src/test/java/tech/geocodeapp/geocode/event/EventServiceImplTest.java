@@ -198,7 +198,7 @@ class EventServiceImplTest {
      */
     @Test
     @Order( 2 )
-    @DisplayName( "Null repository handling - createEvent" )
+    @DisplayName( "Null request handling - createEvent" )
     void createEventNullRequestTest() {
 
         /* Null request check */
@@ -289,7 +289,7 @@ class EventServiceImplTest {
      */
     @Test
     @Order( 5 )
-    @DisplayName( "Null repository handling - getEvent" )
+    @DisplayName( "Null request handling - getEvent" )
     void getEventNullRequestTest() {
 
         /* Null request check */
@@ -371,7 +371,7 @@ class EventServiceImplTest {
      */
     @Test
     @Order( 5 )
-    @DisplayName( "Null repository handling - getCurrentEventStatus" )
+    @DisplayName( "Null request handling - getCurrentEventStatus" )
     void getCurrentEventStatusNullRequestTest() {
 
         /* Null request check */
@@ -444,7 +444,7 @@ class EventServiceImplTest {
      */
     @Test
     @Order( 5 )
-    @DisplayName( "Null repository handling - nextStage" )
+    @DisplayName( "Null request handling - nextStage" )
     void nextStageNullRequestTest() {
 
         /* Null request check */
@@ -479,7 +479,7 @@ class EventServiceImplTest {
      */
     @Test
     @Order( 5 )
-    @DisplayName( "Null repository handling - getEnteredEvents" )
+    @DisplayName( "Null request handling - getEnteredEvents" )
     void getEnteredEventsNullRequestTest() {
 
         /* Null request check */
@@ -538,7 +538,7 @@ class EventServiceImplTest {
      */
     @Test
     @Order( 5 )
-    @DisplayName( "Null repository handling - eventsNearMe" )
+    @DisplayName( "Null request handling - eventsNearMe" )
     void eventsNearMeNullRequestTest() {
 
         /* Null request check */
@@ -610,7 +610,7 @@ class EventServiceImplTest {
      */
     @Test
     @Order( 5 )
-    @DisplayName( "Null repository handling - changeAvailability" )
+    @DisplayName( "Null request handling - changeAvailability" )
     void changeAvailabilityNullRequestTest() {
 
         /* Null request check */
@@ -669,7 +669,7 @@ class EventServiceImplTest {
      */
     @Test
     @Order( 5 )
-    @DisplayName( "Null repository handling - getEventsByLocation" )
+    @DisplayName( "Null request handling - getEventsByLocation" )
     void getEventsByLocationNullRequestTest() {
 
         /* Null request check */
@@ -929,7 +929,7 @@ class EventServiceImplTest {
         var request = new GetInputsRequest();
         request.setEventID(null);
 
-        assertThatThrownBy( () -> eventService.getInputs( null ) )
+        assertThatThrownBy( () -> eventService.getInputs( request ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqEmptyError );
     }
@@ -937,7 +937,6 @@ class EventServiceImplTest {
     @Test
     @DisplayName( "get blockly inputs - invalid event id" )
     void getInputsInvalidEventID() throws InvalidRequestException {
-        /* Null parameter check */
         var request = new GetInputsRequest();
         request.setEventID(UUID.randomUUID());
 
@@ -979,10 +978,7 @@ class EventServiceImplTest {
     @Test
     @DisplayName( "get blockly inputs - user is participating in the blockly event" )
     void getInputs() throws InvalidRequestException, IOException {
-        createValidBlocklyEvent();
-        var user1ID = handleUserLogin("user1");
-
-        joinEvent(blocklyEventID, user1ID);
+        user1InBlocklyEvent();
 
         var request = new GetInputsRequest();
         request.setEventID(blocklyEventID);
@@ -1006,7 +1002,66 @@ class EventServiceImplTest {
         Assertions.assertTrue(Arrays.deepEquals(inputs, response.getInputs()));
     }
 
+    @Test
+    @DisplayName("Null request handling - checkOutput")
+    void checkOutputNullRequest(){
+        user1InBlocklyEvent();
 
+        /* Null request check */
+        assertThatThrownBy( () -> eventService.checkOutput( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    @Test
+    @DisplayName("check output - null event id")
+    void checkOutputNullEventID(){
+        user1InBlocklyEvent();
+
+        /* Null parameter check */
+        var request = new CheckOutputRequest();
+        request.setEventID(null);
+
+        assertThatThrownBy( () -> eventService.checkOutput( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    @Test
+    @DisplayName("check output - null output")
+    void checkOutputNullOutput(){
+        user1InBlocklyEvent();
+
+        /* Null parameter check */
+        var request = new CheckOutputRequest();
+        request.setEventID(blocklyEventID);
+        request.setOutputs(null);
+
+        assertThatThrownBy( () -> eventService.checkOutput( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    @Test
+    @DisplayName("check output - invalid event id")
+    void checkOutputInvalidEventID(){
+        user1InBlocklyEvent();
+
+        var request = new CheckOutputRequest();
+        request.setEventID(UUID.randomUUID());
+        request.setOutputs(new ArrayList<>());
+
+        assertThatThrownBy( () -> eventService.checkOutput( request ) )
+                .isInstanceOf( Exception.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    private void user1InBlocklyEvent(){
+        createValidBlocklyEvent();
+        var user1ID = handleUserLogin("user1");
+
+        joinEvent(blocklyEventID, user1ID);
+    }
 
     private void joinEvent(UUID eventID, UUID userID){
         Assertions.assertNotNull(eventID);

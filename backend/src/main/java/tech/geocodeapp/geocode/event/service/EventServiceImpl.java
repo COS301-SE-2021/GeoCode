@@ -79,6 +79,7 @@ public class EventServiceImpl implements EventService {
     private GeoCodeService geoCodeService;
 
     private final String eventNotFoundMessage = "Event not found";
+    private String notBlocklyEventMsg = "Event is not a Blockly Event";
 
     /**
      * Overloaded Constructor
@@ -851,6 +852,10 @@ public class EventServiceImpl implements EventService {
             var eventManager = new EventManager();
             var eventComponent = eventManager.buildEvent(event);
 
+            if( !eventComponent.isBlocklyEvent() ){
+                return new CheckOutputResponse(false, notBlocklyEventMsg );
+            }
+
             var userOutputs = request.getOutputs();
             var correctOutputs = eventComponent.getOutputs();
 
@@ -870,7 +875,6 @@ public class EventServiceImpl implements EventService {
 
             return new CheckOutputResponse(true, "You passed all of the test cases");
         } catch (Exception e) {
-            e.printStackTrace();
             return new CheckOutputResponse(false, "Invalid request");
         }
     }
@@ -907,7 +911,7 @@ public class EventServiceImpl implements EventService {
         EventComponent eventComponent = eventManager.buildEvent( event );
 
         if( !eventComponent.isBlocklyEvent() ){
-            return new CheckEventAndUserResponse( false, "Event is not a Blockly Event" );
+            return new CheckEventAndUserResponse( false, notBlocklyEventMsg );
         }
 
         /* check if the User is not participating in the Blockly Event */
