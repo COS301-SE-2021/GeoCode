@@ -787,7 +787,7 @@ class EventServiceImplIT {
     void createBlocklyEventNoTestCases() {
         createBlocklyEventRequest();
 
-        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        addBlocklyEventProperty("problemDescription", "Print 'Hello World!' to the screen x times (without the quotes)");
 
         createBlocklyEventResponse();
 
@@ -799,7 +799,7 @@ class EventServiceImplIT {
     void createBlocklyEventNoBlocks() {
         createBlocklyEventRequest();
 
-        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        addBlocklyEventProperty("problemDescription", "Print 'Hello World!' to the screen x times (without the quotes)");
         addBlocklyEventProperty("testCases", "");
 
         createBlocklyEventResponse();
@@ -813,7 +813,7 @@ class EventServiceImplIT {
     void createBlocklyEventEmptyProblemDescription() {
         createBlocklyEventRequest();
 
-        addBlocklyEventProperty("problem_description", "");
+        addBlocklyEventProperty("problemDescription", "");
         addBlocklyEventProperty("testCases", "");
         addBlocklyEventProperty("blocks", "");
 
@@ -828,7 +828,7 @@ class EventServiceImplIT {
     void createBlocklyEventInvalidTestCaseFormat() {
         createBlocklyEventRequest();
 
-        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        addBlocklyEventProperty("problemDescription", "Print 'Hello World!' to the screen x times (without the quotes)");
         addBlocklyEventProperty("testCases", "");
         addBlocklyEventProperty("blocks", "");
         addBlocklyEventProperty("", "");
@@ -844,7 +844,7 @@ class EventServiceImplIT {
     void createBlocklyEventInvalidBlocksFormat() {
         createBlocklyEventRequest();
 
-        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        addBlocklyEventProperty("problemDescription", "Print 'Hello World!' to the screen x times (without the quotes)");
         setTestCases("valid1");
         addBlocklyEventProperty("blocks", "");
 
@@ -859,7 +859,7 @@ class EventServiceImplIT {
     void createBlocklyEventTooFewBlocks() {
         createBlocklyEventRequest();
 
-        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        addBlocklyEventProperty("problemDescription", "Print 'Hello World!' to the screen x times (without the quotes)");
         setTestCases("valid1");
         setBlocks("too_few_blocks");
 
@@ -874,7 +874,7 @@ class EventServiceImplIT {
     void createBlocklyEventInconsistentNumberOfInputs() {
         createBlocklyEventRequest();
 
-        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        addBlocklyEventProperty("problemDescription", "Print 'Hello World!' to the screen x times (without the quotes)");
         setTestCases("inconsistent_num_inputs");
         setBlocks("valid1");
 
@@ -1316,7 +1316,7 @@ class EventServiceImplIT {
     private void createValidBlocklyEvent(){
         createBlocklyEventRequest();
 
-        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        addBlocklyEventProperty("problemDescription", "Print 'Hello World!' to the screen x times (without the quotes)");
         setTestCases("valid1");
         setBlocks("valid1");
 

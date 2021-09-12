@@ -162,7 +162,7 @@ public class EventServiceImpl implements EventService {
             }
         }else if(!properties.isEmpty()){
             /* check if all properties were specified */
-            if( !properties.containsKey("problem_description") ){
+            if( !properties.containsKey("problemDescription") ){
                 return new CreateEventResponse( false, "Problem description not specified for the Blockly Event");
             }
 
@@ -174,7 +174,7 @@ public class EventServiceImpl implements EventService {
                 return new CreateEventResponse( false, "Block types were not specified for the Blockly Event" );
             }
 
-            if(properties.get("problem_description").strip().equals("")){
+            if(properties.get("problemDescription").strip().equals("")){
                 return new CreateEventResponse(false, "An empty problem description was given for the Blockly Event");
             }
 
