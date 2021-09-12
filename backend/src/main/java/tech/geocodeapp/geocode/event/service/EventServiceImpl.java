@@ -194,6 +194,15 @@ public class EventServiceImpl implements EventService {
 
             try {
                 blocks = objectMapper.readValue(properties.get("blocks"), Block[].class);
+
+                /* check that the maxInstance values are valid */
+                for(var block : blocks){
+                    var maxInstances = block.getMaxInstances();
+
+                    if(maxInstances == 0 || maxInstances < -1){
+                        return new CreateEventResponse(false, maxInstances + " is not a valid value for a block's maxInstances property");
+                    }
+                }
             } catch (JsonProcessingException e) {
                 return new CreateEventResponse(false, "Invalid format for the blocks");
             }

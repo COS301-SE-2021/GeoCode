@@ -97,10 +97,6 @@ public class Event {
     @ElementCollection
     private Map<String, String> properties;
 
-
-
-
-
     /**
      * Default constructor
      */
