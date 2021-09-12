@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.GeoCodeApplication;
+import tech.geocodeapp.geocode.event.blockly.Block;
 import tech.geocodeapp.geocode.event.blockly.TestCase;
 import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
 import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
@@ -28,6 +29,8 @@ import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
+import tech.geocodeapp.geocode.geocode.request.GetCollectablesInGeoCodeByQRCodeRequest;
+import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
@@ -126,6 +129,14 @@ class EventServiceImplIT {
 
     private final String eventNotFoundMessage = "Event not found";
     private String notBlocklyEventMsg = "Event is not a Blockly Event";
+
+    private UUID user1ID;
+    private GeoCode firstGeoCode;
+    private int numBlocklyGeoCodes;
+    private List<UUID> blocklyGeoCodeIDs;
+    private int numBlocklyBlocks;
+
+    private UUID blocklyGeoCodeID;
 
     /**
      * Create the EventServiceImpl with the relevant repositories.
@@ -756,7 +767,6 @@ class EventServiceImplIT {
         createBlocklyEventResponse();
 
         Assertions.assertTrue(createBlocklyEventResponse.isSuccess());
-        System.out.println(createBlocklyEventResponse.getMessage());
     }
 
     @Test
@@ -1156,11 +1166,99 @@ class EventServiceImplIT {
         Assertions.assertEquals("You passed all of the test cases", response.getMessage());
     }
 
+    @Test
+    @DisplayName("get blockly event status - just started")
+    @Transactional
+    void getBlocklyCurrentEventStatusStarted() throws InvalidRequestException, NotFoundException, MismatchedParametersException, tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException {
+        user1InBlocklyEvent();
+
+        firstGeoCode = geoCodeService.getGeoCode(new GetGeoCodeRequest(blocklyGeoCodeIDs.get(0))).getFoundGeoCode();
+
+        geoCodeService.getCollectablesInGeoCodeByQRCode(new GetCollectablesInGeoCodeByQRCodeRequest("GeoCode 1", firstGeoCode.getId()));
+
+        var request = new GetCurrentEventStatusRequest(blocklyEventID, user1ID);
+        var response = eventService.getCurrentEventStatus(request);
+
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertEquals("Status returned", response.getMessage());
+        Assertions.assertNotNull(response.getTargetGeocode());
+
+        var status = response.getStatus();
+        Assertions.assertNotNull(status);
+    }
+
+    @Test
+    @DisplayName("get blockly event status - found 1 GeoCode")
+    @Transactional
+    void getBlocklyCurrentEventStatusFoundOneGeoCode() throws NotFoundException, InvalidRequestException, tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException, MismatchedParametersException {
+        getBlocklyCurrentEventStatusStarted();
+
+        eventService.nextStage(firstGeoCode, CurrentUserDetails.getID());
+
+        var request = new GetCurrentEventStatusRequest(blocklyEventID, user1ID);
+        var response = eventService.getCurrentEventStatus(request);
+
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertEquals("Status returned", response.getMessage());
+        Assertions.assertNotNull(response.getTargetGeocode());
+
+        var status = response.getStatus();
+        Assertions.assertNotNull(status);
+
+        var details = status.getDetails();
+
+        Assertions.assertTrue(details.containsKey("blocks"));
+
+        var blockTypes = details.get("blocks").split("#");
+
+        var correctNumBlocks = numBlocklyBlocks/numBlocklyGeoCodes;
+
+        if(numBlocklyBlocks % numBlocklyGeoCodes != 0){
+            ++correctNumBlocks;
+        }
+
+        Assertions.assertEquals(correctNumBlocks, blockTypes.length);
+    }
+
+    @Test
+    @DisplayName("get blockly event status - found all GeoCodes")
+    @Transactional
+    void getBlocklyCurrentEventStatusFoundAllGeoCodes() throws NotFoundException, InvalidRequestException, tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException, MismatchedParametersException {
+        getBlocklyCurrentEventStatusStarted();
+
+        eventService.nextStage(firstGeoCode, CurrentUserDetails.getID());
+
+        var secondGeoCode = geoCodeService.getGeoCode(new GetGeoCodeRequest(blocklyGeoCodeIDs.get(1))).getFoundGeoCode();
+        var thirdGeoCode = geoCodeService.getGeoCode(new GetGeoCodeRequest(blocklyGeoCodeIDs.get(2))).getFoundGeoCode();
+
+        eventService.nextStage(secondGeoCode, CurrentUserDetails.getID());
+        eventService.nextStage(thirdGeoCode, CurrentUserDetails.getID());
+
+        var request = new GetCurrentEventStatusRequest(blocklyEventID, user1ID);
+        var response = eventService.getCurrentEventStatus(request);
+
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertEquals("Status returned", response.getMessage());
+        Assertions.assertNull(response.getTargetGeocode());
+
+        var status = response.getStatus();
+        Assertions.assertNotNull(status);
+
+        var details = status.getDetails();
+
+        Assertions.assertTrue(details.containsKey("blocks"));
+
+        var blockTypes = details.get("blocks").split("#");
+
+        Assertions.assertEquals(numBlocklyBlocks, blockTypes.length);
+    }
+
+
     private void user1InBlocklyEvent(){
         var adminID = handleAdminLogin("adminUser");
 
         createValidBlocklyEvent();
-        var user1ID = handleUserLogin("user1");
+        user1ID = handleUserLogin("user1");
 
         joinEvent(blocklyEventID, user1ID);
     }
@@ -1216,13 +1314,19 @@ class EventServiceImplIT {
     }
 
     private void createValidBlocklyEvent(){
-        var adminID = handleAdminLogin("adminUser");
-
         createBlocklyEventRequest();
 
         addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
         setTestCases("valid1");
         setBlocks("valid1");
+
+        var objectMapper = new ObjectMapper();
+
+        try {
+            numBlocklyBlocks = objectMapper.readValue(readFile("blocks", "valid1"), Block[].class).length;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         createBlocklyEventResponse();
 
@@ -1283,13 +1387,22 @@ class EventServiceImplIT {
     private void createBlocklyEventRequest(){
         /* GeoCodes */
         var adminID = handleAdminLogin("adminUser");
+
         var location = new GeoPoint(-25.75, 28.23);
 
         var createBlocklyGeoCodes = new ArrayList<CreateGeoCodeRequest>();
+        blocklyGeoCodeIDs = new ArrayList<>();
 
-        for(int i = 0; i < 3; ++i){
+        numBlocklyGeoCodes = 3;
+
+        for(int i = 0; i < numBlocklyGeoCodes; ++i){
             var createGeoCodeRequest = new CreateGeoCodeRequest();
-            createGeoCodeRequest.setId(UUID.randomUUID());
+
+            blocklyGeoCodeID = UUID.randomUUID();
+            blocklyGeoCodeIDs.add(blocklyGeoCodeID);
+
+            createGeoCodeRequest.setId(blocklyGeoCodeID);
+
             createGeoCodeRequest.setDescription("GeoCode "+(i+1));
             createGeoCodeRequest.setLocation(location);
             createGeoCodeRequest.setHints(new ArrayList<>(List.of("Map")));
@@ -1345,7 +1458,6 @@ class EventServiceImplIT {
     private void setPropertyFromFile(String property, String fileName){
         try {
             String contents = readFile(property, fileName);
-            //System.out.println(contents);
             addBlocklyEventProperty(property, contents);
         } catch (IOException e) {
             e.printStackTrace();

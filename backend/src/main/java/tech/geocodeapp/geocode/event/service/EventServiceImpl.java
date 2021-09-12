@@ -185,17 +185,6 @@ public class EventServiceImpl implements EventService {
 
             try {
                 testCases = objectMapper.readValue(properties.get("testCases"), TestCase[].class);
-
-                System.out.println("Test Cases");
-                System.out.println();
-
-                for(var testCase: testCases){
-                    System.out.println(Arrays.toString(testCase.getInputs()));
-                    System.out.println(testCase.getOutput());
-                    System.out.println();
-                }
-
-                System.out.println("==================");
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
                 return new CreateEventResponse(false, "Invalid format for the test cases");
@@ -205,16 +194,6 @@ public class EventServiceImpl implements EventService {
 
             try {
                 blocks = objectMapper.readValue(properties.get("blocks"), Block[].class);
-
-
-                System.out.println("Blocks");
-                System.out.println();
-
-                for(var block: blocks){
-                    System.out.println(block.getBlockString());
-                }
-
-                System.out.println("==================");
             } catch (JsonProcessingException e) {
                 return new CreateEventResponse(false, "Invalid format for the blocks");
             }
@@ -420,6 +399,7 @@ public class EventServiceImpl implements EventService {
 
         /* Check whether the current user is requesting for themselves */
         UUID currentUserID = CurrentUserDetails.getID();
+
         if ( !currentUserID.equals( request.getUserID() ) ) {
 
             /* The userID passed in does not match the current user ID. Just return the passed-in user's status */
