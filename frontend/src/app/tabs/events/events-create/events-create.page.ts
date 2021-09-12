@@ -52,7 +52,6 @@ export class EventsCreatePage implements AfterViewInit  {
                     private mapsLoader: GoogleMapsLoader,
                     private toastController: ToastController,
                     private eventApi: EventService) {
-
   }
 
   //Create map and add mapmarkers of geocodes
@@ -78,7 +77,7 @@ export class EventsCreatePage implements AfterViewInit  {
     const modal = await this.modalController.create({
       component: CreateGeocodeComponent,
       swipeToClose: true,
-      componentProps: {}
+      componentProps: {eventGeoCode:true}
     });
     await modal.present();
     const { data } = await modal.onDidDismiss();
@@ -169,7 +168,6 @@ export class EventsCreatePage implements AfterViewInit  {
     });
     await modal.present();
     const { data } = await modal.onDidDismiss();
-
   }
 
 }
