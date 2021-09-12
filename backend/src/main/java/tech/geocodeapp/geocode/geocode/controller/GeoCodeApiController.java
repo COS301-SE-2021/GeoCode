@@ -220,7 +220,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         SwapCollectablesResponse response = geoCodeService.swapCollectables( body );
 
-        if ( ( response != null ) && ( response.isIsSuccess() != null ) ) {
+        if ( ( response != null ) && ( response.isSuccess() != null ) ) {
 
             return new ResponseEntity<>( response, HttpStatus.OK );
         } else {
@@ -236,7 +236,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         UpdateAvailabilityResponse response = geoCodeService.updateAvailability( body );
 
-        if (  ( response != null ) && ( response.isIsSuccess() != null ) ) {
+        if (  ( response != null ) && ( response.isSuccess() != null ) ) {
 
             return new ResponseEntity<>( response, HttpStatus.OK );
         } else {

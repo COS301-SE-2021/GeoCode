@@ -54,7 +54,7 @@ public class UpdateAvailabilityResponse {
      *
      * @return the stored isSuccess attribute
      */
-    public Boolean isIsSuccess() {
+    public Boolean isSuccess() {
 
         return isSuccess;
     }
