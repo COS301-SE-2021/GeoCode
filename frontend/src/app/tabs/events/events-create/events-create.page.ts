@@ -27,7 +27,7 @@ export class EventsCreatePage implements AfterViewInit  {
   selected=[];
   type='event';
   timeHidden=true;
-  blockHidden =false;
+  blockHidden =true;
   challengeHidden=true;
   height='0%';
   minDate;
@@ -107,14 +107,14 @@ export class EventsCreatePage implements AfterViewInit  {
   eventType($event){
     this.type=$event.detail.value;
     if($event.detail.value ==='timetrial'){
-      this.challengeHidden=true;
+      this.blockHidden=true;
       this.timeHidden=false;
     }else if($event.detail.value === 'challenge'){
-      this.challengeHidden=false;
       this.timeHidden=true;
+      this.blockHidden=false;
     }else{
       this.timeHidden=true;
-      this.challengeHidden=true;
+      this.blockHidden=true;
     }
   }
 
