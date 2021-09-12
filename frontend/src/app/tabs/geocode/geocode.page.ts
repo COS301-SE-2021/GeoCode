@@ -1,8 +1,9 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import { NavController } from '@ionic/angular';
+import {ModalController, NavController} from '@ionic/angular';
 import {GeoCodeService, GeoCode, Difficulty} from '../../services/geocode-api';
 import {MapAndInfoComponent} from '../../components/map-and-info/map-and-info.component';
 import {CurrentUserDetails} from '../../services/CurrentUserDetails';
+import {CreateGeocodeComponent} from '../../components/create-geocode/create-geocode.component';
 
 @Component({
   selector: 'app-geocode',
@@ -28,6 +29,7 @@ export class GeocodePage implements AfterViewInit {
   };
 
   constructor(
+    private modalController: ModalController,
     private navCtrl: NavController,
     private geocodeApi: GeoCodeService,
     private currentUser: CurrentUserDetails,
@@ -100,5 +102,15 @@ export class GeocodePage implements AfterViewInit {
       output.push(item.geocode);
     }
     return output;
+  }
+
+  async createGeoCode() {
+    const modal = await this.modalController.create({
+      component: CreateGeocodeComponent,
+      swipeToClose: true,
+      componentProps: {eventGeoCode:false}
+    });
+    await modal.present();
+    const {} = await modal.onDidDismiss();
   }
 }
