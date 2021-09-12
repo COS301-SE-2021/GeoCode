@@ -19,7 +19,7 @@
     <div *ngFor="let hint of request.hints">
       <ion-item>
         <ion-label>Hint</ion-label>
-        <ion-input type="text" (ionBlur)="updateHints($event,hint)" value="{{hint}} "> </ion-input><ion-button color ="button"(click)="deleteHint(hint)">X</ion-button>
+        <ion-input type="text" (ionBlur)="updateHints($event,hint)" value="{{hint}}"> </ion-input><ion-button color ="button"(click)="deleteHint(hint)">X</ion-button>
       </ion-item>
     </div>
 

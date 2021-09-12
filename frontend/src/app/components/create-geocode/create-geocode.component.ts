@@ -2,7 +2,6 @@ import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core'
 import {CreateGeoCodeRequest, CreateGeoCodeResponse, GeoCodeService, GeoPoint} from '../../services/geocode-api';
 import {AlertController, ModalController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
-import {input} from '@ionic/cli/lib/color';
 import {QRGenerator} from '../../services/QRGenerator';
 
 let map;
@@ -80,30 +79,37 @@ export class CreateGeocodeComponent implements AfterViewInit {
 
   //create the geocode and update the remaining fields
   async createGeoCode(){
-    this.locations=this.marker.getPosition();
-    this.request.location.longitude=this.locations.lng();
-    this.request.location.latitude=this.locations.lat();
-    if(this.eventGeoCode){
-      await this.dismiss(this.request);
-    }else{
-      this.geocodeAPI.createGeoCode(this.request).subscribe(async (response: CreateGeoCodeResponse) =>{
-        if(!response.success){
-          const toast =  await this.toastController.create({
-            message: 'Error creating geocode ',
-            duration: 2000
-          });
-          await toast.present();
-          await this.dismiss(null);
-        }else{
-          const toast =  await this.toastController.create({
-            message: 'GeoCode created',
-            duration: 2000
-          });
-          await toast.present();
-          this.qrGenerator.download(response.qrCode);
-          await this.dismiss(null);
-        }
+    if(this.request.hints.length===0){
+      const toast =  await this.toastController.create({
+        message: 'Need at least one hint',
+        duration: 2000
       });
+      await toast.present();
+    }else{
+      this.locations=this.marker.getPosition();
+      this.request.location.longitude=this.locations.lng();
+      this.request.location.latitude=this.locations.lat();
+      if(this.eventGeoCode){
+        await this.dismiss(this.request);
+      }else{
+        await this.dismiss(null);
+        this.geocodeAPI.createGeoCode(this.request).subscribe(async (response: CreateGeoCodeResponse) =>{
+          if(!response.success){
+            const toast =  await this.toastController.create({
+              message: 'Error creating geocode ',
+              duration: 2000
+            });
+            await toast.present();
+          }else{
+            const toast =  await this.toastController.create({
+              message: 'GeoCode created',
+              duration: 2000
+            });
+            await toast.present();
+            this.qrGenerator.download(response.qrCode);
+          }
+        });
+      }
     }
   }
   async dismiss(req) {
@@ -115,9 +121,18 @@ export class CreateGeocodeComponent implements AfterViewInit {
     this.request.difficulty=event;
   }
 
-  updateHints($event,hint){
-    console.log(this.request.hints.indexOf(hint));
-    this.request.hints[this.request.hints.indexOf(hint)] = $event.target.value;
+  async updateHints($event,hint){
+    if($event.target.value===''){
+      const toast = await this.toastController.create({
+        message: 'Hint cannot be empty',
+        duration: 2000
+      });
+      await toast.present();
+    }else{
+      console.log(this.request.hints.indexOf(hint));
+      this.request.hints[this.request.hints.indexOf(hint)] = $event.target.value;
+    }
+
   }
 
   //Place map marker based on user click listener
@@ -128,11 +143,9 @@ export class CreateGeocodeComponent implements AfterViewInit {
         position: location
       }
     );
-   // map.setCenter(location);
   }
 
   async addHint() {
-
     const alert = this.alertController.create({
       header: 'Add Hint',
       message: 'Please enter a hint description',
@@ -145,10 +158,7 @@ export class CreateGeocodeComponent implements AfterViewInit {
       buttons: [
         {
           text: 'Cancel',
-          role: 'cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
+          role: 'cancel'
         },
         {
           text: 'Save',
