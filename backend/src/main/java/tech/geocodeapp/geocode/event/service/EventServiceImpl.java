@@ -154,7 +154,7 @@ public class EventServiceImpl implements EventService {
         if(!properties.isEmpty()){
             /* check if all properties were specified */
             if( !properties.containsKey("problem_description") ){
-                return new CreateEventResponse( false, " not specified for the Blockly Event");
+                return new CreateEventResponse( false, "Problem description not specified for the Blockly Event");
             }
 
             if( !properties.containsKey("testCases") ){
@@ -170,30 +170,60 @@ public class EventServiceImpl implements EventService {
             }
 
             /* check the test cases and block information are in the correct format */
+            final ObjectMapper objectMapper = new ObjectMapper();
+
+            TestCase[] testCases;
+
             try {
-                final ObjectMapper objectMapper = new ObjectMapper();
+                testCases = objectMapper.readValue(properties.get("testCases"), TestCase[].class);
 
-                var testCases = objectMapper.readValue(properties.get("testCases"), TestCase[].class);
-                var blocks = objectMapper.readValue(properties.get("blocks"), Block[].class);
+                System.out.println("Test Cases");
+                System.out.println();
 
-                /* check that the number of block types is at least the number stages in the event
-                * so that at least 1 block type can be allocated at each stage of the event
-                *  */
-                if(blocks.length < request.getCreateGeoCodesToFind().size()){
-                    return new CreateEventResponse(false, "The number of block types must be at least the number of GeoCodes in the Blockly Event");
+                for(var testCase: testCases){
+                    System.out.println(Arrays.toString(testCase.getInputs()));
+                    System.out.println(testCase.getOutput());
+                    System.out.println();
                 }
 
-                /* check the input arrays are of the same size */
-                int numInputValues = testCases[0].getInputs().length;
-
-                for(int i = 1; i < testCases.length; ++i){
-                    if(testCases[i].getInputs().length != numInputValues){
-                        return new CreateEventResponse(false, "The number of input values for each test case must be the same");
-                    }
-                }
+                System.out.println("==================");
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
-                return new CreateEventResponse(false, "Invalid format provided for the Blockly Event's properties: "+e.getMessage());
+                return new CreateEventResponse(false, "Invalid format for the test cases");
+            }
+
+            Block[] blocks;
+
+            try {
+                blocks = objectMapper.readValue(properties.get("blocks"), Block[].class);
+
+
+                System.out.println("Blocks");
+                System.out.println();
+
+                for(var block: blocks){
+                    System.out.println(block.getBlockString());
+                }
+
+                System.out.println("==================");
+            } catch (JsonProcessingException e) {
+                return new CreateEventResponse(false, "Invalid format for the blocks");
+            }
+
+            /* check that the number of block types is at least the number stages in the event
+            * so that at least 1 block type can be allocated at each stage of the event
+            *  */
+            if(blocks.length < request.getCreateGeoCodesToFind().size()){
+                return new CreateEventResponse(false, "The number of block types must be at least the number of GeoCodes in the Blockly Event");
+            }
+
+            /* check the input arrays are of the same size */
+            int numInputValues = testCases[0].getInputs().length;
+
+            for(int i = 1; i < testCases.length; ++i){
+                if(testCases[i].getInputs().length != numInputValues){
+                    return new CreateEventResponse(false, "The number of input values for each test case must be the same");
+                }
             }
         }
 

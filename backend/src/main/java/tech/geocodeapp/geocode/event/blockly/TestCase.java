@@ -14,6 +14,13 @@ public class TestCase {
     private String output;
 
     /**
+     * Default constructor - needed for objectMapper.readValue() in createEvent
+     */
+    public TestCase(){
+
+    }
+
+    /**
      * Overloaded Constructor
      * @param inputs The inputs for the test case
      * @param output The output for the test case

@@ -29,6 +29,9 @@ import tech.geocodeapp.geocode.leaderboard.service.*;
 import tech.geocodeapp.geocode.user.UserMockRepository;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -106,6 +109,10 @@ class EventServiceImplTest {
      * This is used to have a static known UUID for a user ID
      */
     UUID userID = UUID.fromString( "2a72e0f9-86a7-4f38-9fda-5f31a8f3c421" );
+
+    private CreateEventRequest createBlocklyEventRequest;
+    private CreateEventResponse createBlocklyEventResponse;
+    private HashMap<String, String> blocklyEventProperties;
 
     /**
      * Create the EventServiceImpl with the relevant repositories.
@@ -734,6 +741,181 @@ class EventServiceImplTest {
 
     }
 
+    @Test
+    @Order( 10 )
+    @DisplayName( "create blockly event - empty properties" )
+    void createBlocklyEventEmptyProperties() {
+        /*
+         * Not specifying an extra properties for an Event means the Event is
+         * a normal event
+         */
+        createBlocklyEventRequest();
+        createBlocklyEventResponse();
+
+        Assertions.assertTrue(createBlocklyEventResponse.isSuccess());
+    }
+
+    @Test
+    @Order( 11 )
+    @DisplayName( "create blockly event - no problem description" )
+    void createBlocklyEventNoProblemDescription() {
+        createBlocklyEventRequest();
+
+        addBlocklyEventProperty("other", "");
+
+        createBlocklyEventResponse();
+
+        Assertions.assertFalse(createBlocklyEventResponse.isSuccess());
+        Assertions.assertEquals("Problem description not specified for the Blockly Event", createBlocklyEventResponse.getMessage());
+    }
+
+    @Test
+    @Order( 12 )
+    @DisplayName( "create blockly event - no testCases" )
+    void createBlocklyEvent() {
+        createBlocklyEventRequest();
+
+        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+
+        createBlocklyEventResponse();
+
+        Assertions.assertFalse(createBlocklyEventResponse.isSuccess());
+        Assertions.assertEquals("Test cases were not specified for the Blockly Event", createBlocklyEventResponse.getMessage());
+    }
+    @Test
+    @Order( 13 )
+    @DisplayName( "create blockly event - no blocks" )
+    void createBlocklyEventNoBlocks() {
+        createBlocklyEventRequest();
+
+        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        addBlocklyEventProperty("testCases", "");
+
+        createBlocklyEventResponse();
+
+        Assertions.assertFalse(createBlocklyEventResponse.isSuccess());
+        Assertions.assertEquals("Block types were not specified for the Blockly Event", createBlocklyEventResponse.getMessage());
+    }
+
+    @Test
+    @Order( 14 )
+    @DisplayName( "create blockly event - empty problem description" )
+    void createBlocklyEventEmptyProblemDescription() {
+        createBlocklyEventRequest();
+
+        addBlocklyEventProperty("problem_description", "");
+        addBlocklyEventProperty("testCases", "");
+        addBlocklyEventProperty("blocks", "");
+
+        createBlocklyEventResponse();
+
+        Assertions.assertFalse(createBlocklyEventResponse.isSuccess());
+        Assertions.assertEquals("An empty problem description was given for the Blockly Event", createBlocklyEventResponse.getMessage());
+    }
+
+    @Test
+    @Order( 15 )
+    @DisplayName( "create blockly event - invalid format for the test cases" )
+    void createBlocklyEventInvalidTestCaseFormat() {
+        createBlocklyEventRequest();
+
+        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        addBlocklyEventProperty("testCases", "");
+        addBlocklyEventProperty("blocks", "");
+        addBlocklyEventProperty("", "");
+
+        createBlocklyEventResponse();
+
+        Assertions.assertFalse(createBlocklyEventResponse.isSuccess());
+        Assertions.assertEquals("Invalid format for the test cases", createBlocklyEventResponse.getMessage());
+    }
+
+    @Test
+    @Order( 16 )
+    @DisplayName( "create blockly event - invalid format for the blocks" )
+    void createBlocklyEventInvalidBlocksFormat() {
+        createBlocklyEventRequest();
+
+        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        setTestCases("valid1");
+        addBlocklyEventProperty("blocks", "");
+
+        createBlocklyEventResponse();
+
+        Assertions.assertFalse(createBlocklyEventResponse.isSuccess());
+        Assertions.assertEquals("Invalid format for the blocks", createBlocklyEventResponse.getMessage());
+    }
+
+    @Test
+    @Order( 17 )
+    @DisplayName( "create blockly event - fewer blocks than stages (geocodes)" )
+    void createBlocklyEventTooFewBlocks() {
+        createBlocklyEventRequest();
+
+        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        setTestCases("valid1");
+        setBlocks("too_few_blocks");
+
+        createBlocklyEventResponse();
+
+        Assertions.assertFalse(createBlocklyEventResponse.isSuccess());
+        Assertions.assertEquals("The number of block types must be at least the number of GeoCodes in the Blockly Event", createBlocklyEventResponse.getMessage());
+    }
+
+    @Test
+    @Order( 18 )
+    @DisplayName( "create blockly event - inconsistent number of input values" )
+    void createBlocklyEventInconsistentNumberOfInputs() {
+        createBlocklyEventRequest();
+
+        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        setTestCases("inconsistent_num_inputs");
+        setBlocks("valid1");
+
+        createBlocklyEventResponse();
+
+        Assertions.assertFalse(createBlocklyEventResponse.isSuccess());
+        Assertions.assertEquals("The number of input values for each test case must be the same", createBlocklyEventResponse.getMessage());
+    }
+
+    @Test
+    @Order( 19 )
+    @DisplayName( "create blockly event - valid properties" )
+    void createBlocklyEventValidProperties() {
+        createBlocklyEventRequest();
+
+        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        setTestCases("valid1");
+        setBlocks("valid1");
+
+        createBlocklyEventResponse();
+
+        Assertions.assertTrue(createBlocklyEventResponse.isSuccess());
+        Assertions.assertEquals("Event created", createBlocklyEventResponse.getMessage());
+    }
+
+
+
+
+    /*
+    @Test
+    @Order( 1 )
+    @DisplayName( "create blockly event - " )
+    void createBlocklyEvent() {
+        createBlocklyEventRequest();
+
+        addBlocklyEventProperty("problem_description", "Print 'Hello World!' to the screen x times (without the quotes)");
+        addBlocklyEventProperty("testCases", "");
+        addBlocklyEventProperty("blocks", "");
+        addBlocklyEventProperty("", "");
+
+        createBlocklyEventResponse();
+
+        Assertions.assertFalse(createBlocklyEventResponse.isSuccess());
+        Assertions.assertEquals("", createBlocklyEventResponse.getMessage());
+    }
+     */
+
     ////////////////Helper functions////////////////
 
     /**
@@ -768,5 +950,90 @@ class EventServiceImplTest {
         }
 
     }
+
+    /**
+     * Constructs a CreateEventRequest for a Blockly Event
+     * The properties hash map is set to test data validity checks
+     */
+    private void createBlocklyEventRequest(){
+        /* GeoCodes */
+        var location = new GeoPoint(-25.75, 28.23);
+
+        var createBlocklyGeoCodes = new ArrayList<CreateGeoCodeRequest>();
+
+        for(int i = 0; i < 3; ++i){
+            var createGeoCodeRequest = new CreateGeoCodeRequest();
+            createGeoCodeRequest.setId(UUID.randomUUID());
+            createGeoCodeRequest.setDescription("GeoCode "+(i+1));
+            createGeoCodeRequest.setLocation(location);
+            createGeoCodeRequest.setHints(new ArrayList<>(List.of("Map")));
+            createGeoCodeRequest.setDifficulty(Difficulty.EASY);
+            createGeoCodeRequest.setAvailable(true);
+
+            createBlocklyGeoCodes.add(createGeoCodeRequest);
+        }
+
+        createBlocklyEventRequest = new CreateEventRequest();
+        createBlocklyEventRequest.setName("Open Day");
+        createBlocklyEventRequest.setDescription("UP Open Day");
+
+        createBlocklyEventRequest.setLocation(location);
+        createBlocklyEventRequest.setBeginDate(LocalDate.now());
+        createBlocklyEventRequest.setEndDate(LocalDate.now().plusDays(1));
+        createBlocklyEventRequest.setCreateGeoCodesToFind(createBlocklyGeoCodes);
+        createBlocklyEventRequest.setOrderBy(OrderLevels.GIVEN);
+        createBlocklyEventRequest.setAvailable(true);
+
+        blocklyEventProperties = new HashMap<>();
+    }
+
+    /**
+     * Constructs a CreateEventResponse for a Blockly Event
+     */
+    private void createBlocklyEventResponse(){
+        try {
+            createBlocklyEventRequest.setProperties(blocklyEventProperties);
+
+            createBlocklyEventResponse = eventService.createEvent(createBlocklyEventRequest);
+        } catch (InvalidRequestException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Add to the Blockly Event's properties
+     * @param key The property's key
+     * @param value The property's value
+     */
+    private void addBlocklyEventProperty(String key, String value){
+        blocklyEventProperties.put(key, value);
+    }
+
+    private void setPropertyFromFile(String property, String fileName){
+        try {
+            String contents = new String(Files.readAllBytes(Paths.get("src/test/java/tech/geocodeapp/geocode/event/blockly/"+property+"/"+fileName+".json")));
+            //System.out.println(contents);
+            addBlocklyEventProperty(property, contents);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Sets the Blockly Event's test cases to the given test case file
+     * @param fileName The file name (without the .json extension)
+     */
+    private void setTestCases(String fileName){
+        setPropertyFromFile("testCases", fileName);
+    }
+
+    /**
+     * Sets the Blockly Event's block types
+     * @param fileName The file name (without the .json extension)
+     */
+    private void setBlocks(String fileName){
+        setPropertyFromFile("blocks", fileName);
+    }
+
 
 }
