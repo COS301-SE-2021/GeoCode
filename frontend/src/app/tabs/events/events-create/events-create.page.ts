@@ -9,7 +9,6 @@ import {ModalController, NavController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {CreateGeocodeComponent} from '../../../components/create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
-import {BlocklyComponent} from '../../../components/blockly/blockly.component';
 import {EventsCreateBlocklyComponent} from './events-create-blockly/events-create-blockly.component';
 
 @Component({
@@ -34,7 +33,10 @@ export class EventsCreatePage implements AfterViewInit  {
   minDate;
   minEndDate;
   timeLimit=0;
-
+  blockly ={testCases:{},
+  blocks:{},
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+  problem_description:''};
   // @ts-ignore
   request: CreateEventRequest = {
     beginDate: '',
@@ -134,7 +136,9 @@ export class EventsCreatePage implements AfterViewInit  {
   createEvent(){
 
     if(this.type==='challenge'){
-
+      this.request.properties.testCases = JSON.stringify(this.blockly.testCases);
+      this.request.properties.problem_description = this.blockly.problem_description;
+      this.request.properties.blocks = JSON.stringify(this.blockly.blocks);
     }else if(this.type ==='timetrial'){
       this.request.properties.timeLimit=this.timeLimit +'';
     }
@@ -161,7 +165,7 @@ export class EventsCreatePage implements AfterViewInit  {
     this.timeLimit = day*24*60+hour*60+min;
   }
 
- async  createBlockly(){
+ async createBlockly(){
     const modal = await this.modalController.create({
       component: EventsCreateBlocklyComponent,
       swipeToClose: true,
@@ -169,6 +173,11 @@ export class EventsCreatePage implements AfterViewInit  {
     });
     await modal.present();
     const { data } = await modal.onDidDismiss();
+    this.blockly=data;
+  }
+
+  updateProblemDescription($event){
+    this.blockly.problem_description=$event.detail.value;
   }
 
 }
