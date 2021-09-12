@@ -1159,7 +1159,7 @@ class GeoCodeServiceImplIT {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertTrue( response.isIsSuccess() );
+            Assertions.assertTrue( response.isSuccess() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */

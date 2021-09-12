@@ -864,17 +864,20 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          */
         var user = userService.getCurrentUser();
         var userID = user.getId();
-        if ( ( userID == null ) || ( geocode.getCreatedBy().equals( userID ) ) ) {
 
-            //TODO: split the OR into 2 cases
-            return new SwapCollectablesResponse( false,  );
+        if ( ( userID == null ) ) {
+            return new SwapCollectablesResponse( false,  "No user is logged in");
+        }
+
+        if( ( geocode.getCreatedBy().equals( userID ) ) ){
+            return new SwapCollectablesResponse(false, "User tried to swap a Collectable out of a GeoCode that they created");
         }
 
         /* Find the target collectable in the GeoCode */
 
         //check if the targetCollectableID is invalid
         if ( !geocode.getCollectables().contains( request.getTargetCollectableID() ) ) {
-            return new SwapCollectablesResponse( false );
+            return new SwapCollectablesResponse( false, "Target Collectable is not in the target GeoCode" );
         }
 
         /* Get the Collectable that must be swapped out and given to the User */
@@ -888,13 +891,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
 
             /* Validate the Collectable's ID was found */
             if ( !getCollectableByIdResponse.isSuccess() ) {
-                return new SwapCollectablesResponse( false );
+                return new SwapCollectablesResponse( false, getCollectableByIdResponse.getMessage() );
             }
 
             geocodeToUser = getCollectableByIdResponse.getCollectable();
         } catch ( NullRequestParameterException e ) {
 
-            return new SwapCollectablesResponse( false );
+            return new SwapCollectablesResponse( false, e.getMessage() );
         }
 
         /* Perform the swap */
@@ -910,7 +913,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         } catch ( NullRequestParameterException error ) {
 
             /* Validate the Collectable returned */
-            return new SwapCollectablesResponse( false );
+            return new SwapCollectablesResponse( false, error.getMessage() );
         }
 
         //change the location of the Collectable going into the GeoCode
@@ -936,7 +939,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 /* A parameter (or the geocode's event ID) is null
                  * The user is not currently targeting this geocode
                  * There is no event matching the geocode's eventID */
-                return new SwapCollectablesResponse( false );
+                return new SwapCollectablesResponse( false, e.getMessage() );
             }
 
         }
@@ -944,7 +947,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /*
          * Create and return a 'success' response
          */
-        return new SwapCollectablesResponse( true );
+        return new SwapCollectablesResponse( true, "Collectable successfully swapped" );
     }
 
     /**
