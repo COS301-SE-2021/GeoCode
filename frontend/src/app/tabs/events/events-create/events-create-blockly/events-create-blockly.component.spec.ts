@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { EventsCreateBlocklyPage } from './events-create-blockly.page';
+import { EventsCreateBlocklyComponent } from './events-create-blockly.component';
 
-describe('EventsCreateBlocklyPage', () => {
-  let component: EventsCreateBlocklyPage;
-  let fixture: ComponentFixture<EventsCreateBlocklyPage>;
+describe('EventsCreateBlocklyComponent', () => {
+  let component: EventsCreateBlocklyComponent;
+  let fixture: ComponentFixture<EventsCreateBlocklyComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EventsCreateBlocklyPage ],
+      declarations: [ EventsCreateBlocklyComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(EventsCreateBlocklyPage);
+    fixture = TestBed.createComponent(EventsCreateBlocklyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
