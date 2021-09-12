@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {GeoCode, GeoCodeService} from '../../../services/geocode-api';
+import {GeoCode, GeoCodeService, GetHintsRequest, GetHintsResponse} from '../../../services/geocode-api';
 import {MapAndInfoComponent} from '../../../components/map-and-info/map-and-info.component';
 
 @Component({
@@ -38,13 +38,19 @@ export class FindGeocodePage implements AfterViewInit {
 
     if (this.geocode === null) {
       this.geocode = (await this.geocodeService.getGeoCode({geoCodeID: this.geocodeID}).toPromise()).foundGeoCode;
-      console.log(this.geocode);
     }
+    const getHintsRequest: GetHintsRequest ={
+      geoCodeID:this.geocode.id
+    };
+
+    this.geocodeService.getHints(getHintsRequest).subscribe((response: GetHintsResponse) =>{
+      this.geocode.hints = response.hints;
+    });
 
     this.map = this.mapAndInfo.getMap();
     this.googleMaps = this.mapAndInfo.getGoogleMaps();
 
-    const latLng = {lat: this.geocode.location.latitude, lng: this.geocode.location.longitude}
+    const latLng = {lat: this.geocode.location.latitude, lng: this.geocode.location.longitude};
 
     this.map.setOptions({
       center: latLng,
