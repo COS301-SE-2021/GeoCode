@@ -29,7 +29,6 @@ export * from './deletePointResponse';
 export * from './difficulty';
 export * from './event';
 export * from './eventLeaderboardDetails';
-export * from './eventProperties';
 export * from './eventsNearMeRequest';
 export * from './eventsNearMeResponse';
 export * from './geoCode';
