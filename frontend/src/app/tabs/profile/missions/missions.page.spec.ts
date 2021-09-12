@@ -7,6 +7,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {Event, UserService} from '../../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {MockKeycloak} from '../../../mocks/MockKeycloak';
+import {CustomComponentsModule} from '../../../components/components.module';
 
 describe('UserMissionsPage', () => {
   let component: UserMissionsPage;
@@ -32,7 +33,7 @@ describe('UserMissionsPage', () => {
     TestBed.configureTestingModule({
       declarations: [ UserMissionsPage ],
       providers: [ UserService, MockKeycloak.provider() ],
-      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
+      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, CustomComponentsModule]
     }).compileComponents();
 
     const router = TestBed.inject(Router);

@@ -8,6 +8,7 @@ export class MockKeycloak {
 
   getKeycloakInstance() {
     return {
+      authenticated: true,
       subject: 'uuid',
       tokenParsed: {
         // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -70,7 +70,9 @@ export class GeocodeDetailsComponent implements OnInit {
     const modal = await this.modalController.create({
       component: GeocodeUpdateComponent,
       swipeToClose: true,
-      componentProps: {geocode:this.geocode}
+      componentProps: {
+        geocode: this.geocode
+      }
     });
     await modal.present();
     const {data} = await modal.onDidDismiss();

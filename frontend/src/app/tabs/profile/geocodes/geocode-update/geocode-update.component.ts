@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {GeoCodeService, UpdateGeoCodeRequest, UpdateGeoCodeResponse} from '../../../../services/geocode-api';
-import {AlertController, ModalController, ToastController} from '@ionic/angular';
+import {AlertController, ModalController, NavParams, ToastController} from '@ionic/angular';
 
 @Component({
   selector: 'app-geocode-update',
@@ -17,7 +17,15 @@ export class GeocodeUpdateComponent implements OnInit {
     hints: [],
     location: {latitude:0,longitude:0}
   };
-  constructor( private modalController: ModalController,private toastController: ToastController,private geocodeAPI: GeoCodeService, private alertCtrl: AlertController) { }
+  constructor(
+    private modalController: ModalController,
+    private toastController: ToastController,
+    private geocodeAPI: GeoCodeService,
+    private alertCtrl: AlertController,
+    navParams: NavParams
+  ) {
+    this.geocode = navParams.data.geocode;
+  }
 
   ngOnInit() {
     this.updateRequest.available = this.geocode.available;

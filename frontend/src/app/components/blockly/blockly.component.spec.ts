@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { BlocklyComponent } from './blockly.component';
-import {NgxBlocklyModule} from 'ngx-blockly';
+import {MockStorage} from '../../mocks/MockStorage';
 
 describe('BlocklyComponent', () => {
   let component: BlocklyComponent;
@@ -11,7 +11,8 @@ describe('BlocklyComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ BlocklyComponent ],
-      imports: [IonicModule.forRoot(), NgxBlocklyModule]
+      providers: [MockStorage.provider()],
+      imports: [IonicModule.forRoot()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(BlocklyComponent);
