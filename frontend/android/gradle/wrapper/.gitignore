@@ -1,0 +1,2 @@
+# Override the global ignore on .jar files for this file
+!gradle-wrapper.jar

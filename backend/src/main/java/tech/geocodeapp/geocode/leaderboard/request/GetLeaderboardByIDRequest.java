@@ -6,7 +6,9 @@ public class GetLeaderboardByIDRequest {
     /**
      * The id of the Leaderboard to be searched for
      */
-    private final UUID leaderboardID;
+    private UUID leaderboardID;
+
+    public GetLeaderboardByIDRequest() {}
 
     /**
      * Overloaded Constructor

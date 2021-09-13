@@ -1,0 +1,39 @@
+<ng-container *ngIf="navigationLayout.layout === 'tabs'">
+  <ion-toolbar>
+    <ng-container *ngTemplateOutlet="title" ngProjectAs="ion-title"></ng-container>
+    <ng-container *ngTemplateOutlet="buttonsStart" ngProjectAs="ion-buttons"></ng-container>
+    <ng-container *ngTemplateOutlet="buttonsEnd" ngProjectAs="ion-buttons"></ng-container>
+    <ng-container *ngTemplateOutlet="other"></ng-container>
+  </ion-toolbar>
+</ng-container>
+
+<ng-container *ngIf="navigationLayout.layout === 'sidebar'">
+  <ion-toolbar>
+    <ng-container *ngTemplateOutlet="other"></ng-container>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ng-container *ngTemplateOutlet="buttonsStart" ngProjectAs="ion-buttons"></ng-container>
+    <ng-container *ngTemplateOutlet="buttonsEnd" ngProjectAs="ion-buttons"></ng-container>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ng-container *ngTemplateOutlet="title" ngProjectAs="ion-title"></ng-container>
+  </ion-toolbar>
+</ng-container>
+
+<ng-template #title>
+  <ng-content select="app-nav-header"></ng-content>
+</ng-template>
+
+<ng-template #buttonsStart>
+  <ng-content select="ion-buttons[slot='start']"></ng-content>
+</ng-template>
+
+<ng-template #buttonsEnd>
+  <ng-content select="ion-buttons[slot='end']"></ng-content>
+</ng-template>
+
+<ng-template #other>
+  <ng-content></ng-content>
+</ng-template>
+
+

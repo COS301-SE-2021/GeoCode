@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.14"
+  version: "1.5.20"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -311,33 +311,33 @@ paths:
       security:
         - bearerAuth: []
 
-  /User/registerNewUser:
+  /User/handleLogin:
     post:
       tags:
         - "User"
-      summary: "Registers a new User"
-      description: "Registers a new User with the given username"
-      operationId: "registerNewUser"
+      summary: "Handles login of Users"
+      description: "Handles login of Users"
+      operationId: "handleLogin"
       requestBody:
         required: true
-        description: "Request to register a new User"
+        description: "Handles login of Users"
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterNewUserRequest'
+              $ref: '#/components/schemas/HandleLoginRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/RegisterNewUserRequest'
+              $ref: '#/components/schemas/HandleLoginRequest'
       responses:
         '200':
           description: "Response for whether the User registration was successful"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegisterNewUserResponse'
+                $ref: '#/components/schemas/Response'
             application/xml:
               schema:
-                $ref: '#/components/schemas/RegisterNewUserResponse'
+                $ref: '#/components/schemas/Response'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -886,6 +886,47 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
+
+  /GeoCode/updateGeoCode:
+    post:
+      tags:
+        - "GeoCode"
+      summary: "Update the geocode properties"
+      description: "Update the properties for a geocode"
+      operationId: "updateGeoCode"
+      requestBody:
+        required: true
+        description: "Request to update a GeoCode's properties"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGeoCodeRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/UpdateGeoCodeRequest"
+      responses:
+        '200':
+          description: "Updated the GeoCode's properties successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateGeoCodeResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/UpdateGeoCodeResponse"
+        '404':
+          description: "Return the GeoCode properties was not updated successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateGeoCodeRequest"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/UpdateGeoCodeResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: [ ]
 
   /Collectable/createCollectableType:
     post:
@@ -1705,6 +1746,129 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
+        
+  /Event/getBlocks:
+    post:
+      tags:
+        - "Event"
+      summary: "Gets the User's blocks for a Blockly Event"
+      description: "Gets the User's blocks for a Blockly Event"
+      operationId: "getBlocks"
+      requestBody:
+        required: true
+        description: "Request to get the User's blocks for a Blockly Event"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetBlocksRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetBlocksRequest"
+      responses:
+        '200':
+          description: "Return the User's blocks for a Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetBlocksResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetBlocksResponse"
+        '404':
+          description: "Failed to return the User's blocks for that Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetBlocksResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetBlocksResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+        
+  /Event/getInputs:
+    post:
+      tags:
+        - "Event"
+      summary: "Gets the input values for the Blockly Event"
+      description: "Gets the input values for the Blockly Event's test cases"
+      operationId: "getInputs"
+      requestBody:
+        required: true
+        description: "Request to get the input values for a Blockly Event"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetInputsRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/GetInputsRequest"
+      responses:
+        '200':
+          description: "Return the input values for a Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetInputsResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetInputsResponse"
+        '404':
+          description: "Failed to return the input values for the Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetInputsResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/GetInputsResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
+        
+  /Event/checkOutput:
+    post:
+      tags:
+        - "Event"
+      summary: "Checks the output values for the Blockly Event"
+      description: "Checks whether the output provided matches the correct output for the given Blockly Event"
+      operationId: "checkOutput"
+      requestBody:
+        required: true
+        description: "Request to check the output values for a Blockly Event"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckOutputRequest"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/CheckOutputRequest"
+      responses:
+        '200':
+          description: "Return whether the output was correct for all of the test cases for a Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckOutputResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/CheckOutputResponse"
+        '404':
+          description: "Failed to check the output given for the Blockly Event"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckOutputResponse"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/CheckOutputResponse"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - bearerAuth: []
 
   /Leaderboard/createLeaderboard:
     post:
@@ -2075,22 +2239,21 @@ paths:
       security:
         - bearerAuth: []
         
-  /Image/getImage/{imageID}:
+  /Image/getImage/{fileName}:
     get:
       tags:
         - "Image"
       summary: "Retrieves an image"
-      description: "Retrieves an image with the specified ID"
+      description: "Retrieves an image with the specified file name"
       operationId: "getImage"
       parameters:
         - in: path
-          name: imageID
+          name: fileName
           schema:
             type: string
-            format: uuid
-            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f.png"
           required: true
-          description: "ID of the image to retrieve"
+          description: "File name of the image to retrieve"
       responses:
         '200':
           description: "Image retrieved"
@@ -2104,11 +2267,11 @@ paths:
                 type: string
                 format: binary
         '400':
-          description: "Request does not include a valid UUID"
+          description: "Request does not include a valid file name"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
-          description: "An image with the specified ID was not found"
+          description: "An image with the specified file name was not found"
         '500':
           description: "Internal server error"
 
@@ -2246,13 +2409,8 @@ components:
         success:
           type: boolean
           example: "True"
-        geoCodeID:
-          type: string
-          format: uuid
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        qrCode:
-          type: string
-          example: "1qwer3d4"
+        createdGeocode:
+          $ref: "#/components/schemas/GeoCode"
       xml:
         name: "CreateGeoCodeResponse"
 
@@ -2529,6 +2687,47 @@ components:
           type: boolean
       xml:
         name: "UpdateAvailabilityResponse"
+
+    UpdateGeoCodeRequest:
+      type: "object"
+      required:
+        - geoCodeID
+        - description
+        - location
+        - hints
+        - difficulty
+        - available
+      properties:
+        geoCodeID:
+          type: string
+          format: uuid
+        description:
+          type: string
+          example: "This describes the GeoCode to be created"
+        location:
+          $ref: "#/components/schemas/GeoPoint"
+        hints:
+          type: array
+          items:
+            type: string
+        difficulty:
+          $ref: "#/components/schemas/Difficulty"
+        available:
+          type: boolean
+          example: "This describes the GeoCode to be created"
+      xml:
+        name: "UpdateGeoCodeRequest"
+
+    UpdateGeoCodeResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "The GeoCode could not be update"
+          xml:
+            name: "UpdateGeoCodeResponse"
+
 
     GetCollectablesRequest:
       type: "object"
@@ -2955,7 +3154,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GeoCode'
-        pastMissions:
+        missions:
           type: array
           items:
             $ref: '#/components/schemas/Mission'
@@ -3206,30 +3405,15 @@ components:
           xml:
             name: "GetMyLeaderboardsResponse"
 
-    RegisterNewUserRequest:
+    HandleLoginRequest:
       type: "object"
       required:
-        - userID
-        - username
+        - location
       properties:
-        userID:
-          type: string
-          format: UUID
-          example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
-        username:
-          type: string
+        location:
+          $ref: "#/components/schemas/GeoPoint"
       xml:
-        name: "RegisterNewUserRequest"
-
-    RegisterNewUserResponse:
-      allOf:
-        - $ref: "#/components/schemas/Response"
-        - type: "object"
-          properties:
-            message:
-              example: "New User registered"
-          xml:
-            name: "RegisterNewUserResponse"
+        name: "HandleLoginRequest"
             
     GetMyMissionsRequest:
       type: "object"
@@ -3506,7 +3690,7 @@ components:
         - location
         - beginDate
         - endDate
-        - geoCodesToFind
+        - createGeoCodesToFind
         - orderBy
         - available
         - properties
@@ -3532,9 +3716,7 @@ components:
         geoCodesToFind:
           type: array
           items:
-            type: string
-            format: uuid
-            example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+            $ref: "#/components/schemas/CreateGeoCodeRequest"
         orderBy:
           $ref: "#/components/schemas/OrderLevels"
         available:
@@ -3554,6 +3736,14 @@ components:
           properties:
             message:
               example: "Event created"
+            eventID:
+              type: string
+              format: uuid
+              example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+            geocodes:
+              type: array
+              items:
+                $ref: "#/components/schemas/GeoCode"
       xml:
         name: "CreateEventResponse"
 
@@ -3719,6 +3909,113 @@ components:
                 $ref: "#/components/schemas/Event"
           xml:
             name: "GetEventsByLocationResponse"
+            
+    GetBlocksRequest:
+      allOf:
+        - $ref: "#/components/schemas/GetEventDetailsByIDRequest"
+        - type: "object"
+      xml:
+        name: "GetBlocksRequest"
+        
+    GetBlocksResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "Blocks successfully returned"
+            blockNames:
+              type: array
+              items:
+                type: string
+          xml:
+            name: "GetBlocksResponse"
+    
+    TestCase:
+      type: "object"
+      required:
+        - inputs
+        - output
+      properties:
+        inputs:
+          type: array
+          items:
+            type: string
+        output:
+          type: string
+      xml:
+        name: "TestCase"
+          
+    Block:
+      type: "object"
+      required:
+        - type
+        - maxInstances
+      properties:
+        type:
+          type: string
+        maxInstances:
+          type: integer
+      xml:
+        name: "Block"
+        
+    GetEventDetailsByIDRequest:
+      type: "object"
+      required:
+        - eventID
+      properties:
+        eventID:
+          type: string
+          format: uuid
+      xml:
+        name: "GetEventDetailsByIDRequest"
+        
+    GetInputsRequest:
+     allOf:
+        - $ref: "#/components/schemas/GetEventDetailsByIDRequest"
+        - type: "object"
+          xml:
+            name: "GetInputsRequest"
+    
+    GetInputsResponse:
+      type: "object"
+      required:
+        - inputs
+      properties:
+        inputs:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+      xml:
+        name: "GetInputsResponse"
+        
+    CheckOutputRequest:
+      type: "object"
+      required:
+        - eventID
+        - outputs
+      properties:
+        eventID:
+          type: string
+          format: uuid
+        outputs:
+          type: array
+          items:
+            type: string
+      xml:
+        name: "CheckOutputRequest"
+    
+    CheckOutputResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            message:
+              example: "You passed all of the test cases"
+          xml:
+            name: "CheckOutputResponse"
 
     GetLeaderboardByIDRequest:
       type: "object"
@@ -3879,13 +4176,12 @@ components:
         - $ref: "#/components/schemas/Response"
         - type: "object"
           required:
-            - imageID
+            - fileName
           properties:
             message:
               example: "Image uploaded"
-            imageID:
+            fileName:
               type: string
-              format: uuid
-              example: "054463f2-2f7c-4864-8130-68e5aa79ee7f"
+              example: "054463f2-2f7c-4864-8130-68e5aa79ee7f.png"
           xml:
             name: "CreateImageResponse"

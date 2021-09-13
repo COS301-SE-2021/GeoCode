@@ -14,6 +14,10 @@ public class CheckOutputRequest {
      */
     private List<String> outputs;
 
+    public CheckOutputRequest() {
+
+    }
+
     /**
      * Overloaded Constructor
      * @param eventID The id for the event

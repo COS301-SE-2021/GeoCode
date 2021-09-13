@@ -14,6 +14,8 @@ public class HandleLoginRequest {
     @JsonProperty("location")
     private GeoPoint location;
 
+    public HandleLoginRequest() {}
+
     /**
      * Overloaded constructor
      * @param location The location of the User's Trackable

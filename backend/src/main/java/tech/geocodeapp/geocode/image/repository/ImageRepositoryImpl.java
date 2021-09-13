@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import tech.geocodeapp.geocode.image.model.Image;
+import tech.geocodeapp.geocode.image.model.ImageFormat;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,21 +28,21 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     @Override
     public Image save( Image image ) throws IOException {
-        Files.write( getFilePathFromUUID( image.getId() ), image.getBytes() );
+        Files.write( getFilePathFromName( image.getFileName() ), image.getBytes() );
         return image;
     }
 
     @Override
-    public Image findById( UUID id ) throws IOException {
+    public Image findByName( String name ) throws IOException {
         try {
-            byte[] bytes = Files.readAllBytes( getFilePathFromUUID( id ) );
-            return new Image( id, bytes );
+            byte[] bytes = Files.readAllBytes( getFilePathFromName( name ) );
+            return new Image( name, bytes );
         } catch ( NoSuchFileException e ) {
             return null;
         }
     }
 
-    private Path getFilePathFromUUID( UUID input ) {
-        return new File( imageDirectory+"\\"+input.toString()+".png" ).toPath();
+    private Path getFilePathFromName( String input ) {
+        return new File( imageDirectory+"\\"+input ).toPath();
     }
 }

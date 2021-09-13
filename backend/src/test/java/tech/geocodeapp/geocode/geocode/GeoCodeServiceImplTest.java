@@ -778,7 +778,7 @@ class GeoCodeServiceImplTest {
 
             var createResponse = geoCodeService.createGeoCode( createRequest );
 
-            var geoCodeID = createResponse.getGeoCodeID();
+            var geoCodeID = createResponse.getCreatedGeocode().getId();
             var request = new UpdateGeoCodeRequest();
             request.setGeoCodeID( geoCodeID );
             request.setDescription( "This is the updated description" );

@@ -1,0 +1,8 @@
+.horizontalscroll {
+  position: relative;
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  height: auto;
+  white-space: nowrap;
+}

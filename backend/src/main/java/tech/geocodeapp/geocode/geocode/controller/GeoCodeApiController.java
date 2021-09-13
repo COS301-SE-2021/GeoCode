@@ -42,7 +42,7 @@ public class GeoCodeApiController implements GeoCodeApi {
         }
     }
 
-    public ResponseEntity< UpdateGeoCodeResponse > updatedGeoCode( @Parameter( in = ParameterIn.DEFAULT,
+    public ResponseEntity< UpdateGeoCodeResponse > updateGeoCode( @Parameter( in = ParameterIn.DEFAULT,
             description = "Request to update a GeoCode",
             required = true, schema = @Schema() )
                                                                    @Valid @RequestBody UpdateGeoCodeRequest body ) throws InvalidRequestException {
