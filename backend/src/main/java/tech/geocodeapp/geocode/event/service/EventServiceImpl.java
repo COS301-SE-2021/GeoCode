@@ -357,7 +357,7 @@ public class EventServiceImpl implements EventService {
             response = temp.map(
 
                     /* Indicate the Event was found and return it */
-                    event -> new GetEventResponse( true, "Event found", event.getPublicDetails() )
+                    event -> new GetEventResponse( true, "Event found", event.removePrivateDetails() )
                                ).orElseGet(
 
                     /* Indicate the Event was not found */
@@ -658,7 +658,7 @@ public class EventServiceImpl implements EventService {
 
             /* Check if the event is close enough to the given point */
             if ( distance <= request.getRadius() ) {
-                foundEvents.add( event.getPublicDetails() );
+                foundEvents.add( event.removePrivateDetails() );
             }
         }
 
@@ -755,7 +755,7 @@ public class EventServiceImpl implements EventService {
                  * The current Event is the same
                  * therefore add it to the list
                  */
-                foundEvents.add( event.getPublicDetails() );
+                foundEvents.add( event.removePrivateDetails() );
             }
         }
 
