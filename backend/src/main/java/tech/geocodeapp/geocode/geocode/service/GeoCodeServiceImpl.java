@@ -309,7 +309,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and add the created GeoCode to it
          */
-        newGeoCode.setCollectables(null); /* Hide the collectables in the response */
         return new CreateGeoCodeResponse( true, "GeoCode created", newGeoCode );
     }
 
