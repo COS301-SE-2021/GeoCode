@@ -695,7 +695,7 @@ class GeoCodeServiceImplIT {
      */
     @Test
     @Order( 18 )
-    @DisplayName( "Valid request - createGeoCode" )
+    @DisplayName( "Valid request - updateGeoCode" )
     void updateGeoCodeTest() {
 
         try {

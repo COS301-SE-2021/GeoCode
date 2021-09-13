@@ -690,7 +690,7 @@ class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 2 )
-    @DisplayName( "Null repository handling - createGeoCode" )
+    @DisplayName( "Null repository handling - updateGeoCode" )
     void updateGeoCodeNullRequestTest() {
 
         /* Null request check */
@@ -704,7 +704,7 @@ class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 10 )
-    @DisplayName( "Invalid repository attribute handling - createGeoCode" )
+    @DisplayName( "Invalid repository attribute handling - updateGeoCode" )
     void updateGeoCodeInvalidRequestTest() {
 
         /*
@@ -728,7 +728,7 @@ class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 10 )
-    @DisplayName( "All invalid repository attribute handling - createGeoCode" )
+    @DisplayName( "All invalid repository attribute handling - updateGeoCode" )
     void updateGeoCodeAllInvalidRequestTest() {
 
         /*
@@ -754,7 +754,7 @@ class GeoCodeServiceImplTest {
      */
     @Test
     @Order( 18 )
-    @DisplayName( "Valid request - createGeoCode" )
+    @DisplayName( "Valid request - updateGeoCode" )
     void updateGeoCodeTest() {
 
         try {
