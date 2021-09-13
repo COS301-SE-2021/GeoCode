@@ -186,7 +186,6 @@ public class EventServiceImpl implements EventService {
             try {
                 testCases = objectMapper.readValue(properties.get("testCases"), TestCase[].class);
             } catch (JsonProcessingException e) {
-                e.printStackTrace();
                 return new CreateEventResponse(false, "Invalid format for the test cases");
             }
 
