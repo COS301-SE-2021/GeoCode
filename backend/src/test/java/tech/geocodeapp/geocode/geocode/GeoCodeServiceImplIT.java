@@ -626,6 +626,7 @@ class GeoCodeServiceImplIT {
         }
     }
 
+
     /**
      * Check how the use case handles the request being null
      */
@@ -703,24 +704,39 @@ class GeoCodeServiceImplIT {
              * Create a request object
              * and assign values to it
              */
-            var request = new UpdateGeoCodeRequest();
-            request.setAvailable( true );
-            request.setDescription( "The GeoCode is stored at the art Museum in Jhb South" );
-            request.setDifficulty( Difficulty.INSANE );
+            var createRequest = new CreateGeoCodeRequest();
+            createRequest.setAvailable( true );
+            createRequest.setDescription( "The GeoCode is stored at the art Museum in Jhb South" );
+            createRequest.setDifficulty( Difficulty.INSANE );
             List< String > hints = new ArrayList<>();
             hints.add( "This " );
             hints.add( "is " );
             hints.add( "a " );
             hints.add( "secret " );
             hints.add( "hint." );
-            request.setHints( hints );
+            createRequest.setHints( hints );
+            createRequest.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
+
+            var createResponse = geoCodeService.createGeoCode( createRequest );
+
+            var geoCodeID = createResponse.getGeoCodeID();
+            var request = new UpdateGeoCodeRequest();
+            request.setGeoCodeID( geoCodeID );
+            request.setDescription( "This is the updated description" );
 
             var response = geoCodeService.updateGeoCode( request );
 
+            var checkGeoCode = repo.findById( geoCodeID );
+            GeoCode found = new GeoCode();
+            if ( checkGeoCode.isPresent() ) {
+
+                found = checkGeoCode.get();
+            }
             /*
              * Check if the GeoCode was created correctly
              * through checking the description created with the code
              */
+            Assertions.assertEquals( "This is the updated description", found.getDescription() );
             Assertions.assertTrue( response.isSuccess() );
 
         } catch ( InvalidRequestException e ) {
