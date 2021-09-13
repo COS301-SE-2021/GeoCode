@@ -10,6 +10,7 @@ import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {CreateGeocodeComponent} from '../../../components/create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
 import {EventsCreateBlocklyComponent} from './events-create-blockly/events-create-blockly.component';
+import {QRGenerator} from '../../../services/QRGenerator';
 
 @Component({
   selector: 'app-events-create',
@@ -53,7 +54,9 @@ export class EventsCreatePage implements AfterViewInit  {
                     private geocodeApi: GeoCodeService,
                     private mapsLoader: GoogleMapsLoader,
                     private toastController: ToastController,
-                    private eventApi: EventService) {
+                    private eventApi: EventService,
+                    private qrGenerator: QRGenerator
+  ) {
   }
 
   //Create map and add mapmarkers of geocodes
@@ -144,6 +147,9 @@ export class EventsCreatePage implements AfterViewInit  {
     console.log(this.request);
     const response = await this.eventApi.createEvent(this.request).toPromise();
     if (response.success) {
+      for (const geocode of response.geocodes) {
+        this.qrGenerator.download(geocode.qrCode, geocode.description);
+      }
       this.navCtrl.navigateBack('/events').then().catch();
     } else {
       console.log(response);
