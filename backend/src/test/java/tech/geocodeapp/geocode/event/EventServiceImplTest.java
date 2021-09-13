@@ -926,7 +926,7 @@ class EventServiceImplTest {
         var event = response.getFoundEvent();
         Assertions.assertNotNull(event);
         Assertions.assertTrue(event.getGeocodeIDs().isEmpty());
-        Assertions.assertTrue(event.getProperties().isEmpty());
+        Assertions.assertFalse(event.getProperties().containsKey("testCases"));
     }
 
     @Test
