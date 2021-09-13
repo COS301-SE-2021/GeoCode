@@ -392,7 +392,7 @@ public class UserServiceImpl implements UserService {
         var oldUser = userRepo.findByUsernameIgnoreCase(newUser.getUsername());
         if (oldUser != null && !oldUser.getId().equals(newUser.getId())) {
             // Rename the old user
-            var newUsername = "Deleted User "+oldUser.getId();
+            var newUsername = "DeletedUser"+oldUser.getId();
             oldUser.setUsername(newUsername);
             userRepo.save(oldUser);
         }
