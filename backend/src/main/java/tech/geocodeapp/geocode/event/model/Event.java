@@ -616,11 +616,11 @@ public class Event {
     }
 
     /**
-     * Nulls out the details for an Event that should not be seen by non-admin Users
+     * Clears out the details for an Event that should not be seen by non-admin Users
      */
     public void removePrivateDetails(){
-        this.geocodeIDs = null;
-        this.properties = null;
+        this.geocodeIDs = new ArrayList<>();
+        this.properties = new HashMap<>();
     }
 
     /**
