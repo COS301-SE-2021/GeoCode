@@ -112,7 +112,7 @@ export class OpenGeocodePage implements AfterViewInit {
         rotation: '-90 0 0',
         width: '0.75',
         height: '0.75',
-        color: '#17252A'
+        color: '#24444F'
       });
       marker.appendChild(background);
 
