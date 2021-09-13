@@ -37,16 +37,15 @@ export class GeocodeUpdateComponent implements OnInit {
   }
 
   updateDescription($event){
-    this.updateRequest.description = $event.detail.value;
+    this.updateRequest.description = $event.target.value;
   }
 
   updateHints($event,hint){
-    console.log(this.updateRequest.hints.indexOf(hint));
     this.updateRequest.hints[this.updateRequest.hints.indexOf(hint)] = $event.target.value;
   }
 
-  updateDifficulty($event){
-    this.updateRequest.difficulty=$event.detail.value;
+  updateDifficulty(diff){
+    this.updateRequest.difficulty=diff;
   }
 
   async updateGeoCode(){
