@@ -76,7 +76,7 @@ export class MapAndInfoComponent extends AsynchronouslyInitialisedComponent impl
     return this.location;
   }
 
-  private mapSizeMD() {
+  public mapSizeMD() {
     if (this.showInfo) {
       return 8;
     } else {
@@ -84,7 +84,7 @@ export class MapAndInfoComponent extends AsynchronouslyInitialisedComponent impl
     }
   }
 
-  private mapSizeLG() {
+  public mapSizeLG() {
     if (this.showInfo) {
       return 9;
     } else {
@@ -92,7 +92,7 @@ export class MapAndInfoComponent extends AsynchronouslyInitialisedComponent impl
     }
   }
 
-  private getClass() {
+  public getClass() {
     if (this.showInfo && !window.matchMedia('(min-width: 768px)').matches) {
       // Only returns if the geocode details are being shown and the screen is small
       return 'splitScreen';

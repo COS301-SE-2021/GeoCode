@@ -64,7 +64,7 @@
               <ion-col>
                 <ion-item>
                   <ion-input #QR placeholder="Enter Text Code" type="text"></ion-input>
-                  <ion-button slot="end" color="button" (click)="openTextQR(QR.value)">Submit</ion-button>
+                  <ion-button slot="end" color="button" (click)="openTextQR(QR.value.toString())">Submit</ion-button>
                 </ion-item>
               </ion-col>
             </ion-row>

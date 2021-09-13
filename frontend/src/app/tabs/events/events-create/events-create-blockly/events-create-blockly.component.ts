@@ -20,8 +20,8 @@ export class EventsCreateBlocklyComponent implements OnInit {
   testCases: DetailedTestCase[] = [];
   currentlyRecordingTestCase: DetailedTestCase = null;
 
-  private readonly testCasesKey = 'createdTestCases';
-  private readonly programKey = 'createdProgram';
+  readonly testCasesKey = 'createdTestCases';
+  readonly programKey = 'createdProgram';
 
   constructor(
     private modalCtrl: ModalController,

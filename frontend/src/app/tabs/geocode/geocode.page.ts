@@ -32,7 +32,7 @@ export class GeocodePage implements AfterViewInit {
     private modalController: ModalController,
     private navCtrl: NavController,
     private geocodeApi: GeoCodeService,
-    private currentUser: CurrentUserDetails,
+    public currentUser: CurrentUserDetails,
   ) {}
 
   async ngAfterViewInit() {

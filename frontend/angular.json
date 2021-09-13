@@ -73,7 +73,7 @@
                 }
               ]
             },
-            "android": {
+            "androidDev": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

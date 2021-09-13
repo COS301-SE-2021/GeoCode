@@ -35,7 +35,7 @@ jobs:
 
       - name: Build app
         working-directory: frontend
-        run: ionic build
+        run: ionic build --prod
 
   frontend-tests:
     name: Frontend Jasmine Tests
@@ -89,10 +89,9 @@ jobs:
         working-directory: frontend/src
         run: |
             cp environments/environment.prod.ts environments/environment.ts
-            cp environments/environment.prod.ts environments/environment.android.ts
-            sudo sed -i "s/googleMapsKey: ''/googleMapsKey: '${{secrets.GOOGLE_MAPS_ANDROID_KEY}}'/g" environments/environment.android.ts
-            sudo sed -i "s/keycloakInitOptions: keycloakWebOptions/keycloakInitOptions: keycloakAndroidOptions/g" environments/environment.android.ts
-            sudo sed -i "s/baseRedirectURI: 'https:\/\/geocodeapp.tech\/'/baseRedirectURI: 'geocode:\/\/'/g" environments/environment.android.ts
+            sudo sed -i "s/googleMapsKey: ''/googleMapsKey: '${{secrets.GOOGLE_MAPS_ANDROID_KEY}}'/g" environments/environment.prod.ts
+            sudo sed -i "s/keycloakInitOptions: keycloakWebOptions/keycloakInitOptions: keycloakAndroidOptions/g" environments/environment.prod.ts
+            sudo sed -i "s/baseRedirectURI: 'https:\/\/geocodeapp.tech\/'/baseRedirectURI: 'geocode:\/\/'/g" environments/environment.prod.ts
           
       - name: Install Angular CLI
         run: npm install -g @angular/cli@12.2.1
@@ -106,7 +105,7 @@ jobs:
 
       - name: Build app
         working-directory: frontend
-        run: ionic build --configuration=android
+        run: ionic build --prod
         
       - name: Sync Capacitor project
         working-directory: frontend
