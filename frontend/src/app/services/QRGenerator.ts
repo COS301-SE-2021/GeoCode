@@ -19,11 +19,11 @@ export class QRGenerator {
     const ctx = output.getContext('2d');
 
     output.width = 550;
-    output.height = 705;
+    output.height = 715;
 
     /* White background */
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 550, 705);
+    ctx.fillRect(0, 0, 550, 715);
 
     /* URL header */
     ctx.font = '900 55px Helvetica';
