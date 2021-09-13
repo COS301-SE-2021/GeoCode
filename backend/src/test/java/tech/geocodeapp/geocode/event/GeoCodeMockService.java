@@ -8,6 +8,7 @@ import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.response.*;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GeoCodeMockService implements GeoCodeService {
@@ -22,6 +23,14 @@ public class GeoCodeMockService implements GeoCodeService {
     public CreateGeoCodeResponse createGeoCode(CreateGeoCodeRequest request) throws InvalidRequestException {
         var geocode = new GeoCode();
         geocode.setId(request.getId());
+        geocode.setDifficulty(request.getDifficulty());
+
+        /* mock the QR code so can call getCollectablesInGeoCodeByQRCode */
+        geocode.setQrCode(request.getDescription());
+
+        geocode.setEventID(request.getEventComponent().getID());
+
+        geocodeRepo.save(geocode);
 
         return new CreateGeoCodeResponse(true, geocode.getId(), "");
     }
@@ -53,7 +62,19 @@ public class GeoCodeMockService implements GeoCodeService {
 
     @Override
     public GetGeoCodesResponse getAllGeoCodes() {
-        return null;
+        /* Retrieve all the stored GeoCodes from the repository */
+        List< GeoCode > temp = new ArrayList<>( geocodeRepo.findGeoCode() );
+
+        /* Go through each GeoCode found and hide the sensitive data */
+        for ( GeoCode geoCode : temp ) {
+
+            geoCode.setHints( null );
+            geoCode.setQrCode( null );
+            geoCode.setCollectables( null );
+        }
+
+        /* Set the response to the masked GeoCodes and return it */
+        return new GetGeoCodesResponse( temp );
     }
 
     @Override

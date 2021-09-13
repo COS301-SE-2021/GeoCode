@@ -87,12 +87,12 @@ public class UserMockService implements UserService {
 
     @Override
     public User getCurrentUser() {
-        return null;
+        return new User(CurrentUserDetails.getID(), CurrentUserDetails.getUsername());
     }
 
     @Override
     public java.util.UUID getCurrentUserID() {
-        return null;
+        return CurrentUserDetails.getID();
     }
 
     /**

@@ -12,6 +12,13 @@ public class Block {
     private int maxInstances;
 
     /**
+     * Default Constructor - needed for objectMapper.readValue()
+     */
+    public Block(){
+
+    }
+
+    /**
      * Overloaded Constructor
      * @param type The type of Blockly block
      * @param maxInstances The max number of instances of this type of block
