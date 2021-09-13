@@ -13,6 +13,18 @@ import {RequestInterceptor} from './services/RequestInterceptor';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
 import {IonicStorageModule, Storage} from '@ionic/storage-angular';
 
+const doInit = async (keycloak: KeycloakService) => {
+  return await keycloak.init({
+    config: {
+      url: 'https://geocodeapp.tech:8100/auth',
+      realm: 'GeoCode',
+      clientId: environment.keycloakClientID,
+    },
+    initOptions: environment.keycloakInitOptions,
+    enableBearerInterceptor: false
+  });
+}
+
 const initializeKeycloak = (keycloak: KeycloakService, storage: Storage) => async () => {
 
   await storage.create();
@@ -22,18 +34,15 @@ const initializeKeycloak = (keycloak: KeycloakService, storage: Storage) => asyn
   if (token != null) { environment.keycloakInitOptions.token = token; }
   if (refreshToken != null) { environment.keycloakInitOptions.refreshToken = refreshToken; }
 
-  await keycloak.init({
-    config: {
-      url: 'https://geocodeapp.tech:8100/auth',
-      realm: 'GeoCode',
-      clientId: environment.keycloakClientID,
-    },
-    initOptions: environment.keycloakInitOptions,
-    enableBearerInterceptor: false
-  });
+  const success = await doInit(keycloak);
 
   if (token != null) { delete environment.keycloakInitOptions.token; }
   if (refreshToken != null) { delete environment.keycloakInitOptions.refreshToken; }
+
+  if (!success) {
+    console.log('Logging in without saved refresh token');
+    await doInit(keycloak);
+  }
 
 };
 
