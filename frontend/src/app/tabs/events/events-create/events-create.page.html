@@ -51,8 +51,7 @@
           <ion-button color="button"  (click)="createBlockly()" >Create +</ion-button>
         </ion-item>
         <ion-item [hidden]="blockHidden">
-          <ion-label>Description of Coding problem</ion-label>
-          <ion-textarea color="button"  (ionBlur)="updateProblemDescription($event)" ></ion-textarea>
+          <ion-textarea type="text" placeholder="Challenge Instructions" (ionChange)="updateProblemDescription($event)" ></ion-textarea>
         </ion-item>
       </ion-list>
       <ion-item>

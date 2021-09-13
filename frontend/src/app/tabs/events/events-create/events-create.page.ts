@@ -132,7 +132,7 @@ export class EventsCreatePage implements AfterViewInit  {
     this.request.endDate=date.toISOString().split('T')[0];
   }
 
-  createEvent(){
+  async createEvent(){
 
     if(this.type==='challenge'){
       this.request.properties.testCases = JSON.stringify(this.blockly.testCases);
@@ -142,9 +142,13 @@ export class EventsCreatePage implements AfterViewInit  {
       this.request.properties.timeLimit=this.timeLimit +'';
     }
     console.log(this.request);
-    this.eventApi.createEvent(this.request).subscribe((response: CreateEventResponse) =>{
-      this.navCtrl.navigateBack('/events');
-    });
+    const response = await this.eventApi.createEvent(this.request).toPromise();
+    if (response.success) {
+      this.navCtrl.navigateBack('/events').then().catch();
+    } else {
+      console.log(response);
+      alert(response.message);
+    }
 
   }
 

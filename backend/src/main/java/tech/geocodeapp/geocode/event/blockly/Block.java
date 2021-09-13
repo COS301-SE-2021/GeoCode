@@ -1,15 +1,23 @@
 package tech.geocodeapp.geocode.event.blockly;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Block {
     /**
      * The type of Blockly block
      */
+    @JsonProperty("type")
     private String type;
 
     /**
      * The max number of instances of this type of block
      */
+    @JsonProperty("maxInstances")
     private int maxInstances;
+
+    public Block() {
+
+    }
 
     /**
      * Overloaded Constructor

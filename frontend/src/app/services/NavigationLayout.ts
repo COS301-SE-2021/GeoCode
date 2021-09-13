@@ -18,7 +18,7 @@ export class NavigationLayout {
   }
 
   calculateLayout(platform: Platform) {
-    if (platform.width() > 1024) {
+    if (platform.width() > 1280) {
       this.layout = 'sidebar';
       this.compact = (platform.height() < 512);
     } else {

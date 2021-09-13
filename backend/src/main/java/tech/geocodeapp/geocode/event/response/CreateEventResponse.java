@@ -1,13 +1,10 @@
 package tech.geocodeapp.geocode.event.response;
 
 import org.springframework.validation.annotation.Validated;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.geocodeapp.geocode.general.response.Response;
+import tech.geocodeapp.geocode.geocode.model.GeoCode;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.Valid;
-
-import java.util.Objects;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -16,6 +13,8 @@ import java.util.UUID;
 @Validated
 public class CreateEventResponse extends Response {
     private UUID eventID;
+
+    private List<GeoCode> geocodes;
 
     /**
      * Overloaded Constructor
@@ -31,12 +30,17 @@ public class CreateEventResponse extends Response {
      *
      * @param success the status of the Event created
      */
-    public CreateEventResponse( boolean success, String message, UUID eventID) {
+    public CreateEventResponse( boolean success, String message, UUID eventID, List<GeoCode> geocodes) {
         super(success, message);
         this.eventID = eventID;
+        this.geocodes = geocodes;
     }
 
     public UUID getEventID() {
         return eventID;
+    }
+
+    public List<GeoCode> getGeocodes() {
+        return geocodes;
     }
 }

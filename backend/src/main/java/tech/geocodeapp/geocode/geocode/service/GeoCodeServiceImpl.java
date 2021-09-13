@@ -233,7 +233,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* The characters the qrCode must be made up of */
-        var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        /* Avoid l, 1, 0 and O as they are ambiguous */
+        var chars = "23456789ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
         /* create a StringBuffer of the specified size */
         var qr = new StringBuilder( QR_SIZE );
@@ -285,6 +286,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 return new CreateGeoCodeResponse( false, "The GeoCode did not save properly" );
             }
 
+            /* Update the geocode now that it has been saved */
+            newGeoCode = check;
+
             /*
              * Add the GeoCode to the list of GeoCodes that the user has created
              */
@@ -305,33 +309,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and add the created GeoCode to it
          */
-        var response = new CreateGeoCodeResponse();
-
-        /*
-         * Check if the object is present in the repo
-         * if it does exist set it to null
-         * else check if the id is inserted
-         */
-        var temp = geoCodeRepo.findById( id );
-        if ( temp.isPresent() ) {
-
-            /* Check the ID's are identical */
-            if ( temp.get().getId().equals( id ) ) {
-
-                /* Set the attributes as the creation was successful */
-                response = new CreateGeoCodeResponse( true, "GeoCode created", id, qr.toString() );
-            } else {
-
-                /* An error occurred since the ID's are not identical */
-                response.setSuccess( false );
-            }
-        } else {
-
-            /* Exception thrown therefore creation failed */
-            response.setSuccess( false );
-        }
-
-        return response;
+        newGeoCode.setCollectables(null); /* Hide the collectables in the response */
+        return new CreateGeoCodeResponse( true, "GeoCode created", newGeoCode );
     }
 
     /**
