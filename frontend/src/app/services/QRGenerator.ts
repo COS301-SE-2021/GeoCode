@@ -18,12 +18,29 @@ export class QRGenerator {
     const output = document.createElement('canvas');
     const ctx = output.getContext('2d');
 
-    output.height = 500;
-    output.width = 500;
+    output.width = 550;
+    output.height = 705;
 
+    /* White background */
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, 550, 705);
+
+    /* URL header */
+    ctx.font = '900 55px Helvetica';
+    ctx.fillStyle = 'red';
+    ctx.fillText('geocodeapp.tech', 25, 65, 500);
+
+    /* Border around QR code */
     ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, output.width, output.height);
-    ctx.drawImage(input, 25, 25);
+    ctx.fillRect(25, 90, 500, 500);
+
+    /* QR code */
+    ctx.drawImage(input, 50, 115);
+
+    /* Code text at bottom */
+    ctx.font = 'bold 105px Courier New';
+    ctx.fillStyle = 'red';
+    ctx.fillText(code, 25, 675, 500);
 
     return output;
   }

@@ -63,7 +63,7 @@ export class GeocodeDetailsComponent implements OnInit {
   }
 
   getQR() {
-    this.qrGenerator.download(this.geocode.qrCode);
+    this.qrGenerator.download(this.geocode.qrCode, this.geocode.description);
   }
 
   async updateGeocode() {
