@@ -45,7 +45,7 @@ public interface GeoCodeApi {
     @PostMapping( value = "/GeoCode/updatedGeoCode",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity< UpdateGeoCodeResponse > updatedGeoCode( @Parameter( in = ParameterIn.DEFAULT, description = "Request to create a new GeoCode", required = true, schema = @Schema() ) @Valid @RequestBody UpdateGeoCodeRequest body ) throws InvalidRequestException;
+    ResponseEntity< UpdateGeoCodeResponse > updatedGeoCode( @Parameter( in = ParameterIn.DEFAULT, description = "Request to update a new GeoCode", required = true, schema = @Schema() ) @Valid @RequestBody UpdateGeoCodeRequest body ) throws InvalidRequestException;
 
 
     @Operation( summary = "Get the GeoCode's collectables associated with the given QR Code", description = "Get the GeoCode's collectables associated with the given QR Code", security = {
