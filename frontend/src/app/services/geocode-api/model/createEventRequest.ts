@@ -19,7 +19,7 @@ export interface CreateEventRequest {
     location: GeoPoint;
     beginDate: string;
     endDate: string;
-    createGeoCodesToFind: Array<CreateGeoCodeRequest>;
+    geoCodesToFind?: Array<CreateGeoCodeRequest>;
     orderBy: OrderLevels;
     available: boolean;
     properties: { [key: string]: string; };
