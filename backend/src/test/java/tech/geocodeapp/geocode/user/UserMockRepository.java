@@ -5,10 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
@@ -44,6 +41,17 @@ public class UserMockRepository implements UserRepository {
     @Override
     public void deleteById(UUID uuid) {
 
+    }
+
+    @Override
+    public User findByUsernameIgnoreCase(String username) {
+        for (var entry: map.entrySet()) {
+            var user = entry.getValue();
+            if (username.equalsIgnoreCase(user.getUsername())) {
+                return user;
+            }
+        }
+        return null;
     }
 
     @Override
