@@ -55,7 +55,7 @@ jobs:
       run: |
         cd backend
         mvn clean verify \
-          -Denv.DATABASE_URL=jdbc:postgresql://postgres:5432/geocode \
+          -Denv.DATABASE_URL=jdbc:postgresql://localhost:5432/geocode \
           -Denv.DATABASE_USERNAME=postgres \
           -Denv.DATABASE_PASSWORD=postgres \
           -Denv.ALLOWED_ORIGINS_COMMA_SEPARATED="http://localhost" \
