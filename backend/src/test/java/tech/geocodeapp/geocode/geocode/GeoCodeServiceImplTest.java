@@ -15,6 +15,7 @@ import tech.geocodeapp.geocode.event.EventMockRepository;
 import tech.geocodeapp.geocode.event.UserEventStatusMockRepository;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.service.*;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.*;
 import tech.geocodeapp.geocode.geocode.service.*;
@@ -152,9 +153,11 @@ class GeoCodeServiceImplTest {
         lenient().when ( userService.getCurrentUser() ).thenReturn( new User().id( java.util.UUID.randomUUID() ) );
         lenient().when ( userService.getCurrentUserID() ).thenReturn( java.util.UUID.randomUUID() );
 
+        CurrentUserDetails.injectUserDetails(java.util.UUID.randomUUID(), null, null);
+
         try {
 
-            eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService, userService );
+            eventService = new EventServiceImpl( eventRepo, progressLogRepo, leaderboardService );
         } catch ( tech.geocodeapp.geocode.event.exceptions.RepoException e ) {
 
             e.printStackTrace();
@@ -683,6 +686,126 @@ class GeoCodeServiceImplTest {
     }
 
     /**
+     * Check how the use case handles the request being null
+     */
+    @Test
+    @Order( 2 )
+    @DisplayName( "Null repository handling - createGeoCode" )
+    void updateGeoCodeNullRequestTest() {
+
+        /* Null request check */
+        assertThatThrownBy( () -> geoCodeService.updateGeoCode( null ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqEmptyError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 10 )
+    @DisplayName( "Invalid repository attribute handling - createGeoCode" )
+    void updateGeoCodeInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         * */
+        var request = new UpdateGeoCodeRequest();
+        request.setAvailable( true );
+        request.setDescription( null );
+        request.setDifficulty( Difficulty.INSANE );
+        request.setHints( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.updateGeoCode( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Check how the use case handles an invalid request
+     */
+    @Test
+    @Order( 10 )
+    @DisplayName( "All invalid repository attribute handling - createGeoCode" )
+    void updateGeoCodeAllInvalidRequestTest() {
+
+        /*
+         *  Create a request object
+         * and assign values to it
+         * */
+        var request = new UpdateGeoCodeRequest();
+        request.setAvailable( null );
+        request.setDescription( null );
+        request.setDifficulty( null );
+        request.setHints( null );
+        request.setGeoCodeID( null );
+
+        /* Null parameter request check */
+        assertThatThrownBy( () -> geoCodeService.updateGeoCode( request ) )
+                .isInstanceOf( InvalidRequestException.class )
+                .hasMessageContaining( reqParamError );
+    }
+
+    /**
+     * Using valid data does the createGeoCode use case test
+     * complete successfully
+     */
+    @Test
+    @Order( 18 )
+    @DisplayName( "Valid request - createGeoCode" )
+    void updateGeoCodeTest() {
+
+        try {
+
+            /*
+             * Create a request object
+             * and assign values to it
+             */
+            var createRequest = new CreateGeoCodeRequest();
+            createRequest.setAvailable( true );
+            createRequest.setDescription( "The GeoCode is stored at the art Museum in Jhb South" );
+            createRequest.setDifficulty( Difficulty.INSANE );
+            List< String > hints = new ArrayList<>();
+            hints.add( "This " );
+            hints.add( "is " );
+            hints.add( "a " );
+            hints.add( "secret " );
+            hints.add( "hint." );
+            createRequest.setHints( hints );
+            createRequest.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
+
+            var createResponse = geoCodeService.createGeoCode( createRequest );
+
+            var geoCodeID = createResponse.getGeoCodeID();
+            var request = new UpdateGeoCodeRequest();
+            request.setGeoCodeID( geoCodeID );
+            request.setDescription( "This is the updated description" );
+
+            var response = geoCodeService.updateGeoCode( request );
+
+            var checkGeoCode = repo.findById( geoCodeID );
+            GeoCode found = new GeoCode();
+            if ( checkGeoCode.isPresent() ) {
+
+                found = checkGeoCode.get();
+            }
+            /*
+             * Check if the GeoCode was created correctly
+             * through checking the description created with the code
+             */
+            Assertions.assertEquals( "This is the updated description", found.getDescription() );
+            Assertions.assertTrue( response.isSuccess() );
+
+        } catch ( InvalidRequestException e ) {
+
+            /* An error occurred, print the stack to identify */
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Using valid data does the getAllGeoCode use case test
      * complete successfully
      */
@@ -1111,7 +1234,7 @@ class GeoCodeServiceImplTest {
              * Check if the GeoCode was created correctly
              * through checking the returned hints from a known hint
              */
-            Assertions.assertTrue( response.isIsSuccess() );
+            Assertions.assertTrue( response.isSuccess() );
         } catch ( Exception e ) {
 
             /* An error occurred, print the stack to identify */

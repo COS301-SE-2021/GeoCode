@@ -20,7 +20,10 @@ public class GeoCodeMockService implements GeoCodeService {
 
     @Override
     public CreateGeoCodeResponse createGeoCode(CreateGeoCodeRequest request) throws InvalidRequestException {
-        return null;
+        var geocode = new GeoCode();
+        geocode.setId(request.getId());
+
+        return new CreateGeoCodeResponse(true, "CreateGeoCode", geocode.getId(), "");
     }
 
     /**

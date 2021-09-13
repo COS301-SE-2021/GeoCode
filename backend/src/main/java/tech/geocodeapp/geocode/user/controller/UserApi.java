@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 
@@ -132,5 +133,18 @@ public interface UserApi {
             consumes = { "application/json", "application/xml" },
             method = RequestMethod.POST)
     ResponseEntity<GetMyMissionsResponse> getMyMissions(@Parameter(in = ParameterIn.DEFAULT, description = "Request to get the User's Missions", required=true, schema=@Schema()) @Valid @RequestBody GetMyMissionsRequest body);
+
+    @Operation(summary = "Handles login of Users", description = "Handles login of Users", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Response for whether the User registration was successful", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Response.class))),
+
+            @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
+    @RequestMapping(value = "/User/handleLogin",
+            produces = { "application/json", "application/xml" },
+            consumes = { "application/json", "application/xml" },
+            method = RequestMethod.POST)
+    ResponseEntity<Response> handleLogin(@Parameter(in = ParameterIn.DEFAULT, description = "Handles login of Users", required=true, schema=@Schema()) @Valid @RequestBody HandleLoginRequest body);
+
 }
 

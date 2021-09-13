@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
 import tech.geocodeapp.geocode.user.service.UserServiceImpl;
@@ -174,4 +175,22 @@ public class UserApiController implements UserApi {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
+
+    public ResponseEntity<Response> handleLogin(@Parameter(in = ParameterIn.DEFAULT, description = "Handles login of Users", required=true, schema=@Schema()) @Valid @RequestBody HandleLoginRequest body) {
+        try{
+            Response response = userService.handleLogin(body);
+
+            if(response.isSuccess()){
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (NullRequestParameterException e){
+            Response response = new Response(false, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    
+    
 }

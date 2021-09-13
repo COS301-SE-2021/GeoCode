@@ -1,8 +1,10 @@
 package tech.geocodeapp.geocode.event.service;
 
+import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
+import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
-import tech.geocodeapp.geocode.event.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 
@@ -109,15 +111,37 @@ public interface EventService {
     GetEventsByLocationResponse getEventsByLocation( GetEventsByLocationRequest request ) throws InvalidRequestException;
 
     /**
-     * Create a new Leaderboard for an Event
+     * Getting the Blockly blocks for the current User for a Blockly Event
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     * @return The Blockly blocks for the current User
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) throws InvalidRequestException;
+    GetBlocksResponse getBlocks( GetBlocksRequest request ) throws InvalidRequestException;
+
+    /**
+     * Gets the input cases (the variables and their values) for the given Blockly Event
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return The input cases for the Blockly Event
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    GetInputsResponse getInputs( GetInputsRequest request ) throws InvalidRequestException;
+
+    /**
+     * Checks the output that the User's code generated (i.e the JavaScript code that was converted from the BLockly blocks)
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return The number of test cases that the User passed
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    CheckOutputResponse checkOutput( CheckOutputRequest request ) throws InvalidRequestException;
 
     /**
      * Post construct the GeoCode service, this avoids a circular dependency

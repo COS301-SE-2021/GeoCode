@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.event.decorator;
 
+import tech.geocodeapp.geocode.event.blockly.Block;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
@@ -7,6 +8,7 @@ import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class EventDecorator implements EventComponent {
     //the decorated EventComponent
@@ -22,7 +24,7 @@ public abstract class EventDecorator implements EventComponent {
     /**
      * @return the value returned by decoratedType's getID() method
      */
-    public java.util.UUID getID() {
+    public UUID getID() {
         return decoratedType.getID();
     }
 
@@ -30,7 +32,7 @@ public abstract class EventDecorator implements EventComponent {
      * Sets the decoratedType's name variable
      * @param id the id of the Event
      */
-    public void setID(java.util.UUID id) { decoratedType.setID(id); }
+    public void setID(UUID id) { decoratedType.setID(id); }
 
     /**
      * @return the value returned by decoratedType's getName() method
@@ -80,7 +82,7 @@ public abstract class EventDecorator implements EventComponent {
     /**
      * @return the id of the decoratedType
      */
-    public List<java.util.UUID> getGeocodeIDs() {
+    public List<UUID> getGeocodeIDs() {
         return decoratedType.getGeocodeIDs();
     }
 
@@ -88,7 +90,7 @@ public abstract class EventDecorator implements EventComponent {
      * Sets the decoratedType's list of geocode IDs
      * @param ids the list of ids
      */
-    public void setGeocodeIDs(List<java.util.UUID> ids) {
+    public void setGeocodeIDs(List<UUID> ids) {
         decoratedType.setGeocodeIDs(ids);
     }
 
@@ -197,5 +199,94 @@ public abstract class EventDecorator implements EventComponent {
     @Override
     public int calculatePoints(GeoCode foundGeocode, int stageNumber, UserEventStatus status) {
         return decoratedType.calculatePoints(foundGeocode, stageNumber, status);
+    }
+
+    /**
+     * @return the decoratedType's blocklyEvent
+     */
+    @Override
+    public boolean isBlocklyEvent() {
+        return decoratedType.isBlocklyEvent();
+    }
+
+    /**
+     * Sets the decoratedType's blocklyEvent
+     * @param blocklyEvent whether or not the event is a blockly event
+     */
+    @Override
+    public void setBlocklyEvent(boolean blocklyEvent) {
+        decoratedType.setBlocklyEvent(blocklyEvent);
+    }
+
+    /**
+     * Gets the blocklyDetails of the decoratedType if applicable
+     * @return the blocklyDetails or null if the event is not that type
+     */
+    @Override
+    public Block[] getBlocks() {
+        return decoratedType.getBlocks();
+    }
+
+    /**
+     * Sets the decoratedType's blocklyDetails
+     * @param blocks the blockly details
+     */
+    @Override
+    public void setBlocks(Block[] blocks) {
+        decoratedType.setBlocks(blocks);
+    }
+
+    /**
+     * Gets the inputs of the decoratedType if applicable
+     * @return the inputs or null if the event is not that type
+     */
+    @Override
+    public String[][] getInputs() {
+        return decoratedType.getInputs();
+    }
+
+    /**
+     * Sets the decoratedType's inputs if applicable
+     * @param inputs the inputs used
+     */
+    @Override
+    public void setInputs(String[][] inputs) {
+        decoratedType.setInputs(inputs);
+    }
+
+    /**
+     * Gets the outputs of the decoratedType if applicable
+     * @return the outputs or null if the event is not that type
+     */
+    @Override
+    public String[] getOutputs() {
+        return decoratedType.getOutputs();
+    }
+
+    /**
+     * Sets the decoratedType's outputs if applicable
+     * @param outputs the expected outputs of the event
+     */
+    @Override
+    public void setOutputs(String[] outputs) {
+        decoratedType.setOutputs(outputs);
+    }
+
+    /**
+     * Sets the problem description if applicable
+     * @param problemDescription The problem description
+     */
+    @Override
+    public void setProblemDescription(String problemDescription) {
+        decoratedType.setProblemDescription(problemDescription);
+    }
+
+    /**
+     * Gets the problem description if applicable
+     * @return The problem description
+     */
+    @Override
+    public String getProblemDescription() {
+        return decoratedType.getProblemDescription();
     }
 }

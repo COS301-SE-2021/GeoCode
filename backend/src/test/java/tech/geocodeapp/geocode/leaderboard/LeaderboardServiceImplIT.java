@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
+import tech.geocodeapp.geocode.general.response.Response;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
@@ -14,7 +16,7 @@ import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
 import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
-import tech.geocodeapp.geocode.user.request.RegisterNewUserRequest;
+import tech.geocodeapp.geocode.user.request.HandleLoginRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.ArrayList;
@@ -39,6 +41,21 @@ public class LeaderboardServiceImplIT {
     @BeforeEach
     void setUp(){
         leaderboardService = new LeaderboardServiceImpl(leaderboardRepository, pointRepository, userService);
+    }
+
+    private UUID registerNewUser(String username){
+        HandleLoginRequest request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
+        Response response;
+
+        try {
+            response = userService.handleLogin(request);
+            Assertions.assertTrue(response.isSuccess());
+
+            return userService.getCurrentUserID();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Test
@@ -140,9 +157,7 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "Test user");
-            var userResponse = userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Test user");
 
             var request = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             var response = leaderboardService.createPoint(request);
@@ -197,9 +212,7 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "delete point");
-            var userResponse = userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Delete point");
 
             var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             var createPointResponse = leaderboardService.createPoint(createPointRequest);
@@ -257,9 +270,7 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "Test user");
-            var userResponse = userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Test user");
 
             var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             var createPointResponse = leaderboardService.createPoint(createPointRequest);
@@ -283,9 +294,7 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "Test user");
-            var userResponse = userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Test user");
 
             var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             var createPointResponse = leaderboardService.createPoint(createPointRequest);
@@ -308,9 +317,7 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "Test user");
-            var userResponse = userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Test user");
 
             var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             var createPointResponse = leaderboardService.createPoint(createPointRequest);
@@ -337,9 +344,7 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "test user");
-            var userResponse = userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Test user");
 
             var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             var pointResponse = leaderboardService.createPoint(createPointRequest);
@@ -362,16 +367,12 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "test user");
-            userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Test user");
 
             var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             var pointResponse = leaderboardService.createPoint(createPointRequest);
 
-            var updatedUserId = UUID.randomUUID();
-            var updatedUserRequest = new RegisterNewUserRequest(updatedUserId, "updated user");
-            userService.registerNewUser(updatedUserRequest);
+            var updatedUserId = registerNewUser("Updated User");
 
             var request = new UpdatePointRequest(pointResponse.getPoint().getId(), null, updatedUserId, null);
             var response = leaderboardService.updatePoint(request);
@@ -392,16 +393,12 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "test user");
-            userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Test user");
 
             var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             var pointResponse = leaderboardService.createPoint(createPointRequest);
 
-            var updatedUserId = UUID.randomUUID();
-            var updatedUserRequest = new RegisterNewUserRequest(updatedUserId, "updated user");
-            userService.registerNewUser(updatedUserRequest);
+            var updatedUserId = registerNewUser("Updated User");
 
             var request = new UpdatePointRequest(pointResponse.getPoint().getId(), 3, updatedUserId, null);
             var response = leaderboardService.updatePoint(request);
@@ -423,9 +420,7 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "Test user");
-            var userResponse = userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Test user");
 
             var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             var createPointResponse = leaderboardService.createPoint(createPointRequest);
@@ -453,16 +448,12 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "test user");
-            userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Test user");
 
             var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             var pointResponse = leaderboardService.createPoint(createPointRequest);
 
-            var updatedUserId = UUID.randomUUID();
-            var updatedUserRequest = new RegisterNewUserRequest(updatedUserId, "updated user");
-            userService.registerNewUser(updatedUserRequest);
+            var updatedUserId = registerNewUser("Updated User");
 
             var updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
             var updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
@@ -487,16 +478,12 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "test user");
-            userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Test user");
 
             var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             var pointResponse = leaderboardService.createPoint(createPointRequest);
 
-            var updatedUserId = UUID.randomUUID();
-            var updatedUserRequest = new RegisterNewUserRequest(updatedUserId, "updated user");
-            userService.registerNewUser(updatedUserRequest);
+            var updatedUserId = registerNewUser("Updated User");
 
             var updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
             var updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
@@ -558,9 +545,7 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "Test user");
-            var userResponse = userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Test user");
 
             var pointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             leaderboardService.createPoint(pointRequest);
@@ -584,17 +569,16 @@ public class LeaderboardServiceImplIT {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
             //Create three users to use
-            List<UUID> userIds = new ArrayList<UUID>();
+            List<UUID> userIds = new ArrayList<>();
             for (var i = 0; i < 3; i++) {
                 userIds.add(UUID.randomUUID());
             }
             for (var i = 0; i < 3; i++) {
-                var userRequest = new RegisterNewUserRequest(userIds.get(i), "test user");
-                userService.registerNewUser(userRequest);
+                userIds.add(registerNewUser("test user"));
             }
 
             //create 3 points to rank
-            List<PointResponse> pointResponses = new ArrayList<PointResponse>();
+            List<PointResponse> pointResponses = new ArrayList<>();
             var pointRequest = new CreatePointRequest(5, userIds.get(0), leaderboardResponse.getLeaderboard().getId());
             pointResponses.add(leaderboardService.createPoint(pointRequest));
             pointRequest.setAmount(10);
@@ -631,17 +615,14 @@ public class LeaderboardServiceImplIT {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
             //Create three users to use
-            List<UUID> userIds = new ArrayList<UUID>();
+            List<UUID> userIds = new ArrayList<>();
+
             for (var i = 0; i < 3; i++) {
-                userIds.add(UUID.randomUUID());
-            }
-            for (var i = 0; i < 3; i++) {
-                var userRequest = new RegisterNewUserRequest(userIds.get(i), "test user");
-                userService.registerNewUser(userRequest);
+                userIds.add(registerNewUser("test user"));
             }
 
             //create 3 points to rank
-            List<PointResponse> pointResponses = new ArrayList<PointResponse>();
+            List<PointResponse> pointResponses = new ArrayList<>();
             var pointRequest = new CreatePointRequest(5, userIds.get(0), leaderboardResponse.getLeaderboard().getId());
             pointResponses.add(leaderboardService.createPoint(pointRequest));
             pointRequest.setAmount(10);
@@ -677,17 +658,16 @@ public class LeaderboardServiceImplIT {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
             //Create three users to use
-            List<UUID> userIds = new ArrayList<UUID>();
+            List<UUID> userIds = new ArrayList<>();
             for (var i = 0; i < 3; i++) {
                 userIds.add(UUID.randomUUID());
             }
             for (var i = 0; i < 3; i++) {
-                var userRequest = new RegisterNewUserRequest(userIds.get(i), "test user");
-                userService.registerNewUser(userRequest);
+                userIds.add(registerNewUser("test user"));
             }
 
             //create 3 points to rank
-            List<PointResponse> pointResponses = new ArrayList<PointResponse>();
+            List<PointResponse> pointResponses = new ArrayList<>();
             var pointRequest = new CreatePointRequest(5, userIds.get(0), leaderboardResponse.getLeaderboard().getId());
             pointResponses.add(leaderboardService.createPoint(pointRequest));
             pointRequest.setAmount(10);
@@ -742,9 +722,7 @@ public class LeaderboardServiceImplIT {
         try {
             var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            var userId = UUID.randomUUID();
-            var userRequest = new RegisterNewUserRequest(userId, "Test user");
-            var userResponse = userService.registerNewUser(userRequest);
+            var userId = registerNewUser("Test user");
 
             var user = new GetUserByIdRequest(userId);
             var point = new Point(1, userService.getUserById(user).getUser(), leaderboardResponse.getLeaderboard());
