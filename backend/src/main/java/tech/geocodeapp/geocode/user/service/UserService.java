@@ -53,9 +53,10 @@ public interface UserService {
 
     //U1.14 getCurrentUserID
     /** @deprecated use CurrentUserDetails.getID() */
+    @Deprecated
     java.util.UUID getCurrentUserID();
 
-    //U1.15 registerNewUser
+    //U1.15 handleLogin
     Response handleLogin(HandleLoginRequest request) throws NullRequestParameterException;
 
     //GeoCode helper functions
