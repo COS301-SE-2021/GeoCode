@@ -16,12 +16,10 @@ import {Subscription} from 'rxjs';
 export class BlocklyComponent implements AfterViewInit, OnDestroy {
 
   @Input() toolboxBlocks: {[blockName: string]: number} = null;
-  @Input() inputFunction: (promptRequest: string) => string = prompt;
-  @Input() outputFunction: (output: string) => void = alert;
+  @Input() workspaceChangedFunction: (event: any) => void = null;
   @Input() savedProgramID: string = null;
 
   @ViewChild('blocklyDiv', {static:false}) blocklyDiv: ElementRef<HTMLDivElement>;
-  //@ViewChild('ngxBlockly', {static:false}) ngxBlockly: NgxBlocklyComponent;
 
   workspace: Blockly.WorkspaceSvg = null;
   toolbox: Blockly.utils.toolbox.ToolboxInfo = {
@@ -60,20 +58,24 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
       await this.readDefaultToolbox();
     }
     this.workspace = Blockly.inject(this.blocklyDiv.nativeElement, this.config);
-    console.log(this.workspace);
-    console.log(this.workspace.isVisible());
-    //this.workspace = this.ngxBlockly.workspace;
-    //window.dispatchEvent(new Event('resize'));
+
     setTimeout(() => this.forceResize(), 500);
 
     // May need to call this inside the timeout
     if (this.savedProgramID !== null) {
       await this.getProgramFromStorage();
     }
+
+    if (this.workspaceChangedFunction !== null) {
+      this.workspace.addChangeListener(this.workspaceChangedFunction);
+    }
   }
 
   ngOnDestroy() {
     this.themeSubscription.unsubscribe();
+    if (this.workspaceChangedFunction !== null) {
+      this.workspace.removeChangeListener(this.workspaceChangedFunction);
+    }
   }
 
   setWorkspace(blockXML: string) {
@@ -89,6 +91,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
   getProgramBlocks(): {[key: string]: number} {
     const output = {};
     const blocks = this.workspace.getAllBlocks(true);
+    console.log(blocks);
     for (const block of blocks) {
       if (!output.hasOwnProperty(block.type)) {
         output[block.type] = 0;
@@ -145,18 +148,25 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     this.runProgram(code);
   }
 
-  runProgram(code: string) {
+  runProgram(code: string, inputFunction: (promptRequest: string) => string = prompt, outputFunction: (output: string) => boolean = confirm) {
     const interpreter = new Interpreter(code, (interpreter2, scope) => {
-      const alertWrapper = (text) => {
-        text = text ? text.toString() : '';
-        this.outputFunction(text);
-      };
-      interpreter2.setProperty(scope, 'alert', interpreter2.createNativeFunction(alertWrapper));
       const promptWrapper = (text) => {
         text = text ? text.toString() : '';
-        return this.inputFunction(text);
+        const input = inputFunction(text);
+        if (input === null) {
+          throw new Error('User stopped execution');
+        }
+        return input;
       };
       interpreter2.setProperty(scope, 'prompt', interpreter2.createNativeFunction(promptWrapper));
+      const alertWrapper = (text) => {
+        text = text ? text.toString() : '';
+        const continueExecution = outputFunction(text);
+        if (!continueExecution) {
+          throw new Error('User stopped execution');
+        }
+      };
+      interpreter2.setProperty(scope, 'alert', interpreter2.createNativeFunction(alertWrapper));
     });
 
     let stepsAllowed = 10000;

@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {BlocklyComponent} from '../../../../components/blockly/blockly.component';
-import {DetailedTestCase} from './helpers';
+import {DetailedTestCase, TestCaseEvent} from './helpers';
 import {AlertController, ModalController} from '@ionic/angular';
 import {Block, TestCase} from '../../../../services/geocode-api';
 import {Storage} from '@ionic/storage-angular';
@@ -18,7 +18,6 @@ export class EventsCreateBlocklyComponent implements OnInit {
   toolboxVisible = true;
 
   testCases: DetailedTestCase[] = [];
-  currentlyRecordingTestCase: DetailedTestCase = null;
 
   readonly testCasesKey = 'createdTestCases';
   readonly programKey = 'createdProgram';
@@ -37,15 +36,22 @@ export class EventsCreateBlocklyComponent implements OnInit {
   }
 
   async save() {
-    const testCases: TestCase[] = [];
-    for (const tc of this.testCases) {
-      testCases.push(DetailedTestCase.toSimpleTestCase(tc));
+    const verified = await this.verifyTestCases();
+    if (verified) {
+      const testCases: TestCase[] = [];
+      for (const tc of this.testCases) {
+        testCases.push(DetailedTestCase.toSimpleTestCase(tc));
+      }
+      const blocks: Block[] = [];
+      for (const [block, instances] of Object.entries(this.blockly.getProgramBlocks())) {
+        blocks.push({type: block, maxInstances: -1}); // Allow unlimited instances for now. TODO see how well we can support limits
+      }
+      await this.modalCtrl.dismiss({ blocks, testCases });
+
+    } else {
+      alert('Some test cases cannot be reproduced with the current program. Please delete or remake the invalid cases.');
+      this.currentView = 'testCases';
     }
-    const blocks: Block[] = [];
-    for (const [block, instances] of Object.entries(this.blockly.getProgramBlocks())) {
-      blocks.push({type: block, maxInstances: -1}); // Allow unlimited instances for now. TODO see how well we can support limits
-    }
-    await this.modalCtrl.dismiss({ blocks, testCases });
   }
 
   async dismiss() {
@@ -53,14 +59,23 @@ export class EventsCreateBlocklyComponent implements OnInit {
   }
 
   async createTestCase() {
-    this.currentlyRecordingTestCase = new DetailedTestCase();
+    const testCase = new DetailedTestCase();
     await this.blockly.saveProgramToStorage();
 
     const code = this.blockly.generateCode();
-    this.blockly.runProgram(code);
 
-    this.testCases.push(this.currentlyRecordingTestCase);
-    this.currentlyRecordingTestCase = null;
+    this.blockly.runProgram(code, (promptRequest: string) => {
+      const inputText = prompt(promptRequest);
+      testCase.addPrompt(promptRequest);
+      testCase.addInput(inputText);
+      return inputText;
+    }, (outputText: string) => {
+      testCase.addOutput(outputText);
+      console.log(outputText);
+      return confirm(outputText);
+    });
+
+    this.testCases.push(testCase);
     console.log(this.testCases);
 
     await this.storage.set(this.testCasesKey, this.testCases);
@@ -87,20 +102,73 @@ export class EventsCreateBlocklyComponent implements OnInit {
     this.blockly.setToolboxVisibility(this.toolboxVisible);
   }
 
-  blocklyInput = (promptRequest: string) => {
-    const inputText = prompt(promptRequest);
-    if (this.currentlyRecordingTestCase) {
-      this.currentlyRecordingTestCase.addOutput(promptRequest);
-      this.currentlyRecordingTestCase.addInput(inputText);
-    }
-    return inputText;
+  blocklyWorkspaceChanged = (event: any) => {
+    console.log(event);
   };
 
-  blocklyOutput = (outputText: string) => {
-    alert(outputText);
-    if (this.currentlyRecordingTestCase) {
-      this.currentlyRecordingTestCase.addOutput(outputText);
+  async deleteTestCase(testCase: DetailedTestCase) {
+    this.testCases = this.testCases.filter((v) => v !== testCase);
+    await this.storage.set(this.testCasesKey, this.testCases);
+  }
+
+  async verifyTestCases() {
+    await this.storage.set(this.testCasesKey, this.testCases);
+
+    let testCasesVerified = true;
+    for (const testCase of this.testCases) {
+      try {
+        const events: TestCaseEvent[] = [];
+        for (const event of testCase.events) {
+          event.error = null;
+          events.push(event);
+        }
+
+        const code = this.blockly.generateCode();
+
+        this.blockly.runProgram(code, (promptRequest: string) => {
+          const expectedPrompt = events.shift();
+
+          if (expectedPrompt.type !== 'prompt') {
+            expectedPrompt.error = {};
+            throw new Error('Program unexpectedly asked for input');
+          } else if (expectedPrompt.text !== promptRequest) {
+
+            expectedPrompt.error = {text: promptRequest};
+            throw new Error('Program sent invalid prompt');
+          }
+
+          const testInput = events.shift();
+
+          if (testInput.type !== 'input') {
+            testInput.error = {};
+            throw new Error('Program unexpectedly asked for input');
+          }
+          return testInput.text;
+        }, (outputText: string) => {
+          const expectedOutput = events.shift();
+
+          if (expectedOutput.type !== 'output') {
+            expectedOutput.error = {};
+            throw new Error('Program unexpectedly sent output');
+
+          } else if (expectedOutput.text !== outputText) {
+            expectedOutput.error = {text: outputText};
+            throw new Error('Program sent invalid output');
+          }
+
+          return true;
+        });
+
+        if (events.length > 0) {
+          events[0].error = {};
+          throw new Error('Program did not use all test case events');
+        }
+
+      } catch (e) {
+        testCasesVerified = false;
+      }
     }
-  };
+    return testCasesVerified;
+  }
 
 }

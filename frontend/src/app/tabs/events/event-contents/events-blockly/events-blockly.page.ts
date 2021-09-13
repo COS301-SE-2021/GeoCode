@@ -18,10 +18,7 @@ export class EventsBlocklyPage implements OnInit {
   eventID: string = null;
   status: UserEventStatus = null;
 
-  submitting = false;
   testCases: TestCase[] = null;
-  inputs: string[] = null;
-  outputs: string[] = null;
 
   toolboxVisible = true;
 
@@ -59,7 +56,6 @@ export class EventsBlocklyPage implements OnInit {
 
   async submitOutput() {
     await this.blockly.saveProgramToStorage();
-    this.submitting = true;
     if (this.testCases === null) {
       // @ts-ignore TODO check what the format of inputs is
       this.testCases = (await this.eventApi.getInputs({eventID: this.eventID}).toPromise()).inputs;
@@ -68,12 +64,21 @@ export class EventsBlocklyPage implements OnInit {
     const code = this.blockly.generateCode();
     const caseOutputs: string[] = [];
     for (const testCase of this.testCases) {
-      this.inputs = testCase.inputs;
-      this.outputs = [];
-      this.blockly.runProgram(code);
-      caseOutputs.push(this.outputs.join('\n'));
+      const inputs = [];
+      for (const input of testCase.inputs) {
+        inputs.push(input);
+      }
+      const outputs = [];
+
+      this.blockly.runProgram(code, (promptRequest: string) => {
+        return inputs.shift();
+      }, (outputText: string) => {
+        outputs.push(outputText);
+        return true;
+      });
+
+      caseOutputs.push(outputs.join('\n'));
     }
-    this.submitting = false;
 
     const response = await this.eventApi.checkOutput({eventID: this.eventID, outputs: caseOutputs}).toPromise();
     if (response.success) {
@@ -91,21 +96,4 @@ export class EventsBlocklyPage implements OnInit {
   viewDescription() {
     alert(this.event.properties.problemDescription);
   }
-
-  blocklyInput = (promptRequest: string) => {
-    if (this.submitting) {
-      this.outputs.push(promptRequest);
-      return this.inputs.shift();
-    } else {
-      return prompt(promptRequest);
-    }
-  };
-
-  blocklyOutput = (outputText: string) => {
-    if (this.submitting) {
-      this.outputs.push(outputText);
-    } else {
-      alert(outputText);
-    }
-  };
 }

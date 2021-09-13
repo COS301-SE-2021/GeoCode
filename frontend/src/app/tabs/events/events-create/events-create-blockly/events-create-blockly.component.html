@@ -14,7 +14,7 @@
   </ion-toolbar>
 
   <div class="horizontalscroll" *ngIf="currentView === 'blockly'">
-    <ion-button color="button" (click)="currentView = 'testCases'">
+    <ion-button color="button" (click)="verifyTestCases(); currentView = 'testCases'">
       <ion-icon name="list-outline"></ion-icon>
       <ion-label>View Test Cases</ion-label>
     </ion-button>
@@ -54,15 +54,17 @@
 
   <app-blockly #blockly
     [hidden]="currentView !== 'blockly'"
-    [outputFunction]="blocklyOutput"
-    [inputFunction]="blocklyInput"
+    [workspaceChangedFunction]="blocklyWorkspaceChanged"
     [savedProgramID]="programKey"
   ></app-blockly>
 
   <ion-list [hidden]="currentView !== 'testCases'">
     <ion-item *ngFor="let testCase of testCases">
       <ion-grid>
-        <ion-row *ngFor="let event of testCase.events">
+        <ion-row *ngFor="let event of testCase.events" [ngClass]="{failed: event.error}">
+          <ng-template [ngIf]="event.type === 'prompt'">
+            <span class="outputLead">Program: </span> {{event.text}}
+          </ng-template>
           <ng-template [ngIf]="event.type === 'input'">
             <span class="inputLead">User: </span> {{event.text}}
           </ng-template>
@@ -71,9 +73,8 @@
           </ng-template>
         </ion-row>
       </ion-grid>
-      <ion-button color="button" slot="end">
-        <ion-icon name="checkmark"></ion-icon>
-        <ion-label>Verify</ion-label>
+      <ion-button size="default" color="danger" slot="end" (click)="deleteTestCase(testCase)">
+        <ion-icon name="trash-outline"></ion-icon>
       </ion-button>
     </ion-item>
   </ion-list>

@@ -1,11 +1,14 @@
 import {TestCase} from '../../../../services/geocode-api';
 
+export interface TestCaseEvent {
+  type: 'input'|'prompt'|'output';
+  text: string;
+  error: { text?: string };
+}
+
 export class DetailedTestCase {
 
-  readonly events: {
-    type: 'input'|'output';
-    text: string;
-  }[];
+  readonly events: TestCaseEvent[];
 
   constructor() {
     this.events = [];
@@ -29,11 +32,15 @@ export class DetailedTestCase {
   }
 
   public addInput(text: string) {
-    this.events.push({type: 'input', text});
+    this.events.push({type: 'input', text, error: null});
+  }
+
+  public addPrompt(text: string) {
+    this.events.push({type: 'prompt', text, error: null});
   }
 
   public addOutput(text: string) {
-    this.events.push({type: 'output', text});
+    this.events.push({type: 'output', text, error: null});
   }
 
 }

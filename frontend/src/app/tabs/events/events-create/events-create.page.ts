@@ -33,15 +33,14 @@ export class EventsCreatePage implements AfterViewInit  {
   minDate;
   minEndDate;
   timeLimit=0;
-  blockly ={testCases:{},
-  blocks:{},
+  blockly ={testCases:[],
+  blocks:[],
     // eslint-disable-next-line @typescript-eslint/naming-convention
   problem_description:''};
   // @ts-ignore
   request: CreateEventRequest = {
     beginDate: '',
     description: '',
-    // @ts-ignore
     geoCodesToFind: [],
     location: {latitude: 0,longitude: 0},
     name: '',
@@ -86,7 +85,7 @@ export class EventsCreatePage implements AfterViewInit  {
     const { data } = await modal.onDidDismiss();
     if (data != null) {
       this.geocodes.push(data);
-      this.request.createGeoCodesToFind.push(data);
+      this.request.geoCodesToFind.push(data);
     }
   }
 
@@ -173,7 +172,11 @@ export class EventsCreatePage implements AfterViewInit  {
     });
     await modal.present();
     const { data } = await modal.onDidDismiss();
-    this.blockly=data;
+    if (data) {
+      this.blockly.blocks = data.blocks;
+      this.blockly.testCases = data.testCases;
+    }
+    console.log(this.blockly);
   }
 
   updateProblemDescription($event){
