@@ -1,6 +1,7 @@
 package tech.geocodeapp.geocode.event;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -46,6 +47,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
@@ -479,11 +481,18 @@ class EventServiceImplTest {
 
         try {
 
-            //ToDo finish this
+            createValidBlocklyEvent();
 
-            eventService.nextStage( null, null );
+            user1ID = handleLogin(UUID.randomUUID(), "user", false);
+            joinEvent(blocklyEventID, user1ID);
+            try {
+                firstGeoCode = geoCodeService.getGeoCode(new GetGeoCodeRequest(blocklyGeoCodeIDs.get(0))).getFoundGeoCode();
+                eventService.nextStage( firstGeoCode, user1ID );
+            } catch (tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e) {
+                e.printStackTrace();
+            }
         } catch ( InvalidRequestException | NotFoundException | MismatchedParametersException e ) {
-
+            Assertions.fail("should not throw an exception");
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
         }
