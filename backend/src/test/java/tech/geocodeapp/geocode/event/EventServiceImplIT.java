@@ -451,15 +451,23 @@ class EventServiceImplIT {
     @Test
     @Order( 7 )
     @DisplayName( "Valid request - nextStage" )
+    @Transactional
     void nextStageTest() {
 
         try {
 
-            //ToDo finish this
-
-            eventService.nextStage( null, null );
+            handleLogin(UUID.randomUUID(), "testingUser", true);
+            eventID = createEvent();
+            var user1ID = handleLogin(UUID.randomUUID(), "user1", false);
+            joinEvent(eventID, user1ID);
+            try {
+                firstGeoCode = geoCodeService.getGeoCode(new GetGeoCodeRequest(eventRepo.findById(eventID).get().getGeocodeIDs().get(0))).getFoundGeoCode();
+                eventService.nextStage( firstGeoCode, user1ID );
+            } catch (tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e) {
+                e.printStackTrace();
+            }
         } catch ( InvalidRequestException | NotFoundException | MismatchedParametersException e ) {
-
+            Assertions.fail("should not throw an exception");
             /* An error occurred, print the stack to identify */
             e.printStackTrace();
         }
