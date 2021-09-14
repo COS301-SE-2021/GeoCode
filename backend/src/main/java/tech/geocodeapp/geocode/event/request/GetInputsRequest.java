@@ -4,7 +4,12 @@ import java.util.UUID;
 
 public class GetInputsRequest extends GetEventDetailsByIDRequest{
 
-    public GetInputsRequest() {}
+    /**
+     * Default Constructor
+     */
+    public GetInputsRequest(){
+        super();
+    }
 
     public GetInputsRequest(UUID eventID){
         super(eventID);

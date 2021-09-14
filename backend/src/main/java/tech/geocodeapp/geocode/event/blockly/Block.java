@@ -15,7 +15,10 @@ public class Block {
     @JsonProperty("maxInstances")
     private int maxInstances;
 
-    public Block() {
+    /**
+     * Default Constructor - needed for objectMapper.readValue()
+     */
+    public Block(){
 
     }
 

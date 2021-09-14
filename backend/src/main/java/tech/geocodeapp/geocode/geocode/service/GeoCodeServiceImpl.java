@@ -470,7 +470,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response and return all the
          * collectable ID's for the found GeoCode
          */
-        System.out.println("GeoCodeID when getting the Collectables: "+request.getGeoCodeID());
         Assertions.assertNotNull(hold);
         Assertions.assertNotNull(hold.getCollectables());
         return new GetCollectablesResponse( new ArrayList<>( hold.getCollectables() ) );

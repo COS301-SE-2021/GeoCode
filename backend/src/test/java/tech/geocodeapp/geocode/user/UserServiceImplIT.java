@@ -320,9 +320,6 @@ public class UserServiceImplIT {
         firstGeoCodeID = UUID.randomUUID();
         secondGeoCodeID = UUID.randomUUID();
 
-        System.out.println("firstGeoCodeID: "+firstGeoCodeID);
-        System.out.println("secondGeoCodeID: "+secondGeoCodeID);
-
         createFirstGeoCodeRequest = new CreateGeoCodeRequest(firstGeoCodeID, "1", new GeoPoint(10.0, 10.0), new ArrayList<>(),
                 Difficulty.HARD, true);
 
@@ -630,10 +627,6 @@ public class UserServiceImplIT {
             }
 
             var missionType = MissionType.fromValue(collectableType.getProperties().get("missionType"));
-
-            for(var mission : missions){
-                System.out.println(mission.getType());
-            }
 
             //check the details
             Assertions.assertTrue(missions.stream().anyMatch(mission ->
