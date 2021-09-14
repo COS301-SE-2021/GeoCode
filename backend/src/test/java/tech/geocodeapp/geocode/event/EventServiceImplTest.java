@@ -429,24 +429,22 @@ class EventServiceImplTest {
 
         try {
 
-            //ToDo finish this
+            user1ID = handleLogin(UUID.randomUUID(), "user1", false);
 
             /* Insert different random Events into the repository */
             populate( 3 );
 
-            /* Populate with a known Event to find*/
-            var event = new Event( eventID, "Test", "Test description", null,
-                                   null, LocalDate.parse( "2020-01-08" ),
-                                   LocalDate.parse( "2020-01-08" ), null, new HashMap<>() );
+            eventID = createEvent();
 
-            /* Add the created Event to the repository */
-            eventRepo.save( event );
+            joinEvent(eventID, user1ID);
 
             GetCurrentEventStatusRequest request = new GetCurrentEventStatusRequest();
             request.setEventID( eventID );
-            request.setUserID( null );
+            request.setUserID(user1ID);
 
             var response = eventService.getCurrentEventStatus( request );
+
+            Assertions.assertTrue(response.isSuccess());
 
         } catch ( InvalidRequestException e ) {
 
