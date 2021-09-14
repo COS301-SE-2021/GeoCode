@@ -40,12 +40,12 @@ export class OpenGeocodePage implements AfterViewInit {
   ];
 
   constructor(
-    route: ActivatedRoute,
+    private route: ActivatedRoute,
     private geocodeService: GeoCodeService,
     private alertCtrl: AlertController,
     private router: Router,
   ) {
-    this.geocodeID = route.snapshot.paramMap.get('geocodeID');
+    this.geocodeID = this.route.snapshot.paramMap.get('geocodeID');
     const state = this.router.getCurrentNavigation().extras.state;
     if (state) {
       this.qrCode = state.qrCode;
@@ -87,14 +87,24 @@ export class OpenGeocodePage implements AfterViewInit {
     }
 
     const response = await this.geocodeService.getCollectablesInGeoCodeByQRCode({geoCodeID: this.geocodeID, qrCode: this.qrCode}).toPromise();
-    console.log(response);
+    if (response.storedCollectable != null) {
 
-    if (this.useAR) {
-      await this.loadCollectables(response.storedCollectable);
-      this.insertCollectables();
+      if (response.storedCollectable.length === 0) {
+        await this.goBack();
+
+      } else if (this.useAR) {
+        await this.loadCollectables(response.storedCollectable);
+        this.insertCollectables();
+
+      } else {
+        this.collectables = response.storedCollectable;
+      }
     } else {
-      this.collectables = response.storedCollectable;
+      console.log(response);
+      alert('An unknown error occurred!');
     }
+
+
   }
 
   insertCollectables(): void {
@@ -214,12 +224,16 @@ export class OpenGeocodePage implements AfterViewInit {
             console.log(request);
             this.geocodeService.swapCollectables(request).subscribe((response: SwapCollectablesResponse) =>{
               console.log(response);
-              this.router.navigate(['../../..']);
+              this.goBack();
             });
           }
         }
       ]
     });
     await alert.present();
+  }
+
+  async goBack() {
+    await this.router.navigate(['../../..'], {relativeTo: this.route});
   }
 }

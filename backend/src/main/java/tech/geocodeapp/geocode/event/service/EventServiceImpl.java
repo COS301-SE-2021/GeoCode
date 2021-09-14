@@ -182,10 +182,8 @@ public class EventServiceImpl implements EventService {
             /* check the test cases and block information are in the correct format */
             final ObjectMapper objectMapper = new ObjectMapper();
 
-            TestCase[] testCases;
-
             try {
-                testCases = objectMapper.readValue(properties.get("testCases"), TestCase[].class);
+                objectMapper.readValue(properties.get("testCases"), TestCase[].class);
             } catch (JsonProcessingException e) {
                 return new CreateEventResponse(false, "Invalid format for the test cases");
             }
@@ -833,13 +831,13 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        boolean exists = eventRepo.existsById(request.getEventID());
+        var eventTemp = eventRepo.findById(request.getEventID());
 
-        if(!exists){
+        if(eventTemp.isEmpty()){
             return new CheckOutputResponse(false, eventNotFoundMessage);
         }
 
-        var event = eventRepo.findById(request.getEventID()).get();
+        var event = eventTemp.get();
 
         var eventManager = new EventManager();
         var eventComponent = eventManager.buildEvent(event);
@@ -892,15 +890,15 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        /* check if the eventID is invalid */
-        boolean eventExists = eventRepo.existsById( request.getEventID() );
+        var eventTemp = eventRepo.findById( request.getEventID() );
 
-        if( !eventExists ){
+        /* check if the eventID is invalid */
+        if (eventTemp.isEmpty()) {
             return new CheckEventAndUserResponse( false, eventNotFoundMessage );
         }
 
         /* check if the Event is not a BlocklyEvent */
-        Event event = eventRepo.findById( request.getEventID() ).get();
+        Event event = eventTemp.get();
 
         EventManager eventManager = new EventManager();
         EventComponent eventComponent = eventManager.buildEvent( event );

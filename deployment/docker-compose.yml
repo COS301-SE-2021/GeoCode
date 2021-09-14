@@ -57,7 +57,7 @@ services:
       KEYCLOAK_AUTH_SERVER_URL: ${KEYCLOAK_AUTH_SERVER_URL}
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
       ALLOWED_ORIGINS_COMMA_SEPARATED: ${ALLOWED_ORIGINS_COMMA_SEPARATED}
-      IMAGE_DIRECTORY: ~/image-data
+      IMAGE_DIRECTORY: /image-data
       KEY_STORE_TYPE: PKCS12
       KEY_STORE: classpath:keystore.p12
       KEY_STORE_ALIAS: ${KEY_STORE_ALIAS}
@@ -67,4 +67,4 @@ services:
       - 8080:8080
     restart: always
     volumes:
-      - ../../.image-data:~/image-data
+      - ../../.image-data:/image-data

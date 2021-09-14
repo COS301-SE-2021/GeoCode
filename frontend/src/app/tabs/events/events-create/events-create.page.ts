@@ -34,11 +34,11 @@ export class EventsCreatePage implements AfterViewInit  {
   minDate;
   minEndDate;
   timeLimit=0;
-  blockly ={testCases:[],
-  blocks:[],
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-  problem_description:''};
-  // @ts-ignore
+  blockly ={
+    testCases:[],
+    blocks:[],
+    problemDescription:''
+  };
   request: CreateEventRequest = {
     beginDate: '',
     description: '',
@@ -139,7 +139,7 @@ export class EventsCreatePage implements AfterViewInit  {
 
     if(this.type==='challenge'){
       this.request.properties.testCases = JSON.stringify(this.blockly.testCases);
-      this.request.properties.problem_description = this.blockly.problem_description;
+      this.request.properties.problemDescription = this.blockly.problemDescription;
       this.request.properties.blocks = JSON.stringify(this.blockly.blocks);
     }else if(this.type ==='timetrial'){
       this.request.properties.timeLimit=this.timeLimit +'';
@@ -148,7 +148,7 @@ export class EventsCreatePage implements AfterViewInit  {
     const response = await this.eventApi.createEvent(this.request).toPromise();
     if (response.success) {
       for (const geocode of response.geocodes) {
-        this.qrGenerator.download(geocode.qrCode, geocode.description);
+        await this.qrGenerator.download(geocode.qrCode, geocode.description);
       }
       this.navCtrl.navigateBack('/events').then().catch();
     } else {
@@ -190,7 +190,7 @@ export class EventsCreatePage implements AfterViewInit  {
   }
 
   updateProblemDescription($event){
-    this.blockly.problem_description=$event.detail.value;
+    this.blockly.problemDescription=$event.detail.value;
   }
 
 }

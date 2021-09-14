@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.geocode.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -16,12 +15,8 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
-import tech.geocodeapp.geocode.event.decorator.EventComponent;
 import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
 import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
-import tech.geocodeapp.geocode.event.manager.EventManager;
-import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.request.GetEventRequest;
 import tech.geocodeapp.geocode.event.service.EventService;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
@@ -470,8 +465,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response and return all the
          * collectable ID's for the found GeoCode
          */
-        Assertions.assertNotNull(hold);
-        Assertions.assertNotNull(hold.getCollectables());
         return new GetCollectablesResponse( new ArrayList<>( hold.getCollectables() ) );
     }
 
@@ -683,30 +676,25 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Get the GeoCode with the specified ID */
         var temp = geoCodeRepo.findById( request.getGeoCodeID() );
         if ( temp.isPresent() ) {
+            GeoCode geocode = temp.get();
 
             /* Check if the found GeoCode has the correct qrCode */
-            if ( temp.get().getQrCode().equals( request.getQrCode() ) ) {
+            if ( geocode.getQrCode().equals( request.getQrCode() ) ) {
 
                 /* Get the collectables from the found GeoCode */
-                ArrayList< Collectable > storedCollectable = getCollectable( temp.get() );
+                ArrayList< Collectable > storedCollectable = getCollectable( geocode );
 
                 /* Set the response to save the found collectables */
                 response.setStoredCollectable( storedCollectable );
 
-                /* if the Event is a Blockly Event, move to the next stage */
-                GeoCode geocode = temp.get();
-
-                try {
-                    Event event = eventService.getEvent(new GetEventRequest(geocode.getEventID())).getFoundEvent();
-
-                    EventManager eventManager = new EventManager();
-                    EventComponent eventComponent = eventManager.buildEvent(event);
-
-                    if(eventComponent.isBlocklyEvent()){
+                /* if this geocode has an event ID and no collectables, it is in a Blockly Event. Move to the next stage */
+                if ( geocode.getEventID() != null && storedCollectable != null && storedCollectable.isEmpty() ) {
+                    try {
                         eventService.nextStage( geocode, CurrentUserDetails.getID() );
+
+                    } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException | NotFoundException | MismatchedParametersException e) {
+                        response.setStoredCollectable(null);
                     }
-                } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException | NotFoundException | MismatchedParametersException e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -840,11 +828,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * else continue as the user found the GeoCode fairly
          */
         var user = userService.getCurrentUser();
-        var userID = user.getId();
 
-        if ( ( userID == null ) ) {
+        if ( user == null ) {
             return new SwapCollectablesResponse( false,  "No user is logged in");
         }
+        var userID = user.getId();
 
         if( ( geocode.getCreatedBy().equals( userID ) ) ){
             return new SwapCollectablesResponse(false, "User tried to swap a Collectable out of a GeoCode that they created");

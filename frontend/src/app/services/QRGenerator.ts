@@ -1,16 +1,29 @@
 import {Injectable} from '@angular/core';
 import QRCodeStyling from 'qr-code-styling';
+import {Platform} from '@ionic/angular';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 @Injectable({ providedIn: 'root' })
 export class QRGenerator {
 
-  public download(code: string, filename?: string) {
-    if (!(filename)) filename = 'qrcode'
-    const canvas = this.getCanvas(code);
-    const link = document.createElement('a');
-    link.download = filename+'.png';
-    link.href = canvas.toDataURL()
-    link.click();
+  constructor(private platform: Platform, private sharing: SocialSharing) {}
+
+  public async download(code: string, description?: string) {
+    let filename = 'qrcode.png'
+    if (description) {
+      filename = description+'.png';
+    }
+    const imageData = this.getCanvas(code).toDataURL('image/png');
+
+    if (this.platform.is('capacitor')) {
+      await this.sharing.share(description, filename, imageData, undefined);
+
+    } else {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = imageData;
+      link.click();
+    }
   }
 
   public getCanvas(code: string) {
@@ -19,16 +32,17 @@ export class QRGenerator {
     const ctx = output.getContext('2d');
 
     output.width = 550;
-    output.height = 705;
+    output.height = 720;
 
     /* White background */
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 550, 705);
+    ctx.fillRect(0, 0, 550, 720);
 
     /* URL header */
     ctx.font = '900 55px Helvetica';
     ctx.fillStyle = 'red';
-    ctx.fillText('geocodeapp.tech', 25, 65, 500);
+    ctx.textAlign = "center";
+    ctx.fillText('geocodeapp.tech', 275, 65, 500);
 
     /* Border around QR code */
     ctx.fillStyle = "black";
@@ -40,7 +54,8 @@ export class QRGenerator {
     /* Code text at bottom */
     ctx.font = 'bold 105px Courier New';
     ctx.fillStyle = 'red';
-    ctx.fillText(code, 25, 675, 500);
+    ctx.textAlign = "center";
+    ctx.fillText(code, 275, 675, 500);
 
     return output;
   }
@@ -62,4 +77,5 @@ export class QRGenerator {
       }
     });
   }
+
 }

@@ -342,17 +342,16 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     *  Gets the current User using the Keycloak detailsx
+     *  Gets the current User using the Keycloak details
      * @return The current User
      */
     public User getCurrentUser(){
         /* make request to get the current User*/
         var request = new GetUserByIdRequest(CurrentUserDetails.getID());
 
-        try{
+        try {
             return getUserById(request).getUser();
-        }catch(NullRequestParameterException e){
-            e.printStackTrace();
+        } catch(NullRequestParameterException e){
             return null;
         }
     }
