@@ -3690,9 +3690,8 @@ components:
         - location
         - beginDate
         - endDate
-        - createGeoCodesToFind
+        - geoCodesToFind
         - orderBy
-        - available
         - properties
       properties:
         name:
