@@ -695,7 +695,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 response.setStoredCollectable( storedCollectable );
 
                 /* if this geocode has an event ID and no collectables, it is in a Blockly Event. Move to the next stage */
-                if ( geocode.getEventID() != null && storedCollectable.size() == 0 ) {
+                if ( geocode.getEventID() != null && storedCollectable != null && storedCollectable.size() == 0 ) {
                     try {
                         eventService.nextStage( geocode, CurrentUserDetails.getID() );
 
