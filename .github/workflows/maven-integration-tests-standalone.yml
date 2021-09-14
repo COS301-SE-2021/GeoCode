@@ -1,18 +1,29 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Maven Integration Tests (Existing DB)
+name: Maven Integration Tests (Standalone DB)
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, development ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, development ]
 
 jobs:
   build:
-    name: Maven Integration Tests (Existing DB)
+    name: Maven Integration Tests (Standalone DB)
     runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:13.4
+        env:
+          POSTGRES_DB: geocode
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
     - uses: actions/checkout@v2
@@ -44,9 +55,9 @@ jobs:
       run: |
         cd backend
         mvn clean verify \
-          -Denv.DATABASE_URL=${{secrets.TEST_DATABASE_URL}} \
-          -Denv.DATABASE_USERNAME=${{secrets.TEST_DATABASE_USERNAME}} \
-          -Denv.DATABASE_PASSWORD=${{secrets.TEST_DATABASE_PASSWORD}} \
+          -Denv.DATABASE_URL=jdbc:postgresql://localhost:5432/geocode \
+          -Denv.DATABASE_USERNAME=postgres \
+          -Denv.DATABASE_PASSWORD=postgres \
           -Denv.ALLOWED_ORIGINS_COMMA_SEPARATED="http://localhost" \
           -Denv.IMAGE_DIRECTORY="~/image-data" \
           -Denv.KEY_STORE_TYPE=PKCS12 \
