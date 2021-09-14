@@ -9,6 +9,7 @@ import {
 } from '../../../../services/geocode-api';
 import jsQR from 'jsqr';
 import {AlertController} from '@ionic/angular';
+import {Mediator} from '../../../../services/Mediator';
 
 @Component({
   selector: 'app-open-geocode',
@@ -44,6 +45,7 @@ export class OpenGeocodePage implements AfterViewInit {
     private geocodeService: GeoCodeService,
     private alertCtrl: AlertController,
     private router: Router,
+    private mediator: Mediator
   ) {
     this.geocodeID = this.route.snapshot.paramMap.get('geocodeID');
     const state = this.router.getCurrentNavigation().extras.state;
@@ -90,7 +92,7 @@ export class OpenGeocodePage implements AfterViewInit {
     if (response.storedCollectable != null) {
 
       if (response.storedCollectable.length === 0) {
-        await this.goBack();
+        await this.goBack(true);
 
       } else if (this.useAR) {
         await this.loadCollectables(response.storedCollectable);
@@ -101,7 +103,8 @@ export class OpenGeocodePage implements AfterViewInit {
       }
     } else {
       console.log(response);
-      alert('An unknown error occurred!');
+      alert('Incorrect QR code!');
+      await this.goBack(false);
     }
 
 
@@ -224,7 +227,7 @@ export class OpenGeocodePage implements AfterViewInit {
             console.log(request);
             this.geocodeService.swapCollectables(request).subscribe((response: SwapCollectablesResponse) =>{
               console.log(response);
-              this.goBack();
+              this.goBack(true);
             });
           }
         }
@@ -233,7 +236,10 @@ export class OpenGeocodePage implements AfterViewInit {
     await alert.present();
   }
 
-  async goBack() {
+  async goBack(success: boolean) {
+    if (success) {
+      this.mediator.geocodeFound.send(this.geocodeID);
+    }
     await this.router.navigate(['../../..'], {relativeTo: this.route});
   }
 }

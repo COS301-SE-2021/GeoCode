@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {AlertController, NavController, ToastController} from '@ionic/angular';
 import {
   Event,
@@ -9,6 +9,8 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {MapAndInfoComponent} from '../../../components/map-and-info/map-and-info.component';
 import {CurrentUserDetails} from '../../../services/CurrentUserDetails';
+import {Mediator} from '../../../services/Mediator';
+import {Subscription} from 'rxjs';
 
 
 @Component({
@@ -16,7 +18,7 @@ import {CurrentUserDetails} from '../../../services/CurrentUserDetails';
   templateUrl: './event-contents.page.html',
   styleUrls: ['./event-contents.page.scss'],
 })
-export class EventContentsPage implements AfterViewInit {
+export class EventContentsPage implements AfterViewInit, OnDestroy {
 
   @ViewChild('mapAndInfo', {static: false}) mapAndInfo: MapAndInfoComponent;
 
@@ -25,9 +27,12 @@ export class EventContentsPage implements AfterViewInit {
   geocode: GeoCode = null;
   status: UserEventStatus = null;
 
+  refreshSubscription: Subscription = null;
+
   constructor(
     route: ActivatedRoute,
     router: Router,
+    mediator: Mediator,
     private toastController: ToastController,
     private navCtrl: NavController,
     private geocodeApi: GeoCodeService,
@@ -45,16 +50,34 @@ export class EventContentsPage implements AfterViewInit {
       this.event = null;
       this.eventID = route.snapshot.paramMap.get('eventID');
     }
+
+    this.refreshSubscription = mediator.geocodeFound.onReceive(geocodeID => {
+      if (geocodeID === this.geocode.id) {
+        this.geocode = null;
+        this.status = null;
+        this.loadStatus().then().catch();
+      }
+    });
   }
 
   async ngAfterViewInit() {
     await this.mapAndInfo.load();
+    await this.loadStatus();
 
+    if (this.event === null) {
+      this.event = (await this.eventApi.getEvent({eventID: this.eventID}).toPromise()).foundEvent;
+    };
+  }
+
+  ngOnDestroy() {
+    this.refreshSubscription.unsubscribe();
+  }
+
+  async loadStatus() {
     const levelReq: GetCurrentEventStatusRequest = {
       eventID: this.eventID,
       userID: this.currentUser.getID()
     };
-
     const response = await this.eventApi.getCurrentEventStatus(levelReq).toPromise();
     console.log(response);
     if (response.success) {
@@ -78,10 +101,6 @@ export class EventContentsPage implements AfterViewInit {
       this.navCtrl.back();
       await this.presentToast();
     }
-
-    if (this.event === null) {
-      this.event = (await this.eventApi.getEvent({eventID: this.eventID}).toPromise()).foundEvent;
-    };
   }
 
   async presentToast(){
