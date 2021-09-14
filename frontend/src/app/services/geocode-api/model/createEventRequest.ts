@@ -19,8 +19,8 @@ export interface CreateEventRequest {
     location: GeoPoint;
     beginDate: string;
     endDate: string;
-    geoCodesToFind?: Array<CreateGeoCodeRequest>;
+    geoCodesToFind: Array<CreateGeoCodeRequest>;
     orderBy: OrderLevels;
-    available: boolean;
+    available?: boolean;
     properties: { [key: string]: string; };
 }
