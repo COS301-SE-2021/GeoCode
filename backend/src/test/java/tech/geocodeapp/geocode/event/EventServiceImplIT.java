@@ -614,17 +614,6 @@ class EventServiceImplIT {
      */
     @Test
     @Order( 5 )
-    @DisplayName( "Null request handling - getAllEvents" )
-    void getAllEventsTest() {
-        //ToDo finish this
-        var event = eventService.getAllEvents();
-    }
-
-    /**
-     * Check how the use case handles the request being null
-     */
-    @Test
-    @Order( 5 )
     @DisplayName( "Null request handling - changeAvailability" )
     void changeAvailabilityNullRequestTest() {
 
