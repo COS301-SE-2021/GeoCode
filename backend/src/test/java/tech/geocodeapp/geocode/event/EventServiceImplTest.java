@@ -596,13 +596,18 @@ class EventServiceImplTest {
 
         try {
 
-            //ToDo finish this
-
             EventsNearMeRequest request = new EventsNearMeRequest();
-            request.setLocation( null );
-            request.setRadius( 0.0 );
+            GeoPoint location = new GeoPoint( 10.2588, 40.336981 );
+            request.setLocation(location);
+            request.setRadius( 50.0 );
 
+            populate(1);
             var event = eventService.eventsNearMe( request );
+
+            Assertions.assertTrue(event.isSuccess());
+            Assertions.assertEquals("Events returned", event.getMessage());
+            Assertions.assertEquals(1, event.getFoundEvents().size());
+            Assertions.assertEquals("Super Sport", event.getFoundEvents().get(0).getName());
         } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
