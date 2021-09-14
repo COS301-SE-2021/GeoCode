@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
 
 import javax.persistence.EntityManager;
@@ -15,7 +16,12 @@ import java.util.*;
 
 public class EventMockRepository implements EventRepository {
 
+    private final UserEventStatusMockRepository statusRepo;
     private HashMap< UUID, Event > map = new HashMap<>();
+
+    public EventMockRepository(UserEventStatusMockRepository statusRepo) {
+        this.statusRepo = statusRepo;
+    }
 
     @Override
     public List< Event > findAll() {
@@ -294,7 +300,14 @@ public class EventMockRepository implements EventRepository {
     }
 
     @Override
-    public List<Object[]> findEnteredEvents(UUID userID) {
-        return null;
+    public List< Object[] > findEnteredEvents( UUID userID ) {
+        List< Object[] > output = new ArrayList<>();
+        for ( UserEventStatus status: statusRepo.findAll() ) {
+            if ( userID.equals( status.getUserID() ) ) {
+                Event event = map.get( status.getEventID() );
+                output.add( new Object[] { event, status } );
+            }
+        }
+        return output;
     }
 }

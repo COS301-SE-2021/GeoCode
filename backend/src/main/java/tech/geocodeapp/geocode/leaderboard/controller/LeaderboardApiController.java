@@ -41,7 +41,6 @@ public class LeaderboardApiController implements LeaderboardApi {
         try {
             response = leaderboardService.createLeaderboard(body);
         } catch (NullRequestParameterException e) {
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         if (response.isSuccess()) {

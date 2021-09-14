@@ -1,0 +1,10 @@
+  [
+    {
+      "inputs": [ "abc", "def" ],
+      "output": "abc"
+    },
+    {
+      "inputs": [ "ghi", "j" ],
+      "output": "test"
+    }
+  ]

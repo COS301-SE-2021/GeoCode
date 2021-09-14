@@ -1,0 +1,14 @@
+[
+  {
+    "type": "block_type1",
+    "maxInstances": 5
+  },
+  {
+    "type": "block_type2",
+    "maxInstances": -1
+  },
+  {
+    "type": "block_type3",
+    "maxInstances": 1
+  }
+]
