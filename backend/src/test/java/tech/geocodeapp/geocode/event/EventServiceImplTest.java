@@ -14,8 +14,6 @@ import tech.geocodeapp.geocode.event.exceptions.RepoException;
 import tech.geocodeapp.geocode.event.model.Event;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.event.pathfinder.Graph;
-import tech.geocodeapp.geocode.event.repository.EventRepository;
-import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.CreateEventResponse;
 import tech.geocodeapp.geocode.event.response.GetEventResponse;
@@ -73,13 +71,13 @@ class EventServiceImplTest {
      * The mock repository for the Event subsystem
      * All the data will be saved here and is used to mock the JPA repository
      */
-    EventRepository eventRepo;
+    EventMockRepository eventRepo;
 
     /**
      * The mock repository for the Event subsystem UserEventStatus repository
      * All the data will be saved here and is used to mock the JPA repository
      */
-    UserEventStatusRepository userEventStatusRepo;
+    UserEventStatusMockRepository userEventStatusRepo;
 
     /**
      * The leaderboard service accessor
@@ -158,8 +156,8 @@ class EventServiceImplTest {
     void setup() {
 
         /* Create a new repository instance and make sure there is no data in it */
-        eventRepo = new EventMockRepository();
         userEventStatusRepo = new UserEventStatusMockRepository();
+        eventRepo = new EventMockRepository(userEventStatusRepo);
         geoCodeMockRepo = new GeoCodeMockRepository();
 
         /* Clear all the repository data */
