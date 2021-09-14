@@ -688,14 +688,23 @@ class EventServiceImplIT {
     @Test
     @Order( 7 )
     @DisplayName( "Valid request - getEventsByLocation" )
+    @Transactional
     void getEventsByLocationTest() {
 
         try {
-            //ToDo finish this
+            handleLogin(UUID.randomUUID(), "test", false);
+            populate(1);
             GetEventsByLocationRequest request = new GetEventsByLocationRequest();
-            request.setLocation( null );
+            GeoPoint location = new GeoPoint( 10.2587, 40.336981 );
+            request.setLocation(location);
 
             var event = eventService.getEventsByLocation( request );
+
+            Assertions.assertTrue(event.isSuccess());
+            Assertions.assertEquals("Events returned", event.getMessage());
+            Assertions.assertNotNull(event.getEvents());
+            Assertions.assertEquals("Try get as many as possible", event.getEvents().get(0).getDescription());
+            Assertions.assertEquals(location, event.getEvents().get(0).getLocation());
         } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
