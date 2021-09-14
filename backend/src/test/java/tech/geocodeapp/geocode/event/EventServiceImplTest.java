@@ -443,6 +443,9 @@ class EventServiceImplTest {
             var response = eventService.getCurrentEventStatus( request );
 
             Assertions.assertTrue(response.isSuccess());
+            Assertions.assertEquals("Status returned", response.getMessage());
+            Assertions.assertEquals(eventID, response.getStatus().getEventID());
+            Assertions.assertEquals(user1ID, response.getStatus().getUserID());
 
         } catch ( InvalidRequestException e ) {
 
@@ -531,7 +534,6 @@ class EventServiceImplTest {
     void getEnteredEventsTest() {
 
         try {
-//ToDO: fix
            createValidBlocklyEvent();
 
             GetEnteredEventsRequest request = new GetEnteredEventsRequest();
