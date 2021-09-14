@@ -684,30 +684,25 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Get the GeoCode with the specified ID */
         var temp = geoCodeRepo.findById( request.getGeoCodeID() );
         if ( temp.isPresent() ) {
+            GeoCode geocode = temp.get();
 
             /* Check if the found GeoCode has the correct qrCode */
-            if ( temp.get().getQrCode().equals( request.getQrCode() ) ) {
+            if ( geocode.getQrCode().equals( request.getQrCode() ) ) {
 
                 /* Get the collectables from the found GeoCode */
-                ArrayList< Collectable > storedCollectable = getCollectable( temp.get() );
+                ArrayList< Collectable > storedCollectable = getCollectable( geocode );
 
                 /* Set the response to save the found collectables */
                 response.setStoredCollectable( storedCollectable );
 
-                /* if the Event is a Blockly Event, move to the next stage */
-                GeoCode geocode = temp.get();
-
-                try {
-                    Event event = eventService.getEvent(new GetEventRequest(geocode.getEventID())).getFoundEvent();
-
-                    EventManager eventManager = new EventManager();
-                    EventComponent eventComponent = eventManager.buildEvent(event);
-
-                    if(eventComponent.isBlocklyEvent()){
+                /* if this geocode has an event ID and no collectables, it is in a Blockly Event. Move to the next stage */
+                if ( geocode.getEventID() != null && storedCollectable.size() == 0 ) {
+                    try {
                         eventService.nextStage( geocode, CurrentUserDetails.getID() );
+
+                    } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException | NotFoundException | MismatchedParametersException e) {
+                        response.setStoredCollectable(null);
                     }
-                } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException | NotFoundException | MismatchedParametersException e) {
-                    e.printStackTrace();
                 }
             }
         }

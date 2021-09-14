@@ -7,6 +7,7 @@ import {AlertController} from '@ionic/angular';
 import DarkTheme from '@blockly/theme-dark';
 import {Mediator} from '../../services/Mediator';
 import {Subscription} from 'rxjs';
+import DynamicCategoryInfo = Blockly.utils.toolbox.DynamicCategoryInfo;
 
 @Component({
   selector: 'app-blockly',
@@ -22,10 +23,6 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
   @ViewChild('blocklyDiv', {static:false}) blocklyDiv: ElementRef<HTMLDivElement>;
 
   workspace: Blockly.WorkspaceSvg = null;
-  toolbox: Blockly.utils.toolbox.ToolboxInfo = {
-    kind: 'flyoutToolbox',
-    contents: []
-  };
 
   config: Blockly.BlocklyOptions = {
     readOnly: false,
@@ -35,7 +32,6 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
       drag: true,
       wheel: true
     },
-    toolbox: this.toolbox,
     theme: this.getTheme(window.matchMedia('(prefers-color-scheme: dark)').matches)
   };
 
@@ -53,7 +49,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
 
   async ngAfterViewInit() {
     if (this.toolboxBlocks !== null) {
-      await this.readInputToolbox();
+      this.readInputToolbox();
     } else {
       await this.readDefaultToolbox();
     }
@@ -91,8 +87,11 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
   getProgramBlocks(): {[key: string]: number} {
     const output = {};
     const blocks = this.workspace.getAllBlocks(true);
-    console.log(blocks);
     for (const block of blocks) {
+      // eslint-disable-next-line no-underscore-dangle
+      if (block.styleName_ === 'procedure_blocks' || block.styleName_ === 'variable_blocks') {
+        continue;
+      }
       if (!output.hasOwnProperty(block.type)) {
         output[block.type] = 0;
       }
@@ -148,6 +147,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     this.runProgram(code);
   }
 
+  // eslint-disable-next-line max-len
   runProgram(code: string, inputFunction: (promptRequest: string) => string = prompt, outputFunction: (output: string) => boolean = confirm) {
     const interpreter = new Interpreter(code, (interpreter2, scope) => {
       const promptWrapper = (text) => {
@@ -187,13 +187,54 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     this.forceResize();
   }
 
-  async readInputToolbox() {
+  readInputToolbox() {
+    const unlocked = {
+      kind: 'category',
+      id: 'catUnlocked',
+      colour: '160',
+      name: 'Unlocked Blocks',
+      contents: []
+    };
+    const locked = {
+      kind: 'category',
+      id: 'catUnlocked',
+      colour: '160',
+      name: 'Locked Blocks',
+      contents: []
+    };
+    const separator = {
+      kind: 'sep'
+    };
+    const variables = {
+      kind: 'category',
+      id: 'catVariables',
+      colour: '330',
+      custom: 'VARIABLE',
+      name: 'Variables'
+    };
+    const functions = {
+      kind: 'category',
+      id: 'catFunctions',
+      colour: '290',
+      custom: 'PROCEDURE',
+      name: 'Functions'
+    };
+    // @ts-ignore
+    this.config.toolbox = { contents: [unlocked, separator, variables, functions] };
     for (const [blockName, maxInstances] of Object.entries(this.toolboxBlocks)) {
-      // @ts-ignore
-      this.toolbox.contents.push({
-        kind: 'block',
-        type: blockName
-      });
+      if (maxInstances > 0) {
+        // @ts-ignore
+        unlocked.contents.push({
+          kind: 'block',
+          type: blockName
+        });
+      } else {
+        // push locked
+        locked.contents.push({
+          kind: 'block',
+          type: blockName
+        });
+      }
     }
   }
 

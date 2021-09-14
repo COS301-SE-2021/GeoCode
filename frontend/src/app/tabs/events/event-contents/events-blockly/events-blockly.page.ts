@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Event, EventService, TestCase, UserEventStatus} from '../../../../services/geocode-api';
+import {Event, EventService, UserEventStatus} from '../../../../services/geocode-api';
 import {CurrentUserDetails} from '../../../../services/CurrentUserDetails';
 import {zip} from 'rxjs';
 import {BlocklyComponent} from '../../../../components/blockly/blockly.component';
@@ -17,8 +17,9 @@ export class EventsBlocklyPage implements OnInit {
   event: Event = null;
   eventID: string = null;
   status: UserEventStatus = null;
+  blocks: {[blockName: string]: number} = {};
 
-  testCases: TestCase[] = null;
+  testCases: string[][] = null;
 
   toolboxVisible = true;
 
@@ -46,18 +47,18 @@ export class EventsBlocklyPage implements OnInit {
       ).toPromise();
       this.event = responses[0].foundEvent;
       this.status = responses[1].status;
-    }
-  }
 
-  getBlocks(): {[blockName: string]: number} {
-    // TODO Set the available blocks in line with what is in the user's status details
-    return {};
+      for (const block of this.status.details.blocks.split('#')) {
+        if (block !== '') {
+          this.blocks[block] = 999;
+        }
+      }
+    }
   }
 
   async submitOutput() {
     await this.blockly.saveProgramToStorage();
     if (this.testCases === null) {
-      // @ts-ignore TODO check what the format of inputs is
       this.testCases = (await this.eventApi.getInputs({eventID: this.eventID}).toPromise()).inputs;
     }
 
@@ -65,7 +66,7 @@ export class EventsBlocklyPage implements OnInit {
     const caseOutputs: string[] = [];
     for (const testCase of this.testCases) {
       const inputs = [];
-      for (const input of testCase.inputs) {
+      for (const input of testCase) {
         inputs.push(input);
       }
       const outputs = [];
@@ -82,9 +83,9 @@ export class EventsBlocklyPage implements OnInit {
 
     const response = await this.eventApi.checkOutput({eventID: this.eventID, outputs: caseOutputs}).toPromise();
     if (response.success) {
-      alert('Success');
+      alert(response.message);
     } else {
-      alert('Your program output did not match the model.');
+      alert('Your program output did not match the expected output.');
     }
   }
 
@@ -94,6 +95,6 @@ export class EventsBlocklyPage implements OnInit {
   }
 
   viewDescription() {
-    alert(this.event.properties.problemDescription);
+    alert(this.event.properties.problem_description);
   }
 }

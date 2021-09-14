@@ -829,7 +829,7 @@ public class EventServiceImpl implements EventService {
             var numTestCases = correctOutputs.length;
 
             for(int i = 0; i < numTestCases; ++i){
-                if(!userOutputs.get(i).equals(correctOutputs[i])){
+                if(userOutputs.get(i).equals(correctOutputs[i])){
                     ++count;
                 }
             }
@@ -863,15 +863,15 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        /* check if the eventID is invalid */
-        boolean eventExists = eventRepo.existsById( request.getEventID() );
+        var eventTemp = eventRepo.findById( request.getEventID() );
 
-        if( !eventExists ){
+        /* check if the eventID is invalid */
+        if (eventTemp.isEmpty()) {
             return new CheckEventAndUserResponse( false, eventNotFoundMessage );
         }
 
         /* check if the Event is not a BlocklyEvent */
-        Event event = eventRepo.findById( request.getEventID() ).get();
+        Event event = eventTemp.get();
 
         EventManager eventManager = new EventManager();
         EventComponent eventComponent = eventManager.buildEvent( event );

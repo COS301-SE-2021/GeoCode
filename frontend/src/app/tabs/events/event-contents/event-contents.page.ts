@@ -58,21 +58,26 @@ export class EventContentsPage implements AfterViewInit {
     const response = await this.eventApi.getCurrentEventStatus(levelReq).toPromise();
     console.log(response);
     if (response.success) {
+      this.status = response.status;
       if (response.targetGeocode === null) {
-        await this.presentAlert();
+        if (response.status.details.hasOwnProperty('blocks')) {
+          // eslint-disable-next-line max-len
+          await this.presentAlert('You have found all the GeoCodes! Now you need to complete the Blockly coding challenge with the blocks you unlocked along the way.');
+        } else {
+          await this.presentAlert('Congratulations, you have completed the event!');
+          await this.navCtrl.navigateBack('/events');
+        }
       } else {
-        this.status = response.status;
         this.geocode = response.targetGeocode;
+        this.mapAndInfo.getMap().setOptions({
+          center: { lat: this.geocode.location.latitude, lng: this.geocode.location.longitude },
+          zoom: 15,
+        });
       }
     } else {
       this.navCtrl.back();
       await this.presentToast();
     }
-
-    this.mapAndInfo.getMap().setOptions({
-      center: { lat: this.geocode.location.latitude, lng: this.geocode.location.longitude },
-      zoom: 15,
-    });
 
     if (this.event === null) {
       this.event = (await this.eventApi.getEvent({eventID: this.eventID}).toPromise()).foundEvent;
@@ -87,18 +92,13 @@ export class EventContentsPage implements AfterViewInit {
     await toast.present();
   }
 
-  async presentAlert() {
+  async presentAlert(text: string) {
     const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      message: 'Congratulation you completed the event',
+      message: text,
       buttons: ['OK']
     });
-
     await alert.present();
-
-    const { role } = await alert.onDidDismiss();
-    console.log('onDidDismiss resolved with role', role);
-    await this.navCtrl.navigateBack('/events');
+    await alert.onDidDismiss();
   }
 
   async openLeaderBoard() {

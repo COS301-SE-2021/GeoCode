@@ -112,7 +112,7 @@ public class BlocklyEventDecorator extends EventDecorator{
 
         /* get which block types the User has found so far */
         String blockString = status.getDetails().get("blocks");
-        List<String> foundBlockTypes = Arrays.asList(blockString.split("#"));
+        List<String> foundBlockTypes = new ArrayList<>(Arrays.asList(blockString.split("#")));
         String userBlocks = blockString;
 
         /* allocate numberOfBlockTypes random block types to the User */
