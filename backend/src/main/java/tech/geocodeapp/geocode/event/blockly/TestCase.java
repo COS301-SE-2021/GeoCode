@@ -17,10 +17,6 @@ public class TestCase {
     @JsonProperty("output")
     private String output;
 
-    public TestCase() {
-
-    }
-
     /**
      * Default constructor - needed for objectMapper.readValue() in createEvent
      */
