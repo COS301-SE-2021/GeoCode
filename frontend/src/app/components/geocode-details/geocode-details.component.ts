@@ -62,8 +62,8 @@ export class GeocodeDetailsComponent implements OnInit {
     window.open('https://www.google.com/maps/search/?api=1&query='+this.geocode.location.latitude+'%2C'+this.geocode.location.longitude);
   }
 
-  getQR() {
-    this.qrGenerator.download(this.geocode.qrCode, this.geocode.description);
+  async getQR() {
+    await this.qrGenerator.download(this.geocode.qrCode, this.geocode.description);
   }
 
   async updateGeocode() {

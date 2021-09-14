@@ -1,16 +1,32 @@
 import {Injectable} from '@angular/core';
 import QRCodeStyling from 'qr-code-styling';
+import {Platform} from '@ionic/angular';
+import {Capacitor} from '@capacitor/core';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 @Injectable({ providedIn: 'root' })
 export class QRGenerator {
 
-  public download(code: string, filename?: string) {
-    if (!(filename)) filename = 'qrcode'
-    const canvas = this.getCanvas(code);
-    const link = document.createElement('a');
-    link.download = filename+'.png';
-    link.href = canvas.toDataURL()
-    link.click();
+  constructor(private platform: Platform, private sharing: SocialSharing) {}
+
+  public async download(code: string, filename?: string) {
+    if (filename) {
+      filename += '.png';
+    } else {
+      filename = 'qrcode.png';
+    }
+    const imageData = this.getCanvas(code).toDataURL('image/png');
+
+    if (this.platform.is('capacitor')) {
+      const base64 = imageData.split(',')[1];
+      await this.sharing.share('message', 'subject', imageData);
+
+    } else {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = imageData;
+      link.click();
+    }
   }
 
   public getCanvas(code: string) {
@@ -62,4 +78,5 @@ export class QRGenerator {
       }
     });
   }
+
 }

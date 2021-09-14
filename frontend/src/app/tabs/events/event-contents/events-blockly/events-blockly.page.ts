@@ -95,6 +95,6 @@ export class EventsBlocklyPage implements OnInit {
   }
 
   viewDescription() {
-    alert(this.event.properties.problem_description);
+    alert(this.event.properties.problemDescription);
   }
 }

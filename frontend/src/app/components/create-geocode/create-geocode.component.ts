@@ -106,7 +106,7 @@ export class CreateGeocodeComponent implements AfterViewInit {
               duration: 2000
             });
             await toast.present();
-            this.qrGenerator.download(response.createdGeocode.qrCode);
+            await this.qrGenerator.download(response.createdGeocode.qrCode);
           }
         });
       }
