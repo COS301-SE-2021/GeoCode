@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.geocode.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -16,12 +15,8 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
-import tech.geocodeapp.geocode.event.decorator.EventComponent;
 import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
 import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
-import tech.geocodeapp.geocode.event.manager.EventManager;
-import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.request.GetEventRequest;
 import tech.geocodeapp.geocode.event.service.EventService;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
@@ -470,8 +465,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response and return all the
          * collectable ID's for the found GeoCode
          */
-        Assertions.assertNotNull(hold);
-        Assertions.assertNotNull(hold.getCollectables());
         return new GetCollectablesResponse( new ArrayList<>( hold.getCollectables() ) );
     }
 
@@ -835,11 +828,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * else continue as the user found the GeoCode fairly
          */
         var user = userService.getCurrentUser();
-        var userID = user.getId();
 
-        if ( ( userID == null ) ) {
+        if ( user == null ) {
             return new SwapCollectablesResponse( false,  "No user is logged in");
         }
+        var userID = user.getId();
 
         if( ( geocode.getCreatedBy().equals( userID ) ) ){
             return new SwapCollectablesResponse(false, "User tried to swap a Collectable out of a GeoCode that they created");

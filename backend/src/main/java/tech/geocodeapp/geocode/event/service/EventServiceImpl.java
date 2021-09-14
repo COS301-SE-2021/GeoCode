@@ -833,13 +833,13 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException();
         }
 
-        boolean exists = eventRepo.existsById(request.getEventID());
+        var eventTemp = eventRepo.findById(request.getEventID());
 
-        if(!exists){
+        if(eventTemp.isEmpty()){
             return new CheckOutputResponse(false, eventNotFoundMessage);
         }
 
-        var event = eventRepo.findById(request.getEventID()).get();
+        var event = eventTemp.get();
 
         var eventManager = new EventManager();
         var eventComponent = eventManager.buildEvent(event);
