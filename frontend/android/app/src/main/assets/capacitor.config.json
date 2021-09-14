@@ -2,5 +2,14 @@
 	"appId": "tech.geocodeapp.geocode",
 	"appName": "GeoCode",
 	"webDir": "www",
-	"bundledWebRuntime": false
+	"bundledWebRuntime": false,
+	"plugins": {
+		"SplashScreen": {
+			"launchAutoHide": true,
+			"androidScaleType": "CENTER_CROP",
+			"splashFullScreen": true,
+			"splashImmersive": false,
+			"backgroundColor": "#ffffff"
+		}
+	}
 }

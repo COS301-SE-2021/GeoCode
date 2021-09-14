@@ -11,6 +11,8 @@ public class GetMyMissionsRequest   {
   @JsonProperty("userID")
   private UUID userID;
 
+  public GetMyMissionsRequest() {}
+
   public GetMyMissionsRequest(UUID userID) {
     this.userID = userID;
   }

@@ -1,106 +1,109 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start" *ngIf="!isOwnProfile">
-      <ion-back-button defaultHref="profile"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Profile</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-nav>
+  <app-nav-header>
+    <app-nav-toolbar>
+      <ion-buttons slot="start" *ngIf="!isOwnProfile">
+        <ion-back-button defaultHref="profile"></ion-back-button>
+      </ion-buttons>
+      <ion-title>Profile</ion-title>
+    </app-nav-toolbar>
+  </app-nav-header>
 
-<ion-content>
-  <ion-card >
-    <ion-card-header>
-      <ion-card-title class="userDetails">{{username}}</ion-card-title>
-    </ion-card-header>
-  </ion-card>
+  <ion-content>
+    <ion-card >
+      <ion-card-header>
+        <ion-card-title class="userDetails">{{username}}</ion-card-title>
+      </ion-card-header>
+    </ion-card>
 
-  <ng-template [ngIf]="trackable !== null && currentCollectable !== null">
-    <ion-grid>
-      <ion-row>
-        <ion-col size-md="6" size="12">
-          <ion-card class="card">
-            <ion-card-header>
-              <ion-card-title class="cardHeadings">My Current Collectable</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <table><tr>
-                <td class="imageBox">
-                  <div class="image">
-                    <img src="{{currentCollectable.type.image}}">
-                  </div>
-                </td>
-                <td class="contentBox">
-                  <ion-card-title>{{currentCollectable.type.name}}</ion-card-title>
-                  <ion-card-subtitle>{{currentCollectable.type.set.name}}</ion-card-subtitle>
-                </td>
-              </tr></table>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-        <ion-col size-md="6" size="12">
-          <ion-card button (click)="showTrackableLocations()" class="card">
-            <ion-card-header>
-              <ion-card-title class="cardHeadings">My Personal Trackable</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <table><tr>
-                <td class="imageBox">
-                  <div class="image">
-                    <img src="{{trackable.type.image}}">
-                  </div>
-                </td>
-                <td class="contentBox">
-                  <ion-card-title>{{username}}'s Trackable</ion-card-title>
-                  <ion-card-subtitle>{{trackable.type.set.name}}</ion-card-subtitle>
-                </td>
-              </tr></table>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ng-template>
-
-  <ion-list>
-    <ion-item button [routerLink]="['geocodes']">
-      <ion-label>
-        Geocodes
-      </ion-label>
-    </ion-item>
-    <ion-item button [routerLink]="['collections']">
-      <ion-label>
-        Collections
-      </ion-label>
-    </ion-item>
-    <ion-item button [routerLink]="['events']">
-      <ion-label>
-        Events
-      </ion-label>
-    </ion-item>
-    <ion-item button [routerLink]="['missions']">
-      <ion-label>
-        Missions
-      </ion-label>
-    </ion-item>
-
-    <ng-template [ngIf]="isOwnProfile">
-      <ion-item-divider></ion-item-divider>
-      <ion-item-group>
-        <ion-list-header>
-          <ion-label>Account</ion-label>
-        </ion-list-header>
-        <ion-item button (click)="manage()">
-          <ion-icon slot="start" name="person-circle-outline"></ion-icon>
-          <ion-label>Manage</ion-label>
-        </ion-item>
-        <ion-item button (click)="logout()">
-          <ion-icon slot="start" name="log-out-outline"></ion-icon>
-          <ion-label>Log Out</ion-label>
-        </ion-item>
-      </ion-item-group>
+    <ng-template [ngIf]="trackable !== null && currentCollectable !== null">
+      <ion-grid>
+        <ion-row>
+          <ion-col size-md="6" size="12">
+            <ion-card class="card">
+              <ion-card-header>
+                <ion-card-title class="cardHeadings">My Current Collectable</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <table><tr>
+                  <td class="imageBox">
+                    <div class="image">
+                      <img src="{{currentCollectable.type.image}}">
+                    </div>
+                  </td>
+                  <td class="contentBox">
+                    <ion-card-title>{{currentCollectable.type.name}}</ion-card-title>
+                    <ion-card-subtitle>{{currentCollectable.type.set.name}}</ion-card-subtitle>
+                  </td>
+                </tr></table>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col size-md="6" size="12">
+            <ion-card button (click)="showTrackableLocations()" class="card">
+              <ion-card-header>
+                <ion-card-title class="cardHeadings">My Personal Trackable</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <table><tr>
+                  <td class="imageBox">
+                    <div class="image">
+                      <img src="{{trackable.type.image}}">
+                    </div>
+                  </td>
+                  <td class="contentBox">
+                    <ion-card-title>{{username}}'s Trackable</ion-card-title>
+                    <ion-card-subtitle>{{trackable.type.set.name}}</ion-card-subtitle>
+                  </td>
+                </tr></table>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ng-template>
 
-  </ion-list>
+    <ion-list>
+      <ion-item button [routerLink]="['geocodes']">
+        <ion-label>
+          Geocodes
+        </ion-label>
+      </ion-item>
+      <ion-item button [routerLink]="['collections']">
+        <ion-label>
+          Collections
+        </ion-label>
+      </ion-item>
+      <ion-item button [routerLink]="['events']">
+        <ion-label>
+          Events
+        </ion-label>
+      </ion-item>
+      <ion-item button [routerLink]="['missions']">
+        <ion-label>
+          Missions
+        </ion-label>
+      </ion-item>
+
+      <ng-template [ngIf]="isOwnProfile">
+        <ion-item-divider></ion-item-divider>
+        <ion-item-group>
+          <ion-list-header>
+            <ion-label>Account</ion-label>
+          </ion-list-header>
+          <ion-item button (click)="manage()">
+            <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+            <ion-label>Manage</ion-label>
+          </ion-item>
+          <ion-item button (click)="logout()">
+            <ion-icon slot="start" name="log-out-outline"></ion-icon>
+            <ion-label>Log Out</ion-label>
+          </ion-item>
+        </ion-item-group>
+      </ng-template>
+
+    </ion-list>
 
 
-</ion-content>
+  </ion-content>
+</app-nav>
+

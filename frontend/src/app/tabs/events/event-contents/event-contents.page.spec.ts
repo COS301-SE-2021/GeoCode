@@ -9,6 +9,8 @@ import {Event, EventService, GeoCodeService} from '../../../services/geocode-api
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {MockKeycloak} from '../../../mocks/MockKeycloak';
 import {Router} from '@angular/router';
+import {Storage} from '@ionic/storage-angular';
+import {CustomComponentsModule} from '../../../components/components.module';
 
 describe('EventContentsPage', () => {
   let component: EventContentsPage;
@@ -33,8 +35,8 @@ describe('EventContentsPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ EventContentsPage ],
-      providers: [MockGoogleMapsLoader.provider(), GeoCodeService, EventService, MockKeycloak.provider()],
-      imports: [IonicModule.forRoot(), FormsModule, RouterTestingModule, HttpClientTestingModule]
+      providers: [MockGoogleMapsLoader.provider(), GeoCodeService, EventService, MockKeycloak.provider(), Storage],
+      imports: [IonicModule.forRoot(), FormsModule, RouterTestingModule, HttpClientTestingModule, CustomComponentsModule]
     }).compileComponents();
 
     const router = TestBed.inject(Router);

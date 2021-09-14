@@ -1,12 +1,13 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
 import {NavController} from '@ionic/angular';
 import {
+  Event,
   EventService,
   EventsNearMeRequest,
   EventsNearMeResponse,
   GetAllEventsResponse
 } from '../../services/geocode-api';
+import {MapAndInfoComponent} from '../../components/map-and-info/map-and-info.component';
 
 @Component({
   selector: 'app-events',
@@ -14,84 +15,63 @@ import {
   styleUrls: ['./events.page.scss'],
 })
 export class EventsPage implements AfterViewInit {
-  @ViewChild('mapElement', {static: false}) mapElement;
+
+  @ViewChild('mapAndInfo', {static: false}) mapAndInfo: MapAndInfoComponent;
+
   googleMaps;
-  mapOptions;
   map;
-  mapMarker;
-  markers ;
-  selected = [];
-  events = [];
+  markers = [];
+  selected: Event = null;
+  events: Event[] = [];
+  listView = false;
   isHidden = false;
   height = '93%';
   position;
 
-  constructor(private navCtrl: NavController, private mapsLoader: GoogleMapsLoader, private eventApi: EventService) {
-    this.markers=[];
+  constructor(private navCtrl: NavController,private eventApi: EventService) { }
+
+  async ngAfterViewInit() {
+    await this.mapAndInfo.load();
+    this.googleMaps = this.mapAndInfo.getGoogleMaps();
+    this.map = this.mapAndInfo.getMap();
+    this.map.setZoom(10);
+    await this.loadAll();
   }
 
-  //Create map and add mapmarkers of geocodes
-  loadMap(latitude, longitude) {
-    this.markers = [];
-    this.mapOptions = {
-      center: {lat: latitude, lng: longitude},
-      zoom: 10,
-    };
-    this.map = new this.googleMaps.Map(this.mapElement.nativeElement, this.mapOptions);
-  }
-
-  ngAfterViewInit(): void {
-
-    this.mapsLoader.load().then(handle => {
-      this.googleMaps = handle;
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.position=position;
-        this.loadMap(position.coords.latitude, position.coords.longitude);
-      }, (positionError) => {
-        this.loadMap(-25.75625115327836, 28.235629260918344);
-      });
-    }).catch();
-      this.loadAll();
-  }
-
-  //Add geocode to selected array to display its contents to user
-  addToSelected(event) {
-    this.selected = [];
-    this.selected.push(event);
-    this.isHidden=false;
-    this.height='60%';
+  select(event) {
+    this.selected = event;
+    this.mapAndInfo.setInfoVisible(true);
   }
 
   close() {
-    this.isHidden = true;
-    this.height = '93%';
+    this.mapAndInfo.setInfoVisible(false);
   }
 
-  async goToEvent(event) {
+  async goToEvent(event: Event) {
     await this.navCtrl.navigateForward('/events/'+event.id, {state: {event}});
   }
 
-  async goToLeaderBoard(event) {
+  async goToLeaderBoard(event: Event) {
     await this.navCtrl.navigateForward('/events/'+event.id+'/leaderboard', {state: {event}});
   }
 
-  radius($event) {
+  async radius($event) {
     const rad = $event.detail.value;
-    if (rad ==0) {
-      this.loadAll();
+    if (rad === 0) {
+      await this.loadAll();
     } else {
-      this.loadDistance(rad);
+      await this.loadDistance(rad);
     }
   }
 
-  async loadDistance(distance){
-    const req: EventsNearMeRequest={
-      radius:distance,
-      location: {latitude:this.position.coords.latitude,longitude:this.position.coords.longitude}
-    } ;
+  async loadDistance(distance: number){
+    const req: EventsNearMeRequest = {
+      radius: distance,
+      location: { latitude:this.position.coords.latitude,longitude:this.position.coords.longitude }
+    };
     this.eventApi.getEventsNearMe(req).subscribe((response: EventsNearMeResponse) =>{
       console.log(response);
-      this.events=response.foundEvents;
+      this.events = response.foundEvents;
       this.clear();
       this.placeMarkers(this.events);
     });
@@ -106,10 +86,10 @@ export class EventsPage implements AfterViewInit {
     });
   }
 
-  placeMarkers(array) {
+  placeMarkers(array: Event[]) {
     for (const code of array) {
       const marker = new this.googleMaps.Marker({
-        position: {lat: parseFloat(String(code.location.latitude)), lng: parseFloat(String(code.location.longitude))},
+        position: {lat: code.location.latitude, lng: code.location.longitude},
         map: this.map,
         title: '',
 
@@ -117,7 +97,7 @@ export class EventsPage implements AfterViewInit {
       this.markers.push(marker);
       //Add listener to marker to display marker contents when clicked
       marker.addListener('click', () => {
-        this.addToSelected(code);
+        this.select(code);
       });
     }
   }
@@ -127,6 +107,10 @@ export class EventsPage implements AfterViewInit {
       mark.setMap(null);
     }
     this.markers = [];
+  }
+
+  toggleList(){
+    this.listView= !this.listView;
   }
 
 }

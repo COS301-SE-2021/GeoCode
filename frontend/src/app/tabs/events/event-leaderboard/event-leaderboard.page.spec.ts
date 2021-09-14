@@ -6,6 +6,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {Event, EventService, LeaderboardService} from '../../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {Router} from '@angular/router';
+import {CustomComponentsModule} from '../../../components/components.module';
 
 describe('EventLeaderboardPage', () => {
   let component: EventLeaderboardPage;
@@ -34,7 +35,7 @@ describe('EventLeaderboardPage', () => {
     TestBed.configureTestingModule({
       declarations: [ EventLeaderboardPage ],
       providers: [ LeaderboardService, EventService ],
-      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
+      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, CustomComponentsModule]
     }).compileComponents();
 
     const router = TestBed.inject(Router);

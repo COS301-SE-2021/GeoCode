@@ -291,7 +291,7 @@ public class UserServiceImplIT {
         }
 
         Assertions.assertNotNull(createGeoCodeResponse);
-        return createGeoCodeResponse.getGeoCodeID();
+        return createGeoCodeResponse.getCreatedGeocode().getId();
     }
 
     /**

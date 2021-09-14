@@ -7,6 +7,7 @@ import {CollectableService, UserService} from '../../../services/geocode-api';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {KeycloakService} from 'keycloak-angular';
+import {CustomComponentsModule} from '../../../components/components.module';
 
 describe('UserCollectionsPage', () => {
   let component: UserCollectionsPage;
@@ -26,7 +27,7 @@ describe('UserCollectionsPage', () => {
         UserService,
         { provide: KeycloakService, useValue: mockKeycloak }
       ],
-      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
+      imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, CustomComponentsModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(UserCollectionsPage);

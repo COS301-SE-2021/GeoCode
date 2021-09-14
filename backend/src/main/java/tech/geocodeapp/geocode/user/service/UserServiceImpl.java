@@ -387,6 +387,16 @@ public class UserServiceImpl implements UserService {
         //the User is a new User
         var newUser = new User(CurrentUserDetails.getID(), CurrentUserDetails.getUsername());
 
+        // In case a new user has the same username as an existing user
+        // This should only happen if the existing user has deleted their Keycloak account
+        var oldUser = userRepo.findByUsernameIgnoreCase(newUser.getUsername());
+        if (oldUser != null && !oldUser.getId().equals(newUser.getId())) {
+            // Rename the old user
+            var newUsername = "DeletedUser"+oldUser.getId();
+            oldUser.setUsername(newUsername);
+            userRepo.save(oldUser);
+        }
+
         //create the user's trackable object which will always have a Mission
         var createCollectableRequest = new CreateCollectableRequest(trackableTypeUUID, request.getLocation());
         var createCollectableResponse = collectableService.createCollectable(createCollectableRequest);

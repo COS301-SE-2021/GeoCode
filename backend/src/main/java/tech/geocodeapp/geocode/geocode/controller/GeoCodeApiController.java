@@ -42,7 +42,7 @@ public class GeoCodeApiController implements GeoCodeApi {
         }
     }
 
-    public ResponseEntity< UpdateGeoCodeResponse > updatedGeoCode( @Parameter( in = ParameterIn.DEFAULT,
+    public ResponseEntity< UpdateGeoCodeResponse > updateGeoCode( @Parameter( in = ParameterIn.DEFAULT,
             description = "Request to update a GeoCode",
             required = true, schema = @Schema() )
                                                                    @Valid @RequestBody UpdateGeoCodeRequest body ) throws InvalidRequestException {
@@ -220,7 +220,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         SwapCollectablesResponse response = geoCodeService.swapCollectables( body );
 
-        if ( ( response != null ) && ( response.isIsSuccess() != null ) ) {
+        if ( ( response != null ) && ( response.isSuccess() != null ) ) {
 
             return new ResponseEntity<>( response, HttpStatus.OK );
         } else {
@@ -236,7 +236,7 @@ public class GeoCodeApiController implements GeoCodeApi {
 
         UpdateAvailabilityResponse response = geoCodeService.updateAvailability( body );
 
-        if (  ( response != null ) && ( response.isIsSuccess() != null ) ) {
+        if (  ( response != null ) && ( response.isSuccess() != null ) ) {
 
             return new ResponseEntity<>( response, HttpStatus.OK );
         } else {
