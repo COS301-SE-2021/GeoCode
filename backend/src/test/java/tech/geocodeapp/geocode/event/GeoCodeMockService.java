@@ -32,7 +32,7 @@ public class GeoCodeMockService implements GeoCodeService {
 
         geocodeRepo.save(geocode);
 
-        return new CreateGeoCodeResponse(true, geocode.getId(), "");
+        return new CreateGeoCodeResponse(true, "CreateGeoCode", geocode);
     }
 
     /**

@@ -16,7 +16,6 @@ import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -28,12 +27,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
-    private final NewUserInterceptor interceptor;
     private final String allowedOrigins;
     private final RequestMatcher publicEndpoints;
 
-    public SecurityConfig( NewUserInterceptor interceptor, @Value("${allowed-origins}") String allowedOrigins ) {
-        this.interceptor = interceptor;
+    public SecurityConfig( @Value("${allowed-origins}") String allowedOrigins ) {
         this.allowedOrigins = allowedOrigins;
 
         publicEndpoints = new OrRequestMatcher(
@@ -46,7 +43,6 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
         super.configure( http );
         http.cors().and().csrf().disable();
-        http.addFilterBefore( interceptor, BasicAuthenticationFilter.class );
         http.authorizeRequests()
                 .requestMatchers( publicEndpoints )
                     .permitAll()

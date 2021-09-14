@@ -62,7 +62,7 @@ public class ImageServiceImpl implements ImageService {
 
         } else if (nextByte != -1) {
             /* Input stream still contained data after reading */
-            throw new InvalidRequestException( "The supplied file is larger than 1024 kebibytes", HttpStatus.PAYLOAD_TOO_LARGE );
+            throw new InvalidRequestException( "The supplied file is larger than 1024 kibibytes", HttpStatus.PAYLOAD_TOO_LARGE );
         }
 
         ImageFormat outputFormat = ImageFormat.fromBytes( bytes );
@@ -86,10 +86,11 @@ public class ImageServiceImpl implements ImageService {
         }
 
         /* Save the image in the repo */
-        Image image = new Image( UUID.randomUUID(), bytes, outputFormat );
+        String fileName = UUID.randomUUID()+"."+outputFormat;
+        Image image = new Image( fileName, bytes, outputFormat );
         this.imageRepo.save( image );
 
-        return new CreateImageResponse( true, "The image was successfully saved", image.getId() );
+        return new CreateImageResponse( true, "The image was successfully saved", image.getFileName() );
     }
 
     @Override
@@ -97,11 +98,11 @@ public class ImageServiceImpl implements ImageService {
         if ( request == null ) {
             throw new InvalidRequestException( "No request object provided", HttpStatus.BAD_REQUEST );
         }
-        if ( request.getImageID() == null ) {
-            throw new InvalidRequestException( "No image ID provided", HttpStatus.BAD_REQUEST );
+        if ( request.getFileName() == null ) {
+            throw new InvalidRequestException( "No file name provided", HttpStatus.BAD_REQUEST );
         }
 
-        Image image = this.imageRepo.findById( request.getImageID() );
+        Image image = this.imageRepo.findByName( request.getFileName() );
         if ( image == null ) {
             throw new NotFoundException();
         }

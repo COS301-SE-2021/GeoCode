@@ -1,94 +1,16 @@
-
-#card-title{
-  font-size: x-large;
-  text-align: center;
-  padding:0.5%;
-  color: var(--ion-color-accent);
-}
-
 .horizontalscroll {
   position: relative;
   display: flex;
   overflow-x: auto;
   width: 100%;
   height: auto;
-}
-
-.items {
-  width: auto;
   white-space: nowrap;
-  position: relative;
 }
 
-.map{
-  width: 100%;
-  height: 50%;
-  border-width: 0px;
-  padding: 0px;
+.difficultyActive {
+  --background: var(--ion-color-accent);
 }
 
-#geoCodeDetails{
-  width: 100%;
-  height: 50%;
-  padding: 0px;
+ion-fab {
+  margin-bottom: 20px;
 }
-
-.row {
-  border-bottom-color-color:  white;
-  border-bottom-width: .01em;
-  border-bottom-style:solid; margin-bottom : -1px;
-  height: max-content;
-
-  border-top-color-color:  white;
-  border-top-width: .01em;
-  border-top-style:solid; margin-bottom : -1px;
-  font-size: medium;
-}
-
-ion-checkbox{
-  --checkmark-color: white;
-  --background-checked:var(--ion-color-accent);
-  --border-color:white;
-  --border-color-checked:white;
-}
-#button-col{
-  text-align: center;
-}
-
-#button{
-  width: auto;
- // background: var(--ion-color-button);
-  //color: var(--ion-color-button-contrast);
-
-}
-
-#close-button{
-  text-align: left;
-}
-
-#close{
-  color: var(--ion-color-button);
-
-}
-
-ion-card{
-  background-color:var(--ion-color-card) ;
-  border:  var(--ion-color-accent) solid 5px;
-  width:85%;
-  text-align: center;
-  border-radius: 8px;
-  margin: 5px;
-}
-
-#geoCodeDetails{
-  text-align: center;
-  align-items: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-
-
-

@@ -1,56 +1,59 @@
-<ion-header>
-  <ion-toolbar >
-    <ion-title id="page-title">Explore</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-nav>
+  <app-nav-header>
+    <app-nav-toolbar>
+      <ion-title id="page-title">Explore</ion-title>
+    </app-nav-toolbar>
+  </app-nav-header>
 
-<ion-content>
+  <ion-header>
+    <div class="horizontalscroll">
+      <ion-button [hidden]="listView"  color="button" (click)="toggleList()" slot="fixed">
+        <ion-icon name="list-outline"></ion-icon>
+        <ion-label>Show as List</ion-label>
+      </ion-button>
+      <ion-button [hidden]="!listView" color="button" (click)="toggleList()">
+        <ion-icon name="map-outline"></ion-icon>
+        <ion-label>Show on Map</ion-label>
+      </ion-button>
 
-  <div class="horizontalscroll">
-    <div class="items">
-      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="getAllMap()">Get all GeoCodes</ion-button></ion-col>
-      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="easyMap()">Easy</ion-button></ion-col>
-      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="mediumMap()">Medium </ion-button></ion-col>
-      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="hardMap()">Difficult</ion-button></ion-col>
-      <ion-col id="button-col"><ion-button id="button"  color="button" (click)="insaneMap()">Insane</ion-button></ion-col>
+      <div class="items">
+        <ion-chip *ngFor="let diff of getDifficulties()" (click)="toggleDifficulty(diff)" [ngClass]="{difficultyActive: selectedDifficulties[diff]}">
+          <ion-icon name="checkmark-circle"></ion-icon>
+          <ion-label>{{diff}}</ion-label>
+        </ion-chip>
+      </div>
     </div>
-  </div>
-  <div #mapElement [style.height]="height" class="map"></div>
+  </ion-header>
 
-  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button color="button" [routerLink]="['create-geocode']">
-      <ion-icon  name="add-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  <ion-content>
 
-  <div  id ="geoCodeDetails" [hidden]="isHidden">
+    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+      <ion-fab-button color="button" (click)="createGeoCode()">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
 
-    <ion-card *ngFor="let geocode of selected">
-      <div  id="close-button"><ion-button id="close" color="white" (click)="close()">X</ion-button></div>
-      <ion-header>
-        <ion-title id="card-title">
-          {{geocode.description}}
-        </ion-title>
+    <app-map-and-info #mapAndInfo [hidden]="listView">
+      <app-geocode-details
+        [geocode]="selectedGeocode"
+        [closeFunction]="closeDetails"
+        [showFindGeoCode]="true"
+        [showUpdateAvailability]="currentUser.isAdmin()"
+      ></app-geocode-details>
+    </app-map-and-info>
 
-      </ion-header>
-      <ion-card-content>
-        <ng-template [ngIf]="isAdmin()">
-          <ion-row class="row">
-            <ion-col>Available</ion-col>
-            <ion-col><ion-checkbox disabled="false"  (ionBlur)="updateAvailability(geocode)" [(ngModel)]="geocode.available"></ion-checkbox></ion-col>
-          </ion-row>
-        </ng-template>
-          <ion-row class="row">
-            <ion-col>Difficulty</ion-col>
-            <ion-col>{{geocode.difficulty}}</ion-col>
-          </ion-row>
-          <ion-button id="button" color="button" (click)="findGeoCode(geocode)">Find GeoCode</ion-button>
-          <ion-button color="button" (click)="openInMaps(geocode)">Open Location in Google Maps</ion-button>
+    <ion-grid [hidden]="!listView">
+      <ion-row>
+        <ion-col class="grid" *ngFor="let geocode of selectedDifficultyGeoCodes()">
+          <app-geocode-details
+            [geocode]="geocode"
+            [showFindGeoCode]="true"
+            [showUpdateAvailability]="currentUser.isAdmin()"
+          ></app-geocode-details>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-      </ion-card-content>
-    </ion-card>
-</div>
+  </ion-content>
+</app-nav>
 
-
-
-</ion-content>

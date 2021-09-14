@@ -30,6 +30,7 @@ import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
+import tech.geocodeapp.geocode.geocode.response.CreateGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
@@ -225,12 +226,10 @@ public class EventServiceImpl implements EventService {
         List< GeoCode > geoCodes = new ArrayList<>();
 
         /*
-         * Go through each GeoCode ID
+         * Go through each GeoCode creation request
          * and get the GeoCode object
          */
         for ( CreateGeoCodeRequest createGeoCodeRequest : createGeoCodeRequests ) {
-            UUID id = null;
-            
             try {
                 /*
                  * Call the GeoCode service to create the GeoCode Object
@@ -241,23 +240,23 @@ public class EventServiceImpl implements EventService {
 
                 var createGeoCodeResponse = geoCodeService.createGeoCode( createGeoCodeRequest );
 
-                id = createGeoCodeResponse.getGeoCodeID();
+                if ( !createGeoCodeResponse.isSuccess() ) {
+                    return new CreateEventResponse( false, "Failed to create a GeoCode" );
+                }
+
+                /*
+                 * add the created object to the list
+                 * */
+                var created = createGeoCodeResponse.getCreatedGeocode();
+                geoCodes.add( created );
 
                 /* add the current GeoCode's id to the list of GeoCode ids, so that if the
                 * GeoCode id list is not empty when setting it for the created Event
                 *  */
-                geoCodeIDs.add( id );
+                geoCodeIDs.add( created.getId() );
 
-                /*
-                 * Call the GeoCode service to get the GeoCode Object
-                 * add the found object to the list
-                 * */
-                var found = geoCodeService.getGeoCode( new GetGeoCodeRequest( id ) ).getFoundGeoCode();
-                geoCodes.add( found );
-
-                geoCodeService.saveGeoCode( found );
             } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
-                return new CreateEventResponse( false, "Invalid id for a GeoCode: " + id);
+                return new CreateEventResponse( false, e.getMessage());
             }
         }
 
@@ -316,7 +315,7 @@ public class EventServiceImpl implements EventService {
 
             /* Save the newly created entry to the repository */
             eventRepo.save( event );
-            return new CreateEventResponse( true, "Event created", event.getId() );
+            return new CreateEventResponse( true, "Event created", event.getId(), geoCodes );
         } catch ( IllegalArgumentException error ) {
 
             return new CreateEventResponse( false, error.getMessage() );
@@ -471,7 +470,12 @@ public class EventServiceImpl implements EventService {
             try {
 
                 GetGeoCodeResponse getGeoCodeResponse = geoCodeService.getGeoCode( new GetGeoCodeRequest( geocodeID ) );
-                return new GetCurrentEventStatusResponse( true, "Status returned", status, getGeoCodeResponse.getFoundGeoCode() );
+                GeoCode geocode = getGeoCodeResponse.getFoundGeoCode();
+                geocode.setCollectables(null);
+                geocode.setHints(null);
+                geocode.setCreatedBy(null);
+                geocode.setQrCode(null);
+                return new GetCurrentEventStatusResponse( true, "Status returned", status, geocode );
             } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
 
                 return new GetCurrentEventStatusResponse( false, e.getMessage(), null, null );

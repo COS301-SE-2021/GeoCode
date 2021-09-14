@@ -11,6 +11,7 @@ public class GetFoundGeoCodesRequest   {
   @JsonProperty("userID")
   private UUID userID;
 
+  public GetFoundGeoCodesRequest(){}
   public GetFoundGeoCodesRequest(UUID userID){
     this.userID = userID;
   }

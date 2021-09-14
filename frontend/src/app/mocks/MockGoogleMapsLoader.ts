@@ -4,6 +4,8 @@ import {GoogleMapsLoader} from '../services/GoogleMapsLoader';
 class Map {
   // Add methods here as we need to use them
   constructor(...args) {}
+  setOptions(...args) {}
+  setZoom(...args) {}
 };
 
 // Mocks the Marker class found in Google Maps

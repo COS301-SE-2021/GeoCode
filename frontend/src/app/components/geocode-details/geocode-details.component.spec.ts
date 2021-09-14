@@ -15,7 +15,7 @@ describe('GeocodeDetailsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodeDetailsComponent ],
-      providers: [ MockKeycloak.provider(), GeoCodeService ],
+      providers: [ GeoCodeService ],
       imports: [IonicModule.forRoot(), FormsModule, RouterTestingModule, HttpClientTestingModule]
     }).compileComponents();
 

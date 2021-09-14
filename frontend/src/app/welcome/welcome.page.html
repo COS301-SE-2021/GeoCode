@@ -35,8 +35,9 @@
     </ion-grid>
   </ion-card>
   <div class="buttons">
-    <ion-button color="button" (click)="login()">Log in</ion-button>
-    <ion-button color="button" (click)="register()">Sign up</ion-button>
+    <ion-label *ngIf="!locationFound">Please allow access to your location.</ion-label><br>
+    <ion-button color="button" (click)="login()" [disabled]="!locationFound">Log in</ion-button>
+    <ion-button color="button" (click)="register()" [disabled]="!locationFound">Sign up</ion-button>
   </div>
 
 </ion-content>
