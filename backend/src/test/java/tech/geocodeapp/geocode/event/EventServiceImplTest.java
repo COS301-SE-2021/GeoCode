@@ -535,13 +535,21 @@ class EventServiceImplTest {
     void getEnteredEventsTest() {
 
         try {
-
-            //ToDo finish this
+//ToDO: fix
+           createValidBlocklyEvent();
 
             GetEnteredEventsRequest request = new GetEnteredEventsRequest();
-            request.setUserID( null );
+
+            user1ID = handleLogin(UUID.randomUUID(), "user1", false);
+            joinEvent(blocklyEventID, user1ID);
+
+            request.setUserID(user1ID);
 
             var event = eventService.getEnteredEvents( request );
+
+            Assertions.assertTrue(event.isSuccess());
+            Assertions.assertEquals("All entered Events returned", event.getMessage());
+            Assertions.assertEquals(1, event.getEntries().size());
         } catch ( InvalidRequestException e ) {
 
             /* An error occurred, print the stack to identify */
