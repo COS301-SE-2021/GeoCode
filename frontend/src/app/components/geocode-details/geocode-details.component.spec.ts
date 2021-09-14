@@ -3,10 +3,10 @@ import { IonicModule } from '@ionic/angular';
 
 import { GeocodeDetailsComponent } from './geocode-details.component';
 import {FormsModule} from '@angular/forms';
-import {MockKeycloak} from '../../mocks/MockKeycloak';
 import {GeoCodeService} from '../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 describe('GeocodeDetailsComponent', () => {
   let component: GeocodeDetailsComponent;
@@ -15,7 +15,7 @@ describe('GeocodeDetailsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodeDetailsComponent ],
-      providers: [ GeoCodeService ],
+      providers: [ GeoCodeService, SocialSharing ],
       imports: [IonicModule.forRoot(), FormsModule, RouterTestingModule, HttpClientTestingModule]
     }).compileComponents();
 

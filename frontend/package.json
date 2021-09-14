@@ -40,6 +40,7 @@
     "blockly": "^6.20210701.0",
     "cordova-plugin-browsertab": "^0.2.0",
     "cordova-plugin-x-socialsharing": "^6.0.3",
+    "es6-promise-plugin": "^4.2.2",
     "ionic-plugin-deeplinks": "^1.0.22",
     "js-interpreter": "^2.3.1",
     "jsqr": "^1.4.0",

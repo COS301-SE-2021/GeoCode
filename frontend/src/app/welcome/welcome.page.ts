@@ -3,7 +3,6 @@ import {KeycloakService} from 'keycloak-angular';
 import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {Locator} from '../services/Locator';
-import {QRGenerator} from '../services/QRGenerator';
 
 @Component({
   selector: 'app-welcome',
@@ -17,8 +16,7 @@ export class WelcomePage implements OnInit {
   constructor(
     private keycloak: KeycloakService,
     private router: Router,
-    private locator: Locator,
-    private qrGen: QRGenerator
+    private locator: Locator
   ) {
     if (this.keycloak.getKeycloakInstance().authenticated) {
       this.router.navigate(['/explore']).then().catch();
@@ -39,9 +37,5 @@ export class WelcomePage implements OnInit {
     await this.keycloak.register({
       redirectUri: environment.baseRedirectURI+'explore'
     });
-  }
-
-  async test() {
-    await this.qrGen.download('abcdefgh', 'random');
   }
 }

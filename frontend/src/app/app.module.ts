@@ -12,6 +12,7 @@ import {environment} from '../environments/environment';
 import {RequestInterceptor} from './services/RequestInterceptor';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
 import {IonicStorageModule, Storage} from '@ionic/storage-angular';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 const doInit = async (keycloak: KeycloakService) => {
   return await keycloak.init({
@@ -63,6 +64,7 @@ const initializeKeycloak = (keycloak: KeycloakService, storage: Storage) => asyn
     { provide: BASE_PATH, useValue: environment.serverAddress+'/api' },
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
     { provide: APP_INITIALIZER, useFactory: initializeKeycloak, multi: true, deps: [KeycloakService, Storage] },
+    SocialSharing
   ],
   bootstrap: [AppComponent]
 })
