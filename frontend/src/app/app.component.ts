@@ -82,6 +82,8 @@ export class AppComponent implements OnInit {
         if (!response.success) {
           console.log('Failed handleLogin. Logging out...');
           await this.logout();
+        } else {
+          console.log('Completed handleLogin');
         }
       } catch(e) {
         console.log('Failed handleLogin. Logging out...');
