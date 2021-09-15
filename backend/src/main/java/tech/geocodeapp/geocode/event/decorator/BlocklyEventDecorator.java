@@ -88,6 +88,8 @@ public class BlocklyEventDecorator extends EventDecorator{
      */
     @Override
     public void handleStageCompletion(int stageNumber, UserEventStatus status) {
+        /* Let other decorators manipulate the status */
+        super.handleStageCompletion(stageNumber, status);
 
         /* store number of stages and number of blocks */
         int totalStages = this.getGeocodeIDs().size();
