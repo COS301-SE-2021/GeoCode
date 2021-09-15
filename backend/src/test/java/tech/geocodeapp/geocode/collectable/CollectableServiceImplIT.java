@@ -142,7 +142,7 @@ public class CollectableServiceImplIT {
           */
 
         GetCollectableSetsResponse response = collectableService.getCollectableSets();
-        Assertions.assertTrue(!response.getCollectableSets().isEmpty());
+        Assertions.assertFalse(response.getCollectableSets().isEmpty());
     }
 
     @Test
@@ -153,7 +153,7 @@ public class CollectableServiceImplIT {
           */
 
         GetCollectableTypesResponse response = collectableService.getCollectableTypes();
-        Assertions.assertTrue(!response.getCollectableTypes().isEmpty());
+        Assertions.assertFalse(response.getCollectableTypes().isEmpty());
     }
 
     @Test
@@ -168,7 +168,7 @@ public class CollectableServiceImplIT {
         typesBySetRequest.setSetId(validSetId);
 
         GetCollectableTypesResponse response = collectableService.getCollectableTypesBySet(typesBySetRequest);
-        Assertions.assertTrue(!response.getCollectableTypes().isEmpty());
+        Assertions.assertFalse(response.getCollectableTypes().isEmpty());
     }
 
     @Test
@@ -193,7 +193,7 @@ public class CollectableServiceImplIT {
           */
 
         GetCollectablesResponse response = collectableService.getCollectables();
-        Assertions.assertTrue(!response.getCollectables().isEmpty());
+        Assertions.assertFalse(response.getCollectables().isEmpty());
     }
 
 }
