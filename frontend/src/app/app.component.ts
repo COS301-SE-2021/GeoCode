@@ -45,19 +45,19 @@ export class AppComponent implements OnInit {
       console.log('token expired');
     };
 
-    this.keycloakInstance.onAuthLogout = () => {
-      /* Force close to reset keycloak and prevent issues when logging in again */
-      App.exitApp();
-    };
-
-    App.addListener('appUrlOpen', data => {
-      console.log('App opened with URL: ' + data.url);
-      if (data.url.includes('geocode://')) {
-        // Remove 'geocode:/' from URL to get the address that the router should use. Also strip any parameters from the end
-        const target = data.url.substring(9).split('?')[0];
-        this.router.navigate([target]).then().catch();
-      }
-    });
+    if (this.platform.is('capacitor')) {
+      this.keycloakInstance.onAuthLogout = () => {
+        /* Force close to reset keycloak and prevent issues when logging in again */
+        App.exitApp();
+      };
+      App.addListener('appUrlOpen', data => {
+        if (data.url.includes('geocode://')) {
+          // Remove 'geocode:/' from URL to get the address that the router should use. Also strip any parameters from the end
+          const target = data.url.substring(9).split('?')[0];
+          this.router.navigate([target]).then().catch();
+        }
+      });
+    }
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
       this.mediator.themeChanged.send(event.matches);
