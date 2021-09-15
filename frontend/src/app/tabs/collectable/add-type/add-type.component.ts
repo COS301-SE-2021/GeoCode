@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ModalController, NavParams, ToastController} from '@ionic/angular';
+import {AlertController, ModalController, NavParams, ToastController} from '@ionic/angular';
 import {
   CollectableService, CollectableTypeComponent,
   CreateCollectableTypeRequest, ImageService, MissionType,
@@ -32,6 +32,7 @@ export class AddTypeComponent {
     private collectableService: CollectableService,
     private toastController: ToastController,
     private imageService: ImageService,
+    private alertCtrl: AlertController,
     navParams: NavParams
   ) {
     this.request.setId = navParams.data.setID;
@@ -56,7 +57,12 @@ export class AddTypeComponent {
     if (response.success) {
       await this.dismiss(response.collectableType);
     } else {
-      alert(response.message);
+      const alert = await this.alertCtrl.create({
+        header: 'Failed',
+        message: response.message,
+        buttons: ['OK']
+      });
+      await alert.present();
     }
   }
 

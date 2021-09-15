@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
 import {CreateGeoCodeRequest, CreateGeoCodeResponse, GeoCodeService, GeoPoint} from '../../services/geocode-api';
 import {AlertController, ModalController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../services/GoogleMapsLoader';
@@ -92,7 +92,6 @@ export class CreateGeocodeComponent implements AfterViewInit {
       if(this.eventGeoCode){
         await this.dismiss(this.request);
       }else{
-        await this.dismiss(null);
         this.geocodeAPI.createGeoCode(this.request).subscribe(async (response: CreateGeoCodeResponse) =>{
           if(!response.success){
             const toast =  await this.toastController.create({
@@ -106,6 +105,7 @@ export class CreateGeocodeComponent implements AfterViewInit {
               duration: 2000
             });
             await toast.present();
+            await this.dismiss(null);
             await this.qrGenerator.download(response.createdGeocode.qrCode);
           }
         });
@@ -146,7 +146,7 @@ export class CreateGeocodeComponent implements AfterViewInit {
   }
 
   async addHint() {
-    const alert = this.alertController.create({
+    const alert = await this.alertController.create({
       header: 'Add Hint',
       message: 'Please enter a hint description',
       inputs: [
@@ -173,7 +173,7 @@ export class CreateGeocodeComponent implements AfterViewInit {
         }
       ]
     });
-    (await alert).present();
+    await alert.present();
 
   }
 

@@ -103,7 +103,12 @@ export class OpenGeocodePage implements AfterViewInit {
       }
     } else {
       console.log(response);
-      alert('Incorrect QR code!');
+      const alert = await this.alertCtrl.create({
+        header: 'Error',
+        message: 'Incorrect QR code!',
+        buttons: ['OK']
+      });
+      await alert.present();
       await this.goBack(false);
     }
 
