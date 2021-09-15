@@ -81,6 +81,15 @@ public class BlocklyEventDecorator extends EventDecorator{
         return this.problemDescription;
     }
 
+    @Override
+    public void handleEventStart(UserEventStatus status) {
+        /* Let other decorators manipulate the status */
+        super.handleEventStart(status);
+
+        /* Put empty block list in status */
+        status.getDetails().put("blocks", "");
+    }
+
     /**
      * Randomly selects what blockly blocks for an event to give a user and ensures they are not ones already given to them
      * @param stageNumber The index of the stage that was just completed
@@ -139,9 +148,6 @@ public class BlocklyEventDecorator extends EventDecorator{
         }
 
         /* update the hashmap */
-        Map<String, String> temp = new HashMap<>();
-        temp.put("blocks", userBlocks);
-
-        status.setDetails(temp);
+        status.getDetails().put("blocks", userBlocks);
     }
 }

@@ -5,7 +5,7 @@ import {
   EventService,
   GeoCodeService
 } from '../../../services/geocode-api';
-import {AlertController, ModalController, NavController, ToastController} from '@ionic/angular';
+import {AlertController, ModalController, NavController, PickerController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {CreateGeocodeComponent} from '../../../components/create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
@@ -26,14 +26,12 @@ export class EventsCreatePage implements AfterViewInit  {
   markers= [];
   geocodes= [];
   selected=[];
-  type='event';
-  timeHidden=true;
-  blockHidden =true;
+  isBlockly = false;
   challengeHidden=true;
   height='0%';
   minDate;
   minEndDate;
-  timeLimit=0;
+  timeLimit=null;
   blockly ={
     testCases:[],
     blocks:[],
@@ -57,7 +55,8 @@ export class EventsCreatePage implements AfterViewInit  {
     private toastController: ToastController,
     private eventApi: EventService,
     private qrGenerator: QRGenerator,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private pickerCtrl: PickerController
   ) {
   }
 
@@ -108,20 +107,6 @@ export class EventsCreatePage implements AfterViewInit  {
     }
   }
 
-  eventType($event){
-    this.type=$event.detail.value;
-    if($event.detail.value ==='timetrial'){
-      this.blockHidden=true;
-      this.timeHidden=false;
-    }else if($event.detail.value === 'challenge'){
-      this.timeHidden=true;
-      this.blockHidden=false;
-    }else{
-      this.timeHidden=true;
-      this.blockHidden=true;
-    }
-  }
-
   orderBy($event){
     this.request.orderBy=$event.detail.value;
   }
@@ -139,13 +124,15 @@ export class EventsCreatePage implements AfterViewInit  {
 
   async createEvent(){
 
-    if(this.type==='challenge'){
+    if(this.isBlockly){
       this.request.properties.testCases = JSON.stringify(this.blockly.testCases);
       this.request.properties.problemDescription = this.blockly.problemDescription;
       this.request.properties.blocks = JSON.stringify(this.blockly.blocks);
-    }else if(this.type ==='timetrial'){
-      this.request.properties.timeLimit=this.timeLimit +'';
     }
+    const day = this.timeLimit.days;
+    const hour = this.timeLimit.hours;
+    const min = this.timeLimit.minutes;
+    this.request.properties.timeLimit = ''+(day*24*60+hour*60+min);
     console.log(this.request);
     const response = await this.eventApi.createEvent(this.request).toPromise();
     if (response.success) {
@@ -173,14 +160,6 @@ export class EventsCreatePage implements AfterViewInit  {
     this.request.description=$event.detail.value;
   }
 
-  setTime($event){
-    const time = new Date($event.detail.value);
-    const day = time.getDate();
-    const hour = time.getHours();
-    const min = time.getMinutes();
-    this.timeLimit = day*24*60+hour*60+min;
-  }
-
  async createBlockly(){
     const modal = await this.modalController.create({
       component: EventsCreateBlocklyComponent,
@@ -199,5 +178,32 @@ export class EventsCreatePage implements AfterViewInit  {
   updateProblemDescription($event){
     this.blockly.problemDescription=$event.detail.value;
   }
+
+  async selectTimeLimit() {
+    const daysColumn = { name: 'days', options: [] };
+    for (let i = 0; i < 7; i++) { daysColumn.options.push({ text: i+'d', value: i }); }
+    const hoursColumn = { name: 'hours', options: [] };
+    for (let i = 0; i < 24; i++) { hoursColumn.options.push({ text: i+'h', value: i }); }
+    const minutesColumn = { name: 'minutes', options: [] };
+    for (let i = 0; i < 60; i++) { minutesColumn.options.push({ text: i+'m', value: i }); }
+    const picker = await this.pickerCtrl.create({
+      columns: [daysColumn, hoursColumn, minutesColumn],
+      buttons: [{
+        text: 'Cancel'
+      }, {
+        text: 'Confirm',
+        handler: (value) => {
+          this.timeLimit = {
+            days: value.days.value,
+            hours: value.hours.value,
+            minutes: value.minutes.value
+          };
+        },
+      }],
+    });
+
+    await picker.present();
+  }
+
 
 }

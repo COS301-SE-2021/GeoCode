@@ -154,15 +154,13 @@ public class EventServiceImpl implements EventService {
             event.setAvailable( request.isAvailable() );
         }
 
-        /* check if the Event is a Blockly Event */
         var properties = request.getProperties();
 
-        if(properties.containsKey("timeLimit")) {
-            if(properties.size() > 1){
-                return new CreateEventResponse(false, "Time trials only specify the time limit in the extra properties");
-            }
-        }else if(!properties.isEmpty()){
-            /* check if all properties were specified */
+        var isOnlyTimeTrial = ( ( properties.size() == 1 ) && ( properties.containsKey( "timeLimit" ) ) );
+
+        if( !properties.isEmpty() && !isOnlyTimeTrial ){
+            /* check if the Event is a Blockly Event */
+            /* check if all Blockly properties were specified */
             if( !properties.containsKey("problemDescription") ){
                 return new CreateEventResponse( false, "Problem description not specified for the Blockly Event");
             }
@@ -420,14 +418,6 @@ public class EventServiceImpl implements EventService {
 
                 /* Create a new status object with the geocodeID set to the first geocode */
                 Map< String, String > details = new HashMap<>();
-
-                /*
-                 * if the event is a Blockly event,
-                 * add the block ids for the Event and set all the found flags to false
-                 */
-                if( eventComponent.isBlocklyEvent() ){
-                    details.put("blocks", "");
-                }
 
                 status = new UserEventStatus( UUID.randomUUID(), eventComponent.getID(), currentUserID, nextGeocodeID, details );
                 eventComponent.handleEventStart( status );

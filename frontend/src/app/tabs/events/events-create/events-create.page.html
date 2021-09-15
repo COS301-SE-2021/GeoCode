@@ -33,24 +33,23 @@
         <ion-label>End Date</ion-label>
         <ion-datetime displayFormat="MMM D YYYY" min="{{minEndDate}}" max="4000" (ionChange)="endDate($event)"></ion-datetime>
       </ion-item>
+      <ion-item button (click)="selectTimeLimit()">
+        <ion-label>Time Limit</ion-label>
+        <div slot="end">
+          <ion-label *ngIf="timeLimit === null">Select</ion-label>
+          <ion-label *ngIf="timeLimit !== null">{{timeLimit.days}}d {{timeLimit.hours}}h {{timeLimit.minutes}}m</ion-label>
+        </div>
+      </ion-item>
       <ion-item>
-        <ion-label>Event Type</ion-label>
-        <ion-select value="event" (ionChange)="eventType($event)" >
-          <ion-select-option value="event">Event</ion-select-option>
-          <ion-select-option value="timetrial">Time Trial</ion-select-option>
-          <ion-select-option value="challenge">Coding Challenge</ion-select-option>
-        </ion-select>
+        <ion-label>Coding Challenge</ion-label>
+        <ion-checkbox slot="end" [(ngModel)]="isBlockly"></ion-checkbox>
       </ion-item>
-      <ion-item [hidden]="timeHidden">
-        <ion-label>Time Limit(days:hours:minutes)</ion-label>
-        <ion-datetime displayFormat="D:HH:mm" (ionChange)="setTime($event)" ></ion-datetime>
-      </ion-item>
-      <ion-list>
-        <ion-item [hidden]="blockHidden">
+      <ion-list [hidden]="!isBlockly">
+        <ion-item>
           <ion-label>Design coding challenge</ion-label>
           <ion-button color="button"  (click)="createBlockly()" >Create +</ion-button>
         </ion-item>
-        <ion-item [hidden]="blockHidden">
+        <ion-item>
           <ion-textarea type="text" placeholder="Challenge Instructions" (ionChange)="updateProblemDescription($event)" ></ion-textarea>
         </ion-item>
       </ion-list>
