@@ -107,6 +107,11 @@ public class CollectableServiceImpl implements CollectableService {
         if(collectableTypeOptional.isPresent()){
             Collectable collectable = new Collectable(collectableTypeOptional.get());
 
+            if (!collectable.getType().getId().equals(new UUID(0, 0))) {
+                /* Non user-trackables should set their initial location */
+                collectable.changeLocation(request.getLocation());
+            }
+
             Collectable savedCollectable = collectableRepo.save(collectable);
             if(request.isCreateMission()) {
                 CreateMissionRequest createMissionRequest = new CreateMissionRequest(savedCollectable, request.getLocation());
