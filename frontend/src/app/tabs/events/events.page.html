@@ -18,8 +18,14 @@
             <ion-select-option value="0">No radius limit</ion-select-option>
           </ion-select></ion-col>
           <ion-col id="list-col" >
-            <ion-button class="listView" color="card" [hidden]="listView"  (click)="toggleList()"><ion-icon name="list-outline"></ion-icon></ion-button>
-            <ion-button [hidden]="!listView" color="card" (click)="toggleList()"><ion-icon name="map-outline"></ion-icon></ion-button>
+            <ion-button [hidden]="listView"  color="button" (click)="toggleList()">
+              <ion-icon name="list-outline"></ion-icon>
+              <ion-label>Show as List</ion-label>
+            </ion-button>
+            <ion-button [hidden]="!listView" color="button" (click)="toggleList()">
+              <ion-icon name="map-outline"></ion-icon>
+              <ion-label>Show on Map</ion-label>
+            </ion-button>
           </ion-col>
         </ion-row>
 
