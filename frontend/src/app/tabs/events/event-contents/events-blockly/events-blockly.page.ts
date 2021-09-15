@@ -18,7 +18,7 @@ export class EventsBlocklyPage implements OnInit {
   event: Event = null;
   eventID: string = null;
   status: UserEventStatus = null;
-  blocks: {[blockName: string]: number} = {};
+  blocks: {[blockName: string]: number} = null;
 
   testCases: string[][] = null;
 
@@ -36,6 +36,7 @@ export class EventsBlocklyPage implements OnInit {
       this.event = state.event;
       this.eventID = this.event.id;
       this.status = state.status;
+      this.blocks = this.loadBlocks();
     } else {
       this.eventID = route.snapshot.paramMap.get('eventID');
     }
@@ -49,13 +50,18 @@ export class EventsBlocklyPage implements OnInit {
       ).toPromise();
       this.event = responses[0].foundEvent;
       this.status = responses[1].status;
+      this.blocks = this.loadBlocks();
+    }
+  }
 
-      for (const block of this.status.details.blocks.split('#')) {
-        if (block !== '') {
-          this.blocks[block] = 999;
-        }
+  loadBlocks() {
+    const output = {};
+    for (const block of this.status.details.blocks.split('#')) {
+      if (block !== '') {
+        output[block] = 999;
       }
     }
+    return output;
   }
 
   async submitOutput() {
