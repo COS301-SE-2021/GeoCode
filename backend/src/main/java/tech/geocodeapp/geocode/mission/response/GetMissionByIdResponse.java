@@ -11,6 +11,8 @@ public class GetMissionByIdResponse extends Response {
   @JsonProperty("mission")
   private Mission mission;
 
+  public GetMissionByIdResponse() {}
+
   public GetMissionByIdResponse(boolean success, String message, Mission mission){
     super(success, message);
     this.mission = mission;

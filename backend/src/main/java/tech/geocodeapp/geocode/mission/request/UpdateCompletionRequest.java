@@ -11,6 +11,8 @@ public class UpdateCompletionRequest {
     @JsonProperty("location")
     private GeoPoint location;
 
+    public UpdateCompletionRequest() {}
+
     public UpdateCompletionRequest(Mission mission, GeoPoint location) {
         this.mission = mission;
         this.location = location;
