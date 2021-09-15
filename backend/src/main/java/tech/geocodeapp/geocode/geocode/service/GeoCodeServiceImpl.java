@@ -1014,9 +1014,10 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      */
     public CollectableTypeComponent calculateCollectableType( List< CollectableTypeComponent > items ) {
 
-        if ( items.size() == 0 ) {
-
-            /* No items */
+        var noTypesAvailable = ( items.isEmpty() );
+        var onlyUserTrackable = ( items.size() == 1 && items.get(0).getId().equals( new UUID( 0, 0 ) ) );
+        if ( noTypesAvailable || onlyUserTrackable ) {
+            /* No eligible items */
             return null;
         }
 
