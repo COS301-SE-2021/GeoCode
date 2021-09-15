@@ -7,7 +7,6 @@ import {AlertController} from '@ionic/angular';
 import DarkTheme from '@blockly/theme-dark';
 import {Mediator} from '../../services/Mediator';
 import {Subscription} from 'rxjs';
-import DynamicCategoryInfo = Blockly.utils.toolbox.DynamicCategoryInfo;
 
 @Component({
   selector: 'app-blockly',
@@ -47,7 +46,15 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  async sleep(milliseconds: number) {
+    return new Promise<void>(resolve => setTimeout(resolve, milliseconds));
+  }
+
   async ngAfterViewInit() {
+    while (document.getElementById('blocklyDiv') === null) {
+      await this.sleep(100);
+    }
+
     if (this.toolboxBlocks !== null) {
       this.readInputToolbox();
     } else {
@@ -55,7 +62,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     }
     this.workspace = Blockly.inject(this.blocklyDiv.nativeElement, this.config);
 
-    setTimeout(() => this.forceResize(), 500);
+    setTimeout(this.forceResize, 500);
 
     // May need to call this inside the timeout
     if (this.savedProgramID !== null) {
