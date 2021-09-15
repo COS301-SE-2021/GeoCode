@@ -6,13 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tech.geocodeapp.geocode.collectable.model.Rarity;
-import tech.geocodeapp.geocode.collectable.request.*;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableRequest;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableSetRequest;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableTypeRequest;
+import tech.geocodeapp.geocode.collectable.request.GetCollectableTypesBySetRequest;
 import tech.geocodeapp.geocode.collectable.response.*;
-import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.collectable.service.CollectableService;
+import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.mission.MissionMockRepository;
 import tech.geocodeapp.geocode.mission.service.MissionService;
-import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
 
 import java.util.UUID;
 
@@ -30,9 +32,9 @@ public class CollectableServiceImplTest {
     @BeforeEach
     void setup() {
         collectableService = new CollectableServiceImpl(new CollectableMockRepository(), new CollectableSetMockRepository(), new CollectableTypeMockRepository(), missionService);
-            collectableService.deleteCollectableSets();
-            collectableService.deleteCollectables();
-            collectableService.deleteCollectableTypes();
+        collectableService.deleteCollectableSets();
+        collectableService.deleteCollectables();
+        collectableService.deleteCollectableTypes();
     }
 
     @Test
