@@ -790,6 +790,7 @@ public class UserServiceImplIT {
     @Transactional
     void getFoundCollectableTypesTestValidUser() {
         try{
+            createCollectableTypes();
             addFirstTwoGeoCodes();
             addFoundGeoCodesForUser1();
 
@@ -842,6 +843,7 @@ public class UserServiceImplIT {
     @Transactional
     void getFoundGeoCodesTestValidUser() {
         try{
+            createCollectableTypes();
             addFirstTwoGeoCodes();
             addFoundGeoCodesForUser1();
 
@@ -895,6 +897,7 @@ public class UserServiceImplIT {
     @Transactional
     void getOwnedGeoCodesTestValidUser() {
         try{
+            createCollectableTypes();
             addFirstTwoGeoCodes();
 
             /*
@@ -1054,6 +1057,7 @@ public class UserServiceImplIT {
     @Transactional
     public void AddToOwnedGeoCodesTestNotAddDuplicate() throws InvalidRequestException {
         try {
+            createCollectableTypes();
             addFirstTwoGeoCodes();
             
             var response = addToOwnedGeoCodes(validUserId, secondGeoCodeID);
@@ -1078,6 +1082,7 @@ public class UserServiceImplIT {
     @Transactional
     public void AddToOwnedGeoCodesTestAddNew(){
         try {
+            createCollectableTypes();
             addFirstTwoGeoCodes();
 
             //create the third GeoCode
@@ -1108,6 +1113,7 @@ public class UserServiceImplIT {
     @Transactional
     public void AddToFoundGeoCodesTestNotAddDuplicate(){
         try {
+            createCollectableTypes();
             addFirstTwoGeoCodes();
             addFoundGeoCodesForUser1();
 
@@ -1126,6 +1132,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void AddToFoundGeoCodesTestAddNew() throws NullRequestParameterException, InvalidRequestException {
+        createCollectableTypes();
         addFirstTwoGeoCodes();
         addFoundGeoCodesForUser1();
 
@@ -1158,6 +1165,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void AddToFoundCollectableTypesTestNotAddDuplicate() throws NullRequestParameterException, InvalidRequestException {
+        createCollectableTypes();
         addFirstTwoGeoCodes();
         addFoundGeoCodesForUser1();
 
@@ -1185,6 +1193,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void AddToFoundCollectableTypesTestAddNew() throws NullRequestParameterException, InvalidRequestException {
+        createCollectableTypes();
         addFirstTwoGeoCodes();
         addFoundGeoCodesForUser1();
 
@@ -1310,6 +1319,7 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void swapCollectableTestCollectableIsSwapped() throws NullRequestParameterException, InvalidRequestException {
+        createCollectableTypes();
         addFirstTwoGeoCodes();
 
         try {
