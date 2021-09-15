@@ -18,7 +18,7 @@ export class CreateGeocodeComponent implements AfterViewInit {
   mapOptions;
   hints = [];
   difficulty;
-  marker;
+  marker = null;
   geoLocation: GeoPoint={latitude:0,longitude:0};
 //Request object to be updated as fields change
   request: CreateGeoCodeRequest= {
@@ -137,6 +137,9 @@ export class CreateGeocodeComponent implements AfterViewInit {
 
   //Place map marker based on user click listener
   placeMarker(location){
+    if (this.marker !== null) {
+      this.marker.setMap(null);
+    }
     this.marker = new this.googleMaps.Marker({
         map,
         animation: this.googleMaps.Animation.DROP,
