@@ -6,7 +6,7 @@ import {KeycloakInstance} from 'keycloak-js';
 import {Locator} from './services/Locator';
 import {Mediator} from './services/Mediator';
 import {Storage} from '@ionic/storage-angular';
-import {Platform} from '@ionic/angular';
+import {AlertController, Platform} from '@ionic/angular';
 import {CurrentUserDetails} from './services/CurrentUserDetails';
 import {UserService} from './services/geocode-api';
 
@@ -27,7 +27,8 @@ export class AppComponent implements OnInit {
     private storage: Storage,
     private platform: Platform,
     private currentUser: CurrentUserDetails,
-    private userService: UserService
+    private userService: UserService,
+    private alertCtrl: AlertController
   ) {
     this.keycloakInstance = this.keycloak.getKeycloakInstance();
 
@@ -88,7 +89,12 @@ export class AppComponent implements OnInit {
       }
 
     } else {
-      alert('Location access is required to use GeoCode.');
+      const alert = await this.alertCtrl.create({
+        header: 'Error',
+        message: 'Location access is required to use GeoCode.',
+        buttons: ['OK']
+      });
+      await alert.present();
       await this.logout();
     }
   }

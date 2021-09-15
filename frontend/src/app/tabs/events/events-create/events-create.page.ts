@@ -5,7 +5,7 @@ import {
   EventService,
   GeoCodeService
 } from '../../../services/geocode-api';
-import {ModalController, NavController, ToastController} from '@ionic/angular';
+import {AlertController, ModalController, NavController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
 import {CreateGeocodeComponent} from '../../../components/create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
@@ -49,13 +49,15 @@ export class EventsCreatePage implements AfterViewInit  {
     endDate:null,
     properties:{}
   };
-  constructor(      private modalController: ModalController,
-                    private navCtrl: NavController,
-                    private geocodeApi: GeoCodeService,
-                    private mapsLoader: GoogleMapsLoader,
-                    private toastController: ToastController,
-                    private eventApi: EventService,
-                    private qrGenerator: QRGenerator
+  constructor(
+    private modalController: ModalController,
+    private navCtrl: NavController,
+    private geocodeApi: GeoCodeService,
+    private mapsLoader: GoogleMapsLoader,
+    private toastController: ToastController,
+    private eventApi: EventService,
+    private qrGenerator: QRGenerator,
+    private alertCtrl: AlertController
   ) {
   }
 
@@ -153,7 +155,12 @@ export class EventsCreatePage implements AfterViewInit  {
       this.navCtrl.navigateBack('/events').then().catch();
     } else {
       console.log(response);
-      alert(response.message);
+      const alert = await this.alertCtrl.create({
+        header: 'Error',
+        message: response.message,
+        buttons: ['OK']
+      });
+      await alert.present();
     }
 
   }
