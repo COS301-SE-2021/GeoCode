@@ -11,11 +11,17 @@ public class GetMissionByIdRequest {
   @JsonProperty("missionID")
   private UUID missionID;
 
+  public GetMissionByIdRequest() {}
+
   public GetMissionByIdRequest(UUID missionID) {
     this.missionID = missionID;
   }
 
   public UUID getMissionID() {
     return missionID;
+  }
+
+  public void setMissionID(UUID missionID) {
+    this.missionID = missionID;
   }
 }
