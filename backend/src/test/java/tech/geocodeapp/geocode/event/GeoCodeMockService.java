@@ -87,7 +87,7 @@ public class GeoCodeMockService implements GeoCodeService {
     }
 
     @Override
-    public GetGeoCodeByLocationResponse getGeoCodeByLocation(GetGeoCodeByLocationRequest request) throws InvalidRequestException {
+    public GetGeoCodesByLocationResponse getGeoCodesByLocation(GetGeoCodesByLocationRequest request) throws InvalidRequestException {
         return null;
     }
 

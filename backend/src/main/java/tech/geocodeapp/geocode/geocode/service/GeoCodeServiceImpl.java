@@ -748,7 +748,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public GetGeoCodeByLocationResponse getGeoCodeByLocation(GetGeoCodeByLocationRequest request ) throws InvalidRequestException {
+    public GetGeoCodesByLocationResponse getGeoCodesByLocation(GetGeoCodesByLocationRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -777,7 +777,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and set its values
          */
-        return new GetGeoCodeByLocationResponse( temp.get( x ).getId(), temp.get( x ).isAvailable(),
+        return new GetGeoCodesByLocationResponse( temp.get( x ).getId(), temp.get( x ).isAvailable(),
                                                  temp.get( x ).getDescription(), temp.get( x ).getLocation(),
                                                  temp.get( x ).getDifficulty() );
     }

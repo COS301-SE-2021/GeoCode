@@ -129,7 +129,7 @@ public interface GeoCodeService {
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    GetGeoCodeByLocationResponse getGeoCodeByLocation(GetGeoCodeByLocationRequest request ) throws InvalidRequestException;
+    GetGeoCodesByLocationResponse getGeoCodesByLocation(GetGeoCodesByLocationRequest request ) throws InvalidRequestException;
 
     /**
      * Finds the stored GeoCode associated at the given location and returns its Collectables

@@ -93,15 +93,15 @@ public interface GeoCodeApi {
     @Operation( summary = "Get the GeoCode at or near the given location", description = "Get the GeoCode at or near the given location", security = {
             @SecurityRequirement( name = "bearerAuth" ) }, tags = { "GeoCode" } )
     @ApiResponses( value = {
-            @ApiResponse( responseCode = "200", description = "Return the GeoCodec at or near the given location", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetGeoCodeByLocationResponse.class ) ) ),
+            @ApiResponse( responseCode = "200", description = "Return the GeoCodec at or near the given location", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetGeoCodesByLocationResponse.class ) ) ),
 
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
-            @ApiResponse( responseCode = "404", description = "Return the GeoCode was not found", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetGeoCodeByLocationResponse.class ) ) ) } )
+            @ApiResponse( responseCode = "404", description = "Return the GeoCode was not found", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetGeoCodesByLocationResponse.class ) ) ) } )
     @PostMapping( value = "/GeoCode/getGeoCodeByLocation",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity< GetGeoCodeByLocationResponse > getGeoCodeByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get a GeoCode at or near the given location", required = true, schema = @Schema() ) @Valid @RequestBody GetGeoCodeByLocationRequest body ) throws InvalidRequestException;
+    ResponseEntity<GetGeoCodesByLocationResponse> getGeoCodeByLocation(@Parameter( in = ParameterIn.DEFAULT, description = "Request to get a GeoCode at or near the given location", required = true, schema = @Schema() ) @Valid @RequestBody GetGeoCodesByLocationRequest body ) throws InvalidRequestException;
 
 
     @Operation( summary = "Get the GeoCode associated with the given QR Code", description = "Get the GeoCode associated with the given QR Code", security = {

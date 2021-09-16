@@ -1251,7 +1251,7 @@ class GeoCodeServiceImplTest {
     void getGeoCodesByLocationNullRequestTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> geoCodeService.getGeoCodeByLocation( null ) )
+        assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( null ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqEmptyError );
     }
@@ -1268,11 +1268,11 @@ class GeoCodeServiceImplTest {
          *  Create a request object
          * and assign values to it
          */
-        GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
+        GetGeoCodesByLocationRequest request = new GetGeoCodesByLocationRequest();
         request.setLocation( null );
 
         /* Null parameter request check */
-        assertThatThrownBy( () -> geoCodeService.getGeoCodeByLocation( request ) )
+        assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( request ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqParamError );
     }
@@ -1293,12 +1293,12 @@ class GeoCodeServiceImplTest {
         try {
 
             /* Create the request with the ID of the GeoCode we want */
-            GetGeoCodeByLocationRequest request = new GetGeoCodeByLocationRequest();
+            GetGeoCodesByLocationRequest request = new GetGeoCodesByLocationRequest();
             request.setLocation( temp.get( 0 ).getLocation() );
 
 
             /* Get the response by calling the updateAvailability use case */
-            GetGeoCodeByLocationResponse response = geoCodeService.getGeoCodeByLocation( request );
+            GetGeoCodesByLocationResponse response = geoCodeService.getGeoCodesByLocation( request );
 
             /*
              * Check if the GeoCode was created correctly

@@ -15,7 +15,7 @@ import java.util.UUID;
  * to get the specified GeoCode from the given location
  */
 @Validated
-public class GetGeoCodeByLocationResponse {
+public class GetGeoCodesByLocationResponse {
 
     /**
      * The unique ID of the found GeoCode with the specified QR Code
@@ -24,7 +24,7 @@ public class GetGeoCodeByLocationResponse {
     private UUID id = null;
 
     /**
-     * If the the found GeoCode is available to be found
+     * If the found GeoCode is available to be found
      */
     @JsonProperty( "available" )
     private Boolean available = null;
@@ -50,7 +50,7 @@ public class GetGeoCodeByLocationResponse {
     /**
      * Default constructor
      */
-    public GetGeoCodeByLocationResponse() {
+    public GetGeoCodesByLocationResponse() {
 
     }
 
@@ -63,7 +63,7 @@ public class GetGeoCodeByLocationResponse {
      * @param location The longitude and latitude of the found GeoCode
      * @param difficulty The difficulty of the found GeoCode
      */
-    public GetGeoCodeByLocationResponse( UUID id, Boolean available, String description, GeoPoint location, Difficulty difficulty ) {
+    public GetGeoCodesByLocationResponse(UUID id, Boolean available, String description, GeoPoint location, Difficulty difficulty ) {
 
         this.id = id;
         this.available = available;
@@ -79,7 +79,7 @@ public class GetGeoCodeByLocationResponse {
      *
      * @return the response after the id has been changed
      */
-    public GetGeoCodeByLocationResponse id( UUID id ) {
+    public GetGeoCodesByLocationResponse id(UUID id ) {
 
         this.id = id;
         return this;
@@ -113,7 +113,7 @@ public class GetGeoCodeByLocationResponse {
      *
      * @return the response after the available has been changed
      */
-    public GetGeoCodeByLocationResponse available( Boolean available ) {
+    public GetGeoCodesByLocationResponse available(Boolean available ) {
 
         this.available = available;
         return this;
@@ -146,7 +146,7 @@ public class GetGeoCodeByLocationResponse {
      *
      * @return the response after the description has been changed
      */
-    public GetGeoCodeByLocationResponse description( String description ) {
+    public GetGeoCodesByLocationResponse description(String description ) {
 
         this.description = description;
         return this;
@@ -179,7 +179,7 @@ public class GetGeoCodeByLocationResponse {
      *
      * @return the response after the location has been changed
      */
-    public GetGeoCodeByLocationResponse longitude( GeoPoint location ) {
+    public GetGeoCodesByLocationResponse longitude(GeoPoint location ) {
 
         this.location = location;
         return this;
@@ -212,7 +212,7 @@ public class GetGeoCodeByLocationResponse {
      *
      * @return the response after the latitude has been changed
      */
-    public GetGeoCodeByLocationResponse difficulty( Difficulty difficulty ) {
+    public GetGeoCodesByLocationResponse difficulty(Difficulty difficulty ) {
 
         this.difficulty = difficulty;
         return this;
@@ -257,7 +257,7 @@ public class GetGeoCodeByLocationResponse {
 
             return false;
         }
-        var getGeoCodeByLocationResponse = ( GetGeoCodeByLocationResponse ) obj;
+        var getGeoCodeByLocationResponse = (GetGeoCodesByLocationResponse) obj;
         return Objects.equals( this.id, getGeoCodeByLocationResponse.id ) &&
                 Objects.equals( this.available, getGeoCodeByLocationResponse.available ) &&
                 Objects.equals( this.description, getGeoCodeByLocationResponse.description ) &&

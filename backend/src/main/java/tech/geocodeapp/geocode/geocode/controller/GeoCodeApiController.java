@@ -58,12 +58,12 @@ public class GeoCodeApiController implements GeoCodeApi {
         }
     }
 
-    public ResponseEntity< GetGeoCodeByLocationResponse > getGeoCodeByLocation( @Parameter( in = ParameterIn.DEFAULT,
+    public ResponseEntity<GetGeoCodesByLocationResponse> getGeoCodeByLocation(@Parameter( in = ParameterIn.DEFAULT,
             description = "Request to get a GeoCode at or near the given location",
             required = true, schema = @Schema() )
-                                                                                @Valid @RequestBody GetGeoCodeByLocationRequest body ) throws InvalidRequestException {
+                                                                                @Valid @RequestBody GetGeoCodesByLocationRequest body ) throws InvalidRequestException {
 
-        GetGeoCodeByLocationResponse response = geoCodeService.getGeoCodeByLocation( body );
+        GetGeoCodesByLocationResponse response = geoCodeService.getGeoCodesByLocation( body );
 
         if ( ( response != null ) && ( response.getId() != null ) ) {
 
