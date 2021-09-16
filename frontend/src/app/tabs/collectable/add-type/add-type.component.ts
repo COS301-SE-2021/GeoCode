@@ -87,7 +87,7 @@ export class AddTypeComponent {
     if (file) {
       const response = await this.imageService.uploadImage(file).toPromise();
       if (response.success) {
-        this.request.image = environment.serverAddress+'/api/Image/getImage/'+response.fileName;
+        this.request.image = environment.backendServerAddress+'/api/Image/getImage/'+response.fileName;
       } else {
         this.request.image = null;
       }
