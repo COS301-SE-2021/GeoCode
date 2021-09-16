@@ -106,11 +106,11 @@ public class GeoCodeApiController implements GeoCodeApi {
         }
     }
 
-    public ResponseEntity< GetCollectablesInGeoCodesByLocationResponse > getCollectablesInGeoCodesByLocation( @Parameter( in = ParameterIn.DEFAULT,
+    public ResponseEntity<GetCollectablesInGeoCodeByLocationResponse> getCollectablesInGeoCodesByLocation(@Parameter( in = ParameterIn.DEFAULT,
             description = "Request to get a GeoCode's collectables at or near the given location", required = true, schema = @Schema() )
-                                                                                                              @Valid @RequestBody GetCollectablesInGeoCodesByLocationRequest body ) throws InvalidRequestException {
+                                                                                                              @Valid @RequestBody GetCollectablesInGeoCodeByLocationRequest body ) throws InvalidRequestException {
 
-        GetCollectablesInGeoCodesByLocationResponse response = geoCodeService.getCollectablesInGeoCodesByLocation( body );
+        GetCollectablesInGeoCodeByLocationResponse response = geoCodeService.getCollectablesInGeoCodeByLocation( body );
 
         if ( response != null ) {
 

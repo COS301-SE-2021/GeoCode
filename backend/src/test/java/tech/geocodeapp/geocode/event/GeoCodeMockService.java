@@ -113,7 +113,7 @@ public class GeoCodeMockService implements GeoCodeService {
     }
 
     @Override
-    public GetCollectablesInGeoCodesByLocationResponse getCollectablesInGeoCodesByLocation(GetCollectablesInGeoCodesByLocationRequest request) throws InvalidRequestException {
+    public GetCollectablesInGeoCodeByLocationResponse getCollectablesInGeoCodeByLocation(GetCollectablesInGeoCodeByLocationRequest request) throws InvalidRequestException {
         return null;
     }
 

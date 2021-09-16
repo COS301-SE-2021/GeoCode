@@ -140,7 +140,7 @@ public interface GeoCodeService {
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    GetCollectablesInGeoCodesByLocationResponse getCollectablesInGeoCodesByLocation( GetCollectablesInGeoCodesByLocationRequest request ) throws InvalidRequestException;
+    GetCollectablesInGeoCodeByLocationResponse getCollectablesInGeoCodeByLocation(GetCollectablesInGeoCodeByLocationRequest request ) throws InvalidRequestException;
 
     /**
      * Swaps a stored Collectable in a GeoCode with the Users GeoCode
@@ -174,7 +174,7 @@ public interface GeoCodeService {
     /**
      * Determines what type of collectable to create
      * <p>
-     * NOTE: a collectable of Type Rarity is a user Trackable and will not be considered
+     * NOTE: a collectable type with an all-zero ID is a user Trackable and will not be considered
      */
     CollectableTypeComponent calculateCollectableType( List< CollectableTypeComponent > items );
 

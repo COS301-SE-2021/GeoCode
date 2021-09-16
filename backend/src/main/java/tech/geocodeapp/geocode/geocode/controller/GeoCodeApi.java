@@ -64,15 +64,15 @@ public interface GeoCodeApi {
     @Operation( summary = "Get the GeoCode's collectables at or near the given location", description = "Get the GeoCode's collectables at or near the given location", security = {
             @SecurityRequirement( name = "bearerAuth" ) }, tags = { "GeoCode" } )
     @ApiResponses( value = {
-            @ApiResponse( responseCode = "200", description = "Return the GeoCodec at or near the given location", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetCollectablesInGeoCodesByLocationResponse.class ) ) ),
+            @ApiResponse( responseCode = "200", description = "Return the GeoCodec at or near the given location", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetCollectablesInGeoCodeByLocationResponse.class ) ) ),
 
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
-            @ApiResponse( responseCode = "404", description = "Return the GeoCode's collectables was not found", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetCollectablesInGeoCodesByLocationResponse.class ) ) ) } )
+            @ApiResponse( responseCode = "404", description = "Return the GeoCode's collectables was not found", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetCollectablesInGeoCodeByLocationResponse.class ) ) ) } )
     @PostMapping( value = "/GeoCode/getCollectablesInGeoCodesByLocation",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity< GetCollectablesInGeoCodesByLocationResponse > getCollectablesInGeoCodesByLocation( @Parameter( in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's collectables at or near the given location", required = true, schema = @Schema() ) @Valid @RequestBody GetCollectablesInGeoCodesByLocationRequest body ) throws InvalidRequestException;
+    ResponseEntity<GetCollectablesInGeoCodeByLocationResponse> getCollectablesInGeoCodesByLocation(@Parameter( in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's collectables at or near the given location", required = true, schema = @Schema() ) @Valid @RequestBody GetCollectablesInGeoCodeByLocationRequest body ) throws InvalidRequestException;
 
 
     @Operation( summary = "Get a specific GeoCode", description = "Get a GeoCode with a specified ID", security = {

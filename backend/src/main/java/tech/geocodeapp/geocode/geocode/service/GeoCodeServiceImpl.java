@@ -757,7 +757,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public GetCollectablesInGeoCodesByLocationResponse getCollectablesInGeoCodesByLocation( GetCollectablesInGeoCodesByLocationRequest request ) throws InvalidRequestException {
+    public GetCollectablesInGeoCodeByLocationResponse getCollectablesInGeoCodeByLocation(GetCollectablesInGeoCodeByLocationRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -783,13 +783,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Get the collectables from the found GeoCode */
-        ArrayList< Collectable > storedCollectable = getCollectable( temp.get( x ) );
+        ArrayList< Collectable > storedCollectables = getCollectable( temp.get( x ) );
 
         /*
          * Create the new response
          * and set its values
          */
-        return new GetCollectablesInGeoCodesByLocationResponse( storedCollectable );
+        return new GetCollectablesInGeoCodeByLocationResponse( storedCollectables );
     }
 
     /**

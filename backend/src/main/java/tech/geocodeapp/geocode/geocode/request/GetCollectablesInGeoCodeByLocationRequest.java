@@ -7,11 +7,11 @@ import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import java.util.Objects;
 
 /**
- * GetCollectablesInGeoCodesByLocationRequest used to specify the attributes needed to find a specific GeoCode
+ * GetCollectablesInGeoCodeByLocationRequest used to specify the attributes needed to find a specific GeoCode
  * by its longitude and latitude
  */
 @Validated
-public class GetCollectablesInGeoCodesByLocationRequest {
+public class GetCollectablesInGeoCodeByLocationRequest {
 
     /**
      * The location of the GeoCode in the real world
@@ -22,7 +22,7 @@ public class GetCollectablesInGeoCodesByLocationRequest {
     /**
      * Default constructor
      */
-    public GetCollectablesInGeoCodesByLocationRequest() {
+    public GetCollectablesInGeoCodeByLocationRequest() {
 
     }
 
@@ -31,7 +31,7 @@ public class GetCollectablesInGeoCodesByLocationRequest {
      *
      * @param location The longitude and latitude of the GeoCode in the real world
      */
-    public GetCollectablesInGeoCodesByLocationRequest( GeoPoint location ) {
+    public GetCollectablesInGeoCodeByLocationRequest(GeoPoint location ) {
 
         this.location = location;
     }
@@ -43,7 +43,7 @@ public class GetCollectablesInGeoCodesByLocationRequest {
      *
      * @return the request after the location has been changed
      */
-    public GetCollectablesInGeoCodesByLocationRequest location( GeoPoint location ) {
+    public GetCollectablesInGeoCodeByLocationRequest location(GeoPoint location ) {
 
         this.location = location;
         return this;
@@ -88,7 +88,7 @@ public class GetCollectablesInGeoCodesByLocationRequest {
             return false;
         }
 
-        return Objects.equals( this.location, ( ( GetCollectablesInGeoCodesByLocationRequest ) obj ).location );
+        return Objects.equals( this.location, ( (GetCollectablesInGeoCodeByLocationRequest) obj ).location );
     }
 
     /**
