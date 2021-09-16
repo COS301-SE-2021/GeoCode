@@ -173,7 +173,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
       };
 
       const interpreter = new Interpreter(code, (interpreter2, scope) => {
-        const promptWrapper = async (text, callback) => {
+        interpreter2.setProperty(scope, 'prompt', interpreter2.createAsyncFunction(async (text, callback) => {
           const input = await inputFunction(text);
           if (input !== null) {
             callback(input);
@@ -181,10 +181,8 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
           } else {
             reject('User stopped execution');
           }
-        };
-        interpreter2.setProperty(scope, 'prompt', interpreter2.createAsyncFunction(promptWrapper));
-        const alertWrapper = async (text, callback) => {
-          console.log(text);
+        }));
+        interpreter2.setProperty(scope, 'alert', interpreter2.createAsyncFunction(async (text, callback) => {
           const continueExecution = await outputFunction(text);
           if (continueExecution) {
             callback();
@@ -192,8 +190,8 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
           } else {
             reject('User stopped execution');
           }
-        };
-        interpreter2.setProperty(scope, 'alert', interpreter2.createAsyncFunction(alertWrapper));
+        }));
+        interpreter2.setProperty(scope, 'Number', interpreter2.createNativeFunction((text) => Number(text)));
       });
 
       run(interpreter);
