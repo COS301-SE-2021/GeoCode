@@ -63,7 +63,7 @@ public class GeoCodeApiController implements GeoCodeApi {
             required = true, schema = @Schema() )
                                                                                 @Valid @RequestBody GetGeoCodeByLocationRequest body ) throws InvalidRequestException {
 
-        GetGeoCodeByLocationResponse response = geoCodeService.getGeoCodesByLocation( body );
+        GetGeoCodeByLocationResponse response = geoCodeService.getGeoCodeByLocation( body );
 
         if ( ( response != null ) && ( response.getId() != null ) ) {
 

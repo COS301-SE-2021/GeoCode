@@ -1251,7 +1251,7 @@ class GeoCodeServiceImplTest {
     void getGeoCodesByLocationNullRequestTest() {
 
         /* Null request check */
-        assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( null ) )
+        assertThatThrownBy( () -> geoCodeService.getGeoCodeByLocation( null ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqEmptyError );
     }
@@ -1272,7 +1272,7 @@ class GeoCodeServiceImplTest {
         request.setLocation( null );
 
         /* Null parameter request check */
-        assertThatThrownBy( () -> geoCodeService.getGeoCodesByLocation( request ) )
+        assertThatThrownBy( () -> geoCodeService.getGeoCodeByLocation( request ) )
                 .isInstanceOf( InvalidRequestException.class )
                 .hasMessageContaining( reqParamError );
     }
@@ -1298,7 +1298,7 @@ class GeoCodeServiceImplTest {
 
 
             /* Get the response by calling the updateAvailability use case */
-            GetGeoCodeByLocationResponse response = geoCodeService.getGeoCodesByLocation( request );
+            GetGeoCodeByLocationResponse response = geoCodeService.getGeoCodeByLocation( request );
 
             /*
              * Check if the GeoCode was created correctly
