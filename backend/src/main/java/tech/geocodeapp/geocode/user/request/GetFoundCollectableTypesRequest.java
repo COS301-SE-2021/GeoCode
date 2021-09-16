@@ -11,6 +11,8 @@ public class GetFoundCollectableTypesRequest   {
   @JsonProperty("userID")
   private UUID userID;
 
+  public GetFoundCollectableTypesRequest() {}
+
   public GetFoundCollectableTypesRequest(UUID userID){
     this.userID = userID;
   }

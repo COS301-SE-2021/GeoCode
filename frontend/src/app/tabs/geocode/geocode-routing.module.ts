@@ -8,13 +8,10 @@ const routes: Routes = [
     component: GeocodePage
   },
   {
-    path: 'open/:geocodeID',
-    loadChildren: () => import('./geocode-contents/geocode-contents.module').then(m => m.GeocodeContentsPageModule)
-  },
-  {
-    path: 'create-geocode',
-    loadChildren: () => import('./geocode-create/geocode-create.module').then(m => m.GeocodeCreatePageModule)
+    path: 'geocode/:geocodeID',
+    loadChildren: () => import('./find-geocode/find-geocode.module').then( m => m.FindGeocodePageModule)
   }
+
 ];
 
 @NgModule({

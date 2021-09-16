@@ -12,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import tech.geocodeapp.geocode.image.model.ImageFormat;
 import tech.geocodeapp.geocode.image.response.CreateImageResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,14 +25,14 @@ public interface ImageApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Image retrieved", content = @Content(mediaType = "image/gif", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "200", description = "Image retrieved", content = @Content(mediaType = "image/png", schema = @Schema(implementation = Resource.class))),
-            @ApiResponse(responseCode = "400", description = "Request does not include a valid UUID"),
+            @ApiResponse(responseCode = "400", description = "Request does not include a valid file name"),
             @ApiResponse(responseCode = "401", description = "Invalid JWT token"),
             @ApiResponse(responseCode = "404", description = "An image with the specified ID was not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error") })
-    @RequestMapping(value = "/Image/getImage/{imageID}",
+    @RequestMapping(value = "/Image/getImage/{fileName}",
             produces = { "image/gif", "image/png" },
             method = RequestMethod.GET)
-    ResponseEntity<byte[]> getImage(@Parameter(in = ParameterIn.PATH, description = "ID of the image to retrieve", required=true, schema=@Schema()) @PathVariable("imageID") UUID imageID);
+    ResponseEntity<byte[]> getImage(@Parameter(in = ParameterIn.PATH, description = "Name of the image file to retrieve", required=true, schema=@Schema()) @PathVariable("fileName") String fileName);
 
 
     @Operation(summary = "Uploads an image", description = "Uploads an image to the server and returns its ID", security = {

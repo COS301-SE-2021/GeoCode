@@ -26,11 +26,19 @@
       <ion-input (ionBlur)="updateRequest($event, 'name')"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label position="floating">Image URL</ion-label>
-      <ion-input (ionBlur)="updateRequest($event, 'image')"></ion-input>
-    </ion-item>
-    <ion-item *ngIf="request.image !== ''">
-      <img src="{{request.image}}">
+      <input #fileUploader type="file" [hidden]="true" (change)="uploadImage($event)" accept="image/png, image/jpeg, image/gif">
+      <ion-label>Image</ion-label>
+      <img id="imagePreview" *ngIf="request.image !== null" src="{{request.image}}">
+      <ion-button size="default" slot="end" color="button" (click)="fileUploader.click()">
+        <ng-template [ngIf]="request.image === null" [ngIfElse]="editImage">
+          <ion-icon name="cloud-upload-outline"></ion-icon>
+          <ion-label>Upload</ion-label>
+        </ng-template>
+        <ng-template #editImage>
+          <ion-icon name="create-outline"></ion-icon>
+          <ion-label>Change</ion-label>
+        </ng-template>
+      </ion-button>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Rarity</ion-label>

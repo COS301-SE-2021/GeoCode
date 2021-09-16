@@ -1,13 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {KeycloakService} from 'keycloak-angular';
 import {
   GeoCode,
   GeoCodeService,
   UpdateAvailabilityRequest,
   UpdateAvailabilityResponse
 } from '../../services/geocode-api';
-import {NavController} from '@ionic/angular';
+import {ModalController} from '@ionic/angular';
 import {QRGenerator} from '../../services/QRGenerator';
+import {GeocodeUpdateComponent} from '../../tabs/profile/geocodes/geocode-update/geocode-update.component';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-geocode-details',
@@ -17,13 +18,17 @@ import {QRGenerator} from '../../services/QRGenerator';
 export class GeocodeDetailsComponent implements OnInit {
 
   @Input() geocode: GeoCode;
-  @Input() parent: Component;
+  @Input() closeFunction: (() => void) = null;
+  @Input() showFindGeoCode = false;
+  @Input() showUpdateAvailability = false;
   @Input() showQR = false;
+  @Input() showEdit = false;
 
   constructor(
+    private modalController: ModalController,
     private geocodeService: GeoCodeService,
-    private keycloak: KeycloakService,
-    private navCtrl: NavController,
+    private router: Router,
+    private route: ActivatedRoute,
     private qrGenerator: QRGenerator
   ) { }
 
@@ -31,7 +36,12 @@ export class GeocodeDetailsComponent implements OnInit {
 
   //Navigate to findGeoCode page
   async findGeoCode(){
-    await this.navCtrl.navigateForward('/explore/open/'+this.geocode.id,{ state: {geocode: this.geocode} });
+    await this.router.navigate(['geocode/'+this.geocode.id], {
+      relativeTo: this.route,
+      state: {
+        geocode: this.geocode
+      }
+    });
   }
 
   //Call Geocode service and update Availability
@@ -48,16 +58,24 @@ export class GeocodeDetailsComponent implements OnInit {
     });
   }
 
-  isAdmin() {
-    return this.keycloak.isUserInRole('Admin');
-  }
-
   openInMaps() {
     window.open('https://www.google.com/maps/search/?api=1&query='+this.geocode.location.latitude+'%2C'+this.geocode.location.longitude);
   }
 
-  getQR() {
-    this.qrGenerator.generate(this.geocode.qrCode);
+  async getQR() {
+    await this.qrGenerator.download(this.geocode.qrCode, this.geocode.description);
+  }
+
+  async updateGeocode() {
+    const modal = await this.modalController.create({
+      component: GeocodeUpdateComponent,
+      swipeToClose: true,
+      componentProps: {
+        geocode: this.geocode
+      }
+    });
+    await modal.present();
+    const {data} = await modal.onDidDismiss();
   }
 
 }

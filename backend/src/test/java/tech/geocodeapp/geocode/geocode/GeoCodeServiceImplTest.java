@@ -143,8 +143,8 @@ class GeoCodeServiceImplTest {
                                                          new CollectableSetMockRepository(),
                                                          typeMockRepo, missionService );
 
-        EventMockRepository eventRepo = new EventMockRepository();
         UserEventStatusMockRepository progressLogRepo = new UserEventStatusMockRepository();
+        EventMockRepository eventRepo = new EventMockRepository(progressLogRepo);
 
         /* Mock the user service to return wanted data */
         userService = Mockito.mock( UserServiceImpl.class );
@@ -778,7 +778,7 @@ class GeoCodeServiceImplTest {
 
             var createResponse = geoCodeService.createGeoCode( createRequest );
 
-            var geoCodeID = createResponse.getGeoCodeID();
+            var geoCodeID = createResponse.getCreatedGeocode().getId();
             var request = new UpdateGeoCodeRequest();
             request.setGeoCodeID( geoCodeID );
             request.setDescription( "This is the updated description" );

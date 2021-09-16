@@ -217,7 +217,6 @@ public class GeoCodeMockRepository implements GeoCodeRepository {
     @Override
     public GeoCode findGeoCodeWithQRCode(String qrCode ) {
 
-        //System.out.println( qrCode );
         for ( Map.Entry<java.util.UUID, GeoCode> entry : map.entrySet() ) {
 
             GeoCode found = entry.getValue();

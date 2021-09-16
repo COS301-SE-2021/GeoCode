@@ -8,8 +8,9 @@ export class MockKeycloak {
 
   getKeycloakInstance() {
     return {
+      authenticated: true,
       subject: 'uuid',
-      idTokenParsed: {
+      tokenParsed: {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         preferred_username: 'username'
       }

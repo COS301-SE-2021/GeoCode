@@ -37,7 +37,6 @@ public class MockSecurity {
 
     /* Define the user ID that will be returned when a test tries to fetch the current user */
     public static void setCurrentUserID(UUID id) {
-        System.out.println("id: "+id);
         Mockito.when(authentication.getName()).thenReturn(id.toString());
     }
 

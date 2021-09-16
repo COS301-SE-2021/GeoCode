@@ -1,28 +1,28 @@
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AppComponent } from './app.component';
-import {environment} from '../environments/environment';
-import {KeycloakService} from 'keycloak-angular';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
+import {CustomComponentsModule} from './components/components.module';
+import {MockCurrentUserDetails} from './mocks/MockCurrentUserDetails';
+import {UserService} from './services/geocode-api';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {IonicModule} from '@ionic/angular';
+import {MockStorage} from './mocks/MockStorage';
+import {MockKeycloak} from './mocks/MockKeycloak';
 
 describe('AppComponent', () => {
-
-  const mockKeycloak = {
-    getKeycloakInstance: () => ({
-      authenticated: true
-    })
-  };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       providers: [
-        { provide: KeycloakService, useValue: mockKeycloak }
+        MockKeycloak.provider(),
+        MockStorage.provider(),
+        MockCurrentUserDetails.provider(),
+        UserService
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [RouterTestingModule]
+      imports: [IonicModule.forRoot(), RouterTestingModule, CustomComponentsModule, HttpClientTestingModule]
     }).compileComponents();
 
     const router = TestBed.inject(Router);

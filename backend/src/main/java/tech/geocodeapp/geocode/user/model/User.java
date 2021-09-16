@@ -215,4 +215,14 @@ public class User {
             Objects.equals(this.ownedGeocodes, user.ownedGeocodes) &&
             Objects.equals(this.missions, user.missions);
   }
+
+  /**
+   * Creates a hash code from the attributes in the class
+   *
+   * @return the created has code
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hash( id, username, trackableObject, points, currentCollectable, foundCollectableTypes, foundGeocodes, ownedGeocodes, missions );
+  }
 }

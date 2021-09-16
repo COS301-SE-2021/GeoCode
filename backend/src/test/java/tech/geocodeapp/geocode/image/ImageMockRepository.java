@@ -6,20 +6,19 @@ import tech.geocodeapp.geocode.image.repository.ImageRepository;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class ImageMockRepository implements ImageRepository {
 
-    private Map<UUID, Image> map = new HashMap<>();
+    private Map<String, Image> map = new HashMap<>();
 
     @Override
     public Image save(Image image) throws IOException {
-        map.put(image.getId(), image);
+        map.put(image.getFileName(), image);
         return image;
     }
 
     @Override
-    public Image findById(UUID id) throws IOException {
-        return map.get(id);
+    public Image findByName(String fileName) throws IOException {
+        return map.get(fileName);
     }
 }

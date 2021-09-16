@@ -17,6 +17,8 @@ public class GetEventLeaderboardRequest   {
   @JsonProperty("count")
   private Integer count;
 
+  public GetEventLeaderboardRequest() {}
+
   public GetEventLeaderboardRequest(UUID leaderboardID, Integer starting, Integer count) {
     this.leaderboardID = leaderboardID;
     this.starting = starting;
