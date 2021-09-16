@@ -8,6 +8,10 @@ public abstract class GetEventDetailsByIDRequest {
      */
     private UUID eventID;
 
+    public GetEventDetailsByIDRequest() {
+
+    }
+
     public GetEventDetailsByIDRequest(UUID eventID){
 
         this.eventID = eventID;

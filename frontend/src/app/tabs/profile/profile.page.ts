@@ -8,8 +8,8 @@ import {
   UserService
 } from '../../services/geocode-api';
 import {KeycloakService} from 'keycloak-angular';
-import {environment} from '../../../environments/environment';
 import {ActivatedRoute, Router} from '@angular/router';
+import {CurrentUserDetails} from '../../services/CurrentUserDetails';
 
 @Component({
   selector: 'app-profile',
@@ -28,15 +28,15 @@ export class ProfilePage implements OnInit {
     private modalController: ModalController,
     private userService: UserService,
     private keycloak: KeycloakService,
+    private currentUser: CurrentUserDetails,
+    private router: Router,
     route: ActivatedRoute
   ) {
     this.userID = route.snapshot.paramMap.get('userID');
     if (!this.userID) {
-      const instance = this.keycloak.getKeycloakInstance();
       this.isOwnProfile = true;
-      this.userID = instance.subject;
-      // @ts-ignore
-      this.username = instance.idTokenParsed.preferred_username;
+      this.userID = currentUser.getID();
+      this.username = currentUser.getUsername();
 
       this.userService.getUserTrackable({userID: this.userID}).subscribe((response: GetUserTrackableResponse) => {
         console.log(response);
@@ -74,7 +74,7 @@ export class ProfilePage implements OnInit {
   }
 
   async logout() {
-    await this.keycloak.logout(environment.baseRedirectURI+'welcome');
+    await this.currentUser.logout();
   }
 
   async manage() {

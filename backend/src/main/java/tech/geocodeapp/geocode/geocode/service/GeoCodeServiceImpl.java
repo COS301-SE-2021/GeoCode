@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.geocode.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -16,12 +15,8 @@ import tech.geocodeapp.geocode.collectable.request.GetCollectableByIDRequest;
 import tech.geocodeapp.geocode.collectable.response.CreateCollectableResponse;
 import tech.geocodeapp.geocode.collectable.service.CollectableService;
 
-import tech.geocodeapp.geocode.event.decorator.EventComponent;
 import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
 import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
-import tech.geocodeapp.geocode.event.manager.EventManager;
-import tech.geocodeapp.geocode.event.model.Event;
-import tech.geocodeapp.geocode.event.request.GetEventRequest;
 import tech.geocodeapp.geocode.event.service.EventService;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
@@ -233,7 +228,8 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* The characters the qrCode must be made up of */
-        var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        /* Avoid l, 1, 0 and O as they are ambiguous */
+        var chars = "23456789ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
         /* create a StringBuffer of the specified size */
         var qr = new StringBuilder( QR_SIZE );
@@ -285,6 +281,9 @@ public class GeoCodeServiceImpl implements GeoCodeService {
                 return new CreateGeoCodeResponse( false, "The GeoCode did not save properly" );
             }
 
+            /* Update the geocode now that it has been saved */
+            newGeoCode = check;
+
             /*
              * Add the GeoCode to the list of GeoCodes that the user has created
              */
@@ -305,33 +304,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and add the created GeoCode to it
          */
-        var response = new CreateGeoCodeResponse();
-
-        /*
-         * Check if the object is present in the repo
-         * if it does exist set it to null
-         * else check if the id is inserted
-         */
-        var temp = geoCodeRepo.findById( id );
-        if ( temp.isPresent() ) {
-
-            /* Check the ID's are identical */
-            if ( temp.get().getId().equals( id ) ) {
-
-                /* Set the attributes as the creation was successful */
-                response = new CreateGeoCodeResponse( true, "GeoCode created", id, qr.toString() );
-            } else {
-
-                /* An error occurred since the ID's are not identical */
-                response.setSuccess( false );
-            }
-        } else {
-
-            /* Exception thrown therefore creation failed */
-            response.setSuccess( false );
-        }
-
-        return response;
+        return new CreateGeoCodeResponse( true, "GeoCode created", newGeoCode );
     }
 
     /**
@@ -492,9 +465,6 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response and return all the
          * collectable ID's for the found GeoCode
          */
-        System.out.println("GeoCodeID when getting the Collectables: "+request.getGeoCodeID());
-        Assertions.assertNotNull(hold);
-        Assertions.assertNotNull(hold.getCollectables());
         return new GetCollectablesResponse( new ArrayList<>( hold.getCollectables() ) );
     }
 
@@ -706,30 +676,25 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         /* Get the GeoCode with the specified ID */
         var temp = geoCodeRepo.findById( request.getGeoCodeID() );
         if ( temp.isPresent() ) {
+            GeoCode geocode = temp.get();
 
             /* Check if the found GeoCode has the correct qrCode */
-            if ( temp.get().getQrCode().equals( request.getQrCode() ) ) {
+            if ( geocode.getQrCode().equals( request.getQrCode() ) ) {
 
                 /* Get the collectables from the found GeoCode */
-                ArrayList< Collectable > storedCollectable = getCollectable( temp.get() );
+                ArrayList< Collectable > storedCollectable = getCollectable( geocode );
 
                 /* Set the response to save the found collectables */
                 response.setStoredCollectable( storedCollectable );
 
-                /* if the Event is a Blockly Event, move to the next stage */
-                GeoCode geocode = temp.get();
-
-                try {
-                    Event event = eventService.getEvent(new GetEventRequest(geocode.getEventID())).getFoundEvent();
-
-                    EventManager eventManager = new EventManager();
-                    EventComponent eventComponent = eventManager.buildEvent(event);
-
-                    if(eventComponent.isBlocklyEvent()){
+                /* if this geocode has an event ID and no collectables, it is in a Blockly Event. Move to the next stage */
+                if ( geocode.getEventID() != null && storedCollectable != null && storedCollectable.isEmpty() ) {
+                    try {
                         eventService.nextStage( geocode, CurrentUserDetails.getID() );
+
+                    } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException | NotFoundException | MismatchedParametersException e) {
+                        response.setStoredCollectable(null);
                     }
-                } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException | NotFoundException | MismatchedParametersException e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -792,7 +757,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public GetCollectablesInGeoCodesByLocationResponse getCollectablesInGeoCodesByLocation( GetCollectablesInGeoCodesByLocationRequest request ) throws InvalidRequestException {
+    public GetCollectablesInGeoCodeByLocationResponse getCollectablesInGeoCodeByLocation(GetCollectablesInGeoCodeByLocationRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -818,13 +783,13 @@ public class GeoCodeServiceImpl implements GeoCodeService {
         }
 
         /* Get the collectables from the found GeoCode */
-        ArrayList< Collectable > storedCollectable = getCollectable( temp.get( x ) );
+        ArrayList< Collectable > storedCollectables = getCollectable( temp.get( x ) );
 
         /*
          * Create the new response
          * and set its values
          */
-        return new GetCollectablesInGeoCodesByLocationResponse( storedCollectable );
+        return new GetCollectablesInGeoCodeByLocationResponse( storedCollectables );
     }
 
     /**
@@ -863,11 +828,11 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * else continue as the user found the GeoCode fairly
          */
         var user = userService.getCurrentUser();
-        var userID = user.getId();
 
-        if ( ( userID == null ) ) {
+        if ( user == null ) {
             return new SwapCollectablesResponse( false,  "No user is logged in");
         }
+        var userID = user.getId();
 
         if( ( geocode.getCreatedBy().equals( userID ) ) ){
             return new SwapCollectablesResponse(false, "User tried to swap a Collectable out of a GeoCode that they created");

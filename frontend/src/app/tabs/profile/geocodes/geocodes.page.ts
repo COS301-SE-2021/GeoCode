@@ -1,15 +1,9 @@
-import {AfterViewInit, Component, OnInit, ViewChild, ViewChildren} from '@angular/core';
-import {
-  GeoCode,
-  GeoCodeService,
-  GetFoundGeoCodesResponse, GetGeoCodeResponse,
-  GetOwnedGeoCodesResponse,
-  UserService
-} from '../../../services/geocode-api';
-import {KeycloakService} from 'keycloak-angular';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {GeoCode, GeoCodeService, GetGeoCodeResponse, UserService} from '../../../services/geocode-api';
 import {ActivatedRoute} from '@angular/router';
 import {zip} from 'rxjs';
 import {MapAndInfoComponent} from '../../../components/map-and-info/map-and-info.component';
+import {CurrentUserDetails} from '../../../services/CurrentUserDetails';
 
 @Component({
   selector: 'app-geocodes',
@@ -19,9 +13,6 @@ import {MapAndInfoComponent} from '../../../components/map-and-info/map-and-info
 export class UserGeocodesPage implements AfterViewInit {
 
   @ViewChild('mapAndInfo', {static: false}) mapAndInfo: MapAndInfoComponent;
-
-  map;
-  googleMaps;
 
   userID;
   loggedInUserID;
@@ -36,11 +27,11 @@ export class UserGeocodesPage implements AfterViewInit {
   constructor(
     private geocodeService: GeoCodeService,
     private userService: UserService,
-    keycloak: KeycloakService,
+    currentUser: CurrentUserDetails,
     route: ActivatedRoute
   ) {
     this.userID = route.snapshot.paramMap.get('id');
-    this.loggedInUserID = keycloak.getKeycloakInstance().subject;
+    this.loggedInUserID = currentUser.getID();
     if (!this.userID) {
       this.userID = this.loggedInUserID;
     }
@@ -48,15 +39,12 @@ export class UserGeocodesPage implements AfterViewInit {
 
   async ngAfterViewInit() {
     zip(
-      this.mapAndInfo.loadedState$,
+      this.mapAndInfo.loadObservable(),
       this.userService.getFoundGeoCodes({ userID: this.userID }),
       this.userService.getOwnedGeoCodes({ userID: this.userID })
 
     ).subscribe(async responses => {
       console.log(responses);
-
-      this.map = this.mapAndInfo.getMap();
-      this.googleMaps = this.mapAndInfo.getGoogleMaps();
 
       this.foundIDs = responses[1].geocodeIDs;
       if (this.userID === this.loggedInUserID) {
@@ -108,24 +96,9 @@ export class UserGeocodesPage implements AfterViewInit {
   }
 
   placeMarkers(locations: GeoCode[]) {
-    for (const m of this.markers) {
-      m.setMap(null);
-    }
-    this.markers = [];
-    for (const g of locations) {
-      const marker = new this.googleMaps.Marker({
-        map: this.map,
-        title: g.description,
-        position: {
-          lat: parseFloat(String(g.location.latitude)),
-          lng: parseFloat(String(g.location.longitude))
-        }
-      });
-      marker.addListener('click' , (event) => {
-        this.showDetails(g);
-      });
-      this.markers.push(marker);
-    }
+    this.mapAndInfo.placeGeoCodes(locations, geocode => {
+      this.showDetails(geocode);
+    });
   }
 
   showDetails(g: GeoCode) {
@@ -133,11 +106,11 @@ export class UserGeocodesPage implements AfterViewInit {
     this.mapAndInfo.setInfoVisible(g != null);
   }
 
-  closeDetails() {
-    console.log(this);
-    this.showDetails(null);
-  }
+  closeDetails = () => this.showDetails(null);
 
+  createdGeoCode(){
+    return (this.showing === 'created');
+  }
   shouldShowQR() {
     return (this.showing === 'created');
   }

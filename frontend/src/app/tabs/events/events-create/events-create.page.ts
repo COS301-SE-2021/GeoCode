@@ -1,15 +1,15 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {
-  CreateEventRequest, CreateEventResponse, CreateGeoCodeRequest,
-  CreateGeoCodeResponse,
+  CreateEventRequest,
+  CreateEventResponse,
   EventService,
-  GeoCode,
   GeoCodeService
 } from '../../../services/geocode-api';
 import {ModalController, NavController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
-import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
+import {CreateGeocodeComponent} from '../../../components/create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
+import {EventsCreateBlocklyComponent} from './events-create-blockly/events-create-blockly.component';
 import {QRGenerator} from '../../../services/QRGenerator';
 
 @Component({
@@ -28,15 +28,17 @@ export class EventsCreatePage implements AfterViewInit  {
   selected=[];
   type='event';
   timeHidden=true;
+  blockHidden =true;
   challengeHidden=true;
   height='0%';
   minDate;
   minEndDate;
   timeLimit=0;
-  timeday =0;
-  timehours =0;
-  timeMin =0;
-  // @ts-ignore
+  blockly ={
+    testCases:[],
+    blocks:[],
+    problemDescription:''
+  };
   request: CreateEventRequest = {
     beginDate: '',
     description: '',
@@ -53,8 +55,8 @@ export class EventsCreatePage implements AfterViewInit  {
                     private mapsLoader: GoogleMapsLoader,
                     private toastController: ToastController,
                     private eventApi: EventService,
-                    private qrGenerator: QRGenerator) {
-
+                    private qrGenerator: QRGenerator
+  ) {
   }
 
   //Create map and add mapmarkers of geocodes
@@ -80,25 +82,13 @@ export class EventsCreatePage implements AfterViewInit  {
     const modal = await this.modalController.create({
       component: CreateGeocodeComponent,
       swipeToClose: true,
-      componentProps: {}
+      componentProps: {eventGeoCode:true}
     });
     await modal.present();
     const { data } = await modal.onDidDismiss();
     if (data != null) {
       this.geocodes.push(data);
-      this.geocodeApi.createGeoCode(data)
-        .subscribe(async (response: CreateGeoCodeResponse) =>{
-            const toast =  await this.toastController.create({
-              message: 'GeoCode Created',
-              duration: 2000
-            });
-            await toast.present();
-            this.request.geoCodesToFind.push(response.geoCodeID);
-            //create QR code image
-          if(response.success){
-            this.qrGenerator.generate(response.qrCode);
-          }
-        });
+      this.request.geoCodesToFind.push(data);
     }
   }
 
@@ -118,15 +108,15 @@ export class EventsCreatePage implements AfterViewInit  {
 
   eventType($event){
     this.type=$event.detail.value;
-    if($event.detail.value =='timetrial'){
-      this.challengeHidden=true;
+    if($event.detail.value ==='timetrial'){
+      this.blockHidden=true;
       this.timeHidden=false;
-    }else if($event.detail.value == 'challenge'){
-      this.challengeHidden=false;
+    }else if($event.detail.value === 'challenge'){
       this.timeHidden=true;
+      this.blockHidden=false;
     }else{
       this.timeHidden=true;
-      this.challengeHidden=true;
+      this.blockHidden=true;
     }
   }
 
@@ -145,22 +135,26 @@ export class EventsCreatePage implements AfterViewInit  {
     this.request.endDate=date.toISOString().split('T')[0];
   }
 
-  showGeoCodes(){
+  async createEvent(){
 
-  }
-
-  createEvent(){
-    // eslint-disable-next-line eqeqeq
-    if(this.type=='challenge'){
-      // to be implemented in demo 4 wow factor
-      // eslint-disable-next-line eqeqeq
-    }else if(this.type =='timetrial'){
+    if(this.type==='challenge'){
+      this.request.properties.testCases = JSON.stringify(this.blockly.testCases);
+      this.request.properties.problemDescription = this.blockly.problemDescription;
+      this.request.properties.blocks = JSON.stringify(this.blockly.blocks);
+    }else if(this.type ==='timetrial'){
       this.request.properties.timeLimit=this.timeLimit +'';
     }
     console.log(this.request);
-    this.eventApi.createEvent(this.request).subscribe((response: CreateEventResponse) =>{
-      this.navCtrl.navigateBack('/events');
-    });
+    const response = await this.eventApi.createEvent(this.request).toPromise();
+    if (response.success) {
+      for (const geocode of response.geocodes) {
+        await this.qrGenerator.download(geocode.qrCode, geocode.description);
+      }
+      this.navCtrl.navigateBack('/events').then().catch();
+    } else {
+      console.log(response);
+      alert(response.message);
+    }
 
   }
 
@@ -178,6 +172,25 @@ export class EventsCreatePage implements AfterViewInit  {
     const hour = time.getHours();
     const min = time.getMinutes();
     this.timeLimit = day*24*60+hour*60+min;
+  }
+
+ async createBlockly(){
+    const modal = await this.modalController.create({
+      component: EventsCreateBlocklyComponent,
+      swipeToClose: true,
+      componentProps: {}
+    });
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data) {
+      this.blockly.blocks = data.blocks;
+      this.blockly.testCases = data.testCases;
+    }
+    console.log(this.blockly);
+  }
+
+  updateProblemDescription($event){
+    this.blockly.problemDescription=$event.detail.value;
   }
 
 }

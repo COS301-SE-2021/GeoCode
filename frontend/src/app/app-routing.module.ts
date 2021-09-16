@@ -9,11 +9,11 @@ const routes: Routes = [
   {
     path: 'welcome',
     loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule)
+  },
+  {
+    path: 'g/:code',
+    redirectTo: 'welcome'
   }
-
-
-
-
 ];
 @NgModule({
   imports: [

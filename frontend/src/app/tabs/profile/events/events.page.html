@@ -1,18 +1,23 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="profile"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Events</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-nav>
 
-<ion-content>
-  <ion-list>
-    <ion-item *ngFor="let event of leaderboards" button detail [routerLink]="[event.eventID+'/leaderboard']">
-      <h1 slot="start">{{event.rank}}</h1>
-      <ion-label>{{event.name}}</ion-label>
-      <ion-label slot="end">{{event.points}} points</ion-label>
-    </ion-item>
-  </ion-list>
-</ion-content>
+  <app-nav-header>
+    <app-nav-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="profile"></ion-back-button>
+      </ion-buttons>
+      <ion-title>Events</ion-title>
+    </app-nav-toolbar>
+  </app-nav-header>
+
+  <ion-content>
+    <ion-list>
+      <ion-item *ngFor="let event of leaderboards" button detail [routerLink]="[event.eventID+'/leaderboard']">
+        <h1 slot="start">{{event.rank}}</h1>
+        <ion-label>{{event.name}}</ion-label>
+        <ion-label slot="end">{{event.points}} points</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+
+</app-nav>
+

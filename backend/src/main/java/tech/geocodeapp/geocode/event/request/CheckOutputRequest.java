@@ -15,6 +15,13 @@ public class CheckOutputRequest {
     private List<String> outputs;
 
     /**
+     * Default Constructor
+     */
+    public CheckOutputRequest(){
+
+    }
+
+    /**
      * Overloaded Constructor
      * @param eventID The id for the event
      * @param outputs The output that the User's program generated

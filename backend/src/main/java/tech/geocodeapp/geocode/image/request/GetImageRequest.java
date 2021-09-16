@@ -14,30 +14,28 @@ import java.util.UUID;
 @Validated
 public class GetImageRequest {
 
-    private UUID imageID = null;
+    private String fileName = null;
 
-    public GetImageRequest(UUID imageID) {
-        this.imageID = imageID;
+    public GetImageRequest(String fileName) {
+        this.fileName = fileName;
     }
 
-    public GetImageRequest imageID(UUID imageID) {
-        this.imageID = imageID;
+    public GetImageRequest fileName(String fileName) {
+        this.fileName = fileName;
         return this;
     }
 
     /**
-     * Get imageID
-     * @return imageID
+     * Get fileName
+     * @return fileName
      **/
-    @Schema(example = "054463f2-2f7c-4864-8130-68e5aa79ee7f", required = true, description = "")
-
     @Valid
-    public UUID getImageID() {
-        return imageID;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setImageID(UUID imageID) {
-        this.imageID = imageID;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
 
@@ -50,13 +48,13 @@ public class GetImageRequest {
             return false;
         }
         GetImageRequest getImageDataRequest = (GetImageRequest) o;
-        return Objects.equals(this.imageID, getImageDataRequest.imageID) &&
+        return Objects.equals(this.fileName, getImageDataRequest.fileName) &&
                 super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(imageID, super.hashCode());
+        return Objects.hash(fileName, super.hashCode());
     }
 
     @Override
@@ -64,7 +62,7 @@ public class GetImageRequest {
         StringBuilder sb = new StringBuilder();
         sb.append("class GetImageRequest {\n");
         sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-        sb.append("    imageID: ").append(toIndentedString(imageID)).append("\n");
+        sb.append("    fileName: ").append(toIndentedString(fileName)).append("\n");
         sb.append("}");
         return sb.toString();
     }
