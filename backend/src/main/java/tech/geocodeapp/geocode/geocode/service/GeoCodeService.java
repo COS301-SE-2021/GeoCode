@@ -140,7 +140,7 @@ public interface GeoCodeService {
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
-    GetCollectablesInGeoCodeByLocationResponse getCollectablesInGeoCodeByLocation(GetCollectablesInGeoCodeByLocationRequest request ) throws InvalidRequestException;
+    GetCollectablesInGeoCodesByLocationResponse getCollectablesInGeoCodesByLocation(GetCollectablesInGeoCodesByLocationRequest request ) throws InvalidRequestException;
 
     /**
      * Swaps a stored Collectable in a GeoCode with the Users GeoCode

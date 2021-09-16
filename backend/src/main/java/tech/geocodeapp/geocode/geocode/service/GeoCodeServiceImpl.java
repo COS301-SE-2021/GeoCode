@@ -757,7 +757,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public GetCollectablesInGeoCodeByLocationResponse getCollectablesInGeoCodeByLocation(GetCollectablesInGeoCodeByLocationRequest request ) throws InvalidRequestException {
+    public GetCollectablesInGeoCodesByLocationResponse getCollectablesInGeoCodesByLocation(GetCollectablesInGeoCodesByLocationRequest request ) throws InvalidRequestException {
 
         /* Validate the request */
         if ( request == null ) {
@@ -789,7 +789,7 @@ public class GeoCodeServiceImpl implements GeoCodeService {
          * Create the new response
          * and set its values
          */
-        return new GetCollectablesInGeoCodeByLocationResponse( storedCollectables );
+        return new GetCollectablesInGeoCodesByLocationResponse( storedCollectables );
     }
 
     /**

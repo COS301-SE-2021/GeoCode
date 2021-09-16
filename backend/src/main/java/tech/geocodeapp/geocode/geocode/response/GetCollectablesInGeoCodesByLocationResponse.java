@@ -13,7 +13,7 @@ import java.util.Objects;
  * to get the specified GeoCode from the given location
  */
 @Validated
-public class GetCollectablesInGeoCodeByLocationResponse {
+public class GetCollectablesInGeoCodesByLocationResponse {
 
     /**
      * The unique storedCollectable of the found GeoCode with the specified QR Code
@@ -24,7 +24,7 @@ public class GetCollectablesInGeoCodeByLocationResponse {
     /**
      * Default constructor
      */
-    public GetCollectablesInGeoCodeByLocationResponse() {
+    public GetCollectablesInGeoCodesByLocationResponse() {
 
     }
 
@@ -33,7 +33,7 @@ public class GetCollectablesInGeoCodeByLocationResponse {
      *
      * @param storedCollectable The unique storedCollectable of the found GeoCode with the specified QR Code
      */
-    public GetCollectablesInGeoCodeByLocationResponse(ArrayList< Collectable > storedCollectable ) {
+    public GetCollectablesInGeoCodesByLocationResponse(ArrayList< Collectable > storedCollectable ) {
 
         this.storedCollectable = storedCollectable;
     }
@@ -45,7 +45,7 @@ public class GetCollectablesInGeoCodeByLocationResponse {
      *
      * @return the response after the storedCollectable has been changed
      */
-    public GetCollectablesInGeoCodeByLocationResponse storedCollectable(ArrayList< Collectable > storedCollectable ) {
+    public GetCollectablesInGeoCodesByLocationResponse storedCollectable(ArrayList< Collectable > storedCollectable ) {
 
         this.storedCollectable = storedCollectable;
         return this;
@@ -91,7 +91,7 @@ public class GetCollectablesInGeoCodeByLocationResponse {
             return false;
         }
 
-        return Objects.equals( this.storedCollectable, ( (GetCollectablesInGeoCodeByLocationResponse) obj ).storedCollectable );
+        return Objects.equals( this.storedCollectable, ( (GetCollectablesInGeoCodesByLocationResponse) obj ).storedCollectable );
     }
 
     /**

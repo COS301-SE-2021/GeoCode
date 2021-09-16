@@ -11,7 +11,7 @@ import java.util.Objects;
  * by its longitude and latitude
  */
 @Validated
-public class GetCollectablesInGeoCodeByLocationRequest {
+public class GetCollectablesInGeoCodesByLocationRequest {
 
     /**
      * The location of the GeoCode in the real world
@@ -22,7 +22,7 @@ public class GetCollectablesInGeoCodeByLocationRequest {
     /**
      * Default constructor
      */
-    public GetCollectablesInGeoCodeByLocationRequest() {
+    public GetCollectablesInGeoCodesByLocationRequest() {
 
     }
 
@@ -31,7 +31,7 @@ public class GetCollectablesInGeoCodeByLocationRequest {
      *
      * @param location The longitude and latitude of the GeoCode in the real world
      */
-    public GetCollectablesInGeoCodeByLocationRequest(GeoPoint location ) {
+    public GetCollectablesInGeoCodesByLocationRequest(GeoPoint location ) {
 
         this.location = location;
     }
@@ -43,7 +43,7 @@ public class GetCollectablesInGeoCodeByLocationRequest {
      *
      * @return the request after the location has been changed
      */
-    public GetCollectablesInGeoCodeByLocationRequest location(GeoPoint location ) {
+    public GetCollectablesInGeoCodesByLocationRequest location(GeoPoint location ) {
 
         this.location = location;
         return this;
@@ -88,7 +88,7 @@ public class GetCollectablesInGeoCodeByLocationRequest {
             return false;
         }
 
-        return Objects.equals( this.location, ( (GetCollectablesInGeoCodeByLocationRequest) obj ).location );
+        return Objects.equals( this.location, ( (GetCollectablesInGeoCodesByLocationRequest) obj ).location );
     }
 
     /**
