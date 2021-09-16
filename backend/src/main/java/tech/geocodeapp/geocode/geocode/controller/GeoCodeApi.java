@@ -69,10 +69,10 @@ public interface GeoCodeApi {
             @ApiResponse( responseCode = "401", description = "Invalid JWT token" ),
 
             @ApiResponse( responseCode = "404", description = "Return the GeoCode's collectables was not found", content = @Content( mediaType = "application/json", schema = @Schema( implementation = GetCollectablesInGeoCodeByLocationResponse.class ) ) ) } )
-    @PostMapping( value = "/GeoCode/getCollectablesInGeoCodesByLocation",
+    @PostMapping( value = "/GeoCode/getCollectablesInGeoCodeByLocation",
             produces = { "application/json", "application/xml" },
             consumes = { "application/json", "application/xml" } )
-    ResponseEntity<GetCollectablesInGeoCodeByLocationResponse> getCollectablesInGeoCodesByLocation(@Parameter( in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's collectables at or near the given location", required = true, schema = @Schema() ) @Valid @RequestBody GetCollectablesInGeoCodeByLocationRequest body ) throws InvalidRequestException;
+    ResponseEntity<GetCollectablesInGeoCodeByLocationResponse> getCollectablesInGeoCodeByLocation(@Parameter( in = ParameterIn.DEFAULT, description = "Request to get a GeoCode's collectables at or near the given location", required = true, schema = @Schema() ) @Valid @RequestBody GetCollectablesInGeoCodeByLocationRequest body ) throws InvalidRequestException;
 
 
     @Operation( summary = "Get a specific GeoCode", description = "Get a GeoCode with a specified ID", security = {
