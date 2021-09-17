@@ -172,7 +172,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
         }
       };
 
-      const interpreter = new Interpreter(code, (interpreter2, scope) => {
+      const interpreter = new Interpreter('String = String2;\n'+code, (interpreter2, scope) => {
         interpreter2.setProperty(scope, 'prompt', interpreter2.createAsyncFunction(async (text, callback) => {
           const input = await inputFunction(text);
           if (input !== null) {
@@ -192,7 +192,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
           }
         }));
         interpreter2.setProperty(scope, 'Number', interpreter2.createNativeFunction((text) => Number(text)));
-        interpreter2.setProperty(scope, 'String', interpreter2.createNativeFunction((text) => String(text)));
+        interpreter2.setProperty(scope, 'String2', interpreter2.createNativeFunction((text) => String(text)));
       });
 
       run(interpreter);
