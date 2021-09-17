@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.general.response.Response;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
@@ -44,6 +45,7 @@ public class LeaderboardServiceImplIT {
     }
 
     private UUID registerNewUser(String username){
+        CurrentUserDetails.injectUserDetails(UUID.randomUUID(), username, false);
         HandleLoginRequest request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
         Response response;
 
@@ -51,7 +53,7 @@ public class LeaderboardServiceImplIT {
             response = userService.handleLogin(request);
             Assertions.assertTrue(response.isSuccess());
 
-            return userService.getCurrentUserID();
+            return CurrentUserDetails.getID();
         } catch (NullRequestParameterException e) {
             e.printStackTrace();
         }
@@ -571,9 +573,6 @@ public class LeaderboardServiceImplIT {
             //Create three users to use
             List<UUID> userIds = new ArrayList<>();
             for (var i = 0; i < 3; i++) {
-                userIds.add(UUID.randomUUID());
-            }
-            for (var i = 0; i < 3; i++) {
                 userIds.add(registerNewUser("test user"));
             }
 
@@ -659,9 +658,6 @@ public class LeaderboardServiceImplIT {
 
             //Create three users to use
             List<UUID> userIds = new ArrayList<>();
-            for (var i = 0; i < 3; i++) {
-                userIds.add(UUID.randomUUID());
-            }
             for (var i = 0; i < 3; i++) {
                 userIds.add(registerNewUser("test user"));
             }
