@@ -237,7 +237,9 @@ public class EventServiceImpl implements EventService {
                 var createGeoCodeResponse = geoCodeService.createGeoCode( createGeoCodeRequest );
 
                 if ( !createGeoCodeResponse.isSuccess() ) {
-                    return new CreateEventResponse( false, "Failed to create a GeoCode" );
+                    var name = createGeoCodeRequest.getDescription();
+                    var reason = createGeoCodeResponse.getMessage();
+                    return new CreateEventResponse( false, "Failed to create GeoCode \""+name+"\": "+reason );
                 }
 
                 /*

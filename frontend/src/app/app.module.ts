@@ -28,7 +28,6 @@ const doInit = async (keycloak: KeycloakService) => {
   } catch (e) {
     return false;
   }
-
 };
 
 const initializeKeycloak = (keycloak: KeycloakService, storage: Storage) => async () => {
