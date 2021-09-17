@@ -192,6 +192,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
           }
         }));
         interpreter2.setProperty(scope, 'Number', interpreter2.createNativeFunction((text) => Number(text)));
+        interpreter2.setProperty(scope, 'String', interpreter2.createNativeFunction((text) => String(text)));
       });
 
       run(interpreter);
