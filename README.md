@@ -234,11 +234,15 @@ The following software engineers contributed to the GeoCode project:
        <summary><b> Responsibilities </b></summary>
        <pre>
            - GitHub Readme creation and maintenance.
-           - Documentation: Coding Standards
-           - Documentation: Software Requirements Specification
-           - Documentation: Architecture Requirements and Design Specifications
-           - Backend: GeoCode Subsystem and GeoCode Optimization
-           - Backend: Events Subsystem
+           - Documentation: 
+              - Coding Standards
+              - Software Requirements Specification
+              - Architecture Requirements and Design Specifications
+              - Testing Policy
+           - Backend:
+              - GeoCode Subsystem
+              - System Optimization
+              - Events Subsystem
        </pre>
    </details>
 
@@ -267,12 +271,14 @@ The following software engineers contributed to the GeoCode project:
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
-           - Documentation: Software Requirements Specification
-           - Documentation: Architecture Requirements and Design Specifications
-           - Backend: Collectable Subsystem and the design patterns (Decorator and Factory patterns) 
-           - Backend: Mission Subsystem
-           - Backend: LeaderBoard Subsystem
-           - Backend: Events Subsystem extension for Blockly
+           - Documentation: 
+              - Software Requirements Specification
+              - Architecture Requirements and Design Specifications
+           - Backend: 
+              - Mission Subsystem
+              - LeaderBoard Subsystem
+              - Events Subsystem extension for Blockly
+              - Collectable Subsystem and the design patterns (Decorator and Factory patterns)
            - Usability Testing: Conducting Usability Testing
        </pre>
    </details>
@@ -299,16 +305,19 @@ The following software engineers contributed to the GeoCode project:
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
-           - Documentation: Software Requirements Specification
-           - Documentation: Architecture Requirements and Design Specifications
-           - Frontend: Explore tabs Pages 
-           - Frontend: Events tabs Pages
-           - Frontend: Profile tabs Pages
-           - Frontend: Blockly Pages
-           - Frontend: QR Code Creation
-           - Usability Testing: Colour Scheme Test.
-           - Usability Testing: Usability Test document.
-           - Documentation: User Manual
+           - Documentation: 
+              - Software Requirements Specification
+              - Architecture Requirements and Design Specifications
+              - User Manual
+           - Frontend: 
+              - Explore tabs Pages 
+              - Events tabs Pages
+              - Profile tabs Pages
+              - Blockly Pages
+              - QR Code Creation
+           - Usability Testing: 
+              - Colour Scheme Test.
+              - Usability Test document.
        </pre>
    </details>
 
@@ -339,7 +348,6 @@ The following software engineers contributed to the GeoCode project:
            - Backend: 
               - User Subsystem 
               - Leaderboard Subsystem
-              - Event Subsystem
               - Blockly Events
               - Mission Subsystem
               - Collectable Subsystem           
