@@ -345,8 +345,8 @@ The following software engineers contributed to the GeoCode project:
   <pre>
       
          Michael Harvey graduated from Richards Bay Christian School in 2018 with 4 distinctions,
-         and is currently in his 3rd year studying BSc Computer Science. In his first two
-         years of university he achieved 21 distinctions in 24 modules, and he ranked as the 
+         and is currently in his 3rd year studying BSc Computer Science. In his first two and a half
+         years of university he achieved 25 distinctions in 28 modules, and he ranked as the 
          3rd highest first-year Computer Science student at UP in 2019. On the side he maintains
          various Python projects that make use of the API for the mobile game Clash of Clans: 2
          Discord bots, as well as a program collecting Clan War League participation data from
@@ -360,14 +360,21 @@ The following software engineers contributed to the GeoCode project:
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
+           - Automation: Android APK Build
+           - Automation: Deployment
+           - Automation: Swagger Client Generation
+           - Backend: Events Subsystem
            - Documentation: Software Requirements Specification
            - Documentation: Architecture Requirements and Design Specifications
-           - Documentation: Technical Installation manual
-           - Frontend: Collectable tab Pages
-           - Frontend: Profile tab Pages
-           - Frontend: QR scanning
-           - Keycloak integration
-           - Server Management and deployment
+           - Documentation: Technical Installation Manual
+           - Frontend: Adaptive Layout
+           - Frontend: Augmented Reality
+           - Frontend: Blockly Integration
+           - Frontend: Collections Tab Pages
+           - Frontend: QR Code Creation/Scanning
+           - Frontend: Profile Tab Pages
+           - Keycloak Integration
+           - Server Management
            
        </pre>
    </details>
