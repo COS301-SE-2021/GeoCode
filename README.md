@@ -125,8 +125,8 @@ The following documentation was done in LaTeX and is to document the process fol
 
 * <a href="https://www.overleaf.com/read/ysgpfdqtrrkw"> GeoCode - SRS Version One </a>
 * <a href="https://www.overleaf.com/read/xtrkrnzbmbny"> GeoCode - SRS Version Two </a>
-* <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> GeoCode - SRS Version Three </a>
-* <a href=""> GeoCode - SRS Version Four </a>
+* <a href="https://www.overleaf.com/read/mvtwqwsgyqdf"> GeoCode - SRS Version Three </a>
+* <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> GeoCode - SRS Version Four </a>
 
 </div>
 
@@ -138,6 +138,7 @@ The following documentation was done in LaTeX and is to document the methods use
 
 
 * <a href="https://www.overleaf.com/read/byjsbnwxcgnm"> Coding Standards </a>
+* <a href="https://www.overleaf.com/read/nmvtrtfmjtrh"> Testing Policy </a>
 * <a href="https://www.overleaf.com/read/bprjhgpzbcxf">Technical Installation Manual</a>
 * <a href="https://www.overleaf.com/read/fjdvrjjsndhv">User Manual Version One</a>
 * <a href="https://www.overleaf.com/read/kyrfcgymmnng">User Manual Version Two</a>
@@ -176,7 +177,7 @@ phases of the project to the stakeholders of the GeoCode project.
 * <a href="https://drive.google.com/file/d/1OqOuoMHSyd4rTUqWW5j_ME1EZcIJHre4/view?usp=sharing"> Demo 1 </a> - :calendar: 2021-06-14
 * <a href="https://drive.google.com/file/d/1iSdTMS9bjVXQGxdfrJ-6nl46fX0j3h7n/view?usp=sharing"> Demo 2  </a> - :calendar: 2021-06-21 
 * <a href="https://drive.google.com/file/d/1lVIqfENiN10zGNmveXXlzY8A03thT7aV/view?usp=sharing"> Demo 3  </a> - :calendar: 2021-08-20 
-* <a href="https://michael-stroh.github.io/capstone/"> Demo 4  </a> - :calendar: 2021-09-24 
+* <a href="https://michael-stroh.github.io/capstone/"> Demo 4  </a> - :calendar: 2021-09-20 
 
 </div>
 
@@ -233,11 +234,15 @@ The following software engineers contributed to the GeoCode project:
        <summary><b> Responsibilities </b></summary>
        <pre>
            - GitHub Readme creation and maintenance.
-           - Documentation: Coding Standards
-           - Documentation: Software Requirements Specification
-           - Documentation: Architecture Requirements and Design Specifications
-           - Backend: GeoCode Subsystem and GeoCode Optimization
-           - Backend: Events Subsystem
+           - Documentation: 
+              - Coding Standards
+              - Software Requirements Specification
+              - Architecture Requirements and Design Specifications
+              - Testing Policy
+           - Backend:
+              - GeoCode Subsystem
+              - System Optimization
+              - Events Subsystem
        </pre>
    </details>
 
@@ -266,11 +271,15 @@ The following software engineers contributed to the GeoCode project:
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
-           - Documentation: Software Requirements Specification
-           - Documentation: Architecture Requirements and Design Specifications
-           - Backend: Collectable Subsystem and the design patterns (Decorator, Factory and Strategy patterns) 
-           - Backend: Mission Subsystem
-           - Backend: LeaderBoard Subsystem
+           - Documentation: 
+              - Software Requirements Specification
+              - Architecture Requirements and Design Specifications
+           - Backend: 
+              - Mission Subsystem
+              - LeaderBoard Subsystem
+              - Events Subsystem extension for Blockly
+              - Collectable Subsystem and the design patterns (Decorator and Factory patterns)
+           - Usability Testing: Conducting Usability Testing
        </pre>
    </details>
 
@@ -296,16 +305,19 @@ The following software engineers contributed to the GeoCode project:
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
-           - Documentation: Software Requirements Specification
-           - Documentation: Architecture Requirements and Design Specifications
-           - Frontend: Explore tabs Pages 
-           - Frontend: Events tabs Pages
-           - Frontend: Profile tabs Pages
-           - Frontend: Blockly Pages
-           - Frontend: QR Code Creation
-           - Usability Testing: Colour Scheme Test.
-           - Usability Testing: Usability Test document.
-           - Documentation: User Manual
+           - Documentation: 
+              - Software Requirements Specification
+              - Architecture Requirements and Design Specifications
+              - User Manual
+           - Frontend: 
+              - Explore tabs Pages 
+              - Events tabs Pages
+              - Profile tabs Pages
+              - Blockly Pages
+              - QR Code Creation
+           - Usability Testing: 
+              - Colour Scheme Test.
+              - Usability Test document.
        </pre>
    </details>
 
@@ -315,17 +327,13 @@ The following software engineers contributed to the GeoCode project:
 <br/>
 
   <pre>
-      
          Caleb Johnstone graduated from Fourways High School in 2018, achieving 4 distinctions
          - the highest of the two being 94% for Mathematics and 96% for Information Technology.
          He placed 7th in Gauteng for Information Technology. Caleb is currently studying in
          his 3rd year for a BSc Information and Knowledge Systems, specialising in Data Science.
          This degree is one of the two degrees offered at the Computer Science department at
-         the University Of Pretoria. Caleb was the top Computer Science student for 2019 with
-         a weighted average of 90.33%. He was elected as the EBIT House Treasurer for the
-         2019/2020 term. He has been the class representative for eight modules.
-         He has worked as an Information Technology tutor at UJ in 2018 and he is currently
-         working as a test reader at Michael Mount School.
+         the University Of Pretoria. Caleb was the top Computer Science student for 2019 and 2020.
+         He was elected as the EBIT House Treasurer for the 2019/2020 term.
   </pre>
 
 * <a href="https://github.com/CalebJohnstone"> Github Account</a>
@@ -335,12 +343,16 @@ The following software engineers contributed to the GeoCode project:
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
-           - Documentation: Software Requirements Specification
-           - Documentation: Architecture Requirements and Design Specifications
-           - Backend: Collectable Subsystem
-           - Backend: User Subsystem  
-           - Backend: LeaderBoard Subsystem
-           
+           - Documentation: 
+              - Software Requirements Specification
+              - Architecture Requirements and Design Specifications
+              - User Manual
+           - Backend: 
+              - User Subsystem 
+              - Leaderboard Subsystem
+              - Blockly Events
+              - Mission Subsystem
+              - Collectable Subsystem           
        </pre>
    </details>
 
@@ -367,22 +379,24 @@ The following software engineers contributed to the GeoCode project:
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
-           - Automation: Android APK Build
-           - Automation: Deployment
-           - Automation: Swagger Client Generation
+           - Automation:
+              - Android APK Build
+              - Deployment
+              - Swagger Client Generation
+           - Documentation: 
+              - Software Requirements Specification
+              - Architecture Requirements and Design Specifications
+              - Technical Installation Manual
+           - Frontend: 
+              - Adaptive Layout
+              - Augmented Reality
+              - Blockly Integration
+              - Collections Tab Pages
+              - QR Code Creation/Scanning
+              - Profile Tab Pages
            - Backend: Events Subsystem
-           - Documentation: Software Requirements Specification
-           - Documentation: Architecture Requirements and Design Specifications
-           - Documentation: Technical Installation Manual
-           - Frontend: Adaptive Layout
-           - Frontend: Augmented Reality
-           - Frontend: Blockly Integration
-           - Frontend: Collections Tab Pages
-           - Frontend: QR Code Creation/Scanning
-           - Frontend: Profile Tab Pages
            - Keycloak Integration
            - Server Management
-           
        </pre>
    </details>
 
