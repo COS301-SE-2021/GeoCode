@@ -1189,13 +1189,13 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void AddToFoundCollectableTypesTestNotAddDuplicate() throws NullRequestParameterException, InvalidRequestException {
+        createCollectableTypes();
+        addFirstTwoGeoCodes();
+        addFoundGeoCodesForUser1();
 
         //create the CollectableSet to hold the "User Trackable" type
         christmasSetId = createCollectableSet("Christmas Set", "Christmas 2021 Collectables");
         var newCollectableTypeID = createCollectableType("new type", "img_new_type", Rarity.COMMON, christmasSetId, new HashMap<>());
-
-        addFirstTwoGeoCodes();
-        addFoundGeoCodesForUser1();
 
         createCollectable(newCollectableTypeID, false, new GeoPoint(0.0, 0.0));
 
@@ -1211,8 +1211,7 @@ public class UserServiceImplIT {
 
         var foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
 
-        Assertions.assertEquals(1, foundCollectableTypeIDs.size());
-        Assertions.assertEquals(newCollectableTypeID, foundCollectableTypeIDs.get(0));
+        Assertions.assertEquals(2, foundCollectableTypeIDs.size());
     }
 
     @Test
