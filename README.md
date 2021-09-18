@@ -334,6 +334,8 @@ The following software engineers contributed to the GeoCode project:
          This degree is one of the two degrees offered at the Computer Science department at
          the University Of Pretoria. Caleb was the top Computer Science student for 2019 and 2020.
          He was elected as the EBIT House Treasurer for the 2019/2020 term.
+  </pre>
+
 * <a href="https://github.com/CalebJohnstone"> Github Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/caleb-johnstone-94368a132/"> LinkedIn  Account </a>
 * :email: caleb.johnstone@tuks.co.za
