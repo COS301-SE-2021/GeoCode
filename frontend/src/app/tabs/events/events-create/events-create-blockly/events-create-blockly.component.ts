@@ -110,10 +110,6 @@ export class EventsCreateBlocklyComponent implements OnInit {
     this.blockly.setToolboxVisibility(this.toolboxVisible);
   }
 
-  blocklyWorkspaceChanged = (event: any) => {
-    console.log(event);
-  };
-
   async deleteTestCase(testCase: DetailedTestCase) {
     this.testCases = this.testCases.filter((v) => v !== testCase);
     await this.storage.set(this.testCasesKey, this.testCases);
