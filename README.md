@@ -126,6 +126,7 @@ The following documentation was done in LaTeX and is to document the process fol
 * <a href="https://www.overleaf.com/read/ysgpfdqtrrkw"> GeoCode - SRS Version One </a>
 * <a href="https://www.overleaf.com/read/xtrkrnzbmbny"> GeoCode - SRS Version Two </a>
 * <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> GeoCode - SRS Version Three </a>
+* <a href=""> GeoCode - SRS Version Four </a>
 
 </div>
 
@@ -138,13 +139,15 @@ The following documentation was done in LaTeX and is to document the methods use
 
 * <a href="https://www.overleaf.com/read/byjsbnwxcgnm"> Coding Standards </a>
 * <a href="https://www.overleaf.com/read/bprjhgpzbcxf">Technical Installation Manual</a>
-* <a href="https://www.overleaf.com/read/fjdvrjjsndhv">User Manual</a>
+* <a href="https://www.overleaf.com/read/fjdvrjjsndhv">User Manual Version One</a>
+* <a href="https://www.overleaf.com/read/kyrfcgymmnng">User Manual Version Two</a>
 * <a href="https://drive.google.com/file/d/1TPxVUnTDn-eS_OPRwaLPnVOdo1seEFya/view?usp=sharing">Architectural Requirements Version Two</a>
 * <a href="https://www.overleaf.com/read/yvhjyygymzdn">Architectural Requirements Version Three</a>
+* <a href="">Testing Policy</a>
   
 The following documentation was done in LaTeX and is to document the usability testing of the project.
 * <a href="https://www.overleaf.com/read/hpvhpdhpscwz">Application Theme Test</a>
-
+* <a href="https://www.overleaf.com/read/fwdbkgqbjfnf">Usability Test</a>
 </div>
 
 # Project Management Tools
@@ -298,7 +301,11 @@ The following software engineers contributed to the GeoCode project:
            - Frontend: Explore tabs Pages 
            - Frontend: Events tabs Pages
            - Frontend: Profile tabs Pages
+           - Frontend: Blockly Pages
+           - Frontend: QR Code Creation
            - Usability Testing: Colour Scheme Test.
+           - Usability Testing: Usability Test document.
+           - Documentation: User Manual
        </pre>
    </details>
 
