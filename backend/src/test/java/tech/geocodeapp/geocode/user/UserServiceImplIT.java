@@ -10,6 +10,8 @@ import tech.geocodeapp.geocode.collectable.model.Rarity;
 import tech.geocodeapp.geocode.collectable.request.*;
 import tech.geocodeapp.geocode.collectable.response.*;
 import tech.geocodeapp.geocode.collectable.service.CollectableServiceImpl;
+import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
+import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
 import tech.geocodeapp.geocode.event.model.OrderLevels;
 import tech.geocodeapp.geocode.event.request.CreateEventRequest;
 import tech.geocodeapp.geocode.event.request.GetCurrentEventStatusRequest;
@@ -604,7 +606,7 @@ public class UserServiceImplIT {
 
         try {
             winterSchoolEventID = createEvent(winterSchoolEventName, winterSchoolEventName, new GeoPoint(0.0, 0.0),
-                    LocalDate.now(), LocalDate.now().plusDays(3), winterSchoolCreateGeoCodeRequests, OrderLevels.DIFFICULTY, new HashMap<>());
+                    LocalDate.now(), LocalDate.now().plusDays(3), winterSchoolCreateGeoCodeRequests, OrderLevels.GIVEN, new HashMap<>());
         } catch (tech.geocodeapp.geocode.event.exceptions.InvalidRequestException e) {
             e.printStackTrace();
         }
@@ -1020,16 +1022,38 @@ public class UserServiceImplIT {
 
     @Test
     @Transactional
-    public void getMyLeaderboardsTestUsersWithPoints() throws NullRequestParameterException, InvalidRequestException {
+    public void getMyLeaderboardsTestUsersWithPoints() throws NullRequestParameterException, InvalidRequestException, NotFoundException, tech.geocodeapp.geocode.event.exceptions.InvalidRequestException, MismatchedParametersException {
         createCollectableTypes();
 
         createOpenDayEvent();
-        addFoundGeoCodesForUser1();
-        addFoundGeoCodesForUser2();
-
         createWinterSchoolEvent();
-        addFoundGeoCodesForUser1WinterSchool();
-        addFoundGeoCodesForUser2WinterSchool();
+
+        userWithPoints1ID = handleUserLogin("validUser");
+        userWithPoints1 = getUserByID(userWithPoints1ID);
+        joinEvent(openDayEventID, userWithPoints1ID);
+        joinEvent(winterSchoolEventID, userWithPoints1ID);
+
+        userWithPoints2ID = handleUserLogin("userWithPoints2");
+        userWithPoints2 = getUserByID(userWithPoints2ID);
+        joinEvent(openDayEventID, userWithPoints2ID);
+        joinEvent(winterSchoolEventID, userWithPoints2ID);
+
+        var openDayGeocode1 = geoCodeService.getGeoCode(new GetGeoCodeRequest(firstGeoCodeID)).getFoundGeoCode();
+        eventService.nextStage(openDayGeocode1, userWithPoints1ID);
+        eventService.nextStage(openDayGeocode1, userWithPoints2ID);
+
+        var winterSchoolGeocode1 = geoCodeService.getGeoCode(new GetGeoCodeRequest(winterSchoolGeoCode1ID)).getFoundGeoCode();
+        eventService.nextStage(winterSchoolGeocode1, userWithPoints1ID);
+        eventService.nextStage(winterSchoolGeocode1, userWithPoints2ID);
+
+        var openDayGeocode2 = geoCodeService.getGeoCode(new GetGeoCodeRequest(secondGeoCodeID)).getFoundGeoCode();
+        eventService.nextStage(openDayGeocode2, userWithPoints1ID);
+
+        joinEvent(winterSchoolEventID, userWithPoints2ID);
+
+        var winterSchoolGeocode2 = geoCodeService.getGeoCode(new GetGeoCodeRequest(winterSchoolGeoCode2ID)).getFoundGeoCode();
+        eventService.nextStage(winterSchoolGeocode2, userWithPoints2ID);
+
 
         //user1
         var eventNames = new ArrayList<>(Arrays.asList(
@@ -1165,14 +1189,14 @@ public class UserServiceImplIT {
     @Test
     @Transactional
     public void AddToFoundCollectableTypesTestNotAddDuplicate() throws NullRequestParameterException, InvalidRequestException {
-        createCollectableTypes();
-        addFirstTwoGeoCodes();
-        addFoundGeoCodesForUser1();
 
         //create the CollectableSet to hold the "User Trackable" type
         christmasSetId = createCollectableSet("Christmas Set", "Christmas 2021 Collectables");
-
         var newCollectableTypeID = createCollectableType("new type", "img_new_type", Rarity.COMMON, christmasSetId, new HashMap<>());
+
+        addFirstTwoGeoCodes();
+        addFoundGeoCodesForUser1();
+
         createCollectable(newCollectableTypeID, false, new GeoPoint(0.0, 0.0));
 
         var response = addToFoundCollectableTypes(userWithPoints1ID, firstFoundCollectableTypeID);
@@ -1187,7 +1211,8 @@ public class UserServiceImplIT {
 
         var foundCollectableTypeIDs = getFoundCollectableTypesResponse.getCollectableTypeIDs();
 
-        Assertions.assertEquals(2, foundCollectableTypeIDs.size());
+        Assertions.assertEquals(1, foundCollectableTypeIDs.size());
+        Assertions.assertEquals(newCollectableTypeID, foundCollectableTypeIDs.get(0));
     }
 
     @Test
