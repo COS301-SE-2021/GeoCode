@@ -18,6 +18,7 @@ export const environment = {
   keycloakClientID: 'geocode-live',
   baseRedirectURI: 'https://geocodeapp.tech/',
   googleMapsKey: '',
+  apkDownloadLocation: null,
   keycloakInitOptions: keycloakWebOptions
 };
 

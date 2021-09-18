@@ -35,9 +35,12 @@
     </ion-grid>
   </ion-card>
   <div class="buttons">
-    <ion-label *ngIf="!locationFound">Please allow access to your location.</ion-label><br>
+    <ion-label *ngIf="!locationFound">Please allow access to your location.</ion-label>
+    <br>
     <ion-button color="button" (click)="login()" [disabled]="!locationFound">Log in</ion-button>
     <ion-button color="button" (click)="register()" [disabled]="!locationFound">Sign up</ion-button>
+    <br>
+    <ion-button class="apk" *ngIf="showApkLink()" color="button" (click)="getAPK()">Download Android APK</ion-button>
   </div>
 
 </ion-content>

@@ -56,7 +56,7 @@ const initializeKeycloak = (keycloak: KeycloakService, storage: Storage) => asyn
   entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({ mode: 'md' }),
     AppRoutingModule,
     HttpClientModule,
     ApiModule,
