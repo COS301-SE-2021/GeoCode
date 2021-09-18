@@ -176,7 +176,7 @@ phases of the project to the stakeholders of the GeoCode project.
 * <a href="https://drive.google.com/file/d/1OqOuoMHSyd4rTUqWW5j_ME1EZcIJHre4/view?usp=sharing"> Demo 1 </a> - :calendar: 2021-06-14
 * <a href="https://drive.google.com/file/d/1iSdTMS9bjVXQGxdfrJ-6nl46fX0j3h7n/view?usp=sharing"> Demo 2  </a> - :calendar: 2021-06-21 
 * <a href="https://drive.google.com/file/d/1lVIqfENiN10zGNmveXXlzY8A03thT7aV/view?usp=sharing"> Demo 3  </a> - :calendar: 2021-08-20 
-* <a href="https://michael-stroh.github.io/capstone/"> Demo 4  </a> - :calendar: 2021-09-24 
+* <a href="https://michael-stroh.github.io/capstone/"> Demo 4  </a> - :calendar: 2021-09-20 
 
 </div>
 
@@ -317,19 +317,13 @@ The following software engineers contributed to the GeoCode project:
 <br/>
 
   <pre>
-      
          Caleb Johnstone graduated from Fourways High School in 2018, achieving 4 distinctions
          - the highest of the two being 94% for Mathematics and 96% for Information Technology.
          He placed 7th in Gauteng for Information Technology. Caleb is currently studying in
          his 3rd year for a BSc Information and Knowledge Systems, specialising in Data Science.
          This degree is one of the two degrees offered at the Computer Science department at
-         the University Of Pretoria. Caleb was the top Computer Science student for 2019 with
-         a weighted average of 90.33%. He was elected as the EBIT House Treasurer for the
-         2019/2020 term. He has been the class representative for eight modules.
-         He has worked as an Information Technology tutor at UJ in 2018 and he is currently
-         working as a test reader at Michael Mount School.
-  </pre>
-
+         the University Of Pretoria. Caleb was the top Computer Science student for 2019 and 2020.
+         He was elected as the EBIT House Treasurer for the 2019/2020 term.
 * <a href="https://github.com/CalebJohnstone"> Github Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/caleb-johnstone-94368a132/"> LinkedIn  Account </a>
 * :email: caleb.johnstone@tuks.co.za
@@ -337,12 +331,17 @@ The following software engineers contributed to the GeoCode project:
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
-           - Documentation: Software Requirements Specification
-           - Documentation: Architecture Requirements and Design Specifications
-           - Backend: Collectable Subsystem
-           - Backend: User Subsystem  
-           - Backend: LeaderBoard Subsystem
-           
+           - Documentation: 
+              - Software Requirements Specification
+              - Architecture Requirements and Design Specifications
+              - User Manual
+           - Backend: 
+              - User Subsystem 
+              - Leaderboard Subsystem
+              - Event Subsystem
+              - Blockly Events
+              - Mission Subsystem
+              - Collectable Subsystem           
        </pre>
    </details>
 
