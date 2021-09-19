@@ -1,6 +1,5 @@
 package tech.geocodeapp.geocode.collectable.service;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import tech.geocodeapp.geocode.collectable.decorator.CollectableTypeComponent;
 import tech.geocodeapp.geocode.collectable.manager.CollectableTypeManager;
@@ -20,7 +19,6 @@ import tech.geocodeapp.geocode.mission.response.CreateMissionResponse;
 import tech.geocodeapp.geocode.mission.service.MissionService;
 import tech.geocodeapp.geocode.mission.service.MissionServiceImpl;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -49,17 +47,6 @@ public class CollectableServiceImpl implements CollectableService {
         this.missionService = missionService;
 
         initialiseUserTrackables();
-    }
-
-    /**
-     * Once the Collectable service object has been created
-     * insert it into the User and Event subsystem
-     *
-     * This is to avoid circular dependencies as each subsystem requires one another
-     */
-    @PostConstruct
-    public void init() {
-        this.missionService.setCollectableService(this);
     }
 
     @Transactional
@@ -119,7 +106,11 @@ public class CollectableServiceImpl implements CollectableService {
 
         if(collectableTypeOptional.isPresent()){
             Collectable collectable = new Collectable(collectableTypeOptional.get());
-            collectable.changeLocation(request.getLocation());
+
+            if (!collectable.getType().getId().equals(new UUID(0, 0))) {
+                /* Non user-trackables should set their initial location */
+                collectable.changeLocation(request.getLocation());
+            }
 
             Collectable savedCollectable = collectableRepo.save(collectable);
             if(request.isCreateMission()) {

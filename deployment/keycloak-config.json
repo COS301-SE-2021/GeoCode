@@ -100,6 +100,9 @@
               "view-profile",
               "manage-account",
               "delete-account"
+            ],
+            "geocode-test": [
+              "User"
             ]
           }
         },
@@ -498,6 +501,44 @@
           "containerId": "e88e70be-d1a4-4543-bb8e-b3d0c0dc4aaf",
           "attributes": {}
         }
+      ],
+      "geocode-test": [
+        {
+          "id": "eee400d1-5645-4b72-a781-8909698bbc4d",
+          "name": "User",
+          "composite": true,
+          "composites": {
+            "realm": [
+              "User"
+            ],
+            "client": {
+              "geocode-test": [
+                "User"
+              ]
+            }
+          },
+          "clientRole": true,
+          "containerId": "6facbc85-1d6c-4724-9cc4-a9a7615a6f4e",
+          "attributes": {}
+        },
+        {
+          "id": "8a2b2ea8-c362-4796-88f8-7b165b294ede",
+          "name": "Admin",
+          "composite": true,
+          "composites": {
+            "realm": [
+              "Admin"
+            ],
+            "client": {
+              "geocode-test": [
+                "Admin"
+              ]
+            }
+          },
+          "clientRole": true,
+          "containerId": "6facbc85-1d6c-4724-9cc4-a9a7615a6f4e",
+          "attributes": {}
+        }
       ]
     }
   },
@@ -768,11 +809,9 @@
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "",
         "*"
       ],
       "webOrigins": [
-        "",
         "*"
       ],
       "notBefore": 0,
@@ -836,9 +875,82 @@
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/*"
+        "http://localhost/*",
+        "/*",
+        "geocode://*"
       ],
       "webOrigins": [
+        "http://localhost",
+        "+"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "publicClient": true,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "access.token.lifespan": "86400",
+        "saml.multivalued.roles": "false",
+        "saml.force.post.binding": "false",
+        "saml.encrypt": "false",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "saml.server.signature": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "use.refresh.tokens": "true",
+        "exclude.session.state.from.auth.response": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "saml.artifact.binding": "false",
+        "backchannel.logout.session.required": "true",
+        "client_credentials.use_refresh_token": "false",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "false",
+        "client.session.max.lifespan": "2592000",
+        "client.session.idle.timeout": "604800",
+        "saml.onetimeuse.condition": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "web-origins",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
+      "id": "6facbc85-1d6c-4724-9cc4-a9a7615a6f4e",
+      "clientId": "geocode-test",
+      "rootUrl": "https://test.geocodeapp.tech",
+      "adminUrl": "https://test.geocodeapp.tech",
+      "baseUrl": "/",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": [
+        "http://localhost/*",
+        "/*",
+        "geocode://*"
+      ],
+      "webOrigins": [
+        "http://localhost",
         "+"
       ],
       "notBefore": 0,

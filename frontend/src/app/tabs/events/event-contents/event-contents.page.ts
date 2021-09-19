@@ -1,15 +1,16 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
+import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {AlertController, NavController, ToastController} from '@ionic/angular';
 import {
+  Event,
   EventService, GeoCode,
   GeoCodeService,
-  GetCurrentEventStatusRequest,
-  GetCurrentEventStatusResponse
+  GetCurrentEventStatusRequest, UserEventStatus,
 } from '../../../services/geocode-api';
 import {ActivatedRoute, Router} from '@angular/router';
-import {KeycloakService} from 'keycloak-angular';
-
+import {MapAndInfoComponent} from '../../../components/map-and-info/map-and-info.component';
+import {CurrentUserDetails} from '../../../services/CurrentUserDetails';
+import {Mediator} from '../../../services/Mediator';
+import {Subscription} from 'rxjs';
 
 
 @Component({
@@ -17,116 +18,120 @@ import {KeycloakService} from 'keycloak-angular';
   templateUrl: './event-contents.page.html',
   styleUrls: ['./event-contents.page.scss'],
 })
-export class EventContentsPage implements AfterViewInit {
-  @ViewChild('mapElement',{static:false}) mapElement;
-  event=null;
-  eventID=null;
-  geocodes=[];
-  level='';
-  numLevels='';
-  googleMaps;
-  mapOptions;
-  map;
-  description='';
-  name='';
+export class EventContentsPage implements AfterViewInit, OnDestroy {
 
-  constructor(    route: ActivatedRoute,
-                  router: Router,
-                  private toastController: ToastController,
-                  private navCtrl: NavController,
-                  private geocodeApi: GeoCodeService,
-                  private mapsLoader: GoogleMapsLoader,
-                  private eventApi: EventService,
-                  private keycloak: KeycloakService,
-                  private alertController: AlertController) {
+  @ViewChild('mapAndInfo', {static: false}) mapAndInfo: MapAndInfoComponent;
+
+  event: Event = null;
+  eventID: string = null;
+  geocode: GeoCode = null;
+  status: UserEventStatus = null;
+
+  refreshSubscription: Subscription = null;
+
+  constructor(
+    route: ActivatedRoute,
+    router: Router,
+    mediator: Mediator,
+    private toastController: ToastController,
+    private navCtrl: NavController,
+    private geocodeApi: GeoCodeService,
+    private eventApi: EventService,
+    private alertController: AlertController,
+    private currentUser: CurrentUserDetails
+  ) {
     //Get passed in param from routing
     const state = router.getCurrentNavigation().extras.state;
-    console.log(state);
     if (state) {
       //Set the event to the passed in geocode
       this.event = state.event;
-      this.name = this.event.name;
-      this.description= this.event.description;
-      console.log(this.event);
+      this.eventID = this.event.id;
     } else {
       this.event = null;
-      this.eventID = route.snapshot.paramMap.get('id');
-      console.log(this.eventID);
+      this.eventID = route.snapshot.paramMap.get('eventID');
     }
-  }
 
-  async ngAfterViewInit() {
-    if(this.event== null){
-      this.event = (await this.eventApi.getEvent({eventID: this.eventID}).toPromise()).foundEvent;
-      this.name = this.event.name;
-      this.description = this.event.description;
-    }
-    const levelReq: GetCurrentEventStatusRequest ={
-      eventID:this.event.id,
-      userID:this.keycloak.getKeycloakInstance().subject
-    };
-    this.eventApi.getCurrentEventStatus(levelReq).subscribe((response: GetCurrentEventStatusResponse) =>{
-      console.log(response);
-      if(response.success){
-        if(response.targetGeocode==null){
-        this.presentAlert();
-        }else{
-          this.geocodes.push(response.targetGeocode);
-          this.mapsLoader.load().then(handle => {
-            this.googleMaps = handle;
-            this.loadMap();
-          }).catch();
-        }
-      }else{
-        this.navCtrl.back();
-        this.presentToast();
+    this.refreshSubscription = mediator.geocodeFound.onReceive(geocodeID => {
+      if (geocodeID === this.geocode.id) {
+        this.geocode = null;
+        this.status = null;
+        this.loadStatus().then().catch();
       }
     });
   }
-async presentToast(){
-  const toast =  await this.toastController.create({
-    message: 'Error loading Event GeoCode not found',
-    duration: 2000
-  });
-  await toast.present();
-}
-  async presentAlert() {
+
+  async ngAfterViewInit() {
+    await this.mapAndInfo.load();
+    await this.loadStatus();
+
+    if (this.event === null) {
+      this.event = (await this.eventApi.getEvent({eventID: this.eventID}).toPromise()).foundEvent;
+    };
+  }
+
+  ngOnDestroy() {
+    this.refreshSubscription.unsubscribe();
+  }
+
+  async loadStatus() {
+    const levelReq: GetCurrentEventStatusRequest = {
+      eventID: this.eventID,
+      userID: this.currentUser.getID()
+    };
+    const response = await this.eventApi.getCurrentEventStatus(levelReq).toPromise();
+    console.log(response);
+    if (response.success) {
+      this.status = response.status;
+      if (response.targetGeocode === null) {
+        if (response.status.details.hasOwnProperty('blocks')) {
+          // eslint-disable-next-line max-len
+          await this.presentAlert('You have found all the GeoCodes! Now you need to complete the Blockly coding challenge with the blocks you unlocked along the way.');
+        } else {
+          await this.presentAlert('Congratulations, you have completed the event!');
+          await this.navCtrl.navigateBack('/events');
+        }
+      } else {
+        this.geocode = response.targetGeocode;
+        this.mapAndInfo.getMap().setOptions({
+          center: { lat: this.geocode.location.latitude, lng: this.geocode.location.longitude },
+          zoom: 15,
+        });
+      }
+    } else {
+      this.navCtrl.back();
+      await this.presentToast();
+    }
+  }
+
+  async presentToast(){
+    const toast =  await this.toastController.create({
+      message: 'Error loading Event GeoCode not found',
+      duration: 2000
+    });
+    await toast.present();
+  }
+
+  async presentAlert(text: string) {
     const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      message: 'Congratulation you completed the event',
+      message: text,
       buttons: ['OK']
     });
-
     await alert.present();
-
-    const { role } = await alert.onDidDismiss();
-    console.log('onDidDismiss resolved with role', role);
-    await this.navCtrl.navigateBack('/events');
-  }
-
-  //Create map and add mapmarkers of geocodes
-  loadMap(){
-    //Create map and center towards passed in geocode
-    this.mapOptions = {
-      center: {lat: this.event.location.latitude, lng: this.event.location.longitude},
-      zoom: 15,
-    };
-    //Create map
-    this.map = new this.googleMaps.Map(this.mapElement.nativeElement,this.mapOptions);
-  }
-
-  //Navigate to findGeoCode page
-  async findGeoCode(geocode){
-    await this.navCtrl.navigateForward('/explore/open/'+geocode.id,{ state: {geocode} });
-  }
-
-  openInMaps(geocode: GeoCode) {
-    window.open('https://www.google.com/maps/search/?api=1&query='+geocode.location.latitude+'%2C'+geocode.location.longitude);
+    await alert.onDidDismiss();
   }
 
   async openLeaderBoard() {
     const event = this.event;
-    await this.navCtrl.navigateForward('/events/' + this.event.id+'/leaderboard', {state: {event}});
+    await this.navCtrl.navigateForward('/events/'+this.eventID+'/leaderboard', {state: {event}});
+  }
+
+  async openBlockly() {
+    await this.navCtrl.navigateForward('/events/'+this.eventID+'/blockly', {
+      state: {
+        event: this.event,
+        status: this.status
+      }
+    });
   }
 
 

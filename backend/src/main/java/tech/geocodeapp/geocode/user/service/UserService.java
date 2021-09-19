@@ -1,7 +1,7 @@
 package tech.geocodeapp.geocode.user.service;
 
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
+import tech.geocodeapp.geocode.general.response.Response;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.request.*;
 import tech.geocodeapp.geocode.user.response.*;
@@ -52,10 +52,12 @@ public interface UserService {
     User getCurrentUser();
 
     //U1.14 getCurrentUserID
+    /** @deprecated use CurrentUserDetails.getID() */
+    @Deprecated
     java.util.UUID getCurrentUserID();
 
-    //U1.15 registerNewUser
-    RegisterNewUserResponse registerNewUser(RegisterNewUserRequest request) throws NullRequestParameterException;
+    //U1.15 handleLogin
+    Response handleLogin(HandleLoginRequest request) throws NullRequestParameterException;
 
     //GeoCode helper functions
 
@@ -64,11 +66,4 @@ public interface UserService {
 
     //U1.17 addToMyMissions
     AddToMyMissionsResponse addToMyMissions(AddToMyMissionsRequest request) throws NullRequestParameterException;
-
-    /**
-     * Post construct the GeoCode service, this avoids a circular dependency
-     *
-     * @param geoCodeService the service to be set
-     */
-    void setGeoCodeService( GeoCodeService geoCodeService );
 }

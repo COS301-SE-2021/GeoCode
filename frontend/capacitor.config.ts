@@ -5,15 +5,14 @@ const config: CapacitorConfig = {
   appName: 'GeoCode',
   webDir: 'www',
   bundledWebRuntime: false,
-  cordova: {
-    preferences: {
-      ScrollEnabled: 'false',
-      BackupWebStorage: 'none',
-      SplashMaintainAspectRatio: 'true',
-      FadeSplashScreenDuration: '300',
-      SplashShowOnlyFirstTime: 'false',
-      SplashScreen: 'screen',
-      SplashScreenDelay: '3000'
+  plugins: {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    SplashScreen: {
+      launchAutoHide: true,
+      androidScaleType: 'CENTER_CROP',
+      splashFullScreen: true,
+      splashImmersive: false,
+      backgroundColor: '#ffffff'
     }
   }
 };

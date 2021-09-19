@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { UserGeocodesPage } from './geocodes.page';
+import {CommonModule} from '@angular/common';
 
 const routes: Routes = [
   {

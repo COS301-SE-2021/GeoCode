@@ -1,5 +1,7 @@
 package tech.geocodeapp.geocode.event.decorator;
 
+import org.junit.jupiter.api.Assertions;
+import tech.geocodeapp.geocode.event.blockly.Block;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
@@ -19,6 +21,7 @@ public class ConcreteEvent implements EventComponent {
     private LocalDate endDate;
     private List<Leaderboard> leaderboards;
     private Boolean available;
+    private boolean blocklyEvent;
 
     public ConcreteEvent() { }
 
@@ -76,6 +79,33 @@ public class ConcreteEvent implements EventComponent {
     @Override
     public void setAvailable(Boolean available) { this.available = available; }
 
+    @Override
+    public boolean isBlocklyEvent() {
+        return blocklyEvent;
+    }
+
+    @Override
+    public void setBlocklyEvent(boolean blocklyEvent) {
+        this.blocklyEvent = blocklyEvent;
+    }
+
+    /**
+     * @return null because blocklyDetails are not contained in the concreteComponent
+     */
+    @Override
+    public Block[] getBlocks() {
+        return null;
+    }
+
+    /**
+     * Do nothing because the blocklyDetails are not contained in the concreteComponent
+     * @param blocks unused
+     */
+    @Override
+    public void setBlocks(Block[] blocks) {
+
+    }
+
     /**
      * @return null because timeLimit is not contained in the concreteComponent
      */
@@ -128,5 +158,57 @@ public class ConcreteEvent implements EventComponent {
             case INSANE: return 40;
             default: return 0;
         }
+    }
+
+    /**
+     * @return null because the inputs is not contained in the concreteComponent
+     */
+    @Override
+    public String[][] getInputs() {
+        return null;
+    }
+
+    /**
+     * Do nothing in a concrete event
+     * @param inputs unused
+     */
+    @Override
+    public void setInputs(String[][] inputs) {
+
+    }
+
+    /**
+     * @return null because the outputs is not contained in the concreteComponent
+     */
+    @Override
+    public String[] getOutputs() {
+        return null;
+    }
+
+    /**
+     * Do nothing in a concrete event
+     * @param outputs unused
+     */
+    @Override
+    public void setOutputs(String[] outputs) {
+
+    }
+
+    /**
+     * Do nothing in a concrete event
+     *
+     * @param problemDescription unused
+     */
+    @Override
+    public void setProblemDescription(String problemDescription) {
+
+    }
+
+    /**
+     * @return null because the outputs is not contained in the concreteComponent
+     */
+    @Override
+    public String getProblemDescription() {
+        return null;
     }
 }

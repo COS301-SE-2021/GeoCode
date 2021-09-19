@@ -1,15 +1,15 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {
-  CreateEventRequest, CreateEventResponse, CreateGeoCodeRequest,
-  CreateGeoCodeResponse,
+  CreateEventRequest,
+  CreateEventResponse,
   EventService,
-  GeoCode,
   GeoCodeService
 } from '../../../services/geocode-api';
-import {ModalController, NavController, ToastController} from '@ionic/angular';
+import {AlertController, ModalController, NavController, PickerController, ToastController} from '@ionic/angular';
 import {GoogleMapsLoader} from '../../../services/GoogleMapsLoader';
-import {CreateGeocodeComponent} from './create-geocode/create-geocode.component';
+import {CreateGeocodeComponent} from '../../../components/create-geocode/create-geocode.component';
 import {EventLocationComponent} from './event-location/event-location.component';
+import {EventsCreateBlocklyComponent} from './events-create-blockly/events-create-blockly.component';
 import {QRGenerator} from '../../../services/QRGenerator';
 
 @Component({
@@ -26,17 +26,17 @@ export class EventsCreatePage implements AfterViewInit  {
   markers= [];
   geocodes= [];
   selected=[];
-  type='event';
-  timeHidden=true;
+  isBlockly = false;
   challengeHidden=true;
   height='0%';
   minDate;
   minEndDate;
-  timeLimit=0;
-  timeday =0;
-  timehours =0;
-  timeMin =0;
-  // @ts-ignore
+  timeLimit=null;
+  blockly ={
+    testCases:[],
+    blocks:[],
+    problemDescription:''
+  };
   request: CreateEventRequest = {
     beginDate: '',
     description: '',
@@ -47,14 +47,17 @@ export class EventsCreatePage implements AfterViewInit  {
     endDate:null,
     properties:{}
   };
-  constructor(      private modalController: ModalController,
-                    private navCtrl: NavController,
-                    private geocodeApi: GeoCodeService,
-                    private mapsLoader: GoogleMapsLoader,
-                    private toastController: ToastController,
-                    private eventApi: EventService,
-                    private qrGenerator: QRGenerator) {
-
+  constructor(
+    private modalController: ModalController,
+    private navCtrl: NavController,
+    private geocodeApi: GeoCodeService,
+    private mapsLoader: GoogleMapsLoader,
+    private toastController: ToastController,
+    private eventApi: EventService,
+    private qrGenerator: QRGenerator,
+    private alertCtrl: AlertController,
+    private pickerCtrl: PickerController
+  ) {
   }
 
   //Create map and add mapmarkers of geocodes
@@ -80,25 +83,13 @@ export class EventsCreatePage implements AfterViewInit  {
     const modal = await this.modalController.create({
       component: CreateGeocodeComponent,
       swipeToClose: true,
-      componentProps: {}
+      componentProps: {eventGeoCode:true}
     });
     await modal.present();
     const { data } = await modal.onDidDismiss();
     if (data != null) {
       this.geocodes.push(data);
-      this.geocodeApi.createGeoCode(data)
-        .subscribe(async (response: CreateGeoCodeResponse) =>{
-            const toast =  await this.toastController.create({
-              message: 'GeoCode Created',
-              duration: 2000
-            });
-            await toast.present();
-            this.request.geoCodesToFind.push(response.geoCodeID);
-            //create QR code image
-          if(response.success){
-            this.qrGenerator.generate(response.qrCode);
-          }
-        });
+      this.request.geoCodesToFind.push(data);
     }
   }
 
@@ -113,20 +104,6 @@ export class EventsCreatePage implements AfterViewInit  {
     if (data != null) {
       this.request.location.latitude=data.getPosition().lat();
       this.request.location.longitude=data.getPosition().lng();
-    }
-  }
-
-  eventType($event){
-    this.type=$event.detail.value;
-    if($event.detail.value =='timetrial'){
-      this.challengeHidden=true;
-      this.timeHidden=false;
-    }else if($event.detail.value == 'challenge'){
-      this.challengeHidden=false;
-      this.timeHidden=true;
-    }else{
-      this.timeHidden=true;
-      this.challengeHidden=true;
     }
   }
 
@@ -145,22 +122,33 @@ export class EventsCreatePage implements AfterViewInit  {
     this.request.endDate=date.toISOString().split('T')[0];
   }
 
-  showGeoCodes(){
+  async createEvent(){
 
-  }
-
-  createEvent(){
-    // eslint-disable-next-line eqeqeq
-    if(this.type=='challenge'){
-      // to be implemented in demo 4 wow factor
-      // eslint-disable-next-line eqeqeq
-    }else if(this.type =='timetrial'){
-      this.request.properties.timeLimit=this.timeLimit +'';
+    if(this.isBlockly){
+      this.request.properties.testCases = JSON.stringify(this.blockly.testCases);
+      this.request.properties.problemDescription = this.blockly.problemDescription;
+      this.request.properties.blocks = JSON.stringify(this.blockly.blocks);
     }
+    const day = this.timeLimit.days;
+    const hour = this.timeLimit.hours;
+    const min = this.timeLimit.minutes;
+    this.request.properties.timeLimit = ''+(day*24*60+hour*60+min);
     console.log(this.request);
-    this.eventApi.createEvent(this.request).subscribe((response: CreateEventResponse) =>{
-      this.navCtrl.navigateBack('/events');
-    });
+    const response = await this.eventApi.createEvent(this.request).toPromise();
+    if (response.success) {
+      for (const geocode of response.geocodes) {
+        await this.qrGenerator.download(geocode.qrCode, geocode.description);
+      }
+      this.navCtrl.navigateBack('/events').then().catch();
+    } else {
+      console.log(response);
+      const alert = await this.alertCtrl.create({
+        header: 'Error',
+        message: response.message,
+        buttons: ['OK']
+      });
+      await alert.present();
+    }
 
   }
 
@@ -172,12 +160,50 @@ export class EventsCreatePage implements AfterViewInit  {
     this.request.description=$event.detail.value;
   }
 
-  setTime($event){
-    const time = new Date($event.detail.value);
-    const day = time.getDate();
-    const hour = time.getHours();
-    const min = time.getMinutes();
-    this.timeLimit = day*24*60+hour*60+min;
+ async createBlockly(){
+    const modal = await this.modalController.create({
+      component: EventsCreateBlocklyComponent,
+      swipeToClose: true,
+      componentProps: {}
+    });
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data) {
+      this.blockly.blocks = data.blocks;
+      this.blockly.testCases = data.testCases;
+    }
+    console.log(this.blockly);
   }
+
+  updateProblemDescription($event){
+    this.blockly.problemDescription=$event.detail.value;
+  }
+
+  async selectTimeLimit() {
+    const daysColumn = { name: 'days', options: [] };
+    for (let i = 0; i < 7; i++) { daysColumn.options.push({ text: i+'d', value: i }); }
+    const hoursColumn = { name: 'hours', options: [] };
+    for (let i = 0; i < 24; i++) { hoursColumn.options.push({ text: i+'h', value: i }); }
+    const minutesColumn = { name: 'minutes', options: [] };
+    for (let i = 0; i < 60; i++) { minutesColumn.options.push({ text: i+'m', value: i }); }
+    const picker = await this.pickerCtrl.create({
+      columns: [daysColumn, hoursColumn, minutesColumn],
+      buttons: [{
+        text: 'Cancel'
+      }, {
+        text: 'Confirm',
+        handler: (value) => {
+          this.timeLimit = {
+            days: value.days.value,
+            hours: value.hours.value,
+            minutes: value.minutes.value
+          };
+        },
+      }],
+    });
+
+    await picker.present();
+  }
+
 
 }

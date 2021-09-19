@@ -1,26 +1,23 @@
 package tech.geocodeapp.geocode.leaderboard;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import tech.geocodeapp.geocode.GeoCodeApplication;
-import tech.geocodeapp.geocode.event.service.EventService;
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.general.response.Response;
-import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
+import tech.geocodeapp.geocode.geocode.model.GeoPoint;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
 import tech.geocodeapp.geocode.leaderboard.repository.LeaderboardRepository;
 import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.leaderboard.request.*;
-import tech.geocodeapp.geocode.leaderboard.response.CreateLeaderboardResponse;
-import tech.geocodeapp.geocode.leaderboard.response.DeletePointResponse;
-import tech.geocodeapp.geocode.leaderboard.response.GetEventLeaderboardResponse;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardServiceImpl;
 import tech.geocodeapp.geocode.user.request.GetUserByIdRequest;
-import tech.geocodeapp.geocode.user.request.RegisterNewUserRequest;
-import tech.geocodeapp.geocode.user.response.RegisterNewUserResponse;
+import tech.geocodeapp.geocode.user.request.HandleLoginRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
 
 import java.util.ArrayList;
@@ -35,9 +32,6 @@ public class LeaderboardServiceImplIT {
     private UserService userService;
 
     @Autowired
-    private EventService eventService;
-
-    @Autowired
     private PointRepository pointRepository;
 
     @Autowired
@@ -45,17 +39,31 @@ public class LeaderboardServiceImplIT {
 
     private LeaderboardService leaderboardService;
 
-    private final String menloParkChristmas = "Christmas 2021 market";
-
     @BeforeEach
     void setUp(){
-        leaderboardService = new LeaderboardServiceImpl(leaderboardRepository, pointRepository, eventService, userService);
+        leaderboardService = new LeaderboardServiceImpl(leaderboardRepository, pointRepository, userService);
+    }
+
+    private UUID registerNewUser(String username){
+        CurrentUserDetails.injectUserDetails(UUID.randomUUID(), username, false);
+        HandleLoginRequest request = new HandleLoginRequest(new GeoPoint(0.0, 0.0));
+        Response response;
+
+        try {
+            response = userService.handleLogin(request);
+            Assertions.assertTrue(response.isSuccess());
+
+            return CurrentUserDetails.getID();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Test
     public void createLeaderboardTestNullRequest(){
         try{
-            CreateLeaderboardResponse response = leaderboardService.createLeaderboard(null);
+            var response = leaderboardService.createLeaderboard(null);
 
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("The CreateLeaderboardRequest object passed was NULL", response.getMessage());
@@ -67,7 +75,7 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void createLeaderboardTestNullName(){
-        CreateLeaderboardRequest request = new CreateLeaderboardRequest(null);
+        var request = new CreateLeaderboardRequest(null);
 
         assertThatThrownBy(() -> leaderboardService.createLeaderboard(request))
                 .isInstanceOf(NullRequestParameterException.class);
@@ -75,15 +83,16 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void createLeaderboardTestNew(){
-        CreateLeaderboardRequest request = new CreateLeaderboardRequest(menloParkChristmas);
+        var menloParkChristmas = "Christmas 2021 market";
+        var request = new CreateLeaderboardRequest(menloParkChristmas);
 
         try {
-            CreateLeaderboardResponse response = leaderboardService.createLeaderboard(request);
+            var response = leaderboardService.createLeaderboard(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The Leaderboard was successfully created", response.getMessage());
 
-            Leaderboard christmasLeaderboard = response.getLeaderboard();
+            var christmasLeaderboard = response.getLeaderboard();
 
             Assertions.assertNotNull(christmasLeaderboard);
             Assertions.assertEquals(menloParkChristmas, christmasLeaderboard.getName());
@@ -95,7 +104,7 @@ public class LeaderboardServiceImplIT {
     @Test
     public void createPointTestNullRequest() {
         try {
-            PointResponse response = leaderboardService.createPoint(null);
+            var response = leaderboardService.createPoint(null);
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("The CreatePointRequest passed was NULL", response.getMessage());
             Assertions.assertNull(response.getPoint());
@@ -106,7 +115,7 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void createPointTestNullAllParameters() {
-        CreatePointRequest request = new CreatePointRequest(null, null, null);
+        var request = new CreatePointRequest(null, null, null);
 
         assertThatThrownBy(() -> leaderboardService.createPoint(request))
                 .isInstanceOf(NullRequestParameterException.class);
@@ -114,9 +123,9 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void createPointTestInvalidLeaderboardId() {
-        CreatePointRequest request = new CreatePointRequest(1, UUID.randomUUID(), UUID.randomUUID());
+        var request = new CreatePointRequest(1, UUID.randomUUID(), UUID.randomUUID());
         try {
-            PointResponse response = leaderboardService.createPoint(request);
+            var response = leaderboardService.createPoint(request);
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("Invalid leaderboard Id provided", response.getMessage());
             Assertions.assertNull(response.getPoint());
@@ -128,11 +137,13 @@ public class LeaderboardServiceImplIT {
     @Test
     public void createPointTestInvalidUserId() {
         //create a leaderboard to ensure a valid id for leaderboardId parameter
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        var leaderboardRequest = new CreateLeaderboardRequest("test");
+
         try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            CreatePointRequest request = new CreatePointRequest(1, UUID.randomUUID(), leaderboardResponse.getLeaderboard().getId());
-            PointResponse response = leaderboardService.createPoint(request);
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            var request = new CreatePointRequest(1, UUID.randomUUID(), leaderboardResponse.getLeaderboard().getId());
+            var response = leaderboardService.createPoint(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("Invalid user Id provided", response.getMessage());
             Assertions.assertNull(response.getPoint());
@@ -143,14 +154,16 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void createPointTestValidRequestParameters() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("testValid");
+        var leaderboardRequest = new CreateLeaderboardRequest("testValid");
+
         try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
-            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
-            CreatePointRequest request = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
-            PointResponse response = leaderboardService.createPoint(request);
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            var userId = registerNewUser("Test user");
+
+            var request = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            var response = leaderboardService.createPoint(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("The Point was successfully created.", response.getMessage());
             Assertions.assertNotNull(response.getPoint());
@@ -163,7 +176,8 @@ public class LeaderboardServiceImplIT {
     @Test
     public void deletePointTestNullRequest() {
         try {
-            DeletePointResponse response = leaderboardService.deletePoint(null);
+            var response = leaderboardService.deletePoint(null);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("The DeletePointRequest passed was NULL", response.getMessage());
         } catch (NullRequestParameterException e) {
@@ -173,16 +187,19 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void deletePointTestNullPointId() {
-        DeletePointRequest request = new DeletePointRequest(null);
+        var request = new DeletePointRequest(null);
+
         assertThatThrownBy(() -> leaderboardService.deletePoint(request))
                 .isInstanceOf(NullRequestParameterException.class);
     }
 
     @Test
     public void deletePointTestInvalidPointId() {
-        DeletePointRequest request = new DeletePointRequest(UUID.randomUUID());
+        var request = new DeletePointRequest(UUID.randomUUID());
+
         try {
-            DeletePointResponse response = leaderboardService.deletePoint(request);
+            var response = leaderboardService.deletePoint(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("No Point with the given Id exists", response.getMessage());
         } catch (NullRequestParameterException e) {
@@ -192,16 +209,19 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void deletePointTestValidPointId() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test delete");
+        var leaderboardRequest = new CreateLeaderboardRequest("test delete");
+
         try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "delete point");
-            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
-            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
-            PointResponse createPointResponse = leaderboardService.createPoint(createPointRequest);
-            DeletePointRequest request = new DeletePointRequest(createPointResponse.getPoint().getId());
-            DeletePointResponse response = leaderboardService.deletePoint(request);
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            var userId = registerNewUser("Delete point");
+
+            var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            var createPointResponse = leaderboardService.createPoint(createPointRequest);
+
+            var request = new DeletePointRequest(createPointResponse.getPoint().getId());
+            var response = leaderboardService.deletePoint(request);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Successfully deleted the provided point", response.getMessage());
         } catch (NullRequestParameterException e) {
@@ -212,7 +232,8 @@ public class LeaderboardServiceImplIT {
     @Test
     public void updatePointTestNullRequest() {
         try {
-            PointResponse response = leaderboardService.updatePoint(null);
+            var response = leaderboardService.updatePoint(null);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("The UpdatePointRequest passed was NULL", response.getMessage());
             Assertions.assertNull(response.getPoint());
@@ -223,16 +244,19 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void updatePointTestNullPointId() {
-        UpdatePointRequest request = new UpdatePointRequest(null, null, null, null);
+        var request = new UpdatePointRequest(null, null, null, null);
+
         assertThatThrownBy(() -> leaderboardService.updatePoint(request))
                 .isInstanceOf(NullRequestParameterException.class);
     }
 
     @Test
     public void updatePointTestInvalidPointId() {
-        UpdatePointRequest request  = new UpdatePointRequest(UUID.randomUUID(), 1, null, null);
+        var request  = new UpdatePointRequest(UUID.randomUUID(), 1, null, null);
+
         try {
-            PointResponse response = leaderboardService.updatePoint(request);
+            var response = leaderboardService.updatePoint(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("No point with the provided Id exists", response.getMessage());
             Assertions.assertNull(response.getPoint());
@@ -243,16 +267,18 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void updatePointTestOnlyAmountUpdated() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("update amount");
+        var leaderboardRequest = new CreateLeaderboardRequest("update amount");
+
         try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
-            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
-            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
-            PointResponse createPointResponse = leaderboardService.createPoint(createPointRequest);
-            UpdatePointRequest request = new UpdatePointRequest(createPointResponse.getPoint().getId(), 2, null, null);
-            PointResponse response = leaderboardService.updatePoint(request);
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            var userId = registerNewUser("Test user");
+
+            var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            var createPointResponse = leaderboardService.createPoint(createPointRequest);
+
+            var request = new UpdatePointRequest(createPointResponse.getPoint().getId(), 2, null, null);
+            var response = leaderboardService.updatePoint(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Updated point successfully", response.getMessage());
@@ -265,16 +291,18 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void updatePointTestInvalidLeaderboardId() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("update leaderboard invalid");
+        var leaderboardRequest = new CreateLeaderboardRequest("update leaderboard invalid");
+
         try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
-            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
-            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
-            PointResponse createPointResponse = leaderboardService.createPoint(createPointRequest);
-            UpdatePointRequest request = new UpdatePointRequest(createPointResponse.getPoint().getId(), null, null, UUID.randomUUID());
-            PointResponse response = leaderboardService.updatePoint(request);
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            var userId = registerNewUser("Test user");
+
+            var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            var createPointResponse = leaderboardService.createPoint(createPointRequest);
+
+            var request = new UpdatePointRequest(createPointResponse.getPoint().getId(), null, null, UUID.randomUUID());
+            var response = leaderboardService.updatePoint(request);
 
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("Invalid LeaderboardId to update to was provided", response.getMessage());
@@ -286,19 +314,21 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void updatePointTestOnlyLeaderboardId() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
-        try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
-            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
-            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
-            PointResponse createPointResponse = leaderboardService.createPoint(createPointRequest);
+        var leaderboardRequest = new CreateLeaderboardRequest("test");
 
-            CreateLeaderboardRequest updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
-            CreateLeaderboardResponse updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
-            UpdatePointRequest request = new UpdatePointRequest(createPointResponse.getPoint().getId(), null, null, updatedLeaderboardResponse.getLeaderboard().getId());
-            PointResponse response = leaderboardService.updatePoint(request);
+        try {
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            var userId = registerNewUser("Test user");
+
+            var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            var createPointResponse = leaderboardService.createPoint(createPointRequest);
+
+            var updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
+            var updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
+
+            var request = new UpdatePointRequest(createPointResponse.getPoint().getId(), null, null, updatedLeaderboardResponse.getLeaderboard().getId());
+            var response = leaderboardService.updatePoint(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Updated point successfully", response.getMessage());
@@ -311,17 +341,18 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void updatePointTestInvalidUserId() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
-        try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "test user");
-            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
-            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
-            PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
+        var leaderboardRequest = new CreateLeaderboardRequest("test");
 
-            UpdatePointRequest request = new UpdatePointRequest(pointResponse.getPoint().getId(), null, UUID.randomUUID(), null);
-            PointResponse response = leaderboardService.updatePoint(request);
+        try {
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            var userId = registerNewUser("Test user");
+
+            var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            var pointResponse = leaderboardService.createPoint(createPointRequest);
+
+            var request = new UpdatePointRequest(pointResponse.getPoint().getId(), null, UUID.randomUUID(), null);
+            var response = leaderboardService.updatePoint(request);
 
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("Invalid UserId to update to was provided", response.getMessage());
@@ -333,20 +364,20 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void updatePointTestOnlyUserId() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
-        try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "test user");
-            userService.registerNewUser(userRequest);
-            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
-            PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
+        var leaderboardRequest = new CreateLeaderboardRequest("test");
 
-            UUID updatedUserId = UUID.randomUUID();
-            RegisterNewUserRequest updatedUserRequest = new RegisterNewUserRequest(updatedUserId, "updated user");
-            userService.registerNewUser(updatedUserRequest);
-            UpdatePointRequest request = new UpdatePointRequest(pointResponse.getPoint().getId(), null, updatedUserId, null);
-            PointResponse response = leaderboardService.updatePoint(request);
+        try {
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            var userId = registerNewUser("Test user");
+
+            var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            var pointResponse = leaderboardService.createPoint(createPointRequest);
+
+            var updatedUserId = registerNewUser("Updated User");
+
+            var request = new UpdatePointRequest(pointResponse.getPoint().getId(), null, updatedUserId, null);
+            var response = leaderboardService.updatePoint(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Updated point successfully", response.getMessage());
@@ -359,20 +390,20 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void updatePointTestValidAmountAndUserId() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
-        try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "test user");
-            userService.registerNewUser(userRequest);
-            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
-            PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
+        var leaderboardRequest = new CreateLeaderboardRequest("test");
 
-            UUID updatedUserId = UUID.randomUUID();
-            RegisterNewUserRequest updatedUserRequest = new RegisterNewUserRequest(updatedUserId, "updated user");
-            userService.registerNewUser(updatedUserRequest);
-            UpdatePointRequest request = new UpdatePointRequest(pointResponse.getPoint().getId(), 3, updatedUserId, null);
-            PointResponse response = leaderboardService.updatePoint(request);
+        try {
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            var userId = registerNewUser("Test user");
+
+            var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            var pointResponse = leaderboardService.createPoint(createPointRequest);
+
+            var updatedUserId = registerNewUser("Updated User");
+
+            var request = new UpdatePointRequest(pointResponse.getPoint().getId(), 3, updatedUserId, null);
+            var response = leaderboardService.updatePoint(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Updated point successfully", response.getMessage());
@@ -386,19 +417,21 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void updatePointTestValidAmountAndLeaderboardId() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
-        try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
-            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
-            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
-            PointResponse createPointResponse = leaderboardService.createPoint(createPointRequest);
+        var leaderboardRequest = new CreateLeaderboardRequest("test");
 
-            CreateLeaderboardRequest updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
-            CreateLeaderboardResponse updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
-            UpdatePointRequest request = new UpdatePointRequest(createPointResponse.getPoint().getId(), 4, null, updatedLeaderboardResponse.getLeaderboard().getId());
-            PointResponse response = leaderboardService.updatePoint(request);
+        try {
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            var userId = registerNewUser("Test user");
+
+            var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            var createPointResponse = leaderboardService.createPoint(createPointRequest);
+
+            var updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
+            var updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
+
+            var request = new UpdatePointRequest(createPointResponse.getPoint().getId(), 4, null, updatedLeaderboardResponse.getLeaderboard().getId());
+            var response = leaderboardService.updatePoint(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Updated point successfully", response.getMessage());
@@ -412,24 +445,23 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void updatePointTestValidUserIdAndLeaderboardId() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        var leaderboardRequest = new CreateLeaderboardRequest("test");
+
         try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "test user");
-            userService.registerNewUser(userRequest);
-            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
-            PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            UUID updatedUserId = UUID.randomUUID();
-            RegisterNewUserRequest updatedUserRequest = new RegisterNewUserRequest(updatedUserId, "updated user");
-            userService.registerNewUser(updatedUserRequest);
+            var userId = registerNewUser("Test user");
 
-            CreateLeaderboardRequest updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
-            CreateLeaderboardResponse updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
+            var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            var pointResponse = leaderboardService.createPoint(createPointRequest);
 
-            UpdatePointRequest request = new UpdatePointRequest(pointResponse.getPoint().getId(), null, updatedUserId, updatedLeaderboardResponse.getLeaderboard().getId());
-            PointResponse response = leaderboardService.updatePoint(request);
+            var updatedUserId = registerNewUser("Updated User");
+
+            var updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
+            var updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
+
+            var request = new UpdatePointRequest(pointResponse.getPoint().getId(), null, updatedUserId, updatedLeaderboardResponse.getLeaderboard().getId());
+            var response = leaderboardService.updatePoint(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Updated point successfully", response.getMessage());
@@ -443,24 +475,23 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void updatePointTestAllOptionalFieldsValid() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        var leaderboardRequest = new CreateLeaderboardRequest("test");
+
         try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "test user");
-            userService.registerNewUser(userRequest);
-            CreatePointRequest createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
-            PointResponse pointResponse = leaderboardService.createPoint(createPointRequest);
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
-            UUID updatedUserId = UUID.randomUUID();
-            RegisterNewUserRequest updatedUserRequest = new RegisterNewUserRequest(updatedUserId, "updated user");
-            userService.registerNewUser(updatedUserRequest);
+            var userId = registerNewUser("Test user");
 
-            CreateLeaderboardRequest updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
-            CreateLeaderboardResponse updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
+            var createPointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            var pointResponse = leaderboardService.createPoint(createPointRequest);
 
-            UpdatePointRequest request = new UpdatePointRequest(pointResponse.getPoint().getId(), 2, updatedUserId, updatedLeaderboardResponse.getLeaderboard().getId());
-            PointResponse response = leaderboardService.updatePoint(request);
+            var updatedUserId = registerNewUser("Updated User");
+
+            var updatedLeaderboardRequest = new CreateLeaderboardRequest("updated leaderboard");
+            var updatedLeaderboardResponse = leaderboardService.createLeaderboard(updatedLeaderboardRequest);
+
+            var request = new UpdatePointRequest(pointResponse.getPoint().getId(), 2, updatedUserId, updatedLeaderboardResponse.getLeaderboard().getId());
+            var response = leaderboardService.updatePoint(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Updated point successfully", response.getMessage());
@@ -476,7 +507,8 @@ public class LeaderboardServiceImplIT {
     @Test
     public void getEventLeaderboardTestNullRequest() {
         try {
-            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(null);
+            var response = leaderboardService.getEventLeaderboard(null);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("The GetEventLeaderboardRequest object passed was NULL", response.getMessage());
             Assertions.assertNull(response.getLeaderboard());
@@ -487,16 +519,19 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void getEventLeaderboardTestNullRequestParameters() {
-        GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(null, null, null);
+        var request = new GetEventLeaderboardRequest(null, null, null);
+
         assertThatThrownBy(() -> leaderboardService.getEventLeaderboard(request))
                 .isInstanceOf(NullRequestParameterException.class);
     }
 
     @Test
     public void getEventLeaderboardTestInvalidLeaderboardId() {
-        GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(UUID.randomUUID(), 1, 1);
+        var request = new GetEventLeaderboardRequest(UUID.randomUUID(), 1, 1);
+
         try {
-            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
+            var response = leaderboardService.getEventLeaderboard(request);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("No leaderboard exists for the provided leaderboardId", response.getMessage());
             Assertions.assertTrue(response.getLeaderboard().isEmpty());
@@ -507,17 +542,18 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void getEventLeaderboardTestStartingGreaterThanPointsInLeaderboard() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        var leaderboardRequest = new CreateLeaderboardRequest("test");
+
         try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
-            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
-            CreatePointRequest pointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            var userId = registerNewUser("Test user");
+
+            var pointRequest = new CreatePointRequest(1, userId, leaderboardResponse.getLeaderboard().getId());
             leaderboardService.createPoint(pointRequest);
 
-            GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(leaderboardResponse.getLeaderboard().getId(), 2, 1);
-            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
+            var request = new GetEventLeaderboardRequest(leaderboardResponse.getLeaderboard().getId(), 2, 1);
+            var response = leaderboardService.getEventLeaderboard(request);
 
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("Starting is greater than the number of points in the leaderboard", response.getMessage());
@@ -529,23 +565,20 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void getEventLeaderboardTestResponseWithAllPointsInLeaderboard() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        var leaderboardRequest = new CreateLeaderboardRequest("test");
+
         try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
             //Create three users to use
-            List<UUID> userIds = new ArrayList<UUID>();
-            for (int i = 0; i < 3; i++) {
-                userIds.add(UUID.randomUUID());
-            }
-            for (int i = 0; i < 3; i++) {
-                RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userIds.get(i), "test user");
-                userService.registerNewUser(userRequest);
+            List<UUID> userIds = new ArrayList<>();
+            for (var i = 0; i < 3; i++) {
+                userIds.add(registerNewUser("test user"));
             }
 
             //create 3 points to rank
-            List<PointResponse> pointResponses = new ArrayList<PointResponse>();
-            CreatePointRequest pointRequest = new CreatePointRequest(5, userIds.get(0), leaderboardResponse.getLeaderboard().getId());
+            List<PointResponse> pointResponses = new ArrayList<>();
+            var pointRequest = new CreatePointRequest(5, userIds.get(0), leaderboardResponse.getLeaderboard().getId());
             pointResponses.add(leaderboardService.createPoint(pointRequest));
             pointRequest.setAmount(10);
             pointRequest.setUserId(userIds.get(1));
@@ -554,8 +587,8 @@ public class LeaderboardServiceImplIT {
             pointRequest.setUserId(userIds.get(2));
             pointResponses.add(leaderboardService.createPoint(pointRequest));
 
-            GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(leaderboardResponse.getLeaderboard().getId(), 1, 3);
-            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
+            var request = new GetEventLeaderboardRequest(leaderboardResponse.getLeaderboard().getId(), 1, 3);
+            var response = leaderboardService.getEventLeaderboard(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Successfully found points for event", response.getMessage());
@@ -575,23 +608,21 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void getEventLeaderboardTestCountGreaterThanNumberOfPointsLeft() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        var leaderboardRequest = new CreateLeaderboardRequest("test");
+
         try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
             //Create three users to use
-            List<UUID> userIds = new ArrayList<UUID>();
-            for (int i = 0; i < 3; i++) {
-                userIds.add(UUID.randomUUID());
-            }
-            for (int i = 0; i < 3; i++) {
-                RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userIds.get(i), "test user");
-                userService.registerNewUser(userRequest);
+            List<UUID> userIds = new ArrayList<>();
+
+            for (var i = 0; i < 3; i++) {
+                userIds.add(registerNewUser("test user"));
             }
 
             //create 3 points to rank
-            List<PointResponse> pointResponses = new ArrayList<PointResponse>();
-            CreatePointRequest pointRequest = new CreatePointRequest(5, userIds.get(0), leaderboardResponse.getLeaderboard().getId());
+            List<PointResponse> pointResponses = new ArrayList<>();
+            var pointRequest = new CreatePointRequest(5, userIds.get(0), leaderboardResponse.getLeaderboard().getId());
             pointResponses.add(leaderboardService.createPoint(pointRequest));
             pointRequest.setAmount(10);
             pointRequest.setUserId(userIds.get(1));
@@ -600,8 +631,8 @@ public class LeaderboardServiceImplIT {
             pointRequest.setUserId(userIds.get(2));
             pointResponses.add(leaderboardService.createPoint(pointRequest));
 
-            GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(leaderboardResponse.getLeaderboard().getId(), 2, 3);
-            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
+            var request = new GetEventLeaderboardRequest(leaderboardResponse.getLeaderboard().getId(), 2, 3);
+            var response = leaderboardService.getEventLeaderboard(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Successfully found points for event", response.getMessage());
@@ -620,23 +651,20 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void getEventLeaderboardTestCountLowerThanNumberOfPointsInLeaderboard() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("test");
+        var leaderboardRequest = new CreateLeaderboardRequest("test");
+
         try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
 
             //Create three users to use
-            List<UUID> userIds = new ArrayList<UUID>();
-            for (int i = 0; i < 3; i++) {
-                userIds.add(UUID.randomUUID());
-            }
-            for (int i = 0; i < 3; i++) {
-                RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userIds.get(i), "test user");
-                userService.registerNewUser(userRequest);
+            List<UUID> userIds = new ArrayList<>();
+            for (var i = 0; i < 3; i++) {
+                userIds.add(registerNewUser("test user"));
             }
 
             //create 3 points to rank
-            List<PointResponse> pointResponses = new ArrayList<PointResponse>();
-            CreatePointRequest pointRequest = new CreatePointRequest(5, userIds.get(0), leaderboardResponse.getLeaderboard().getId());
+            List<PointResponse> pointResponses = new ArrayList<>();
+            var pointRequest = new CreatePointRequest(5, userIds.get(0), leaderboardResponse.getLeaderboard().getId());
             pointResponses.add(leaderboardService.createPoint(pointRequest));
             pointRequest.setAmount(10);
             pointRequest.setUserId(userIds.get(1));
@@ -645,8 +673,8 @@ public class LeaderboardServiceImplIT {
             pointRequest.setUserId(userIds.get(2));
             pointResponses.add(leaderboardService.createPoint(pointRequest));
 
-            GetEventLeaderboardRequest request = new GetEventLeaderboardRequest(leaderboardResponse.getLeaderboard().getId(), 1, 2);
-            GetEventLeaderboardResponse response = leaderboardService.getEventLeaderboard(request);
+            var request = new GetEventLeaderboardRequest(leaderboardResponse.getLeaderboard().getId(), 1, 2);
+            var response = leaderboardService.getEventLeaderboard(request);
 
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Successfully found points for event", response.getMessage());
@@ -666,7 +694,8 @@ public class LeaderboardServiceImplIT {
     @Test
     public void savePointNullTest() {
         try {
-            Response response = leaderboardService.savePoint(null);
+            var response = leaderboardService.savePoint(null);
+
             Assertions.assertFalse(response.isSuccess());
             Assertions.assertEquals("Point provided is null", response.getMessage());
         } catch (NullRequestParameterException e) {
@@ -676,22 +705,25 @@ public class LeaderboardServiceImplIT {
 
     @Test
     public void savePointNullValuesTest() {
-        Point point = new Point(null, null, null);
+        var point = new Point(null, null, null);
+
         assertThatThrownBy(() -> leaderboardService.savePoint(point))
                 .isInstanceOf(NullRequestParameterException.class);
     }
 
     @Test
     public void savePointValidTest() {
-        CreateLeaderboardRequest leaderboardRequest = new CreateLeaderboardRequest("testValid");
+        var leaderboardRequest = new CreateLeaderboardRequest("testValid");
+
         try {
-            CreateLeaderboardResponse leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
-            UUID userId = UUID.randomUUID();
-            RegisterNewUserRequest userRequest = new RegisterNewUserRequest(userId, "Test user");
-            RegisterNewUserResponse userResponse = userService.registerNewUser(userRequest);
-            GetUserByIdRequest user = new GetUserByIdRequest(userId);
-            Point point = new Point(1, userService.getUserById(user).getUser(), leaderboardResponse.getLeaderboard());
-            Response response = leaderboardService.savePoint(point);
+            var leaderboardResponse = leaderboardService.createLeaderboard(leaderboardRequest);
+
+            var userId = registerNewUser("Test user");
+
+            var user = new GetUserByIdRequest(userId);
+            var point = new Point(1, userService.getUserById(user).getUser(), leaderboardResponse.getLeaderboard());
+            var response = leaderboardService.savePoint(point);
+
             Assertions.assertTrue(response.isSuccess());
             Assertions.assertEquals("Saved point successfully", response.getMessage());
         } catch (NullRequestParameterException e) {

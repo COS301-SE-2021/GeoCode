@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss(null)">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Create GeoCode</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item>
+    <ion-label>Description</ion-label>
+    <ion-input type="text" (ionBlur)="updateRequest($event,'description')"> </ion-input>
+  </ion-item>
+
+  <ion-list>
+    <ion-button color="button"(click)="addHint()">Add Hint +</ion-button>
+    <div *ngFor="let hint of request.hints">
+      <ion-item>
+        <ion-label>Hint</ion-label>
+        <ion-input type="text" (ionBlur)="updateHints($event,hint)" value="{{hint}}"> </ion-input><ion-button color ="button"(click)="deleteHint(hint)">X</ion-button>
+      </ion-item>
+    </div>
+
+  </ion-list>
+
+  <ion-item>
+    <ion-label>Difficulty</ion-label>
+    <ion-select  placeholder="Select One" #Diff (ionChange)="updateDifficulty(Diff.value)">
+      <ion-select-option value="EASY">Easy</ion-select-option>
+      <ion-select-option value="MEDIUM">Medium</ion-select-option>
+      <ion-select-option value="HARD">Hard</ion-select-option>
+      <ion-select-option value="INSANE">Insane</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Please Select Location on Map</ion-label>
+    <ion-label #location></ion-label>
+  </ion-item>
+
+  <div #mapElement class="map"></div>
+  <div id="button-container">
+    <ion-button class="button" color="button" (click)="createGeoCode()">Create GeoCode</ion-button>
+  </div>
+
+
+</ion-content>
+

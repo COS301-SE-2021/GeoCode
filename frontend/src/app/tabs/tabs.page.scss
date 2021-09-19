@@ -8,10 +8,46 @@ ion-tab-button{
   --color-selected: black;
 }
 
-ion-icon{
-
+img {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  width: 150px;
 }
 
+.hidden {
+  height: 0;
+  border: 0;
+}
 
+ion-list {
+  position: absolute;
+  bottom: 0;
+  width: 200px;
+  border: 0;
+  overflow: hidden;
+  background: inherit;
+}
+
+.item {
+  --color: white;
+
+  ion-icon {
+    color: white;
+  }
+}
+
+.item.selected {
+  --color: black;
+
+  ion-icon {
+    color: black;
+  }
+}
+
+ion-item {
+  --background: none;
+  --border-style: none;
+}
 
 

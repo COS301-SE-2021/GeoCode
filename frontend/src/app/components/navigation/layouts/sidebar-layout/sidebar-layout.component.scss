@@ -1,0 +1,17 @@
+.page {
+  display: flex;
+  height: 100vh;
+}
+
+#menu {
+  width:200px;
+  height:100%;
+  background-color: var(--ion-toolbar-background);
+}
+
+#content {
+  position: relative;
+  height:100%;
+  flex:1;
+  min-width:50px;
+}

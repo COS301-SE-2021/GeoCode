@@ -1,5 +1,12 @@
-import { Component } from '@angular/core';
-import {Platform} from '@ionic/angular';
+import {Component, ViewChild} from '@angular/core';
+import {IonTabs} from '@ionic/angular';
+import {NavigationLayout} from '../services/NavigationLayout';
+
+class TabDefinition {
+  name: string;
+  internalName: string;
+  iconName: string;
+}
 
 @Component({
   selector: 'app-tabs',
@@ -7,16 +14,28 @@ import {Platform} from '@ionic/angular';
   styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
-  tabsPlacement='bottom';
-  geoCodeIcon = '/assets/images/QRCodeWht.svg';
-  //eventsIcon = '/assets/images/CalendarIconWht.svg';
-  //eventsIcon = 'trophy-outline';
-  collectableIcon = '/assets/images/CoinStackWht.svg';
 
-  constructor(public platform: Platform) {
-  if(!this.platform.is('mobile')){
-    this.tabsPlacement='top';
+  @ViewChild('tabs') tabs: IonTabs;
+
+  tabList: TabDefinition[] = [
+    { name: 'Explore', internalName: 'explore', iconName: 'qr-code-outline' },
+    { name: 'Collections', internalName: 'collections', iconName: 'diamond-outline' },
+    { name: 'Events', internalName: 'events', iconName: 'trophy-outline' },
+    { name: 'Profile', internalName: 'profile', iconName: 'person-circle-outline' }
+  ];
+
+  constructor(public navigationLayout: NavigationLayout) { }
+
+  async changeTab(tabName: string) {
+    await this.tabs.select(tabName);
   }
+
+  isSelected(tab: TabDefinition) {
+    try {
+      return (this.tabs.getSelected() === tab.internalName);
+    } catch {
+      return false;
+    }
   }
 
 }

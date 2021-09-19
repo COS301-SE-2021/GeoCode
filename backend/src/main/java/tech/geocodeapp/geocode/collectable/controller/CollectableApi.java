@@ -5,7 +5,6 @@
  */
 package tech.geocodeapp.geocode.collectable.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import tech.geocodeapp.geocode.collectable.model.*;
 import tech.geocodeapp.geocode.collectable.request.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,16 +24,16 @@ import tech.geocodeapp.geocode.collectable.response.*;
 
 import javax.validation.Valid;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T03:21:48.298Z[GMT]")
 @Validated
-@CrossOrigin(origins = "${web_referrer}", maxAge = 3600)
 public interface CollectableApi {
 
     @Operation(summary = "Creates a new Collectable", description = "Create Collectable", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Collectable" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Collectable created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Collectable.class))),
+            @ApiResponse(responseCode = "200", description = "Collectable created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateCollectableResponse.class))),
 
+            @ApiResponse(responseCode = "400", description = "Failed to create Collectable", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateCollectableResponse.class))),
+            
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/Collectable/createCollectable",
             produces = { "application/json", "application/xml" },
@@ -46,7 +45,9 @@ public interface CollectableApi {
     @Operation(summary = "Create a new Collectable Set", description = "Create Collectable Set", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Collectable" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully created Collectable Set", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CollectableSet.class))),
+            @ApiResponse(responseCode = "200", description = "Successfully created Collectable Set", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateCollectableSetResponse.class))),
+
+            @ApiResponse(responseCode = "400", description = "Failed to create CollectableSet", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateCollectableSetResponse.class))),
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/Collectable/createCollectableSet",
@@ -59,7 +60,9 @@ public interface CollectableApi {
     @Operation(summary = "Creates a new Collectable Type", description = "Create Collectable Type", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Collectable" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Collectable Type created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CollectableType.class))),
+            @ApiResponse(responseCode = "200", description = "Collectable Type created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateCollectableTypeResponse.class))),
+
+            @ApiResponse(responseCode = "400", description = "Failed to create CollectableType", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateCollectableTypeResponse.class))),
 
             @ApiResponse(responseCode = "401", description = "Invalid JWT token") })
     @RequestMapping(value = "/Collectable/createCollectableType",

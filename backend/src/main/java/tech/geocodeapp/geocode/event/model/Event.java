@@ -97,10 +97,6 @@ public class Event {
     @ElementCollection
     private Map<String, String> properties;
 
-
-
-
-
     /**
      * Default constructor
      */
@@ -123,7 +119,6 @@ public class Event {
      */
     public Event( UUID id, String name, String description, GeoPoint location, List< UUID > geocodeIDs,
                   LocalDate beginDate, LocalDate endDate, List< Leaderboard > leaderboards, Map<String, String> properties) {
-
         this.id = id;
         this.name = name;
         this.description = description;
@@ -619,4 +614,16 @@ public class Event {
         return o.toString().replace( "\n", "\n    " );
     }
 
+    /**
+     * Clears out the details for an Event that should not be seen by non-admin Users
+     * and returns the Event
+     * @return The event with the details nulled out
+     */
+    public Event removePrivateDetails(){
+        this.geocodeIDs = new ArrayList<>();
+        if (this.properties != null) {
+            this.properties.remove("testCases");
+        }
+        return this;
+    }
 }

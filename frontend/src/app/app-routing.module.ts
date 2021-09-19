@@ -11,13 +11,9 @@ const routes: Routes = [
     loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule)
   },
   {
-    path: 'profile/:id',
-    loadChildren: () => import('./tabs/profile/profile.module').then(m => m.ProfilePageModule)
-  },
-
-
-
-
+    path: 'g/:code',
+    redirectTo: 'welcome'
+  }
 ];
 @NgModule({
   imports: [

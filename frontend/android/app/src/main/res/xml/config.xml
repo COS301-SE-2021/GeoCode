@@ -6,17 +6,14 @@
     <param name="android-package" value="com.google.cordova.plugin.browsertab.BrowserTab"/>
   </feature>
 
+  <feature name="SocialSharing">
+    <param name="android-package" value="nl.xservices.plugins.SocialSharing"/>
+  </feature>
+
   <feature name="IonicDeeplinkPlugin">
     <param name="android-package" value="io.ionic.links.IonicDeeplink"/>
     <param name="onload" value="true"/>
   </feature>
 
   
-  <preference name="ScrollEnabled" value="false" />
-  <preference name="BackupWebStorage" value="none" />
-  <preference name="SplashMaintainAspectRatio" value="true" />
-  <preference name="FadeSplashScreenDuration" value="300" />
-  <preference name="SplashShowOnlyFirstTime" value="false" />
-  <preference name="SplashScreen" value="screen" />
-  <preference name="SplashScreenDelay" value="3000" />
 </widget>

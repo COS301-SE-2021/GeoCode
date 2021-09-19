@@ -1,40 +1,48 @@
 package tech.geocodeapp.geocode.event.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.stereotype.Service;
-import javax.persistence.EntityNotFoundException;
-import javax.validation.constraints.NotNull;
-
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import tech.geocodeapp.geocode.event.blockly.Block;
+import tech.geocodeapp.geocode.event.blockly.TestCase;
 import tech.geocodeapp.geocode.event.decorator.EventComponent;
-import tech.geocodeapp.geocode.event.pathfinder.Graph;
+import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
+import tech.geocodeapp.geocode.event.exceptions.MismatchedParametersException;
+import tech.geocodeapp.geocode.event.exceptions.NotFoundException;
+import tech.geocodeapp.geocode.event.exceptions.RepoException;
 import tech.geocodeapp.geocode.event.manager.EventManager;
-import tech.geocodeapp.geocode.event.model.*;
+import tech.geocodeapp.geocode.event.model.Event;
+import tech.geocodeapp.geocode.event.model.OrderLevels;
+import tech.geocodeapp.geocode.event.model.UserEventStatus;
+import tech.geocodeapp.geocode.event.pathfinder.Graph;
 import tech.geocodeapp.geocode.event.repository.EventRepository;
 import tech.geocodeapp.geocode.event.repository.UserEventStatusRepository;
 import tech.geocodeapp.geocode.event.request.*;
 import tech.geocodeapp.geocode.event.response.*;
-import tech.geocodeapp.geocode.event.exceptions.*;
-
 import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
-
+import tech.geocodeapp.geocode.general.security.CurrentUserDetails;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
 import tech.geocodeapp.geocode.geocode.model.GeoPoint;
+import tech.geocodeapp.geocode.geocode.request.CreateGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
+import tech.geocodeapp.geocode.geocode.response.CreateGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.response.GetGeoCodeResponse;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
-
 import tech.geocodeapp.geocode.leaderboard.model.Leaderboard;
 import tech.geocodeapp.geocode.leaderboard.model.Point;
+import tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest;
 import tech.geocodeapp.geocode.leaderboard.request.CreatePointRequest;
 import tech.geocodeapp.geocode.leaderboard.request.GetPointForUserRequest;
 import tech.geocodeapp.geocode.leaderboard.response.PointResponse;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
 
-import tech.geocodeapp.geocode.user.service.UserService;
-
+import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 /**
@@ -71,13 +79,8 @@ public class EventServiceImpl implements EventService {
     @NotNull( message = "GeoCode Service Implementation may not be null." )
     private GeoCodeService geoCodeService;
 
-    /**
-     * The User service to access the current user
-     */
-    @NotNull( message = "User Service Implementation may not be null." )
-    private UserService userService;
-
     private final String eventNotFoundMessage = "Event not found";
+    private final String notBlocklyEventMsg = "Event is not a Blockly Event";
 
     /**
      * Overloaded Constructor
@@ -87,8 +90,7 @@ public class EventServiceImpl implements EventService {
      */
     public EventServiceImpl( EventRepository eventRepo,
                              UserEventStatusRepository userEventStatusRepo,
-                             @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService,
-                             @Qualifier( "UserService" ) UserService userService ) throws RepoException {
+                             @Qualifier( "LeaderboardService" ) @Lazy LeaderboardService leaderboardService ) throws RepoException {
 
         if ( ( eventRepo != null ) && ( userEventStatusRepo != null ) ) {
 
@@ -97,7 +99,6 @@ public class EventServiceImpl implements EventService {
             this.userEventStatusRepo = userEventStatusRepo;
 
             this.leaderboardService = Objects.requireNonNull( leaderboardService, "EventService: Leaderboard service must not be null." );
-            this.userService = Objects.requireNonNull( userService, "EventService: User service must not be null." );
         } else {
 
             /* The repo does not exist throw an error */
@@ -116,64 +117,144 @@ public class EventServiceImpl implements EventService {
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
+    @Transactional
     public CreateEventResponse createEvent( CreateEventRequest request ) throws InvalidRequestException {
-
         /* Validate the request */
         if ( request == null ) {
 
             throw new InvalidRequestException( true );
         } else if ( ( request.getDescription() == null ) || ( request.getLocation() == null ) ||
                 ( request.getName() == null ) || ( request.getBeginDate() == null ) ||
-                ( request.getEndDate() == null ) || ( request.getGeoCodesToFind() == null ) ||
+                ( request.getEndDate() == null ) || ( request.getCreateGeoCodesToFind() == null ) ||
                 ( request.getOrderBy() == null ) ) {
 
             throw new InvalidRequestException();
         }
 
-        /* Hold the created leaderboards */
-        var leaderboard = new ArrayList< Leaderboard >();
-        try {
-
-            /*
-             * Create the request to the leaderboard service
-             * and store the response
-             */
-            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() );
-            var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
-
-            leaderboard.add( hold );
-        } catch ( NullRequestParameterException e ) {
-
-            return new CreateEventResponse( false, e.getMessage() );
+        if( request.getCreateGeoCodesToFind().isEmpty() ){
+            return new CreateEventResponse( false, "Cannot create an Event without GeoCodes" );
         }
 
-        /* Store the list of GeoCode UUIDs to create a Level on */
-        List< UUID > geoCodeIDs = request.getGeoCodesToFind();
-
+        /* Create the new Event object with the specified attributes */
         UUID eventID = UUID.randomUUID();
 
+        /* set the geoCodeIDs to null for now, set it once the GeoCodeIDs have been stored */
+        var event = new Event( eventID, request.getName(), request.getDescription(),
+                request.getLocation(), null, request.getBeginDate(), request.getEndDate(),
+                null, request.getProperties() );
+
+        /* Check the availability of the Event */
+        if ( request.isAvailable() == null ) {
+
+            /* None is set so make it default available */
+            event.setAvailable( true );
+        } else {
+
+            /* Set to the given */
+            event.setAvailable( request.isAvailable() );
+        }
+
+        var properties = request.getProperties();
+
+        var isOnlyTimeTrial = ( ( properties.size() == 1 ) && ( properties.containsKey( "timeLimit" ) ) );
+
+        if( !properties.isEmpty() && !isOnlyTimeTrial ){
+            /* check if the Event is a Blockly Event */
+            /* check if all Blockly properties were specified */
+            if( !properties.containsKey("problemDescription") ){
+                return new CreateEventResponse( false, "Problem description not specified for the Blockly Event");
+            }
+
+            if( !properties.containsKey("testCases") ){
+                return new CreateEventResponse( false, "Test cases were not specified for the Blockly Event" );
+            }
+
+            if( !properties.containsKey("blocks") ){
+                return new CreateEventResponse( false, "Block types were not specified for the Blockly Event" );
+            }
+
+            if(properties.get("problemDescription").strip().equals("")){
+                return new CreateEventResponse(false, "An empty problem description was given for the Blockly Event");
+            }
+
+            /* check the test cases and block information are in the correct format */
+            final ObjectMapper objectMapper = new ObjectMapper();
+
+            try {
+                objectMapper.readValue(properties.get("testCases"), TestCase[].class);
+            } catch (JsonProcessingException e) {
+                return new CreateEventResponse(false, "Invalid format for the test cases");
+            }
+
+            Block[] blocks;
+
+            try {
+                blocks = objectMapper.readValue(properties.get("blocks"), Block[].class);
+
+                /* check that the maxInstance values are valid */
+                for(var block : blocks){
+                    var maxInstances = block.getMaxInstances();
+
+                    if(maxInstances == 0 || maxInstances < -1){
+                        return new CreateEventResponse(false, maxInstances + " is not a valid value for a block's maxInstances property");
+                    }
+                }
+            } catch (JsonProcessingException e) {
+                return new CreateEventResponse(false, "Invalid format for the blocks");
+            }
+
+            /* check that the number of block types is at least the number stages in the event
+            * so that at least 1 block type can be allocated at each stage of the event
+            *  */
+            if(blocks.length < request.getCreateGeoCodesToFind().size()){
+                return new CreateEventResponse(false, "The number of block types must be at least the number of GeoCodes in the Blockly Event");
+            }
+        }
+
+        /* Create the EventComponent to pass to the createGeoCode function */
+        EventManager eventManager = new EventManager();
+        EventComponent eventComponent = eventManager.buildEvent(event);
+
+        /* Store the list of GeoCode UUIDs to create a Level on */
+        List<CreateGeoCodeRequest> createGeoCodeRequests = request.getCreateGeoCodesToFind();
+
+        List<UUID> geoCodeIDs = new ArrayList<>();
         List< GeoCode > geoCodes = new ArrayList<>();
+
         /*
-         * Go through each GeoCode ID
+         * Go through each GeoCode creation request
          * and get the GeoCode object
          */
-        for ( UUID id : geoCodeIDs ) {
+        for ( CreateGeoCodeRequest createGeoCodeRequest : createGeoCodeRequests ) {
             try {
                 /*
-                 * Call the GeoCode service to get the GeoCode Object
-                 * add the found object to the list
+                 * Call the GeoCode service to create the GeoCode Object
+                 * Pass eventComponent to createGeoCode to use to check if Collectables
+                 * should be added to the GeoCode
                  * */
-                var found = geoCodeService.getGeoCode( new GetGeoCodeRequest( id ) ).getFoundGeoCode();
-                geoCodes.add( found );
+                createGeoCodeRequest.setEventComponent(eventComponent);
 
-                /* Set the geocode's event ID */
-                if ( found.getEventID() != null ) {
-                    return new CreateEventResponse( false, "Attempted to link a geocode that is already linked to an event" );
+                var createGeoCodeResponse = geoCodeService.createGeoCode( createGeoCodeRequest );
+
+                if ( !createGeoCodeResponse.isSuccess() ) {
+                    var name = createGeoCodeRequest.getDescription();
+                    var reason = createGeoCodeResponse.getMessage();
+                    return new CreateEventResponse( false, "Failed to create GeoCode \""+name+"\": "+reason );
                 }
-                found.setEventID( eventID );
-                geoCodeService.saveGeoCode( found );
+
+                /*
+                 * add the created object to the list
+                 * */
+                var created = createGeoCodeResponse.getCreatedGeocode();
+                geoCodes.add( created );
+
+                /* add the current GeoCode's id to the list of GeoCode ids, so that if the
+                * GeoCode id list is not empty when setting it for the created Event
+                *  */
+                geoCodeIDs.add( created.getId() );
+
             } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
-                return new CreateEventResponse( false, "Failed to find geocode with id " + id.toString() );
+                return new CreateEventResponse( false, e.getMessage());
             }
         }
 
@@ -198,21 +279,31 @@ public class EventServiceImpl implements EventService {
             return new CreateEventResponse( false, "Sorting failed" );
         }
 
-        /* Create the new Event object with the specified attributes */
-        var event = new Event( eventID, request.getName(), request.getDescription(),
-                               request.getLocation(), geoCodeIDs, request.getBeginDate(), request.getEndDate(),
-                               leaderboard, request.getProperties() );
+        /* set the GeoCode ids now that we have them after the GeoCodes have been created */
+        event.setGeocodeIDs(geoCodeIDs);
 
-        /* Check the availability of the Event */
-        if ( request.isAvailable() == null ) {
+        /* Hold the created leaderboards */
+        var leaderboards = new ArrayList< Leaderboard >();
 
-            /* None is set so make it default available */
-            event.setAvailable( true );
-        } else {
+        try {
 
-            /* Set to the given */
-            event.setAvailable( request.isAvailable() );
+            /*
+             * Create the request to the leaderboard service
+             * and store the response
+             */
+            var leaderboardRequest = new CreateLeaderboardRequest( request.getName() );
+            var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
+
+            leaderboards.add( hold );
+        } catch ( NullRequestParameterException e ) {
+
+            return new CreateEventResponse( false, e.getMessage() );
         }
+
+        /* set the leaderboard now that we now the details of the Event are correct
+        * and the details for creating the GeoCodes are also correct
+        * */
+        event.setLeaderboards(leaderboards);
 
         /*
          * Save the newly create Event
@@ -222,7 +313,7 @@ public class EventServiceImpl implements EventService {
 
             /* Save the newly created entry to the repository */
             eventRepo.save( event );
-            return new CreateEventResponse( true, "Event created" );
+            return new CreateEventResponse( true, "Event created", event.getId(), geoCodes );
         } catch ( IllegalArgumentException error ) {
 
             return new CreateEventResponse( false, error.getMessage() );
@@ -262,7 +353,7 @@ public class EventServiceImpl implements EventService {
             response = temp.map(
 
                     /* Indicate the Event was found and return it */
-                    event -> new GetEventResponse( true, "Event found", event )
+                    event -> new GetEventResponse( true, "Event found", event.removePrivateDetails() )
                                ).orElseGet(
 
                     /* Indicate the Event was not found */
@@ -303,7 +394,8 @@ public class EventServiceImpl implements EventService {
         UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID( request.getEventID(), request.getUserID() );
 
         /* Check whether the current user is requesting for themselves */
-        UUID currentUserID = userService.getCurrentUserID();
+        UUID currentUserID = CurrentUserDetails.getID();
+
         if ( !currentUserID.equals( request.getUserID() ) ) {
 
             /* The userID passed in does not match the current user ID. Just return the passed-in user's status */
@@ -321,22 +413,23 @@ public class EventServiceImpl implements EventService {
 
                 /* Create the decorated event */
                 EventManager manager = new EventManager();
-                EventComponent event = manager.buildEvent( temp.get() );
+                EventComponent eventComponent = manager.buildEvent( temp.get() );
 
                 /* Get the first geocode of the event */
-                UUID nextGeocodeID = event.getGeocodeIDs().get( 0 );
+                UUID nextGeocodeID = eventComponent.getGeocodeIDs().get( 0 );
 
                 /* Create a new status object with the geocodeID set to the first geocode */
-                Map< String, String > details = new HashMap< String, String >();
-                status = new UserEventStatus( UUID.randomUUID(), event.getID(), currentUserID, nextGeocodeID, details );
-                event.handleEventStart( status );
+                Map< String, String > details = new HashMap<>();
+
+                status = new UserEventStatus( UUID.randomUUID(), eventComponent.getID(), currentUserID, nextGeocodeID, details );
+                eventComponent.handleEventStart( status );
 
                 /* Create the user's points if the event has a leaderboard */
-                if ( event.getLeaderboards().size() > 0 ) {
+                if ( eventComponent.getLeaderboards().size() > 0 ) {
 
                     try {
 
-                        UUID leaderboardID = event.getLeaderboards().get( 0 ).getId();
+                        UUID leaderboardID = eventComponent.getLeaderboards().get( 0 ).getId();
                         CreatePointRequest pointRequest = new CreatePointRequest( 0, currentUserID, leaderboardID );
                         PointResponse pointResponse = leaderboardService.createPoint( pointRequest );
 
@@ -367,7 +460,12 @@ public class EventServiceImpl implements EventService {
             try {
 
                 GetGeoCodeResponse getGeoCodeResponse = geoCodeService.getGeoCode( new GetGeoCodeRequest( geocodeID ) );
-                return new GetCurrentEventStatusResponse( true, "Status returned", status, getGeoCodeResponse.getFoundGeoCode() );
+                GeoCode geocode = getGeoCodeResponse.getFoundGeoCode();
+                geocode.setCollectables(null);
+                geocode.setHints(null);
+                geocode.setCreatedBy(null);
+                geocode.setQrCode(null);
+                return new GetCurrentEventStatusResponse( true, "Status returned", status, geocode );
             } catch ( tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException e ) {
 
                 return new GetCurrentEventStatusResponse( false, e.getMessage(), null, null );
@@ -553,7 +651,7 @@ public class EventServiceImpl implements EventService {
 
             /* Check if the event is close enough to the given point */
             if ( distance <= request.getRadius() ) {
-                foundEvents.add( event );
+                foundEvents.add( event.removePrivateDetails() );
             }
         }
 
@@ -569,6 +667,11 @@ public class EventServiceImpl implements EventService {
     public GetAllEventsResponse getAllEvents() {
 
         var temp = eventRepo.findAll();
+
+        /* remove the list of GeoCode IDs and the properties map from the events */
+        for(var event: temp){
+            event.removePrivateDetails();
+        }
 
         return new GetAllEventsResponse( true, "All Events returned", temp );
     }
@@ -645,7 +748,7 @@ public class EventServiceImpl implements EventService {
                  * The current Event is the same
                  * therefore add it to the list
                  */
-                foundEvents.add( event );
+                foundEvents.add( event.removePrivateDetails() );
             }
         }
 
@@ -653,56 +756,171 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
-     * Create a new Leaderboard for an Event
+     * Getting the Blockly blocks for the current User for a Blockly Event
      *
      * @param request the attributes the response should be created from
      *
-     * @return the newly created response instance from the specified CreateGeoCodeRequest
+     * @return The Blockly blocks for the current User
      *
      * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
      */
     @Override
-    public CreateLeaderboardResponse createLeaderBoard( CreateLeaderboardRequest request ) throws InvalidRequestException {
+    public GetBlocksResponse getBlocks(GetBlocksRequest request) throws InvalidRequestException {
+        var checkEventAndUserResponse = checkEventAndUser(request, true, false);
 
-        /* Validate the request */
-        if ( request == null ) {
+        if(!checkEventAndUserResponse.isSuccess()){
+            return new GetBlocksResponse(false, checkEventAndUserResponse.getMessage());
+        }
 
-            throw new InvalidRequestException( true );
-        } else if ( request.getName() == null ) {
+        /* get the blocks that the User has from the UserEventStatus */
+        var status = checkEventAndUserResponse.getStatus();
+        var details = status.getDetails();
+        var blocks = details.get("blocks");
 
+        List< String > blockNames = new ArrayList<>(Arrays.asList(blocks.split("#")));//TODO: change to get w/ correct format (if format changes)
+        return new GetBlocksResponse( true, "Blocks successfully returned", blockNames );
+    }
+
+    /**
+     * Gets the input cases (the variables and their values) for the given Blockly Event
+     *
+     * @param request the attributes the response should be created from
+     * @return The input cases for the Blockly Event
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public GetInputsResponse getInputs(GetInputsRequest request) throws InvalidRequestException {
+        var checkEventAndUserResponse = checkEventAndUser(request, false, true);
+
+        if(!checkEventAndUserResponse.isSuccess()){
+            return new GetInputsResponse(false, checkEventAndUserResponse.getMessage());
+        }
+
+        /* return the inputs for the Event */
+        var eventComponent = checkEventAndUserResponse.getEventComponent();
+        var inputs = eventComponent.getInputs();
+
+        return new GetInputsResponse(true, "Inputs successfully returned for the Blockly Event", inputs);
+    }
+
+    /**
+     * Checks the output that the User's code generated (i.e the JavaScript code that was converted from the BLockly blocks)
+     *
+     * @param request the attributes the response should be created from
+     *
+     * @return The number of test cases that the User passed
+     *
+     * @throws InvalidRequestException the provided request was invalid and resulted in an error being thrown
+     */
+    @Override
+    public CheckOutputResponse checkOutput(CheckOutputRequest request) throws InvalidRequestException {
+        /* validate the request */
+        if(request == null){
+            throw new InvalidRequestException(true);
+        }
+
+        if(request.getEventID() == null || request.getOutputs() == null){
             throw new InvalidRequestException();
         }
 
-        try {
+        var eventTemp = eventRepo.findById(request.getEventID());
 
-            /*
-             * Create the request to the leaderboard service
-             * and store the response
-             */
-            var leaderboardRequest = new tech.geocodeapp.geocode.leaderboard.request.CreateLeaderboardRequest( request.getName() );
-            var hold = leaderboardService.createLeaderboard( leaderboardRequest ).getLeaderboard();
-
-            /* Find the Event object with the given ID */
-            var event = eventRepo.findById( request.getEventID() );
-            if ( event.isPresent() ) {
-
-                /* Get the actual Event and append to its leaderboards */
-                var currEvent = event.get();
-                currEvent.addLeaderboardsItem( hold );
-            } else {
-
-                /* The object was not found */
-                return new CreateLeaderboardResponse( false );
-            }
-
-        } catch ( NullRequestParameterException error ) {
-
-            /* An error occurred and the leaderboard could not be created */
-            return new CreateLeaderboardResponse( false );
+        if(eventTemp.isEmpty()){
+            return new CheckOutputResponse(false, eventNotFoundMessage);
         }
 
-        /* The new leaderboard was successfully made */
-        return new CreateLeaderboardResponse( true );
+        var event = eventTemp.get();
+
+        var eventManager = new EventManager();
+        var eventComponent = eventManager.buildEvent(event);
+
+        if( !eventComponent.isBlocklyEvent() ){
+            return new CheckOutputResponse(false, notBlocklyEventMsg );
+        }
+
+        var userOutputs = request.getOutputs();
+        var correctOutputs = eventComponent.getOutputs();
+
+        /* count the number of test cases that the output matched on */
+        var numTestCases = correctOutputs.length;
+
+        /* check that the number of test cases is correct */
+        if( userOutputs.size() != numTestCases ){
+            return new CheckOutputResponse( false, "The number of output test cases provided was incorrect" );
+        }
+
+        var count = 0;
+
+        for(int i = 0; i < numTestCases; ++i){
+            if( userOutputs.get(i).equals(correctOutputs[i]) ){
+                ++count;
+            }
+        }
+
+        if(count < numTestCases){
+            return new CheckOutputResponse(true, "You passed "+count+" out of the "+numTestCases+" test cases");
+        }
+
+        return new CheckOutputResponse(true, "You passed all of the test cases");
+    }
+
+    //// Blockly Helper Functions ////
+
+    /**
+     * checks the given request is valid, the event is valid and that the user is participating in the given event
+     *
+     * @param request The request to check
+     * @param needStatus Whether the calling function needs the UserEventStatus to be returned
+     */
+    private CheckEventAndUserResponse checkEventAndUser(GetEventDetailsByIDRequest request, boolean needStatus, boolean needEventComponent) throws InvalidRequestException {
+        /* Validate the request */
+        if( request == null ){
+            throw new InvalidRequestException( true );
+        }
+
+        if( request.getEventID() == null ){
+            throw new InvalidRequestException();
+        }
+
+        var eventTemp = eventRepo.findById( request.getEventID() );
+
+        /* check if the eventID is invalid */
+        if (eventTemp.isEmpty()) {
+            return new CheckEventAndUserResponse( false, eventNotFoundMessage );
+        }
+
+        /* check if the Event is not a BlocklyEvent */
+        Event event = eventTemp.get();
+
+        EventManager eventManager = new EventManager();
+        EventComponent eventComponent = eventManager.buildEvent( event );
+
+        if( !eventComponent.isBlocklyEvent() ){
+            return new CheckEventAndUserResponse( false, notBlocklyEventMsg );
+        }
+
+        /* check if the User is not participating in the Blockly Event */
+
+        /* Get the UserEventStatus object from the repository */
+        UserEventStatus status = userEventStatusRepo.findStatusByEventIDAndUserID( request.getEventID(), CurrentUserDetails.getID() );
+
+        if( status == null ){
+            return new CheckEventAndUserResponse( false, "User is not participating in the Blockly Event" );
+        }
+
+        var response = new CheckEventAndUserResponse(true, "Valid request");
+
+        /* only give the calling function the status if needed */
+        if(needStatus){
+            response.setStatus(status);
+        }
+
+        /* only give the calling function the eventComponent if needed */
+        if(needEventComponent){
+            response.setEventComponent(eventComponent);
+        }
+
+        return response;
     }
 
     /*---------- Post Construct services ----------*/
@@ -715,15 +933,6 @@ public class EventServiceImpl implements EventService {
     public void setGeoCodeService( GeoCodeService geoCodeService ) {
 
         this.geoCodeService = geoCodeService;
-
-
-        //        GetGeoCodesResponse r = geoCodeService.getAllGeoCodes();
-        //        GeoPoint start = new GeoPoint(25, 25);
-        //        for (GeoCode g: r.getGeocodes()) {
-        //            System.out.println(g.getDescription()+", "+g.getLocation().getLatitude()+", "+g.getLocation().getLongitude());
-        //        }
-        //        List<UUID> output = Graph.getOptimalGeocodeIDOrder(r.getGeocodes(), start);
-        //        System.out.println(output);
     }
 
     /*-------------------------------------*/

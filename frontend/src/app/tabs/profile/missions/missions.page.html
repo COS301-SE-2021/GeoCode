@@ -1,17 +1,21 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="profile"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Missions</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-nav>
 
-<ion-content>
-  <ion-list>
-    <ion-item *ngFor="let mission of missions" button detail [routerLink]="['/mission/'+mission.id]">
-      <ion-label slot="start">{{mission.type}}</ion-label><br>
-      <ion-progress-bar color="accent" type="determinate" value="{{mission.completion/mission.amount}}"></ion-progress-bar ><br /><br />
-    </ion-item>
-  </ion-list>
-</ion-content>
+  <app-nav-header>
+    <app-nav-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="profile"></ion-back-button>
+      </ion-buttons>
+      <ion-title>Missions</ion-title>
+    </app-nav-toolbar>
+  </app-nav-header>
+
+  <ion-content>
+    <ion-list>
+      <ion-item *ngFor="let mission of missions" button detail [routerLink]="['/mission/'+mission.id]">
+        <ion-label slot="start">{{mission.type}}</ion-label><br>
+        <ion-progress-bar color="accent" type="determinate" value="{{mission.completion/mission.amount}}"></ion-progress-bar ><br /><br />
+      </ion-item>
+    </ion-list>
+  </ion-content>
+
+</app-nav>
