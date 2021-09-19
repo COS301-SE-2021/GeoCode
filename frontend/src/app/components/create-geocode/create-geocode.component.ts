@@ -106,7 +106,7 @@ export class CreateGeocodeComponent implements AfterViewInit {
             });
             await toast.present();
             await this.dismiss(null);
-            await this.qrGenerator.download(response.createdGeocode.qrCode);
+            await this.qrGenerator.download(response.createdGeocode.qrCode, response.createdGeocode.description);
           }
         });
       }
