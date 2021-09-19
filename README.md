@@ -144,7 +144,6 @@ The following documentation was done in LaTeX and is to document the methods use
 * <a href="https://www.overleaf.com/read/kyrfcgymmnng">User Manual Version Two</a>
 * <a href="https://drive.google.com/file/d/1TPxVUnTDn-eS_OPRwaLPnVOdo1seEFya/view?usp=sharing">Architectural Requirements Version Two</a>
 * <a href="https://www.overleaf.com/read/yvhjyygymzdn">Architectural Requirements Version Three</a>
-* <a href="">Testing Policy</a>
   
 The following documentation was done in LaTeX and is to document the usability testing of the project.
 * <a href="https://www.overleaf.com/read/hpvhpdhpscwz">Application Theme Test</a>
@@ -243,6 +242,12 @@ The following software engineers contributed to the GeoCode project:
               - GeoCode Subsystem
               - System Optimization
               - Events Subsystem
+		   - Testing and researched frameworks:
+              - Unit Testing
+              - Integration Testing
+              - Jmeter
+              - Sonar		
+              - Mockito			  
        </pre>
    </details>
 
