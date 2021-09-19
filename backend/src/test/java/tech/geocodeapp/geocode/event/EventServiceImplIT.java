@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import tech.geocodeapp.geocode.GeoCodeApplication;
+import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableSetRequest;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableTypeRequest;
+import tech.geocodeapp.geocode.collectable.service.CollectableService;
 import tech.geocodeapp.geocode.event.blockly.Block;
 import tech.geocodeapp.geocode.event.blockly.TestCase;
 import tech.geocodeapp.geocode.event.exceptions.InvalidRequestException;
@@ -33,6 +37,7 @@ import tech.geocodeapp.geocode.geocode.request.GetCollectablesInGeoCodeByQRCodeR
 import tech.geocodeapp.geocode.geocode.request.GetGeoCodeRequest;
 import tech.geocodeapp.geocode.geocode.service.GeoCodeService;
 import tech.geocodeapp.geocode.leaderboard.service.LeaderboardService;
+import tech.geocodeapp.geocode.mission.model.MissionType;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.request.HandleLoginRequest;
 import tech.geocodeapp.geocode.user.service.UserService;
@@ -103,6 +108,12 @@ class EventServiceImplIT {
      */
     @Autowired
     GeoCodeService geoCodeService;
+
+    /**
+     * The Collectable service accessor
+     */
+    @Autowired
+    CollectableService collectableService;
 
     /**
      * The expected exception message for if the given request has invalid attributes
@@ -229,6 +240,8 @@ class EventServiceImplIT {
     void createEventTest() {
 
         try {
+
+            createCollectableTypes();
 
             /* Create GeoCodes to add to the event */
             List<CreateGeoCodeRequest> createGeoCodeRequests = new ArrayList<>();
@@ -750,6 +763,7 @@ class EventServiceImplIT {
          * Not specifying an extra properties for an Event means the Event is
          * a normal event
          */
+        createCollectableTypes();
         createBlocklyEventRequest();
         createBlocklyEventResponse();
 
@@ -893,7 +907,7 @@ class EventServiceImplIT {
         var event = response.getFoundEvent();
         Assertions.assertNotNull(event);
         Assertions.assertTrue(event.getGeocodeIDs().isEmpty());
-        Assertions.assertTrue(event.getProperties().isEmpty());
+        Assertions.assertFalse(event.getProperties().containsKey("testCases"));
     }
 
     @Test
@@ -1155,20 +1169,17 @@ class EventServiceImplIT {
 
     @Test
     @DisplayName("get blockly event status - just started")
-    @Transactional
     void getBlocklyCurrentEventStatusStarted() throws InvalidRequestException, NotFoundException, MismatchedParametersException, tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException {
         user1InBlocklyEvent();
 
         firstGeoCode = geoCodeService.getGeoCode(new GetGeoCodeRequest(blocklyGeoCodeIDs.get(0))).getFoundGeoCode();
-
-        geoCodeService.getCollectablesInGeoCodeByQRCode(new GetCollectablesInGeoCodeByQRCodeRequest("GeoCode 1", firstGeoCode.getId()));
 
         var request = new GetCurrentEventStatusRequest(blocklyEventID, user1ID);
         var response = eventService.getCurrentEventStatus(request);
 
         Assertions.assertTrue(response.isSuccess());
         Assertions.assertEquals("Status returned", response.getMessage());
-        Assertions.assertNotNull(response.getTargetGeocode());
+        Assertions.assertEquals(response.getTargetGeocode().getId(), firstGeoCode.getId());
 
         var status = response.getStatus();
         Assertions.assertNotNull(status);
@@ -1176,7 +1187,6 @@ class EventServiceImplIT {
 
     @Test
     @DisplayName("get blockly event status - found 1 GeoCode")
-    @Transactional
     void getBlocklyCurrentEventStatusFoundOneGeoCode() throws NotFoundException, InvalidRequestException, tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException, MismatchedParametersException {
         getBlocklyCurrentEventStatusStarted();
 
@@ -1209,7 +1219,6 @@ class EventServiceImplIT {
 
     @Test
     @DisplayName("get blockly event status - found all GeoCodes")
-    @Transactional
     void getBlocklyCurrentEventStatusFoundAllGeoCodes() throws NotFoundException, InvalidRequestException, tech.geocodeapp.geocode.geocode.exceptions.InvalidRequestException, MismatchedParametersException {
         getBlocklyCurrentEventStatusStarted();
 
@@ -1344,6 +1353,7 @@ class EventServiceImplIT {
     }
 
     private UUID createEvent() throws InvalidRequestException {
+        createCollectableTypes();
         var request = new CreateEventRequest();
         request.setDescription( "Try get as many as possible" );
         request.setLocation( new GeoPoint( 10.2587, 40.336981 ) );
@@ -1365,6 +1375,50 @@ class EventServiceImplIT {
         var response  = eventService.createEvent( request );
 
         return response.getEventID();
+    }
+
+    private void createCollectableTypes(){
+        //create the CollectableSet to hold the "User Trackable" type
+        var christmasSetId = createCollectableSet("Christmas Set", "Christmas 2021 Collectables");
+
+        //create the CollectableTypes so that the GeoCodes have CollectableTypes to be populated with
+        var santaProperties = new HashMap<String, String>();
+        santaProperties.put("missionType", String.valueOf(MissionType.SWAP));
+        createCollectableType("Santa", "img_santa", Rarity.COMMON, christmasSetId, santaProperties);
+
+        var penguinProperties = new HashMap<String, String>();
+        penguinProperties.put("missionType", String.valueOf(MissionType.GEOCODE));
+        createCollectableType("Penguin", "img_penguin", Rarity.EPIC, christmasSetId, penguinProperties);
+
+        var bearProperties = new HashMap<String, String>();
+        bearProperties.put("missionType", String.valueOf(MissionType.DISTANCE));
+        createCollectableType("Bear", "img_bear", Rarity.COMMON, christmasSetId, bearProperties);
+    }
+
+    UUID createCollectableSet(String name, String description){
+        var createCollectableSetRequest = new CreateCollectableSetRequest(name, description);
+
+        try {
+            var createCollectableSetResponse = collectableService.createCollectableSet(createCollectableSetRequest);
+            return createCollectableSetResponse.getCollectableSet().getId();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private UUID createCollectableType(String name, String image, Rarity rarity, UUID setId, HashMap<String, String> properties) {
+        var createCollectableTypeRequest = new CreateCollectableTypeRequest(name, image, rarity, setId, properties);
+
+        try {
+            var createCollectableTypeResponse = collectableService.createCollectableType(createCollectableTypeRequest);
+            Assertions.assertTrue(createCollectableTypeResponse.isSuccess());
+
+            return createCollectableTypeResponse.getCollectableType().getId();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

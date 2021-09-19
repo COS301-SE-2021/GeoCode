@@ -4,6 +4,7 @@ import {Event, EventService, UserEventStatus} from '../../../../services/geocode
 import {CurrentUserDetails} from '../../../../services/CurrentUserDetails';
 import {zip} from 'rxjs';
 import {BlocklyComponent} from '../../../../components/blockly/blockly.component';
+import {AlertController} from '@ionic/angular';
 
 @Component({
   selector: 'app-events-blockly',
@@ -17,7 +18,7 @@ export class EventsBlocklyPage implements OnInit {
   event: Event = null;
   eventID: string = null;
   status: UserEventStatus = null;
-  blocks: {[blockName: string]: number} = {};
+  blocks: {[blockName: string]: number} = null;
 
   testCases: string[][] = null;
 
@@ -27,13 +28,15 @@ export class EventsBlocklyPage implements OnInit {
     route: ActivatedRoute,
     router: Router,
     private eventApi: EventService,
-    private currentUser: CurrentUserDetails
+    private currentUser: CurrentUserDetails,
+    private alertCtrl: AlertController
   ) {
     const state = router.getCurrentNavigation().extras.state;
     if (state) {
       this.event = state.event;
       this.eventID = this.event.id;
       this.status = state.status;
+      this.blocks = this.loadBlocks();
     } else {
       this.eventID = route.snapshot.paramMap.get('eventID');
     }
@@ -47,13 +50,18 @@ export class EventsBlocklyPage implements OnInit {
       ).toPromise();
       this.event = responses[0].foundEvent;
       this.status = responses[1].status;
+      this.blocks = this.loadBlocks();
+    }
+  }
 
-      for (const block of this.status.details.blocks.split('#')) {
-        if (block !== '') {
-          this.blocks[block] = 999;
-        }
+  loadBlocks() {
+    const output = {};
+    for (const block of this.status.details.blocks.split('#')) {
+      if (block !== '') {
+        output[block] = 999;
       }
     }
+    return output;
   }
 
   async submitOutput() {
@@ -62,7 +70,7 @@ export class EventsBlocklyPage implements OnInit {
       this.testCases = (await this.eventApi.getInputs({eventID: this.eventID}).toPromise()).inputs;
     }
 
-    const code = this.blockly.generateCode();
+    const code = this.blockly.generateCode(true);
     const caseOutputs: string[] = [];
     for (const testCase of this.testCases) {
       const inputs = [];
@@ -71,9 +79,9 @@ export class EventsBlocklyPage implements OnInit {
       }
       const outputs = [];
 
-      this.blockly.runProgram(code, (promptRequest: string) => {
+      await this.blockly.runProgram(code, async (promptRequest: string) => {
         return inputs.shift();
-      }, (outputText: string) => {
+      }, async (outputText: string) => {
         outputs.push(outputText);
         return true;
       });
@@ -83,10 +91,19 @@ export class EventsBlocklyPage implements OnInit {
 
     const response = await this.eventApi.checkOutput({eventID: this.eventID, outputs: caseOutputs}).toPromise();
     if (response.success) {
-      alert(response.message);
+      await this.alert(response.message);
     } else {
-      alert('Your program output did not match the expected output.');
+      await this.alert('Your program output did not match the expected output.');
     }
+  }
+
+  async alert(message: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Alert',
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
   toggleToolbox() {
@@ -94,7 +111,12 @@ export class EventsBlocklyPage implements OnInit {
     this.blockly.setToolboxVisibility(this.toolboxVisible);
   }
 
-  viewDescription() {
-    alert(this.event.properties.problemDescription);
+  async viewDescription() {
+    const alert = await this.alertCtrl.create({
+      header: 'Challenge',
+      message: this.event.properties.problemDescription,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 }

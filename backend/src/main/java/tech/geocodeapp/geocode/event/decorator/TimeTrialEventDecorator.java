@@ -70,8 +70,6 @@ public class TimeTrialEventDecorator extends EventDecorator {
     public int calculatePoints(GeoCode foundGeocode, int stageNumber, UserEventStatus status) {
         int basePointsAmount = super.calculatePoints(foundGeocode, stageNumber, status);
 
-        int newPointsAmount = basePointsAmount;
-
         /* Get the time the user finished the previous and current stages */
         String startTimeStr = status.getDetails().get("timeSplit_0");
         if (startTimeStr != null) {
@@ -88,7 +86,7 @@ public class TimeTrialEventDecorator extends EventDecorator {
 
                 /* If the user is over the time limit, the pointsBonus will be negative */
                 int pointsBonus = (int) Math.round(basePointsAmount * percentageTimeRemaining);
-                newPointsAmount = basePointsAmount + pointsBonus;
+                int newPointsAmount = basePointsAmount + pointsBonus;
 
                 if (newPointsAmount >= 0) {
                     /* Only return the newPointsAmount if it is zero or positive. */

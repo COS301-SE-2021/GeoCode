@@ -7,8 +7,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.lenient;
 
+import tech.geocodeapp.geocode.collectable.model.Rarity;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableSetRequest;
+import tech.geocodeapp.geocode.collectable.request.CreateCollectableTypeRequest;
 import tech.geocodeapp.geocode.collectable.request.GetCollectableTypeByIDRequest;
 import tech.geocodeapp.geocode.event.service.EventService;
+import tech.geocodeapp.geocode.general.exception.NullRequestParameterException;
 import tech.geocodeapp.geocode.geocode.exceptions.*;
 import tech.geocodeapp.geocode.geocode.model.Difficulty;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;
@@ -19,10 +23,12 @@ import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCodeApplication;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.mission.model.MissionType;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.service.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -594,6 +600,8 @@ class GeoCodeServiceImplIT {
 
         try {
 
+            createCollectableTypes();
+
             /*
              * Create a request object
              * and assign values to it
@@ -699,6 +707,7 @@ class GeoCodeServiceImplIT {
     void updateGeoCodeTest() {
 
         try {
+            createCollectableTypes();
 
             /*
              * Create a request object
@@ -1560,6 +1569,50 @@ class GeoCodeServiceImplIT {
             e.printStackTrace();
         }
 
+    }
+
+    private void createCollectableTypes(){
+        //create the CollectableSet to hold the "User Trackable" type
+        var christmasSetId = createCollectableSet("Christmas Set", "Christmas 2021 Collectables");
+
+        //create the CollectableTypes so that the GeoCodes have CollectableTypes to be populated with
+        var santaProperties = new HashMap<String, String>();
+        santaProperties.put("missionType", String.valueOf(MissionType.SWAP));
+        createCollectableType("Santa", "img_santa", Rarity.COMMON, christmasSetId, santaProperties);
+
+        var penguinProperties = new HashMap<String, String>();
+        penguinProperties.put("missionType", String.valueOf(MissionType.GEOCODE));
+        createCollectableType("Penguin", "img_penguin", Rarity.EPIC, christmasSetId, penguinProperties);
+
+        var bearProperties = new HashMap<String, String>();
+        bearProperties.put("missionType", String.valueOf(MissionType.DISTANCE));
+        createCollectableType("Bear", "img_bear", Rarity.COMMON, christmasSetId, bearProperties);
+    }
+
+    UUID createCollectableSet(String name, String description){
+        var createCollectableSetRequest = new CreateCollectableSetRequest(name, description);
+
+        try {
+            var createCollectableSetResponse = collectableService.createCollectableSet(createCollectableSetRequest);
+            return createCollectableSetResponse.getCollectableSet().getId();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private UUID createCollectableType(String name, String image, Rarity rarity, UUID setId, HashMap<String, String> properties) {
+        var createCollectableTypeRequest = new CreateCollectableTypeRequest(name, image, rarity, setId, properties);
+
+        try {
+            var createCollectableTypeResponse = collectableService.createCollectableType(createCollectableTypeRequest);
+            Assertions.assertTrue(createCollectableTypeResponse.isSuccess());
+
+            return createCollectableTypeResponse.getCollectableType().getId();
+        } catch (NullRequestParameterException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

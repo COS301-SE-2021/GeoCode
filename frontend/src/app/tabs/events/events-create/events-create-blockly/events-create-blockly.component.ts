@@ -49,7 +49,7 @@ export class EventsCreateBlocklyComponent implements OnInit {
       await this.modalCtrl.dismiss({ blocks, testCases });
 
     } else {
-      alert('Some test cases cannot be reproduced with the current program. Please delete or remake the invalid cases.');
+      await this.alert('Some test cases cannot be reproduced with the current program. Please delete or remake the invalid cases.');
       this.currentView = 'testCases';
     }
   }
@@ -64,21 +64,29 @@ export class EventsCreateBlocklyComponent implements OnInit {
 
     const code = this.blockly.generateCode();
 
-    this.blockly.runProgram(code, (promptRequest: string) => {
-      const inputText = prompt(promptRequest);
+    await this.blockly.runProgram(code, async (promptRequest: string) => {
+      const inputText = await this.blockly.input(promptRequest);
       testCase.addPrompt(promptRequest);
       testCase.addInput(inputText);
       return inputText;
-    }, (outputText: string) => {
+    }, async (outputText: string) => {
       testCase.addOutput(outputText);
-      console.log(outputText);
-      return confirm(outputText);
+      return await this.blockly.output(outputText);
     });
 
     this.testCases.push(testCase);
     console.log(this.testCases);
 
     await this.storage.set(this.testCasesKey, this.testCases);
+  }
+
+  async alert(message: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Alert',
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
   async clearAllTestCases() {
@@ -102,10 +110,6 @@ export class EventsCreateBlocklyComponent implements OnInit {
     this.blockly.setToolboxVisibility(this.toolboxVisible);
   }
 
-  blocklyWorkspaceChanged = (event: any) => {
-    console.log(event);
-  };
-
   async deleteTestCase(testCase: DetailedTestCase) {
     this.testCases = this.testCases.filter((v) => v !== testCase);
     await this.storage.set(this.testCasesKey, this.testCases);
@@ -123,9 +127,9 @@ export class EventsCreateBlocklyComponent implements OnInit {
           events.push(event);
         }
 
-        const code = this.blockly.generateCode();
+        const code = this.blockly.generateCode(true);
 
-        this.blockly.runProgram(code, (promptRequest: string) => {
+        await this.blockly.runProgram(code, async (promptRequest: string) => {
           const expectedPrompt = events.shift();
 
           if (expectedPrompt.type !== 'prompt') {
@@ -144,7 +148,7 @@ export class EventsCreateBlocklyComponent implements OnInit {
             throw new Error('Program unexpectedly asked for input');
           }
           return testInput.text;
-        }, (outputText: string) => {
+        }, async (outputText: string) => {
           const expectedOutput = events.shift();
 
           if (expectedOutput.type !== 'output') {

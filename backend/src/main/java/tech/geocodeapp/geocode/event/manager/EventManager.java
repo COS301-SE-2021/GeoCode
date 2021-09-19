@@ -31,7 +31,8 @@ public class EventManager {
         if(event.getProperties().containsKey("timeLimit")) {
             factory = new TimeTrialEventFactory();
             builtEvent = factory.decorateEvent(event, builtEvent);
-        }else if(event.getProperties().containsKey("blocks")) {
+        }
+        if(event.getProperties().containsKey("blocks")) {
             factory = new BlocklyEventFactory();
             builtEvent = factory.decorateEvent(event, builtEvent);
         }

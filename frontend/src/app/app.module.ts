@@ -15,16 +15,20 @@ import {IonicStorageModule, Storage} from '@ionic/storage-angular';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 const doInit = async (keycloak: KeycloakService) => {
-  return await keycloak.init({
-    config: {
-      url: 'https://geocodeapp.tech:8100/auth',
-      realm: 'GeoCode',
-      clientId: environment.keycloakClientID,
-    },
-    initOptions: environment.keycloakInitOptions,
-    enableBearerInterceptor: false
-  });
-}
+  try {
+    return await keycloak.init({
+      config: {
+        url: environment.keycloakServerAddress+'/auth',
+        realm: 'GeoCode',
+        clientId: environment.keycloakClientID,
+      },
+      initOptions: environment.keycloakInitOptions,
+      enableBearerInterceptor: false
+    });
+  } catch (e) {
+    return false;
+  }
+};
 
 const initializeKeycloak = (keycloak: KeycloakService, storage: Storage) => async () => {
 
@@ -52,7 +56,7 @@ const initializeKeycloak = (keycloak: KeycloakService, storage: Storage) => asyn
   entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({ mode: 'md' }),
     AppRoutingModule,
     HttpClientModule,
     ApiModule,
@@ -61,7 +65,7 @@ const initializeKeycloak = (keycloak: KeycloakService, storage: Storage) => asyn
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: BASE_PATH, useValue: environment.serverAddress+'/api' },
+    { provide: BASE_PATH, useValue: environment.backendServerAddress+'/api' },
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
     { provide: APP_INITIALIZER, useFactory: initializeKeycloak, multi: true, deps: [KeycloakService, Storage] },
     SocialSharing

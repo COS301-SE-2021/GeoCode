@@ -13,10 +13,12 @@ const keycloakAndroidOptions: KeycloakInitOptions = {
 
 export const environment = {
   production: true,
-  serverAddress: 'https://geocodeapp.tech:8080',
+  backendServerAddress: 'https://geocodeapp.tech:8080',
+  keycloakServerAddress: 'https://geocodeapp.tech:8100',
   keycloakClientID: 'geocode-live',
   baseRedirectURI: 'https://geocodeapp.tech/',
   googleMapsKey: '',
+  apkDownloadLocation: null,
   keycloakInitOptions: keycloakWebOptions
 };
 
