@@ -65,13 +65,13 @@ export class EventsCreateBlocklyComponent implements OnInit {
     const code = this.blockly.generateCode();
 
     await this.blockly.runProgram(code, async (promptRequest: string) => {
-      const inputText = await this.blockly.input(promptRequest);
+      const inputText = await this.blockly.programInput(promptRequest);
       testCase.addPrompt(promptRequest);
       testCase.addInput(inputText);
       return inputText;
     }, async (outputText: string) => {
       testCase.addOutput(outputText);
-      return await this.blockly.output(outputText);
+      return await this.blockly.programOutput(outputText);
     });
 
     this.testCases.push(testCase);
