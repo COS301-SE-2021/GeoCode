@@ -32,7 +32,6 @@ public class EventManager {
             factory = new TimeTrialEventFactory();
             builtEvent = factory.decorateEvent(event, builtEvent);
         }
-
         if(event.getProperties().containsKey("blocks")) {
             factory = new BlocklyEventFactory();
             builtEvent = factory.decorateEvent(event, builtEvent);

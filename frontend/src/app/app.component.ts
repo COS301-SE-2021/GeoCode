@@ -6,7 +6,7 @@ import {KeycloakInstance} from 'keycloak-js';
 import {Locator} from './services/Locator';
 import {Mediator} from './services/Mediator';
 import {Storage} from '@ionic/storage-angular';
-import {Platform} from '@ionic/angular';
+import {AlertController, Platform} from '@ionic/angular';
 import {CurrentUserDetails} from './services/CurrentUserDetails';
 import {UserService} from './services/geocode-api';
 
@@ -27,7 +27,8 @@ export class AppComponent implements OnInit {
     private storage: Storage,
     private platform: Platform,
     private currentUser: CurrentUserDetails,
-    private userService: UserService
+    private userService: UserService,
+    private alertCtrl: AlertController
   ) {
     this.keycloakInstance = this.keycloak.getKeycloakInstance();
 
@@ -44,19 +45,19 @@ export class AppComponent implements OnInit {
       console.log('token expired');
     };
 
-    this.keycloakInstance.onAuthLogout = () => {
-      /* Force close to reset keycloak and prevent issues when logging in again */
-      App.exitApp();
-    };
-
-    App.addListener('appUrlOpen', data => {
-      console.log('App opened with URL: ' + data.url);
-      if (data.url.includes('geocode://')) {
-        // Remove 'geocode:/' from URL to get the address that the router should use. Also strip any parameters from the end
-        const target = data.url.substring(9).split('?')[0];
-        this.router.navigate([target]).then().catch();
-      }
-    });
+    if (this.platform.is('capacitor')) {
+      this.keycloakInstance.onAuthLogout = () => {
+        /* Force close to reset keycloak and prevent issues when logging in again */
+        App.exitApp();
+      };
+      App.addListener('appUrlOpen', data => {
+        if (data.url.includes('geocode://')) {
+          // Remove 'geocode:/' from URL to get the address that the router should use. Also strip any parameters from the end
+          const target = data.url.substring(9).split('?')[0];
+          this.router.navigate([target]).then().catch();
+        }
+      });
+    }
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
       this.mediator.themeChanged.send(event.matches);
@@ -81,6 +82,8 @@ export class AppComponent implements OnInit {
         if (!response.success) {
           console.log('Failed handleLogin. Logging out...');
           await this.logout();
+        } else {
+          console.log('Completed handleLogin');
         }
       } catch(e) {
         console.log('Failed handleLogin. Logging out...');
@@ -88,7 +91,12 @@ export class AppComponent implements OnInit {
       }
 
     } else {
-      alert('Location access is required to use GeoCode.');
+      const alert = await this.alertCtrl.create({
+        header: 'Error',
+        message: 'Location access is required to use GeoCode.',
+        buttons: ['OK']
+      });
+      await alert.present();
       await this.logout();
     }
   }

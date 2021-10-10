@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {IonicModule, ModalController, NavParams, ToastController} from '@ionic/angular';
 
 import { AddTypeComponent } from './add-type.component';
-import {CollectableService} from '../../../services/geocode-api';
+import {CollectableService, ImageService} from '../../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {FormsModule} from '@angular/forms';
 
@@ -13,7 +13,7 @@ describe('AddTypeComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AddTypeComponent ],
-      providers: [ModalController, CollectableService, ToastController, NavParams],
+      providers: [ModalController, CollectableService, ToastController, NavParams, ImageService],
       imports: [IonicModule.forRoot(), HttpClientTestingModule, FormsModule]
     }).compileComponents();
 

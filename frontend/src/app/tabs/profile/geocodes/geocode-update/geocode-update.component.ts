@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {GeoCodeService, UpdateGeoCodeRequest, UpdateGeoCodeResponse} from '../../../../services/geocode-api';
+import {GeoCode, GeoCodeService, UpdateGeoCodeRequest, UpdateGeoCodeResponse} from '../../../../services/geocode-api';
 import {AlertController, ModalController, NavParams, ToastController} from '@ionic/angular';
 
 @Component({
@@ -8,7 +8,7 @@ import {AlertController, ModalController, NavParams, ToastController} from '@ion
   styleUrls: ['./geocode-update.component.scss'],
 })
 export class GeocodeUpdateComponent implements OnInit {
-  geocode;
+  geocode: GeoCode;
   updateRequest: UpdateGeoCodeRequest ={
     available: false,
     description: '',

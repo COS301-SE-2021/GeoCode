@@ -11,11 +11,17 @@ public class GetProgressRequest   {
   @JsonProperty("missionID")
   private UUID missionID;
 
+  public GetProgressRequest() {}
+
   public GetProgressRequest(UUID missionID) {
     this.missionID = missionID;
   }
 
   public UUID getMissionID() {
     return missionID;
+  }
+
+  public void setMissionID(UUID missionID) {
+    this.missionID = missionID;
   }
 }

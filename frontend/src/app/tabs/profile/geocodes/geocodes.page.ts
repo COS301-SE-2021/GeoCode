@@ -30,7 +30,7 @@ export class UserGeocodesPage implements AfterViewInit {
     currentUser: CurrentUserDetails,
     route: ActivatedRoute
   ) {
-    this.userID = route.snapshot.paramMap.get('id');
+    this.userID = route.snapshot.paramMap.get('userID');
     this.loggedInUserID = currentUser.getID();
     if (!this.userID) {
       this.userID = this.loggedInUserID;

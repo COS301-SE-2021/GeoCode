@@ -6,6 +6,7 @@ import {MockGoogleMapsLoader} from '../../mocks/MockGoogleMapsLoader';
 import {RouterTestingModule} from '@angular/router/testing';
 import {GeoCodeService} from '../../services/geocode-api';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 describe('CreateGeocodeComponent', () => {
   let component: CreateGeocodeComponent;
@@ -14,7 +15,7 @@ describe('CreateGeocodeComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CreateGeocodeComponent ],
-      providers: [ MockGoogleMapsLoader.provider(), GeoCodeService ],
+      providers: [ MockGoogleMapsLoader.provider(), GeoCodeService, SocialSharing ],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
     }).compileComponents();
 

@@ -8,6 +8,7 @@ import {
   GetAllEventsResponse
 } from '../../services/geocode-api';
 import {MapAndInfoComponent} from '../../components/map-and-info/map-and-info.component';
+import {Locator} from '../../services/Locator';
 
 @Component({
   selector: 'app-events',
@@ -26,9 +27,8 @@ export class EventsPage implements AfterViewInit {
   listView = false;
   isHidden = false;
   height = '93%';
-  position;
 
-  constructor(private navCtrl: NavController,private eventApi: EventService) { }
+  constructor(private navCtrl: NavController,private eventApi: EventService, private locator: Locator) { }
 
   async ngAfterViewInit() {
     await this.mapAndInfo.load();
@@ -65,9 +65,10 @@ export class EventsPage implements AfterViewInit {
   }
 
   async loadDistance(distance: number){
+    const position = await this.locator.getCurrentLocation();
     const req: EventsNearMeRequest = {
       radius: distance,
-      location: { latitude:this.position.coords.latitude,longitude:this.position.coords.longitude }
+      location: { latitude: position.latitude, longitude: position.longitude }
     };
     this.eventApi.getEventsNearMe(req).subscribe((response: EventsNearMeResponse) =>{
       console.log(response);

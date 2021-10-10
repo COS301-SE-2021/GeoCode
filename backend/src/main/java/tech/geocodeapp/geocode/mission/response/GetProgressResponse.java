@@ -10,6 +10,8 @@ public class GetProgressResponse extends Response {
   @JsonProperty("progress")
   private Double progress;
 
+  public GetProgressResponse() {}
+
   public GetProgressResponse(boolean success, String message,Double progress){
     super(success, message);
     this.progress = progress;

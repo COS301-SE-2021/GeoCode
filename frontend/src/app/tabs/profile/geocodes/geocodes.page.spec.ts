@@ -9,6 +9,7 @@ import {MockKeycloak} from '../../../mocks/MockKeycloak';
 import {CustomComponentsModule} from '../../../components/components.module';
 import {MockGoogleMapsLoader} from '../../../mocks/MockGoogleMapsLoader';
 import {MockCurrentUserDetails} from '../../../mocks/MockCurrentUserDetails';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 describe('UserGeocodesPage', () => {
   let component: UserGeocodesPage;
@@ -22,7 +23,8 @@ describe('UserGeocodesPage', () => {
         UserService,
         MockKeycloak.provider(),
         MockGoogleMapsLoader.provider(),
-        MockCurrentUserDetails.provider()
+        MockCurrentUserDetails.provider(),
+        SocialSharing
       ],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, CustomComponentsModule]
     }).compileComponents();

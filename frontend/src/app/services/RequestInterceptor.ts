@@ -12,7 +12,7 @@ export class RequestInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (request.url.includes(environment.serverAddress)) {
+    if (request.url.includes(environment.backendServerAddress)) {
       const kc = this.keycloak.getKeycloakInstance()
       //from(kc.updateToken(30));
       const newRequest = request.clone({

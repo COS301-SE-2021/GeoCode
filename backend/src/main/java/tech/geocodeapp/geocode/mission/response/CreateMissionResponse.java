@@ -11,6 +11,8 @@ public class CreateMissionResponse extends Response {
   @JsonProperty("mission")
   private Mission mission;
 
+  public CreateMissionResponse() {}
+
   public CreateMissionResponse(boolean success, String message, Mission mission) {
     super(success, message);
     this.mission = mission;

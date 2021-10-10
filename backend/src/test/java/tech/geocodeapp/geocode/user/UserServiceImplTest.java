@@ -171,8 +171,6 @@ public class UserServiceImplTest {
         //save the valid user to the MockRepo
         validUserId = handleUserLogin("validUser");
 
-        System.out.println("validUserId: "+validUserId);
-
         //make 3 CollectableTypes for Easter
         egg = new CollectableType();
         egg.setId(eggCollectableTypeID);
@@ -230,9 +228,6 @@ public class UserServiceImplTest {
         numberOfOwnedGeoCodesBefore = validUser.getOwnedGeocodes().size();
         numberOfFoundGeoCodesBefore = validUser.getFoundGeocodes().size();
         numberOfFoundCollectableTypesBefore = validUser.getFoundCollectableTypes().size();
-
-        //display the User's currentCollectableID
-        //System.out.println("the User's currentCollectableID: "+validUser.getCurrentCollectable().getId());
 
         //add Missions to the User
         var swapMission = new Mission();

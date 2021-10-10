@@ -25,7 +25,7 @@
                 <ion-label>View Leaderboard</ion-label>
               </ion-button>
             </ion-col>
-            <ion-col *ngIf="(status !== null && status.details.hasOwnProperty('blocks')) || true">
+            <ion-col *ngIf="status !== null && status.details.hasOwnProperty('blocks')">
               <ion-button color="button" expand="block" (click)="openBlockly()">
                 <ion-icon name="extension-puzzle-outline"></ion-icon>
                 <ion-label>Open Blockly Editor</ion-label>

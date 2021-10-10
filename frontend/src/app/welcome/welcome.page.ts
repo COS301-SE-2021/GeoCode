@@ -38,4 +38,12 @@ export class WelcomePage implements OnInit {
       redirectUri: environment.baseRedirectURI+'explore'
     });
   }
+
+  showApkLink() {
+    return environment.apkDownloadLocation !== null;
+  }
+
+  getAPK() {
+    window.location.href = environment.apkDownloadLocation;
+  }
 }

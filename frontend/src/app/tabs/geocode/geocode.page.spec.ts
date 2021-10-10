@@ -7,9 +7,9 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {FormsModule} from '@angular/forms';
 import {MockGoogleMapsLoader} from '../../mocks/MockGoogleMapsLoader';
-import {MockKeycloak} from '../../mocks/MockKeycloak';
 import {CustomComponentsModule} from '../../components/components.module';
 import {MockCurrentUserDetails} from '../../mocks/MockCurrentUserDetails';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 describe('GeocodePage', () => {
   let component: GeocodePage;
@@ -18,7 +18,7 @@ describe('GeocodePage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GeocodePage ],
-      providers: [NavController, GeoCodeService, MockCurrentUserDetails.provider(), MockGoogleMapsLoader.provider()],
+      providers: [NavController, GeoCodeService, MockCurrentUserDetails.provider(), MockGoogleMapsLoader.provider(), SocialSharing],
       imports: [IonicModule.forRoot(), RouterTestingModule, HttpClientTestingModule, FormsModule, CustomComponentsModule]
     }).compileComponents();
 

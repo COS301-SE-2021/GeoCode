@@ -97,10 +97,6 @@ public class Event {
     @ElementCollection
     private Map<String, String> properties;
 
-
-
-
-
     /**
      * Default constructor
      */
@@ -619,12 +615,12 @@ public class Event {
     }
 
     /**
-     * Nulls out the details for an Event that should not be seen by non-admin Users
+     * Clears out the details for an Event that should not be seen by non-admin Users
      * and returns the Event
      * @return The event with the details nulled out
      */
     public Event removePrivateDetails(){
-        this.geocodeIDs = null;
+        this.geocodeIDs = new ArrayList<>();
         if (this.properties != null) {
             this.properties.remove("testCases");
         }

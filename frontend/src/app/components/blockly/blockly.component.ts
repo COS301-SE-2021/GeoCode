@@ -22,10 +22,6 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
   @ViewChild('blocklyDiv', {static:false}) blocklyDiv: ElementRef<HTMLDivElement>;
 
   workspace: Blockly.WorkspaceSvg = null;
-  toolbox: Blockly.utils.toolbox.ToolboxInfo = {
-    kind: 'flyoutToolbox',
-    contents: []
-  };
 
   config: Blockly.BlocklyOptions = {
     readOnly: false,
@@ -35,7 +31,6 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
       drag: true,
       wheel: true
     },
-    toolbox: this.toolbox,
     theme: this.getTheme(window.matchMedia('(prefers-color-scheme: dark)').matches)
   };
 
@@ -51,15 +46,23 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  async sleep(milliseconds: number) {
+    return new Promise<void>(resolve => setTimeout(resolve, milliseconds));
+  }
+
   async ngAfterViewInit() {
+    while (document.getElementById('blocklyDiv') === null) {
+      await this.sleep(100);
+    }
+
     if (this.toolboxBlocks !== null) {
-      await this.readInputToolbox();
+      this.readInputToolbox();
     } else {
       await this.readDefaultToolbox();
     }
     this.workspace = Blockly.inject(this.blocklyDiv.nativeElement, this.config);
 
-    setTimeout(() => this.forceResize(), 500);
+    setTimeout(this.forceResize, 500);
 
     // May need to call this inside the timeout
     if (this.savedProgramID !== null) {
@@ -91,8 +94,11 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
   getProgramBlocks(): {[key: string]: number} {
     const output = {};
     const blocks = this.workspace.getAllBlocks(true);
-    console.log(blocks);
     for (const block of blocks) {
+      // eslint-disable-next-line no-underscore-dangle
+      if (block.styleName_ === 'procedure_blocks' || block.styleName_ === 'variable_blocks') {
+        continue;
+      }
       if (!output.hasOwnProperty(block.type)) {
         output[block.type] = 0;
       }
@@ -145,41 +151,64 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     if (this.savedProgramID !== null) {
       await this.saveProgramToStorage();
     }
-    this.runProgram(code);
+    await this.runProgram(code);
   }
 
-  runProgram(code: string, inputFunction: (promptRequest: string) => string = prompt, outputFunction: (output: string) => boolean = confirm) {
-    const interpreter = new Interpreter(code, (interpreter2, scope) => {
-      const promptWrapper = (text) => {
-        text = text ? text.toString() : '';
-        const input = inputFunction(text);
-        if (input === null) {
-          throw new Error('User stopped execution');
+  async runProgram(
+    code: string,
+    inputFunction: (promptRequest: string) => Promise<string> = this.input,
+    outputFunction: (output: string) => Promise<boolean> = this.output
+  ) {
+    return new Promise<void> ((resolve, reject) => {
+
+      const run = (interpreter2) => {
+        try {
+          if (!interpreter2.run()) {
+            // if run returns false, the program has ended
+            resolve();
+          } // else the program will continue running
+        } catch (e) {
+          reject(e);
         }
-        return input;
       };
-      interpreter2.setProperty(scope, 'prompt', interpreter2.createNativeFunction(promptWrapper));
-      const alertWrapper = (text) => {
-        text = text ? text.toString() : '';
-        const continueExecution = outputFunction(text);
-        if (!continueExecution) {
-          throw new Error('User stopped execution');
-        }
-      };
-      interpreter2.setProperty(scope, 'alert', interpreter2.createNativeFunction(alertWrapper));
+
+      const interpreter = new Interpreter('String = String2;\n'+code, (interpreter2, scope) => {
+        interpreter2.setProperty(scope, 'prompt', interpreter2.createAsyncFunction(async (text, callback) => {
+          const input = await inputFunction(text);
+          if (input !== null) {
+            callback(input);
+            run(interpreter2);
+          } else {
+            reject('User stopped execution');
+          }
+        }));
+        interpreter2.setProperty(scope, 'alert', interpreter2.createAsyncFunction(async (text, callback) => {
+          const continueExecution = await outputFunction(text);
+          if (continueExecution) {
+            callback();
+            run(interpreter2);
+          } else {
+            reject('User stopped execution');
+          }
+        }));
+        interpreter2.setProperty(scope, 'Number', interpreter2.createNativeFunction((text) => Number(text)));
+        interpreter2.setProperty(scope, 'String2', interpreter2.createNativeFunction((text) => String(text)));
+      });
+
+      run(interpreter);
     });
-
-    let stepsAllowed = 10000;
-    while (interpreter.step() && stepsAllowed) {
-      stepsAllowed--;
-    }
-    if (!stepsAllowed) {
-      throw EvalError('Infinite loop.');
-    }
   }
 
-  generateCode() {
-    return BlocklyJsGenerator.workspaceToCode(this.workspace);
+  generateCode(preventInfiniteLoops = false) {
+    if (preventInfiniteLoops) {
+      // @ts-ignore
+      BlocklyJsGenerator.INFINITE_LOOP_TRAP = 'if (--window.infiniteLoopTrap == 0) throw "Infinite loop";\n';
+      return 'window.infiniteLoopTrap = 1000;\n'+BlocklyJsGenerator.workspaceToCode(this.workspace);
+    } else {
+      // @ts-ignore
+      BlocklyJsGenerator.INFINITE_LOOP_TRAP = '';
+      return BlocklyJsGenerator.workspaceToCode(this.workspace);
+    }
   }
 
   setToolboxVisibility(visibility: boolean) {
@@ -187,13 +216,54 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     this.forceResize();
   }
 
-  async readInputToolbox() {
+  readInputToolbox() {
+    const unlocked = {
+      kind: 'category',
+      id: 'catUnlocked',
+      colour: '160',
+      name: 'Unlocked Blocks',
+      contents: []
+    };
+    const locked = {
+      kind: 'category',
+      id: 'catUnlocked',
+      colour: '160',
+      name: 'Locked Blocks',
+      contents: []
+    };
+    const separator = {
+      kind: 'sep'
+    };
+    const variables = {
+      kind: 'category',
+      id: 'catVariables',
+      colour: '330',
+      custom: 'VARIABLE',
+      name: 'Variables'
+    };
+    const functions = {
+      kind: 'category',
+      id: 'catFunctions',
+      colour: '290',
+      custom: 'PROCEDURE',
+      name: 'Functions'
+    };
+    // @ts-ignore
+    this.config.toolbox = { contents: [unlocked, separator, variables, functions] };
     for (const [blockName, maxInstances] of Object.entries(this.toolboxBlocks)) {
-      // @ts-ignore
-      this.toolbox.contents.push({
-        kind: 'block',
-        type: blockName
-      });
+      if (maxInstances > 0) {
+        // @ts-ignore
+        unlocked.contents.push({
+          kind: 'block',
+          type: blockName
+        });
+      } else {
+        // push locked
+        locked.contents.push({
+          kind: 'block',
+          type: blockName
+        });
+      }
     }
   }
 
@@ -214,6 +284,42 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
       req.send(null); // return control
     });
   }
+
+  public output = async (output: string): Promise<boolean> => {
+    const alert = await this.alertCtrl.create({
+      message: output,
+      backdropDismiss: false,
+      translucent: true,
+      buttons: [
+        { text: 'Stop Running', role: 'cancel' },
+        { text: 'Continue', role: 'ok' }
+      ]
+    });
+    await alert.present();
+    const {role} = await alert.onDidDismiss();
+    return role === 'ok';
+  };
+
+  public input = async (promptRequest: string): Promise<string> => {
+    const alert = await this.alertCtrl.create({
+      message: promptRequest,
+      backdropDismiss: false,
+      inputs: [
+        { name: 'input', type: 'text' }
+      ],
+      buttons: [
+        { text: 'Stop Running', role: 'cancel' },
+        { text: 'Enter', role: 'ok' }
+      ]
+    });
+    await alert.present();
+    const {data, role} = await alert.onDidDismiss();
+    if (role === 'ok') {
+      return data.values.input;
+    } else {
+      return null;
+    }
+  };
 
   private forceResize() {
     window.dispatchEvent(new Event('resize'));

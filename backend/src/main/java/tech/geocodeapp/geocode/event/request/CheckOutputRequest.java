@@ -14,7 +14,10 @@ public class CheckOutputRequest {
      */
     private List<String> outputs;
 
-    public CheckOutputRequest() {
+    /**
+     * Default Constructor
+     */
+    public CheckOutputRequest(){
 
     }
 

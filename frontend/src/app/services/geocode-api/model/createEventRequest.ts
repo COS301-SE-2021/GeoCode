@@ -13,7 +13,7 @@ import { CreateGeoCodeRequest } from './createGeoCodeRequest';
 import { GeoPoint } from './geoPoint';
 import { OrderLevels } from './orderLevels';
 
-export interface CreateEventRequest { 
+export interface CreateEventRequest {
     name: string;
     description: string;
     location: GeoPoint;

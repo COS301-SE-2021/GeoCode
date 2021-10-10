@@ -17,7 +17,7 @@ export class UserMissionsPage implements OnInit {
     keycloak: KeycloakService,
     route: ActivatedRoute
   ) {
-    let id = route.snapshot.paramMap.get('id');
+    let id = route.snapshot.paramMap.get('userID');
     if (!id) {
       id = keycloak.getKeycloakInstance().subject;
     }

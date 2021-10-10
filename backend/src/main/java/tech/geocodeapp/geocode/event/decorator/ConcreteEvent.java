@@ -1,5 +1,6 @@
 package tech.geocodeapp.geocode.event.decorator;
 
+import org.junit.jupiter.api.Assertions;
 import tech.geocodeapp.geocode.event.blockly.Block;
 import tech.geocodeapp.geocode.event.model.UserEventStatus;
 import tech.geocodeapp.geocode.geocode.model.GeoCode;

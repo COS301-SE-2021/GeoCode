@@ -9,6 +9,7 @@ import {
 } from '../../../../services/geocode-api';
 import jsQR from 'jsqr';
 import {AlertController} from '@ionic/angular';
+import {Mediator} from '../../../../services/Mediator';
 
 @Component({
   selector: 'app-open-geocode',
@@ -40,12 +41,13 @@ export class OpenGeocodePage implements AfterViewInit {
   ];
 
   constructor(
-    route: ActivatedRoute,
+    private route: ActivatedRoute,
     private geocodeService: GeoCodeService,
     private alertCtrl: AlertController,
     private router: Router,
+    private mediator: Mediator
   ) {
-    this.geocodeID = route.snapshot.paramMap.get('geocodeID');
+    this.geocodeID = this.route.snapshot.paramMap.get('geocodeID');
     const state = this.router.getCurrentNavigation().extras.state;
     if (state) {
       this.qrCode = state.qrCode;
@@ -87,14 +89,30 @@ export class OpenGeocodePage implements AfterViewInit {
     }
 
     const response = await this.geocodeService.getCollectablesInGeoCodeByQRCode({geoCodeID: this.geocodeID, qrCode: this.qrCode}).toPromise();
-    console.log(response);
+    if (response.storedCollectable != null) {
 
-    if (this.useAR) {
-      await this.loadCollectables(response.storedCollectable);
-      this.insertCollectables();
+      if (response.storedCollectable.length === 0) {
+        await this.goBack(true);
+
+      } else if (this.useAR) {
+        await this.loadCollectables(response.storedCollectable);
+        this.insertCollectables();
+
+      } else {
+        this.collectables = response.storedCollectable;
+      }
     } else {
-      this.collectables = response.storedCollectable;
+      console.log(response);
+      const alert = await this.alertCtrl.create({
+        header: 'Error',
+        message: 'Incorrect QR code!',
+        buttons: ['OK']
+      });
+      await alert.present();
+      await this.goBack(false);
     }
+
+
   }
 
   insertCollectables(): void {
@@ -214,12 +232,19 @@ export class OpenGeocodePage implements AfterViewInit {
             console.log(request);
             this.geocodeService.swapCollectables(request).subscribe((response: SwapCollectablesResponse) =>{
               console.log(response);
-              this.router.navigate(['../../..']);
+              this.goBack(true);
             });
           }
         }
       ]
     });
     await alert.present();
+  }
+
+  async goBack(success: boolean) {
+    if (success) {
+      this.mediator.geocodeFound.send(this.geocodeID);
+    }
+    await this.router.navigate(['../../..'], {relativeTo: this.route});
   }
 }

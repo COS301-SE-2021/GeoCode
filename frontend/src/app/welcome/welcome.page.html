@@ -22,22 +22,34 @@
     <ion-grid>
       <ion-row>
         <ion-col>
-         <p>Bored, tired of doing the same activities due to the risk of COVID-19.<br> Introducing GeoCode, a treasure hunting game for
+         <p>Bored, tired of doing the same activities due to the risk of COVID-19?<br> Introducing GeoCode, a treasure hunting game for
              all ages. All you need is a phone and your brain to solve clues to find GeoCodes.
          </p>
           <ul>
             <li>Fill collectable sets by finding all the collectables.</li>
             <li>Work together with other players around the world to complete missions.</li>
-            <li>  Race against friends and the clock in time trials.</li>
+            <li>  Race against friends and the clock in time trial events.</li>
           </ul>
         </ion-col>
       </ion-row>
     </ion-grid>
   </ion-card>
   <div class="buttons">
-    <ion-label *ngIf="!locationFound">Please allow access to your location.</ion-label><br>
-    <ion-button color="button" (click)="login()" [disabled]="!locationFound">Log in</ion-button>
-    <ion-button color="button" (click)="register()" [disabled]="!locationFound">Sign up</ion-button>
+    <ion-label *ngIf="!locationFound">Please allow access to your location.</ion-label>
+    <br>
+    <ion-button color="button" (click)="register()" [disabled]="!locationFound">
+      <ion-icon name="person-add-outline"></ion-icon>
+      <ion-label>Sign Up</ion-label>
+    </ion-button>
+    <ion-button color="button" (click)="login()" [disabled]="!locationFound">
+      <ion-icon name="log-in-outline"></ion-icon>
+      <ion-label>Log In</ion-label>
+    </ion-button>
+    <br>
+    <ion-button class="apk" *ngIf="showApkLink()" color="button" (click)="getAPK()">
+      <ion-icon name="logo-android"></ion-icon>
+      <ion-label>Download Android APK</ion-label>
+    </ion-button>
   </div>
 
 </ion-content>

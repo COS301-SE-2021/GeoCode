@@ -24,7 +24,7 @@ public class BlocklyEventFactory extends AbstractEventFactory{
         try {
             BlocklyEventDecorator toReturn = new BlocklyEventDecorator(eventComponent);
 
-            toReturn.setProblemDescription(properties.get("problem_description"));
+            toReturn.setProblemDescription(properties.get("problemDescription"));
             toReturn.setBlocks(objectMapper.readValue(properties.get("blocks"), Block[].class));
             toReturn.setBlocklyEvent(true);
 

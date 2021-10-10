@@ -37,8 +37,8 @@
 
   <ion-content>
     <app-blockly #blockly
-      *ngIf="status !== null"
-      [toolboxBlocks]="null"
+      *ngIf="blocks !== null"
+      [toolboxBlocks]="blocks"
       [savedProgramID]="eventID"
     ></app-blockly>
   </ion-content>

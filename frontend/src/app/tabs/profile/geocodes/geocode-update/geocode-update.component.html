@@ -26,7 +26,7 @@
     </ion-list>
 
 
-  <ion-item>
+  <ion-item *ngIf="geocode.eventID === null">
     <ion-label>Difficulty</ion-label>
     <ion-select  placeholder="Select One" #Diff (ionChange)="updateDifficulty(Diff.value)" value="{{updateRequest.difficulty}}">
       <ion-select-option value="EASY">Easy</ion-select-option>

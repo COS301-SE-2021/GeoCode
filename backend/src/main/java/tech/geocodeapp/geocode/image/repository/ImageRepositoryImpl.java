@@ -43,6 +43,6 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     private Path getFilePathFromName( String input ) {
-        return new File( imageDirectory+"\\"+input ).toPath();
+        return new File( imageDirectory+File.separator+input ).toPath();
     }
 }

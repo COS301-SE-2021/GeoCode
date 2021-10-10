@@ -10,9 +10,9 @@
     </parent>
     <groupId>tech.geocodeapp</groupId>
     <artifactId>geocode</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>geocode</name>
-    <description>Peak Performers Geocode application</description>
+    <description>GeoCode Spring Backend</description>
     <properties>
         <java.version>11</java.version>
         <keycloak.version>13.0.1</keycloak.version>
