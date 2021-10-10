@@ -8,24 +8,21 @@
 
 # Example QR Codes
 
-## Kragga Kamma Game Park
+## Example GeoCode (Explore tab)
 
-- A regular GeoCode that is accessible from the Explore page
-- Located in Gqeberha (Port Elizabeth)
+Located in Gqeberha (Port Elizabeth)
 
-![Kragga Kamma Game Park](https://user-images.githubusercontent.com/39992590/136439581-d59013fa-2ffc-41fb-8fbd-4fe3e9a5f3bc.png)
+| Kragga Kamma Game Park |
+| - |
+| <img src="https://user-images.githubusercontent.com/39992590/136439581-d59013fa-2ffc-41fb-8fbd-4fe3e9a5f3bc.png" width="300"> |
 
-## Port Elizabeth Malls
+## Example Event (Events tab)
 
-- An event that is accessible from the Events Page
-- Located in Gqeberha (Port Elizabeth)
+Located in Gqeberha (Port Elizabeth)
 
-Baywest Mall:
+| Baywest Mall | Walmer Park |
+| - | - |
+| <img src="https://user-images.githubusercontent.com/39992590/136439595-934f854e-d030-4975-b05e-127399aa3bed.png" width="300"> | <img src="https://user-images.githubusercontent.com/39992590/136439599-86b5f4e4-a3d1-476d-98bd-e421d6eac784.png" width="300"> |
 
-![Baywest Mall](https://user-images.githubusercontent.com/39992590/136439595-934f854e-d030-4975-b05e-127399aa3bed.png)
-
-Walmer Park:
-
-![Walmer Park](https://user-images.githubusercontent.com/39992590/136439599-86b5f4e4-a3d1-476d-98bd-e421d6eac784.png)
 
 Please note that GeoCodes cannot be opened by their creators. If you create a new GeoCode, please create a new account to open it.
