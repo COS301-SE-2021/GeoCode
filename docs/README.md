@@ -31,4 +31,4 @@ Located in Gqeberha (Port Elizabeth)
 | <img src="https://user-images.githubusercontent.com/39992590/136439595-934f854e-d030-4975-b05e-127399aa3bed.png" width="300"> | <img src="https://user-images.githubusercontent.com/39992590/136439599-86b5f4e4-a3d1-476d-98bd-e421d6eac784.png" width="300"> |
 
 
-Please note that GeoCodes cannot be opened by their creators. If you create a new GeoCode, please create a new account to open it.
+Please note that users cannot swap collectables inside GeoCodes that they have created. If you create a new GeoCode, please create a new account to open it.
