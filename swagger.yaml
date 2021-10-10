@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the swagger documentation and API for the GeoCode project implemented by Peak Performers for the client [5DT](https://5dt.com/)."
-  version: "1.5.20"
+  version: "1.6"
   title: "Swagger GeoCode"
   termsOfService: "https://swagger.io/terms/"
   contact:
@@ -2656,10 +2656,14 @@ components:
       type: "object"
       required:
         - success
+        - message
       properties:
         success:
           type: boolean
           example: "True"
+        message:
+          type: string
+          example: "Swap successful"
       xml:
         name: "SwapCollectablesResponse"
 
