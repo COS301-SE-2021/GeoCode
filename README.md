@@ -1,10 +1,11 @@
 <div align="center">
-  <img align="left" width="80" src="https://drive.google.com/uc?export=view&id=14tcYhY4PgTOkXN-oUasKH8UpUKQcx_cn">
+  <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713126-4d74b8ff-1b54-473f-a109-7a03cf665f6e.png">
 </div>
-<h1 align="center" style="color:green; font-size: 300%;" > GeoCode – Virtual Global Treasure Hunt </h1>
+<h1 align="center" style="color:green; font-size: 300%;" > <a href="https://geocodeapp.tech">GeoCode – Virtual Global Treasure Hunt </a></h1>
 
 <br>
 <div align="center">
+
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=bugs)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=code_smells)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
@@ -31,22 +32,6 @@
 
 -->
 
-<h1> Table of Contents</h1>
-
-<div style="margin-left: 4%">
-
-- [Project Overview](#project-overview)
-- [GitHub Management](#github-management)
-- [Deployment](#deployment)
-- [Software Requirements Specification](#software-requirements-specification)
-- [Documentation](#documentation)
-- [Project Management Tools](#project-management-tools)
-- [Demo Video Links](#demo-video-links)
-- [Mentors](#mentors)
-- [Collaborators](#collaborators)
-
-</div>
-
 # Project Overview
 
 <div style="margin-left: 4%">
@@ -63,120 +48,32 @@ With the use of GeoCodes as QR codes it also means if someone stumbles upon the 
 
 </div>
 
-# GitHub Management
-
-<div align="center">
-
-[![Build Status](https://img.shields.io/github/issues/COS301-SE-2021/GeoCode.svg)](https://github.com/COS301-SE-2021/GeoCode/issues)
-[![Build Status](https://img.shields.io/github/issues-closed/COS301-SE-2021/GeoCode)](https://img.shields.io/github/issues-closed/COS301-SE-2021/GeoCode)
-[![Build Status](https://img.shields.io/github/milestones/open/COS301-SE-2021/GeoCode)](https://img.shields.io/github/milestones/open/COS301-SE-2021/GeoCode)
-
-</div>
-
-<div style="margin-left: 4%">
-
-A monorepo with the Git Flow structure will be used in the COS301-SE-2021 organization for the GeoCode project.
-<br/>
-
-The following type of branches will be used in the repository:
-<br/>
-* **master:** The current stable release version of the product. There will only be one of these branches.
-* **release/vN.N:** A copy of the master branch for version N.N of the system.
-* **development:** A branch consisting of finished code that will be included in the next push to master.
-* **dev/SubsystemName:** The main development branch of a single subsystem.
-* **dev/SubsystemName-FeatureName:** Used to indicate a new feature being implemented and tested.
-
- <br/>
-      For the management of the project at least two team members will work on a single feature. When a feature has been implemented and tested it will be merged into the develop branch, 
-      to merge the feature branch into the development branch a Pull Request will be made where a team member who did not work on the branch being merged will need to be assigned on the 
-      branch to review the code and accept the Pull Request or request changes. This is done to ensure the separate subsystems of the project are integrated correctly and help ensure the 
-      development branch will contain code and features that work correctly.
-<br/><br/>
-      The file structure for each of the different subsystem identified in the subsystem will be as such:
-
-    ExampleSubsystem
-
-    |------ controller
-               |------ ExampleSubsystemApi
-               |------ ExampleSubsystemApiController
-    |------ exception
-    |------ model
-    |------ repository
-    |------ request
-    |------ response
-    |------ service
-               |------ ExampleSubsystemService
-               |------ ExampleSubsystemServiceImpl
-</div>
-
-# Deployment
-
-<div style="margin-left: 4%">
-
-This will be announced after the first stable release of the GeoCode project.
-
-</div>    
-
-# Software Requirements Specification
-
-<div style="margin-left: 4%">
-
-The following documentation was done in LaTeX and is to document the process followed when designing <br/> and structure of the GeoCode project.
-
-* <a href="https://www.overleaf.com/read/ysgpfdqtrrkw"> GeoCode - SRS Version One </a>
-* <a href="https://www.overleaf.com/read/xtrkrnzbmbny"> GeoCode - SRS Version Two </a>
-* <a href="https://www.overleaf.com/read/mvtwqwsgyqdf"> GeoCode - SRS Version Three </a>
-* <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> GeoCode - SRS Version Four </a>
-
-</div>
-
 # Documentation
 
 <div style="margin-left: 4%">
+	
+The latest versions of the project's documentation, created in LaTeX.
 
-The following documentation was done in LaTeX and is to document the methods used to create, how <br/> to install and use the GeoCode project.
-
+* <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> Software Requirements Specification </a>
+* <a href="https://www.overleaf.com/read/yvhjyygymzdn">Architectural Requirements</a>
+* <a href="https://www.overleaf.com/read/kggjdjzsptbh">Technical Installation Manual</a>
+* <a href="https://www.overleaf.com/read/kyrfcgymmnng">User Manual</a>
+* <a href="https://www.overleaf.com/read/hpvhpdhpscwz">Application Theme Test</a>
+* <a href="https://www.overleaf.com/read/fwdbkgqbjfnf">Usability Test Results</a>
 * <a href="https://www.overleaf.com/read/byjsbnwxcgnm"> Coding Standards </a>
 * <a href="https://www.overleaf.com/read/nmvtrtfmjtrh"> Testing Policy </a>
-* <a href="https://www.overleaf.com/read/bprjhgpzbcxf">Technical Installation Manual Version One</a>
-* <a href="https://www.overleaf.com/read/kggjdjzsptbh">Technical Installation Manual Version Two</a>
-* <a href="https://www.overleaf.com/read/fjdvrjjsndhv">User Manual Version One</a>
-* <a href="https://www.overleaf.com/read/kyrfcgymmnng">User Manual Version Two</a>
-* <a href="https://drive.google.com/file/d/1TPxVUnTDn-eS_OPRwaLPnVOdo1seEFya/view?usp=sharing">Architectural Requirements Version Two</a>
-* <a href="https://www.overleaf.com/read/yvhjyygymzdn">Architectural Requirements Version Three</a>
-  
-The following documentation was done in LaTeX and is to document the usability testing of the project.
-* <a href="https://www.overleaf.com/read/hpvhpdhpscwz">Application Theme Test</a>
-* <a href="https://www.overleaf.com/read/fwdbkgqbjfnf">Usability Test</a>
-</div>
-
-# Project Management Tools
-
-<div style="margin-left: 4%">
-
-To aid with the management of the GeoCode project the following tools were used:
-
-* <a href="https://github.com/COS301-SE-2021/GeoCode/projects">GitHub project boards:</a> Task allocations and progress tracking.
-* <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
-* <a href="https://discord.com/brand-newover">Discord:</a> Informal team meetings for quick debriefs, communication.
-* <a href="https://discord.com/developers/docs/resources/webhooks">GitHub and Discord Webhooks:</a> Notifications sent to the team's discord server when a commit is made to the GitHub repository.
-* <a href="https://www.overleaf.com">Overleaf:</a> LaTeX editor that allows collaboration on creating documentation.
 
 </div>
 
-
-
-# Demo Video Links
+# Additional Links
 
 <div style="margin-left: 4%">
 
-The following links are the live demo videos held on blackboard collaborate to present the different <br/>
-phases of the project to the stakeholders of the GeoCode project.
-
-* <a href="https://drive.google.com/file/d/1OqOuoMHSyd4rTUqWW5j_ME1EZcIJHre4/view?usp=sharing"> Demo 1 </a> - :calendar: 2021-06-14
-* <a href="https://drive.google.com/file/d/1iSdTMS9bjVXQGxdfrJ-6nl46fX0j3h7n/view?usp=sharing"> Demo 2  </a> - :calendar: 2021-06-21 
-* <a href="https://drive.google.com/file/d/1lVIqfENiN10zGNmveXXlzY8A03thT7aV/view?usp=sharing"> Demo 3  </a> - :calendar: 2021-08-20 
-* <a href="https://drive.google.com/file/d/1M2ubzX2ipWgjRyU-sgUrgj8x_HbYWWN0/view?usp=sharing"> Demo 4  </a> - :calendar: 2021-09-20 
+- [Technology Stack](docs/Technology_Stack.md)
+- [GitHub Management](docs/GitHub_Management.md)
+- [Project Management Tools](docs/Project_Management_Tools.md)
+- [Demo Video Links](docs/Demo_Video_Links.md)
+- [Previous Documentation Versions](docs/Previous_Documentation_Versions.md)
 
 </div>
 
@@ -184,7 +81,7 @@ phases of the project to the stakeholders of the GeoCode project.
 
 <div style="margin-left: 4%">
 
-The team Peak Performers had the following mentor from <a href="https://5dt.com/"> Fifth Dimension Technologies </a> and the <a href="https://www.up.ac.za/"> University of Pretoria</a>:
+The team had the following mentors from <a href="https://5dt.com/"> Fifth Dimension Technologies </a> and the <a href="https://www.up.ac.za/"> University of Pretoria</a> respectively:
 
 Industry Mentor:
   <pre>
@@ -208,7 +105,7 @@ University Mentor:
 
 The following software engineers contributed to the GeoCode project:
 
-<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1_OiHlqj6YBQIg5iIfT0zQbJZkdsbCjx1">
+<img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713416-05aa6fc3-717f-4b63-be63-18f50543022f.jpg">
 <h1 style="color:green; font-size: 200%;" > Michael Ströh </h1>
 <br/>
 
@@ -252,7 +149,7 @@ The following software engineers contributed to the GeoCode project:
    </details>
 
 
-<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1A2cEQ7wslTqTWvZy7f6A4TBXakVAcWcQ">
+<img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713414-dda2cefb-7b9a-4d9f-aabc-19394d69e5cb.jpg">
 <h1 style="color:green; font-size: 200%;" > Liam Moore </h1>
 <br/>
 
@@ -272,7 +169,6 @@ The following software engineers contributed to the GeoCode project:
 * <a href="https://github.com/NitronBiohazard"> Github Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/liam-moore-410004210/"> LinkedIn  Account </a>
 * :email: liam.moore@tuks.co.za
-
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
@@ -287,9 +183,9 @@ The following software engineers contributed to the GeoCode project:
            - Usability Testing: Conducting Usability Testing
        </pre>
    </details>
+	
 
-
-<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1vofqN3uiCv7RwSIVo-SRCgzG7G2lrOcu">
+<img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713405-9f0d8938-aa24-4b74-bc17-d3c9b4f6fa82.jpg">
 <h1 style="color:green; font-size: 200%;" > Jenna Gallagher </h1>
 <br/>
 
@@ -306,7 +202,6 @@ The following software engineers contributed to the GeoCode project:
 * :mortar_board: <a href="www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a>
 * :wave: <a href="https://jennalyngallagher.github.io/"> Personal Website </a>
 * :email: jenna.gallagher@tuks.co.za
-
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
@@ -326,8 +221,7 @@ The following software engineers contributed to the GeoCode project:
        </pre>
    </details>
 
-
-<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1QDGS-md4cPuMLbopvBIPRxzjDHnoCbLw">
+<img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713398-3c3662de-2dd3-4a5f-9fee-5862591f1c60.jpg">
 <h1 style="color:green; font-size: 200%;" > Caleb Johnstone </h1>
 <br/>
 
@@ -344,7 +238,6 @@ The following software engineers contributed to the GeoCode project:
 * <a href="https://github.com/CalebJohnstone"> Github Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/caleb-johnstone-94368a132/"> LinkedIn  Account </a>
 * :email: caleb.johnstone@tuks.co.za
-
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
@@ -361,8 +254,7 @@ The following software engineers contributed to the GeoCode project:
        </pre>
    </details>
 
-
-<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1jeukx2dfvmPY8R6NiL92o8rqUoTZrXb0">
+<img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713394-0993c9b5-fd2e-467d-a511-c4c1d9fc3e4e.jpg">
 <h1 style="color:green; font-size: 200%;" > Michael Harvey </h1>
 <br/>
 
@@ -380,7 +272,6 @@ The following software engineers contributed to the GeoCode project:
 * <a href="https://github.com/robotic-coder"> Github Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/michaelharvey-123/"> LinkedIn  Account </a>
 * :email: michael.harvey@tuks.co.za
-
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
