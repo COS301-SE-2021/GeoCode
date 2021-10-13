@@ -110,17 +110,16 @@ The following software engineers contributed to the GeoCode project:
 <h1 style="color:green; font-size: 200%;" > Michael Ströh </h1>
 
    <pre>
-
-            Michael Ströh has learnt throughout his university career that perseverance leads to
-            excellence. Through working as a Teaching Assistant for COS 212 (Data Structures)
-            and a Student Lab Technician in the CBT labs at the University Of Pretoria he has
-            learnt how to manage his time wisely and effectively communicate not only as a team
-            but also as an individual. As an Artificial Intelligence project Michael Ströh 
-            successfully completed a Sudoku solver using Generic Algorithms and a flower 
-            specimens classifier using Machine Learning with back propagation to identify 
-            the different species of the iris flower, namely, iris setosa, iris versicolour 
-            and iris virginica.
-   </pre>
+         Michael Ströh has learnt throughout his university career that perseverance leads to
+         excellence. Through working as a Teaching Assistant for COS 212 (Data Structures)
+         and a Student Lab Technician in the CBT labs at the University Of Pretoria he has
+         learnt how to manage his time wisely and effectively communicate not only as a team
+         but also as an individual. As an Artificial Intelligence project Michael Ströh 
+         successfully completed a Sudoku solver using Generic Algorithms and a flower 
+         specimens classifier using Machine Learning with back propagation to identify 
+         the different species of the iris flower, namely, iris setosa, iris versicolour 
+         and iris virginica.
+</pre>
 
 * <a href="https://github.com/Michael-Stroh"> GitHub Account </a>
 * :mortar_board: <a href="https://www.linkedin.com/in/stroh-michael"> LinkedIn Account </a>
@@ -143,9 +142,9 @@ The following software engineers contributed to the GeoCode project:
               - Unit Testing
               - Integration Testing
               - Jmeter
-              - Sonar		
-              - Mockito			  
-       </pre>
+              - Sonar
+              - Mockito
+</pre>
    </details>
 
 
@@ -155,15 +154,14 @@ The following software engineers contributed to the GeoCode project:
 
 
   <pre>
-
          Graduated from Heron Bridge College in 2017 with a distinction for both IT and Life
          Orientation. Switched from Computer Engineering to a BSc Information and Knowledge
-         Systems with the choice of the Software Development elective group in 2019. I was the
+         Systems with the choice of the Software Development elective group in 2019. He was the
          class representative for INF 154. Since switching to BSc Information and Knowledge
-         Systems I have received distinctions for 6 modules. The Software Development elective
-         group contained modules that gave me experience with C#, C# entity framework, .NET
-         and Node.JS
-  </pre>
+         Systems he has received distinctions for 6 modules. The Software Development elective
+         group contained modules that gave him experience with C#, C# entity framework, .NET
+         and Node.js.
+</pre>
 
 
 * <a href="https://github.com/NitronBiohazard"> GitHub Account</a>
@@ -181,7 +179,7 @@ The following software engineers contributed to the GeoCode project:
               - Events Subsystem extension for Blockly
               - Collectable Subsystem and the design patterns (Decorator and Factory patterns)
            - Usability Testing: Conducting Usability Testing
-       </pre>
+</pre>
    </details>
 	
 
@@ -190,13 +188,12 @@ The following software engineers contributed to the GeoCode project:
 <h1 style="color:green; font-size: 200%;" > Jenna Gallagher </h1>
 
   <pre>
-      
          Graduated from St Dominic’s Priory High School in 2018 with 5 distinctions and 3rd
          in her year. She currently has 17 distinctions out of 23 modules. Jenna has done an
          internship at Propella which helps startups bring their ideas to life through technology.
          There she experienced the life cycle of project development from meeting a client all the
          way through to the end project, this will help her in leading the capstone project.
-  </pre>
+</pre>
 
 * <a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> GitHub Account </a>
 * :mortar_board: <a href="www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a>
@@ -233,7 +230,7 @@ The following software engineers contributed to the GeoCode project:
          This degree is one of the two degrees offered at the Computer Science department at
          the University Of Pretoria. Caleb was the top Computer Science student for 2019 and 2020.
          He was elected as the EBIT House Treasurer for the 2019/2020 term.
-  </pre>
+</pre>
 
 * <a href="https://github.com/CalebJohnstone"> GitHub Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/caleb-johnstone-94368a132/"> LinkedIn  Account </a>
@@ -251,7 +248,7 @@ The following software engineers contributed to the GeoCode project:
               - Blockly Events
               - Mission Subsystem
               - Collectable Subsystem           
-       </pre>
+</pre>
    </details>
 
 <br/>
@@ -259,15 +256,12 @@ The following software engineers contributed to the GeoCode project:
 <h1 style="color:green; font-size: 200%;" > Michael Harvey </h1>
 
   <pre>
-      
          Michael Harvey graduated from Richards Bay Christian School in 2018 with 4 distinctions,
          and is currently in his 3rd year studying BSc Computer Science. In his first two and a half
-         years of university he achieved 25 distinctions in 28 modules, and he ranked as the 
-         3rd highest first-year Computer Science student at UP in 2019. On the side he maintains
-         various Python projects that make use of the API for the mobile game Clash of Clans: 2
-         Discord bots, as well as a program collecting Clan War League participation data from
-         hundreds of thousands of clans for statistical purposes.
-  </pre>
+         years of university he achieved 25 distinctions in 28 modules, and he ranked as the 3rd-
+         highest first-year Computer Science student at UP in 2019. On the side he maintains 2
+         Discord bots written in Python that make use of the API for the mobile game Clash of Clans.
+</pre>
 
 * <a href="https://github.com/robotic-coder"> GitHub Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/michaelharvey-123/"> LinkedIn  Account </a>
@@ -293,7 +287,7 @@ The following software engineers contributed to the GeoCode project:
            - Backend: Events Subsystem
            - Keycloak Integration
            - Server Management
-       </pre>
+</pre>
    </details>
 
 
