@@ -4,8 +4,6 @@
 
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713416-05aa6fc3-717f-4b63-be63-18f50543022f.jpg">
 <h1 style="color:green; font-size: 200%;" > Michael Ströh </h1>
-<br/>
-
    <pre>
 
             Michael Ströh has learnt throughout his university career that perseverance leads to
@@ -18,7 +16,6 @@
             the different species of the iris flower, namely, iris setosa, iris versicolour 
             and iris virginica.
    </pre>
-
 <ul>
 	<li><a href="https://github.com/Michael-Stroh"> GitHub Account </a></li>
 	<li>🎓 <a href="https://www.linkedin.com/in/stroh-michael"> LinkedIn Account </a></li>
@@ -47,12 +44,9 @@
        </pre>
    </details>
 
-
+<br>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713414-dda2cefb-7b9a-4d9f-aabc-19394d69e5cb.jpg">
 <h1 style="color:green; font-size: 200%;" > Liam Moore </h1>
-<br/>
-
-
   <pre>
 
          Graduated from Heron Bridge College in 2017 with a distinction for both IT and Life
@@ -63,7 +57,6 @@
          group contained modules that gave me experience with C#, C# entity framework, .NET
          and Node.JS
   </pre>
-
 <ul>
 	<li><a href="https://github.com/NitronBiohazard"> GitHub Account</a></li>
 	<li>🎓 <a href="https://www.linkedin.com/in/liam-moore-410004210/"> LinkedIn  Account </a></li>
@@ -83,12 +76,10 @@
            - Usability Testing: Conducting Usability Testing
        </pre>
    </details>
-	
 
+<br>	
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713405-9f0d8938-aa24-4b74-bc17-d3c9b4f6fa82.jpg">
 <h1 style="color:green; font-size: 200%;" > Jenna Gallagher </h1>
-<br/>
-
   <pre>
       
          Graduated from St Dominic’s Priory High School in 2018 with 5 distinctions and 3rd
@@ -97,8 +88,6 @@
          There she experienced the life cycle of project development from meeting a client all the
          way through to the end project, this will help her in leading the capstone project.
   </pre>
-
-
 <ul>
 	<li><a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> GitHub Account </a></li>
 	<li>🎓 <a href="www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a></li>
@@ -124,10 +113,9 @@
        </pre>
    </details>
 
+<br>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713398-3c3662de-2dd3-4a5f-9fee-5862591f1c60.jpg">
 <h1 style="color:green; font-size: 200%;" > Caleb Johnstone </h1>
-<br/>
-
   <pre>
          Caleb Johnstone graduated from Fourways High School in 2018, achieving 4 distinctions
          - the highest of the two being 94% for Mathematics and 96% for Information Technology.
@@ -137,7 +125,6 @@
          the University Of Pretoria. Caleb was the top Computer Science student for 2019 and 2020.
          He was elected as the EBIT House Treasurer for the 2019/2020 term.
   </pre>
-
 <ul>
 	<li><a href="https://github.com/CalebJohnstone"> GitHub Account</a></li>
 	<li>🎓 <a href="https://www.linkedin.com/in/caleb-johnstone-94368a132/"> LinkedIn  Account </a></li>
@@ -159,10 +146,9 @@
        </pre>
    </details>
 
+<br>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713394-0993c9b5-fd2e-467d-a511-c4c1d9fc3e4e.jpg">
 <h1 style="color:green; font-size: 200%;" > Michael Harvey </h1>
-<br/>
-
   <pre>
       
          Michael Harvey graduated from Richards Bay Christian School in 2018 with 4 distinctions,
@@ -173,7 +159,6 @@
          Discord bots, as well as a program collecting Clan War League participation data from
          hundreds of thousands of clans for statistical purposes.
   </pre>
-
 <ul>
 	<li><a href="https://github.com/robotic-coder"> GitHub Account</a></li>
 	<li>🎓 <a href="https://www.linkedin.com/in/michaelharvey-123/"> LinkedIn  Account </a></li>
@@ -196,3 +181,6 @@
               - Blockly Integration
               - Collections Tab Pages
               - QR Code Creation/Scanning
+       </pre>
+   </details>
+</div>
