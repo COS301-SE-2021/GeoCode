@@ -105,6 +105,7 @@ University Mentor:
 
 The following software engineers contributed to the GeoCode project:
 
+<br/>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713416-05aa6fc3-717f-4b63-be63-18f50543022f.jpg">
 <h1 style="color:green; font-size: 200%;" > Michael Ströh </h1>
 
