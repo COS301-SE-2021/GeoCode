@@ -1,8 +1,8 @@
 <div align="center">
   <img align="left" width="120" src="https://user-images.githubusercontent.com/39992590/136713126-4d74b8ff-1b54-473f-a109-7a03cf665f6e.png">
 </div>
-<h1 align="center" style="color:green; font-size: 300%;" >GeoCode – Virtual Global Treasure Hunt</h1>
-<h3 align="center">by <a href="Team">Peak Performers</a></h1>
+<h1 align="center" style="color:green; font-size: 250%;" >GeoCode – Virtual Global Treasure Hunt</h1>
+<h3 align="center">by <a href="Team">Peak Performers</a></h3>
 
 ## Useful Links
 

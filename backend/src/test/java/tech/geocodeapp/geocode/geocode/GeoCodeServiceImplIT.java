@@ -142,6 +142,7 @@ class GeoCodeServiceImplIT {
         pointRepository.deleteAll();
         userRepository.deleteAll();
         repo.deleteAll();
+        collectableService.initialiseUserTrackables();
 
         try {
 

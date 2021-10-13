@@ -263,7 +263,7 @@ public class CollectableServiceImpl implements CollectableService {
         this.missionService = missionService;
     }
 
-    private void initialiseUserTrackables() {
+    public void initialiseUserTrackables() {
         /*
          * The "User Trackables" set and type are required to exist before users can enter the system.
          * Create them on application load if they do not exist.
