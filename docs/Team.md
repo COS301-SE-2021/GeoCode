@@ -4,7 +4,7 @@
 
 <br>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713416-05aa6fc3-717f-4b63-be63-18f50543022f.jpg">
-<h1 style="color:green; font-size: 200%;" > Michael Ströh </h1>
+<h1 style="color:#3AAFA9; font-size: 200%;" > Michael Ströh </h1>
 <pre style="white-space: pre-wrap;">
 Michael Ströh has learnt throughout his university career that perseverance leads to excellence. Through working as a Teaching Assistant for COS 212 (Data Structures) and a Student Lab Technician in the CBT labs at the University Of Pretoria he has learnt how to manage his time wisely and effectively communicate not only as a team but also as an individual. As an Artificial Intelligence project Michael Ströh successfully completed a Sudoku solver using Generic Algorithms and a flower specimens classifier using Machine Learning with back propagation to identify the different species of the iris flower, namely, iris setosa, iris versicolour and iris virginica.
 </pre>
@@ -38,7 +38,7 @@ Michael Ströh has learnt throughout his university career that perseverance lea
 
 <br>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713414-dda2cefb-7b9a-4d9f-aabc-19394d69e5cb.jpg">
-<h1 style="color:green; font-size: 200%;" > Liam Moore </h1>
+<h1 style="color:#3AAFA9; font-size: 200%;" > Liam Moore </h1>
   <pre style="white-space: pre-wrap;">
 Graduated from Heron Bridge College in 2017 with a distinction for both IT and Life Orientation. Switched from Computer Engineering to a BSc Information and Knowledge Systems with the choice of the Software Development elective group in 2019. He was the class representative for INF 154. Since switching to BSc Information and Knowledge Systems he has received distinctions for 6 modules. The Software Development elective group contained modules that gave him experience with C#, C# entity framework, .NET and Node.js.
 </pre>
@@ -64,7 +64,7 @@ Graduated from Heron Bridge College in 2017 with a distinction for both IT and L
 
 <br>  
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713405-9f0d8938-aa24-4b74-bc17-d3c9b4f6fa82.jpg">
-<h1 style="color:green; font-size: 200%;" > Jenna Gallagher </h1>
+<h1 style="color:#3AAFA9; font-size: 200%;" > Jenna Gallagher </h1>
 <pre style="white-space: pre-wrap;">
 Graduated from St Dominic’s Priory High School in 2018 with 5 distinctions and 3rd in her year. She currently has 17 distinctions out of 23 modules. Jenna has done an internship at Propella which helps startups bring their ideas to life through technology. There she experienced the life cycle of project development from meeting a client all the way through to the end project, this will help her in leading the capstone project.
 </pre>
@@ -95,7 +95,7 @@ Graduated from St Dominic’s Priory High School in 2018 with 5 distinctions and
 
 <br>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713398-3c3662de-2dd3-4a5f-9fee-5862591f1c60.jpg">
-<h1 style="color:green; font-size: 200%;" > Caleb Johnstone </h1>
+<h1 style="color:#3AAFA9; font-size: 200%;" > Caleb Johnstone </h1>
   <pre style="white-space: pre-wrap;">
 Caleb Johnstone graduated from Fourways High School in 2018, achieving 4 distinctions - the highest of the two being 94% for Mathematics and 96% for Information Technology. He placed 7th in Gauteng for Information Technology. Caleb is currently studying in his 3rd year for a BSc Information and Knowledge Systems, specialising in Data Science. This degree is one of the two degrees offered at the Computer Science department at the University Of Pretoria. Caleb was the top Computer Science student for 2019 and 2020. He was elected as the EBIT House Treasurer for the 2019/2020 term.
 </pre>
@@ -122,7 +122,7 @@ Caleb Johnstone graduated from Fourways High School in 2018, achieving 4 distinc
 
 <br>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713394-0993c9b5-fd2e-467d-a511-c4c1d9fc3e4e.jpg">
-<h1 style="color:green; font-size: 200%;" > Michael Harvey </h1>
+<h1 style="color:#3AAFA9; font-size: 200%;" > Michael Harvey </h1>
 <pre style="white-space: pre-wrap;">
 Michael Harvey graduated from Richards Bay Christian School in 2018 with 4 distinctions, and is currently in his 3rd year studying BSc Computer Science. In his first two and a half years of university he achieved 25 distinctions in 28 modules, and he ranked as the 3rd-highest first-year Computer Science student at UP in 2019. On the side he maintains 2 Discord bots written in Python that make use of the API for the mobile game Clash of Clans.
 </pre>

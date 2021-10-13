@@ -36,15 +36,11 @@
 
 <div style="margin-left: 4%">
 
-With the adjustment to the global pandemic and the modernisation of the world we know, average day <br/> activities, which some have been around for centuries, are needing to find their way onto the virtual world. <br/> Geocaching has started to go out of fashion and is needing a new modern twist on the classic treasure hunt game.
+With the adjustment to the global pandemic and the modernisation of the world we know, average day activities, which some have been around for centuries, are needing to find their way onto the virtual world. Geocaching has started to go out of fashion and is needing a new modern twist on the classic treasure hunt game.
 
-<br/>
+There is a need to have GeoCodes as there is a problem of caches going missing from people stumbling upon the caches without the knowledge of what they are. With GeoCodes the likely hood of a cache going missing is a lot smaller as it will only be a QR code sticker which people are a lot less likely to remove. A QR code is also a lot easier to replace. The use of a GeoCode also resolves the issue of logbooks being full and people unable to log their finds in the books as this will go digital.
 
-There is a need to have GeoCodes as there is a problem of caches going missing from people stumbling upon <br/> the caches without the knowledge of what they are. With GeoCodes the likely hood of a cache going missing is <br/> a lot smaller as it will only be a QR code sticker which people are a lot less likely to remove. A QR code is also a lot <br/> easier to replace. The use of a GeoCode also resolves the issue of logbooks being full and people unable to log <br/> their finds in the books as this will go digital.
-
-<br/>
-
-With the use of GeoCodes as QR codes it also means if someone stumbles upon the QR code and scans it they <br/> will be taken to the GeoCode website where they will be introduced to the concept and have the opportunity to <br/> join the GeoCode community.
+With the use of GeoCodes as QR codes it also means if someone stumbles upon a QR code and scans it, they will be taken to the GeoCode website where they will be introduced to the concept and have the opportunity to join the GeoCode community.
 
 </div>
 

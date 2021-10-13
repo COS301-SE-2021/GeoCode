@@ -6,10 +6,10 @@
 
 ## Useful Links
 
-* ### [Website (geocodeapp.tech)](https://geocodeapp.tech)
-* ### [Website Instructions and Example QR Codes](Instructions)
-* ### [Android APK](https://github.com/COS301-SE-2021/GeoCode/releases/download/v1.1/GeoCode.apk)  
-* ### [GitHub Repository](https://github.com/COS301-SE-2021/GeoCode)
+* ### [🌐 Website (geocodeapp.tech)](https://geocodeapp.tech)
+* ### [📖 Website Instructions and Example QR Codes](Instructions)
+* ### [📲 Android APK](https://github.com/COS301-SE-2021/GeoCode/releases/download/v1.1/GeoCode.apk)  
+* ### [👨‍💻 GitHub Repository](https://github.com/COS301-SE-2021/GeoCode)
 
 ## Project Overview
 
