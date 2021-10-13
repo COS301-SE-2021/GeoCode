@@ -107,7 +107,6 @@ The following software engineers contributed to the GeoCode project:
 
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713416-05aa6fc3-717f-4b63-be63-18f50543022f.jpg">
 <h1 style="color:green; font-size: 200%;" > Michael Ströh </h1>
-<br/>
 
    <pre>
 
@@ -149,9 +148,9 @@ The following software engineers contributed to the GeoCode project:
    </details>
 
 
+<br/>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713414-dda2cefb-7b9a-4d9f-aabc-19394d69e5cb.jpg">
 <h1 style="color:green; font-size: 200%;" > Liam Moore </h1>
-<br/>
 
 
   <pre>
@@ -185,9 +184,9 @@ The following software engineers contributed to the GeoCode project:
    </details>
 	
 
+<br/>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713405-9f0d8938-aa24-4b74-bc17-d3c9b4f6fa82.jpg">
 <h1 style="color:green; font-size: 200%;" > Jenna Gallagher </h1>
-<br/>
 
   <pre>
       
@@ -221,9 +220,9 @@ The following software engineers contributed to the GeoCode project:
        </pre>
    </details>
 
+<br/>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713398-3c3662de-2dd3-4a5f-9fee-5862591f1c60.jpg">
 <h1 style="color:green; font-size: 200%;" > Caleb Johnstone </h1>
-<br/>
 
   <pre>
          Caleb Johnstone graduated from Fourways High School in 2018, achieving 4 distinctions
@@ -254,9 +253,9 @@ The following software engineers contributed to the GeoCode project:
        </pre>
    </details>
 
+<br/>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713394-0993c9b5-fd2e-467d-a511-c4c1d9fc3e4e.jpg">
 <h1 style="color:green; font-size: 200%;" > Michael Harvey </h1>
-<br/>
 
   <pre>
       

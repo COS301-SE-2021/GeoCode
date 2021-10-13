@@ -6,39 +6,19 @@
 
 ## Useful Links
 
-[Website (geocodeapp.tech)](https://geocodeapp.tech)  
-[Android APK](https://github.com/COS301-SE-2021/GeoCode/releases/download/v1.1/GeoCode.apk)  
-[GitHub Repository](https://github.com/COS301-SE-2021/GeoCode)
+* ### [Website (geocodeapp.tech)](https://geocodeapp.tech)
+* ### [Website Instructions and Example QR Codes](Instructions)
+* ### [Android APK](https://github.com/COS301-SE-2021/GeoCode/releases/download/v1.1/GeoCode.apk)  
+* ### [GitHub Repository](https://github.com/COS301-SE-2021/GeoCode)
+
+## Project Overview
+
+With the adjustment to the global pandemic and the modernisation of the world we know, average day activities, which some have been around for centuries, are needing to find their way onto the virtual world. Geocaching has started to go out of fashion and is needing a new modern twist on the classic treasure hunt game.
+
+There is a need to have GeoCodes as there is a problem of caches going missing from people stumbling upon the caches without the knowledge of what they are. With GeoCodes the likely hood of a cache going missing is a lot smaller as it will only be a QR code sticker which people are a lot less likely to remove. A QR code is also a lot easier to replace. The use of a GeoCode also resolves the issue of logbooks being full and people unable to log their finds in the books as this will go digital.
+
+With the use of GeoCodes as QR codes it also means if someone stumbles upon a QR code and scans it, they will be taken to the GeoCode website where they will be introduced to the concept and have the opportunity to join the GeoCode community.
 
 ## Application Demo Video
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/cVB8_jblmtk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-## Opening the Site
-
-- Navigate to [https://geocodeapp.tech](https://geocodeapp.tech)
-- Click on the **Sign Up** button to register an account to use, using a valid email address and a username of your choice.
-- Once your information is entered, click the **Register** button and you will be asked to verify your email address.
-- Once verified, you will be able to sign in with your chosen user name and password to use the site as well as on the Android app.
-- No further setup is required - you will be able to use the site with your new account. For more information, please read the provided user manual.
-
-## Example QR Codes
-
-### Example GeoCode (Explore tab)
-
-Located in Gqeberha (Port Elizabeth)
-
-| Kragga Kamma Game Park |
-| - |
-| <img src="https://user-images.githubusercontent.com/39992590/136439581-d59013fa-2ffc-41fb-8fbd-4fe3e9a5f3bc.png" width="300"> |
-
-### Example Event (Events tab)
-
-Located in Gqeberha (Port Elizabeth)
-
-| Baywest Mall | Walmer Park |
-| - | - |
-| <img src="https://user-images.githubusercontent.com/39992590/136439595-934f854e-d030-4975-b05e-127399aa3bed.png" width="300"> | <img src="https://user-images.githubusercontent.com/39992590/136439599-86b5f4e4-a3d1-476d-98bd-e421d6eac784.png" width="300"> |
-
-
-Please note that users cannot swap collectables inside GeoCodes that they have created. If you create a new GeoCode, please create a new account to open it.

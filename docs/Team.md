@@ -3,6 +3,7 @@
 <div style="margin-left: 4%">
 
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713416-05aa6fc3-717f-4b63-be63-18f50543022f.jpg">
+<br>
 <h1 style="color:green; font-size: 200%;" > Michael Ströh </h1>
    <pre>
 
