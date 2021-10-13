@@ -122,7 +122,7 @@ The following software engineers contributed to the GeoCode project:
             and iris virginica.
    </pre>
 
-* <a href="https://github.com/Michael-Stroh"> Github Account </a>
+* <a href="https://github.com/Michael-Stroh"> GitHub Account </a>
 * :mortar_board: <a href="https://www.linkedin.com/in/stroh-michael"> LinkedIn Account </a>
 * :wave: <a href="https://michael-stroh.github.io/myCV/"> Personal Website </a>
 * :email: m.stroh@tuks.co.za
@@ -166,7 +166,7 @@ The following software engineers contributed to the GeoCode project:
   </pre>
 
 
-* <a href="https://github.com/NitronBiohazard"> Github Account</a>
+* <a href="https://github.com/NitronBiohazard"> GitHub Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/liam-moore-410004210/"> LinkedIn  Account </a>
 * :email: liam.moore@tuks.co.za
    <details>
@@ -198,7 +198,7 @@ The following software engineers contributed to the GeoCode project:
          way through to the end project, this will help her in leading the capstone project.
   </pre>
 
-* <a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> Github Account </a>
+* <a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> GitHub Account </a>
 * :mortar_board: <a href="www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a>
 * :wave: <a href="https://jennalyngallagher.github.io/"> Personal Website </a>
 * :email: jenna.gallagher@tuks.co.za
@@ -235,7 +235,7 @@ The following software engineers contributed to the GeoCode project:
          He was elected as the EBIT House Treasurer for the 2019/2020 term.
   </pre>
 
-* <a href="https://github.com/CalebJohnstone"> Github Account</a>
+* <a href="https://github.com/CalebJohnstone"> GitHub Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/caleb-johnstone-94368a132/"> LinkedIn  Account </a>
 * :email: caleb.johnstone@tuks.co.za
    <details>
@@ -269,7 +269,7 @@ The following software engineers contributed to the GeoCode project:
          hundreds of thousands of clans for statistical purposes.
   </pre>
 
-* <a href="https://github.com/robotic-coder"> Github Account</a>
+* <a href="https://github.com/robotic-coder"> GitHub Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/michaelharvey-123/"> LinkedIn  Account </a>
 * :email: michael.harvey@tuks.co.za
    <details>

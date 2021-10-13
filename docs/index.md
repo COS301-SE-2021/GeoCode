@@ -7,7 +7,7 @@
 ## Useful Links
 
 [Website (geocodeapp.tech)](https://geocodeapp.tech)  
-[Android APK](https://github.com/COS301-SE-2021/GeoCode/releases/download/v1.0/GeoCode.apk)  
+[Android APK](https://github.com/COS301-SE-2021/GeoCode/releases/download/v1.1/GeoCode.apk)  
 [GitHub Repository](https://github.com/COS301-SE-2021/GeoCode)
 
 ## Application Demo Video
