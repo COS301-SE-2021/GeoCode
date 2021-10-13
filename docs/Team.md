@@ -2,21 +2,20 @@
 
 <div style="margin-left: 4%">
 
+<br>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713416-05aa6fc3-717f-4b63-be63-18f50543022f.jpg">
-
 <h1 style="color:green; font-size: 200%;" > Michael Ströh </h1>
-   <pre>
-
-            Michael Ströh has learnt throughout his university career that perseverance leads to
-            excellence. Through working as a Teaching Assistant for COS 212 (Data Structures)
-            and a Student Lab Technician in the CBT labs at the University Of Pretoria he has
-            learnt how to manage his time wisely and effectively communicate not only as a team
-            but also as an individual. As an Artificial Intelligence project Michael Ströh 
-            successfully completed a Sudoku solver using Generic Algorithms and a flower 
-            specimens classifier using Machine Learning with back propagation to identify 
-            the different species of the iris flower, namely, iris setosa, iris versicolour 
-            and iris virginica.
-   </pre>
+<pre>
+         Michael Ströh has learnt throughout his university career that perseverance leads to
+         excellence. Through working as a Teaching Assistant for COS 212 (Data Structures)
+         and a Student Lab Technician in the CBT labs at the University Of Pretoria he has
+         learnt how to manage his time wisely and effectively communicate not only as a team
+         but also as an individual. As an Artificial Intelligence project Michael Ströh 
+         successfully completed a Sudoku solver using Generic Algorithms and a flower 
+         specimens classifier using Machine Learning with back propagation to identify 
+         the different species of the iris flower, namely, iris setosa, iris versicolour 
+         and iris virginica.
+</pre>
 <ul>
 	<li><a href="https://github.com/Michael-Stroh"> GitHub Account </a></li>
 	<li>🎓 <a href="https://www.linkedin.com/in/stroh-michael"> LinkedIn Account </a></li>
@@ -42,14 +41,13 @@
               - Jmeter
               - Sonar		
               - Mockito			  
-       </pre>
+</pre>
    </details>
 
 <br>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713414-dda2cefb-7b9a-4d9f-aabc-19394d69e5cb.jpg">
 <h1 style="color:green; font-size: 200%;" > Liam Moore </h1>
   <pre>
-
          Graduated from Heron Bridge College in 2017 with a distinction for both IT and Life
          Orientation. Switched from Computer Engineering to a BSc Information and Knowledge
          Systems with the choice of the Software Development elective group in 2019. I was the
@@ -57,7 +55,7 @@
          Systems I have received distinctions for 6 modules. The Software Development elective
          group contained modules that gave me experience with C#, C# entity framework, .NET
          and Node.JS
-  </pre>
+</pre>
 <ul>
 	<li><a href="https://github.com/NitronBiohazard"> GitHub Account</a></li>
 	<li>🎓 <a href="https://www.linkedin.com/in/liam-moore-410004210/"> LinkedIn  Account </a></li>
@@ -75,20 +73,19 @@
               - Events Subsystem extension for Blockly
               - Collectable Subsystem and the design patterns (Decorator and Factory patterns)
            - Usability Testing: Conducting Usability Testing
-       </pre>
+</pre>
    </details>
 
 <br>	
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713405-9f0d8938-aa24-4b74-bc17-d3c9b4f6fa82.jpg">
 <h1 style="color:green; font-size: 200%;" > Jenna Gallagher </h1>
-  <pre>
-      
+<pre>
          Graduated from St Dominic’s Priory High School in 2018 with 5 distinctions and 3rd
          in her year. She currently has 17 distinctions out of 23 modules. Jenna has done an
          internship at Propella which helps startups bring their ideas to life through technology.
          There she experienced the life cycle of project development from meeting a client all the
          way through to the end project, this will help her in leading the capstone project.
-  </pre>
+</pre>
 <ul>
 	<li><a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> GitHub Account </a></li>
 	<li>🎓 <a href="www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a></li>
@@ -111,7 +108,7 @@
            - Usability Testing: 
               - Colour Scheme Test.
               - Usability Test document.
-       </pre>
+</pre>
    </details>
 
 <br>
@@ -144,22 +141,21 @@
               - Blockly Events
               - Mission Subsystem
               - Collectable Subsystem           
-       </pre>
+</pre>
    </details>
 
 <br>
 <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713394-0993c9b5-fd2e-467d-a511-c4c1d9fc3e4e.jpg">
 <h1 style="color:green; font-size: 200%;" > Michael Harvey </h1>
-  <pre>
-      
+<pre>
          Michael Harvey graduated from Richards Bay Christian School in 2018 with 4 distinctions,
-         and is currently in his 3rd year studying BSc Computer Science. In his first two and a half
-         years of university he achieved 25 distinctions in 28 modules, and he ranked as the 
+         and is currently in his 3rd year studying BSc Computer Science. In his first two and a
+         half years of university he achieved 25 distinctions in 28 modules, and he ranked as the 
          3rd highest first-year Computer Science student at UP in 2019. On the side he maintains
          various Python projects that make use of the API for the mobile game Clash of Clans: 2
          Discord bots, as well as a program collecting Clan War League participation data from
          hundreds of thousands of clans for statistical purposes.
-  </pre>
+</pre>
 <ul>
 	<li><a href="https://github.com/robotic-coder"> GitHub Account</a></li>
 	<li>🎓 <a href="https://www.linkedin.com/in/michaelharvey-123/"> LinkedIn  Account </a></li>

@@ -59,7 +59,7 @@ The latest versions of the project's documentation, created in LaTeX.
 * <a href="https://www.overleaf.com/read/kggjdjzsptbh">Technical Installation Manual</a>
 * <a href="https://www.overleaf.com/read/kyrfcgymmnng">User Manual</a>
 * <a href="https://www.overleaf.com/read/hpvhpdhpscwz">Application Theme Test</a>
-* <a href="https://www.overleaf.com/read/fwdbkgqbjfnf">Usability Test Results</a>
+* <a href="https://www.overleaf.com/read/fwdbkgqbjfnf">Usability Test</a>
 * <a href="https://www.overleaf.com/read/byjsbnwxcgnm"> Coding Standards </a>
 * <a href="https://www.overleaf.com/read/nmvtrtfmjtrh"> Testing Policy </a>
 
