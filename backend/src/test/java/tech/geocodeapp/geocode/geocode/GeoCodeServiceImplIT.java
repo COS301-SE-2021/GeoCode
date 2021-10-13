@@ -25,6 +25,7 @@ import tech.geocodeapp.geocode.GeoCodeApplication;
 import tech.geocodeapp.geocode.collectable.service.*;
 import tech.geocodeapp.geocode.mission.model.MissionType;
 import tech.geocodeapp.geocode.user.model.User;
+import tech.geocodeapp.geocode.user.repository.UserRepository;
 import tech.geocodeapp.geocode.user.service.*;
 
 import java.util.ArrayList;
@@ -75,6 +76,14 @@ class GeoCodeServiceImplIT {
     UserService userService;
 
     /**
+     * The repository for the User subsystem
+     *
+     * This is used to empty the User database before testing
+     */
+    @Autowired
+    UserRepository userRepository;
+
+    /**
      * This is used to access the Event subsystem in some use cases
      */
     @Autowired
@@ -121,6 +130,7 @@ class GeoCodeServiceImplIT {
     void setup() {
 
         /* Clear the repo of any old data */
+        userRepository.deleteAll();
         repo.deleteAll();
 
         try {
