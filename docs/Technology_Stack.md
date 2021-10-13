@@ -1,6 +1,6 @@
 # Server
 
-[![DigitalOcean](https://img.shields.io/static/v1?logo=digitalocean&label=DigitalOcean&message=droplet&color=0080FF)](https://digitalocean.com)
+[![DigitalOcean](https://img.shields.io/static/v1?logo=digitalocean&label=DigitalOcean&message=droplet&color=0080FF)](https://www.digitalocean.com/products/droplets/)
 [![Docker](https://img.shields.io/static/v1?logo=docker&label=Docker&message=v20.10.9&color=2496ED)](https://docker.com)
 [![Apache](https://img.shields.io/static/v1?logo=apache&label=Apache&message=v2.4.46&color=D22128)](https://httpd.apache.org)
 
