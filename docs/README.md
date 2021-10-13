@@ -1,20 +1,29 @@
-# Website Link: [https://geocodeapp.tech](https://geocodeapp.tech)
+<div align="center">
+  <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713126-4d74b8ff-1b54-473f-a109-7a03cf665f6e.png">
+</div>
+<h1 align="center" style="color:green; font-size: 300%;" >GeoCode – Virtual Global Treasure Hunt</h1>
 
-# Application Demo Video
+## Useful Links
+
+[Website (geocodeapp.tech)](https://geocodeapp.tech)  
+[Android APK](https://github.com/COS301-SE-2021/GeoCode/releases/download/v1.0/GeoCode.apk)  
+[GitHub Repository](https://github.com/COS301-SE-2021/GeoCode)
+
+## Application Demo Video
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/cVB8_jblmtk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-# Opening the Site
+## Opening the Site
 
-- Navigate to the [https://geocodeapp.tech](https://geocodeapp.tech)
+- Navigate to [https://geocodeapp.tech](https://geocodeapp.tech)
 - Click on the **Sign Up** button to register an account to use, using a valid email address and a username of your choice.
 - Once your information is entered, click the **Register** button and you will be asked to verify your email address.
 - Once verified, you will be able to sign in with your chosen user name and password to use the site as well as on the Android app.
 - No further setup is required - you will be able to use the site with your new account. For more information, please read the provided user manual.
 
-# Example QR Codes
+## Example QR Codes
 
-## Example GeoCode (Explore tab)
+### Example GeoCode (Explore tab)
 
 Located in Gqeberha (Port Elizabeth)
 
@@ -22,7 +31,7 @@ Located in Gqeberha (Port Elizabeth)
 | - |
 | <img src="https://user-images.githubusercontent.com/39992590/136439581-d59013fa-2ffc-41fb-8fbd-4fe3e9a5f3bc.png" width="300"> |
 
-## Example Event (Events tab)
+### Example Event (Events tab)
 
 Located in Gqeberha (Port Elizabeth)
 
