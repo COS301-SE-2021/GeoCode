@@ -23,6 +23,7 @@ import tech.geocodeapp.geocode.geocode.request.*;
 import tech.geocodeapp.geocode.geocode.repository.GeoCodeRepository;
 import tech.geocodeapp.geocode.GeoCodeApplication;
 import tech.geocodeapp.geocode.collectable.service.*;
+import tech.geocodeapp.geocode.leaderboard.repository.PointRepository;
 import tech.geocodeapp.geocode.mission.model.MissionType;
 import tech.geocodeapp.geocode.user.model.User;
 import tech.geocodeapp.geocode.user.repository.UserRepository;
@@ -74,6 +75,14 @@ class GeoCodeServiceImplIT {
      */
     @Autowired
     UserService userService;
+
+    /**
+     * The point repository for the Leaderboard subsystem
+     *
+     * This is used to empty the Point database before testing
+     */
+    @Autowired
+    PointRepository pointRepository;
 
     /**
      * The repository for the User subsystem
@@ -130,6 +139,7 @@ class GeoCodeServiceImplIT {
     void setup() {
 
         /* Clear the repo of any old data */
+        pointRepository.deleteAll();
         userRepository.deleteAll();
         repo.deleteAll();
 
