@@ -1,10 +1,11 @@
 <div align="center">
-  <img align="left" width="80" src="https://drive.google.com/uc?export=view&id=14tcYhY4PgTOkXN-oUasKH8UpUKQcx_cn">
+  <img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713126-4d74b8ff-1b54-473f-a109-7a03cf665f6e.png">
 </div>
-<h1 align="center" style="color:green; font-size: 300%;" > GeoCode – Virtual Global Treasure Hunt </h1>
+<h1 align="center" style="color:green; font-size: 300%;" > <a href="https://geocodeapp.tech">GeoCode – Virtual Global Treasure Hunt </a></h1>
 
 <br>
 <div align="center">
+
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=bugs)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_GeoCode&metric=code_smells)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_GeoCode)
@@ -31,152 +32,45 @@
 
 -->
 
-<h1> Table of Contents</h1>
-
-<div style="margin-left: 4%">
-
-- [Project Overview](#project-overview)
-- [GitHub Management](#github-management)
-- [Deployment](#deployment)
-- [Software Requirements Specification](#software-requirements-specification)
-- [Documentation](#documentation)
-- [Project Management Tools](#project-management-tools)
-- [Demo Video Links](#demo-video-links)
-- [Mentors](#mentors)
-- [Collaborators](#collaborators)
-
-</div>
-
 # Project Overview
 
 <div style="margin-left: 4%">
 
-With the adjustment to the global pandemic and the modernisation of the world we know, average day <br/> activities, which some have been around for centuries, are needing to find their way onto the virtual world. <br/> Geocaching has started to go out of fashion and is needing a new modern twist on the classic treasure hunt game.
+With the adjustment to the global pandemic and the modernisation of the world we know, average day activities, which some have been around for centuries, are needing to find their way onto the virtual world. Geocaching has started to go out of fashion and is needing a new modern twist on the classic treasure hunt game.
 
-<br/>
+There is a need to have GeoCodes as there is a problem of caches going missing from people stumbling upon the caches without the knowledge of what they are. With GeoCodes the likely hood of a cache going missing is a lot smaller as it will only be a QR code sticker which people are a lot less likely to remove. A QR code is also a lot easier to replace. The use of a GeoCode also resolves the issue of logbooks being full and people unable to log their finds in the books as this will go digital.
 
-There is a need to have GeoCodes as there is a problem of caches going missing from people stumbling upon <br/> the caches without the knowledge of what they are. With GeoCodes the likely hood of a cache going missing is <br/> a lot smaller as it will only be a QR code sticker which people are a lot less likely to remove. A QR code is also a lot <br/> easier to replace. The use of a GeoCode also resolves the issue of logbooks being full and people unable to log <br/> their finds in the books as this will go digital.
-
-<br/>
-
-With the use of GeoCodes as QR codes it also means if someone stumbles upon the QR code and scans it they <br/> will be taken to the GeoCode website where they will be introduced to the concept and have the opportunity to <br/> join the GeoCode community.
-
-</div>
-
-# GitHub Management
-
-<div align="center">
-
-[![Build Status](https://img.shields.io/github/issues/COS301-SE-2021/GeoCode.svg)](https://github.com/COS301-SE-2021/GeoCode/issues)
-[![Build Status](https://img.shields.io/github/issues-closed/COS301-SE-2021/GeoCode)](https://img.shields.io/github/issues-closed/COS301-SE-2021/GeoCode)
-[![Build Status](https://img.shields.io/github/milestones/open/COS301-SE-2021/GeoCode)](https://img.shields.io/github/milestones/open/COS301-SE-2021/GeoCode)
-
-</div>
-
-<div style="margin-left: 4%">
-
-A monorepo with the Git Flow structure will be used in the COS301-SE-2021 organization for the GeoCode project.
-<br/>
-
-The following type of branches will be used in the repository:
-<br/>
-* **master:** The current stable release version of the product. There will only be one of these branches.
-* **release/vN.N:** A copy of the master branch for version N.N of the system.
-* **development:** A branch consisting of finished code that will be included in the next push to master.
-* **dev/SubsystemName:** The main development branch of a single subsystem.
-* **dev/SubsystemName-FeatureName:** Used to indicate a new feature being implemented and tested.
-
- <br/>
-      For the management of the project at least two team members will work on a single feature. When a feature has been implemented and tested it will be merged into the develop branch, 
-      to merge the feature branch into the development branch a Pull Request will be made where a team member who did not work on the branch being merged will need to be assigned on the 
-      branch to review the code and accept the Pull Request or request changes. This is done to ensure the separate subsystems of the project are integrated correctly and help ensure the 
-      development branch will contain code and features that work correctly.
-<br/><br/>
-      The file structure for each of the different subsystem identified in the subsystem will be as such:
-
-    ExampleSubsystem
-
-    |------ controller
-               |------ ExampleSubsystemApi
-               |------ ExampleSubsystemApiController
-    |------ exception
-    |------ model
-    |------ repository
-    |------ request
-    |------ response
-    |------ service
-               |------ ExampleSubsystemService
-               |------ ExampleSubsystemServiceImpl
-</div>
-
-# Deployment
-
-<div style="margin-left: 4%">
-
-This will be announced after the first stable release of the GeoCode project.
-
-</div>    
-
-# Software Requirements Specification
-
-<div style="margin-left: 4%">
-
-The following documentation was done in LaTeX and is to document the process followed when designing <br/> and structure of the GeoCode project.
-
-* <a href="https://www.overleaf.com/read/ysgpfdqtrrkw"> GeoCode - SRS Version One </a>
-* <a href="https://www.overleaf.com/read/xtrkrnzbmbny"> GeoCode - SRS Version Two </a>
-* <a href="https://www.overleaf.com/read/mvtwqwsgyqdf"> GeoCode - SRS Version Three </a>
-* <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> GeoCode - SRS Version Four </a>
+With the use of GeoCodes as QR codes it also means if someone stumbles upon a QR code and scans it, they will be taken to the GeoCode website where they will be introduced to the concept and have the opportunity to join the GeoCode community.
 
 </div>
 
 # Documentation
 
 <div style="margin-left: 4%">
+	
+The latest versions of the project's documentation, created in LaTeX.
 
-The following documentation was done in LaTeX and is to document the methods used to create, how <br/> to install and use the GeoCode project.
-
-* <a href="https://www.overleaf.com/read/byjsbnwxcgnm"> Coding Standards </a>
-* <a href="https://www.overleaf.com/read/nmvtrtfmjtrh"> Testing Policy </a>
-* <a href="https://www.overleaf.com/read/bprjhgpzbcxf">Technical Installation Manual Version One</a>
-* <a href="https://www.overleaf.com/read/kggjdjzsptbh">Technical Installation Manual Version Two</a>
-* <a href="https://www.overleaf.com/read/fjdvrjjsndhv">User Manual Version One</a>
-* <a href="https://www.overleaf.com/read/kyrfcgymmnng">User Manual Version Two</a>
-* <a href="https://drive.google.com/file/d/1TPxVUnTDn-eS_OPRwaLPnVOdo1seEFya/view?usp=sharing">Architectural Requirements Version Two</a>
-* <a href="https://www.overleaf.com/read/yvhjyygymzdn">Architectural Requirements Version Three</a>
-  
-The following documentation was done in LaTeX and is to document the usability testing of the project.
+* <a href="https://www.overleaf.com/read/tpdxjjnhsxxq"> Software Requirements Specification </a>
+* <a href="https://www.overleaf.com/read/yvhjyygymzdn">Architectural Requirements</a>
+* <a href="https://www.overleaf.com/read/kggjdjzsptbh">Technical Installation Manual</a>
+* <a href="https://www.overleaf.com/read/kyrfcgymmnng">User Manual</a>
 * <a href="https://www.overleaf.com/read/hpvhpdhpscwz">Application Theme Test</a>
 * <a href="https://www.overleaf.com/read/fwdbkgqbjfnf">Usability Test</a>
-</div>
-
-# Project Management Tools
-
-<div style="margin-left: 4%">
-
-To aid with the management of the GeoCode project the following tools were used:
-
-* <a href="https://github.com/COS301-SE-2021/GeoCode/projects">GitHub project boards:</a> Task allocations and progress tracking.
-* <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
-* <a href="https://discord.com/brand-newover">Discord:</a> Informal team meetings for quick debriefs, communication.
-* <a href="https://discord.com/developers/docs/resources/webhooks">GitHub and Discord Webhooks:</a> Notifications sent to the team's discord server when a commit is made to the GitHub repository.
-* <a href="https://www.overleaf.com">Overleaf:</a> LaTeX editor that allows collaboration on creating documentation.
+* <a href="https://www.overleaf.com/read/byjsbnwxcgnm"> Coding Standards </a>
+* <a href="https://www.overleaf.com/read/nmvtrtfmjtrh"> Testing Policy </a>
 
 </div>
 
-
-
-# Demo Video Links
+# Additional Links
 
 <div style="margin-left: 4%">
 
-The following links are the live demo videos held on blackboard collaborate to present the different <br/>
-phases of the project to the stakeholders of the GeoCode project.
-
-* <a href="https://drive.google.com/file/d/1OqOuoMHSyd4rTUqWW5j_ME1EZcIJHre4/view?usp=sharing"> Demo 1 </a> - :calendar: 2021-06-14
-* <a href="https://drive.google.com/file/d/1iSdTMS9bjVXQGxdfrJ-6nl46fX0j3h7n/view?usp=sharing"> Demo 2  </a> - :calendar: 2021-06-21 
-* <a href="https://drive.google.com/file/d/1lVIqfENiN10zGNmveXXlzY8A03thT7aV/view?usp=sharing"> Demo 3  </a> - :calendar: 2021-08-20 
-* <a href="https://drive.google.com/file/d/1M2ubzX2ipWgjRyU-sgUrgj8x_HbYWWN0/view?usp=sharing"> Demo 4  </a> - :calendar: 2021-09-20 
+- [Demo Website](https://cos301-se-2021.github.io/GeoCode)
+- [Technology Stack](docs/Technology_Stack.md)
+- [GitHub Management](docs/GitHub_Management.md)
+- [Project Management Tools](docs/Project_Management_Tools.md)
+- [Demo Video Links](docs/Demo_Video_Links.md)
+- [Previous Documentation Versions](docs/Previous_Documentation_Versions.md)
 
 </div>
 
@@ -184,21 +78,21 @@ phases of the project to the stakeholders of the GeoCode project.
 
 <div style="margin-left: 4%">
 
-The team Peak Performers had the following mentor from <a href="https://5dt.com/"> Fifth Dimension Technologies </a> and the <a href="https://www.up.ac.za/"> University of Pretoria</a>:
+The team had the following mentors from <a href="https://5dt.com/"> Fifth Dimension Technologies </a> and the <a href="https://www.up.ac.za/"> University of Pretoria</a> respectively:
 
 Industry Mentor:
-  <pre>
-    <p style="font-size: 170%;" > Kyle Pretorius </p>
-    - kyle.pretorius@5dt.com
-    - <a href="https://www.linkedin.com/in/kyle-pretorius-1880a8160/">LinkedIn Account </a>
-  </pre>
+<pre>
+Kyle Pretorius
+ - kyle.pretorius@5dt.com
+ - <a href="https://www.linkedin.com/in/kyle-pretorius-1880a8160/">LinkedIn Account </a>
+</pre>
 
 University Mentor:
-  <pre>
-    <p style="font-size: 170%;" > Andrew Broekman  </p>
-    - andrew.broekman@up.ac.za
-    - <a href="https://www.linkedin.com/in/andrewbroekman/">LinkedIn Account</a>
-  </pre>
+<pre>
+Andrew Broekman
+ - andrew.broekman@up.ac.za
+ - <a href="https://www.linkedin.com/in/andrewbroekman/">LinkedIn Account</a>
+</pre>
 
 </div>
 
@@ -208,24 +102,23 @@ University Mentor:
 
 The following software engineers contributed to the GeoCode project:
 
-<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1_OiHlqj6YBQIg5iIfT0zQbJZkdsbCjx1">
-<h1 style="color:green; font-size: 200%;" > Michael Ströh </h1>
 <br/>
+<img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713416-05aa6fc3-717f-4b63-be63-18f50543022f.jpg">
+<h1 style="color:green; font-size: 200%;" > Michael Ströh </h1>
 
    <pre>
+         Michael Ströh has learnt throughout his university career that perseverance leads to
+         excellence. Through working as a Teaching Assistant for COS 212 (Data Structures)
+         and a Student Lab Technician in the CBT labs at the University Of Pretoria he has
+         learnt how to manage his time wisely and effectively communicate not only as a team
+         but also as an individual. As an Artificial Intelligence project Michael Ströh 
+         successfully completed a Sudoku solver using Generic Algorithms and a flower 
+         specimens classifier using Machine Learning with back propagation to identify 
+         the different species of the iris flower, namely, iris setosa, iris versicolour 
+         and iris virginica.
+</pre>
 
-            Michael Ströh has learnt throughout his university career that perseverance leads to
-            excellence. Through working as a Teaching Assistant for COS 212 (Data Structures)
-            and a Student Lab Technician in the CBT labs at the University Of Pretoria he has
-            learnt how to manage his time wisely and effectively communicate not only as a team
-            but also as an individual. As an Artificial Intelligence project Michael Ströh 
-            successfully completed a Sudoku solver using Generic Algorithms and a flower 
-            specimens classifier using Machine Learning with back propagation to identify 
-            the different species of the iris flower, namely, iris setosa, iris versicolour 
-            and iris virginica.
-   </pre>
-
-* <a href="https://github.com/Michael-Stroh"> Github Account </a>
+* :man_technologist: <a href="https://github.com/Michael-Stroh"> GitHub Account </a>
 * :mortar_board: <a href="https://www.linkedin.com/in/stroh-michael"> LinkedIn Account </a>
 * :wave: <a href="https://michael-stroh.github.io/myCV/"> Personal Website </a>
 * :email: m.stroh@tuks.co.za
@@ -246,33 +139,31 @@ The following software engineers contributed to the GeoCode project:
               - Unit Testing
               - Integration Testing
               - Jmeter
-              - Sonar		
-              - Mockito			  
-       </pre>
+              - Sonar
+              - Mockito
+</pre>
    </details>
 
 
-<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1A2cEQ7wslTqTWvZy7f6A4TBXakVAcWcQ">
-<h1 style="color:green; font-size: 200%;" > Liam Moore </h1>
 <br/>
+<img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713414-dda2cefb-7b9a-4d9f-aabc-19394d69e5cb.jpg">
+<h1 style="color:green; font-size: 200%;" > Liam Moore </h1>
 
 
   <pre>
-
          Graduated from Heron Bridge College in 2017 with a distinction for both IT and Life
          Orientation. Switched from Computer Engineering to a BSc Information and Knowledge
-         Systems with the choice of the Software Development elective group in 2019. I was the
+         Systems with the choice of the Software Development elective group in 2019. He was the
          class representative for INF 154. Since switching to BSc Information and Knowledge
-         Systems I have received distinctions for 6 modules. The Software Development elective
-         group contained modules that gave me experience with C#, C# entity framework, .NET
-         and Node.JS
-  </pre>
+         Systems he has received distinctions for 6 modules. The Software Development elective
+         group contained modules that gave him experience with C#, C# entity framework, .NET
+         and Node.js.
+</pre>
 
 
-* <a href="https://github.com/NitronBiohazard"> Github Account</a>
+* :man_technologist: <a href="https://github.com/NitronBiohazard"> GitHub Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/liam-moore-410004210/"> LinkedIn  Account </a>
 * :email: liam.moore@tuks.co.za
-
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
@@ -285,28 +176,26 @@ The following software engineers contributed to the GeoCode project:
               - Events Subsystem extension for Blockly
               - Collectable Subsystem and the design patterns (Decorator and Factory patterns)
            - Usability Testing: Conducting Usability Testing
-       </pre>
+</pre>
    </details>
+	
 
-
-<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1vofqN3uiCv7RwSIVo-SRCgzG7G2lrOcu">
-<h1 style="color:green; font-size: 200%;" > Jenna Gallagher </h1>
 <br/>
+<img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713405-9f0d8938-aa24-4b74-bc17-d3c9b4f6fa82.jpg">
+<h1 style="color:green; font-size: 200%;" > Jenna Gallagher </h1>
 
   <pre>
-      
          Graduated from St Dominic’s Priory High School in 2018 with 5 distinctions and 3rd
          in her year. She currently has 17 distinctions out of 23 modules. Jenna has done an
          internship at Propella which helps startups bring their ideas to life through technology.
          There she experienced the life cycle of project development from meeting a client all the
          way through to the end project, this will help her in leading the capstone project.
-  </pre>
+</pre>
 
-* <a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> Github Account </a>
+* :woman_technologist: <a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> GitHub Account </a>
 * :mortar_board: <a href="www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a>
 * :wave: <a href="https://jennalyngallagher.github.io/"> Personal Website </a>
 * :email: jenna.gallagher@tuks.co.za
-
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
@@ -326,10 +215,9 @@ The following software engineers contributed to the GeoCode project:
        </pre>
    </details>
 
-
-<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1QDGS-md4cPuMLbopvBIPRxzjDHnoCbLw">
-<h1 style="color:green; font-size: 200%;" > Caleb Johnstone </h1>
 <br/>
+<img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713398-3c3662de-2dd3-4a5f-9fee-5862591f1c60.jpg">
+<h1 style="color:green; font-size: 200%;" > Caleb Johnstone </h1>
 
   <pre>
          Caleb Johnstone graduated from Fourways High School in 2018, achieving 4 distinctions
@@ -339,12 +227,11 @@ The following software engineers contributed to the GeoCode project:
          This degree is one of the two degrees offered at the Computer Science department at
          the University Of Pretoria. Caleb was the top Computer Science student for 2019 and 2020.
          He was elected as the EBIT House Treasurer for the 2019/2020 term.
-  </pre>
+</pre>
 
-* <a href="https://github.com/CalebJohnstone"> Github Account</a>
+* :man_technologist: <a href="https://github.com/CalebJohnstone"> GitHub Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/caleb-johnstone-94368a132/"> LinkedIn  Account </a>
 * :email: caleb.johnstone@tuks.co.za
-
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
@@ -358,32 +245,34 @@ The following software engineers contributed to the GeoCode project:
               - Blockly Events
               - Mission Subsystem
               - Collectable Subsystem           
-       </pre>
+</pre>
    </details>
 
-
-<img align="left" width="80" src="https://drive.google.com/uc?export=view&id=1jeukx2dfvmPY8R6NiL92o8rqUoTZrXb0">
-<h1 style="color:green; font-size: 200%;" > Michael Harvey </h1>
 <br/>
+<img align="left" width="80" src="https://user-images.githubusercontent.com/39992590/136713394-0993c9b5-fd2e-467d-a511-c4c1d9fc3e4e.jpg">
+<h1 style="color:green; font-size: 200%;" > Michael Harvey </h1>
 
   <pre>
-      
          Michael Harvey graduated from Richards Bay Christian School in 2018 with 4 distinctions,
          and is currently in his 3rd year studying BSc Computer Science. In his first two and a half
-         years of university he achieved 25 distinctions in 28 modules, and he ranked as the 
-         3rd highest first-year Computer Science student at UP in 2019. On the side he maintains
-         various Python projects that make use of the API for the mobile game Clash of Clans: 2
-         Discord bots, as well as a program collecting Clan War League participation data from
-         hundreds of thousands of clans for statistical purposes.
-  </pre>
+         years of university he achieved 25 distinctions in 28 modules, and he ranked as the 3rd-
+         highest first-year Computer Science student at UP in 2019. On the side he maintains 2
+         Discord bots written in Python that make use of the API for the mobile game Clash of Clans.
+</pre>
 
-* <a href="https://github.com/robotic-coder"> Github Account</a>
+* :man_technologist: <a href="https://github.com/robotic-coder"> GitHub Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/michaelharvey-123/"> LinkedIn  Account </a>
 * :email: michael.harvey@tuks.co.za
-
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
+           - Frontend: 
+              - Adaptive Layout
+              - Augmented Reality
+              - Blockly Integration
+              - Collections Tab Pages
+              - QR Code Creation/Scanning
+              - Profile Tab Pages
            - Automation:
               - Android APK Build
               - Deployment
@@ -392,17 +281,11 @@ The following software engineers contributed to the GeoCode project:
               - Software Requirements Specification
               - Architecture Requirements and Design Specifications
               - Technical Installation Manual
-           - Frontend: 
-              - Adaptive Layout
-              - Augmented Reality
-              - Blockly Integration
-              - Collections Tab Pages
-              - QR Code Creation/Scanning
-              - Profile Tab Pages
            - Backend: Events Subsystem
            - Keycloak Integration
            - Server Management
-       </pre>
+           - GitHub Pages Setup
+</pre>
    </details>
 
 
