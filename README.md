@@ -80,18 +80,18 @@ The latest versions of the project's documentation, created in LaTeX.
 The team had the following mentors from <a href="https://5dt.com/"> Fifth Dimension Technologies </a> and the <a href="https://www.up.ac.za/"> University of Pretoria</a> respectively:
 
 Industry Mentor:
-  <pre>
-    <p style="font-size: 170%;" > Kyle Pretorius </p>
-    - kyle.pretorius@5dt.com
-    - <a href="https://www.linkedin.com/in/kyle-pretorius-1880a8160/">LinkedIn Account </a>
-  </pre>
+<pre>
+Kyle Pretorius
+ - kyle.pretorius@5dt.com
+ - <a href="https://www.linkedin.com/in/kyle-pretorius-1880a8160/">LinkedIn Account </a>
+</pre>
 
 University Mentor:
-  <pre>
-    <p style="font-size: 170%;" > Andrew Broekman  </p>
-    - andrew.broekman@up.ac.za
-    - <a href="https://www.linkedin.com/in/andrewbroekman/">LinkedIn Account</a>
-  </pre>
+<pre>
+Andrew Broekman
+ - andrew.broekman@up.ac.za
+ - <a href="https://www.linkedin.com/in/andrewbroekman/">LinkedIn Account</a>
+</pre>
 
 </div>
 
