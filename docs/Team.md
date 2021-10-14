@@ -70,7 +70,7 @@ Graduated from St Dominic’s Priory High School in 2018 with 5 distinctions and
 </pre>
 <ul>
   <li>👩‍💻 <a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> GitHub Account </a></li>
-  <li>🎓 <a href="www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a></li>
+  <li>🎓 <a href="https://www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a></li>
   <li>👋 <a href="https://jennalyngallagher.github.io/"> Personal Website </a></li>
   <li>📧 jenna.gallagher@tuks.co.za</li>
 </ul>
