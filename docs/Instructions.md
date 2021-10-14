@@ -16,7 +16,7 @@ If you scan these codes (or any ones that you create) with a regular QR scanner,
 
 * **Kragga Kamma Game Park**
 * Located in Gqeberha (Port Elizabeth)
-* If you are already logged in, click [this link](https://geocodeapp.tech/explore/geocode/90251204-4265-4671-958f-7f712a5cb8f2) to view the GeoCode.
+* If you are already logged in, click [here](https://geocodeapp.tech/explore/geocode/90251204-4265-4671-958f-7f712a5cb8f2) to view the GeoCode.
 
 | Kragga Kamma Game Park |
 | - |
@@ -26,7 +26,7 @@ If you scan these codes (or any ones that you create) with a regular QR scanner,
 
 * **Port Elizabeth Malls**
 * Located in Gqeberha (Port Elizabeth)
-* If you are already logged in, click [this link](https://geocodeapp.tech/events/98cef77d-b7c5-489a-9946-e038d49abf13) to enter the event.
+* If you are already logged in, click [here](https://geocodeapp.tech/events/98cef77d-b7c5-489a-9946-e038d49abf13) to enter the event.
 
 | Baywest Mall | Walmer Park |
 | - | - |
