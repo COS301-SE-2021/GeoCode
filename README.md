@@ -65,6 +65,7 @@ The latest versions of the project's documentation, created in LaTeX.
 
 <div style="margin-left: 4%">
 
+- [Demo Website](https://cos301-se-2021.github.io/GeoCode)
 - [Technology Stack](docs/Technology_Stack.md)
 - [GitHub Management](docs/GitHub_Management.md)
 - [Project Management Tools](docs/Project_Management_Tools.md)
