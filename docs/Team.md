@@ -134,6 +134,13 @@ Michael Harvey graduated from Richards Bay Christian School in 2018 with 4 disti
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
+ - Frontend:
+    - Adaptive Layout
+    - Augmented Reality
+    - Blockly Integration
+    - Collections Tab Pages
+    - QR Code Creation/Scanning
+    - Profile Tab Pages
  - Automation:
     - Android APK Build
     - Deployment
@@ -142,12 +149,10 @@ Michael Harvey graduated from Richards Bay Christian School in 2018 with 4 disti
     - Software Requirements Specification
     - Architecture Requirements and Design Specifications
     - Technical Installation Manual
- - Frontend: 
-    - Adaptive Layout
-    - Augmented Reality
-    - Blockly Integration
-    - Collections Tab Pages
-    - QR Code Creation/Scanning
+ - Backend: Events Subsystem
+ - Keycloak Integration
+ - Server Management
+ - GitHub Pages Setup
 </pre>
    </details>
 </div>

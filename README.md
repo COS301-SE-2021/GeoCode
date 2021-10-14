@@ -265,6 +265,13 @@ The following software engineers contributed to the GeoCode project:
    <details>
        <summary><b> Responsibilities </b></summary>
        <pre>
+           - Frontend: 
+              - Adaptive Layout
+              - Augmented Reality
+              - Blockly Integration
+              - Collections Tab Pages
+              - QR Code Creation/Scanning
+              - Profile Tab Pages
            - Automation:
               - Android APK Build
               - Deployment
@@ -273,16 +280,10 @@ The following software engineers contributed to the GeoCode project:
               - Software Requirements Specification
               - Architecture Requirements and Design Specifications
               - Technical Installation Manual
-           - Frontend: 
-              - Adaptive Layout
-              - Augmented Reality
-              - Blockly Integration
-              - Collections Tab Pages
-              - QR Code Creation/Scanning
-              - Profile Tab Pages
            - Backend: Events Subsystem
            - Keycloak Integration
            - Server Management
+           - GitHub Pages Setup
 </pre>
    </details>
 
