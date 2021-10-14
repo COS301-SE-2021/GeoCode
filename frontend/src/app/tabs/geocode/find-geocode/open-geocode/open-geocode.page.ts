@@ -232,13 +232,27 @@ export class OpenGeocodePage implements AfterViewInit {
             console.log(request);
             this.geocodeService.swapCollectables(request).subscribe((response: SwapCollectablesResponse) =>{
               console.log(response);
-              this.goBack(true);
+              if (response.success) {
+                this.goBack(true);
+              } else {
+                this.swapFail(response.message);
+              }
             });
           }
         }
       ]
     });
     await alert.present();
+  }
+
+  async swapFail(message: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Failed to Swap Collectable',
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
+    await this.goBack(false);
   }
 
   async goBack(success: boolean) {

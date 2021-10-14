@@ -44,6 +44,25 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     this.themeSubscription = mediator.themeChanged.onReceive((isDark) => {
       this.workspace.setTheme(this.getTheme(isDark));
     });
+    // @ts-ignore
+    Blockly.prompt = async (message, defaultValue, callback) => {
+      const text = await this.input(message, [
+        { text: 'Cancel', role: 'cancel' },
+        { text: 'Enter', role: 'ok' }
+      ], defaultValue);
+      if (text !== null) {
+        callback(text);
+      }
+    };
+    // @ts-ignore
+    Blockly.alert = async (message, callback) => {
+      const response = await this.output(message, [
+        { text: 'OK', role: 'ok' }
+      ]);
+      if (response) {
+        callback();
+      }
+    };
   }
 
   async sleep(milliseconds: number) {
@@ -156,8 +175,8 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
 
   async runProgram(
     code: string,
-    inputFunction: (promptRequest: string) => Promise<string> = this.input,
-    outputFunction: (output: string) => Promise<boolean> = this.output
+    inputFunction: (promptRequest: string) => Promise<string> = this.programInput,
+    outputFunction: (output: string) => Promise<boolean> = this.programOutput
   ) {
     return new Promise<void> ((resolve, reject) => {
 
@@ -285,41 +304,15 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  public output = async (output: string): Promise<boolean> => {
-    const alert = await this.alertCtrl.create({
-      message: output,
-      backdropDismiss: false,
-      translucent: true,
-      buttons: [
-        { text: 'Stop Running', role: 'cancel' },
-        { text: 'Continue', role: 'ok' }
-      ]
-    });
-    await alert.present();
-    const {role} = await alert.onDidDismiss();
-    return role === 'ok';
-  };
+  public programOutput = async (output: string): Promise<boolean> => await this.output(output, [
+    { text: 'Stop Running', role: 'cancel' },
+    { text: 'Continue', role: 'ok' }
+  ]);
 
-  public input = async (promptRequest: string): Promise<string> => {
-    const alert = await this.alertCtrl.create({
-      message: promptRequest,
-      backdropDismiss: false,
-      inputs: [
-        { name: 'input', type: 'text' }
-      ],
-      buttons: [
-        { text: 'Stop Running', role: 'cancel' },
-        { text: 'Enter', role: 'ok' }
-      ]
-    });
-    await alert.present();
-    const {data, role} = await alert.onDidDismiss();
-    if (role === 'ok') {
-      return data.values.input;
-    } else {
-      return null;
-    }
-  };
+  public programInput = async (promptRequest: string): Promise<string> => await this.input(promptRequest, [
+    { text: 'Stop Running', role: 'cancel' },
+    { text: 'Enter', role: 'ok' }
+  ]);
 
   private forceResize() {
     window.dispatchEvent(new Event('resize'));
@@ -332,6 +325,36 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
       return null;
     }
   }
+
+  private input = async (message: string, buttons: any[], value: any = ''): Promise<string> => {
+    const alert = await this.alertCtrl.create({
+      message,
+      backdropDismiss: false,
+      inputs: [
+        { name: 'input', type: 'text', value }
+      ],
+      buttons,
+    });
+    await alert.present();
+    const {data, role} = await alert.onDidDismiss();
+    if (role === 'ok') {
+      return data.values.input;
+    } else {
+      return null;
+    }
+  };
+
+  private output = async (message: string, buttons: any[]): Promise<boolean> => {
+    const alert = await this.alertCtrl.create({
+      message,
+      backdropDismiss: false,
+      buttons
+    });
+    await alert.present();
+    const {role} = await alert.onDidDismiss();
+    return role === 'ok';
+  };
+
 
 }
 
