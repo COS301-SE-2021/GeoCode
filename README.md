@@ -119,7 +119,7 @@ The following software engineers contributed to the GeoCode project:
 </pre>
 
 * :man_technologist: <a href="https://github.com/Michael-Stroh"> GitHub Account </a>
-* :mortar_board: <a href="https://www.linkedin.com/in/stroh-michael"> LinkedIn Account </a>
+* :mortar_board: <a href="https://www.linkedin.com/in/stroh-michael/"> LinkedIn Account </a>
 * :wave: <a href="https://michael-stroh.github.io/myCV/"> Personal Website </a>
 * :email: m.stroh@tuks.co.za
    <details>
@@ -193,7 +193,7 @@ The following software engineers contributed to the GeoCode project:
 </pre>
 
 * :woman_technologist: <a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> GitHub Account </a>
-* :mortar_board: <a href="https://www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a>
+* :mortar_board: <a href="https://www.linkedin.com/in/jenna-lyn-gallagher/"> LinkedIn  Account </a>
 * :wave: <a href="https://jennalyngallagher.github.io/"> Personal Website </a>
 * :email: jenna.gallagher@tuks.co.za
    <details>

@@ -10,7 +10,7 @@ Michael Ströh has learnt throughout his university career that perseverance lea
 </pre>
 <ul>
   <li>👨‍💻 <a href="https://github.com/Michael-Stroh"> GitHub Account </a></li>
-  <li>🎓 <a href="https://www.linkedin.com/in/stroh-michael"> LinkedIn Account </a></li>
+  <li>🎓 <a href="https://www.linkedin.com/in/stroh-michael/"> LinkedIn Account </a></li>
   <li>👋 <a href="https://michael-stroh.github.io/myCV/"> Personal Website </a></li>
   <li>📧 m.stroh@tuks.co.za</li>
 </ul>
@@ -70,7 +70,7 @@ Graduated from St Dominic’s Priory High School in 2018 with 5 distinctions and
 </pre>
 <ul>
   <li>👩‍💻 <a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> GitHub Account </a></li>
-  <li>🎓 <a href="https://www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a></li>
+  <li>🎓 <a href="https://www.linkedin.com/in/jenna-lyn-gallagher/"> LinkedIn  Account </a></li>
   <li>👋 <a href="https://jennalyngallagher.github.io/"> Personal Website </a></li>
   <li>📧 jenna.gallagher@tuks.co.za</li>
 </ul>
