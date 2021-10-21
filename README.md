@@ -193,7 +193,7 @@ The following software engineers contributed to the GeoCode project:
 </pre>
 
 * :woman_technologist: <a href="https://github.com/JennaLynGallagher/JennaLynGallagher"> GitHub Account </a>
-* :mortar_board: <a href="www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a>
+* :mortar_board: <a href="https://www.linkedin.com/in/jenna-gallagher-a79149204"> LinkedIn  Account </a>
 * :wave: <a href="https://jennalyngallagher.github.io/"> Personal Website </a>
 * :email: jenna.gallagher@tuks.co.za
    <details>
