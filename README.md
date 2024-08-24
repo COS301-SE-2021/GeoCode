@@ -260,7 +260,7 @@ The following software engineers contributed to the GeoCode project:
          Discord bots written in Python that make use of the API for the mobile game Clash of Clans.
 </pre>
 
-* :man_technologist: <a href="https://github.com/robotic-coder"> GitHub Account</a>
+* :man_technologist: <a href="https://github.com/MichaelJHarvey"> GitHub Account</a>
 * :mortar_board: <a href="https://www.linkedin.com/in/michaelharvey-123/"> LinkedIn  Account </a>
 * :email: michael.harvey@tuks.co.za
    <details>
