@@ -127,7 +127,7 @@ Caleb Johnstone graduated from Fourways High School in 2018, achieving 4 distinc
 Michael Harvey graduated from Richards Bay Christian School in 2018 with 4 distinctions, and is currently in his 3rd year studying BSc Computer Science. In his first two and a half years of university he achieved 25 distinctions in 28 modules, and he ranked as the 3rd-highest first-year Computer Science student at UP in 2019. On the side he maintains 2 Discord bots written in Python that make use of the API for the mobile game Clash of Clans.
 </pre>
 <ul>
-  <li>👨‍💻 <a href="https://github.com/robotic-coder"> GitHub Account</a></li>
+  <li>👨‍💻 <a href="https://github.com/MichaelJHarvey"> GitHub Account</a></li>
   <li>🎓 <a href="https://www.linkedin.com/in/michaelharvey-123/"> LinkedIn  Account </a></li>
   <li>📧 michael.harvey@tuks.co.za</li>
 </ul>
